@@ -1798,12 +1798,12 @@ export default function PortfolioPage() {
                                                                 )}
                                                                 onClick={(e) => { e.stopPropagation(); setExpandedSymbol(isExpanded ? null : group.symbol); }}
                                                             >
-                                                                {/* SOL TARAFTA 21st.dev STİLİ TEMİZ SEMBOL KODU VE UZANTI */}
+                                                                 {/* SOL TARAFTA 21st.dev STİLİ TEMİZ SEMBOL KODU VE UZANTI */}
                                                                 <td className="py-4 px-6">
                                                                     <div className="flex flex-col justify-center">
                                                                         <div className="flex items-center gap-2">
                                                                             {isCash ? (
-                                                                                <span className="text-base font-black text-slate-900 tracking-tight leading-none">
+                                                                                <span className="text-lg font-black text-slate-900 tracking-tight leading-none">
                                                                                     {displaySymbol}
                                                                                 </span>
                                                                             ) : (
@@ -1813,7 +1813,7 @@ export default function PortfolioPage() {
                                                                                     className="hover:underline inline-flex items-center gap-1 group/sym"
                                                                                     title={`${displaySymbol} Şirket & Finansal Detayına Git`}
                                                                                 >
-                                                                                    <span className="text-base font-black text-slate-900 tracking-tight leading-none group-hover/sym:text-violet-600 transition-colors">{displaySymbol}</span>
+                                                                                    <span className="text-lg font-black text-slate-900 tracking-tight leading-none group-hover/sym:text-violet-600 transition-colors">{displaySymbol}</span>
                                                                                     <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover/sym:text-violet-600 transition-colors" />
                                                                                 </Link>
                                                                             )}
@@ -1830,7 +1830,7 @@ export default function PortfolioPage() {
                                                                 </td>
                                                                 <td className="py-4 px-4">
                                                                     <div className="flex flex-col text-xs font-semibold">
-                                                                        <span className="text-slate-900 font-bold">
+                                                                        <span className="text-slate-800 font-bold text-sm">
                                                                             {isCash ? `${formatCurrency(group.totalQuantity * group.avgCost)}` : `${group.totalQuantity} adet`}
                                                                         </span>
                                                                         {!isCash && (
@@ -1838,17 +1838,17 @@ export default function PortfolioPage() {
                                                                         )}
                                                                     </div>
                                                                 </td>
-                                                                <td className="py-4 px-4 font-extrabold text-slate-900">
+                                                                <td className="py-4 px-4 font-bold text-slate-800 text-sm">
                                                                     {isCash ? "1.00 ₺" : (currentPrice > 0 ? formatCurrency(currentPrice) : "-")}
                                                                 </td>
-                                                                <td className="py-4 px-4 font-black text-slate-900">
+                                                                <td className="py-4 px-4 font-black text-slate-900 text-sm">
                                                                     {formatCurrency(marketValue)}
                                                                 </td>
                                                                 <td className="py-4 px-4">
                                                                     {isCash ? (
                                                                         <span className="text-xs font-bold text-slate-400">-</span>
                                                                     ) : (
-                                                                        <div className={cn("inline-flex items-center px-3 py-1 rounded-full font-bold text-xs border shadow-xs transition-all", isProfit ? "bg-emerald-50 text-emerald-700 border-emerald-200/80" : "bg-rose-50 text-rose-700 border-rose-200/80")}>
+                                                                        <div className={cn("text-sm font-semibold tracking-tight", isProfit ? "text-emerald-600" : "text-rose-600")}>
                                                                             {isProfit ? "+" : ""}{formatCurrency(profit)}
                                                                         </div>
                                                                     )}
