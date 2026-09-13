@@ -1808,7 +1808,7 @@ export default function PortfolioPage() {
                                                                                 </span>
                                                                             ) : (
                                                                                 <Link
-                                                                                    href={`/varlik/${displaySymbol}`}
+                                                                                    href={`/dashboard/varlik/${displaySymbol}`}
                                                                                     onClick={(e) => e.stopPropagation()}
                                                                                     className="hover:underline inline-flex items-center gap-1 group/sym"
                                                                                     title={`${displaySymbol} Şirket & Finansal Detayına Git`}
@@ -1901,7 +1901,7 @@ export default function PortfolioPage() {
                                                                                 <div className="flex items-center gap-2">
                                                                                     {!isCash && (
                                                                                         <Link
-                                                                                            href={`/varlik/${displaySymbol}`}
+                                                                                            href={`/dashboard/varlik/${displaySymbol}`}
                                                                                             onClick={(e) => e.stopPropagation()}
                                                                                             className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100/80 hover:bg-blue-200 text-[#00008B] font-bold rounded-lg text-xs transition-all"
                                                                                         >

@@ -1287,7 +1287,7 @@ function CalendarContent() {
                                                             <div>
                                                                 {item.symbol && item.symbol.trim() !== '-' ? (
                                                                     <Link 
-                                                                        href={`/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
+                                                                        href={`/dashboard/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
                                                                         className="hover:underline font-black text-xs text-[#00008B] hover:text-emerald-800 block"
                                                                         title={`${item.symbol} Şirket Detayına Git`}
                                                                     >
@@ -1475,7 +1475,7 @@ function CalendarContent() {
                                                             <div>
                                                                 {item.symbol && item.symbol.trim() !== '-' ? (
                                                                     <Link 
-                                                                        href={`/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
+                                                                        href={`/dashboard/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
                                                                         className="hover:underline font-black text-xs text-[#00008B] hover:text-blue-800 block"
                                                                         title={`${item.symbol} Şirket Detayına Git`}
                                                                     >
@@ -1661,7 +1661,7 @@ function CalendarContent() {
                                                             <div>
                                                                 {item.symbol && item.symbol.trim() !== '-' && item.symbol.trim().length >= 2 ? (
                                                                     <Link 
-                                                                        href={`/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
+                                                                        href={`/dashboard/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
                                                                         className="hover:underline font-black text-xs text-[#00008B] hover:text-purple-800 block"
                                                                         title={`${item.symbol} Şirket Detayına Git`}
                                                                     >

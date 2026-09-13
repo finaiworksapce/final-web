@@ -108,7 +108,6 @@ export const sectorMapping: Record<string, string> = {
   "BKRGY": "Gayrimenkul",
   "BLCYT": "Tekstil",
   "BLUME": "Metal Ana",
-  "BMEKS": "Bilişim",
   "BMSCH": "Metal Ana",
   "BMSTL": "Metal Ana",
   "BNTAS": "Sınai",
@@ -397,7 +396,6 @@ export const sectorMapping: Record<string, string> = {
   "MAKTK": "Sınai",
   "MANAS": "Bilişim",
   "MARBL": "Sınai",
-  "MARKA": "Holding",
   "MARMR": "Sınai",
   "MARTI": "Turizm",
   "MASFN": "Sınai",
@@ -649,16 +647,11 @@ export const sectorMapping: Record<string, string> = {
   "ZPT10": "Borsa Yatırım Fonu",
   "ZRE20": "Borsa Yatırım Fonu",
   "ZRGYO": "Gayrimenkul Yatırım Ortaklığı",
-  "ZSR25": "Borsa Yatırım Fonu",
+  "ZSR25": "Borsa Yatırım Fonu"
 };
 
-export const getAssetSector = (symbol: string): string => {
-    const commodities = ["ALTIN", "GUMUS", "ALTIN.S1"];
-    const cleanSym = symbol.toUpperCase().replace(/\.IS$/, '');
-    if (commodities.includes(cleanSym) || cleanSym.includes("XAU") || cleanSym.includes("XAG")) return "Emtia";
-    if (cleanSym.includes("BTC") || cleanSym.includes("ETH") || cleanSym.includes("SOL") || cleanSym.includes("USDT")) return "Kripto";
-    if (cleanSym.endsWith("GYO") || cleanSym.includes("GMYO")) return "Gayrimenkul";
-    if (sectorMapping[cleanSym]) return sectorMapping[cleanSym];
-    if (sectorMapping[symbol]) return sectorMapping[symbol];
-    return "Yatırım Fonu";
-};
+export function getAssetSector(symbol: string): string {
+    if (!symbol) return 'Diğer';
+    const cleanSym = symbol.toUpperCase().replace(/\.IS$/i, '').trim();
+    return sectorMapping[cleanSym] || 'Borsa İstanbul';
+}

@@ -1073,7 +1073,7 @@ export default function AssetsPage() {
                             return list.map((item, idx) => (
                                 <a 
                                     key={item.symbol} 
-                                    href={`/varlik/${item.symbol}`}
+                                    href={`/dashboard/varlik/${item.symbol}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="flex items-center justify-between p-2 px-3 bg-slate-50/70 border border-slate-200/80 rounded-xl hover:bg-blue-50/60 hover:border-blue-300 transition-all text-xs group cursor-pointer"
@@ -1339,7 +1339,7 @@ export default function AssetsPage() {
                                                 <td className="py-3 px-4">
                                                     <div className="min-w-0">
                                                         <a 
-                                                            href={`/varlik/${item.symbol}`}
+                                                            href={`/dashboard/varlik/${item.symbol}`}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                             className="font-black text-[#00008B] group-hover:text-blue-900 text-xs truncate block"
@@ -1382,7 +1382,7 @@ export default function AssetsPage() {
 
                                                 <td className="py-3 px-2 text-center">
                                                     <a 
-                                                        href={`/varlik/${item.symbol}`} 
+                                                        href={`/dashboard/varlik/${item.symbol}`} 
                                                         target="_blank" 
                                                         rel="noopener noreferrer"
                                                         className="p-1.5 rounded-lg bg-slate-100 group-hover:bg-[#00008B] group-hover:text-white text-slate-500 inline-block transition-colors"
@@ -1402,7 +1402,7 @@ export default function AssetsPage() {
                                 {paginatedStocks.map((item) => (
                                     <a
                                         key={item.symbol}
-                                        href={`/varlik/${item.symbol}`}
+                                        href={`/dashboard/varlik/${item.symbol}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="bg-white border border-slate-200/90 p-3.5 rounded-2xl space-y-2.5 hover:border-blue-300 hover:shadow-md transition-all block group"

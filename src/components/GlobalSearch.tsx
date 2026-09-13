@@ -91,7 +91,7 @@ export function GlobalSearch({
     if (pathname === '/dashboard/analysis') {
       router.push(`?q=${cleanSym}`);
     } else {
-      router.push(`/varlik/${cleanSym}`);
+      router.push(`/dashboard/varlik/${cleanSym}`);
     }
   };
 
