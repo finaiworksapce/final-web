@@ -1730,28 +1730,28 @@ export default function PortfolioPage() {
                 return (
                     <div className="bg-white/90 backdrop-blur-xl border border-slate-200/70 rounded-3xl shadow-2xl shadow-slate-200/40 overflow-hidden flex flex-col justify-between h-full transition-all">
                         <div>
-                            {/* TABLO BAŞLIĞI VE SAĞ ÜSTTE VARLIK EKLE BUTONU (21st.dev Premium Bar) */}
-                            <div className="p-6 border-b border-slate-100/80 flex justify-between items-center bg-gradient-to-r from-slate-50/50 via-white to-slate-50/30 flex-wrap gap-4">
-                                <div className="flex items-center gap-3">
-                                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">Portföy Tablosu</h3>
-                                    <div className="text-[10px] font-black text-violet-700 bg-violet-50 border border-violet-200/60 px-3 py-1 rounded-full shadow-xs tracking-wider uppercase">
+                             {/* TABLO BAŞLIĞI VE SAĞ ÜSTTE VARLIK EKLE BUTONU (Sade & Kompakt Başlık) */}
+                            <div className="p-4 border-b border-slate-100/80 flex justify-between items-center bg-slate-50/50 flex-wrap gap-3">
+                                <div className="flex items-center gap-2.5">
+                                    <h3 className="text-base font-bold text-slate-800 tracking-tight">Portföy Tablosu</h3>
+                                    <div className="text-[10px] font-bold text-violet-700 bg-violet-50 border border-violet-200/50 px-2.5 py-0.5 rounded-full shadow-2xs tracking-wider uppercase">
                                         {groupedAssets.length} VARLIK
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-2.5">
+                                <div className="flex items-center gap-2">
                                     <button
                                         onClick={(e) => { e.stopPropagation(); setIsCashModalOpen(true); }}
-                                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 font-bold rounded-2xl text-xs border border-emerald-500/20 shadow-xs transition-all active:scale-[0.98]"
+                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl text-xs border border-emerald-200/60 shadow-2xs transition-all active:scale-[0.98]"
                                     >
-                                        <Coins className="w-4 h-4 text-emerald-600" />
+                                        <Coins className="w-3.5 h-3.5 text-emerald-600" />
                                         Nakit İşlemleri
                                     </button>
                                     <button
                                         onClick={(e) => { e.stopPropagation(); setIsModalOpen(true); }}
-                                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold rounded-2xl text-xs shadow-lg shadow-slate-900/15 transition-all active:scale-[0.98]"
+                                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs shadow-md transition-all active:scale-[0.98]"
                                     >
-                                        <Plus className="w-4 h-4" />
+                                        <Plus className="w-3.5 h-3.5" />
                                         Varlık Tanımla
                                     </button>
                                 </div>
@@ -1761,12 +1761,12 @@ export default function PortfolioPage() {
                                 <table className="w-full text-left border-collapse">
                                     <thead>
                                         <tr className="text-[10px] text-slate-400 uppercase tracking-widest font-extrabold border-b border-slate-100 bg-slate-50/60">
-                                            <th className="py-4 px-6">Varlık</th>
-                                            <th className="py-4 px-4">Maliyet / Adet</th>
-                                            <th className="py-4 px-4">Anlık</th>
-                                            <th className="py-4 px-4">Bakiye</th>
-                                            <th className="py-4 px-4">Kâr/Zarar</th>
-                                            <th className="py-4 px-6 text-right">İşlem</th>
+                                            <th className="py-2.5 px-6">Varlık</th>
+                                            <th className="py-2.5 px-4">Maliyet / Adet</th>
+                                            <th className="py-2.5 px-4">Anlık</th>
+                                            <th className="py-2.5 px-4">Bakiye</th>
+                                            <th className="py-2.5 px-4">Kâr/Zarar</th>
+                                            <th className="py-2.5 px-6 text-right">İşlem</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
