@@ -1798,12 +1798,12 @@ export default function PortfolioPage() {
                                                                 )}
                                                                 onClick={(e) => { e.stopPropagation(); setExpandedSymbol(isExpanded ? null : group.symbol); }}
                                                             >
-                                                                 {/* SOL TARAFTA 21st.dev STİLİ TEMİZ SEMBOL KODU VE UZANTI */}
-                                                                <td className="py-4 px-6">
+                                                                  {/* SOL TARAFTA 21st.dev STİLİ TEMİZ SEMBOL KODU VE UZANTI */}
+                                                                <td className="py-3 px-6">
                                                                     <div className="flex flex-col justify-center">
-                                                                        <div className="flex items-center gap-2">
+                                                                        <div className="flex items-center gap-1.5">
                                                                             {isCash ? (
-                                                                                <span className="text-lg font-black text-slate-900 tracking-tight leading-none">
+                                                                                <span className="text-sm font-bold text-slate-800 tracking-tight leading-none">
                                                                                     {displaySymbol}
                                                                                 </span>
                                                                             ) : (
@@ -1813,52 +1813,52 @@ export default function PortfolioPage() {
                                                                                     className="hover:underline inline-flex items-center gap-1 group/sym"
                                                                                     title={`${displaySymbol} Şirket & Finansal Detayına Git`}
                                                                                 >
-                                                                                    <span className="text-lg font-black text-slate-900 tracking-tight leading-none group-hover/sym:text-violet-600 transition-colors">{displaySymbol}</span>
-                                                                                    <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover/sym:text-violet-600 transition-colors" />
+                                                                                    <span className="text-sm font-bold text-slate-800 tracking-tight leading-none group-hover/sym:text-violet-600 transition-colors">{displaySymbol}</span>
+                                                                                    <ArrowUpRight className="w-3 h-3 text-slate-400 group-hover/sym:text-violet-600 transition-colors" />
                                                                                 </Link>
                                                                             )}
                                                                             {isCash && (
-                                                                                <span className="px-2.5 py-0.5 rounded-full bg-violet-600 text-white text-[9px] font-black uppercase tracking-wider shadow-xs">
+                                                                                <span className="px-2 py-0.5 rounded-full bg-violet-600 text-white text-[8px] font-bold uppercase tracking-wider">
                                                                                     NAKİT
                                                                                 </span>
                                                                             )}
                                                                         </div>
-                                                                        <span className="text-[11px] text-slate-400 font-medium leading-tight mt-1 truncate max-w-[180px] sm:max-w-xs">
+                                                                        <span className="text-[11px] text-slate-400 font-normal leading-tight mt-0.5 truncate max-w-[180px] sm:max-w-xs">
                                                                             {isCash ? "Kullanılabilir Nakit Bakiyesi" : (getAssetName(group.symbol) || "Hisse Senedi")}
                                                                         </span>
                                                                     </div>
                                                                 </td>
-                                                                <td className="py-4 px-4">
-                                                                    <div className="flex flex-col text-xs font-semibold">
-                                                                        <span className="text-slate-800 font-bold text-sm">
+                                                                <td className="py-3 px-4">
+                                                                    <div className="flex flex-col text-xs">
+                                                                        <span className="text-slate-700 font-semibold text-xs">
                                                                             {isCash ? `${formatCurrency(group.totalQuantity * group.avgCost)}` : `${group.totalQuantity} adet`}
                                                                         </span>
                                                                         {!isCash && (
-                                                                            <span className="text-slate-400 text-[11px] font-medium">{formatCurrency(group.avgCost)}</span>
+                                                                            <span className="text-slate-400 text-[10px] font-normal">{formatCurrency(group.avgCost)}</span>
                                                                         )}
                                                                     </div>
                                                                 </td>
-                                                                <td className="py-4 px-4 font-bold text-slate-800 text-sm">
+                                                                <td className="py-3 px-4 font-medium text-slate-700 text-xs">
                                                                     {isCash ? "1.00 ₺" : (currentPrice > 0 ? formatCurrency(currentPrice) : "-")}
                                                                 </td>
-                                                                <td className="py-4 px-4 font-black text-slate-900 text-sm">
+                                                                <td className="py-3 px-4 font-semibold text-slate-800 text-xs">
                                                                     {formatCurrency(marketValue)}
                                                                 </td>
-                                                                <td className="py-4 px-4">
+                                                                <td className="py-3 px-4">
                                                                     {isCash ? (
-                                                                        <span className="text-xs font-bold text-slate-400">-</span>
+                                                                        <span className="text-xs font-normal text-slate-400">-</span>
                                                                     ) : (
-                                                                        <div className={cn("text-sm font-semibold tracking-tight", isProfit ? "text-emerald-600" : "text-rose-600")}>
+                                                                        <div className={cn("text-xs font-semibold tracking-tight", isProfit ? "text-emerald-600" : "text-rose-600")}>
                                                                             {isProfit ? "+" : ""}{formatCurrency(profit)}
                                                                         </div>
                                                                     )}
                                                                 </td>
-                                                                <td className="py-4 px-6 text-right">
-                                                                    <div className="flex items-center justify-end gap-2 flex-wrap sm:flex-nowrap">
+                                                                <td className="py-3 px-6 text-right">
+                                                                    <div className="flex items-center justify-end gap-1.5 flex-wrap sm:flex-nowrap">
                                                                         {isCash ? (
                                                                             <button
                                                                                 onClick={(e) => { e.stopPropagation(); setIsCashModalOpen(true); }}
-                                                                                className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-md transition-all active:scale-95 flex items-center gap-1.5"
+                                                                                className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-bold text-[11px] shadow-xs transition-all active:scale-95 flex items-center gap-1.5"
                                                                                 title="Nakit Yatır veya Çek"
                                                                             >
                                                                                 <Coins className="w-3.5 h-3.5" /> Nakit İşlemleri
@@ -1867,28 +1867,28 @@ export default function PortfolioPage() {
                                                                             <>
                                                                                 <button 
                                                                                     onClick={(e) => { e.stopPropagation(); openBuyModal(group); }}
-                                                                                    className="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white font-extrabold text-xs border border-emerald-200/80 transition-all active:scale-95 flex items-center gap-1 shadow-xs"
+                                                                                    className="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white font-bold text-[11px] border border-emerald-200/70 transition-all active:scale-95 flex items-center gap-1"
                                                                                     title={`${displaySymbol} varlık alımı yap`}
                                                                                 >
-                                                                                    <Plus className="w-3.5 h-3.5" /> AL
+                                                                                    <Plus className="w-3 h-3" /> AL
                                                                                 </button>
                                                                                 <button 
                                                                                     onClick={(e) => { e.stopPropagation(); openSellModal(group); }}
-                                                                                    className="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white font-extrabold text-xs border border-rose-200/80 transition-all active:scale-95 flex items-center gap-1 shadow-xs"
+                                                                                    className="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white font-bold text-[11px] border border-rose-200/70 transition-all active:scale-95 flex items-center gap-1"
                                                                                     title={`${displaySymbol} varlık satışı yap (Nakit Bakiyesine Aktarılır)`}
                                                                                 >
-                                                                                    <TrendingDown className="w-3.5 h-3.5" /> SAT
+                                                                                    <TrendingDown className="w-3 h-3" /> SAT
                                                                                 </button>
                                                                                 <button 
                                                                                     onClick={(e) => { e.stopPropagation(); confirmDeleteGroup(group.symbol, group.transactions, group.type); }} 
-                                                                                    className="p-2 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-xl transition-all"
+                                                                                    className="p-1.5 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-lg transition-all"
                                                                                     title={`${displaySymbol} varlığını sil (pozisyon kaydını kaldır)`}
                                                                                 >
-                                                                                    <Trash2 className="w-4 h-4" />
+                                                                                    <Trash2 className="w-3.5 h-3.5" />
                                                                                 </button>
                                                                             </>
                                                                         )}
-                                                                        <ChevronRight className={cn("w-4 h-4 text-slate-400 transition-transform duration-200", isExpanded && "rotate-90 text-violet-600")} />
+                                                                        <ChevronRight className={cn("w-3.5 h-3.5 text-slate-400 transition-transform duration-200", isExpanded && "rotate-90 text-violet-600")} />
                                                                     </div>
                                                                 </td>
                                                             </tr>
