@@ -8,11 +8,14 @@ import { NewsThumbnail } from "@/components/news/NewsThumbnail";
 
 interface RelatedNewsWidgetProps {
     items: EnrichedNewsItem[];
+    limit?: number;
     className?: string;
 }
 
-export function RelatedNewsWidget({ items, className = "" }: RelatedNewsWidgetProps) {
+export function RelatedNewsWidget({ items, limit = 6, className = "" }: RelatedNewsWidgetProps) {
     if (!items || items.length === 0) return null;
+
+    const displayItems = items.slice(0, limit);
 
     return (
         <div className={`bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs ${className}`}>
@@ -34,11 +37,11 @@ export function RelatedNewsWidget({ items, className = "" }: RelatedNewsWidgetPr
             </div>
 
             <div className="divide-y divide-slate-100">
-                {items.slice(0, 3).map((item, idx) => (
+                {displayItems.map((item, idx) => (
                     <Link
                         key={item.id || idx}
                         href={`/dashboard/news/${item.slug}`}
-                        className="py-3 first:pt-0 last:pb-0 flex items-center gap-3.5 group transition-colors"
+                        className="py-3 first:pt-0 last:pb-0 flex items-center gap-3.5 group transition-all hover:bg-slate-50/70 -mx-2 px-2 rounded-xl"
                     >
                         <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-xl overflow-hidden shrink-0">
                             <NewsThumbnail

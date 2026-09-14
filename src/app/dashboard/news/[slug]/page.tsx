@@ -17,11 +17,9 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { EnrichedNewsItem } from "@/app/api/news/route";
-import { FinAiReport, ArticleResponseData } from "@/app/api/news/article/route";
+import { ArticleResponseData } from "@/app/api/news/article/route";
 import { NewsThumbnail } from "@/components/news/NewsThumbnail";
 import { FinAiReportCard } from "@/components/news/FinAiReportCard";
-import { RelatedAssetsWidget } from "@/components/news/RelatedAssetsWidget";
-import { MarketOverviewWidget } from "@/components/news/MarketOverviewWidget";
 import { RelatedNewsWidget } from "@/components/news/RelatedNewsWidget";
 
 export default function NewsDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -66,12 +64,13 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
                     );
                     setBreakingNews(newsJson.data.slice(0, 5));
                     
-                    // Filter related news by same category if possible
+                    // Filter related news by same category first, then other categories to ensure sufficient items
                     if (currentItem) {
                         const sameCat = otherItems.filter(item => item.category === currentItem?.category);
-                        setRelatedNews(sameCat.length >= 2 ? sameCat.slice(0, 3) : otherItems.slice(0, 3));
+                        const diffCat = otherItems.filter(item => item.category !== currentItem?.category);
+                        setRelatedNews([...sameCat, ...diffCat].slice(0, 8));
                     } else {
-                        setRelatedNews(otherItems.slice(0, 3));
+                        setRelatedNews(otherItems.slice(0, 8));
                     }
                 }
 
@@ -145,31 +144,11 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
         }
     };
 
-    // Calculate related assets contextually
-    const rawAssets = newsItem?.affectedAssets && newsItem.affectedAssets.length > 0
-        ? newsItem.affectedAssets
-        : (newsItem?.tickers || []);
-
-    // Filter out category names if they match
-    let specificAssets = rawAssets.filter(a => 
-        a.toLowerCase() !== newsItem?.categoryLabel.toLowerCase() &&
-        !newsItem?.categoryLabel.toLowerCase().includes(a.toLowerCase())
-    );
-
-    // If no explicit assets, provide sensible category assets
-    if (specificAssets.length === 0 && newsItem) {
-        if (newsItem.category === 'macro' || newsItem.category === 'global') {
-            specificAssets = ['EUR/USD', 'Dolar/TL', 'Küresel Piyasalar'];
-        } else if (newsItem.category === 'commodity') {
-            specificAssets = ['Brent Petrol', 'Gram Altın', 'Emtia'];
-        } else if (newsItem.category === 'crypto') {
-            specificAssets = ['Bitcoin', 'Ethereum'];
-        } else if (newsItem.category === 'bist' || newsItem.category === 'portfolio') {
-            specificAssets = ['BIST 100', 'BIST 30'];
-        }
-    }
-
     const coverImage = article?.image || newsItem?.imageUrl || null;
+
+    // Calculate how many related news items to display to match article length
+    const paragraphCount = article?.paragraphs?.length || 1;
+    const relatedLimit = paragraphCount <= 2 ? 3 : paragraphCount <= 5 ? 5 : 7;
 
     return (
         <div className="min-h-screen bg-slate-50/50 text-[#00008B] pb-24">
@@ -211,7 +190,7 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
             {/* Main Content Area */}
             <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 pt-5 space-y-6">
 
-                {/* CANLI AKIŞ TICKER (As shown at top of reference image) */}
+                {/* CANLI AKIŞ TICKER */}
                 {breakingNews.length > 0 && (
                     <div className="w-full bg-[#00008B] text-white rounded-xl px-4 py-2 flex items-center gap-3 overflow-hidden shadow-xs">
                         <div className="flex items-center gap-1.5 px-2.5 py-0.5 bg-rose-600 text-white font-black text-[10px] rounded-md uppercase tracking-wider shrink-0">
@@ -240,7 +219,7 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
                             <FileText className="w-5 h-5 text-[#00008B] absolute inset-0 m-auto animate-pulse" />
                         </div>
                         <h3 className="text-base font-black text-[#00008B]">Haber Detayı Hazırlanıyor</h3>
-                        <p className="text-xs text-slate-400 font-bold">Tam metin ve FinAi Raporu derleniyor...</p>
+                        <p className="text-xs text-slate-400 font-bold">Tam metin ve FinAi Özeti derleniyor...</p>
                     </div>
                 ) : error ? (
                     <div className="bg-red-50 border border-red-200 text-red-700 p-8 rounded-3xl flex items-center gap-4">
@@ -276,14 +255,6 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
                                 >
                                     {newsItem.categoryLabel}
                                 </Link>
-                                {specificAssets.length > 0 && (
-                                    <>
-                                        <ChevronRight className="w-3.5 h-3.5 text-slate-300" />
-                                        <span className="text-slate-600 truncate max-w-[180px]">
-                                            {specificAssets[0]}
-                                        </span>
-                                    </>
-                                )}
                             </nav>
 
                             {/* 2. Kategori Rozeti */}
@@ -366,26 +337,21 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
                             </div>
                         </motion.article>
 
-                        {/* SAĞ KOLON: FinAi Raporu + Yardımcı Widget'lar (%35 Genişlik) */}
+                        {/* SAĞ KOLON: Özet + İlgili Haberler (%35 Genişlik) */}
                         <div className="lg:col-span-4 space-y-5">
                             
-                            {/* WIDGET 1: FinAi Raporu (Doğal yükseklikte, temiz beyaz kart) */}
+                            {/* WIDGET 1: Özet (Toplam Varlık Değeri Stili #0b192c) */}
                             <FinAiReportCard 
                                 report={article.report} 
                                 fallbackSummary={article.summary} 
                             />
 
-                            {/* WIDGET 2: İlgili Varlıklar (Varsa) */}
-                            {specificAssets.length > 0 && (
-                                <RelatedAssetsWidget assets={specificAssets} />
-                            )}
-
-                            {/* WIDGET 3: Piyasa Genel Görünümü */}
-                            <MarketOverviewWidget />
-
-                            {/* WIDGET 4: İlgili Haberler */}
+                            {/* WIDGET 2: İlgili Haberler (Haber metninin bitimine kadar olan boşluğu doldurur) */}
                             {relatedNews.length > 0 && (
-                                <RelatedNewsWidget items={relatedNews} />
+                                <RelatedNewsWidget 
+                                    items={relatedNews} 
+                                    limit={relatedLimit}
+                                />
                             )}
 
                         </div>
