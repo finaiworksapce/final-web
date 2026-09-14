@@ -17,31 +17,7 @@ function formatClockTime(dateStr: string): string {
     }
 }
 
-function NewsThumbnail({ imageUrl, title }: { imageUrl?: string | null; title: string }) {
-    const [hasError, setHasError] = useState(false);
-
-    if (imageUrl && !hasError) {
-        return (
-            <div className="w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] xl:w-[82px] xl:h-[82px] rounded-xl overflow-hidden shrink-0 border border-slate-100 bg-slate-100 relative shadow-2xs">
-                <img
-                    src={imageUrl}
-                    alt={title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    onError={() => setHasError(true)}
-                    loading="lazy"
-                />
-            </div>
-        );
-    }
-
-    // FinAi Fallback Placeholder (Kare thumbnail ölçeğinde)
-    return (
-        <div className="w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] xl:w-[82px] xl:h-[82px] rounded-xl shrink-0 border border-slate-100 bg-gradient-to-br from-slate-50 to-blue-50/40 flex flex-col items-center justify-center text-slate-400 relative select-none shadow-2xs group-hover:border-blue-100 transition-colors">
-            <Newspaper className="w-5 h-5 sm:w-6 sm:h-6 text-slate-300 group-hover:text-blue-500 transition-colors" />
-            <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-wider text-slate-400 mt-1">FinAi</span>
-        </div>
-    );
-}
+import { NewsThumbnail } from "@/components/news/NewsThumbnail";
 
 export function LatestNewsWidget({ news }: LatestNewsWidgetProps) {
     // 5 adet yatay kart eşit aralıklarla yan yana dizilir
@@ -85,8 +61,11 @@ export function LatestNewsWidget({ news }: LatestNewsWidgetProps) {
                                 href={href}
                                 className="group flex items-start gap-2.5 sm:gap-3 p-2 sm:px-3 sm:py-1.5 hover:bg-slate-50/70 rounded-xl transition-colors min-w-0"
                             >
-                                {/* Kare Haber Görseli / Fallback */}
-                                <NewsThumbnail imageUrl={item.imageUrl} title={item.title} />
+                                <NewsThumbnail 
+                                    imageUrl={item.imageUrl} 
+                                    title={item.title} 
+                                    className="w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] xl:w-[82px] xl:h-[82px] rounded-xl"
+                                />
 
                                 {/* Sağ Bilgi Alanı: Saat + Başlık + Kategori */}
                                 <div className="min-w-0 flex-1 flex flex-col justify-between h-[70px] sm:h-[76px] xl:h-[82px]">
