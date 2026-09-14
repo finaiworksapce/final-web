@@ -12,8 +12,7 @@ import {
     Loader2, 
     AlertCircle, 
     FileText,
-    ChevronRight,
-    Radio
+    ChevronRight
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { EnrichedNewsItem } from "@/app/api/news/route";
@@ -29,7 +28,6 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
     const [newsItem, setNewsItem] = useState<EnrichedNewsItem | null>(null);
     const [article, setArticle] = useState<ArticleResponseData | null>(null);
     const [relatedNews, setRelatedNews] = useState<EnrichedNewsItem[]>([]);
-    const [breakingNews, setBreakingNews] = useState<EnrichedNewsItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [copied, setCopied] = useState(false);
@@ -59,12 +57,10 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
                     otherItems = newsJson.data.filter((item: EnrichedNewsItem) => 
                         item.slug !== slug && 
                         item.slug !== decodedSlug &&
-                        item.id !== slug &&
+                        item.id !== slug && 
                         item.id !== decodedSlug
                     );
-                    setBreakingNews(newsJson.data.slice(0, 5));
-                    
-                    // Filter related news by same category first, then other categories to ensure sufficient items
+
                     if (currentItem) {
                         const sameCat = otherItems.filter(item => item.category === currentItem?.category);
                         const diffCat = otherItems.filter(item => item.category !== currentItem?.category);
@@ -190,27 +186,6 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
             {/* Main Content Area */}
             <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-8 pt-5 space-y-6">
 
-                {/* CANLI AKIŞ TICKER */}
-                {breakingNews.length > 0 && (
-                    <div className="w-full bg-[#00008B] text-white rounded-xl px-4 py-2 flex items-center gap-3 overflow-hidden shadow-xs">
-                        <div className="flex items-center gap-1.5 px-2.5 py-0.5 bg-rose-600 text-white font-black text-[10px] rounded-md uppercase tracking-wider shrink-0">
-                            <Radio className="w-2.5 h-2.5 animate-pulse" />
-                            <span>CANLI AKIŞ</span>
-                        </div>
-                        <div className="flex items-center gap-4 text-xs text-blue-100 font-medium truncate">
-                            {breakingNews.map((item, idx) => (
-                                <Link 
-                                    key={idx} 
-                                    href={`/dashboard/news/${item.slug}`}
-                                    className="hover:underline hover:text-white shrink-0 truncate flex items-center gap-2"
-                                >
-                                    <span>{item.title}</span>
-                                    {idx < breakingNews.length - 1 && <span className="text-blue-400 font-bold">•</span>}
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
-                )}
 
                 {loading ? (
                     <div className="bg-white border border-slate-200/80 rounded-3xl p-16 text-center space-y-4 shadow-xs">
