@@ -144,7 +144,7 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
 
     // Calculate how many related news items to display to match article length
     const paragraphCount = article?.paragraphs?.length || 1;
-    const relatedLimit = paragraphCount <= 2 ? 3 : paragraphCount <= 5 ? 5 : 7;
+    const relatedLimit = paragraphCount <= 2 ? 2 : paragraphCount <= 5 ? 4 : 5;
 
     return (
         <div className="min-h-screen bg-slate-50/50 text-[#00008B] pb-24">
