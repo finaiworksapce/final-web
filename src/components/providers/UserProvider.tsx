@@ -6,6 +6,8 @@ import { User } from '@supabase/supabase-js';
 import { PortfolioService, Asset } from '@/lib/portfolio-service';
 import { Wallet, Activity, BarChart2 } from 'lucide-react';
 
+export type AuthState = 'INITIALIZING' | 'AUTHENTICATED' | 'UNAUTHENTICATED';
+
 interface UserContextType {
     user: User | null;
     avatarUrl: string | null;
@@ -16,6 +18,7 @@ interface UserContextType {
     setEmail: (email: string | null) => void;
     userMetadata: any;
     isAuthenticated: boolean | null;
+    authState: AuthState;
     updateProfile: (updates: { [key: string]: any }) => Promise<void>;
     // Data states
     myAssets: Asset[];
@@ -35,6 +38,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     const [userName, setUserName] = useState<string | null>(null);
     const [email, setEmail] = useState<string | null>(null);
     const [userMetadata, setUserMetadata] = useState<any>(null);
+    const [authState, setAuthState] = useState<AuthState>('INITIALIZING');
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
     const [myAssets, setMyAssets] = useState<Asset[]>([]);
     const [prices, setPrices] = useState<Record<string, number>>({});
@@ -42,6 +46,14 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     const [portfolioHistory, setPortfolioHistory] = useState<any[]>([]);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
     const [globalNews, setGlobalNews] = useState<any[]>([]);
+
+    const currentUserRef = React.useRef<User | null>(null);
+    currentUserRef.current = user;
+
+    const setAuthResolved = (state: 'AUTHENTICATED' | 'UNAUTHENTICATED') => {
+        setAuthState(state);
+        setIsAuthenticated(state === 'AUTHENTICATED');
+    };
 
     const prefetchNews = async () => {
         try {
@@ -95,7 +107,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
     const refreshDashboardData = async () => {
         try {
-            const assets = await PortfolioService.getAssets();
+            // Pass user?.id directly to avoid redundant network auth roundtrips
+            const assets = await PortfolioService.getAssets(currentUserRef.current?.id);
             setMyAssets(assets);
 
             if (assets.length > 0) {
@@ -184,12 +197,54 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
             }
             setIsDataLoaded(true);
         } catch (error) {
-            console.error("Error refreshing dashboard data:", error);
-            setIsDataLoaded(true); // Still set to true to unlock screen
+            // ÖNEMLİ: Geçici ağ/oturum hatasında mevcut myAssets veya stats'i ASLA sıfırlama!
+            // Stale-while-revalidate mantığıyla son geçerli veriyi koru.
+            console.warn("[UserProvider] Portföy verisi yenileme geçici uyarısı:", error);
+            setIsDataLoaded(true); // Ekran kilidini aç
         }
     };
 
     useEffect(() => {
+        let isMounted = true;
+
+        const applyUserSession = (sessionUser: User) => {
+            if (!isMounted) return;
+            setAuthResolved('AUTHENTICATED');
+            setUser(sessionUser);
+            const metadata = sessionUser.user_metadata;
+            setUserMetadata(metadata);
+
+            setEmail(sessionUser.email || null);
+
+            let name = "Kullanıcı";
+            if (metadata?.full_name) {
+                name = metadata.full_name;
+            } else if (metadata?.first_name && metadata?.last_name) {
+                name = `${metadata.first_name} ${metadata.last_name}`;
+            } else {
+                name = sessionUser.email?.split('@')[0] || "Kullanıcı";
+            }
+            setUserName(name);
+
+            if (metadata?.avatar_url) {
+                setAvatarUrl(metadata.avatar_url);
+                localStorage.setItem('user_avatar_url', metadata.avatar_url);
+            }
+        };
+
+        const clearUserSession = () => {
+            if (!isMounted) return;
+            setAuthResolved('UNAUTHENTICATED');
+            setUser(null);
+            setUserName(null);
+            setEmail(null);
+            setUserMetadata(null);
+            setAvatarUrl(null);
+            setMyAssets([]);
+            setStats([]);
+            setPortfolioHistory([]);
+            localStorage.removeItem('user_avatar_url');
+        };
 
         // Initial Auth Check
         const checkAuth = async () => {
@@ -197,105 +252,106 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
                 const { data: { session }, error } = await supabase.auth.getSession();
 
                 if (error) {
-                    console.error("Supabase session error:", error);
-                    setIsAuthenticated(false);
+                    console.warn("[UserProvider] Supabase session kontrol uyarısı:", error.message);
+                    if (!currentUserRef.current) {
+                        setAuthResolved('UNAUTHENTICATED');
+                    }
                     isAuthCheckCompleted.current = true;
                     return;
                 }
 
-                if (session) {
-                    setIsAuthenticated(true);
-                    setUser(session.user);
-                    const user = session.user;
-                    const metadata = user.user_metadata;
-                    setUserMetadata(metadata);
-
-                    setEmail(user.email || null);
-
-                    let name = "Kullanıcı";
-                    if (metadata?.full_name) {
-                        name = metadata.full_name;
-                    } else if (metadata?.first_name && metadata?.last_name) {
-                        name = `${metadata.first_name} ${metadata.last_name}`;
-                    } else {
-                        name = user.email?.split('@')[0] || "Kullanıcı";
+                if (session?.user) {
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log("[Auth] Aktif oturum doğrulandı:", session.user.id);
                     }
-                    setUserName(name);
-
-                    if (metadata?.avatar_url) {
-                        setAvatarUrl(metadata.avatar_url);
-                        localStorage.setItem('user_avatar_url', metadata.avatar_url);
-                    }
+                    applyUserSession(session.user);
                     refreshDashboardData();
                 } else {
                     if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined' && window.location.search.includes('mockUser=true')) {
-                        setIsAuthenticated(true);
+                        setAuthResolved('AUTHENTICATED');
                         setUser({ id: 'test-user', email: 'test@finai.com', user_metadata: { full_name: 'Test Kullanıcı' } } as any);
                         setUserName('Test Kullanıcı');
                         setIsDataLoaded(true);
                         isAuthCheckCompleted.current = true;
                         return;
                     }
-                    setIsAuthenticated(false);
+                    if (!currentUserRef.current) {
+                        setAuthResolved('UNAUTHENTICATED');
+                    }
                 }
                 isAuthCheckCompleted.current = true;
             } catch (err) {
-                console.error("Auth check internal error:", err);
-                setIsAuthenticated(false);
+                console.warn("[UserProvider] Auth check internal warning:", err);
+                if (!currentUserRef.current) {
+                    setAuthResolved('UNAUTHENTICATED');
+                }
                 isAuthCheckCompleted.current = true;
             }
         };
         checkAuth();
 
-        // Supabase Auth Listener
+        // Supabase Auth Listener (Event bazlı kontrollü filtreleme)
         const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-            if (session) {
-                setIsAuthenticated(true);
-                setUser(session.user);
-                const user = session.user;
-                const metadata = user.user_metadata;
-                setUserMetadata(metadata);
+            if (!isMounted) return;
 
-                // Refresh Email
-                setEmail(user.email || null);
-
-                // Refresh Name
-                let name = "Kullanıcı";
-                if (metadata?.full_name) {
-                    name = metadata.full_name;
-                } else if (metadata?.first_name && metadata?.last_name) {
-                    name = `${metadata.first_name} ${metadata.last_name}`;
-                } else {
-                    name = user.email?.split('@')[0] || "Kullanıcı";
-                }
-                setUserName(name);
-
-                if (metadata?.avatar_url) {
-                    setAvatarUrl(metadata.avatar_url);
-                    localStorage.setItem('user_avatar_url', metadata.avatar_url);
-                }
-                refreshDashboardData();
-            } else {
-                setIsAuthenticated(false);
-                setUser(null);
-                setUserName(null);
-                setEmail(null);
-                setUserMetadata(null);
-                setAvatarUrl(null);
-                localStorage.removeItem('user_avatar_url');
+            if (process.env.NODE_ENV === 'development') {
+                console.log(`[Auth Event] ${event}`, session?.user?.id ? `(User: ${session.user.id})` : '(No Session)');
             }
-            isAuthCheckCompleted.current = true;
+
+            switch (event) {
+                case 'SIGNED_IN':
+                case 'TOKEN_REFRESHED':
+                case 'USER_UPDATED':
+                    if (session?.user) {
+                        applyUserSession(session.user);
+                        refreshDashboardData();
+                    }
+                    isAuthCheckCompleted.current = true;
+                    break;
+
+                case 'INITIAL_SESSION':
+                    if (session?.user) {
+                        applyUserSession(session.user);
+                        refreshDashboardData();
+                    } else if (!currentUserRef.current) {
+                        setAuthResolved('UNAUTHENTICATED');
+                    }
+                    isAuthCheckCompleted.current = true;
+                    break;
+
+                case 'SIGNED_OUT':
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('[Auth] Gerçek SIGNED_OUT algılandı, oturum temizleniyor.');
+                    }
+                    clearUserSession();
+                    isAuthCheckCompleted.current = true;
+                    break;
+
+                default:
+                    // Bilinmeyen veya geçici ara durumlarda (örn. network dalgalanması):
+                    // Eğer session varsa güncelle; yoksa aktif authenticated kullanıcıyı ASLA logout etme!
+                    if (session?.user) {
+                        applyUserSession(session.user);
+                    }
+                    break;
+            }
         });
 
-        // Safety timeout: If auth check hangs for more than 5s, fallback to false
+        // Safety timeout: Yalnızca UI kilitlenmesini çözer, KULLANICIYI ASLA LOGOUT ETMEZ!
         const safetyTimeout = setTimeout(() => {
             if (!isAuthCheckCompleted.current) {
-                console.warn("Auth check timed out, falling back to unauthenticated state.");
-                setIsAuthenticated(false);
+                console.warn("[UserProvider] Auth check gecikmesi (zaman aşımı). Ekran kilidi açılıyor, oturum zorla sonlandırılmıyor.");
+                isAuthCheckCompleted.current = true;
+                setIsDataLoaded(true);
+                // Sadece daha önce hiçbir session kaydedilmemişse fallback unauthenticated yap
+                if (!currentUserRef.current) {
+                    setAuthResolved('UNAUTHENTICATED');
+                }
             }
-        }, 5000);
+        }, 8000);
 
         return () => {
+            isMounted = false;
             subscription.unsubscribe();
             clearTimeout(safetyTimeout);
         };
@@ -341,6 +397,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
             setEmail,
             userMetadata,
             isAuthenticated,
+            authState,
             updateProfile,
             myAssets,
             prices,
@@ -370,6 +427,7 @@ export function useUser() {
             setEmail: () => { },
             userMetadata: null,
             isAuthenticated: null,
+            authState: 'INITIALIZING',
             updateProfile: async () => { },
             myAssets: [],
             prices: {},
@@ -393,6 +451,7 @@ export function useUser() {
             setEmail: () => { },
             userMetadata: null,
             isAuthenticated: null,
+            authState: 'INITIALIZING',
             updateProfile: async () => { },
             myAssets: [],
             prices: {},

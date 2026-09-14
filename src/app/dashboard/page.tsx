@@ -15,9 +15,8 @@ import { DailyAgendaWidget } from "@/components/dashboard/DailyAgendaWidget";
 import { LatestNewsWidget } from "@/components/dashboard/LatestNewsWidget";
 import { FinancialTicker } from "@/components/FinancialTicker";
 import Link from "next/link";
-
 export default function DashboardPage() {
-    const { user, email: userEmail, userName, isAuthenticated, isDataLoaded, globalNews } = useUser();
+    const { user, email: userEmail, userName, isAuthenticated, authState, isDataLoaded, globalNews } = useUser();
     const [news, setNews] = useState<any[]>([]);
 
     useEffect(() => {
@@ -65,7 +64,7 @@ export default function DashboardPage() {
         }
     }, [isDataLoaded]);
 
-    if (isAuthenticated === false && isDataLoaded) {
+    if (authState === 'UNAUTHENTICATED' && isAuthenticated === false && isDataLoaded) {
         return <AuthComponent />;
     }
 

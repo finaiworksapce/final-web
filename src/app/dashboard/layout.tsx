@@ -102,7 +102,7 @@ function DashboardShell({
     }, [pathname]);
 
     // Consume Context
-    const { isAuthenticated, userName, avatarUrl, isDataLoaded } = useUser();
+    const { isAuthenticated, authState, userName, avatarUrl, isDataLoaded } = useUser();
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
@@ -132,7 +132,9 @@ function DashboardShell({
     }, []);
 
     const isMock = typeof window !== 'undefined' && window.location.href.includes('mockUser=true');
-    if (!isMock && isAuthenticated === false) {
+    
+    // Kesinlikle unauthenticated / çıkış yapılmış durum
+    if (!isMock && authState === 'UNAUTHENTICATED' && isAuthenticated === false) {
         return (
             <div className="min-h-screen bg-white relative flex items-center justify-center">
                 <AuthComponent
@@ -143,7 +145,8 @@ function DashboardShell({
         );
     }
 
-    if (!isMock && (isAuthenticated === null || (isAuthenticated === true && !isDataLoaded))) {
+    // Initializing veya veri yüklenme aşaması: Yalnızca spinner göster, asla login ekranına düşürme
+    if (!isMock && (authState === 'INITIALIZING' || isAuthenticated === null || (isAuthenticated === true && !isDataLoaded))) {
         return (
             <div className="min-h-screen bg-white flex items-center justify-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>

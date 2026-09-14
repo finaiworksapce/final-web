@@ -254,8 +254,15 @@ const getAssetName = (symbol: string): string => {
 };
 
 export default function PortfolioPage() {
-    const { refreshDashboardData } = useUser();
-    const [assets, setAssets] = useState<Asset[]>([]);
+    const { refreshDashboardData, isAuthenticated, user, myAssets } = useUser();
+    const [assets, setAssets] = useState<Asset[]>(() => (myAssets && myAssets.length > 0 ? myAssets : []));
+    
+    // UserProvider'dan gelen merkezi varlıkları boş state'e senkronize et
+    useEffect(() => {
+        if (myAssets && myAssets.length > 0 && assets.length === 0) {
+            setAssets(myAssets);
+        }
+    }, [myAssets]);
     
     // Instant 0-second Client-Side LocalStorage Price Cache
     const [prices, setPrices] = useState<Record<string, number>>(() => {
@@ -914,9 +921,10 @@ export default function PortfolioPage() {
 
     // Fetch Data
     const fetchPortfolioData = async () => {
+        if (!isAuthenticated) return;
         setLoading(true);
         try {
-            const storedAssets = await PortfolioService.getAssets();
+            const storedAssets = await PortfolioService.getAssets(user?.id);
             setAssets(storedAssets);
 
             // Fetch HalkArz Dividends
@@ -1006,7 +1014,7 @@ export default function PortfolioPage() {
 
             refreshDashboardData();
         } catch (error) {
-            console.error("Failed to load portfolio", error);
+            console.warn("[PortfolioContent] Portföy verisi yükleme geçici uyarısı (mevcut varlıklar korunuyor):", error);
         } finally {
             setLoading(false);
         }
@@ -1039,16 +1047,12 @@ export default function PortfolioPage() {
         }
     };
 
+    // Yalnızca auth doğrulandığında kontrollü şekilde fetch et (duplicate interval kaldırıldı)
     useEffect(() => {
-        fetchPortfolioData();
-
-        // 60-second (1 minute) auto-refresh for live stock & fund prices
-        const interval = setInterval(() => {
+        if (isAuthenticated) {
             fetchPortfolioData();
-        }, 60000);
-
-        return () => clearInterval(interval);
-    }, []);
+        }
+    }, [isAuthenticated]);
 
     // Prevent search trigger when selection is made
     useEffect(() => {

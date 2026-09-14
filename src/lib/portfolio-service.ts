@@ -14,31 +14,50 @@ export interface Asset {
 export type HistoryRange = '1W' | '1M' | '3M' | 'YTD' | '1Y';
 
 export const PortfolioService = {
-    getAssets: async (): Promise<Asset[]> => {
-        try {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (!user) return [];
+    getAssets: async (providedUserId?: string): Promise<Asset[]> => {
+        let userId = providedUserId;
 
-            const { data, error } = await supabase
-                .from('user_portfolios')
-                .select('*')
-                .eq('user_id', user.id);
-
-            if (error) throw error;
-
-            return data.map((item: any) => ({
-                id: item.id,
-                symbol: item.symbol,
-                type: item.asset_type as any,
-                quantity: Number(item.quantity),
-                avgCost: Number(item.avg_cost),
-                dateAdded: item.purchase_date,
-                userId: item.user_id
-            }));
-        } catch (error) {
-            console.error('Error fetching assets:', error);
-            return [];
+        if (!userId) {
+            // Check session first (fast local check)
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session?.user?.id) {
+                userId = session.user.id;
+            } else {
+                // Fallback to getUser()
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user?.id) {
+                    userId = user.id;
+                }
+            }
         }
+
+        if (!userId) {
+            throw new Error("Aktif kullanıcı oturumu bulunamadı, portföy sorgusu iptal edildi.");
+        }
+
+        const { data, error } = await supabase
+            .from('user_portfolios')
+            .select('*')
+            .eq('user_id', userId);
+
+        if (error) {
+            console.error('Veritabanı portföy sorgusu hatası:', error);
+            throw error;
+        }
+
+        if (!data) {
+            throw new Error("Veritabanından portföy verisi alınamadı.");
+        }
+
+        return data.map((item: any) => ({
+            id: item.id,
+            symbol: item.symbol,
+            type: item.asset_type as any,
+            quantity: Number(item.quantity),
+            avgCost: Number(item.avg_cost),
+            dateAdded: item.purchase_date,
+            userId: item.user_id
+        }));
     },
 
     addAsset: async (asset: Omit<Asset, "id">) => {
