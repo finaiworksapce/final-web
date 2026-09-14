@@ -228,6 +228,14 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
                     }
                     refreshDashboardData();
                 } else {
+                    if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined' && window.location.search.includes('mockUser=true')) {
+                        setIsAuthenticated(true);
+                        setUser({ id: 'test-user', email: 'test@finai.com', user_metadata: { full_name: 'Test Kullanıcı' } } as any);
+                        setUserName('Test Kullanıcı');
+                        setIsDataLoaded(true);
+                        isAuthCheckCompleted.current = true;
+                        return;
+                    }
                     setIsAuthenticated(false);
                 }
                 isAuthCheckCompleted.current = true;

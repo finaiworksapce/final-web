@@ -1730,28 +1730,28 @@ export default function PortfolioPage() {
                 return (
                     <div className="bg-white/90 backdrop-blur-xl border border-slate-200/70 rounded-3xl shadow-2xl shadow-slate-200/40 overflow-hidden flex flex-col justify-between h-full transition-all">
                         <div>
-                             {/* TABLO BAŞLIĞI VE SAĞ ÜSTTE VARLIK EKLE BUTONU (Sade & Kompakt Başlık) */}
-                            <div className="p-4 border-b border-slate-100/80 flex justify-between items-center bg-slate-50/50 flex-wrap gap-3">
-                                <div className="flex items-center gap-2.5">
-                                    <h3 className="text-base font-bold text-slate-800 tracking-tight">Portföy Tablosu</h3>
-                                    <div className="text-[10px] font-bold text-violet-700 bg-violet-50 border border-violet-200/50 px-2.5 py-0.5 rounded-full shadow-2xs tracking-wider uppercase">
+                            {/* TABLO BAŞLIĞI VE SAĞ ÜSTTE VARLIK EKLE BUTONU (21st.dev Premium Bar) */}
+                            <div className="p-6 border-b border-slate-100/80 flex justify-between items-center bg-gradient-to-r from-slate-50/50 via-white to-slate-50/30 flex-wrap gap-4">
+                                <div className="flex items-center gap-3">
+                                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">Portföy Tablosu</h3>
+                                    <div className="text-[10px] font-black text-violet-700 bg-violet-50 border border-violet-200/60 px-3 py-1 rounded-full shadow-xs tracking-wider uppercase">
                                         {groupedAssets.length} VARLIK
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2.5">
                                     <button
                                         onClick={(e) => { e.stopPropagation(); setIsCashModalOpen(true); }}
-                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl text-xs border border-emerald-200/60 shadow-2xs transition-all active:scale-[0.98]"
+                                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-700 font-bold rounded-2xl text-xs border border-emerald-500/20 shadow-xs transition-all active:scale-[0.98]"
                                     >
-                                        <Coins className="w-3.5 h-3.5 text-emerald-600" />
+                                        <Coins className="w-4 h-4 text-emerald-600" />
                                         Nakit İşlemleri
                                     </button>
                                     <button
                                         onClick={(e) => { e.stopPropagation(); setIsModalOpen(true); }}
-                                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs shadow-md transition-all active:scale-[0.98]"
+                                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-extrabold rounded-2xl text-xs shadow-lg shadow-slate-900/15 transition-all active:scale-[0.98]"
                                     >
-                                        <Plus className="w-3.5 h-3.5" />
+                                        <Plus className="w-4 h-4" />
                                         Varlık Tanımla
                                     </button>
                                 </div>
@@ -1761,12 +1761,12 @@ export default function PortfolioPage() {
                                 <table className="w-full text-left border-collapse">
                                     <thead>
                                         <tr className="text-[10px] text-slate-400 uppercase tracking-widest font-extrabold border-b border-slate-100 bg-slate-50/60">
-                                            <th className="py-2.5 px-6">Varlık</th>
-                                            <th className="py-2.5 px-4">Maliyet / Adet</th>
-                                            <th className="py-2.5 px-4">Anlık</th>
-                                            <th className="py-2.5 px-4">Bakiye</th>
-                                            <th className="py-2.5 px-4">Kâr/Zarar</th>
-                                            <th className="py-2.5 px-6 text-right">İşlem</th>
+                                            <th className="py-4 px-6">Varlık</th>
+                                            <th className="py-4 px-4">Maliyet / Adet</th>
+                                            <th className="py-4 px-4">Anlık</th>
+                                            <th className="py-4 px-4">Bakiye</th>
+                                            <th className="py-4 px-4">Kâr/Zarar</th>
+                                            <th className="py-4 px-6 text-right">İşlem</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
@@ -1798,12 +1798,12 @@ export default function PortfolioPage() {
                                                                 )}
                                                                 onClick={(e) => { e.stopPropagation(); setExpandedSymbol(isExpanded ? null : group.symbol); }}
                                                             >
-                                                                  {/* SOL TARAFTA 21st.dev STİLİ TEMİZ SEMBOL KODU VE UZANTI */}
-                                                                <td className="py-3 px-6">
+                                                                {/* SOL TARAFTA İKONSUZ TEMİZ SEMBOL KODU VE UZANTI (BİTİK BÜYÜK FONT) */}
+                                                                <td className="py-4.5 px-6">
                                                                     <div className="flex flex-col justify-center">
-                                                                        <div className="flex items-center gap-1.5">
+                                                                        <div className="flex items-center gap-2">
                                                                             {isCash ? (
-                                                                                <span className="text-sm font-bold text-slate-800 tracking-tight leading-none">
+                                                                                <span className="text-lg font-black text-slate-900 tracking-tight leading-none">
                                                                                     {displaySymbol}
                                                                                 </span>
                                                                             ) : (
@@ -1813,52 +1813,52 @@ export default function PortfolioPage() {
                                                                                     className="hover:underline inline-flex items-center gap-1 group/sym"
                                                                                     title={`${displaySymbol} Şirket & Finansal Detayına Git`}
                                                                                 >
-                                                                                    <span className="text-sm font-bold text-slate-800 tracking-tight leading-none group-hover/sym:text-violet-600 transition-colors">{displaySymbol}</span>
-                                                                                    <ArrowUpRight className="w-3 h-3 text-slate-400 group-hover/sym:text-violet-600 transition-colors" />
+                                                                                    <span className="text-lg font-black text-slate-900 tracking-tight leading-none group-hover/sym:text-violet-600 transition-colors">{displaySymbol}</span>
+                                                                                    <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover/sym:text-violet-600 transition-colors" />
                                                                                 </Link>
                                                                             )}
                                                                             {isCash && (
-                                                                                <span className="px-2 py-0.5 rounded-full bg-violet-600 text-white text-[8px] font-bold uppercase tracking-wider">
+                                                                                <span className="px-2.5 py-0.5 rounded-full bg-violet-600 text-white text-[9px] font-black uppercase tracking-wider shadow-xs">
                                                                                     NAKİT
                                                                                 </span>
                                                                             )}
                                                                         </div>
-                                                                        <span className="text-[11px] text-slate-400 font-normal leading-tight mt-0.5 truncate max-w-[180px] sm:max-w-xs">
+                                                                        <span className="text-xs text-slate-400 font-medium leading-tight mt-1 truncate max-w-[180px] sm:max-w-xs">
                                                                             {isCash ? "Kullanılabilir Nakit Bakiyesi" : (getAssetName(group.symbol) || "Hisse Senedi")}
                                                                         </span>
                                                                     </div>
                                                                 </td>
-                                                                <td className="py-3 px-4">
+                                                                <td className="py-4.5 px-4">
                                                                     <div className="flex flex-col text-xs">
-                                                                        <span className="text-slate-700 font-semibold text-xs">
+                                                                        <span className="text-slate-900 font-bold">
                                                                             {isCash ? `${formatCurrency(group.totalQuantity * group.avgCost)}` : `${group.totalQuantity} adet`}
                                                                         </span>
                                                                         {!isCash && (
-                                                                            <span className="text-slate-400 text-[10px] font-normal">{formatCurrency(group.avgCost)}</span>
+                                                                            <span className="text-slate-400 text-[11px] font-normal mt-0.5">{formatCurrency(group.avgCost)}</span>
                                                                         )}
                                                                     </div>
                                                                 </td>
-                                                                <td className="py-3 px-4 font-medium text-slate-700 text-xs">
+                                                                <td className="py-4.5 px-4 font-bold text-slate-800 text-sm">
                                                                     {isCash ? "1.00 ₺" : (currentPrice > 0 ? formatCurrency(currentPrice) : "-")}
                                                                 </td>
-                                                                <td className="py-3 px-4 font-semibold text-slate-800 text-xs">
+                                                                <td className="py-4.5 px-4 font-extrabold text-slate-900 text-sm">
                                                                     {formatCurrency(marketValue)}
                                                                 </td>
-                                                                <td className="py-3 px-4">
+                                                                <td className="py-4.5 px-4">
                                                                     {isCash ? (
                                                                         <span className="text-xs font-normal text-slate-400">-</span>
                                                                     ) : (
-                                                                        <div className={cn("text-xs font-semibold tracking-tight", isProfit ? "text-emerald-600" : "text-rose-600")}>
+                                                                        <span className={cn("text-sm font-semibold tracking-tight", isProfit ? "text-emerald-600" : "text-rose-600")}>
                                                                             {isProfit ? "+" : ""}{formatCurrency(profit)}
-                                                                        </div>
+                                                                        </span>
                                                                     )}
                                                                 </td>
-                                                                <td className="py-3 px-6 text-right">
-                                                                    <div className="flex items-center justify-end gap-1.5 flex-wrap sm:flex-nowrap">
+                                                                <td className="py-4 px-6 text-right">
+                                                                    <div className="flex items-center justify-end gap-2 flex-wrap sm:flex-nowrap">
                                                                         {isCash ? (
                                                                             <button
                                                                                 onClick={(e) => { e.stopPropagation(); setIsCashModalOpen(true); }}
-                                                                                className="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-bold text-[11px] shadow-xs transition-all active:scale-95 flex items-center gap-1.5"
+                                                                                className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-md transition-all active:scale-95 flex items-center gap-1.5"
                                                                                 title="Nakit Yatır veya Çek"
                                                                             >
                                                                                 <Coins className="w-3.5 h-3.5" /> Nakit İşlemleri
@@ -1867,28 +1867,28 @@ export default function PortfolioPage() {
                                                                             <>
                                                                                 <button 
                                                                                     onClick={(e) => { e.stopPropagation(); openBuyModal(group); }}
-                                                                                    className="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white font-bold text-[11px] border border-emerald-200/70 transition-all active:scale-95 flex items-center gap-1"
+                                                                                    className="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white font-extrabold text-xs border border-emerald-200/80 transition-all active:scale-95 flex items-center gap-1 shadow-xs"
                                                                                     title={`${displaySymbol} varlık alımı yap`}
                                                                                 >
-                                                                                    <Plus className="w-3 h-3" /> AL
+                                                                                    <Plus className="w-3.5 h-3.5" /> AL
                                                                                 </button>
                                                                                 <button 
                                                                                     onClick={(e) => { e.stopPropagation(); openSellModal(group); }}
-                                                                                    className="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white font-bold text-[11px] border border-rose-200/70 transition-all active:scale-95 flex items-center gap-1"
+                                                                                    className="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white font-extrabold text-xs border border-rose-200/80 transition-all active:scale-95 flex items-center gap-1 shadow-xs"
                                                                                     title={`${displaySymbol} varlık satışı yap (Nakit Bakiyesine Aktarılır)`}
                                                                                 >
-                                                                                    <TrendingDown className="w-3 h-3" /> SAT
+                                                                                    <TrendingDown className="w-3.5 h-3.5" /> SAT
                                                                                 </button>
                                                                                 <button 
                                                                                     onClick={(e) => { e.stopPropagation(); confirmDeleteGroup(group.symbol, group.transactions, group.type); }} 
-                                                                                    className="p-1.5 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-lg transition-all"
+                                                                                    className="p-2 hover:bg-rose-50 text-slate-400 hover:text-rose-600 rounded-xl transition-all"
                                                                                     title={`${displaySymbol} varlığını sil (pozisyon kaydını kaldır)`}
                                                                                 >
-                                                                                    <Trash2 className="w-3.5 h-3.5" />
+                                                                                    <Trash2 className="w-4 h-4" />
                                                                                 </button>
                                                                             </>
                                                                         )}
-                                                                        <ChevronRight className={cn("w-3.5 h-3.5 text-slate-400 transition-transform duration-200", isExpanded && "rotate-90 text-violet-600")} />
+                                                                        <ChevronRight className={cn("w-4 h-4 text-slate-400 transition-transform duration-200", isExpanded && "rotate-90 text-violet-600")} />
                                                                     </div>
                                                                 </td>
                                                             </tr>
