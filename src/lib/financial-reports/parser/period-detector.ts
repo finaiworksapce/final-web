@@ -251,37 +251,26 @@ export function detectDocumentReportingPeriod(headerText: string): PeriodResolut
   }
 
   if (bestCandidate) {
-    const { day, month, year, raw } = bestCandidate;
+    const { month, year, raw } = bestCandidate;
     const quarter = getQuarterFromMonth(month);
-    const isAltıAylık = lower.includes('altı aylık') || lower.includes('alti aylik') || lower.includes('6 aylık') || quarter === 2;
-    const isÜçAylık = lower.includes('üç aylık') || lower.includes('uc aylik') || lower.includes('3 aylık') || quarter === 1;
-    const isDokuzAylık = lower.includes('dokuz aylık') || lower.includes('9 aylık') || quarter === 3;
-    const isYıllık = lower.includes('yıllık') || lower.includes('yillik') || quarter === 4;
 
-    let durationMonths = 0;
-    let periodStart: string | null = null;
+    let durationMonths = month;
+    let endDay = 31;
+    if (month === 3) { durationMonths = 3; endDay = 31; }
+    else if (month === 6) { durationMonths = 6; endDay = 30; }
+    else if (month === 9) { durationMonths = 9; endDay = 30; }
+    else if (month === 12) { durationMonths = 12; endDay = 31; }
 
-    if (isAltıAylık) {
-      durationMonths = 6;
-      periodStart = formatIsoDate(year, 1, 1);
-    } else if (isDokuzAylık) {
-      durationMonths = 9;
-      periodStart = formatIsoDate(year, 1, 1);
-    } else if (isÜçAylık) {
-      durationMonths = 3;
-      periodStart = formatIsoDate(year, month - 2, 1);
-    } else if (isYıllık) {
-      durationMonths = 12;
-      periodStart = formatIsoDate(year, 1, 1);
-    }
+    const periodStart = formatIsoDate(year, 1, 1);
+    const periodEnd = formatIsoDate(year, month, endDay);
 
     return {
       fiscalYear: year,
       fiscalQuarter: quarter,
       periodStart,
-      periodEnd: formatIsoDate(year, month, day),
+      periodEnd,
       durationMonths,
-      periodType: durationMonths > 0 ? (durationMonths === 12 ? 'ANNUAL' : 'CUMULATIVE_INTERIM') : 'POINT_IN_TIME',
+      periodType: durationMonths === 12 ? 'ANNUAL' : 'CUMULATIVE_INTERIM',
       isComparative: false,
       rawHeaderText: raw,
       confidence: 0.98,

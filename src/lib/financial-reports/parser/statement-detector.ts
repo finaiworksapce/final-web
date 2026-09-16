@@ -112,14 +112,21 @@ export function classifyStatementType(headerText: string): DetectedStatementHead
 
   const cleaned = cleanWhitespace(headerText);
   const lower = turkishToLower(cleaned);
+  const collapsed = lower.replace(/\s+/g, '');
 
   for (const rule of STATEMENT_PATTERNS) {
-    if (rule.exclusions && rule.exclusions.some((exc) => lower.includes(exc))) {
-      continue;
-    }
+    if (rule.type === 'OTHER') continue;
 
     for (const pattern of rule.patterns) {
-      if (lower.includes(pattern)) {
+      const collapsedPattern = pattern.replace(/\s+/g, '');
+      if (lower.includes(pattern) || collapsed.includes(collapsedPattern)) {
+        if (rule.exclusions && rule.exclusions.some((exc) => lower.includes(exc) || collapsed.includes(exc.replace(/\s+/g, '')))) {
+          // Do not exclude if it's a primary statement header containing "tablo" or "finansaldurum" or "bilanço" or "bilanco"
+          if (!collapsed.includes('tablo') && !collapsed.includes('finansaldurum') && !collapsed.includes('bilanço') && !collapsed.includes('bilanco')) {
+            continue;
+          }
+        }
+
         const isPartTwo = lower.includes('kaynaklar') || lower.includes('yükümlülükler');
         const truncatedTitle = cleaned.length > 200 ? `${cleaned.slice(0, 197)}...` : cleaned;
         return {

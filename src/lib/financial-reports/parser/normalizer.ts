@@ -30,11 +30,14 @@ export function turkishToUpper(text: string): string {
  */
 export function cleanWhitespace(text: string): string {
   if (!text) return '';
-  return text
+  let str = text
     .replace(/[\u00A0\u200B\u200E\u200F\uFEFF]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .replace(/(\b20\d)\s+(\d\b)/g, (m, p1, p2) => p1 + p2)
-    .trim();
+    .replace(/\s+/g, ' ');
+
+  // Collapse spaced digits like "20 2 6" -> "2026" or "3 1" -> "31"
+  str = str.replace(/(\b\d{1,3})\s+(?=\d\b)/g, '$1');
+  str = str.replace(/(\b\d{1,3})\s+(?=\d\b)/g, '$1');
+  return str.trim();
 }
 
 /**

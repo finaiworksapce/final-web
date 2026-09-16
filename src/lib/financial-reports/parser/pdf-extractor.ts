@@ -225,8 +225,8 @@ export function extractPagesFromPdfBuffer(pdfBuffer: Buffer): ExtractedPageLayou
     const raw = s.stream.toString('binary');
     if (!raw.includes('BT') || !raw.includes('ET')) continue;
 
-    // Filter out font definitions or XObject images
-    if (s.dict.includes('/Subtype/Type1') || s.dict.includes('/Subtype/CIDFontType2') || raw.includes('begincmap')) {
+    // Filter out font definitions or XObject CMap streams
+    if (raw.includes('begincmap') || raw.includes('beginbfchar')) {
       continue;
     }
 
