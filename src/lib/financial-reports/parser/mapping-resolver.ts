@@ -34,10 +34,15 @@ export const BASELINE_MAPPING_RULES: StaticMappingRule[] = [
   // INCOME STATEMENT
   { statementType: 'INCOME_STATEMENT', rawLabel: 'Hasılat', normalizedLabel: 'hasılat', itemCode: 'REVENUE', confidence: 1.0 },
   { statementType: 'INCOME_STATEMENT', rawLabel: 'Satış Gelirleri', normalizedLabel: 'satış gelirleri', itemCode: 'REVENUE', confidence: 1.0 },
+  { statementType: 'INCOME_STATEMENT', rawLabel: 'Satışlar', normalizedLabel: 'satışlar', itemCode: 'REVENUE', confidence: 0.95 },
+  { statementType: 'INCOME_STATEMENT', rawLabel: 'Grup Dışı Hasılat', normalizedLabel: 'grup dışı hasılat', itemCode: 'REVENUE', confidence: 0.95 },
+  { statementType: 'INCOME_STATEMENT', rawLabel: 'Satışlerin Maliyeti', normalizedLabel: 'satışların maliyeti', itemCode: 'COST_OF_REVENUE', confidence: 1.0 },
   { statementType: 'INCOME_STATEMENT', rawLabel: 'Satışların Maliyeti', normalizedLabel: 'satışların maliyeti', itemCode: 'COST_OF_REVENUE', confidence: 1.0 },
   { statementType: 'INCOME_STATEMENT', rawLabel: 'Satışların Maliyeti (-)', normalizedLabel: 'satışların maliyeti (-)', itemCode: 'COST_OF_REVENUE', confidence: 1.0 },
+  { statementType: 'INCOME_STATEMENT', rawLabel: 'Satış Maliyeti', normalizedLabel: 'satış maliyeti', itemCode: 'COST_OF_REVENUE', confidence: 1.0 },
   { statementType: 'INCOME_STATEMENT', rawLabel: 'Brüt Kâr (Zarar)', normalizedLabel: 'brüt kâr (zarar)', itemCode: 'GROSS_PROFIT', confidence: 1.0 },
   { statementType: 'INCOME_STATEMENT', rawLabel: 'Brüt Kar (Zarar)', normalizedLabel: 'brüt kar (zarar)', itemCode: 'GROSS_PROFIT', confidence: 1.0 },
+  { statementType: 'INCOME_STATEMENT', rawLabel: 'BRÜT KÂR (ZARAR)', normalizedLabel: 'brüt kâr (zarar)', itemCode: 'GROSS_PROFIT', confidence: 1.0 },
   { statementType: 'INCOME_STATEMENT', rawLabel: 'Esas Faaliyet Kârı (Zararı)', normalizedLabel: 'esas faaliyet kârı (zararı)', itemCode: 'OPERATING_PROFIT', confidence: 1.0 },
   { statementType: 'INCOME_STATEMENT', rawLabel: 'Esas Faaliyet Karı (Zararı)', normalizedLabel: 'esas faaliyet karı (zararı)', itemCode: 'OPERATING_PROFIT', confidence: 1.0 },
   { statementType: 'INCOME_STATEMENT', rawLabel: 'Faaliyet Kârı (Zararı)', normalizedLabel: 'faaliyet kârı (zararı)', itemCode: 'OPERATING_PROFIT', confidence: 0.95 },
@@ -56,6 +61,7 @@ export const BASELINE_MAPPING_RULES: StaticMappingRule[] = [
   { statementType: 'BALANCE_SHEET', rawLabel: 'DURAN VARLIKLAR', normalizedLabel: 'duran varlıklar', itemCode: 'NON_CURRENT_ASSETS', confidence: 1.0 },
   { statementType: 'BALANCE_SHEET', rawLabel: 'DURAN VARLIKLAR TOPLAMI', normalizedLabel: 'duran varlıklar toplamı', itemCode: 'NON_CURRENT_ASSETS', confidence: 1.0 },
   { statementType: 'BALANCE_SHEET', rawLabel: 'Nakit ve Nakit Benzerleri', normalizedLabel: 'nakit ve nakit benzerleri', itemCode: 'CASH_AND_EQUIVALENTS', confidence: 1.0 },
+  { statementType: 'BALANCE_SHEET', rawLabel: 'Nakit ve Bankalar', normalizedLabel: 'nakit ve bankalar', itemCode: 'CASH_AND_EQUIVALENTS', confidence: 1.0 },
   { statementType: 'BALANCE_SHEET', rawLabel: 'Ticari Alacaklar', normalizedLabel: 'ticari alacaklar', itemCode: 'TRADE_RECEIVABLES', confidence: 1.0 },
   { statementType: 'BALANCE_SHEET', rawLabel: 'Stoklar', normalizedLabel: 'stoklar', itemCode: 'INVENTORIES', confidence: 1.0 },
   { statementType: 'BALANCE_SHEET', rawLabel: 'Maddi Duran Varlıklar', normalizedLabel: 'maddi duran varlıklar', itemCode: 'PROPERTY_PLANT_EQUIPMENT', confidence: 1.0 },
@@ -76,6 +82,7 @@ export const BASELINE_MAPPING_RULES: StaticMappingRule[] = [
   { statementType: 'BALANCE_SHEET', rawLabel: 'TOPLAM ÖZKAYNAKLAR', normalizedLabel: 'toplam özkaynaklar', itemCode: 'TOTAL_EQUITY', confidence: 1.0 },
   { statementType: 'BALANCE_SHEET', rawLabel: 'ÖZKAYNAKLAR TOPLAMI', normalizedLabel: 'özkaynaklar toplamı', itemCode: 'TOTAL_EQUITY', confidence: 1.0 },
   { statementType: 'BALANCE_SHEET', rawLabel: 'Ana Ortaklığa Ait Özkaynaklar', normalizedLabel: 'ana ortaklığa ait özkaynaklar', itemCode: 'EQUITY_PARENT', confidence: 1.0 },
+  { statementType: 'BALANCE_SHEET', rawLabel: 'Ana Ortaklığa Ait Özkaynaklar', normalizedLabel: 'ana ortaklığa ait özkaynaklar', itemCode: 'PARENT_EQUITY', confidence: 1.0 },
   { statementType: 'BALANCE_SHEET', rawLabel: 'Ödenmiş Sermaye', normalizedLabel: 'ödenmiş sermaye', itemCode: 'PAID_IN_CAPITAL', confidence: 1.0 },
   { statementType: 'BALANCE_SHEET', rawLabel: '16.1 Ödenmiş Sermaye', normalizedLabel: '16.1 ödenmiş sermaye', itemCode: 'PAID_IN_CAPITAL', confidence: 1.0 },
   { statementType: 'BALANCE_SHEET', rawLabel: 'Geçmiş Yıllar Kârları/Zararları', normalizedLabel: 'geçmiş yıllar kârları/zararları', itemCode: 'RETAINED_EARNINGS', confidence: 1.0 },
@@ -110,6 +117,7 @@ export function resolveCanonicalMapping(
   }
 
   const normalized = normalizeItemLabel(rawLabel);
+  const collapsed = normalized.replace(/\s+/g, '');
   const rules = customRules || BASELINE_MAPPING_RULES;
 
   // 1. Direct normalized label exact match within statementType
@@ -128,13 +136,36 @@ export function resolveCanonicalMapping(
     };
   }
 
+  // 1b. Collapsed exact match within statementType
+  if (collapsed.length >= 3) {
+    const collapsedExact = rules.filter(
+      (r) => r.statementType === statementType && r.normalizedLabel.replace(/\s+/g, '') === collapsed
+    );
+    if (collapsedExact.length === 1) {
+      const match = collapsedExact[0];
+      return {
+        status: 'MAPPED',
+        canonicalItemCode: match.itemCode,
+        canonicalItemId: null,
+        confidence: 0.95,
+        matchedRule: `COLLAPSED: ${match.normalizedLabel} -> ${match.itemCode}`,
+      };
+    }
+  }
+
   // 2. Fuzzy / contains match within statementType
   const fuzzyMatches = rules.filter(
-    (r) =>
-      r.statementType === statementType &&
-      (normalized.startsWith(r.normalizedLabel) ||
-        r.normalizedLabel.startsWith(normalized) ||
-        (r.pattern && r.pattern.test(normalized)))
+    (r) => {
+      if (r.statementType !== statementType) return false;
+      const rNorm = r.normalizedLabel;
+      const rCollapsed = rNorm.replace(/\s+/g, '');
+      return (
+        normalized.startsWith(rNorm) ||
+        rNorm.startsWith(normalized) ||
+        (collapsed.length >= 4 && (collapsed.includes(rCollapsed) || rCollapsed.includes(collapsed))) ||
+        (r.pattern && (r.pattern.test(normalized) || r.pattern.test(collapsed)))
+      );
+    }
   );
 
   if (fuzzyMatches.length === 1) {
@@ -151,15 +182,22 @@ export function resolveCanonicalMapping(
   // 3. Ambiguous check (multiple matching rules with conflicting item codes)
   if (fuzzyMatches.length > 1) {
     const uniqueItemCodes = Array.from(new Set(fuzzyMatches.map((m) => m.itemCode)));
-    if (uniqueItemCodes.length > 1) {
+    if (uniqueItemCodes.length === 1) {
       return {
-        status: 'AMBIGUOUS',
-        canonicalItemCode: null,
+        status: 'MAPPED',
+        canonicalItemCode: uniqueItemCodes[0],
         canonicalItemId: null,
-        confidence: 0.4,
-        notes: `Birden fazla olası kalem eşleşti: ${uniqueItemCodes.join(', ')}`,
+        confidence: 0.85,
+        matchedRule: `MULTIPLE_SAME: ${uniqueItemCodes[0]}`,
       };
     }
+    return {
+      status: 'AMBIGUOUS',
+      canonicalItemCode: null,
+      canonicalItemId: null,
+      confidence: 0.4,
+      notes: `Birden fazla olası kalem eşleşti: ${uniqueItemCodes.join(', ')}`,
+    };
   }
 
   // 4. Guaranteed zero loss fallback: Unmapped

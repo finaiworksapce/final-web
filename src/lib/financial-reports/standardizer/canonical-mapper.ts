@@ -48,6 +48,7 @@ export function mapRawLabelToCanonical(
 
   const cleanRaw = rawLabel.trim();
   const normalized = normalizeItemLabel(cleanRaw);
+  const collapsed = normalized.replace(/\s+/g, '');
 
   // 1. EXACT match (case & whitespace match)
   const exactRule = BASELINE_MAPPING_RULES.find(
@@ -79,14 +80,33 @@ export function mapRawLabelToCanonical(
     };
   }
 
-  // 3. ALIAS & ALMOST EXACT ALIAS matching
+  // 2b. COLLAPSED_EXACT match (ignores intra-word spaces e.g. "Na ki t ve Na ki t Ben zer ler i")
+  if (collapsed.length >= 3) {
+    const collapsedExactMatches = BASELINE_MAPPING_RULES.filter(
+      (r) => r.statementType === statementType && r.normalizedLabel.replace(/\s+/g, '') === collapsed
+    );
+    if (collapsedExactMatches.length === 1) {
+      const match = collapsedExactMatches[0];
+      return {
+        status: 'MAPPED',
+        canonicalItemCode: match.itemCode,
+        confidence: 0.95,
+        mappingMethod: 'NORMALIZED_EXACT',
+        matchedRuleLabel: match.rawLabel,
+      };
+    }
+  }
+
+  // 3. ALIAS & ALMOST EXACT ALIAS matching (supports space-collapsed matching)
   const aliasMatches = BASELINE_MAPPING_RULES.filter((r) => {
     if (r.statementType !== statementType) return false;
     const ruleNorm = r.normalizedLabel;
+    const ruleCollapsed = ruleNorm.replace(/\s+/g, '');
     return (
       normalized.includes(ruleNorm) ||
       ruleNorm.includes(normalized) ||
-      (r.pattern && r.pattern.test(normalized))
+      (collapsed.length >= 4 && (collapsed.includes(ruleCollapsed) || ruleCollapsed.includes(collapsed))) ||
+      (r.pattern && (r.pattern.test(normalized) || r.pattern.test(collapsed)))
     );
   });
 

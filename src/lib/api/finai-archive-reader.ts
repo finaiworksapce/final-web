@@ -280,7 +280,10 @@ export class FinAiArchiveReader {
         let scaleMultiplier = 1;
 
         for (const s of snaps || []) {
-          valMap[s.canonical_item_code] = s.value;
+          const rawVal = Number(s.value);
+          const mult = Number(s.scale_multiplier || 1);
+          const baseVal = !isNaN(rawVal) ? (mult > 1 ? rawVal * mult : rawVal) : rawVal;
+          valMap[s.canonical_item_code] = baseVal;
           if (s.currency) currency = s.currency;
           if (s.scale) scale = s.scale;
           if (s.scale_multiplier) scaleMultiplier = s.scale_multiplier;
