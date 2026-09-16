@@ -201,6 +201,7 @@ export interface ValidatedFinancialData {
   symbol: string;
   normalizedSymbol: string;
   companyName: string;
+  source?: string;
   sectorInfo: SectorInfo;
   quality: QualityMetadata;
   ttm: CalculatedTTM | null;

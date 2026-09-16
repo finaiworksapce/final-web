@@ -1288,9 +1288,15 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   <h3 className="text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
                     <TableIcon className="w-5 h-5 text-[#00008B]" />
                     {symbol} Finansal Tablolar
+                    {fundamentalsData?.source && (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-50 text-emerald-700 border border-emerald-200 tracking-wider">
+                        <CheckCircle2 className="w-3 h-3" />
+                        {fundamentalsData.source}
+                      </span>
+                    )}
                   </h3>
                   <p className="text-xs font-bold text-slate-400">
-                    Resmi Raporlama Dönemleri Bazında Gelir Tablosu, Bilanço ve Nakit Akışı
+                    Resmi Raporlama Dönemleri Bazında Gelir Tablosu, Bilanço ve Nakit Akışı (Tutarlar Bin TL cinsindendir)
                   </p>
                 </div>
 

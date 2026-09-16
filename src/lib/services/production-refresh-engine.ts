@@ -47,7 +47,7 @@ export interface SymbolRefreshResult {
   statements: {
     quarterlyCount: number;
     annualCount: number;
-    status: 'INSERTED' | 'UPDATED' | 'NO_CHANGE' | 'NOT_APPLICABLE' | 'FAILED';
+    status: 'INSERTED' | 'UPDATED' | 'NO_CHANGE' | 'NOT_APPLICABLE' | 'FAILED' | 'SKIPPED_DEPRECATED';
   };
   metadata: {
     profileUpdated: boolean;
@@ -376,14 +376,9 @@ export class ProductionRefreshEngine {
           result.statements.annualCount = aStmts.length;
 
           if ((qStmts.length > 0 || aStmts.length > 0) && !dryRun) {
-            const allStmts = [...qStmts, ...aStmts];
-            const { error: stmtErr } = await this.sb
-              .from('financial_statement_periods')
-              .upsert(allStmts, { onConflict: 'symbol,period_type,period_end,statement_type,version' });
-
-            if (!stmtErr) {
-              result.statements.status = 'INSERTED';
-            }
+            // [FAZ 7 DEPRECATED] DB write to financial_statement_periods disabled. KAP system is source of truth.
+            console.log(`[LEGACY_ARCHIVED] Write to financial_statement_periods bypassed for ${symbol}`);
+            result.statements.status = 'SKIPPED_DEPRECATED';
           }
         } catch (stmtErr: any) {
           result.statements.status = 'FAILED';

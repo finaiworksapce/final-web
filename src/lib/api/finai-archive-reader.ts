@@ -13,11 +13,14 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 const ARCHIVE_ROOT = path.join(process.cwd(), '.finai_archive');
 
+import { ensureEnvLoaded } from '../financial-reports/admin-client';
+
 // Lazily initialized server-side Supabase client
 let _supabaseClient: SupabaseClient | null = null;
 
 function getSupabaseClient(): SupabaseClient | null {
   if (_supabaseClient) return _supabaseClient;
+  ensureEnvLoaded();
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !key) return null;
@@ -234,9 +237,116 @@ export class FinAiArchiveReader {
   }
 
   /**
+   * Helper to query KAP System (financial_reports + financial_statement_snapshots)
+   */
+  private static async getKapStatements(symbol: string, periodType: 'QUARTERLY' | 'ANNUAL'): Promise<any[] | null> {
+    const sb = getSupabaseClient();
+    if (!sb) return null;
+
+    try {
+      const cleanSymbol = symbol.toUpperCase().trim();
+      let query = sb
+        .from('financial_reports')
+        .select('*')
+        .eq('symbol', cleanSymbol)
+        .eq('is_current', true);
+
+      if (periodType === 'QUARTERLY') {
+        query = query.in('fiscal_quarter', [1, 2, 3]);
+      } else {
+        query = query.eq('fiscal_quarter', 4);
+      }
+
+      query = query
+        .order('fiscal_year', { ascending: false })
+        .order('fiscal_quarter', { ascending: false });
+
+      const { data: reports, error: repErr } = await query;
+      if (repErr || !reports || reports.length === 0) {
+        return null; // Fall back to legacy if no KAP reports for this symbol+periodType
+      }
+
+      const results = [];
+      for (const rep of reports) {
+        const { data: snaps } = await sb
+          .from('financial_statement_snapshots')
+          .select('*')
+          .eq('report_id', rep.id)
+          .eq('is_current', true);
+
+        const valMap: Record<string, any> = {};
+        let currency = 'TRY';
+        let scale = 'EXACT';
+        let scaleMultiplier = 1;
+
+        for (const s of snaps || []) {
+          valMap[s.canonical_item_code] = s.value;
+          if (s.currency) currency = s.currency;
+          if (s.scale) scale = s.scale;
+          if (s.scale_multiplier) scaleMultiplier = s.scale_multiplier;
+        }
+
+        results.push({
+          symbol: rep.symbol,
+          periodType: rep.fiscal_quarter === 4 ? 'ANNUAL' : 'QUARTERLY',
+          periodEnd: rep.reporting_period_end,
+          fiscalYear: rep.fiscal_year,
+          fiscalQuarter: rep.fiscal_quarter,
+          currency,
+          scale,
+          scaleMultiplier,
+          isKapData: true,
+          isLegacyFallback: false,
+          revenue: valMap.REVENUE ?? valMap.HASILAT ?? null,
+          costOfRevenue: valMap.COST_OF_REVENUE ?? valMap.COST_OF_SALES ?? null,
+          grossProfit: valMap.GROSS_PROFIT ?? null,
+          operatingIncome: valMap.OPERATING_INCOME ?? valMap.OPERATING_PROFIT ?? null,
+          ebitda: valMap.EBITDA ?? null,
+          netIncome: valMap.NET_INCOME_PERIOD ?? valMap.NET_INCOME ?? null,
+          netIncomeToParent: valMap.NET_INCOME_PARENT ?? valMap.NET_INCOME_PERIOD ?? valMap.NET_INCOME ?? null,
+          cashAndEquivalents: valMap.CASH_AND_EQUIVALENTS ?? null,
+          totalCurrentAssets: valMap.CURRENT_ASSETS ?? valMap.TOTAL_CURRENT_ASSETS ?? null,
+          totalAssets: valMap.TOTAL_ASSETS ?? null,
+          currentLiabilities: valMap.SHORT_TERM_LIABILITIES ?? valMap.CURRENT_LIABILITIES ?? null,
+          totalLiabilities: valMap.TOTAL_LIABILITIES ?? null,
+          totalEquity: valMap.TOTAL_EQUITY ?? null,
+          parentEquity: valMap.PARENT_EQUITY ?? valMap.TOTAL_EQUITY ?? null,
+          netDebt: valMap.NET_DEBT ?? null,
+          operatingCashFlow: valMap.OPERATING_CASH_FLOW ?? null,
+          capitalExpenditure: valMap.CAPITAL_EXPENDITURE ?? null,
+          freeCashFlow: valMap.FREE_CASH_FLOW ?? null,
+          rawIS: valMap,
+          rawBS: valMap,
+          rawCF: valMap,
+          provenance: {
+            source: 'KAP Finansal Raporu',
+            reportId: rep.id,
+            reportDate: rep.report_date,
+            periodEnd: rep.reporting_period_end,
+            version: rep.version,
+            verificationStatus: rep.verification_status
+          }
+        });
+      }
+
+      return results.length > 0 ? results : null;
+    } catch (err: any) {
+      console.warn(`[FinAiArchiveReader] KAP System query warning for ${symbol}:`, err.message);
+      return null;
+    }
+  }
+
+  /**
    * 3. Quarterly Statements
    */
   public static async getQuarterlyStatements(symbol: string): Promise<any[] | null> {
+    // 1. Primary Source: KAP System
+    const kapData = await this.getKapStatements(symbol, 'QUARTERLY');
+    if (kapData && kapData.length > 0) {
+      return kapData;
+    }
+
+    // 2. Secondary Fallback: Legacy Archive (For unmigrated symbols)
     const sb = getSupabaseClient();
     if (sb) {
       try {
@@ -248,7 +358,8 @@ export class FinAiArchiveReader {
           .order('period_end', { ascending: false });
 
         if (!error && data && data.length > 0) {
-          return this.mapStatementRows(data);
+          const mapped = this.mapStatementRows(data);
+          return mapped.map(r => ({ ...r, isKapData: false, isLegacyFallback: true }));
         }
       } catch (err: any) {
         console.warn(`[FinAiArchiveReader] Supabase error in getQuarterlyStatements(${symbol}):`, err.message);
@@ -262,6 +373,13 @@ export class FinAiArchiveReader {
    * 4. Annual Statements
    */
   public static async getAnnualStatements(symbol: string): Promise<any[] | null> {
+    // 1. Primary Source: KAP System
+    const kapData = await this.getKapStatements(symbol, 'ANNUAL');
+    if (kapData && kapData.length > 0) {
+      return kapData;
+    }
+
+    // 2. Secondary Fallback: Legacy Archive (For unmigrated symbols)
     const sb = getSupabaseClient();
     if (sb) {
       try {
@@ -273,7 +391,8 @@ export class FinAiArchiveReader {
           .order('period_end', { ascending: false });
 
         if (!error && data && data.length > 0) {
-          return this.mapStatementRows(data);
+          const mapped = this.mapStatementRows(data);
+          return mapped.map(r => ({ ...r, isKapData: false, isLegacyFallback: true }));
         }
       } catch (err: any) {
         console.warn(`[FinAiArchiveReader] Supabase error in getAnnualStatements(${symbol}):`, err.message);

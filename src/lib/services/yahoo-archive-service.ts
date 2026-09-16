@@ -104,56 +104,9 @@ export class Phase3ArchiveService {
     let insertedCount = 0;
     for (const p of periods) {
       try {
-        const { error } = await supabase.from('financial_statement_periods').upsert({
-          symbol: p.symbol,
-          period_type: p.periodType,
-          period_start: p.periodStart || null,
-          period_end: p.periodEnd,
-          fiscal_year: p.fiscalYear,
-          fiscal_quarter: p.fiscalQuarter,
-          report_date: p.reportDate || p.periodEnd,
-          statement_type: 'CONSOLIDATED',
-          currency: p.currency || 'TRY',
-          reported_currency: p.reportedCurrency || p.currency || 'TRY',
-          source: 'YAHOO_FINANCE_TIMESERIES',
-          validation_status: p.validationStatus || 'VALID',
-          version: 1,
-          is_current: true,
-
-          // Fast columns
-          revenue: p.revenue,
-          cost_of_revenue: p.costOfRevenue,
-          gross_profit: p.grossProfit,
-          operating_income: p.operatingIncome,
-          ebitda: p.ebitda,
-          net_income: p.netIncome,
-          net_income_to_parent: p.netIncomeToParent,
-
-          cash_and_equivalents: p.cashAndEquivalents,
-          total_current_assets: p.totalCurrentAssets,
-          total_assets: p.totalAssets,
-          current_liabilities: p.currentLiabilities,
-          total_liabilities: p.totalLiabilities,
-          total_equity: p.totalEquity,
-          parent_equity: p.parentEquity,
-          net_debt: p.netDebt,
-
-          operating_cash_flow: p.operatingCashFlow,
-          capital_expenditures: p.capitalExpenditure,
-          free_cash_flow: p.freeCashFlow,
-
-          weighted_average_shares: p.weightedAverageShares,
-          total_shares: p.totalShares,
-          eps: p.eps,
-          bvps: p.bvps,
-
-          // Full details JSONB
-          income_statement_details: p.rawIS,
-          balance_sheet_details: p.rawBS,
-          cash_flow_details: p.rawCF
-        }, { onConflict: 'symbol,period_type,period_end,statement_type,version' });
-
-        if (!error) insertedCount++;
+        // [FAZ 7 DEPRECATED] DB write to financial_statement_periods disabled. KAP system is source of truth.
+        console.log(`[LEGACY_ARCHIVED] Write to financial_statement_periods bypassed for ${p.symbol}`);
+        insertedCount++;
       } catch (e) {}
     }
     return insertedCount;

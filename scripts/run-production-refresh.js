@@ -329,9 +329,8 @@ async function refreshSymbol(item) {
         report.statementsFound = allStmts.length;
 
         if (allStmts.length > 0 && !isDryRun) {
-          await sb.from('financial_statement_periods').upsert(allStmts, {
-            onConflict: 'symbol,period_type,period_end,statement_type,version'
-          });
+          // [FAZ 7 DEPRECATED] DB write to financial_statement_periods disabled.
+          console.log(`[LEGACY_ARCHIVED] Write to financial_statement_periods bypassed for ${sym}`);
         }
       } catch (e) {}
     }

@@ -14,6 +14,7 @@ import { calculateTTM } from '@/lib/ttm-calculator';
 import { YahooFinanceAdapter } from '@/lib/adapters/yahoo-finance.adapter';
 import { TradingViewAdapter } from '@/lib/adapters/tradingview.adapter';
 import { supabase } from '@/lib/supabase';
+import { FinAiArchiveReader } from '@/lib/api/finai-archive-reader';
 
 // In-memory server cache (10 minutes TTL for active fundamentals)
 const fundamentalsCache = new Map<string, { data: ValidatedFinancialData; timestamp: number }>();
@@ -64,79 +65,8 @@ async function persistToSupabaseArchive(data: ValidatedFinancialData, provenance
       const ps = item.perShare;
 
       try {
-        await supabase.from('financial_statement_periods').upsert({
-          symbol: cleanSymbol,
-          company_name: data.companyName,
-          period_type: p.periodType,
-          period_start: p.startDate || null,
-          period_end: p.endDate,
-          fiscal_year: p.year,
-          fiscal_quarter: p.quarter,
-          report_date: p.endDate,
-          statement_type: 'CONSOLIDATED',
-          consolidation_type: 'CONSOLIDATED',
-          currency: p.currency || 'TRY',
-          source_currency: p.sourceCurrency || p.currency || 'TRY',
-          reported_currency: p.reportedCurrency || p.currency || 'TRY',
-          source: data.quality.sourceMetadata.source || 'Yahoo Finance BIST Gateway',
-          validation_status: data.quality.validationStatus || 'VALID',
-          quality_score: data.quality.completenessScore,
-          is_restated: p.isRestated || false,
-          is_current: true,
-          version: p.version || 1,
-          
-          // Flow Items
-          revenue: is.revenue,
-          cost_of_revenue: is.costOfRevenue,
-          gross_profit: is.grossProfit,
-          operating_income: is.operatingIncome,
-          ebitda: is.ebitda,
-          pretax_income: is.pretaxIncome,
-          tax_expense: is.taxExpense,
-          net_income: is.netIncome,
-          net_income_to_parent: is.netIncomeToParent,
-
-          // Balance Sheet Items
-          cash_and_equivalents: bs.cashAndEquivalents,
-          total_current_assets: bs.currentAssets,
-          total_assets: bs.totalAssets,
-          current_liabilities: bs.currentLiabilities,
-          total_liabilities: bs.totalLiabilities,
-          total_equity: bs.totalEquity,
-          parent_equity: bs.parentEquity,
-          financial_debt: bs.financialDebt,
-          net_debt: bs.netDebt,
-
-          // Cash Flow Items
-          operating_cash_flow: cf.operatingCashFlow,
-          investing_cash_flow: cf.investingCashFlow,
-          financing_cash_flow: cf.financingCashFlow,
-          capital_expenditures: cf.capitalExpenditures,
-          free_cash_flow: cf.freeCashFlow,
-          dividends_paid: cf.dividendsPaid,
-          net_change_in_cash: cf.netChangeInCash,
-
-          // Per Share Items
-          weighted_average_shares: ps.weightedAverageShares,
-          diluted_weighted_average_shares: ps.weightedAverageShares,
-          total_shares: ps.totalShares,
-          circulating_shares: ps.circulatingShares,
-          free_float_shares: ps.freeFloatShares,
-          eps: ps.basicEPS,
-          diluted_eps: ps.dilutedEPS,
-          bvps: ps.bookValuePerShare,
-          paid_in_capital: ps.paidInCapital,
-
-          // Raw Details
-          income_statement_details: is,
-          balance_sheet_details: bs,
-          cash_flow_details: cf,
-          per_share_details: ps,
-
-          fetched_at: data.quality.sourceMetadata.fetchedAt,
-          last_verified_at: data.quality.sourceMetadata.verifiedAt,
-          updated_at: now
-        }, { onConflict: 'symbol,period_type,period_end,statement_type,version' });
+        // [FAZ 7 DEPRECATED] Writing to financial_statement_periods disabled. KAP system is source of truth.
+        console.log(`[LEGACY_ARCHIVED] Write to financial_statement_periods bypassed for ${cleanSymbol}`);
       } catch (e) {}
     }
 
@@ -185,8 +115,109 @@ export async function fetchStockFundamentals(rawSymbol: string): Promise<Validat
     return cached.data;
   }
 
-  // 2. Fetch via Primary Source Adapter (Yahoo Finance)
+  // 2. Fetch via KAP System First (Source of Truth)
   const sectorInfo = getSectorCategory(cleanSymbol);
+  try {
+    const kapQuarters = await FinAiArchiveReader.getQuarterlyStatements(cleanSymbol);
+    const kapAnnuals = await FinAiArchiveReader.getAnnualStatements(cleanSymbol);
+    const hasKapData = kapQuarters?.some(q => q.isKapData) || kapAnnuals?.some(a => a.isKapData);
+
+    if (hasKapData) {
+      const mapKapPeriod = (kp: any): FinancialPeriodData => ({
+        period: {
+          periodType: kp.periodType,
+          startDate: kp.periodEnd,
+          endDate: kp.periodEnd,
+          year: kp.fiscalYear,
+          quarter: kp.fiscalQuarter,
+          consolidated: true,
+          isDiscreteQuarter: true,
+          currency: kp.currency || 'TRY',
+          sourceCurrency: kp.currency || 'TRY',
+          reportedCurrency: kp.currency || 'TRY',
+          isRestated: false,
+          version: kp.provenance?.version || 1
+        },
+        incomeStatement: {
+          revenue: kp.revenue,
+          costOfRevenue: kp.costOfRevenue,
+          grossProfit: kp.grossProfit,
+          operatingIncome: kp.operatingIncome,
+          ebitda: kp.ebitda,
+          netIncome: kp.netIncome,
+          netIncomeToParent: kp.netIncomeToParent
+        },
+        balanceSheet: {
+          cashAndEquivalents: kp.cashAndEquivalents,
+          financialDebt: null,
+          shortTermDebt: null,
+          longTermDebt: null,
+          totalAssets: kp.totalAssets,
+          totalLiabilities: kp.totalLiabilities,
+          totalEquity: kp.totalEquity,
+          parentEquity: kp.parentEquity,
+          currentAssets: kp.totalCurrentAssets,
+          currentLiabilities: kp.currentLiabilities,
+          inventories: null,
+          receivables: null,
+          netDebt: kp.netDebt
+        },
+        cashFlowStatement: {
+          operatingCashFlow: kp.operatingCashFlow,
+          capitalExpenditures: kp.capitalExpenditure,
+          freeCashFlow: kp.freeCashFlow
+        },
+        perShare: {
+          basicEPS: null,
+          dilutedEPS: null,
+          bookValuePerShare: null,
+          paidInCapital: null,
+          totalShares: null,
+          circulatingShares: null,
+          freeFloatShares: null,
+          freeFloatPercent: null,
+          weightedAverageShares: null
+        }
+      });
+
+      const quarters = (kapQuarters || []).map(mapKapPeriod);
+      const annuals = (kapAnnuals || []).map(mapKapPeriod);
+      const companyName = `${cleanSymbol} Sanayi ve Ticaret A.Ş.`;
+      const ttm = calculateTTM(quarters);
+
+      const quality = validateFinancialData(
+        cleanSymbol,
+        sectorInfo,
+        quarters,
+        annuals,
+        'KAP Finansal Raporu',
+        false,
+        undefined,
+        false
+      );
+
+      const payload: ValidatedFinancialData = {
+        symbol: cleanSymbol,
+        normalizedSymbol: cleanSymbol,
+        companyName,
+        source: 'KAP Finansal Raporu',
+        sectorInfo,
+        quality,
+        ttm,
+        quarters,
+        annuals,
+        dividends: [],
+        lastUpdated: new Date().toISOString()
+      };
+
+      fundamentalsCache.set(cacheKey, { data: payload, timestamp: now });
+      return payload;
+    }
+  } catch (e: any) {
+    console.warn(`[FundamentalsService] KAP check error for ${cleanSymbol}:`, e?.message || e);
+  }
+
+  // 3. Fallback: External Source Adapter (Yahoo Finance) for unmigrated symbols
   let adapterStatements: any = null;
   let primarySourceFailed = false;
 
