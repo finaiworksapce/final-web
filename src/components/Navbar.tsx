@@ -47,7 +47,7 @@ export default function Navbar() {
 
     return (
         <div className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'py-3 sm:py-4 bg-white/80 backdrop-blur-md' : 'py-4 sm:py-6'}`}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 relative flex items-center justify-between">
+            <div className="w-full px-4 sm:px-8 lg:px-12 relative flex items-center justify-between">
                 
                 {/* Sol Taraf - Logo */}
                 <Link href="/" className="flex items-center group relative z-50 transition-transform hover:scale-105 shrink-0">

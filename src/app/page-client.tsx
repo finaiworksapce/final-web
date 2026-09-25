@@ -160,85 +160,86 @@ export default function HomeClient() {
 
       <main className="flex-1 relative z-10 w-full overflow-hidden">
         {/* 
-            HERO SECTION
+            FIRST VIEWPORT (100vh) - Hero centered, Testimonials pinned at bottom edge
         */}
-        <section
-          id="hero"
-          className="flex flex-col justify-center relative pt-20 sm:pt-24 md:pt-28 pb-4 sm:pb-8 w-full"
-        >
-          {/* ORJİNAL HERO */}
-          <div className="max-w-6xl mx-auto w-full px-6 relative">
-            {/* Text Content */}
-            <div className="text-center relative z-10 space-y-4 sm:space-y-6 max-w-4xl mx-auto mt-2 sm:mt-4">
-              
-              {/* Huge H1 with soft radial glow from navy to white */}
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-                className="text-[60px] sm:text-[80px] md:text-[110px] lg:text-[120px] leading-[1.0] font-black tracking-tighter text-[#00008B] py-2 sm:py-4 relative flex justify-center items-center w-full mx-auto"
-              >
-                <span className="relative inline-block z-10">
-                  <span className="text-[#00008B] px-2 font-black">
-                    FinAi
-                  </span>
-                  <svg className="absolute w-full h-2 sm:h-3 -bottom-1 left-0 text-[#00008B] opacity-80" viewBox="0 0 100 10" preserveAspectRatio="none">
-                    <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="6" fill="transparent" />
-                  </svg>
-                </span>
-              </motion.h1>
-
-              {/* Badge moved here - Perfectly centered below FinAi */}
-              <div className="flex justify-center w-full sm:-mt-2">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-blue-50/80 border border-blue-200/50 backdrop-blur-md text-blue-700 text-xs sm:text-sm font-bold shadow-sm"
+        <div className="min-h-screen flex flex-col justify-between pt-20 sm:pt-24 pb-4 sm:pb-6 relative w-full overflow-hidden">
+          
+          {/* HERO SECTION */}
+          <section
+            id="hero"
+            className="my-auto w-full flex flex-col justify-center relative py-4 sm:py-6"
+          >
+            <div className="max-w-6xl mx-auto w-full px-6 relative">
+              {/* Text Content */}
+              <div className="text-center relative z-10 space-y-4 sm:space-y-6 max-w-4xl mx-auto">
+                
+                {/* Huge H1 with soft radial glow from navy to white */}
+                <motion.h1
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
+                  className="text-[60px] sm:text-[85px] md:text-[115px] lg:text-[125px] leading-[1.0] font-black tracking-tighter text-[#00008B] py-2 sm:py-3 relative flex justify-center items-center w-full mx-auto"
                 >
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+                  <span className="relative inline-block z-10">
+                    <span className="text-[#00008B] px-2 font-black">
+                      FinAi
+                    </span>
+                    <svg className="absolute w-full h-2 sm:h-3 -bottom-1 left-0 text-[#00008B] opacity-80" viewBox="0 0 100 10" preserveAspectRatio="none">
+                      <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="6" fill="transparent" />
+                    </svg>
                   </span>
-                  Akıllı Portföy Yönetimi
+                </motion.h1>
+
+                {/* Badge moved here - Perfectly centered below FinAi */}
+                <div className="flex justify-center w-full sm:-mt-2">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-blue-50/80 border border-blue-200/50 backdrop-blur-md text-blue-700 text-xs sm:text-sm font-bold shadow-sm"
+                  >
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+                    </span>
+                    Akıllı Portföy Yönetimi
+                  </motion.div>
+                </div>
+
+                {/* Subtitle */}
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.2 }}
+                  className="text-base sm:text-xl md:text-2xl text-[#00008B]/70 max-w-3xl mx-auto leading-relaxed font-medium mt-4 sm:mt-6 px-4 sm:px-0"
+                >
+                  Karmaşaya Son, Kontrol Sizde: Tüm Yatırımlarınızı Tek Ekrandan, <b className="text-[#00008B]">Yapay Zeka Destekli Analizlerle</b> Takip Edin.
+                </motion.p>
+
+                {/* CTAs */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.3 }}
+                  className="flex md:hidden flex-row gap-3 justify-center items-center pt-4 sm:pt-6"
+                >
+                    <Link href="/login?tab=register" className="flex items-center justify-center gap-1.5 px-6 py-3 bg-[#00008B] hover:bg-[#0b2d82] text-white font-bold rounded-full shadow-lg transition-all text-sm tracking-wide">
+                        Ücretsiz Dene
+                        <ArrowRight className="w-4 h-4" />
+                    </Link>
+                    <Link href="/login" className="flex items-center justify-center px-6 py-3 bg-white hover:bg-slate-50 text-[#00008B] font-bold rounded-full border border-slate-200 hover:border-[#00008B] shadow-sm transition-all text-sm tracking-wide">
+                        Giriş Yap
+                    </Link>
                 </motion.div>
               </div>
-
-              {/* Subtitle */}
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2 }}
-                className="text-base sm:text-xl md:text-2xl text-[#00008B]/70 max-w-3xl mx-auto leading-relaxed font-medium mt-4 sm:mt-6 px-4 sm:px-0"
-              >
-                Karmaşaya Son, Kontrol Sizde: Tüm Yatırımlarınızı Tek Ekrandan, <b className="text-[#00008B]">Yapay Zeka Destekli Analizlerle</b> Takip Edin.
-              </motion.p>
-
-              {/* CTAs */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.3 }}
-                className="flex md:hidden flex-row gap-3 justify-center items-center pt-6 sm:pt-8"
-              >
-                  <Link href="/login?tab=register" className="flex items-center justify-center gap-1.5 px-6 py-3 bg-[#00008B] hover:bg-[#0b2d82] text-white font-bold rounded-full shadow-lg transition-all text-sm tracking-wide">
-                      Ücretsiz Dene
-                      <ArrowRight className="w-4 h-4" />
-                  </Link>
-                  <Link href="/login" className="flex items-center justify-center px-6 py-3 bg-white hover:bg-slate-50 text-[#00008B] font-bold rounded-full border border-slate-200 hover:border-[#00008B] shadow-sm transition-all text-sm tracking-wide">
-                      Giriş Yap
-                  </Link>
-              </motion.div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* 
-            TESTIMONIALS
-        */}
-        <section className="w-full bg-white pt-2 sm:pt-4 pb-12 sm:pb-16 relative z-20 overflow-hidden">
-            <InfiniteMovingCards items={testimonialsData} direction="right" speed="slow" className="w-full max-w-none" />
-        </section>
+          {/* TESTIMONIALS (Pinned at the bottom edge of 100vh screen fold) */}
+          <section className="w-full bg-white pt-2 pb-2 sm:pb-4 relative z-20 overflow-hidden shrink-0 mt-auto">
+              <InfiniteMovingCards items={testimonialsData} direction="right" speed="slow" className="w-full max-w-none" />
+          </section>
+        </div>
 
         {/* 
             FEATURES SECTION
