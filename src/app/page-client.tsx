@@ -173,12 +173,12 @@ export default function HomeClient() {
               {/* Text Content */}
               <div className="text-center relative z-10 space-y-4 sm:space-y-6 max-w-4xl mx-auto">
                 
-                {/* Huge H1 with soft radial glow from navy to white */}
+                {/* Huge H1 with soft radial glow from navy to white - Geometric Outfit font matching image style */}
                 <motion.h1
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-                  className="text-[60px] sm:text-[85px] md:text-[115px] lg:text-[125px] leading-[1.0] font-black tracking-tighter text-[#00008B] py-2 sm:py-3 relative flex justify-center items-center w-full mx-auto"
+                  className="font-[family-name:var(--font-outfit)] text-[65px] sm:text-[90px] md:text-[120px] lg:text-[135px] leading-[1.0] font-black tracking-tight text-[#00008B] py-2 sm:py-4 relative flex justify-center items-center w-full mx-auto"
                 >
                   <span className="relative inline-block z-10">
                     <span className="text-[#00008B] px-2 font-black">
@@ -190,30 +190,14 @@ export default function HomeClient() {
                   </span>
                 </motion.h1>
 
-                {/* Badge moved here - Perfectly centered below FinAi */}
-                <div className="flex justify-center w-full sm:-mt-2">
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                    className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-blue-50/80 border border-blue-200/50 backdrop-blur-md text-blue-700 text-xs sm:text-sm font-bold shadow-sm"
-                  >
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
-                    </span>
-                    Akıllı Portföy Yönetimi
-                  </motion.div>
-                </div>
-
-                {/* Subtitle */}
+                {/* Subtitle - Effective new marketing sentence with Outfit font */}
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.2 }}
-                  className="text-base sm:text-xl md:text-2xl text-[#00008B]/70 max-w-3xl mx-auto leading-relaxed font-medium mt-4 sm:mt-6 px-4 sm:px-0"
+                  className="font-[family-name:var(--font-outfit)] text-base sm:text-xl md:text-2xl text-[#00008B]/80 max-w-3xl mx-auto leading-relaxed font-semibold mt-6 sm:mt-8 px-4 sm:px-0 tracking-wide"
                 >
-                  Karmaşaya Son, Kontrol Sizde: Tüm Yatırımlarınızı Tek Ekrandan, <b className="text-[#00008B]">Yapay Zeka Destekli Analizlerle</b> Takip Edin.
+                  Tüm Yatırımlarınızı Yapay Zeka Gücüyle Tek Ekrandan Yönetin, <b className="text-[#00008B] font-extrabold">Portföyünüzün Tam Kontrolünü</b> Elinize Alın.
                 </motion.p>
 
                 {/* CTAs */}
