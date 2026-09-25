@@ -59,9 +59,9 @@ const FAQAccordionSection = ({ features = defaultFeatures }: Feature197Props) =>
   };
 
   return (
-    <section className="py-20 w-full" id="faq">
-      <div className="container mx-auto max-w-7xl px-6">
-        <div className="text-center mb-16">
+    <section className="py-16 md:py-20 w-full" id="faq">
+      <div className="max-w-full lg:max-w-[1536px] mx-auto w-full px-6 md:px-12 lg:px-16">
+        <div className="text-center mb-12 lg:mb-16">
           <h2 className="text-3xl md:text-5xl font-black text-[#00008B] mb-4 tracking-tight">Merak Ettikleriniz</h2>
           <p className="text-[#00008B]/60 text-lg sm:text-xl font-medium uppercase tracking-widest text-[13px]">Bize en sık sorulan sorular ve yanıtları.</p>
         </div>

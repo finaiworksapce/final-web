@@ -190,14 +190,14 @@ export default function HomeClient() {
                   </span>
                 </motion.h1>
 
-                {/* Subtitle - Effective new marketing sentence with Outfit font */}
+                {/* Subtitle - Effective marketing sentence with clean typography matching Image 1 */}
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.2 }}
-                  className="font-[family-name:var(--font-outfit)] text-base sm:text-xl md:text-2xl text-[#00008B]/80 max-w-3xl mx-auto leading-relaxed font-semibold mt-6 sm:mt-8 px-4 sm:px-0 tracking-wide"
+                  className="font-sans text-base sm:text-xl md:text-2xl text-[#00008B]/80 max-w-3xl mx-auto leading-relaxed font-medium mt-8 sm:mt-12 md:mt-14 px-4 sm:px-0 tracking-normal"
                 >
-                  Tüm Yatırımlarınızı Yapay Zeka Gücüyle Tek Ekrandan Yönetin, <b className="text-[#00008B] font-extrabold">Portföyünüzün Tam Kontrolünü</b> Elinize Alın.
+                  Tüm Yatırımlarınızı Yapay Zeka Gücüyle Tek Ekrandan Yönetin, <b className="text-[#00008B] font-bold">Portföyünüzün Tam Kontrolünü</b> Elinize Alın.
                 </motion.p>
 
                 {/* CTAs */}

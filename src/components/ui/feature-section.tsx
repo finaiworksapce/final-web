@@ -46,13 +46,13 @@ export function FeatureSteps({
   const currentImage = openIndex !== null ? openIndex : activeImageIndex
 
   return (
-    <div className={cn("py-12 md:py-16 bg-white", className)}>
-      <div className="max-w-7xl mx-auto w-full px-6">
-        <h2 className="text-3xl md:text-5xl lg:text-5xl font-black mb-16 text-center text-[#00008B] tracking-tight">
+    <div className={cn("py-12 md:py-16 bg-white w-full", className)}>
+      <div className="max-w-full lg:max-w-[1536px] mx-auto w-full px-6 md:px-12 lg:px-16">
+        <h2 className="text-3xl md:text-5xl lg:text-5xl font-black mb-12 lg:mb-16 text-center text-[#00008B] tracking-tight">
           {title}
         </h2>
 
-        <div className="flex flex-col md:grid md:grid-cols-2 gap-10 md:gap-16 items-stretch">
+        <div className="flex flex-col md:grid md:grid-cols-2 gap-10 md:gap-14 lg:gap-20 items-stretch">
           
           {/* Sol Kolon - Başlıklar (Accordion) */}
           <div className="order-2 md:order-1 flex flex-col justify-center divide-y divide-slate-100">
