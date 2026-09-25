@@ -36,41 +36,48 @@ export default function Navbar() {
         { name: 'Merak Ettikleriniz', url: '/#faq', icon: Info },
     ];
 
+    // SADECE Laptop/Desktop üst menüsü için ("Hakkımızda" çıkarılmış, mobil menüde korunuyor)
+    const desktopNavItems = [
+        { name: 'Ana Sayfa', url: '/#hero', icon: Home },
+        { name: 'Özellikler', url: '/#features', icon: Compass },
+        { name: 'Merak Ettikleriniz', url: '/#faq', icon: Info },
+    ];
+
     if (isAuthPage) return null;
 
     return (
-        <div className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'py-4 bg-white/80 backdrop-blur-md' : 'py-6'}`}>
+        <div className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'py-3 sm:py-4 bg-white/80 backdrop-blur-md' : 'py-4 sm:py-6'}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 relative flex items-center justify-between">
                 
                 {/* Sol Taraf - Logo */}
-                <Link href="/" className="flex items-center group relative z-50 transition-transform hover:scale-105">
-                    <FinAiLogo className="h-10 sm:h-12 w-auto" />
+                <Link href="/" className="flex items-center group relative z-50 transition-transform hover:scale-105 shrink-0">
+                    <FinAiLogo className="h-9 sm:h-10 md:h-12 w-auto" />
                 </Link>
 
                 {/* Orta Taraf - Tubelight Menu (Sadece Desktoptan Görünür) */}
                 <div className="hidden md:block">
-                    <TubelightNavbar items={navItems} />
+                    <TubelightNavbar items={desktopNavItems} />
                 </div>
 
                 {/* Sağ Taraf - Butonlar / Mobil Menü Butonu */}
-                <div className="flex items-center gap-3 relative z-50">
+                <div className="flex items-center gap-2 lg:gap-3 relative z-50 shrink-0">
                     {isAuthenticated ? (
                         <Link href="/dashboard" passHref legacyBehavior>
                             <motion.a
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="cursor-pointer px-6 py-2.5 text-sm font-bold text-white bg-[#00008B] hover:bg-black rounded-full shadow-[0_8px_30px_-5px_rgba(0,0,139,0.4)] transition-all hidden sm:block"
+                                className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm font-bold text-white bg-[#00008B] hover:bg-black rounded-full shadow-[0_8px_30px_-5px_rgba(0,0,139,0.4)] transition-all hidden sm:block whitespace-nowrap"
                             >
                                 Panele Git
                             </motion.a>
                         </Link>
                     ) : (
-                        <div className="hidden sm:flex items-center gap-3">
+                        <div className="hidden sm:flex items-center gap-2 lg:gap-3">
                             <Link href="/login" passHref legacyBehavior>
                                 <motion.a
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="cursor-pointer px-6 py-2.5 text-sm font-bold text-[#00008B] hover:bg-slate-100 rounded-full border-2 border-slate-200 hover:border-[#00008B] transition-all bg-white relative z-50 block"
+                                    className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm font-bold text-[#00008B] hover:bg-slate-100 rounded-full border-2 border-slate-200 hover:border-[#00008B] transition-all bg-white relative z-50 block whitespace-nowrap"
                                 >
                                     Giriş Yap
                                 </motion.a>
@@ -79,7 +86,7 @@ export default function Navbar() {
                                 <motion.a
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="cursor-pointer px-6 py-2.5 text-sm font-bold text-white bg-[#00008B] hover:bg-black rounded-full shadow-[0_8px_30px_-5px_rgba(0,0,139,0.4)] transition-all relative z-50 block"
+                                    className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm font-bold text-white bg-[#00008B] hover:bg-black rounded-full shadow-[0_8px_30px_-5px_rgba(0,0,139,0.4)] transition-all relative z-50 block whitespace-nowrap"
                                 >
                                     Kaydol
                                 </motion.a>

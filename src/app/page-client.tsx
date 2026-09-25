@@ -164,21 +164,21 @@ export default function HomeClient() {
         */}
         <section
           id="hero"
-          className="min-h-screen flex flex-col justify-center relative pt-24 pb-32 w-full"
+          className="flex flex-col justify-center relative pt-20 sm:pt-24 md:pt-28 pb-4 sm:pb-8 w-full"
         >
           {/* ORJİNAL HERO */}
           <div className="max-w-6xl mx-auto w-full px-6 relative">
             {/* Text Content */}
-            <div className="text-center relative z-10 space-y-6 max-w-4xl mx-auto mt-10">
+            <div className="text-center relative z-10 space-y-4 sm:space-y-6 max-w-4xl mx-auto mt-2 sm:mt-4">
               
               {/* Huge H1 with soft radial glow from navy to white */}
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-                className="text-[65px] sm:text-[80px] md:text-[120px] leading-[1.0] font-black tracking-tighter text-[#00008B] py-4 relative flex justify-center items-center w-full mx-auto"
+                className="text-[60px] sm:text-[80px] md:text-[110px] lg:text-[120px] leading-[1.0] font-black tracking-tighter text-[#00008B] py-2 sm:py-4 relative flex justify-center items-center w-full mx-auto"
               >
-                <span className="relative inline-block z-10 mt-10 sm:mt-0">
+                <span className="relative inline-block z-10">
                   <span className="text-[#00008B] px-2 font-black">
                     FinAi
                   </span>
@@ -209,7 +209,7 @@ export default function HomeClient() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.2 }}
-                className="text-base sm:text-xl md:text-2xl text-[#00008B]/70 max-w-3xl mx-auto leading-relaxed font-medium mt-6 px-4 sm:px-0"
+                className="text-base sm:text-xl md:text-2xl text-[#00008B]/70 max-w-3xl mx-auto leading-relaxed font-medium mt-4 sm:mt-6 px-4 sm:px-0"
               >
                 Karmaşaya Son, Kontrol Sizde: Tüm Yatırımlarınızı Tek Ekrandan, <b className="text-[#00008B]">Yapay Zeka Destekli Analizlerle</b> Takip Edin.
               </motion.p>
@@ -219,7 +219,7 @@ export default function HomeClient() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.3 }}
-                className="flex md:hidden flex-row gap-3 justify-center items-center pt-8"
+                className="flex md:hidden flex-row gap-3 justify-center items-center pt-6 sm:pt-8"
               >
                   <Link href="/login?tab=register" className="flex items-center justify-center gap-1.5 px-6 py-3 bg-[#00008B] hover:bg-[#0b2d82] text-white font-bold rounded-full shadow-lg transition-all text-sm tracking-wide">
                       Ücretsiz Dene
@@ -236,7 +236,7 @@ export default function HomeClient() {
         {/* 
             TESTIMONIALS
         */}
-        <section className="w-full bg-white pt-16 pb-16 relative z-20 overflow-hidden">
+        <section className="w-full bg-white pt-2 sm:pt-4 pb-12 sm:pb-16 relative z-20 overflow-hidden">
             <InfiniteMovingCards items={testimonialsData} direction="right" speed="slow" className="w-full max-w-none" />
         </section>
 
