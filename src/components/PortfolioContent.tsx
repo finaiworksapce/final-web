@@ -1474,7 +1474,7 @@ export default function PortfolioPage() {
                     if (!isFocused) setFocusedWidget(id);
                 }}
                 className={cn(
-                    "w-full transition-all duration-300 rounded-3xl flex flex-col",
+                    "w-full transition-all duration-300 rounded-3xl flex flex-col overflow-hidden",
                     !isFocused && "cursor-pointer hover:border-blue-300 hover:shadow-2xl active:scale-[0.99]",
                     isFocused && "ring-2 ring-[#00008B]/20 shadow-2xl"
                 )}
@@ -2307,7 +2307,7 @@ export default function PortfolioPage() {
 
             case 'extremes':
                 return (
-                    <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-xl shadow-[#00008B]/5">
+                    <div className="bg-white border border-slate-100 rounded-3xl p-4 sm:p-6 shadow-xl shadow-[#00008B]/5 w-full overflow-x-hidden">
                         {/* ÜST BİLGİ VE ZAMAN PERİYODU SEÇİCİLERİ */}
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 mb-4 gap-3">
                             <div className="flex items-center gap-2">
@@ -2338,7 +2338,7 @@ export default function PortfolioPage() {
                         </div>
 
                         {/* LİSTELEME */}
-                        <div className={cn("space-y-4 overflow-y-auto pr-1", isFocused ? "max-h-[800px]" : "max-h-[420px]")}>
+                        <div className={cn("space-y-4 w-full overflow-x-hidden", isFocused ? "max-h-[800px] overflow-y-auto pr-1" : "")}>
                             {/* CANLI DALGA ANİMASYONU STİL TANIMI (PREFERS-REDUCED-MOTION UYUMLU) */}
                             <style>{`
                                 @keyframes navyPulseRing {
@@ -2365,7 +2365,7 @@ export default function PortfolioPage() {
                                 const itemsToDisplay = isFocused ? extremesEntries : extremesEntries.slice(0, 2);
 
                                 return (
-                                    <div className="space-y-4">
+                                    <div className="space-y-4 w-full overflow-x-hidden">
                                         {itemsToDisplay.map(([sym, ext]) => {
                                             // Dinamik zaman periyodu marjına göre Düşük - Yüksek hesaplama
                                             let marginMultiplier = 1;
@@ -2404,7 +2404,7 @@ export default function PortfolioPage() {
                                             const regionCenterPos = regionLeft + (regionWidth / 2);
 
                                             return (
-                                                <div key={sym} className="space-y-3 p-4 bg-slate-50/70 rounded-2xl border border-slate-100 hover:bg-blue-50/30 transition-all">
+                                                <div key={sym} className="space-y-3 p-4 bg-slate-50/70 rounded-2xl border border-slate-100 hover:bg-blue-50/30 transition-all w-full overflow-x-hidden">
                                                     {/* ÜST BAŞLIK VE SON FİYAT */}
                                                     <div className="flex justify-between items-center text-xs">
                                                         <div className="flex items-center gap-2">
@@ -2418,7 +2418,7 @@ export default function PortfolioPage() {
                                                     </div>
 
                                                     {/* FİYAT ANALİZİ & TREND BANDI ÇUBUĞU KART ALANI */}
-                                                    <div className="relative pt-[60px] pb-[95px] my-1 select-none">
+                                                    <div className="relative pt-[60px] pb-[95px] my-1 select-none w-full px-2 sm:px-4 overflow-x-hidden">
                                                         {/* ANLIK FİYAT İLE MALİYET ARASINDAKİ BÖLGE (KÂR / ZARAR GÖSTERGESİ) */}
                                                         {hasCost && costPos !== null && (
                                                             <>
@@ -2527,15 +2527,15 @@ export default function PortfolioPage() {
                                                         )}
 
                                                         {/* DÜŞÜK VE YÜKSEK ETİKETLERİ (ÇUBUĞUN HEMEN ALTINDA, ÇİZGİNİN ÖNÜNDE) */}
-                                                        <div className="flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-wider absolute top-[76px] left-0 right-0 z-10 pointer-events-none">
+                                                        <div className="flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-wider absolute top-[76px] left-0 right-0 z-10 pointer-events-none px-2 sm:px-4">
                                                             <span>DÜŞÜK: {formatCurrency(low)}</span>
                                                             <span>YÜKSEK: {formatCurrency(high)}</span>
                                                         </div>
                                                     </div>
 
                                                     {/* MARKA RENK PALETİNDEKİ MÜKEMMEL MAVİ YAPAY ZEKA ANALİZ KUTUSU */}
-                                                    <div className="bg-[#00008B] border border-[#00008B]/20 rounded-2xl p-4 shadow-md text-white">
-                                                        <p className="text-xs font-medium text-slate-100 leading-relaxed">
+                                                    <div className="bg-[#00008B] border border-[#00008B]/20 rounded-2xl p-4 shadow-md text-white w-full overflow-hidden">
+                                                        <p className="text-xs font-medium text-slate-100 leading-relaxed break-words">
                                                             {(() => {
                                                                 const isProfit = userCost ? currentPrice >= userCost : false;
                                                                 const diffP = userCost ? Math.abs(((currentPrice - userCost) / userCost) * 100).toFixed(1) : null;
