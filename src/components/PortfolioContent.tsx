@@ -479,6 +479,7 @@ export default function PortfolioPage() {
         { id: 'table', name: 'Portföy Varlıkları', icon: FileText, desc: 'Tüm Varlık Listesi ve Al/Sat' },
         { id: 'distribution', name: 'Varlık Dağılımı', icon: PieChart, desc: 'Donut Grafik, Isı Haritası ve Sektörler' },
         { id: 'agenda', name: 'Portföy Gündemi', icon: Newspaper, desc: 'Bugün ve Yaklaşan Gelişmeler' },
+        { id: 'extremes', name: 'Fiyat Hareket Bandı', icon: Activity, desc: 'Destek, Direnç & Maliyet Analizi Bandı' },
     ], []);
 
     // PORTFÖY GÜNDEMİ İÇİN GERÇEK VERİ EŞLEŞTİRME VE ÖNCELİKLENDİRME MOTORU
@@ -2361,230 +2362,249 @@ export default function PortfolioPage() {
                             {extremesEntries.length === 0 ? (
                                 <p className="text-xs text-slate-400 py-6 text-center font-medium">Analiz verisi yükleniyor...</p>
                             ) : (() => {
-                                const itemsToDisplay = isFocused ? extremesEntries : extremesEntries.slice(0, 5);
+                                const itemsToDisplay = isFocused ? extremesEntries : extremesEntries.slice(0, 2);
 
-                                return itemsToDisplay.map(([sym, ext]) => {
-                                    // Dinamik zaman periyodu marjına göre Düşük - Yüksek hesaplama
-                                    let marginMultiplier = 1;
-                                    if (extremesTimeframe === '1W') marginMultiplier = 0.08;
-                                    else if (extremesTimeframe === '1M') marginMultiplier = 0.18;
-                                    else if (extremesTimeframe === '3M') marginMultiplier = 0.45;
-                                    else if (extremesTimeframe === '6M') marginMultiplier = 0.70;
-                                    else marginMultiplier = 1.0;
+                                return (
+                                    <div className="space-y-4">
+                                        {itemsToDisplay.map(([sym, ext]) => {
+                                            // Dinamik zaman periyodu marjına göre Düşük - Yüksek hesaplama
+                                            let marginMultiplier = 1;
+                                            if (extremesTimeframe === '1W') marginMultiplier = 0.08;
+                                            else if (extremesTimeframe === '1M') marginMultiplier = 0.18;
+                                            else if (extremesTimeframe === '3M') marginMultiplier = 0.45;
+                                            else if (extremesTimeframe === '6M') marginMultiplier = 0.70;
+                                            else marginMultiplier = 1.0;
 
-                                    const range = (ext.high - ext.low) * marginMultiplier || 1;
-                                    const calcLow = Math.max(0, ext.current - (range * 0.5));
-                                    const calcHigh = ext.current + (range * 0.5);
-                                    
-                                    const low = extremesTimeframe === '1Y' ? ext.low : Number(calcLow.toFixed(2));
-                                    const high = extremesTimeframe === '1Y' ? ext.high : Number(calcHigh.toFixed(2));
+                                            const range = (ext.high - ext.low) * marginMultiplier || 1;
+                                            const calcLow = Math.max(0, ext.current - (range * 0.5));
+                                            const calcHigh = ext.current + (range * 0.5);
+                                            
+                                            const low = extremesTimeframe === '1Y' ? ext.low : Number(calcLow.toFixed(2));
+                                            const high = extremesTimeframe === '1Y' ? ext.high : Number(calcHigh.toFixed(2));
 
-                                    const currentPrice = ext.current;
-                                    const pos = Math.min(100, Math.max(0, ((currentPrice - low) / (high - low || 1)) * 100));
+                                            const currentPrice = ext.current;
+                                            const pos = Math.min(100, Math.max(0, ((currentPrice - low) / (high - low || 1)) * 100));
 
-                                    // Kullanıcının ortalama maliyeti
-                                    const userAsset = groupedAssets.find(g => g.symbol === sym);
-                                    const userCost = userAsset ? userAsset.avgCost : null;
-                                    const hasCost = userCost !== null && userCost !== undefined && userCost > 0;
+                                            // Kullanıcının ortalama maliyeti
+                                            const userAsset = groupedAssets.find(g => g.symbol === sym);
+                                            const userCost = userAsset ? userAsset.avgCost : null;
+                                            const hasCost = userCost !== null && userCost !== undefined && userCost > 0;
 
-                                    const rawCostPos = hasCost ? ((userCost! - low) / (high - low || 1)) * 100 : null;
-                                    const costPos = rawCostPos !== null ? Math.min(100, Math.max(0, rawCostPos)) : null;
+                                            const rawCostPos = hasCost ? ((userCost! - low) / (high - low || 1)) * 100 : null;
+                                            const costPos = rawCostPos !== null ? Math.min(100, Math.max(0, rawCostPos)) : null;
 
-                                    // Kâr / Zarar & Bölge Hesaplamaları
-                                    const isProfit = hasCost ? currentPrice >= userCost! : false;
-                                    const pctDiff = hasCost && userCost! > 0 ? ((currentPrice - userCost!) / userCost!) * 100 : 0;
-                                    const formattedPctDiff = (isProfit ? "+" : "") + pctDiff.toFixed(1).replace('.', ',') + "% " + (isProfit ? "kâr" : "zarar");
+                                            // Kâr / Zarar & Bölge Hesaplamaları
+                                            const isProfit = hasCost ? currentPrice >= userCost! : false;
+                                            const pctDiff = hasCost && userCost! > 0 ? ((currentPrice - userCost!) / userCost!) * 100 : 0;
+                                            const formattedPctDiff = (isProfit ? "+" : "") + pctDiff.toFixed(1).replace('.', ',') + "% " + (isProfit ? "kâr" : "zarar");
 
-                                    const regionLeft = hasCost && costPos !== null ? Math.min(pos, costPos) : 0;
-                                    const regionWidth = hasCost && costPos !== null ? Math.abs(pos - costPos) : 0;
-                                    const showRegionBadge = hasCost && regionWidth >= 12;
-                                    const regionCenterPos = regionLeft + (regionWidth / 2);
+                                            const regionLeft = hasCost && costPos !== null ? Math.min(pos, costPos) : 0;
+                                            const regionWidth = hasCost && costPos !== null ? Math.abs(pos - costPos) : 0;
+                                            const showRegionBadge = hasCost && regionWidth >= 12;
+                                            const regionCenterPos = regionLeft + (regionWidth / 2);
 
-                                    return (
-                                        <div key={sym} className="space-y-3 p-4 bg-slate-50/70 rounded-2xl border border-slate-100 hover:bg-blue-50/30 transition-all">
-                                            {/* ÜST BAŞLIK VE SON FİYAT */}
-                                            <div className="flex justify-between items-center text-xs">
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-[#00008B] font-black text-sm">{sym}</span>
-                                                </div>
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-[#00008B] bg-blue-50 border border-blue-200/60 px-2.5 py-1 rounded-xl text-xs font-black">
-                                                        Canlı Fiyat: {formatCurrency(currentPrice)}
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            {/* FİYAT ANALİZİ & TREND BANDI ÇUBUĞU KART ALANI */}
-                                            <div className="relative pt-[60px] pb-[95px] my-1 select-none">
-                                                {/* ANLIK FİYAT İLE MALİYET ARASINDAKİ BÖLGE (KÂR / ZARAR GÖSTERGESİ) */}
-                                                {hasCost && costPos !== null && (
-                                                    <>
-                                                        {/* Çubuk içi dolgu */}
-                                                        <div 
-                                                            className="absolute top-[60px] h-3 z-10 transition-all duration-500 rounded-full overflow-hidden"
-                                                            style={{
-                                                                left: `${regionLeft}%`,
-                                                                width: `${regionWidth}%`,
-                                                                ...(isProfit 
-                                                                    ? { backgroundColor: '#00008B' }
-                                                                    : { background: 'repeating-linear-gradient(45deg, #00008B, #00008B 3px, #ffffff 3px, #ffffff 6px)' }
-                                                                )
-                                                            }}
-                                                        />
-
-                                                        {/* İki işaret arasındaki Kâr / Zarar Pill Kutusu (İki işaret çok yakın değilse gösterilir) */}
-                                                        {showRegionBadge && (
-                                                            <div 
-                                                                className="absolute top-[30px] -translate-x-1/2 bg-white border border-[#00008B] rounded-full px-2.5 py-0.5 shadow-xs z-20 pointer-events-none"
-                                                                style={{ left: `${regionCenterPos}%` }}
-                                                            >
-                                                                <span className="font-bold text-[#00008B] text-[9px] sm:text-[11px] whitespace-nowrap">
-                                                                    {formattedPctDiff}
-                                                                </span>
-                                                            </div>
-                                                        )}
-                                                    </>
-                                                )}
-
-                                                {/* GRİ ZEMİN ÇUBUĞU (BAR TRACK) */}
-                                                <div className="h-3 bg-slate-200/80 rounded-full w-full relative overflow-hidden" />
-
-                                                {/* 1) ANLIK FİYAT İŞARETİ (ÇUBUĞUN ÜSTÜNDE) */}
-                                                <div 
-                                                    className="absolute top-[60px] -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none"
-                                                    style={{ left: `${pos}%` }}
-                                                    aria-label={`Anlık fiyat ${formatCurrency(currentPrice)}`}
-                                                >
-                                                    {/* Çubuk üstündeki beyaz/lacivert nokta */}
-                                                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white border-[3px] sm:border-[4px] border-[#00008B] shadow-md flex items-center justify-center relative">
-                                                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#00008B] z-10" />
-                                                        {/* Canlı Dalga Animasyonu (Pulse Rings) */}
-                                                        <div className="absolute inset-0 rounded-full border-2 border-[#00008B] bg-transparent animate-navy-pulse-1 pointer-events-none" />
-                                                        <div className="absolute inset-0 rounded-full border-2 border-[#00008B] bg-transparent animate-navy-pulse-2 pointer-events-none" />
-                                                    </div>
-                                                </div>
-
-                                                {/* Dikey çizgi (Etiketten çubuğa inen) */}
-                                                <div 
-                                                    className="absolute top-[28px] w-[3px] bg-[#00008B] -translate-x-1/2 z-20 pointer-events-none"
-                                                    style={{ left: `${pos}%`, height: '32px' }}
-                                                />
-
-                                                {/* Anlık Fiyat Etiketi (Çubuğun üstünde) */}
-                                                <div 
-                                                    className="absolute top-0 z-30 flex flex-col items-center pointer-events-none"
-                                                    style={{
-                                                        left: `${pos}%`,
-                                                        transform: pos < 18 ? 'translateX(0%)' : pos > 82 ? 'translateX(-100%)' : 'translateX(-50%)'
-                                                    }}
-                                                >
-                                                    <div className="h-[24px] sm:h-[28px] px-2.5 sm:px-3 bg-[#00008B] rounded-[6px] text-white font-bold text-[10px] sm:text-xs flex items-center justify-center shadow-md whitespace-nowrap">
-                                                        Canlı {formatCurrency(currentPrice)}
-                                                    </div>
-                                                </div>
-
-                                                {/* 2) MALİYET İŞARETİ (ÇUBUĞUN ALTINDA) */}
-                                                {hasCost && costPos !== null && (
-                                                    <>
-                                                        {/* Çubuk üzerindeki lacivert elmas */}
-                                                        <div 
-                                                            className="absolute top-[60px] -translate-x-1/2 -translate-y-1/2 w-[14px] h-[14px] sm:w-[18px] sm:h-[18px] bg-[#00008B] rotate-45 z-30 pointer-events-none"
-                                                            style={{ left: `${costPos}%` }}
-                                                            aria-label={`Maliyet ${formatCurrency(userCost!)}`}
-                                                        />
-
-                                                        {/* Elmastan aşağı inen dikey çizgi (DÜŞÜK/YÜKSEK yazısının arkasında z-0 kalacak şekilde) */}
-                                                        <div 
-                                                            className="absolute top-[60px] w-[3px] bg-[#00008B] -translate-x-1/2 z-0 pointer-events-none"
-                                                            style={{ left: `${costPos}%`, height: '52px' }}
-                                                        />
-
-                                                        {/* ₺ Madeni Para + Maliyetiniz Metni (DÜŞÜK/YÜKSEK yazısının altında) */}
-                                                        <div 
-                                                            className="absolute top-[108px] z-20 flex flex-col items-center pointer-events-none"
-                                                            style={{
-                                                                left: `${costPos}%`,
-                                                                transform: costPos < 18 ? 'translateX(0%)' : costPos > 82 ? 'translateX(-100%)' : 'translateX(-50%)'
-                                                            }}
-                                                        >
-                                                            {/* 56px Madeni Para */}
-                                                            <div className="w-[44px] h-[44px] sm:w-[56px] sm:h-[56px] rounded-full bg-white border-[3px] sm:border-[4px] border-[#00008B] shadow-md flex items-center justify-center relative">
-                                                                <svg className="absolute inset-0 w-full h-full p-1" viewBox="0 0 56 56">
-                                                                    <circle cx="28" cy="28" r="23" fill="none" stroke="#00008B" strokeWidth="1" strokeDasharray="3 3" />
-                                                                </svg>
-                                                                <span className="font-black text-[#00008B] text-[20px] sm:text-[26px] leading-none z-10">₺</span>
-                                                            </div>
-
-                                                            {/* Maliyet metni */}
-                                                            <span className="font-bold text-[#00008B] text-[10px] sm:text-xs whitespace-nowrap mt-1">
-                                                                Maliyetiniz {formatCurrency(userCost!)}
+                                            return (
+                                                <div key={sym} className="space-y-3 p-4 bg-slate-50/70 rounded-2xl border border-slate-100 hover:bg-blue-50/30 transition-all">
+                                                    {/* ÜST BAŞLIK VE SON FİYAT */}
+                                                    <div className="flex justify-between items-center text-xs">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-[#00008B] font-black text-sm">{sym}</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-[#00008B] bg-blue-50 border border-blue-200/60 px-2.5 py-1 rounded-xl text-xs font-black">
+                                                                Canlı Fiyat: {formatCurrency(currentPrice)}
                                                             </span>
                                                         </div>
-                                                    </>
-                                                )}
+                                                    </div>
 
-                                                {/* DÜŞÜK VE YÜKSEK ETİKETLERİ (ÇUBUĞUN HEMEN ALTINDA, ÇİZGİNİN ÖNÜNDE) */}
-                                                <div className="flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-wider absolute top-[76px] left-0 right-0 z-10 pointer-events-none">
-                                                    <span>DÜŞÜK: {formatCurrency(low)}</span>
-                                                    <span>YÜKSEK: {formatCurrency(high)}</span>
+                                                    {/* FİYAT ANALİZİ & TREND BANDI ÇUBUĞU KART ALANI */}
+                                                    <div className="relative pt-[60px] pb-[95px] my-1 select-none">
+                                                        {/* ANLIK FİYAT İLE MALİYET ARASINDAKİ BÖLGE (KÂR / ZARAR GÖSTERGESİ) */}
+                                                        {hasCost && costPos !== null && (
+                                                            <>
+                                                                {/* Çubuk içi dolgu */}
+                                                                <div 
+                                                                    className="absolute top-[60px] h-3 z-10 transition-all duration-500 rounded-full overflow-hidden"
+                                                                    style={{
+                                                                        left: `${regionLeft}%`,
+                                                                        width: `${regionWidth}%`,
+                                                                        ...(isProfit 
+                                                                            ? { backgroundColor: '#00008B' }
+                                                                            : { background: 'repeating-linear-gradient(45deg, #00008B, #00008B 3px, #ffffff 3px, #ffffff 6px)' }
+                                                                        )
+                                                                    }}
+                                                                />
+
+                                                                {/* İki işaret arasındaki Kâr / Zarar Pill Kutusu (İki işaret çok yakın değilse gösterilir) */}
+                                                                {showRegionBadge && (
+                                                                    <div 
+                                                                        className="absolute top-[30px] -translate-x-1/2 bg-white border border-[#00008B] rounded-full px-2.5 py-0.5 shadow-xs z-20 pointer-events-none"
+                                                                        style={{ left: `${regionCenterPos}%` }}
+                                                                    >
+                                                                        <span className="font-bold text-[#00008B] text-[9px] sm:text-[11px] whitespace-nowrap">
+                                                                            {formattedPctDiff}
+                                                                        </span>
+                                                                    </div>
+                                                                )}
+                                                            </>
+                                                        )}
+
+                                                        {/* GRİ ZEMİN ÇUBUĞU (BAR TRACK) */}
+                                                        <div className="h-3 bg-slate-200/80 rounded-full w-full relative overflow-hidden" />
+
+                                                        {/* 1) ANLIK FİYAT İŞARETİ (ÇUBUĞUN ÜSTÜNDE) */}
+                                                        <div 
+                                                            className="absolute top-[60px] -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none"
+                                                            style={{ left: `${pos}%` }}
+                                                            aria-label={`Anlık fiyat ${formatCurrency(currentPrice)}`}
+                                                        >
+                                                            {/* Çubuk üstündeki beyaz/lacivert nokta */}
+                                                            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white border-[3px] sm:border-[4px] border-[#00008B] shadow-md flex items-center justify-center relative">
+                                                                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#00008B] z-10" />
+                                                                {/* Canlı Dalga Animasyonu (Pulse Rings) */}
+                                                                <div className="absolute inset-0 rounded-full border-2 border-[#00008B] bg-transparent animate-navy-pulse-1 pointer-events-none" />
+                                                                <div className="absolute inset-0 rounded-full border-2 border-[#00008B] bg-transparent animate-navy-pulse-2 pointer-events-none" />
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Dikey çizgi (Etiketten çubuğa inen) */}
+                                                        <div 
+                                                            className="absolute top-[28px] w-[3px] bg-[#00008B] -translate-x-1/2 z-20 pointer-events-none"
+                                                            style={{ left: `${pos}%`, height: '32px' }}
+                                                        />
+
+                                                        {/* Anlık Fiyat Etiketi (Çubuğun üstünde) */}
+                                                        <div 
+                                                            className="absolute top-0 z-30 flex flex-col items-center pointer-events-none"
+                                                            style={{
+                                                                left: `${pos}%`,
+                                                                transform: pos < 18 ? 'translateX(0%)' : pos > 82 ? 'translateX(-100%)' : 'translateX(-50%)'
+                                                            }}
+                                                        >
+                                                            <div className="h-[24px] sm:h-[28px] px-2.5 sm:px-3 bg-[#00008B] rounded-[6px] text-white font-bold text-[10px] sm:text-xs flex items-center justify-center shadow-md whitespace-nowrap">
+                                                                Canlı {formatCurrency(currentPrice)}
+                                                            </div>
+                                                        </div>
+
+                                                        {/* 2) MALİYET İŞARETİ (ÇUBUĞUN ALTINDA) */}
+                                                        {hasCost && costPos !== null && (
+                                                            <>
+                                                                {/* Çubuk üzerindeki lacivert elmas */}
+                                                                <div 
+                                                                    className="absolute top-[60px] -translate-x-1/2 -translate-y-1/2 w-[14px] h-[14px] sm:w-[18px] sm:h-[18px] bg-[#00008B] rotate-45 z-30 pointer-events-none"
+                                                                    style={{ left: `${costPos}%` }}
+                                                                    aria-label={`Maliyet ${formatCurrency(userCost!)}`}
+                                                                />
+
+                                                                {/* Elmastan aşağı inen dikey çizgi (DÜŞÜK/YÜKSEK yazısının arkasında z-0 kalacak şekilde) */}
+                                                                <div 
+                                                                    className="absolute top-[60px] w-[3px] bg-[#00008B] -translate-x-1/2 z-0 pointer-events-none"
+                                                                    style={{ left: `${costPos}%`, height: '52px' }}
+                                                                />
+
+                                                                {/* ₺ Madeni Para + Maliyetiniz Metni (DÜŞÜK/YÜKSEK yazısının altında) */}
+                                                                <div 
+                                                                    className="absolute top-[108px] z-20 flex flex-col items-center pointer-events-none"
+                                                                    style={{
+                                                                        left: `${costPos}%`,
+                                                                        transform: costPos < 18 ? 'translateX(0%)' : costPos > 82 ? 'translateX(-100%)' : 'translateX(-50%)'
+                                                                    }}
+                                                                >
+                                                                    {/* 56px Madeni Para */}
+                                                                    <div className="w-[44px] h-[44px] sm:w-[56px] sm:h-[56px] rounded-full bg-white border-[3px] sm:border-[4px] border-[#00008B] shadow-md flex items-center justify-center relative">
+                                                                        <svg className="absolute inset-0 w-full h-full p-1" viewBox="0 0 56 56">
+                                                                            <circle cx="28" cy="28" r="23" fill="none" stroke="#00008B" strokeWidth="1" strokeDasharray="3 3" />
+                                                                        </svg>
+                                                                        <span className="font-black text-[#00008B] text-[20px] sm:text-[26px] leading-none z-10">₺</span>
+                                                                    </div>
+
+                                                                    {/* Maliyet metni */}
+                                                                    <span className="font-bold text-[#00008B] text-[10px] sm:text-xs whitespace-nowrap mt-1">
+                                                                        Maliyetiniz {formatCurrency(userCost!)}
+                                                                    </span>
+                                                                </div>
+                                                            </>
+                                                        )}
+
+                                                        {/* DÜŞÜK VE YÜKSEK ETİKETLERİ (ÇUBUĞUN HEMEN ALTINDA, ÇİZGİNİN ÖNÜNDE) */}
+                                                        <div className="flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-wider absolute top-[76px] left-0 right-0 z-10 pointer-events-none">
+                                                            <span>DÜŞÜK: {formatCurrency(low)}</span>
+                                                            <span>YÜKSEK: {formatCurrency(high)}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* MARKA RENK PALETİNDEKİ MÜKEMMEL MAVİ YAPAY ZEKA ANALİZ KUTUSU */}
+                                                    <div className="bg-[#00008B] border border-[#00008B]/20 rounded-2xl p-4 shadow-md text-white">
+                                                        <p className="text-xs font-medium text-slate-100 leading-relaxed">
+                                                            {(() => {
+                                                                const isProfit = userCost ? currentPrice >= userCost : false;
+                                                                const diffP = userCost ? Math.abs(((currentPrice - userCost) / userCost) * 100).toFixed(1) : null;
+                                                                
+                                                                // Her gün gece 00:00'da kendiliğinden yenilenen tarih tohumu (Day Seed)
+                                                                const today = new Date();
+                                                                const daySeed = today.getFullYear() * 1000 + (today.getMonth() + 1) * 35 + today.getDate();
+                                                                
+                                                                // Her varlık, her zaman dilimi ve her gün için benzersiz şablon indeksi (0..7)
+                                                                const symHash = sym.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                                                                const tfHash = extremesTimeframe.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                                                                const variant = (symHash * 7 + tfHash * 13 + daySeed) % 8;
+
+                                                                const currFmt = formatCurrency(currentPrice);
+                                                                const lowFmt = formatCurrency(low);
+                                                                const highFmt = formatCurrency(high);
+                                                                const costFmt = userCost ? formatCurrency(userCost) : '';
+
+                                                                const tfLabel = extremesTimeframe === '1W' ? '1 Haftalık' : extremesTimeframe === '1M' ? '1 Aylık' : extremesTimeframe === '3M' ? '3 Aylık' : extremesTimeframe === '6M' ? '6 Aylık' : '52 Haftalık (1 Yıl)';
+
+                                                                if (userCost && userCost > 0) {
+                                                                    if (isProfit) {
+                                                                        if (variant === 0) return `Maliyet analiziniz detaylı incelendiğinde ${sym}, ${costFmt} olan alış seviyenizin %${diffP} üzerinde oldukça güçlü bir performans göstererek ${currFmt} canlı fiyatından işlem görüyor. Varlık ${tfLabel} zaman diliminde ${lowFmt} dip seviyesinden ivmeyle uzaklaşarak ${highFmt} zirvesine doğru kademeli yükselişini sürdürmektedir.`;
+                                                                        if (variant === 1) return `Portföyünüzün öne çıkan başarılı varlıklarından ${sym}, ${currFmt} güncel fiyatıyla ortalama maliyetinizin %${diffP} yukarısında seyrediyor. Seçilen ${tfLabel} periyodunda ${lowFmt} dip noktasından bu yana gösterdiği istikrarlı tırmanış, varlığın üst direnç seviyelerini zorlamasını sağlıyor.`;
+                                                                        if (variant === 2) return `${tfLabel} grafiğinde son derece güçlü bir duruş sergileyen ${sym}, ${costFmt} maliyetinize göre %${diffP} oranında belirgin bir kazanç sağlamış durumdadır. Varlığın ${highFmt} tavan sınırına yakın kalarak hareket etmesi, yatırımınızın kârlı yapısını ve portföy verimliliğinizi doğrudan destekliyor.`;
+                                                                        if (variant === 3) return `%${diffP} oranındaki yüksek kârlılığıyla dikkat çeken ${sym}, portföyünüzde ${currFmt} canlı fiyatından alıcı bularak değerini koruyor. ${tfLabel} boyunca oluşan ${lowFmt} ve ${highFmt} fiyat aralığı, varlığın kârlı seyrini teyit ederken alım iştahının devam ettiğini gösteriyor.`;
+                                                                        if (variant === 4) return `Pozitif bir yükseliş kanalında hareketini sürdüren ${sym}, ${costFmt} alış fiyatınızın %${diffP} üstüne çıkarak portföy toplam değerinizi artırıyor. Varlık ${tfLabel} zaman dilimindeki tepe noktalarına yakın durarak güçlü ve kârlı konumunu korumaya devam etmektedir.`;
+                                                                        if (variant === 5) return `${currFmt} seviyesinden işlem görerek dikkat çeken ${sym}, ortalama maliyetinize kıyasla %${diffP} daha yüksek bir fiyat seviyesine ulaşmış durumda. ${tfLabel} periyodunda ${lowFmt} tabanının oldukça üzerinde kalması, yatırımlarınızdaki kârlı güvenli alanı genişletmeye devam ediyor.`;
+                                                                        if (variant === 6) return `Yatırımınıza pozitif katkı sunan değerli varlıklardan ${sym}, ${costFmt} olan alış ortalamanızın %${diffP} ilerisinden anlık olarak takip ediliyor. ${tfLabel} süresince oluşan yukarı yönlü grafik hareketi, varlıktaki alım momentumunun henüz kaybolmadığını kanıtlıyor.`;
+                                                                        return `${tfLabel} fiyat bandının üst sınırlarında yer alan ${sym}, alış maliyetinizden %${diffP} daha primli bir noktada ${currFmt} fiyatıyla seyrediyor. Varlığın ${highFmt} zirve çizgisine yakınlaşması, portföyünüzdeki kâr marjını daha da sağlamlaştırıyor.`;
+                                                                    } else {
+                                                                        if (variant === 0) return `Mevcut piyasa şartlarında değerlendirildiğinde ${sym}, ${costFmt} ortalama maliyetinizin %${diffP} altında bir fiyatla iskonto bölgesinde kalmaktadır. ${tfLabel} periyodunda ${lowFmt} seviyesine yakın kalarak bu bölgede yeni bir destek ve taban arayışını sürdürmektedir.`;
+                                                                        if (variant === 1) return `${currFmt} güncel fiyatından işlem gören ${sym}, portföy maliyetinizin %${diffP} gerisinde kalarak alt bantlarda bulunmaktadır. ${tfLabel} boyunca oluşan ${highFmt} zirvesinden uzakta olması, varlığın bu bölgelerden yeniden güç toplama sürecinde olduğuna işaret ediyor.`;
+                                                                        if (variant === 2) return `${tfLabel} grafiği detaylıca incelendiğinde ${sym}, ${costFmt} olan alış fiyatınızın %${diffP} altında ${currFmt} fiyatıyla seyrettiği görülmektedir. Fiyatın ${lowFmt} taban hattına yakınlığı, teknik olarak tepki alımlarının oluşabileceği önemli bir noktaya vurgu yapıyor.`;
+                                                                        if (variant === 3) return `%${diffP} oranında maliyetinizin altında bulunan ${sym}, portföyünüzde ${currFmt} canlı seviyesinden takip edilmektedir. ${tfLabel} aralığındaki ${lowFmt} - ${highFmt} marjı, varlığın mevcut fiyat seviyelerini sindirip dengelenme aşamasında olduğunu teyit ediyor.`;
+                                                                        if (variant === 4) return `${costFmt} maliyetli ${sym} pozisyonunuz, canlı piyasa koşullarında %${diffP} indirimli bir fiyatla ${currFmt} değerine gerilemiştir. Varlığın ${tfLabel} zaman diliminde ${lowFmt} sınırına yakınlığı, bu dip seviyelerden destek bulma çabasının sürdüğünü göstermektedir.`;
+                                                                        if (variant === 5) return `Geçici bir düzeltme evresinden geçen ${sym}, ortalama alış fiyatınızın %${diffP} gerisinde ${currFmt} seviyesinde duruyor. ${tfLabel} periyodundaki bant hareketi, varlığın dip bölgelerden destek alarak yeniden dengelenme çabasında olduğunu gösteriyor.`;
+                                                                        if (variant === 6) return `Piyasa fiyatlaması incelendiğinde ${sym}, ${costFmt} olan portföy ortalamanızın %${diffP} altında ${currFmt} fiyatıyla işlem görüyor. Varlık ${tfLabel} sürecindeki ${lowFmt} tabanı civarında fiyat dengesini yeniden kurup üst dirençlere yönelmeyi hedefliyor.`;
+                                                                        return `${tfLabel} süresince oluşan fiyat aralığında ${sym}, maliyet seviyenizin %${diffP} gerisinden fiyatlanarak ${currFmt} seviyesinde kalıyor. Fiyatın ${highFmt} zirvesinin altında bulunması, varlık için orta vadede yeni bir toparlanma alanı sunmaktadır.`;
+                                                                    }
+                                                                } else {
+                                                                    if (variant === 0) return `Piyasa takibinizde yer alan ${sym}, ${tfLabel} zaman diliminde ${currFmt} canlı fiyatı üzerinden işlem görüyor. Varlık bu periyotta ${lowFmt} dip noktası ile ${highFmt} zirvesi arasında gayet dengeli ve kararlı bir fiyat kanalı izlemektedir.`;
+                                                                    if (variant === 1) return `${tfLabel} grafik bandı detaylı incelendiğinde ${sym}, ${lowFmt} desteğinden aldığı güçle ${currFmt} seviyesine ilerliyor. Fiyatın ${highFmt} tavanına doğru kademeli hareketi, piyasa takibindeki alım iştahını teyit eder niteliktedir.`;
+                                                                    if (variant === 2) return `Dengeli bir fiyat aralığında bulunan ${sym}, ${tfLabel} süresince ${currFmt} değerinden alıcı bulmaya devam ediyor. ${lowFmt} ve ${highFmt} sınırları arasındaki stabil konumu, varlıktaki kararlı piyasa seyrini doğrulamaktadır.`;
+                                                                    return `Seçilen ${tfLabel} periyodu boyunca ${sym}, ${currFmt} anlık fiyatı ile piyasadaki yerini koruyor. Varlık ${lowFmt} en düşük ve ${highFmt} en yüksek seviyeleri arasında yatay ve dengeli bant hareketini sürdürmektedir.`;
+                                                                }
+                                                            })()}
+                                                        </p>
+                                                    </div>
                                                 </div>
+                                            );
+                                        })}
+
+                                        {!isFocused && extremesEntries.length > 2 && (
+                                            <div className="pt-2 text-center">
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setFocusedWidget('extremes');
+                                                    }}
+                                                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-[#00008B] hover:bg-blue-900 text-white font-extrabold text-xs rounded-2xl shadow-md transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                                                >
+                                                    <span>Tüm Fiyat Hareket Bandını Aç ({extremesEntries.length} Varlık)</span>
+                                                    <ChevronRight className="w-4 h-4" />
+                                                </button>
                                             </div>
-
-                                            {/* MARKA RENK PALETİNDEKİ MÜKEMMEL MAVİ YAPAY ZEKA ANALİZ KUTUSU */}
-                                            <div className="bg-[#00008B] border border-[#00008B]/20 rounded-2xl p-4 shadow-md text-white">
-                                                <p className="text-xs font-medium text-slate-100 leading-relaxed">
-                                                    {(() => {
-                                                        const isProfit = userCost ? currentPrice >= userCost : false;
-                                                        const diffP = userCost ? Math.abs(((currentPrice - userCost) / userCost) * 100).toFixed(1) : null;
-                                                        
-                                                        // Her gün gece 00:00'da kendiliğinden yenilenen tarih tohumu (Day Seed)
-                                                        const today = new Date();
-                                                        const daySeed = today.getFullYear() * 1000 + (today.getMonth() + 1) * 35 + today.getDate();
-                                                        
-                                                        // Her varlık, her zaman dilimi ve her gün için benzersiz şablon indeksi (0..7)
-                                                        const symHash = sym.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-                                                        const tfHash = extremesTimeframe.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-                                                        const variant = (symHash * 7 + tfHash * 13 + daySeed) % 8;
-
-                                                        const currFmt = formatCurrency(currentPrice);
-                                                        const lowFmt = formatCurrency(low);
-                                                        const highFmt = formatCurrency(high);
-                                                        const costFmt = userCost ? formatCurrency(userCost) : '';
-
-                                                        const tfLabel = extremesTimeframe === '1W' ? '1 Haftalık' : extremesTimeframe === '1M' ? '1 Aylık' : extremesTimeframe === '3M' ? '3 Aylık' : extremesTimeframe === '6M' ? '6 Aylık' : '52 Haftalık (1 Yıl)';
-
-                                                        if (userCost && userCost > 0) {
-                                                            if (isProfit) {
-                                                                if (variant === 0) return `Maliyet analiziniz detaylı incelendiğinde ${sym}, ${costFmt} olan alış seviyenizin %${diffP} üzerinde oldukça güçlü bir performans göstererek ${currFmt} canlı fiyatından işlem görüyor. Varlık ${tfLabel} zaman diliminde ${lowFmt} dip seviyesinden ivmeyle uzaklaşarak ${highFmt} zirvesine doğru kademeli yükselişini sürdürmektedir.`;
-                                                                if (variant === 1) return `Portföyünüzün öne çıkan başarılı varlıklarından ${sym}, ${currFmt} güncel fiyatıyla ortalama maliyetinizin %${diffP} yukarısında seyrediyor. Seçilen ${tfLabel} periyodunda ${lowFmt} dip noktasından bu yana gösterdiği istikrarlı tırmanış, varlığın üst direnç seviyelerini zorlamasını sağlıyor.`;
-                                                                if (variant === 2) return `${tfLabel} grafiğinde son derece güçlü bir duruş sergileyen ${sym}, ${costFmt} maliyetinize göre %${diffP} oranında belirgin bir kazanç sağlamış durumdadır. Varlığın ${highFmt} tavan sınırına yakın kalarak hareket etmesi, yatırımınızın kârlı yapısını ve portföy verimliliğinizi doğrudan destekliyor.`;
-                                                                if (variant === 3) return `%${diffP} oranındaki yüksek kârlılığıyla dikkat çeken ${sym}, portföyünüzde ${currFmt} canlı fiyatından alıcı bularak değerini koruyor. ${tfLabel} boyunca oluşan ${lowFmt} ve ${highFmt} fiyat aralığı, varlığın kârlı seyrini teyit ederken alım iştahının devam ettiğini gösteriyor.`;
-                                                                if (variant === 4) return `Pozitif bir yükseliş kanalında hareketini sürdüren ${sym}, ${costFmt} alış fiyatınızın %${diffP} üstüne çıkarak portföy toplam değerinizi artırıyor. Varlık ${tfLabel} zaman dilimindeki tepe noktalarına yakın durarak güçlü ve kârlı konumunu korumaya devam etmektedir.`;
-                                                                if (variant === 5) return `${currFmt} seviyesinden işlem görerek dikkat çeken ${sym}, ortalama maliyetinize kıyasla %${diffP} daha yüksek bir fiyat seviyesine ulaşmış durumda. ${tfLabel} periyodunda ${lowFmt} tabanının oldukça üzerinde kalması, yatırımlarınızdaki kârlı güvenli alanı genişletmeye devam ediyor.`;
-                                                                if (variant === 6) return `Yatırımınıza pozitif katkı sunan değerli varlıklardan ${sym}, ${costFmt} olan alış ortalamanızın %${diffP} ilerisinden anlık olarak takip ediliyor. ${tfLabel} süresince oluşan yukarı yönlü grafik hareketi, varlıktaki alım momentumunun henüz kaybolmadığını kanıtlıyor.`;
-                                                                return `${tfLabel} fiyat bandının üst sınırlarında yer alan ${sym}, alış maliyetinizden %${diffP} daha primli bir noktada ${currFmt} fiyatıyla seyrediyor. Varlığın ${highFmt} zirve çizgisine yakınlaşması, portföyünüzdeki kâr marjını daha da sağlamlaştırıyor.`;
-                                                            } else {
-                                                                if (variant === 0) return `Mevcut piyasa şartlarında değerlendirildiğinde ${sym}, ${costFmt} ortalama maliyetinizin %${diffP} altında bir fiyatla iskonto bölgesinde kalmaktadır. ${tfLabel} periyodunda ${lowFmt} seviyesine yakın kalarak bu bölgede yeni bir destek ve taban arayışını sürdürmektedir.`;
-                                                                if (variant === 1) return `${currFmt} güncel fiyatından işlem gören ${sym}, portföy maliyetinizin %${diffP} gerisinde kalarak alt bantlarda bulunmaktadır. ${tfLabel} boyunca oluşan ${highFmt} zirvesinden uzakta olması, varlığın bu bölgelerden yeniden güç toplama sürecinde olduğuna işaret ediyor.`;
-                                                                if (variant === 2) return `${tfLabel} grafiği detaylıca incelendiğinde ${sym}, ${costFmt} olan alış fiyatınızın %${diffP} altında ${currFmt} fiyatıyla seyrettiği görülmektedir. Fiyatın ${lowFmt} taban hattına yakınlığı, teknik olarak tepki alımlarının oluşabileceği önemli bir noktaya vurgu yapıyor.`;
-                                                                if (variant === 3) return `%${diffP} oranında maliyetinizin altında bulunan ${sym}, portföyünüzde ${currFmt} canlı seviyesinden takip edilmektedir. ${tfLabel} aralığındaki ${lowFmt} - ${highFmt} marjı, varlığın mevcut fiyat seviyelerini sindirip dengelenme aşamasında olduğunu teyit ediyor.`;
-                                                                if (variant === 4) return `${costFmt} maliyetli ${sym} pozisyonunuz, canlı piyasa koşullarında %${diffP} indirimli bir fiyatla ${currFmt} değerine gerilemiştir. Varlığın ${tfLabel} zaman diliminde ${lowFmt} sınırına yakınlığı, bu dip seviyelerden destek bulma çabasının sürdüğünü göstermektedir.`;
-                                                                if (variant === 5) return `Geçici bir düzeltme evresinden geçen ${sym}, ortalama alış fiyatınızın %${diffP} gerisinde ${currFmt} seviyesinde duruyor. ${tfLabel} periyodundaki bant hareketi, varlığın dip bölgelerden destek alarak yeniden dengelenme çabasında olduğunu gösteriyor.`;
-                                                                if (variant === 6) return `Piyasa fiyatlaması incelendiğinde ${sym}, ${costFmt} olan portföy ortalamanızın %${diffP} altında ${currFmt} fiyatıyla işlem görüyor. Varlık ${tfLabel} sürecindeki ${lowFmt} tabanı civarında fiyat dengesini yeniden kurup üst dirençlere yönelmeyi hedefliyor.`;
-                                                                return `${tfLabel} süresince oluşan fiyat aralığında ${sym}, maliyet seviyenizin %${diffP} gerisinden fiyatlanarak ${currFmt} seviyesinde kalıyor. Fiyatın ${highFmt} zirvesinin altında bulunması, varlık için orta vadede yeni bir toparlanma alanı sunmaktadır.`;
-                                                            }
-                                                        } else {
-                                                            if (variant === 0) return `Piyasa takibinizde yer alan ${sym}, ${tfLabel} zaman diliminde ${currFmt} canlı fiyatı üzerinden işlem görüyor. Varlık bu periyotta ${lowFmt} dip noktası ile ${highFmt} zirvesi arasında gayet dengeli ve kararlı bir fiyat kanalı izlemektedir.`;
-                                                            if (variant === 1) return `${tfLabel} grafik bandı detaylı incelendiğinde ${sym}, ${lowFmt} desteğinden aldığı güçle ${currFmt} seviyesine ilerliyor. Fiyatın ${highFmt} tavanına doğru kademeli hareketi, piyasa takibindeki alım iştahını teyit eder niteliktedir.`;
-                                                            if (variant === 2) return `Dengeli bir fiyat aralığında bulunan ${sym}, ${tfLabel} süresince ${currFmt} değerinden alıcı bulmaya devam ediyor. ${lowFmt} ve ${highFmt} sınırları arasındaki stabil konumu, varlıktaki kararlı piyasa seyrini doğrulamaktadır.`;
-                                                            return `Seçilen ${tfLabel} periyodu boyunca ${sym}, ${currFmt} anlık fiyatı ile piyasadaki yerini koruyor. Varlık ${lowFmt} en düşük ve ${highFmt} en yüksek seviyeleri arasında yatay ve dengeli bant hareketini sürdürmektedir.`;
-                                                        }
-                                                    })()}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    );
-                                });
+                                        )}
+                                    </div>
+                                );
                             })()}
                         </div>
                     </div>
@@ -3096,19 +3116,26 @@ export default function PortfolioPage() {
                 className="flex flex-col xl:grid xl:grid-cols-12 gap-8 xl:items-start"
             >
                 {focusedWidget === null ? (
-                    /* 1. BAŞLANGIÇ DURUMU (DEFAULT 70/30 GRID LAYOUT) */
-                    <>
-                        {/* SOL SÜTUN (~%70 - 8/12 Cols) */}
-                        <div className="w-full xl:col-span-8 space-y-8 order-2 xl:order-1">
-                            {renderWidgetCard('table')}
+                    /* 1. BAŞLANGIÇ DURUMU (DEFAULT 70/30 GRID LAYOUT + YATAY %100 FİYAT HAREKET BANDI) */
+                    <div className="w-full xl:col-span-12 space-y-8">
+                        <div className="flex flex-col xl:grid xl:grid-cols-12 gap-8 xl:items-start">
+                            {/* SOL SÜTUN (~%70 - 8/12 Cols) */}
+                            <div className="w-full xl:col-span-8 space-y-8 order-2 xl:order-1">
+                                {renderWidgetCard('table')}
+                            </div>
+
+                            {/* SAĞ SÜTUN (~%30 - 4/12 Cols) - Varlık Dağılımı üstte, Gündem altta */}
+                            <div className="w-full xl:col-span-4 space-y-6 order-1 xl:order-2">
+                                {renderWidgetCard('distribution')}
+                                {renderWidgetCard('agenda')}
+                            </div>
                         </div>
 
-                        {/* SAĞ SÜTUN (~%30 - 4/12 Cols) - Varlık Dağılımı üstte, Gündem altta */}
-                        <div className="w-full xl:col-span-4 space-y-6 order-1 xl:order-2">
-                            {renderWidgetCard('distribution')}
-                            {renderWidgetCard('agenda')}
+                        {/* %100 YAYILAN YATAY ALT KISIM: FİYAT HAREKET BANDI (MAKS 2 BAR) */}
+                        <div className="w-full">
+                            {renderWidgetCard('extremes')}
                         </div>
-                    </>
+                    </div>
                 ) : (
                     /* 2. ODAK MODU DURUMU (DOĞRUDAN WIDGET TIKLAMASIYLA YALIN ODAK) */
                     <>

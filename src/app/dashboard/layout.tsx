@@ -231,12 +231,6 @@ function DashboardShell({
             isActive: pathname === "/dashboard/data" || pathname.startsWith("/dashboard/varlik") || pathname.startsWith("/varlik")
         },
         { 
-            icon: BarChart3, 
-            label: "Analiz", 
-            href: "/dashboard/analysis",
-            isActive: pathname.startsWith("/dashboard/analysis") || pathname.startsWith("/dashboard/correlation-analysis") || pathname.startsWith("/dashboard/behavioral") || pathname.startsWith("/dashboard/test")
-        },
-        { 
             icon: Calendar, 
             label: "Takvim", 
             href: "/dashboard/calendar",
