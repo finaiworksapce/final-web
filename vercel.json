@@ -14,11 +14,7 @@
         },
         {
             "path": "/api/cron/update-calendar",
-            "schedule": "0 18 * * 0"
-        },
-        {
-            "path": "/api/cron/update-calendar",
-            "schedule": "0 18 * * *"
+            "schedule": "0 9 * * *"
         },
         {
             "path": "/api/cron/refresh-market-data",

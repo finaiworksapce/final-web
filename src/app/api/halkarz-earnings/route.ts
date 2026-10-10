@@ -5,6 +5,7 @@ export interface HalkarzEarningsItem {
     companyName: string;
     link: string;
     earningsDate: string;
+    parsedDate?: string | null;
     timestamp: number;
     daysLeft: number;
 }
@@ -41,6 +42,7 @@ export async function GET() {
             if (!uniqueItemsMap.has(key)) {
                 let timestamp = Date.now();
                 let daysLeft = 0;
+                let parsedDateStr: string | null = null;
 
                 if (rawDate && rawDate.includes('.')) {
                     const parts = rawDate.split('.');
@@ -49,6 +51,7 @@ export async function GET() {
                         if (!isNaN(parsedDate.getTime())) {
                             timestamp = parsedDate.getTime();
                             daysLeft = Math.ceil((timestamp - Date.now()) / (1000 * 60 * 60 * 24));
+                            parsedDateStr = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
                         }
                     }
                 }
@@ -58,6 +61,7 @@ export async function GET() {
                     companyName: item.b_sirket || '',
                     link: item.b_link || '',
                     earningsDate: rawDate,
+                    parsedDate: parsedDateStr,
                     timestamp,
                     daysLeft
                 });
@@ -73,6 +77,7 @@ export async function GET() {
             success: true,
             count: items.length,
             data: items,
+            source: "https://halkarz.com/bilanco-takvimi/",
             updatedAt: new Date().toISOString()
         });
 

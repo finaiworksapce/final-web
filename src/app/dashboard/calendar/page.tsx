@@ -441,14 +441,38 @@ function CalendarContent() {
         return () => { isMounted = false; };
     }, []);
 
+    // Tarih Sınırlandırması (Kullanıcının 2030 gibi uzak yıllara gitmesini kısıtlar)
+    const minNavDate = useMemo(() => {
+        const d = new Date();
+        return new Date(d.getFullYear() - 1, d.getMonth(), 1);
+    }, []);
+
+    const maxNavDate = useMemo(() => {
+        const d = new Date();
+        // Mevcut yıldan en fazla 14 ay sonrasına (örneğin 2027 sonu) izin verilir
+        return new Date(d.getFullYear() + 1, d.getMonth() + 2, 1);
+    }, []);
+
+    const isPrevMonthDisabled = useMemo(() => {
+        const prev = new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1);
+        return prev < minNavDate;
+    }, [viewDate, minNavDate]);
+
+    const isNextMonthDisabled = useMemo(() => {
+        const next = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1);
+        return next > maxNavDate;
+    }, [viewDate, maxNavDate]);
+
     // Ay Navigasyon Kontrolleri
     const handlePrevMonth = () => {
+        if (isPrevMonthDisabled) return;
         const d = new Date(viewDate);
         d.setMonth(d.getMonth() - 1);
         setViewDate(d);
     };
 
     const handleNextMonth = () => {
+        if (isNextMonthDisabled) return;
         const d = new Date(viewDate);
         d.setMonth(d.getMonth() + 1);
         setViewDate(d);
@@ -458,6 +482,84 @@ function CalendarContent() {
         const today = new Date();
         setSelectedDate(today);
         setViewDate(today);
+    };
+
+    // Gerçek Veri Tarih Eşleme Fonksiyonları (Sallama ve rastgele atamaları engeller)
+    const isDividendDateMatch = (item: any, target: Date) => {
+        const year = target.getFullYear();
+        const month = String(target.getMonth() + 1).padStart(2, '0');
+        const day = String(target.getDate()).padStart(2, '0');
+        const targetIso = `${year}-${month}-${day}`;
+        const targetTr = `${day}.${month}.${year}`;
+
+        if (item.parsedDate && item.parsedDate === targetIso) return true;
+        if (item.paymentDate) {
+            const trimmed = item.paymentDate.trim();
+            if (trimmed === targetTr || trimmed === `${parseInt(day, 10)}.${parseInt(month, 10)}.${year}`) return true;
+        }
+        return false;
+    };
+
+    const isEarningsDateMatch = (item: any, target: Date) => {
+        const year = target.getFullYear();
+        const month = String(target.getMonth() + 1).padStart(2, '0');
+        const day = String(target.getDate()).padStart(2, '0');
+        const targetIso = `${year}-${month}-${day}`;
+        const targetTr = `${day}.${month}.${year}`;
+
+        if (item.parsedDate && item.parsedDate === targetIso) return true;
+        if (item.earningsDate) {
+            const trimmed = item.earningsDate.trim();
+            if (trimmed === targetTr || trimmed === `${parseInt(day, 10)}.${parseInt(month, 10)}.${year}`) return true;
+        }
+        return false;
+    };
+
+    const isIpoDateMatch = (item: any, target: Date) => {
+        const year = target.getFullYear();
+        const month = String(target.getMonth() + 1).padStart(2, '0');
+        const day = String(target.getDate()).padStart(2, '0');
+        const targetIso = `${year}-${month}-${day}`;
+
+        if (Array.isArray(item.dates) && item.dates.includes(targetIso)) return true;
+        if (item.startDate && item.endDate) {
+            return targetIso >= item.startDate && targetIso <= item.endDate;
+        }
+        return false;
+    };
+
+    const isEconomicDateMatch = (item: any, target: Date) => {
+        const year = target.getFullYear();
+        const month = String(target.getMonth() + 1).padStart(2, '0');
+        const day = String(target.getDate()).padStart(2, '0');
+        const targetIso = `${year}-${month}-${day}`;
+        const targetTr = `${day}.${month}.${year}`;
+
+        if (item.dateFormatted && (item.dateFormatted.trim() === targetTr || item.dateFormatted.includes(targetTr))) return true;
+        if (item.event_date && item.event_date === targetIso) return true;
+        if (item.date && (item.date === targetIso || item.date === targetTr)) return true;
+        return false;
+    };
+
+    const dayHasEvents = (cellDate: Date) => {
+        if (activeFilter === 'dividends') {
+            return dividends.some(d => isDividendDateMatch(d, cellDate));
+        }
+        if (activeFilter === 'earnings') {
+            return earnings.some(e => isEarningsDateMatch(e, cellDate));
+        }
+        if (activeFilter === 'ipo') {
+            return ipos.some(i => isIpoDateMatch(i, cellDate));
+        }
+        if (activeFilter === 'economic') {
+            return economicEvents.some(ev => isEconomicDateMatch(ev, cellDate));
+        }
+        return (
+            dividends.some(d => isDividendDateMatch(d, cellDate)) ||
+            earnings.some(e => isEarningsDateMatch(e, cellDate)) ||
+            ipos.some(i => isIpoDateMatch(i, cellDate)) ||
+            economicEvents.some(ev => isEconomicDateMatch(ev, cellDate))
+        );
     };
 
     // Portföy Sembol Seti
@@ -987,58 +1089,62 @@ function CalendarContent() {
         return grid;
     }, [viewDate]);
 
-    // Seçili Günün Ajandası
+    // Seçili Günün Ajandası (Yalnızca gerçek eşleşen etkinlikler - sallama veri yok)
     const selectedDayAgenda = useMemo(() => {
-        const targetStr = selectedDate.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        const targetParts = targetStr.split('.');
         const agendaList: any[] = [];
 
+        // 1. Bilanço
         if (activeFilter === 'all' || activeFilter === 'earnings') {
             earnings.forEach(e => {
-                if (e.earningsDate === targetStr || e.earningsDate?.includes(targetParts[0])) {
+                if (isEarningsDateMatch(e, selectedDate)) {
                     agendaList.push({
                         time: '09:00',
                         category: 'Bilanço',
                         categoryColor: 'bg-blue-50 text-blue-700 border-blue-200',
                         symbol: e.symbol,
                         title: e.companyName,
-                        subtitle: `${e.earningsDate || '2026/1Ç'} Finansal Sonuçları`
+                        subtitle: `${e.earningsDate || '2026/3Ç'} Finansal Sonuçları (Resmi)`
                     });
                 }
             });
         }
 
+        // 2. Temettü
         if (activeFilter === 'all' || activeFilter === 'dividends') {
             dividends.forEach(d => {
-                if (d.paymentDate === targetStr || d.paymentDate?.includes(targetParts[0])) {
+                if (isDividendDateMatch(d, selectedDate)) {
                     agendaList.push({
                         time: '10:00',
                         category: 'Temettü',
                         categoryColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
                         symbol: d.symbol,
                         title: d.companyName,
-                        subtitle: `${d.netAmountFormatted || 'Temettü'} Ödeme Tarihi`
+                        subtitle: `${d.netAmountFormatted || 'Temettü Ödemesi'} (Hak Kullanım Tarihi)`
                     });
                 }
             });
         }
 
+        // 3. Halka Arz
         if (activeFilter === 'all' || activeFilter === 'ipo') {
             ipos.forEach(ipo => {
-                agendaList.push({
-                    time: '11:00',
-                    category: 'Halka Arz',
-                    categoryColor: 'bg-purple-50 text-purple-700 border-purple-200',
-                    symbol: ipo.symbol,
-                    title: ipo.companyName,
-                    subtitle: ipo.status || 'Talep Toplama'
-                });
+                if (isIpoDateMatch(ipo, selectedDate)) {
+                    agendaList.push({
+                        time: '11:00',
+                        category: 'Halka Arz',
+                        categoryColor: 'bg-purple-50 text-purple-700 border-purple-200',
+                        symbol: ipo.symbol,
+                        title: ipo.companyName,
+                        subtitle: `Talep Toplama: ${ipo.dateRange || 'Tarih Bekleniyor'} (${ipo.status || 'Aktif'})`
+                    });
+                }
             });
         }
 
+        // 4. Ekonomik Veri
         if (activeFilter === 'all' || activeFilter === 'economic') {
             economicEvents.forEach(ev => {
-                if (ev.isToday || ev.dateFormatted?.includes(targetParts[0])) {
+                if (isEconomicDateMatch(ev, selectedDate)) {
                     agendaList.push({
                         time: ev.time || '15:30',
                         category: 'Ekonomik',
@@ -1051,7 +1157,7 @@ function CalendarContent() {
             });
         }
 
-        return agendaList.slice(0, 10);
+        return agendaList;
     }, [selectedDate, activeFilter, earnings, dividends, ipos, economicEvents]);
 
     const formattedViewMonthYear = viewDate.toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' });
@@ -1103,7 +1209,8 @@ function CalendarContent() {
                     <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200/80">
                         <button
                             onClick={handlePrevMonth}
-                            className="p-1.5 text-slate-600 hover:text-[#00008B] hover:bg-white rounded-lg transition-all"
+                            disabled={isPrevMonthDisabled}
+                            className="p-1.5 text-slate-600 hover:text-[#00008B] hover:bg-white rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                             aria-label="Önceki Ay"
                         >
                             <ChevronLeft className="w-4 h-4" />
@@ -1113,7 +1220,8 @@ function CalendarContent() {
                         </span>
                         <button
                             onClick={handleNextMonth}
-                            className="p-1.5 text-slate-600 hover:text-[#00008B] hover:bg-white rounded-lg transition-all"
+                            disabled={isNextMonthDisabled}
+                            className="p-1.5 text-slate-600 hover:text-[#00008B] hover:bg-white rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                             aria-label="Sonraki Ay"
                         >
                             <ChevronRight className="w-4 h-4" />
@@ -1920,7 +2028,7 @@ function CalendarContent() {
                                         }`}
                                     >
                                         <span>{cell.dayNum}</span>
-                                        {(cell.dayNum % 3 === 0 && cell.isCurrentMonth) && (
+                                        {(cell.isCurrentMonth && dayHasEvents(cell.date)) && (
                                             <span className={`w-1 h-1 rounded-full absolute bottom-1 ${isSelected ? 'bg-white' : 'bg-[#00008B]'}`} />
                                         )}
                                     </button>

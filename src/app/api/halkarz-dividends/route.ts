@@ -8,6 +8,7 @@ export interface HalkarzDividendItem {
     netAmountFormatted: string;
     yieldPercent: number;
     paymentDate: string;
+    parsedDate?: string | null;
     timestamp: number;
 }
 
@@ -48,12 +49,14 @@ export async function GET() {
 
             if (!uniqueItemsMap.has(key)) {
                 let timestamp = Date.now();
+                let parsedDateStr: string | null = null;
                 if (rawDate && rawDate.includes('.')) {
                     const parts = rawDate.split('.');
                     if (parts.length === 3) {
                         const parsedDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
                         if (!isNaN(parsedDate.getTime())) {
                             timestamp = parsedDate.getTime();
+                            parsedDateStr = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
                         }
                     }
                 }
@@ -66,6 +69,7 @@ export async function GET() {
                     netAmountFormatted: `${netAmount.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 4 })} ₺`,
                     yieldPercent: yieldVal,
                     paymentDate: rawDate,
+                    parsedDate: parsedDateStr,
                     timestamp
                 });
             }
@@ -80,6 +84,7 @@ export async function GET() {
             success: true,
             count: items.length,
             data: items,
+            source: "https://halkarz.com/temettu-takvimi/",
             updatedAt: new Date().toISOString()
         });
 
