@@ -18,7 +18,8 @@ import {
     Loader2,
     Clock,
     Search,
-    X
+    X,
+    AlertCircle
 } from "lucide-react";
 import { useUser } from "@/components/providers/UserProvider";
 
@@ -168,8 +169,8 @@ function CalendarContent() {
     const [divPortfolioOnly, setDivPortfolioOnly] = useState<boolean>(
         () => searchParams?.get('portfolio') === 'true'
     );
-    const [divSort, setDivSort] = useState<'date-asc' | 'date-desc' | 'yield-desc' | 'yield-asc' | 'amount-desc' | 'name-asc' | 'name-desc'>(
-        () => (searchParams?.get('sort') as any) || 'date-asc'
+    const [divSort, setDivSort] = useState<'default' | 'date-asc' | 'date-desc' | 'yield-desc' | 'yield-asc' | 'amount-desc' | 'name-asc' | 'name-desc'>(
+        () => (searchParams?.get('sort') as any) || 'default'
     );
 
     // ==========================================
@@ -271,7 +272,7 @@ function CalendarContent() {
             setDivYieldFilter((searchParams.get('yield') as any) || 'all');
             setDivAmountFilter((searchParams.get('amount') as any) || 'all');
             setDivPortfolioOnly(searchParams.get('portfolio') === 'true');
-            setDivSort((searchParams.get('sort') as any) || 'date-asc');
+            setDivSort((searchParams.get('sort') as any) || 'default');
         }
 
         // 2. Bilanço Parametreleri
@@ -591,16 +592,30 @@ function CalendarContent() {
 
     // Tarih / Sayı Ayrıştırma Yardımcıları
     const getItemTimestamp = (item: any, dateKey: string = 'paymentDate'): number => {
-        if (item.timestamp) return item.timestamp;
+        if (item.timestamp && item.timestamp > 0) return item.timestamp;
         const val = item[dateKey] || item.earningsDate || item.paymentDate;
-        if (val) {
+        if (val && String(val).trim() !== '...' && String(val).trim() !== 'Açıklanmadı' && String(val).trim() !== '-') {
             const parts = String(val).split('.');
             if (parts.length === 3) {
-                return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`).getTime();
+                const d = parseInt(parts[0], 10);
+                const m = parseInt(parts[1], 10);
+                const y = parseInt(parts[2], 10);
+                if (!isNaN(d) && !isNaN(m) && !isNaN(y) && d > 0 && d <= 31 && m > 0 && m <= 12 && y >= 2020) {
+                    return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`).getTime();
+                }
             }
-            return new Date(val).getTime() || 0;
+            const t = new Date(val).getTime();
+            if (!isNaN(t)) return t;
         }
         return 0;
+    };
+
+    const isDividendDateAnnounced = (item: any): boolean => {
+        if (!item) return false;
+        const val = String(item.paymentDate || item.parsedDate || '').trim();
+        if (!val || val === '...' || val === '-' || val.toLowerCase().includes('açıklanma')) return false;
+        const ts = getItemTimestamp(item, 'paymentDate');
+        return ts > 0;
     };
 
     const getItemYield = (item: any): number => {
@@ -632,8 +647,12 @@ function CalendarContent() {
             );
         }
         const now = new Date();
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+
+        // 1. Tarih Filtresi (Kural 2 & 3: Tarihi açıklanmayan hisseler SADECE "Tümü" seçildiğinde listelenir)
         if (divDateFilter !== 'all') {
             list = list.filter(item => {
+                if (!isDividendDateAnnounced(item)) return false;
                 const ts = getItemTimestamp(item, 'paymentDate');
                 if (!ts) return false;
                 const itemDate = new Date(ts);
@@ -643,18 +662,18 @@ function CalendarContent() {
                     return diffDays >= -1 && diffDays <= 7;
                 }
                 if (divDateFilter === 'this-month') return itemDate.getMonth() === now.getMonth() && itemDate.getFullYear() === now.getFullYear();
-                if (divDateFilter === 'next-3-months') {
-                    const diffDays = (itemDate.getTime() - now.getTime()) / (1000 * 3600 * 24);
-                    return diffDays >= 0 && diffDays <= 90;
-                }
                 return true;
             });
         }
+
+        // 2. Durum Filtresi
         if (divStatusFilter !== 'all') {
-            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
             list = list.filter(item => {
+                const isAnnounced = isDividendDateAnnounced(item);
+                if (!isAnnounced) {
+                    return divStatusFilter === 'upcoming';
+                }
                 const ts = getItemTimestamp(item, 'paymentDate');
-                if (!ts) return true;
                 return divStatusFilter === 'upcoming' ? ts >= todayStart : ts < todayStart;
             });
         }
@@ -682,15 +701,38 @@ function CalendarContent() {
                 return portfolioSymbols.has(sym);
             });
         }
+
+        // Kural 4: Sıralamada En Yakın ve En Uzak seçildiğinde tarihi açıklanmayanlar filtrelenir
+        if (divSort === 'date-asc' || divSort === 'date-desc') {
+            list = list.filter(item => isDividendDateAnnounced(item));
+        }
+
+        // Kural 1: Varsayılan sıralamada tarihi açıklanmayan hisseler EN ALTTA çıkar
         list.sort((a, b) => {
+            const hasDateA = isDividendDateAnnounced(a);
+            const hasDateB = isDividendDateAnnounced(b);
             const tsA = getItemTimestamp(a, 'paymentDate');
             const tsB = getItemTimestamp(b, 'paymentDate');
             const yA = getItemYield(a);
             const yB = getItemYield(b);
             const amtA = getItemAmount(a);
             const amtB = getItemAmount(b);
+
+            // Varsayılan sıralama: Kesin tarihi olanlar yakından uzağa, tarihi açıklanmayanlar en altta
+            if (divSort === 'default') {
+                if (hasDateA && !hasDateB) return -1;
+                if (!hasDateA && hasDateB) return 1;
+                if (!hasDateA && !hasDateB) return (a.symbol || '').localeCompare(b.symbol || '');
+                return tsA - tsB;
+            }
+
             if (divSort === 'date-asc') return tsA - tsB;
             if (divSort === 'date-desc') return tsB - tsA;
+
+            // Diğer tüm sıralamalarda da tarihi açıklanmayanları en alta yerleştir
+            if (hasDateA && !hasDateB) return -1;
+            if (!hasDateA && hasDateB) return 1;
+
             if (divSort === 'yield-desc') return yB - yA;
             if (divSort === 'yield-asc') return yA - yB;
             if (divSort === 'amount-desc') return amtB - amtA;
@@ -705,8 +747,8 @@ function CalendarContent() {
         const chips: { id: string; label: string; clear: () => void }[] = [];
         if (divSearch.trim()) chips.push({ id: 'search', label: `Arama: "${divSearch}"`, clear: () => { setDivSearch(''); updateDividendUrlParams({ search: '' }); } });
         if (divDateFilter !== 'all') {
-            const labels: Record<string, string> = { today: 'Bugün', 'this-week': 'Bu Hafta', 'this-month': 'Bu Ay', 'next-3-months': 'Önümüzdeki 3 Ay' };
-            chips.push({ id: 'date', label: `Tarih: ${labels[divDateFilter]}`, clear: () => { setDivDateFilter('all'); updateDividendUrlParams({ date: 'all' }); } });
+            const labels: Record<string, string> = { today: 'Bugün', 'this-week': 'Bu Hafta', 'this-month': 'Bu Ay' };
+            chips.push({ id: 'date', label: `Tarih: ${labels[divDateFilter] || divDateFilter}`, clear: () => { setDivDateFilter('all'); updateDividendUrlParams({ date: 'all' }); } });
         }
         if (divStatusFilter !== 'all') chips.push({ id: 'status', label: `Durum: ${divStatusFilter === 'upcoming' ? 'Yaklaşan' : 'Gerçekleşen'}`, clear: () => { setDivStatusFilter('all'); updateDividendUrlParams({ status: 'all' }); } });
         if (divYieldFilter !== 'all') {
@@ -734,9 +776,9 @@ function CalendarContent() {
         setDivYieldFilter('all');
         setDivAmountFilter('all');
         setDivPortfolioOnly(false);
-        setDivSort('date-asc');
+        setDivSort('default');
         setDivPage(1);
-        router.replace('/dashboard/calendar?type=dividend', { scroll: false });
+        updateDividendUrlParams({ search: '', date: 'all', status: 'all', yield: 'all', amount: 'all', portfolio: false, sort: 'default' });
     };
 
     // ==========================================
@@ -1293,11 +1335,10 @@ function CalendarContent() {
                         <div>
                             <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Tarih</label>
                             <select value={divDateFilter} onChange={(e) => { const v = e.target.value as any; setDivDateFilter(v); updateDividendUrlParams({ date: v }); }} className="w-full p-2 bg-white border border-emerald-200/80 rounded-xl text-slate-700">
-                                <option value="all">Tüm Tarihler</option>
+                                <option value="all">Tümü</option>
                                 <option value="today">Bugün</option>
                                 <option value="this-week">Bu Hafta</option>
                                 <option value="this-month">Bu Ay</option>
-                                <option value="next-3-months">Önümüzdeki 3 Ay</option>
                             </select>
                         </div>
                         <div>
@@ -1336,6 +1377,7 @@ function CalendarContent() {
                         <div>
                             <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Sıralama</label>
                             <select value={divSort} onChange={(e) => { const v = e.target.value as any; setDivSort(v); updateDividendUrlParams({ sort: v }); }} className="w-full p-2 bg-white border border-emerald-200/80 rounded-xl text-slate-700">
+                                <option value="default">Varsayılan (Açıklanmayanlar Sonda)</option>
                                 <option value="date-asc">En Yakın Tarih</option>
                                 <option value="date-desc">En Uzak Tarih</option>
                                 <option value="yield-desc">En Yüksek Verim</option>
@@ -1361,6 +1403,16 @@ function CalendarContent() {
                     )}
 
                     <div className="pt-2">
+                        {/* Kural 4: En Yakın / En Uzak sıralamasında uyarı metni */}
+                        {(divSort === 'date-asc' || divSort === 'date-desc') && (
+                            <div className="mb-3 flex items-start sm:items-center gap-2.5 p-3.5 rounded-2xl bg-amber-50/90 border border-amber-200 text-amber-900 text-xs font-semibold shadow-xs">
+                                <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5 sm:mt-0" />
+                                <p>
+                                    <span className="font-extrabold text-amber-950">Bilgilendirme:</span> Sıralamada <strong>{divSort === 'date-asc' ? 'En Yakın Tarih' : 'En Uzak Tarih'}</strong> seçildiğinde, kesin temettü dağıtım tarihi henüz açıklanmayan hisseler listelenmez. Tarihi açıklanmayan hisseleri de görmek için <button type="button" onClick={() => { setDivSort('default'); updateDividendUrlParams({ sort: 'default' }); }} className="underline font-black text-amber-900 hover:text-amber-950">Varsayılan sıralama</button> modunu kullanabilirsiniz.
+                                </p>
+                            </div>
+                        )}
+
                         <span className="text-xs font-black text-[#00008B] block mb-3">Toplam {filteredDividends.length} Temettü Kaydı</span>
                         {loading ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yükleniyor...</div>
@@ -1385,58 +1437,96 @@ function CalendarContent() {
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-emerald-100/60">
-                                            {paginatedDividends.map((item, idx) => (
-                                                <tr key={idx} className="hover:bg-emerald-50/50 transition-colors">
-                                                    <td className="py-3 px-3.5">
-                                                        <div className="flex items-center gap-2.5">
-                                                            <div className="w-8 h-8 rounded-xl bg-emerald-100/80 border border-emerald-200 text-emerald-800 flex items-center justify-center font-black text-xs shrink-0">
-                                                                {item.symbol?.substring(0, 3)}
+                                            {paginatedDividends.map((item, idx) => {
+                                                const isAnnounced = isDividendDateAnnounced(item);
+                                                const ts = getItemTimestamp(item, 'paymentDate');
+                                                const now = new Date();
+                                                const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+                                                const isPaid = isAnnounced && ts > 0 && ts < todayStart;
+
+                                                const rowBg = isPaid
+                                                    ? "bg-emerald-100/70 hover:bg-emerald-100/90 border-b border-emerald-200/90 text-emerald-950 font-medium"
+                                                    : !isAnnounced
+                                                    ? "bg-slate-50/70 hover:bg-slate-100/80 border-b border-slate-100 text-slate-600"
+                                                    : "bg-white hover:bg-emerald-50/40 border-b border-emerald-100/60 text-slate-800";
+
+                                                return (
+                                                    <tr key={idx} className={`transition-colors ${rowBg}`}>
+                                                        <td className="py-3 px-3.5">
+                                                            <div className="flex items-center gap-2.5">
+                                                                <div className={`w-8 h-8 rounded-xl border flex items-center justify-center font-black text-xs shrink-0 ${
+                                                                    isPaid
+                                                                        ? 'bg-emerald-200 border-emerald-300 text-emerald-900'
+                                                                        : !isAnnounced
+                                                                        ? 'bg-slate-200/80 border-slate-300 text-slate-700'
+                                                                        : 'bg-emerald-100/80 border-emerald-200 text-emerald-800'
+                                                                }`}>
+                                                                    {item.symbol?.substring(0, 3)}
+                                                                </div>
+                                                                <div>
+                                                                    {item.symbol && item.symbol.trim() !== '-' ? (
+                                                                        <Link 
+                                                                            href={`/dashboard/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
+                                                                            className={`hover:underline font-black text-xs block ${
+                                                                                isPaid ? 'text-emerald-950 hover:text-emerald-800' : 'text-[#00008B] hover:text-emerald-800'
+                                                                            }`}
+                                                                            title={`${item.symbol} Şirket Detayına Git`}
+                                                                        >
+                                                                            {item.symbol}
+                                                                        </Link>
+                                                                    ) : (
+                                                                        <span className="text-xs font-black text-[#00008B] block">{item.symbol || '-'}</span>
+                                                                    )}
+                                                                    <span className={`text-[11px] font-bold line-clamp-1 max-w-[220px] ${
+                                                                        isPaid ? 'text-emerald-800/90' : 'text-slate-500'
+                                                                    }`} title={item.companyName}>
+                                                                        {item.companyName}
+                                                                    </span>
+                                                                </div>
                                                             </div>
-                                                            <div>
-                                                                {item.symbol && item.symbol.trim() !== '-' ? (
-                                                                    <Link 
-                                                                        href={`/dashboard/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
-                                                                        className="hover:underline font-black text-xs text-[#00008B] hover:text-emerald-800 block"
-                                                                        title={`${item.symbol} Şirket Detayına Git`}
-                                                                    >
-                                                                        {item.symbol}
-                                                                    </Link>
-                                                                ) : (
-                                                                    <span className="text-xs font-black text-[#00008B] block">{item.symbol || '-'}</span>
-                                                                )}
-                                                                <span className="text-[11px] font-bold text-slate-500 line-clamp-1 max-w-[220px]" title={item.companyName}>
-                                                                    {item.companyName}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td className="py-3 px-3.5 whitespace-nowrap text-slate-700 font-bold">
-                                                        {item.paymentDate || 'Belirtilmedi'}
-                                                    </td>
-                                                    <td className="py-3 px-3.5 whitespace-nowrap text-emerald-700 font-black">
-                                                        {item.netAmountFormatted || `${item.netAmountPerShare ? item.netAmountPerShare.toFixed(2) : '0,00'} TL`}
-                                                    </td>
-                                                    <td className="py-3 px-3.5 whitespace-nowrap">
-                                                        <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-emerald-100/90 text-emerald-900 border border-emerald-200 font-black text-xs">
-                                                            %{getItemYield(item).toFixed(2)}
-                                                        </span>
-                                                    </td>
-                                                    <td className="py-3 px-3.5 whitespace-nowrap">
-                                                        <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-md border ${
-                                                            item.paymentDate && item.paymentDate.includes('.')
-                                                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                                                : 'bg-slate-50 text-slate-600 border-slate-200'
-                                                        }`}>
-                                                            {item.status || 'Açıklandı'}
-                                                        </span>
-                                                    </td>
-                                                    <td className="py-3 px-3.5 text-right whitespace-nowrap">
-                                                        <button title="Hatırlatıcı Ekle" className="p-1.5 text-slate-400 hover:text-emerald-700 hover:bg-emerald-100/60 rounded-lg transition-all">
-                                                            <Bell className="w-4 h-4" />
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            ))}
+                                                        </td>
+                                                        <td className="py-3 px-3.5 whitespace-nowrap font-bold">
+                                                            {isAnnounced ? (
+                                                                <span className={isPaid ? 'text-emerald-950' : 'text-slate-700'}>{item.paymentDate}</span>
+                                                            ) : (
+                                                                <span className="text-slate-400 italic font-semibold">Açıklanmadı</span>
+                                                            )}
+                                                        </td>
+                                                        <td className={`py-3 px-3.5 whitespace-nowrap font-black ${isPaid ? 'text-emerald-900' : 'text-emerald-700'}`}>
+                                                            {item.netAmountFormatted || `${item.netAmountPerShare ? item.netAmountPerShare.toFixed(2) : '0,00'} TL`}
+                                                        </td>
+                                                        <td className="py-3 px-3.5 whitespace-nowrap">
+                                                            <span className={`inline-flex items-center px-2 py-0.5 rounded-lg border font-black text-xs ${
+                                                                isPaid
+                                                                    ? 'bg-emerald-200/90 text-emerald-950 border-emerald-300'
+                                                                    : 'bg-emerald-100/90 text-emerald-900 border border-emerald-200'
+                                                            }`}>
+                                                                %{getItemYield(item).toFixed(2)}
+                                                            </span>
+                                                        </td>
+                                                        <td className="py-3 px-3.5 whitespace-nowrap">
+                                                            <span className={`text-[9px] font-black px-2.5 py-0.5 rounded-md border ${
+                                                                isPaid
+                                                                    ? 'bg-emerald-600 text-white border-emerald-700 shadow-2xs'
+                                                                    : !isAnnounced
+                                                                    ? 'bg-slate-100 text-slate-600 border-slate-200'
+                                                                    : 'bg-blue-50 text-blue-700 border-blue-200'
+                                                            }`}>
+                                                                {isPaid ? 'Ödendi' : (!isAnnounced ? 'Açıklanmadı' : 'Yaklaşan')}
+                                                            </span>
+                                                        </td>
+                                                        <td className="py-3 px-3.5 text-right whitespace-nowrap">
+                                                            <button title="Hatırlatıcı Ekle" className={`p-1.5 rounded-lg transition-all ${
+                                                                isPaid
+                                                                    ? 'text-emerald-700 hover:text-emerald-950 hover:bg-emerald-200/80'
+                                                                    : 'text-slate-400 hover:text-emerald-700 hover:bg-emerald-100/60'
+                                                            }`}>
+                                                                <Bell className="w-4 h-4" />
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
                                         </tbody>
                                     </table>
                                 </div>

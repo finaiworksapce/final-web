@@ -48,15 +48,20 @@ export async function GET() {
             const key = `${symbol}_${rawDate}_${netAmount}`;
 
             if (!uniqueItemsMap.has(key)) {
-                let timestamp = Date.now();
+                let timestamp = 0;
                 let parsedDateStr: string | null = null;
-                if (rawDate && rawDate.includes('.')) {
+                if (rawDate && rawDate.includes('.') && rawDate.trim() !== '...') {
                     const parts = rawDate.split('.');
                     if (parts.length === 3) {
-                        const parsedDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
-                        if (!isNaN(parsedDate.getTime())) {
-                            timestamp = parsedDate.getTime();
-                            parsedDateStr = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                        const d = parseInt(parts[0], 10);
+                        const m = parseInt(parts[1], 10);
+                        const y = parseInt(parts[2], 10);
+                        if (!isNaN(d) && !isNaN(m) && !isNaN(y) && d > 0 && d <= 31 && m > 0 && m <= 12 && y >= 2020) {
+                            const parsedDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+                            if (!isNaN(parsedDate.getTime())) {
+                                timestamp = parsedDate.getTime();
+                                parsedDateStr = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                            }
                         }
                     }
                 }
@@ -68,7 +73,7 @@ export async function GET() {
                     netAmountPerShare: netAmount,
                     netAmountFormatted: `${netAmount.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 4 })} ₺`,
                     yieldPercent: yieldVal,
-                    paymentDate: rawDate,
+                    paymentDate: rawDate.trim() === '...' ? 'Açıklanmadı' : rawDate,
                     parsedDate: parsedDateStr,
                     timestamp
                 });
@@ -77,8 +82,15 @@ export async function GET() {
 
         const items = Array.from(uniqueItemsMap.values());
 
-        // En yakından uzağa sıralama
-        items.sort((a, b) => a.timestamp - b.timestamp);
+        // Tarihi olanları yakından uzağa sırala, tarihi açıklanmayanları en alta yerleştir
+        items.sort((a, b) => {
+            const hasA = Boolean(a.parsedDate && a.timestamp > 0);
+            const hasB = Boolean(b.parsedDate && b.timestamp > 0);
+            if (hasA && !hasB) return -1;
+            if (!hasA && hasB) return 1;
+            if (!hasA && !hasB) return (a.symbol || '').localeCompare(b.symbol || '');
+            return a.timestamp - b.timestamp;
+        });
 
         return NextResponse.json({
             success: true,
