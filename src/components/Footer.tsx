@@ -53,6 +53,15 @@ export default function Footer() {
                 </div>
             </div>
 
+            {/* ÖNEMLİ YASAL UYARI */}
+            <div className="border-t border-white/10 mt-8 pt-8 pb-4">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <p className="text-xs text-white/70 leading-relaxed font-normal">
+                        <strong className="text-white font-semibold">⚠️ ÖNEMLİ YASAL UYARI:</strong> Platformumuzda yer alan bilgiler, tahminler, analizler ve yapay zeka tarafından sunulan raporlar kesinlikle yatırım danışmanlığı kapsamında değildir. FinAi, 6362 sayılı Sermaye Piyasası Kanunu ve ilgili mevzuat uyarınca yatırım danışmanlığı faaliyeti yürütmemektedir. Sunulan veriler kullanıcıları bilgilendirme amaçlı olup, yatırım kararları tamamen kullanıcının sorumluluğundadır.
+                    </p>
+                </div>
+            </div>
+
             {/* Alt Telif Yazısı (İnce Çizgisiz, Bütünleşik Mavi Arka Plan) */}
             <div className="py-6 px-4 text-center text-xs text-white/60 font-bold uppercase tracking-widest bg-[#00008B]">
                 © {new Date().getFullYear()} FinAi. Tüm hakları saklıdır.
