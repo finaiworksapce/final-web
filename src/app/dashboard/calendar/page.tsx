@@ -19,7 +19,9 @@ import {
     Clock,
     Search,
     X,
-    AlertCircle
+    AlertCircle,
+    ArrowRight,
+    ExternalLink
 } from "lucide-react";
 import { useUser } from "@/components/providers/UserProvider";
 
@@ -200,17 +202,14 @@ function CalendarContent() {
     const [ipoDateFilter, setIpoDateFilter] = useState<'all' | 'today' | 'this-week' | 'this-month' | 'next-3-months'>(
         () => (searchParams?.get('date') as any) || 'all'
     );
-    const [ipoStatusFilter, setIpoStatusFilter] = useState<'all' | 'upcoming' | 'active' | 'completed'>(
+    const [ipoStatusFilter, setIpoStatusFilter] = useState<'all' | 'talep-toplama' | 'taslak' | 'basvuru' | 'ertelendi' | 'reddedildi' | 'iptal-edildi'>(
         () => (searchParams?.get('status') as any) || 'all'
     );
     const [ipoPriceFilter, setIpoPriceFilter] = useState<'all' | '0-25' | '25-50' | '50-100' | '100plus'>(
         () => (searchParams?.get('price') as any) || 'all'
     );
-    const [ipoPortfolioOnly, setIpoPortfolioOnly] = useState<boolean>(
-        () => searchParams?.get('portfolio') === 'true'
-    );
-    const [ipoSort, setIpoSort] = useState<'date-asc' | 'date-desc' | 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc'>(
-        () => (searchParams?.get('sort') as any) || 'date-asc'
+    const [ipoSort, setIpoSort] = useState<'default' | 'date-asc' | 'date-desc' | 'name-asc' | 'name-desc'>(
+        () => (searchParams?.get('sort') as any) || 'default'
     );
 
     // ==========================================
@@ -220,7 +219,7 @@ function CalendarContent() {
     const [ecoDateFilter, setEcoDateFilter] = useState<'all' | 'today' | 'tomorrow' | 'this-week' | 'this-month'>(
         () => (searchParams?.get('date') as any) || 'all'
     );
-    const [ecoCountryFilter, setEcoCountryFilter] = useState<'all' | 'tr' | 'us' | 'eu' | 'uk' | 'de' | 'cn' | 'jp' | 'other'>(
+    const [ecoCountryFilter, setEcoCountryFilter] = useState<'all' | 'tr' | 'us' | 'eu' | 'uk' | 'other'>(
         () => (searchParams?.get('country') as any) || 'all'
     );
     const [ecoImportanceFilter, setEcoImportanceFilter] = useState<'all' | 'high' | 'medium' | 'low'>(
@@ -229,8 +228,8 @@ function CalendarContent() {
     const [ecoStatusFilter, setEcoStatusFilter] = useState<'all' | 'pending' | 'announced'>(
         () => (searchParams?.get('status') as any) || 'all'
     );
-    const [ecoSort, setEcoSort] = useState<'date-asc' | 'date-desc' | 'importance-desc' | 'name-asc'>(
-        () => (searchParams?.get('sort') as any) || 'date-asc'
+    const [ecoSort, setEcoSort] = useState<'default' | 'date-asc' | 'importance-desc' | 'name-asc'>(
+        () => (searchParams?.get('sort') as any) || 'default'
     );
 
     // ==========================================
@@ -291,8 +290,7 @@ function CalendarContent() {
             setIpoDateFilter((searchParams.get('date') as any) || 'all');
             setIpoStatusFilter((searchParams.get('status') as any) || 'all');
             setIpoPriceFilter((searchParams.get('price') as any) || 'all');
-            setIpoPortfolioOnly(searchParams.get('portfolio') === 'true');
-            setIpoSort((searchParams.get('sort') as any) || 'date-asc');
+            setIpoSort((searchParams.get('sort') as any) || 'default');
         }
 
         // 4. Ekonomik Takvim Parametreleri
@@ -302,7 +300,7 @@ function CalendarContent() {
             setEcoCountryFilter((searchParams.get('country') as any) || 'all');
             setEcoImportanceFilter((searchParams.get('importance') as any) || 'all');
             setEcoStatusFilter((searchParams.get('status') as any) || 'all');
-            setEcoSort((searchParams.get('sort') as any) || 'date-asc');
+            setEcoSort((searchParams.get('sort') as any) || 'default');
         }
     }, [searchParams]);
 
@@ -357,15 +355,14 @@ function CalendarContent() {
         const d = newParams.date !== undefined ? newParams.date : ipoDateFilter;
         const st = newParams.status !== undefined ? newParams.status : ipoStatusFilter;
         const pr = newParams.price !== undefined ? newParams.price : ipoPriceFilter;
-        const p = newParams.portfolio !== undefined ? newParams.portfolio : ipoPortfolioOnly;
         const so = newParams.sort !== undefined ? newParams.sort : ipoSort;
 
         if (s) params.set('search', s); else params.delete('search');
         if (d && d !== 'all') params.set('date', d); else params.delete('date');
         if (st && st !== 'all') params.set('status', st); else params.delete('status');
         if (pr && pr !== 'all') params.set('price', pr); else params.delete('price');
-        if (p) params.set('portfolio', 'true'); else params.delete('portfolio');
-        if (so && so !== 'date-asc') params.set('sort', so); else params.delete('sort');
+        params.delete('portfolio');
+        if (so && so !== 'default') params.set('sort', so); else params.delete('sort');
         router.replace(`/dashboard/calendar?${params.toString()}`, { scroll: false });
     };
 
@@ -385,7 +382,7 @@ function CalendarContent() {
         if (c && c !== 'all') params.set('country', c); else params.delete('country');
         if (i && i !== 'all') params.set('importance', i); else params.delete('importance');
         if (st && st !== 'all') params.set('status', st); else params.delete('status');
-        if (so && so !== 'date-asc') params.set('sort', so); else params.delete('sort');
+        if (so && so !== 'default') params.set('sort', so); else params.delete('sort');
         router.replace(`/dashboard/calendar?${params.toString()}`, { scroll: false });
     };
 
@@ -616,6 +613,64 @@ function CalendarContent() {
         if (!val || val === '...' || val === '-' || val.toLowerCase().includes('açıklanma')) return false;
         const ts = getItemTimestamp(item, 'paymentDate');
         return ts > 0;
+    };
+
+    const isIpoDateAnnounced = (item: any): boolean => {
+        if (!item) return false;
+        if (item.startDate && item.endDate) return true;
+        if (Array.isArray(item.dates) && item.dates.length > 0) return true;
+        const text = String(item.dateRange || '').trim().toLowerCase();
+        if (!text || text.includes('bekleniyor') || text.includes('açıklanmadı') || text === '...' || text === '-') {
+            return false;
+        }
+        const ts = getItemTimestamp(item, 'dateRange');
+        return ts > 0;
+    };
+
+    const getIpoTimeRange = (item: any): { start: number; end: number } | null => {
+        if (!isIpoDateAnnounced(item)) return null;
+        if (item.startDate && item.endDate) {
+            const s = new Date(item.startDate + 'T00:00:00').getTime();
+            const e = new Date(item.endDate + 'T23:59:59').getTime();
+            if (!isNaN(s) && !isNaN(e)) return { start: s, end: e };
+        }
+        const ts = getItemTimestamp(item, 'dateRange');
+        if (ts > 0) {
+            return { start: ts, end: ts + (24 * 60 * 60 * 1000) - 1 };
+        }
+        return null;
+    };
+
+    const isEconomicEventReleased = (item: any): boolean => {
+        if (!item) return false;
+        if (item.is_released === true) return true;
+        if (item.is_released === false) return false;
+        const act = String(item.actual || '').trim();
+        if (!act || act === '-' || act === '—' || act === '...' || act.toLowerCase() === 'bekleniyor') {
+            return false;
+        }
+        return true;
+    };
+
+    const getEconomicEventTimestamp = (item: any): number => {
+        if (item.timestamp && item.timestamp > 0) return item.timestamp;
+        const dateStr = item.dateFormatted || item.event_date || item.date;
+        const timeStr = item.time || '00:00';
+        if (dateStr) {
+            const parts = String(dateStr).split('.');
+            if (parts.length === 3) {
+                const d = parseInt(parts[0], 10);
+                const m = parseInt(parts[1], 10);
+                const y = parseInt(parts[2], 10);
+                const [hh, mm] = String(timeStr).split(':').map((x: string) => parseInt(x, 10) || 0);
+                if (!isNaN(d) && !isNaN(m) && !isNaN(y)) {
+                    return new Date(y, m - 1, d, hh, mm).getTime();
+                }
+            }
+            const t = new Date(dateStr).getTime();
+            if (!isNaN(t)) return t;
+        }
+        return 0;
     };
 
     const getItemYield = (item: any): number => {
@@ -894,33 +949,53 @@ function CalendarContent() {
             );
         }
         const now = new Date();
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+        const todayEnd = todayStart + (24 * 60 * 60 * 1000) - 1;
+
+        // Kural 5: Tarih filtresinde herhangi bir zaman aralığı seçildiğinde
+        // sadece Talep toplama tarihleri belli olan ve belirlenen zaman aralığına uygun hisseleri gösterelim
         if (ipoDateFilter !== 'all') {
             list = list.filter(item => {
-                const ts = getItemTimestamp(item, 'dateRange');
-                if (!ts) return false;
-                const itemDate = new Date(ts);
-                if (ipoDateFilter === 'today') return itemDate.toDateString() === now.toDateString();
-                if (ipoDateFilter === 'this-week') {
-                    const diffDays = (itemDate.getTime() - now.getTime()) / (1000 * 3600 * 24);
-                    return diffDays >= -1 && diffDays <= 7;
+                const range = getIpoTimeRange(item);
+                if (!range) return false; // Kesinlikle tarihi açıklanmamış olanları eler
+
+                if (ipoDateFilter === 'today') {
+                    return range.start <= todayEnd && range.end >= todayStart;
                 }
-                if (ipoDateFilter === 'this-month') return itemDate.getMonth() === now.getMonth() && itemDate.getFullYear() === now.getFullYear();
+                if (ipoDateFilter === 'this-week') {
+                    const dayOfWeek = now.getDay();
+                    const diffMon = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+                    const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffMon).getTime();
+                    const weekEnd = weekStart + (7 * 24 * 60 * 60 * 1000) - 1;
+                    return range.start <= weekEnd && range.end >= weekStart;
+                }
+                if (ipoDateFilter === 'this-month') {
+                    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+                    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999).getTime();
+                    return range.start <= monthEnd && range.end >= monthStart;
+                }
                 if (ipoDateFilter === 'next-3-months') {
-                    const diffDays = (itemDate.getTime() - now.getTime()) / (1000 * 3600 * 24);
-                    return diffDays >= 0 && diffDays <= 90;
+                    const rangeEnd = todayStart + (90 * 24 * 60 * 60 * 1000);
+                    return range.start <= rangeEnd && range.end >= todayStart;
                 }
                 return true;
             });
         }
+
+        // Kural 4: Durum filtresi seçenekleri: ertelendi, taslak, reddedildi, iptal edildi, talep toplama, başvuru sürecinde
         if (ipoStatusFilter !== 'all') {
             list = list.filter(item => {
-                const st = (item.status || '').toLowerCase();
-                if (ipoStatusFilter === 'upcoming') return st.includes('yaklaşan') || st.includes('hazırlık');
-                if (ipoStatusFilter === 'active') return st.includes('açık') || st.includes('talep');
-                if (ipoStatusFilter === 'completed') return st.includes('sona') || st.includes('tamam');
+                const st = `${item.status || ''} ${item.badge || ''}`.toLowerCase();
+                if (ipoStatusFilter === 'talep-toplama') return st.includes('talep') || st.includes('toplama');
+                if (ipoStatusFilter === 'taslak') return st.includes('taslak');
+                if (ipoStatusFilter === 'basvuru') return st.includes('başvuru') || st.includes('basvuru') || st.includes('spk onay') || st.includes('onay');
+                if (ipoStatusFilter === 'ertelendi') return st.includes('ertelendi') || st.includes('ertele');
+                if (ipoStatusFilter === 'reddedildi') return st.includes('reddedildi') || st.includes('ret');
+                if (ipoStatusFilter === 'iptal-edildi') return st.includes('iptal');
                 return true;
             });
         }
+
         if (ipoPriceFilter !== 'all') {
             list = list.filter(item => {
                 const p = parseFloat(item.priceFormatted || item.offerPrice || '0');
@@ -931,27 +1006,43 @@ function CalendarContent() {
                 return true;
             });
         }
-        if (ipoPortfolioOnly) {
-            list = list.filter(item => {
-                const sym = (item.symbol || '').toUpperCase().replace(/\.IS$/, '');
-                return portfolioSymbols.has(sym);
-            });
+
+        // Kural 2: En yakın tarih ve en uzak tarih seçeneği sıralama filtresinden seçildiği zaman
+        // kullanıcıya sadece tarihleri açıklanmış olan hisseleri gösterelim
+        if (ipoSort === 'date-asc' || ipoSort === 'date-desc') {
+            list = list.filter(item => isIpoDateAnnounced(item));
         }
+
         list.sort((a, b) => {
+            const isAnnouncedA = isIpoDateAnnounced(a);
+            const isAnnouncedB = isIpoDateAnnounced(b);
             const tsA = getItemTimestamp(a, 'dateRange');
             const tsB = getItemTimestamp(b, 'dateRange');
-            const prA = parseFloat(a.priceFormatted || a.offerPrice || '0');
-            const prB = parseFloat(b.priceFormatted || b.offerPrice || '0');
-            if (ipoSort === 'date-asc') return tsA - tsB;
-            if (ipoSort === 'date-desc') return tsB - tsA;
-            if (ipoSort === 'price-asc') return prA - prB;
-            if (ipoSort === 'price-desc') return prB - prA;
-            if (ipoSort === 'name-asc') return (a.companyName || '').localeCompare(b.companyName || '');
-            if (ipoSort === 'name-desc') return (b.companyName || '').localeCompare(a.companyName || '');
+
+            if (ipoSort === 'date-asc') {
+                return (tsA || Infinity) - (tsB || Infinity);
+            }
+            if (ipoSort === 'date-desc') {
+                return (tsB || 0) - (tsA || 0);
+            }
+            if (ipoSort === 'name-asc') {
+                return (a.companyName || '').localeCompare(b.companyName || '');
+            }
+            if (ipoSort === 'name-desc') {
+                return (b.companyName || '').localeCompare(a.companyName || '');
+            }
+
+            // Default Sort: Tarihi açıklananlar en yakın tarihe göre yukarıda, açıklanmayanlar (taslaklar) en altta
+            if (isAnnouncedA && !isAnnouncedB) return -1;
+            if (!isAnnouncedA && isAnnouncedB) return 1;
+            if (isAnnouncedA && isAnnouncedB) {
+                return (tsA || Infinity) - (tsB || Infinity);
+            }
             return 0;
         });
+
         return list;
-    }, [ipos, ipoSearch, ipoDateFilter, ipoStatusFilter, ipoPriceFilter, ipoPortfolioOnly, ipoSort, portfolioSymbols]);
+    }, [ipos, ipoSearch, ipoDateFilter, ipoStatusFilter, ipoPriceFilter, ipoSort]);
 
     const ipoActiveChips = useMemo(() => {
         const chips: { id: string; label: string; clear: () => void }[] = [];
@@ -961,16 +1052,22 @@ function CalendarContent() {
             chips.push({ id: 'date', label: `Tarih: ${labels[ipoDateFilter]}`, clear: () => { setIpoDateFilter('all'); updateIpoUrlParams({ date: 'all' }); } });
         }
         if (ipoStatusFilter !== 'all') {
-            const labels: Record<string, string> = { upcoming: 'Yaklaşan', active: 'Başvuru Açık', completed: 'Tamamlanan' };
-            chips.push({ id: 'status', label: `Durum: ${labels[ipoStatusFilter]}`, clear: () => { setIpoStatusFilter('all'); updateIpoUrlParams({ status: 'all' }); } });
+            const labels: Record<string, string> = {
+                'talep-toplama': 'Talep Toplama',
+                'taslak': 'Taslak',
+                'basvuru': 'Başvuru Sürecinde',
+                'ertelendi': 'Ertelendi',
+                'reddedildi': 'Reddedildi',
+                'iptal-edildi': 'İptal Edildi'
+            };
+            chips.push({ id: 'status', label: `Durum: ${labels[ipoStatusFilter] || ipoStatusFilter}`, clear: () => { setIpoStatusFilter('all'); updateIpoUrlParams({ status: 'all' }); } });
         }
         if (ipoPriceFilter !== 'all') {
             const labels: Record<string, string> = { '0-25': '0–25 TL', '25-50': '25–50 TL', '50-100': '50–100 TL', '100plus': '100 TL+' };
             chips.push({ id: 'price', label: `Fiyat: ${labels[ipoPriceFilter]}`, clear: () => { setIpoPriceFilter('all'); updateIpoUrlParams({ price: 'all' }); } });
         }
-        if (ipoPortfolioOnly) chips.push({ id: 'portfolio', label: 'Portföyümdekiler', clear: () => { setIpoPortfolioOnly(false); updateIpoUrlParams({ portfolio: false }); } });
         return chips;
-    }, [ipoSearch, ipoDateFilter, ipoStatusFilter, ipoPriceFilter, ipoPortfolioOnly]);
+    }, [ipoSearch, ipoDateFilter, ipoStatusFilter, ipoPriceFilter]);
 
     const ipoTotalPages = Math.ceil(filteredIpos.length / ITEMS_PER_PAGE) || 1;
     const paginatedIpos = useMemo(() => {
@@ -983,8 +1080,7 @@ function CalendarContent() {
         setIpoDateFilter('all');
         setIpoStatusFilter('all');
         setIpoPriceFilter('all');
-        setIpoPortfolioOnly(false);
-        setIpoSort('date-asc');
+        setIpoSort('default');
         setIpoPage(1);
         router.replace('/dashboard/calendar?type=ipo', { scroll: false });
     };
@@ -994,6 +1090,18 @@ function CalendarContent() {
     // ==========================================
     const filteredEconomicEvents = useMemo(() => {
         let list = [...economicEvents];
+
+        // Kural 2: Çin, Japonya ve Almanya gibi ülkeleri kaldır
+        list = list.filter(item => {
+            const c = (item.country || item.currency || '').toLowerCase();
+            if (c.includes('cn') || c.includes('cny') || c.includes('çin') ||
+                c.includes('jp') || c.includes('jpy') || c.includes('japonya') ||
+                c.includes('de') || c.includes('almanya')) {
+                return false;
+            }
+            return true;
+        });
+
         if (ecoSearch.trim()) {
             const q = ecoSearch.trim().toLowerCase();
             list = list.filter(item =>
@@ -1020,34 +1128,67 @@ function CalendarContent() {
                 if (ecoCountryFilter === 'us') return c.includes('us') || c.includes('usd') || c.includes('abd');
                 if (ecoCountryFilter === 'eu') return c.includes('eu') || c.includes('eur') || c.includes('euro');
                 if (ecoCountryFilter === 'uk') return c.includes('uk') || c.includes('gbp') || c.includes('ingiltere');
-                if (ecoCountryFilter === 'de') return c.includes('de') || c.includes('almanya');
-                if (ecoCountryFilter === 'cn') return c.includes('cn') || c.includes('cny') || c.includes('çin');
-                if (ecoCountryFilter === 'jp') return c.includes('jp') || c.includes('jpy') || c.includes('japonya');
                 return true;
             });
         }
+
+        // Kural 1: Önem seviyesi seçildiğinde direkt tüm verilerin kaybolması düzeltildi
         if (ecoImportanceFilter !== 'all') {
             list = list.filter(item => {
                 const imp = item.impact;
-                if (ecoImportanceFilter === 'high') return imp === 'Yüksek' || imp === 3;
-                if (ecoImportanceFilter === 'medium') return imp === 'Orta' || imp === 2;
-                if (ecoImportanceFilter === 'low') return imp === 'Düşük' || imp === 1;
+                if (ecoImportanceFilter === 'high') {
+                    return imp === 'critical' || imp === 'high' || imp === 'Yüksek' || imp === 'Kritik' || imp === 3 || imp === '3';
+                }
+                if (ecoImportanceFilter === 'medium') {
+                    return imp === 'medium' || imp === 'Orta' || imp === 2 || imp === '2';
+                }
+                if (ecoImportanceFilter === 'low') {
+                    return imp === 'low' || imp === 'Düşük' || imp === 1 || imp === '1';
+                }
                 return true;
             });
         }
+
+        // Kural 3: Durum filtresi - Açıklandı seçildiğinde sadece açıklananlar, Beklenen seçildiğinde sadece beklenenler
         if (ecoStatusFilter !== 'all') {
             list = list.filter(item => {
-                const hasActual = item.actual !== undefined && item.actual !== null && item.actual !== '' && item.actual !== '-';
+                const hasActual = isEconomicEventReleased(item);
                 return ecoStatusFilter === 'announced' ? hasActual : !hasActual;
             });
         }
+
+        // Kural 4: En yakın tarih seçeneğine basıldığı zaman açıklanmamış verilerden en yakın tarihten itibaren başlasın, açıklananlar gizlensin
+        if (ecoSort === 'date-asc') {
+            list = list.filter(item => !isEconomicEventReleased(item));
+        }
+
         list.sort((a, b) => {
-            const impA = a.impact === 'Yüksek' || a.impact === 3 ? 3 : a.impact === 'Orta' || a.impact === 2 ? 2 : 1;
-            const impB = b.impact === 'Yüksek' || b.impact === 3 ? 3 : b.impact === 'Orta' || b.impact === 2 ? 2 : 1;
-            if (ecoSort === 'importance-desc') return impB - impA;
-            if (ecoSort === 'name-asc') return (a.event || '').localeCompare(b.event || '');
+            const impVal = (item: any) => {
+                const imp = item.impact;
+                if (imp === 'critical' || imp === 'high' || imp === 'Yüksek' || imp === 'Kritik' || imp === 3) return 3;
+                if (imp === 'medium' || imp === 'Orta' || imp === 2) return 2;
+                return 1;
+            };
+
+            if (ecoSort === 'importance-desc') {
+                return impVal(b) - impVal(a);
+            }
+            if (ecoSort === 'name-asc') {
+                return (a.event || '').localeCompare(b.event || '');
+            }
+            if (ecoSort === 'date-asc') {
+                const tsA = getEconomicEventTimestamp(a);
+                const tsB = getEconomicEventTimestamp(b);
+                return (tsA || Infinity) - (tsB || Infinity);
+            }
+
+            // Default Sort: En yakın / güncel tarihe göre sırala
+            const tsA = getEconomicEventTimestamp(a);
+            const tsB = getEconomicEventTimestamp(b);
+            if (tsA && tsB) return tsA - tsB;
             return 0;
         });
+
         return list;
     }, [economicEvents, ecoSearch, ecoDateFilter, ecoCountryFilter, ecoImportanceFilter, ecoStatusFilter, ecoSort]);
 
@@ -1059,7 +1200,7 @@ function CalendarContent() {
             chips.push({ id: 'date', label: `Tarih: ${labels[ecoDateFilter]}`, clear: () => { setEcoDateFilter('all'); updateEconomicUrlParams({ date: 'all' }); } });
         }
         if (ecoCountryFilter !== 'all') {
-            const labels: Record<string, string> = { tr: 'Türkiye (TRY)', us: 'ABD (USD)', eu: 'Euro Bölgesi', uk: 'İngiltere', de: 'Almanya', cn: 'Çin', jp: 'Japonya' };
+            const labels: Record<string, string> = { tr: 'Türkiye (TRY)', us: 'ABD (USD)', eu: 'Euro Bölgesi', uk: 'İngiltere' };
             chips.push({ id: 'country', label: `Ülke: ${labels[ecoCountryFilter] || ecoCountryFilter}`, clear: () => { setEcoCountryFilter('all'); updateEconomicUrlParams({ country: 'all' }); } });
         }
         if (ecoImportanceFilter !== 'all') {
@@ -1084,7 +1225,7 @@ function CalendarContent() {
         setEcoCountryFilter('all');
         setEcoImportanceFilter('all');
         setEcoStatusFilter('all');
-        setEcoSort('date-asc');
+        setEcoSort('default');
         setEcoPage(1);
         router.replace('/dashboard/calendar?type=economic', { scroll: false });
     };
@@ -1762,7 +1903,7 @@ function CalendarContent() {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs font-bold">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs font-bold">
                         <div>
                             <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Tarih</label>
                             <select value={ipoDateFilter} onChange={(e) => { const v = e.target.value as any; setIpoDateFilter(v); updateIpoUrlParams({ date: v }); }} className="w-full p-2 bg-white border border-purple-200/80 rounded-xl text-slate-700">
@@ -1777,9 +1918,12 @@ function CalendarContent() {
                             <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Durum</label>
                             <select value={ipoStatusFilter} onChange={(e) => { const v = e.target.value as any; setIpoStatusFilter(v); updateIpoUrlParams({ status: v }); }} className="w-full p-2 bg-white border border-purple-200/80 rounded-xl text-slate-700">
                                 <option value="all">Tüm Durumlar</option>
-                                <option value="upcoming">Yaklaşan</option>
-                                <option value="active">Başvuru Açık</option>
-                                <option value="completed">Tamamlanan</option>
+                                <option value="talep-toplama">Talep Toplama</option>
+                                <option value="taslak">Taslak</option>
+                                <option value="basvuru">Başvuru Sürecinde</option>
+                                <option value="ertelendi">Ertelendi</option>
+                                <option value="reddedildi">Reddedildi</option>
+                                <option value="iptal-edildi">İptal Edildi</option>
                             </select>
                         </div>
                         <div>
@@ -1793,19 +1937,11 @@ function CalendarContent() {
                             </select>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Portföy</label>
-                            <button onClick={() => { const v = !ipoPortfolioOnly; setIpoPortfolioOnly(v); updateIpoUrlParams({ portfolio: v }); }} className={`w-full p-2 rounded-xl border transition-all flex items-center justify-center gap-1.5 ${ipoPortfolioOnly ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-slate-700 border-purple-200/80'}`}>
-                                <Briefcase className="w-3.5 h-3.5" />
-                                <span>Portföyümdekiler</span>
-                            </button>
-                        </div>
-                        <div className="col-span-2">
                             <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Sıralama</label>
                             <select value={ipoSort} onChange={(e) => { const v = e.target.value as any; setIpoSort(v); updateIpoUrlParams({ sort: v }); }} className="w-full p-2 bg-white border border-purple-200/80 rounded-xl text-slate-700">
+                                <option value="default">Varsayılan Sıralama</option>
                                 <option value="date-asc">En Yakın Tarih</option>
                                 <option value="date-desc">En Uzak Tarih</option>
-                                <option value="price-asc">En Düşük Fiyat</option>
-                                <option value="price-desc">En Yüksek Fiyat</option>
                                 <option value="name-asc">Şirket (A-Z)</option>
                                 <option value="name-desc">Şirket (Z-A)</option>
                             </select>
@@ -1826,6 +1962,16 @@ function CalendarContent() {
                     )}
 
                     <div className="pt-2">
+                        {/* Halka Arz Tarih Sıralaması Uyarısı */}
+                        {(ipoSort === 'date-asc' || ipoSort === 'date-desc') && (
+                            <div className="mb-3 flex items-start sm:items-center gap-2.5 p-3.5 rounded-2xl bg-amber-50/90 border border-amber-200 text-amber-900 text-xs font-semibold shadow-xs">
+                                <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5 sm:mt-0" />
+                                <p>
+                                    <span className="font-extrabold text-amber-950">Bilgilendirme:</span> Sıralamada <strong>{ipoSort === 'date-asc' ? 'En Yakın Tarih' : 'En Uzak Tarih'}</strong> seçildiğinde, yalnızca talep toplama tarihleri resmi olarak açıklanmış şirketler listelenir. Tarihi henüz kesinleşmemiş (taslak/başvuru sürecindeki) halka arzları da görmek için <button type="button" onClick={() => { setIpoSort('default'); updateIpoUrlParams({ sort: 'default' }); }} className="underline font-black text-amber-900 hover:text-amber-950">Varsayılan sıralama</button> modunu kullanabilirsiniz.
+                                </p>
+                            </div>
+                        )}
+
                         <span className="text-xs font-black text-[#00008B] block mb-3">Toplam {filteredIpos.length} Halka Arz Kaydı</span>
                         {loading ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yükleniyor...</div>
@@ -1962,9 +2108,6 @@ function CalendarContent() {
                                 <option value="us">ABD (USD)</option>
                                 <option value="eu">Euro Bölgesi (EUR)</option>
                                 <option value="uk">İngiltere (GBP)</option>
-                                <option value="de">Almanya</option>
-                                <option value="cn">Çin (CNY)</option>
-                                <option value="jp">Japonya (JPY)</option>
                             </select>
                         </div>
                         <div>
@@ -1987,7 +2130,8 @@ function CalendarContent() {
                         <div>
                             <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Sıralama</label>
                             <select value={ecoSort} onChange={(e) => { const v = e.target.value as any; setEcoSort(v); updateEconomicUrlParams({ sort: v }); }} className="w-full p-2 bg-white border border-amber-200/80 rounded-xl text-slate-700">
-                                <option value="date-asc">En Yakın Tarih</option>
+                                <option value="default">Varsayılan Sıralama</option>
+                                <option value="date-asc">En Yakın Tarih (Beklenenler)</option>
                                 <option value="importance-desc">Önem: Yüksek → Düşük</option>
                                 <option value="name-asc">Veri Adı (A-Z)</option>
                             </select>
@@ -2008,6 +2152,16 @@ function CalendarContent() {
                     )}
 
                     <div className="pt-2">
+                        {/* Ekonomik Takvim En Yakın Tarih Sıralaması Uyarısı */}
+                        {ecoSort === 'date-asc' && (
+                            <div className="mb-3 flex items-start sm:items-center gap-2.5 p-3.5 rounded-2xl bg-amber-50/90 border border-amber-200 text-amber-900 text-xs font-semibold shadow-xs">
+                                <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5 sm:mt-0" />
+                                <p>
+                                    <span className="font-extrabold text-amber-950">Bilgilendirme:</span> <strong>En Yakın Tarih</strong> sıralamasında yalnızca henüz açıklanmamış (beklenen) ekonomik veriler en yakın tarihten başlayarak listelenir; açıklanmış geçmiş veriler bu sıralamada gizlenir. Tüm verileri görmek için <button type="button" onClick={() => { setEcoSort('default'); updateEconomicUrlParams({ sort: 'default' }); }} className="underline font-black text-amber-900 hover:text-amber-950">Varsayılan sıralama</button> modunu kullanabilirsiniz.
+                                </p>
+                            </div>
+                        )}
+
                         <span className="text-xs font-black text-[#00008B] block mb-3">Toplam {filteredEconomicEvents.length} Ekonomik Veri Kaydı</span>
                         {loading ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yükleniyor...</div>
@@ -2030,26 +2184,55 @@ function CalendarContent() {
                                                 <th className="py-3 px-3.5">Beklenti</th>
                                                 <th className="py-3 px-3.5">Açıklanan</th>
                                                 <th className="py-3 px-3.5">Önem</th>
+                                                <th className="py-3 px-3.5 text-right">İşlem</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-amber-100/50">
-                                            {paginatedEconomicEvents.map((item, idx) => (
-                                                <tr key={idx} className="hover:bg-amber-50/40 transition-colors">
-                                                    <td className="py-3 px-3.5 text-[#00008B] whitespace-nowrap">{item.dateFormatted || 'Bugün'} {item.time || '15:30'}</td>
-                                                    <td className="py-3 px-3.5 font-black text-slate-700 whitespace-nowrap">{item.country || 'USD'}</td>
-                                                    <td className="py-3 px-3.5 text-slate-800">{item.event}</td>
-                                                    <td className="py-3 px-3.5 text-slate-500 whitespace-nowrap">{item.previous || '—'}</td>
-                                                    <td className="py-3 px-3.5 text-slate-700 whitespace-nowrap">{item.forecast || '—'}</td>
-                                                    <td className="py-3 px-3.5 text-amber-700 font-black whitespace-nowrap">{item.actual || '—'}</td>
-                                                    <td className="py-3 px-3.5 whitespace-nowrap">
-                                                        <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-md border ${
-                                                            item.impact === 'Yüksek' || item.impact === 3 ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-amber-100/80 text-amber-800 border-amber-200'
-                                                        }`}>
-                                                            {item.impact === 3 ? 'Yüksek' : 'Orta'}
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            ))}
+                                            {paginatedEconomicEvents.map((item, idx) => {
+                                                const isHigh = item.impact === 'critical' || item.impact === 'high' || item.impact === 'Yüksek' || item.impact === 'Kritik' || item.impact === 3;
+                                                const isMed = item.impact === 'medium' || item.impact === 'Orta' || item.impact === 2;
+                                                const detailHref = `/dashboard/economic-calendar/${encodeURIComponent(item.id || item.event)}`;
+
+                                                return (
+                                                    <tr key={idx} className="hover:bg-amber-50/40 transition-colors">
+                                                        <td className="py-3 px-3.5 text-[#00008B] whitespace-nowrap">{item.dateFormatted || 'Bugün'} {item.time || '15:30'}</td>
+                                                        <td className="py-3 px-3.5 font-black text-slate-700 whitespace-nowrap">{item.country || 'USD'}</td>
+                                                        <td className="py-3 px-3.5">
+                                                            <Link
+                                                                href={detailHref}
+                                                                className="text-slate-800 hover:text-[#00008B] hover:underline font-bold transition-colors inline-flex items-center gap-1.5 group"
+                                                                title={`${item.event} Detayına Git`}
+                                                            >
+                                                                <span>{item.event}</span>
+                                                                <ExternalLink className="w-3 h-3 text-slate-400 group-hover:text-[#00008B] opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+                                                            </Link>
+                                                        </td>
+                                                        <td className="py-3 px-3.5 text-slate-500 whitespace-nowrap">{item.previous || '—'}</td>
+                                                        <td className="py-3 px-3.5 text-slate-700 whitespace-nowrap">{item.forecast || '—'}</td>
+                                                        <td className="py-3 px-3.5 text-amber-700 font-black whitespace-nowrap">{item.actual || '—'}</td>
+                                                        <td className="py-3 px-3.5 whitespace-nowrap">
+                                                            <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-md border ${
+                                                                isHigh 
+                                                                    ? 'bg-rose-50 text-rose-700 border-rose-200' 
+                                                                    : isMed 
+                                                                    ? 'bg-amber-100/80 text-amber-800 border-amber-200' 
+                                                                    : 'bg-slate-100 text-slate-600 border-slate-200'
+                                                            }`}>
+                                                                {isHigh ? 'Yüksek' : isMed ? 'Orta' : 'Düşük'}
+                                                            </span>
+                                                        </td>
+                                                        <td className="py-3 px-3.5 text-right whitespace-nowrap">
+                                                            <Link
+                                                                href={detailHref}
+                                                                className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black text-amber-900 bg-amber-100/80 hover:bg-amber-200/90 rounded-lg border border-amber-200/80 transition-all hover:scale-105"
+                                                            >
+                                                                <span>İncele</span>
+                                                                <ArrowRight className="w-3 h-3" />
+                                                            </Link>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
                                         </tbody>
                                     </table>
                                 </div>
@@ -2389,14 +2572,22 @@ function CalendarContent() {
                                             <tr key={idx} className="hover:bg-amber-50/40 transition-colors">
                                                 <td className="py-2.5 px-2 text-[#00008B] whitespace-nowrap">{item.time || '15:30'}</td>
                                                 <td className="py-2.5 px-2 font-black text-slate-700 whitespace-nowrap">{item.country || 'USD'}</td>
-                                                <td className="py-2.5 px-2 text-slate-800 truncate max-w-[130px]">{item.event}</td>
+                                                <td className="py-2.5 px-2 text-slate-800 truncate max-w-[130px]">
+                                                    <Link
+                                                        href={`/dashboard/economic-calendar/${encodeURIComponent(item.id || item.event)}`}
+                                                        className="hover:text-[#00008B] hover:underline transition-colors truncate block"
+                                                        title={item.event}
+                                                    >
+                                                        {item.event}
+                                                    </Link>
+                                                </td>
                                                 <td className="py-2.5 px-2 whitespace-nowrap">
                                                     <span className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded border ${
-                                                        item.impact === 'Yüksek' || item.impact === 3
+                                                        item.impact === 'critical' || item.impact === 'high' || item.impact === 'Yüksek' || item.impact === 'Kritik' || item.impact === 3
                                                             ? 'bg-rose-50 text-rose-700 border-rose-200'
                                                             : 'bg-amber-100/80 text-amber-800 border-amber-200'
                                                     }`}>
-                                                        {item.impact === 3 ? 'Yüksek' : 'Orta'}
+                                                        {item.impact === 'critical' || item.impact === 'high' || item.impact === 'Yüksek' || item.impact === 3 ? 'Yüksek' : 'Orta'}
                                                     </span>
                                                 </td>
                                             </tr>
