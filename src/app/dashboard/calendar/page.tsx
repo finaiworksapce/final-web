@@ -615,30 +615,58 @@ function CalendarContent() {
         return ts > 0;
     };
 
+    // HALKA ARZ: Tek tarih kaynağı "Talep Toplama Tarihleri" (startDate / endDate)
     const isIpoDateAnnounced = (item: any): boolean => {
-        if (!item) return false;
-        if (item.startDate && item.endDate) return true;
-        if (Array.isArray(item.dates) && item.dates.length > 0) return true;
-        const text = String(item.dateRange || '').trim().toLowerCase();
-        if (!text || text.includes('bekleniyor') || text.includes('açıklanmadı') || text === '...' || text === '-') {
-            return false;
-        }
-        const ts = getItemTimestamp(item, 'dateRange');
-        return ts > 0;
+        return Boolean(item && item.startDate && item.endDate);
     };
 
     const getIpoTimeRange = (item: any): { start: number; end: number } | null => {
         if (!isIpoDateAnnounced(item)) return null;
-        if (item.startDate && item.endDate) {
-            const s = new Date(item.startDate + 'T00:00:00').getTime();
-            const e = new Date(item.endDate + 'T23:59:59').getTime();
-            if (!isNaN(s) && !isNaN(e)) return { start: s, end: e };
-        }
-        const ts = getItemTimestamp(item, 'dateRange');
-        if (ts > 0) {
-            return { start: ts, end: ts + (24 * 60 * 60 * 1000) - 1 };
-        }
-        return null;
+        const s = new Date(item.startDate + 'T00:00:00').getTime();
+        const e = new Date(item.endDate + 'T23:59:59').getTime();
+        if (isNaN(s) || isNaN(e)) return null;
+        return { start: s, end: e };
+    };
+
+    // Talep toplama tarihlerine göre bugünkü aşama (kullanıcının yerel gününe göre)
+    const getIpoPhase = (item: any): 'active' | 'upcoming' | 'completed' | null => {
+        if (!isIpoDateAnnounced(item)) return null;
+        const now = new Date();
+        const todayIso = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        if (todayIso < item.startDate) return 'upcoming';
+        if (todayIso > item.endDate) return 'completed';
+        return 'active';
+    };
+
+    // Talep toplama tarihine göre "en yakından en uzağa" karşılaştırma:
+    // Talep toplayanlar → Yaklaşanlar (en yakın başlangıç önce) → Tamamlananlar (en son biten önce) → Tarihsizler
+    const compareIposByTalepToplama = (a: any, b: any): number => {
+        const rank = (p: ReturnType<typeof getIpoPhase>) => (p === 'active' ? 0 : p === 'upcoming' ? 1 : p === 'completed' ? 2 : 3);
+        const pa = getIpoPhase(a);
+        const pb = getIpoPhase(b);
+        if (rank(pa) !== rank(pb)) return rank(pa) - rank(pb);
+        if (pa === 'completed') return String(b.endDate).localeCompare(String(a.endDate));
+        if (pa === 'active' || pa === 'upcoming') return String(a.startDate).localeCompare(String(b.startDate));
+        return 0;
+    };
+
+    const getIpoStatusLabel = (item: any): string => {
+        const badge = String(item?.status || '').trim();
+        const phase = getIpoPhase(item);
+        // halkarz.com rozetleri (Ertelendi, Başvuru Sürecinde, İptal vb.) korunur
+        if (badge && !/talep|taslak/i.test(badge)) return badge;
+        if (phase === 'active') return 'Talep Toplanıyor';
+        if (phase === 'upcoming') return 'Talep Toplama Yaklaşıyor';
+        if (phase === 'completed') return 'Talep Toplama Tamamlandı';
+        return badge || 'Taslak';
+    };
+
+    const getIpoStatusBadgeClass = (item: any): string => {
+        const phase = getIpoPhase(item);
+        if (phase === 'active') return 'bg-purple-600 text-white border-purple-700';
+        if (phase === 'upcoming') return 'bg-purple-100 text-purple-800 border-purple-300';
+        if (phase === 'completed') return 'bg-slate-100 text-slate-600 border-slate-200';
+        return 'bg-purple-50 text-purple-700 border-purple-200';
     };
 
     const isEconomicEventReleased = (item: any): boolean => {
@@ -982,7 +1010,7 @@ function CalendarContent() {
         if (ipoStatusFilter !== 'all') {
             list = list.filter(item => {
                 const st = `${item.status || ''} ${item.badge || ''}`.toLowerCase();
-                if (ipoStatusFilter === 'talep-toplama') return st.includes('talep') || st.includes('toplama');
+                if (ipoStatusFilter === 'talep-toplama') return isIpoDateAnnounced(item);
                 if (ipoStatusFilter === 'taslak') return st.includes('taslak');
                 if (ipoStatusFilter === 'basvuru') return st.includes('başvuru') || st.includes('basvuru') || st.includes('spk onay') || st.includes('onay');
                 if (ipoStatusFilter === 'ertelendi') return st.includes('ertelendi') || st.includes('ertele');
@@ -1010,31 +1038,19 @@ function CalendarContent() {
         }
 
         list.sort((a, b) => {
-            const isAnnouncedA = isIpoDateAnnounced(a);
-            const isAnnouncedB = isIpoDateAnnounced(b);
-            const tsA = getItemTimestamp(a, 'dateRange');
-            const tsB = getItemTimestamp(b, 'dateRange');
-
-            if (ipoSort === 'date-asc') {
-                return (tsA || Infinity) - (tsB || Infinity);
-            }
-            if (ipoSort === 'date-desc') {
-                return (tsB || 0) - (tsA || 0);
-            }
             if (ipoSort === 'name-asc') {
                 return (a.companyName || '').localeCompare(b.companyName || '');
             }
             if (ipoSort === 'name-desc') {
                 return (b.companyName || '').localeCompare(a.companyName || '');
             }
-
-            // Default Sort: Tarihi açıklananlar en yakın tarihe göre yukarıda, açıklanmayanlar (taslaklar) en altta
-            if (isAnnouncedA && !isAnnouncedB) return -1;
-            if (!isAnnouncedA && isAnnouncedB) return 1;
-            if (isAnnouncedA && isAnnouncedB) {
-                return (tsA || Infinity) - (tsB || Infinity);
+            // En Uzak Tarih: talep toplama tarihine göre en yakından en uzağa sıralamanın tersi
+            if (ipoSort === 'date-desc') {
+                return compareIposByTalepToplama(b, a);
             }
-            return 0;
+            // Varsayılan ve En Yakın Tarih: yalnızca talep toplama tarihlerine göre
+            // Talep toplayanlar → Yaklaşanlar → Tamamlananlar (en son biten önce) → Tarihsizler (en altta)
+            return compareIposByTalepToplama(a, b);
         });
 
         return list;
@@ -1384,37 +1400,19 @@ function CalendarContent() {
     }, [dividends]);
 
     const overviewIpos = useMemo(() => {
-        const now = new Date();
-        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+        // Genel bakışta sadece talep toplama tarihi belli olan halka arzlar gösterilir
+        return ipos
+            .filter(item => isIpoDateAnnounced(item))
+            .sort(compareIposByTalepToplama)
+            .slice(0, 4);
+    }, [ipos]);
 
-        const announced = ipos.filter(item => isIpoDateAnnounced(item));
-        const unannounced = ipos.filter(item => !isIpoDateAnnounced(item));
-
-        const getIpoTs = (item: any) => {
-            if (item.timestamp && item.timestamp > 0) return item.timestamp;
-            const range = getIpoTimeRange(item);
-            if (range) return range.start;
-            return getItemTimestamp(item, 'dateRange');
-        };
-
-        const upcoming = announced.filter(item => {
-            const range = getIpoTimeRange(item);
-            const endTs = range ? range.end : getIpoTs(item);
-            return endTs >= todayStart;
-        });
-
-        const past = announced.filter(item => {
-            const range = getIpoTimeRange(item);
-            const endTs = range ? range.end : getIpoTs(item);
-            return endTs < todayStart;
-        });
-
-        // Yaklaşanlar en yakın tarihten uzağa
-        upcoming.sort((a, b) => getIpoTs(a) - getIpoTs(b));
-        // Geçmiştekiler bugüne en yakın tarihten geriye doğru
-        past.sort((a, b) => getIpoTs(b) - getIpoTs(a));
-
-        return [...upcoming, ...past, ...unannounced].slice(0, 4);
+    // Piyasa Gündemi kartı: şu an talep toplayan + talep toplaması yaklaşan halka arz sayısı
+    const activeOrUpcomingIpoCount = useMemo(() => {
+        return ipos.filter(item => {
+            const phase = getIpoPhase(item);
+            return phase === 'active' || phase === 'upcoming';
+        }).length;
     }, [ipos]);
 
     const overviewEconomicEvents = useMemo(() => {
@@ -2123,8 +2121,8 @@ function CalendarContent() {
                                                         {item.price ? `${item.price} TL` : 'Belirlenmedi'}
                                                     </td>
                                                     <td className="py-3 px-3.5 whitespace-nowrap">
-                                                        <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-md border bg-purple-50 text-purple-700 border-purple-200">
-                                                            {item.status || 'Talep Toplama'}
+                                                        <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-md border ${getIpoStatusBadgeClass(item)}`}>
+                                                            {getIpoStatusLabel(item)}
                                                         </span>
                                                     </td>
                                                     <td className="py-3 px-3.5 text-right whitespace-nowrap">
@@ -2625,8 +2623,8 @@ function CalendarContent() {
                                         <div>
                                             <div className="flex items-center gap-2">
                                                 <span className="text-xs font-black text-[#00008B]">{item.symbol}</span>
-                                                <span className="text-[9px] font-extrabold text-purple-800 bg-purple-100/80 px-1.5 py-0.5 rounded border border-purple-200/80">
-                                                    {item.status}
+                                                <span className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded border ${getIpoStatusBadgeClass(item)}`}>
+                                                    {getIpoStatusLabel(item)}
                                                 </span>
                                             </div>
                                             <p className="text-[10px] font-bold text-slate-600 truncate max-w-[140px]">{item.companyName}</p>
@@ -2765,8 +2763,10 @@ function CalendarContent() {
 
                             <Link href="/dashboard/calendar?type=ipo" onClick={() => { setActiveFilter('ipo'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="bg-purple-500/10 border border-purple-500/20 rounded-2xl p-3.5 backdrop-blur-md cursor-pointer hover:bg-purple-500/20 transition-all block">
                                 <span className="text-[10px] font-bold text-purple-300 uppercase block mb-1">Halka Arz</span>
-                                <span className="text-base font-black text-purple-400 block">{ipos.length || 3} Talep Toplama</span>
-                                <span className="text-[9px] text-purple-200/60">Aktif Başvuru</span>
+                                <span className="text-base font-black text-purple-400 block">
+                                    {activeOrUpcomingIpoCount > 0 ? activeOrUpcomingIpoCount : (ipos.length || 0)} {activeOrUpcomingIpoCount > 0 ? 'Aktif / Yaklaşan' : 'Talep Toplama'}
+                                </span>
+                                <span className="text-[9px] text-purple-200/60">Talep Toplama Takvimi</span>
                             </Link>
 
                             <Link href="/dashboard/calendar?type=economic" onClick={() => { setActiveFilter('economic'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-3.5 backdrop-blur-md cursor-pointer hover:bg-blue-500/20 transition-all block">
