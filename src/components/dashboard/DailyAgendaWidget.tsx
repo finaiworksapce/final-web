@@ -85,24 +85,42 @@ export function DailyAgendaWidget() {
         return () => { isMounted = false; };
     }, []);
 
-    // Bugünün Tarihi (Format: 15.10.2026)
-    const today = new Date();
-    const todayFormattedDate = today.toLocaleDateString('tr-TR', {
+    // Bugünün Tarih Bilgileri (TR Yerel Saati / Europe/Istanbul)
+    const now = new Date();
+    const todayFormattedDate = now.toLocaleDateString('tr-TR', {
         timeZone: 'Europe/Istanbul',
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
     });
+    const todayIso = now.toLocaleDateString('sv-SE', {
+        timeZone: 'Europe/Istanbul'
+    }); // Format: YYYY-MM-DD
 
-    // Takvim sayfasından gelen verileri ajanda formatında birleştirme
+    const dateParts = todayFormattedDate.split('.');
+    const dInt = parseInt(dateParts[0], 10);
+    const mInt = parseInt(dateParts[1], 10);
+    const yInt = parseInt(dateParts[2], 10);
+    const todayTrShort = `${dInt}.${mInt}.${yInt}`;
+
+    const todayStart = new Date(yInt, mInt - 1, dInt, 0, 0, 0, 0).getTime();
+    const todayEnd = new Date(yInt, mInt - 1, dInt, 23, 59, 59, 999).getTime();
+
+    // Takvim sayfasından gelen verileri ajanda formatında birleştirme (SADECE BUGÜNÜN TARİHİ)
     const agendaItems = useMemo(() => {
         const unified: DailyAgendaItem[] = [];
 
-        // 1. EKONOMİK TAKVİM (Önce bugünün saatli verileri, yoksa yaklaşan güncel veriler)
-        const todayEco = economicData.filter((item: any) => item.dateFormatted === todayFormattedDate || item.isToday);
-        const sourceEco = todayEco.length > 0 ? todayEco : economicData.slice(0, 4);
+        // 1. EKONOMİK TAKVİM (Sadece Bugünün Tarihindeki Gelişmeler)
+        const todayEco = economicData.filter((item: any) => {
+            if (item.isToday) return true;
+            if (item.dateFormatted && (item.dateFormatted.trim() === todayFormattedDate || item.dateFormatted.trim() === todayTrShort)) return true;
+            if (item.event_date && item.event_date === todayIso) return true;
+            if (item.date && (item.date === todayIso || item.date === todayFormattedDate || item.date === todayTrShort)) return true;
+            if (item.timestamp && item.timestamp >= todayStart && item.timestamp <= todayEnd) return true;
+            return false;
+        });
 
-        sourceEco.forEach((item: any, idx: number) => {
+        todayEco.forEach((item: any, idx: number) => {
             let aux = '';
             if (item.actual && item.actual !== '-' && item.actual !== 'Bekleniyor') {
                 aux = `Açıklanan: ${item.actual}`;
@@ -127,76 +145,113 @@ export function DailyAgendaWidget() {
             });
         });
 
-        // 2. HALKA ARZ TAKVİMİ (Takvim sayfasındaki en güncel halka arzlar)
-        if (ipoData.length > 0) {
-            ipoData.slice(0, 3).forEach((item: any, idx: number) => {
-                const statusLabel = item.status || 'Talep Toplama';
-                const dateText = item.dateRange || '';
-                const aux = dateText ? `${dateText} • ${statusLabel}` : statusLabel;
+        // 2. HALKA ARZ TAKVİMİ (Sadece Bugün Talep Toplama / İşlem Sürecinde Olanlar)
+        const todayIpo = ipoData.filter((item: any) => {
+            if (Array.isArray(item.dates) && item.dates.includes(todayIso)) return true;
+            if (item.startDate && item.endDate) {
+                return todayIso >= item.startDate && todayIso <= item.endDate;
+            }
+            if (item.timestamp && item.timestamp >= todayStart && item.timestamp <= todayEnd) return true;
+            if (item.dateRange) {
+                const text = String(item.dateRange).trim().toLowerCase();
+                const match = text.match(/([\d\-]+)\s+([a-zçğıöşü]+)\s+(\d{4})/i);
+                if (match) {
+                    const dayPart = match[1];
+                    const monthName = match[2];
+                    const yr = parseInt(match[3], 10);
+                    const TURKISH_MONTHS: Record<string, number> = {
+                        'ocak': 1, 'şubat': 2, 'mart': 3, 'nisan': 4, 'mayıs': 5, 'haziran': 6,
+                        'temmuz': 7, 'ağustos': 8, 'eylül': 9, 'ekim': 10, 'kasım': 11, 'aralık': 12
+                    };
+                    const mo = TURKISH_MONTHS[monthName];
+                    if (mo && yr === yInt && mo === mInt) {
+                        const days = dayPart.split('-').map(d => parseInt(d.trim(), 10)).filter(d => !isNaN(d));
+                        if (days.length > 0) {
+                            const minDay = Math.min(...days);
+                            const maxDay = Math.max(...days);
+                            if (dInt >= minDay && dInt <= maxDay) return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        });
 
-                unified.push({
-                    id: `ipo-${item.id || idx}`,
-                    category: 'ipo',
-                    categoryLabel: 'Halka Arz',
-                    symbolOrCountry: item.symbol || 'IPO',
-                    title: `${item.companyName || item.symbol} Halka Arz`,
-                    badgeColor: 'bg-emerald-50 text-emerald-700 border border-emerald-200/60',
-                    auxiliaryText: aux,
-                    link: '/dashboard/calendar?type=ipo',
-                    sortKey: 'ipo'
-                });
+        todayIpo.forEach((item: any, idx: number) => {
+            const statusLabel = item.status || 'Talep Toplama';
+            const dateText = item.dateRange || '';
+            const aux = dateText ? `${dateText} • ${statusLabel}` : statusLabel;
+
+            unified.push({
+                id: `ipo-${item.id || idx}`,
+                category: 'ipo',
+                categoryLabel: 'Halka Arz',
+                symbolOrCountry: item.symbol || 'IPO',
+                title: `${item.companyName || item.symbol} Halka Arz`,
+                badgeColor: 'bg-emerald-50 text-emerald-700 border border-emerald-200/60',
+                auxiliaryText: aux,
+                link: '/dashboard/calendar?type=ipo',
+                sortKey: 'ipo'
             });
-        }
+        });
 
-        // 3. TEMETTÜ TAKVİMİ (Takvim sayfasındaki en güncel yaklaşan ve bugünkü temettüler)
-        if (dividendsData.length > 0) {
-            // Önce bugünkü ödemeler, ardından en yakın temettüler
-            const todayDiv = dividendsData.filter((item: any) => item.paymentDate === todayFormattedDate);
-            const nextDiv = dividendsData.filter((item: any) => item.paymentDate !== todayFormattedDate);
-            const sourceDiv = [...todayDiv, ...nextDiv].slice(0, 3);
+        // 3. TEMETTÜ TAKVİMİ (Sadece Bugünün Tarihindeki Temettü Ödemeleri)
+        const todayDiv = dividendsData.filter((item: any) => {
+            if (item.parsedDate && item.parsedDate === todayIso) return true;
+            if (item.paymentDate) {
+                const pDate = String(item.paymentDate).trim();
+                if (pDate === todayFormattedDate || pDate === todayTrShort) return true;
+            }
+            if (item.timestamp && item.timestamp >= todayStart && item.timestamp <= todayEnd) return true;
+            return false;
+        });
 
-            sourceDiv.forEach((item: any, idx: number) => {
-                const netStr = item.netAmountFormatted ? `Net: ${item.netAmountFormatted}` : '';
-                const dateStr = item.paymentDate && item.paymentDate !== 'Açıklanmadı' ? item.paymentDate : '';
-                const aux = [netStr, dateStr].filter(Boolean).join(' • ');
+        todayDiv.forEach((item: any, idx: number) => {
+            const netStr = item.netAmountFormatted ? `Net: ${item.netAmountFormatted}` : '';
+            const dateStr = item.paymentDate && item.paymentDate !== 'Açıklanmadı' ? item.paymentDate : '';
+            const aux = [netStr, dateStr].filter(Boolean).join(' • ');
 
-                unified.push({
-                    id: `div-${item.symbol || idx}`,
-                    category: 'dividends',
-                    categoryLabel: 'Temettü',
-                    symbolOrCountry: item.symbol || 'BİST',
-                    title: `${item.companyName || item.symbol} Temettü Dağıtımı`,
-                    badgeColor: 'bg-amber-50 text-amber-700 border border-amber-200/60',
-                    auxiliaryText: aux || 'Temettü Dağıtımı',
-                    link: '/dashboard/calendar?type=dividend',
-                    sortKey: 'div'
-                });
+            unified.push({
+                id: `div-${item.symbol || idx}`,
+                category: 'dividends',
+                categoryLabel: 'Temettü',
+                symbolOrCountry: item.symbol || 'BİST',
+                title: `${item.companyName || item.symbol} Temettü Dağıtımı`,
+                badgeColor: 'bg-amber-50 text-amber-700 border border-amber-200/60',
+                auxiliaryText: aux || 'Temettü Dağıtımı',
+                link: '/dashboard/calendar?type=dividend',
+                sortKey: 'div'
             });
-        }
+        });
 
-        // 4. BİLANÇO TAKVİMİ (Takvim sayfasındaki en güncel yaklaşan ve bugünkü bilançolar)
-        if (earningsData.length > 0) {
-            const todayEarn = earningsData.filter((item: any) => item.earningsDate === todayFormattedDate || item.daysLeft === 0);
-            const nextEarn = earningsData.filter((item: any) => item.earningsDate !== todayFormattedDate && item.daysLeft !== 0);
-            const sourceEarn = [...todayEarn, ...nextEarn].slice(0, 3);
+        // 4. BİLANÇO TAKVİMİ (Sadece Bugünün Tarihindeki Bilanço Açıklamaları)
+        const todayEarn = earningsData.filter((item: any) => {
+            if (item.parsedDate && item.parsedDate === todayIso) return true;
+            if (item.earningsDate) {
+                const eDate = String(item.earningsDate).trim();
+                if (eDate === todayFormattedDate || eDate === todayTrShort) return true;
+            }
+            if (item.daysLeft === 0) return true;
+            if (item.timestamp && item.timestamp >= todayStart && item.timestamp <= todayEnd) return true;
+            return false;
+        });
 
-            sourceEarn.forEach((item: any, idx: number) => {
-                const dateStr = item.earningsDate ? `Tarih: ${item.earningsDate}` : '';
-                const aux = [dateStr, 'Seans Sonu'].filter(Boolean).join(' • ');
+        todayEarn.forEach((item: any, idx: number) => {
+            const dateStr = item.earningsDate ? `Tarih: ${item.earningsDate}` : '';
+            const aux = [dateStr, 'Seans Sonu'].filter(Boolean).join(' • ');
 
-                unified.push({
-                    id: `earn-${item.symbol || idx}`,
-                    category: 'earnings',
-                    categoryLabel: 'Bilanço',
-                    symbolOrCountry: item.symbol || 'BİST',
-                    title: `${item.companyName || item.symbol} Bilanço Açıklaması`,
-                    badgeColor: 'bg-purple-50 text-purple-700 border border-purple-200/60',
-                    auxiliaryText: aux,
-                    link: '/dashboard/calendar?type=earnings',
-                    sortKey: 'earn'
-                });
+            unified.push({
+                id: `earn-${item.symbol || idx}`,
+                category: 'earnings',
+                categoryLabel: 'Bilanço',
+                symbolOrCountry: item.symbol || 'BİST',
+                title: `${item.companyName || item.symbol} Bilanço Açıklaması`,
+                badgeColor: 'bg-purple-50 text-purple-700 border border-purple-200/60',
+                auxiliaryText: aux,
+                link: '/dashboard/calendar?type=earnings',
+                sortKey: 'earn'
             });
-        }
+        });
 
         // Kategori hiyerarşisine göre sıralama:
         // 1. Ekonomik Gelişmeler (En üstte, saat sırasına göre)
@@ -214,7 +269,7 @@ export function DailyAgendaWidget() {
             }
             return 0;
         });
-    }, [economicData, earningsData, dividendsData, ipoData, todayFormattedDate]);
+    }, [economicData, earningsData, dividendsData, ipoData, todayFormattedDate, todayIso, todayTrShort, todayStart, todayEnd, dInt, mInt, yInt]);
 
     // Seçili sekmeye göre filtreleme
     const filteredItems = useMemo(() => {
