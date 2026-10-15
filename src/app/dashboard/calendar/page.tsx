@@ -1339,6 +1339,107 @@ function CalendarContent() {
         return agendaList;
     }, [selectedDate, activeFilter, earnings, dividends, ipos, economicEvents]);
 
+    // ==========================================
+    // GENEL BAKIŞ WİDGETLARI SIRALAMA MANTIĞI (Tarihi En Yakından En Uzağa)
+    // ==========================================
+    const overviewEarnings = useMemo(() => {
+        const now = new Date();
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+
+        const valid = earnings.filter(item => {
+            const ts = getItemTimestamp(item, 'earningsDate');
+            return ts > 0;
+        });
+
+        // Bugünden itibaren yaklaşan bilançolar
+        const upcoming = valid.filter(item => getItemTimestamp(item, 'earningsDate') >= todayStart);
+        // Geçmiş bilançolar
+        const past = valid.filter(item => getItemTimestamp(item, 'earningsDate') < todayStart);
+
+        // Yaklaşanlar en yakın tarihten uzağa doğru artan sırada
+        upcoming.sort((a, b) => getItemTimestamp(a, 'earningsDate') - getItemTimestamp(b, 'earningsDate'));
+        // Geçmiştekiler bugüne en yakın olandan geriye doğru
+        past.sort((a, b) => getItemTimestamp(b, 'earningsDate') - getItemTimestamp(a, 'earningsDate'));
+
+        return [...upcoming, ...past].slice(0, 4);
+    }, [earnings]);
+
+    const overviewDividends = useMemo(() => {
+        const now = new Date();
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+
+        const valid = dividends.filter(item => isDividendDateAnnounced(item));
+
+        // Bugünden itibaren yaklaşan temettüler (21 Ekim BASCM -> 23 Ekim MCARD -> 26 Ekim OSMEN ...)
+        const upcoming = valid.filter(item => getItemTimestamp(item, 'paymentDate') >= todayStart);
+        // Geçmişte ödenmiş temettüler (BEGYO vb.)
+        const past = valid.filter(item => getItemTimestamp(item, 'paymentDate') < todayStart);
+
+        // Yaklaşanlar en yakın tarihten uzağa doğru artan sırada
+        upcoming.sort((a, b) => getItemTimestamp(a, 'paymentDate') - getItemTimestamp(b, 'paymentDate'));
+        // Geçmiştekiler bugüne en yakın olandan geriye doğru
+        past.sort((a, b) => getItemTimestamp(b, 'paymentDate') - getItemTimestamp(a, 'paymentDate'));
+
+        return [...upcoming, ...past].slice(0, 4);
+    }, [dividends]);
+
+    const overviewIpos = useMemo(() => {
+        const now = new Date();
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+
+        const announced = ipos.filter(item => isIpoDateAnnounced(item));
+        const unannounced = ipos.filter(item => !isIpoDateAnnounced(item));
+
+        const getIpoTs = (item: any) => {
+            if (item.timestamp && item.timestamp > 0) return item.timestamp;
+            const range = getIpoTimeRange(item);
+            if (range) return range.start;
+            return getItemTimestamp(item, 'dateRange');
+        };
+
+        const upcoming = announced.filter(item => {
+            const range = getIpoTimeRange(item);
+            const endTs = range ? range.end : getIpoTs(item);
+            return endTs >= todayStart;
+        });
+
+        const past = announced.filter(item => {
+            const range = getIpoTimeRange(item);
+            const endTs = range ? range.end : getIpoTs(item);
+            return endTs < todayStart;
+        });
+
+        // Yaklaşanlar en yakın tarihten uzağa
+        upcoming.sort((a, b) => getIpoTs(a) - getIpoTs(b));
+        // Geçmiştekiler bugüne en yakın tarihten geriye doğru
+        past.sort((a, b) => getIpoTs(b) - getIpoTs(a));
+
+        return [...upcoming, ...past, ...unannounced].slice(0, 4);
+    }, [ipos]);
+
+    const overviewEconomicEvents = useMemo(() => {
+        // Henüz açıklanmamış / yaklaşan ekonomik veriler
+        const pending = economicEvents.filter(item => !isEconomicEventReleased(item));
+        // Açıklanmış veriler
+        const released = economicEvents.filter(item => isEconomicEventReleased(item));
+
+        // Yaklaşan haberler en yakın tarih ve saate göre artan sırada
+        pending.sort((a, b) => {
+            const tsA = getEconomicEventTimestamp(a);
+            const tsB = getEconomicEventTimestamp(b);
+            return (tsA || Infinity) - (tsB || Infinity);
+        });
+
+        // Açıklanmış olanlar en son açıklanandan geriye doğru
+        released.sort((a, b) => {
+            const tsA = getEconomicEventTimestamp(a);
+            const tsB = getEconomicEventTimestamp(b);
+            return (tsB || 0) - (tsA || 0);
+        });
+
+        return [...pending, ...released].slice(0, 5);
+    }, [economicEvents]);
+
     const formattedViewMonthYear = viewDate.toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' });
     const formattedSelectedDayHeader = selectedDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', weekday: 'long' });
 
@@ -2411,11 +2512,11 @@ function CalendarContent() {
 
                         {loading ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yükleniyor...</div>
-                        ) : earnings.length === 0 ? (
+                        ) : overviewEarnings.length === 0 ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yaklaşan bilanço verisi bulunmuyor.</div>
                         ) : (
                             <div className="space-y-3">
-                                {earnings.slice(0, 4).map((item, idx) => (
+                                {overviewEarnings.map((item, idx) => (
                                     <div key={idx} className="flex items-center justify-between p-2.5 rounded-2xl bg-blue-50/50 border border-blue-100/70 hover:bg-blue-100/50 transition-all">
                                         <div className="flex items-center gap-3">
                                             <div className="bg-blue-100/80 text-blue-800 px-2 py-1 rounded-xl text-center min-w-[44px]">
@@ -2461,11 +2562,11 @@ function CalendarContent() {
 
                         {loading ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yükleniyor...</div>
-                        ) : dividends.length === 0 ? (
+                        ) : overviewDividends.length === 0 ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yaklaşan temettü ödemesi bulunmuyor.</div>
                         ) : (
                             <div className="space-y-3">
-                                {dividends.slice(0, 4).map((item, idx) => (
+                                {overviewDividends.map((item, idx) => (
                                     <div key={idx} className="flex items-center justify-between p-2.5 rounded-2xl bg-emerald-50/50 border border-emerald-100/70 hover:bg-emerald-100/50 transition-all">
                                         <div className="flex items-center gap-3">
                                             <div className="bg-emerald-100/80 text-emerald-800 px-2 py-1 rounded-xl text-center min-w-[44px]">
@@ -2513,11 +2614,11 @@ function CalendarContent() {
 
                         {loading ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yükleniyor...</div>
-                        ) : ipos.length === 0 ? (
+                        ) : overviewIpos.length === 0 ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yaklaşan halka arz bulunmuyor.</div>
                         ) : (
                             <div className="relative pl-6 space-y-4 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-purple-200">
-                                {ipos.slice(0, 4).map((item, idx) => (
+                                {overviewIpos.map((item, idx) => (
                                     <div key={idx} className="relative flex items-center justify-between p-2 rounded-2xl bg-purple-50/40 border border-purple-100/70 hover:bg-purple-100/40 transition-all">
                                         <div className="absolute -left-[19px] w-3 h-3 rounded-full bg-purple-600 ring-4 ring-purple-100" />
                                         
@@ -2581,16 +2682,23 @@ function CalendarContent() {
                                         <tr>
                                             <td colSpan={4} className="py-8 text-center text-slate-400">Veriler yükleniyor...</td>
                                         </tr>
-                                    ) : economicEvents.length === 0 ? (
+                                    ) : overviewEconomicEvents.length === 0 ? (
                                         <tr>
                                             <td colSpan={4} className="py-8 text-center text-slate-400">Kayıtlı ekonomik veri bulunmuyor.</td>
                                         </tr>
                                     ) : (
-                                        economicEvents.slice(0, 5).map((item, idx) => {
+                                        overviewEconomicEvents.map((item, idx) => {
                                             const isReleased = isEconomicEventReleased(item);
                                             return (
                                                 <tr key={idx} className={`transition-colors ${isReleased ? 'bg-blue-100/60 hover:bg-blue-100/80 text-blue-950 font-medium' : 'hover:bg-blue-50/40'}`}>
-                                                    <td className="py-2.5 px-2 text-[#00008B] whitespace-nowrap">{item.time || '15:30'}</td>
+                                                    <td className="py-2.5 px-2 text-[#00008B] whitespace-nowrap">
+                                                        {item.dateFormatted && (
+                                                            <span className="font-bold text-slate-500 mr-1.5 text-[10px]">
+                                                                {item.dateFormatted.split('.')[0]}.{item.dateFormatted.split('.')[1]}
+                                                            </span>
+                                                        )}
+                                                        <span>{item.time || '15:30'}</span>
+                                                    </td>
                                                     <td className="py-2.5 px-2 font-black text-slate-700 whitespace-nowrap">{item.country || 'USD'}</td>
                                                     <td className="py-2.5 px-2 text-slate-800 truncate max-w-[130px]">
                                                         <Link

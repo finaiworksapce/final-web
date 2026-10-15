@@ -92,6 +92,16 @@ export async function GET() {
             }
         });
 
+        // Tarihi olanları yakından uzağa sırala, tarihi açıklanmayanları en alta yerleştir
+        items.sort((a, b) => {
+            const hasA = Boolean(a.timestamp && a.timestamp > 0);
+            const hasB = Boolean(b.timestamp && b.timestamp > 0);
+            if (hasA && !hasB) return -1;
+            if (!hasA && hasB) return 1;
+            if (!hasA && !hasB) return (a.symbol || '').localeCompare(b.symbol || '');
+            return a.timestamp - b.timestamp;
+        });
+
         return NextResponse.json({
             success: true,
             count: items.length,
