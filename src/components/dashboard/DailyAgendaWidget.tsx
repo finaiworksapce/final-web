@@ -58,31 +58,26 @@ export function DailyAgendaWidget() {
         let isMounted = true;
 
         async function fetchAgendaData() {
+            setLoading(true);
             try {
-                const fetchWithTimeout = (url: string) => {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 2500);
-                    return fetch(url, { signal: controller.signal })
-                        .then(r => r.json())
-                        .catch(() => ({ data: [] }))
-                        .finally(() => clearTimeout(timeoutId));
-                };
-
+                // FinAi Takvim sayfasıyla birebir aynı API endpoint'lerinden tam senkron veri çekimi
                 const [ecoRes, earnRes, divRes, ipoRes] = await Promise.all([
-                    fetchWithTimeout('/api/calendar'),
-                    fetchWithTimeout('/api/halkarz-earnings'),
-                    fetchWithTimeout('/api/halkarz-dividends'),
-                    fetchWithTimeout('/api/halkarz-ipo')
+                    fetch('/api/calendar').then(r => r.json()).catch(() => ({ data: [] })),
+                    fetch('/api/halkarz-earnings').then(r => r.json()).catch(() => ({ data: [] })),
+                    fetch('/api/halkarz-dividends').then(r => r.json()).catch(() => ({ data: [] })),
+                    fetch('/api/halkarz-ipo').then(r => r.json()).catch(() => ({ data: [] }))
                 ]);
 
                 if (isMounted) {
-                    setEconomicData(Array.isArray(ecoRes.data) ? ecoRes.data : []);
-                    setEarningsData(Array.isArray(earnRes.data) ? earnRes.data : []);
-                    setDividendsData(Array.isArray(divRes.data) ? divRes.data : []);
-                    setIpoData(Array.isArray(ipoRes.data) ? ipoRes.data : []);
+                    setEconomicData(Array.isArray(ecoRes?.data) ? ecoRes.data : []);
+                    setEarningsData(Array.isArray(earnRes?.data) ? earnRes.data : []);
+                    setDividendsData(Array.isArray(divRes?.data) ? divRes.data : []);
+                    setIpoData(Array.isArray(ipoRes?.data) ? ipoRes.data : []);
                 }
             } catch (err) {
-                // Sessiz hata yönetimi
+                console.error("DailyAgenda fetch error:", err);
+            } finally {
+                if (isMounted) setLoading(false);
             }
         }
 
@@ -90,7 +85,7 @@ export function DailyAgendaWidget() {
         return () => { isMounted = false; };
     }, []);
 
-    // Bugünün Tarihi (Format: 10.09.2026)
+    // Bugünün Tarihi (Format: 15.10.2026)
     const today = new Date();
     const todayFormattedDate = today.toLocaleDateString('tr-TR', {
         timeZone: 'Europe/Istanbul',
@@ -99,236 +94,115 @@ export function DailyAgendaWidget() {
         year: 'numeric'
     });
 
-    // Mevcut verileri tek çatı altında ajanda formatında birleştirme
+    // Takvim sayfasından gelen verileri ajanda formatında birleştirme
     const agendaItems = useMemo(() => {
         const unified: DailyAgendaItem[] = [];
 
-        // 1. Ekonomik Takvim Olayları (Bugünün Verileri)
-        const matchedEco: DailyAgendaItem[] = [];
-        economicData.forEach((item: any, idx: number) => {
-            const isToday = item.dateFormatted === todayFormattedDate || item.isToday;
-            if (isToday) {
-                let aux = '';
-                if (item.actual && item.actual !== '-' && item.actual !== 'Bekleniyor') {
-                    aux = `Açıklanan: ${item.actual}`;
-                } else if (item.forecast) {
-                    aux = `Beklenti: ${item.forecast}`;
-                } else if (item.previous) {
-                    aux = `Önceki: ${item.previous}`;
-                }
+        // 1. EKONOMİK TAKVİM (Önce bugünün saatli verileri, yoksa yaklaşan güncel veriler)
+        const todayEco = economicData.filter((item: any) => item.dateFormatted === todayFormattedDate || item.isToday);
+        const sourceEco = todayEco.length > 0 ? todayEco : economicData.slice(0, 4);
 
-                matchedEco.push({
-                    id: `eco-${item.id || idx}`,
-                    category: 'economic',
-                    categoryLabel: 'Ekonomik',
-                    time: item.time || '14:00',
-                    symbolOrCountry: item.flag || item.country || 'GB',
-                    title: item.event || 'Ekonomik Gelişme',
-                    badgeColor: 'bg-blue-50 text-blue-700 border border-blue-200/60',
-                    impact: item.impact || 'high',
-                    auxiliaryText: aux,
-                    link: item.id ? `/dashboard/economic-calendar/${item.id}` : '/dashboard/calendar?type=economic',
-                    sortKey: item.time || '14:00'
-                });
+        sourceEco.forEach((item: any, idx: number) => {
+            let aux = '';
+            if (item.actual && item.actual !== '-' && item.actual !== 'Bekleniyor') {
+                aux = `Açıklanan: ${item.actual}`;
+            } else if (item.forecast) {
+                aux = `Beklenti: ${item.forecast}`;
+            } else if (item.previous) {
+                aux = `Önceki: ${item.previous}`;
             }
+
+            unified.push({
+                id: `eco-${item.id || idx}`,
+                category: 'economic',
+                categoryLabel: 'Ekonomik',
+                time: item.time || '14:00',
+                symbolOrCountry: item.flag || item.country || 'TR',
+                title: item.event || 'Ekonomik Gelişme',
+                badgeColor: 'bg-blue-50 text-blue-700 border border-blue-200/60',
+                impact: item.impact || 'high',
+                auxiliaryText: aux,
+                link: item.id ? `/dashboard/economic-calendar/${encodeURIComponent(item.id)}` : '/dashboard/calendar?type=economic',
+                sortKey: item.time || '14:00'
+            });
         });
 
-        if (matchedEco.length > 0) {
-            unified.push(...matchedEco);
-        } else {
-            // Güvenilir bugünkü ekonomik takvim göstergeleri
-            unified.push(
-                {
-                    id: 'eco-boe-rate',
-                    category: 'economic',
-                    categoryLabel: 'Ekonomik',
-                    time: '14:00',
-                    symbolOrCountry: 'GB',
-                    title: 'İngiltere Merkez Bankası (BoE) Faiz Kararı',
-                    badgeColor: 'bg-blue-50 text-blue-700 border border-blue-200/60',
-                    impact: 'critical',
-                    auxiliaryText: 'Açıklanan: %5,1',
-                    link: '/dashboard/calendar?type=economic',
-                    sortKey: '14:00'
-                },
-                {
-                    id: 'eco-us-jobless',
-                    category: 'economic',
-                    categoryLabel: 'Ekonomik',
-                    time: '15:30',
-                    symbolOrCountry: 'US',
-                    title: 'İşsizlik Haklarından Yararlanma Başvuruları',
-                    badgeColor: 'bg-blue-50 text-blue-700 border border-blue-200/60',
-                    impact: 'high',
-                    auxiliaryText: 'Açıklanan: 220K',
-                    link: '/dashboard/calendar?type=economic',
-                    sortKey: '15:30'
-                },
-                {
-                    id: 'eco-us-oil',
-                    category: 'economic',
-                    categoryLabel: 'Ekonomik',
-                    time: '17:00',
-                    symbolOrCountry: 'US',
-                    title: 'Ham Petrol Stokları',
-                    badgeColor: 'bg-blue-50 text-blue-700 border border-blue-200/60',
-                    impact: 'medium',
-                    auxiliaryText: 'Beklenti: -1.2M',
-                    link: '/dashboard/calendar?type=economic',
-                    sortKey: '17:00'
-                }
-            );
-        }
+        // 2. HALKA ARZ TAKVİMİ (Takvim sayfasındaki en güncel halka arzlar)
+        if (ipoData.length > 0) {
+            ipoData.slice(0, 3).forEach((item: any, idx: number) => {
+                const statusLabel = item.status || 'Talep Toplama';
+                const dateText = item.dateRange || '';
+                const aux = dateText ? `${dateText} • ${statusLabel}` : statusLabel;
 
-        // 2. Halka Arz Olayları (Saat yazılmaz, sadece sembol ve içerik)
-        const matchedIpo: DailyAgendaItem[] = [];
-        ipoData.forEach((item: any, idx: number) => {
-            const isActive = item.status === 'Talep Toplama' || item.status === 'İşlem Görecek' || idx < 2;
-            if (isActive) {
-                matchedIpo.push({
+                unified.push({
                     id: `ipo-${item.id || idx}`,
                     category: 'ipo',
                     categoryLabel: 'Halka Arz',
                     symbolOrCountry: item.symbol || 'IPO',
-                    title: `${item.companyName || item.symbol} Halka Arz (${item.status || 'Talep Toplama'})`,
+                    title: `${item.companyName || item.symbol} Halka Arz`,
                     badgeColor: 'bg-emerald-50 text-emerald-700 border border-emerald-200/60',
-                    auxiliaryText: 'Talep Toplama Aktif',
+                    auxiliaryText: aux,
                     link: '/dashboard/calendar?type=ipo',
                     sortKey: 'ipo'
                 });
-            }
-        });
-
-        if (matchedIpo.length > 0) {
-            unified.push(...matchedIpo.slice(0, 2));
-        } else {
-            unified.push(
-                {
-                    id: 'ipo-bahgm',
-                    category: 'ipo',
-                    categoryLabel: 'Halka Arz',
-                    symbolOrCountry: 'BAHGM',
-                    title: 'Bahadır Kimya Halka Arz (Talep Toplama Başladı)',
-                    badgeColor: 'bg-emerald-50 text-emerald-700 border border-emerald-200/60',
-                    auxiliaryText: 'Dağıtım: Eşit | ₺51,00',
-                    link: '/dashboard/calendar?type=ipo',
-                    sortKey: 'ipo'
-                },
-                {
-                    id: 'ipo-durkn',
-                    category: 'ipo',
-                    categoryLabel: 'Halka Arz',
-                    symbolOrCountry: 'DURKN',
-                    title: 'Durukan Şekerleme Halka Arz (Talep Toplama 2. Gün)',
-                    badgeColor: 'bg-emerald-50 text-emerald-700 border border-emerald-200/60',
-                    auxiliaryText: 'Dağıtım: Eşit | ₺17,00',
-                    link: '/dashboard/calendar?type=ipo',
-                    sortKey: 'ipo'
-                }
-            );
+            });
         }
 
-        // 3. Temettü Olayları (Saat yazılmaz, sadece hisse ve dağıtım)
-        const matchedDiv: DailyAgendaItem[] = [];
-        dividendsData.forEach((item: any, idx: number) => {
-            const isDivToday = item.paymentDate === todayFormattedDate;
-            if (isDivToday) {
-                matchedDiv.push({
+        // 3. TEMETTÜ TAKVİMİ (Takvim sayfasındaki en güncel yaklaşan ve bugünkü temettüler)
+        if (dividendsData.length > 0) {
+            // Önce bugünkü ödemeler, ardından en yakın temettüler
+            const todayDiv = dividendsData.filter((item: any) => item.paymentDate === todayFormattedDate);
+            const nextDiv = dividendsData.filter((item: any) => item.paymentDate !== todayFormattedDate);
+            const sourceDiv = [...todayDiv, ...nextDiv].slice(0, 3);
+
+            sourceDiv.forEach((item: any, idx: number) => {
+                const netStr = item.netAmountFormatted ? `Net: ${item.netAmountFormatted}` : '';
+                const dateStr = item.paymentDate && item.paymentDate !== 'Açıklanmadı' ? item.paymentDate : '';
+                const aux = [netStr, dateStr].filter(Boolean).join(' • ');
+
+                unified.push({
                     id: `div-${item.symbol || idx}`,
                     category: 'dividends',
                     categoryLabel: 'Temettü',
                     symbolOrCountry: item.symbol || 'BİST',
-                    title: `${item.companyName || item.symbol} Temettü Dağıtımı (${item.netAmountFormatted || 'Net'})`,
+                    title: `${item.companyName || item.symbol} Temettü Dağıtımı`,
                     badgeColor: 'bg-amber-50 text-amber-700 border border-amber-200/60',
-                    auxiliaryText: item.netAmountFormatted ? `Hisse Başı: ${item.netAmountFormatted}` : 'Hesaba Geçiş',
+                    auxiliaryText: aux || 'Temettü Dağıtımı',
                     link: '/dashboard/calendar?type=dividend',
                     sortKey: 'div'
                 });
-            }
-        });
-
-        if (matchedDiv.length > 0) {
-            unified.push(...matchedDiv.slice(0, 2));
-        } else {
-            unified.push(
-                {
-                    id: 'div-froto',
-                    category: 'dividends',
-                    categoryLabel: 'Temettü',
-                    symbolOrCountry: 'FROTO',
-                    title: 'Ford Otomotiv Nakit Temettü Dağıtımı',
-                    badgeColor: 'bg-amber-50 text-amber-700 border border-amber-200/60',
-                    auxiliaryText: 'Hisse Başı Net: ₺29,75',
-                    link: '/dashboard/calendar?type=dividend',
-                    sortKey: 'div'
-                },
-                {
-                    id: 'div-tuprs',
-                    category: 'dividends',
-                    categoryLabel: 'Temettü',
-                    symbolOrCountry: 'TUPRS',
-                    title: 'Tüpraş 2. Taksit Temettü Dağıtımı',
-                    badgeColor: 'bg-amber-50 text-amber-700 border border-amber-200/60',
-                    auxiliaryText: 'Hisse Başı Net: ₺11,93',
-                    link: '/dashboard/calendar?type=dividend',
-                    sortKey: 'div'
-                }
-            );
+            });
         }
 
-        // 4. Bilanço Olayları (Saat yazılmaz, seans sonu/KAP)
-        const matchedEarn: DailyAgendaItem[] = [];
-        earningsData.forEach((item: any, idx: number) => {
-            const isEarnToday = item.earningsDate === todayFormattedDate || (item.daysLeft !== undefined && item.daysLeft === 0);
-            if (isEarnToday) {
-                matchedEarn.push({
+        // 4. BİLANÇO TAKVİMİ (Takvim sayfasındaki en güncel yaklaşan ve bugünkü bilançolar)
+        if (earningsData.length > 0) {
+            const todayEarn = earningsData.filter((item: any) => item.earningsDate === todayFormattedDate || item.daysLeft === 0);
+            const nextEarn = earningsData.filter((item: any) => item.earningsDate !== todayFormattedDate && item.daysLeft !== 0);
+            const sourceEarn = [...todayEarn, ...nextEarn].slice(0, 3);
+
+            sourceEarn.forEach((item: any, idx: number) => {
+                const dateStr = item.earningsDate ? `Tarih: ${item.earningsDate}` : '';
+                const aux = [dateStr, 'Seans Sonu'].filter(Boolean).join(' • ');
+
+                unified.push({
                     id: `earn-${item.symbol || idx}`,
                     category: 'earnings',
                     categoryLabel: 'Bilanço',
                     symbolOrCountry: item.symbol || 'BİST',
                     title: `${item.companyName || item.symbol} Bilanço Açıklaması`,
                     badgeColor: 'bg-purple-50 text-purple-700 border border-purple-200/60',
-                    auxiliaryText: 'Seans Sonu Açıklanması Bekleniyor',
+                    auxiliaryText: aux,
                     link: '/dashboard/calendar?type=earnings',
                     sortKey: 'earn'
                 });
-            }
-        });
-
-        if (matchedEarn.length > 0) {
-            unified.push(...matchedEarn.slice(0, 2));
-        } else {
-            unified.push(
-                {
-                    id: 'earn-thyao',
-                    category: 'earnings',
-                    categoryLabel: 'Bilanço',
-                    symbolOrCountry: 'THYAO',
-                    title: 'Türk Hava Yolları 2026/2. Çeyrek Bilanço Açıklaması',
-                    badgeColor: 'bg-purple-50 text-purple-700 border border-purple-200/60',
-                    auxiliaryText: 'Seans Kapanışı Sonrası KAP Bildirimi',
-                    link: '/dashboard/calendar?type=earnings',
-                    sortKey: 'earn'
-                },
-                {
-                    id: 'earn-asels',
-                    category: 'earnings',
-                    categoryLabel: 'Bilanço',
-                    symbolOrCountry: 'ASELS',
-                    title: 'Aselsan 2. Çeyrek Finansal ve Faaliyet Raporu',
-                    badgeColor: 'bg-purple-50 text-purple-700 border border-purple-200/60',
-                    auxiliaryText: 'KAP Duyurusu',
-                    link: '/dashboard/calendar?type=earnings',
-                    sortKey: 'earn'
-                }
-            );
+            });
         }
 
         // Kategori hiyerarşisine göre sıralama:
         // 1. Ekonomik Gelişmeler (En üstte, saat sırasına göre)
-        // 2. Halka Arzlar (Alt alta)
-        // 3. Temettüler (Alt alta)
-        // 4. Bilançolar (Alt alta)
+        // 2. Halka Arzlar
+        // 3. Temettüler
+        // 4. Bilançolar
         return unified.sort((a, b) => {
             const orderA = CATEGORY_PRIORITY[a.category] ?? 99;
             const orderB = CATEGORY_PRIORITY[b.category] ?? 99;
@@ -387,7 +261,7 @@ export function DailyAgendaWidget() {
                     </div>
 
                     <Link
-                        href="/dashboard/calendar"
+                        href={activeCategory !== 'all' ? `/dashboard/calendar?type=${activeCategory === 'dividends' ? 'dividend' : activeCategory}` : "/dashboard/calendar"}
                         className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors group/link"
                     >
                         <span>Tümünü Gör</span>
@@ -426,9 +300,10 @@ export function DailyAgendaWidget() {
                 ) : filteredItems.length > 0 ? (
                     <div className="divide-y divide-slate-100/80 space-y-0.5">
                         {filteredItems.map((item) => (
-                            <div
+                            <Link
                                 key={item.id}
-                                className="flex items-center justify-between gap-2.5 py-2.5 px-1 hover:bg-slate-50/80 rounded-lg transition-colors group/item"
+                                href={item.link || '/dashboard/calendar'}
+                                className="flex items-center justify-between gap-2.5 py-2.5 px-1 hover:bg-slate-50/80 rounded-lg transition-colors group/item block"
                             >
                                 {/* Sol: Saat (Yalnızca Ekonomik verilerde) + Ülke / Sembol */}
                                 <div className="flex items-center gap-2 shrink-0">
@@ -461,7 +336,7 @@ export function DailyAgendaWidget() {
                                         {item.categoryLabel}
                                     </span>
                                 </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 ) : (
@@ -488,7 +363,7 @@ export function DailyAgendaWidget() {
                 </div>
 
                 <Link
-                    href="/dashboard/calendar"
+                    href={activeCategory !== 'all' ? `/dashboard/calendar?type=${activeCategory === 'dividends' ? 'dividend' : activeCategory}` : "/dashboard/calendar"}
                     className="text-[11px] font-bold text-blue-600 hover:text-blue-700 transition-colors inline-flex items-center gap-1"
                 >
                     <span>Tüm Takvim</span>
