@@ -60,12 +60,12 @@ export function DailyAgendaWidget() {
         async function fetchAgendaData() {
             setLoading(true);
             try {
-                // FinAi Takvim sayfasıyla birebir aynı API endpoint'lerinden tam senkron veri çekimi
+                // FinAi Takvim sayfasıyla birebir aynı API endpoint'lerinden taze veri çekimi
                 const [ecoRes, earnRes, divRes, ipoRes] = await Promise.all([
-                    fetch('/api/calendar').then(r => r.json()).catch(() => ({ data: [] })),
-                    fetch('/api/halkarz-earnings').then(r => r.json()).catch(() => ({ data: [] })),
-                    fetch('/api/halkarz-dividends').then(r => r.json()).catch(() => ({ data: [] })),
-                    fetch('/api/halkarz-ipo').then(r => r.json()).catch(() => ({ data: [] }))
+                    fetch('/api/calendar', { cache: 'no-store' }).then(r => r.json()).catch(() => ({ data: [] })),
+                    fetch('/api/halkarz-earnings', { cache: 'no-store' }).then(r => r.json()).catch(() => ({ data: [] })),
+                    fetch('/api/halkarz-dividends', { cache: 'no-store' }).then(r => r.json()).catch(() => ({ data: [] })),
+                    fetch('/api/halkarz-ipo', { cache: 'no-store' }).then(r => r.json()).catch(() => ({ data: [] }))
                 ]);
 
                 if (isMounted) {
@@ -93,30 +93,25 @@ export function DailyAgendaWidget() {
         month: '2-digit',
         year: 'numeric'
     });
-    const todayIso = now.toLocaleDateString('sv-SE', {
-        timeZone: 'Europe/Istanbul'
-    }); // Format: YYYY-MM-DD
 
-    const dateParts = todayFormattedDate.split('.');
-    const dInt = parseInt(dateParts[0], 10);
-    const mInt = parseInt(dateParts[1], 10);
-    const yInt = parseInt(dateParts[2], 10);
-    const todayTrShort = `${dInt}.${mInt}.${yInt}`;
-
-    const todayStart = new Date(yInt, mInt - 1, dInt, 0, 0, 0, 0).getTime();
-    const todayEnd = new Date(yInt, mInt - 1, dInt, 23, 59, 59, 999).getTime();
+    // Takvim sayfasıyla birebir aynı kesin tarih eşleme kontrolleri (SADECE BUGÜN)
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const targetIso = `${year}-${month}-${day}`;
+    const targetTr = `${day}.${month}.${year}`;
+    const targetTrShort = `${parseInt(day, 10)}.${parseInt(month, 10)}.${year}`;
 
     // Takvim sayfasından gelen verileri ajanda formatında birleştirme (SADECE BUGÜNÜN TARİHİ)
     const agendaItems = useMemo(() => {
         const unified: DailyAgendaItem[] = [];
 
-        // 1. EKONOMİK TAKVİM (Sadece Bugünün Tarihindeki Gelişmeler)
+        // 1. EKONOMİK TAKVİM (Sadece Bugünün Tarihindeki Olaylar)
         const todayEco = economicData.filter((item: any) => {
             if (item.isToday) return true;
-            if (item.dateFormatted && (item.dateFormatted.trim() === todayFormattedDate || item.dateFormatted.trim() === todayTrShort)) return true;
-            if (item.event_date && item.event_date === todayIso) return true;
-            if (item.date && (item.date === todayIso || item.date === todayFormattedDate || item.date === todayTrShort)) return true;
-            if (item.timestamp && item.timestamp >= todayStart && item.timestamp <= todayEnd) return true;
+            if (item.dateFormatted && (item.dateFormatted.trim() === targetTr || item.dateFormatted.includes(targetTr) || item.dateFormatted.trim() === targetTrShort)) return true;
+            if (item.event_date && item.event_date === targetIso) return true;
+            if (item.date && (item.date === targetIso || item.date === targetTr || item.date === targetTrShort)) return true;
             return false;
         });
 
@@ -147,32 +142,9 @@ export function DailyAgendaWidget() {
 
         // 2. HALKA ARZ TAKVİMİ (Sadece Bugün Talep Toplama / İşlem Sürecinde Olanlar)
         const todayIpo = ipoData.filter((item: any) => {
-            if (Array.isArray(item.dates) && item.dates.includes(todayIso)) return true;
+            if (Array.isArray(item.dates) && item.dates.includes(targetIso)) return true;
             if (item.startDate && item.endDate) {
-                return todayIso >= item.startDate && todayIso <= item.endDate;
-            }
-            if (item.timestamp && item.timestamp >= todayStart && item.timestamp <= todayEnd) return true;
-            if (item.dateRange) {
-                const text = String(item.dateRange).trim().toLowerCase();
-                const match = text.match(/([\d\-]+)\s+([a-zçğıöşü]+)\s+(\d{4})/i);
-                if (match) {
-                    const dayPart = match[1];
-                    const monthName = match[2];
-                    const yr = parseInt(match[3], 10);
-                    const TURKISH_MONTHS: Record<string, number> = {
-                        'ocak': 1, 'şubat': 2, 'mart': 3, 'nisan': 4, 'mayıs': 5, 'haziran': 6,
-                        'temmuz': 7, 'ağustos': 8, 'eylül': 9, 'ekim': 10, 'kasım': 11, 'aralık': 12
-                    };
-                    const mo = TURKISH_MONTHS[monthName];
-                    if (mo && yr === yInt && mo === mInt) {
-                        const days = dayPart.split('-').map(d => parseInt(d.trim(), 10)).filter(d => !isNaN(d));
-                        if (days.length > 0) {
-                            const minDay = Math.min(...days);
-                            const maxDay = Math.max(...days);
-                            if (dInt >= minDay && dInt <= maxDay) return true;
-                        }
-                    }
-                }
+                return targetIso >= item.startDate && targetIso <= item.endDate;
             }
             return false;
         });
@@ -195,14 +167,13 @@ export function DailyAgendaWidget() {
             });
         });
 
-        // 3. TEMETTÜ TAKVİMİ (Sadece Bugünün Tarihindeki Temettü Ödemeleri)
+        // 3. TEMETTÜ TAKVİMİ (Sadece Bugün Ödemesi Gerçekleşenler)
         const todayDiv = dividendsData.filter((item: any) => {
-            if (item.parsedDate && item.parsedDate === todayIso) return true;
+            if (item.parsedDate && item.parsedDate === targetIso) return true;
             if (item.paymentDate) {
-                const pDate = String(item.paymentDate).trim();
-                if (pDate === todayFormattedDate || pDate === todayTrShort) return true;
+                const trimmed = item.paymentDate.trim();
+                if (trimmed === targetTr || trimmed === targetTrShort) return true;
             }
-            if (item.timestamp && item.timestamp >= todayStart && item.timestamp <= todayEnd) return true;
             return false;
         });
 
@@ -224,15 +195,13 @@ export function DailyAgendaWidget() {
             });
         });
 
-        // 4. BİLANÇO TAKVİMİ (Sadece Bugünün Tarihindeki Bilanço Açıklamaları)
+        // 4. BİLANÇO TAKVİMİ (Sadece Bugün Açıklanan Bilançolar)
         const todayEarn = earningsData.filter((item: any) => {
-            if (item.parsedDate && item.parsedDate === todayIso) return true;
+            if (item.parsedDate && item.parsedDate === targetIso) return true;
             if (item.earningsDate) {
-                const eDate = String(item.earningsDate).trim();
-                if (eDate === todayFormattedDate || eDate === todayTrShort) return true;
+                const trimmed = item.earningsDate.trim();
+                if (trimmed === targetTr || trimmed === targetTrShort) return true;
             }
-            if (item.daysLeft === 0) return true;
-            if (item.timestamp && item.timestamp >= todayStart && item.timestamp <= todayEnd) return true;
             return false;
         });
 
@@ -269,7 +238,7 @@ export function DailyAgendaWidget() {
             }
             return 0;
         });
-    }, [economicData, earningsData, dividendsData, ipoData, todayFormattedDate, todayIso, todayTrShort, todayStart, todayEnd, dInt, mInt, yInt]);
+    }, [economicData, earningsData, dividendsData, ipoData, targetIso, targetTr, targetTrShort]);
 
     // Seçili sekmeye göre filtreleme
     const filteredItems = useMemo(() => {
