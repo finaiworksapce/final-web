@@ -653,5 +653,8 @@ export const sectorMapping: Record<string, string> = {
 export function getAssetSector(symbol: string): string {
     if (!symbol) return 'Diğer';
     const cleanSym = symbol.toUpperCase().replace(/\.IS$/i, '').trim();
+    if (cleanSym === 'NAKİT' || cleanSym === 'NAKIT' || cleanSym === 'TRY_CASH' || cleanSym === 'CASH') {
+        return 'Nakit';
+    }
     return sectorMapping[cleanSym] || 'Borsa İstanbul';
 }

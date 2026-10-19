@@ -1973,26 +1973,37 @@ export default function PortfolioPage() {
             case 'distribution':
                 return (() => {
                     const sortedAssets = groupedAssets
-                        .map(g => ({ ...g, marketVal: (prices[g.symbol] || g.avgCost) * g.totalQuantity }))
-                        .filter(g => g.marketVal > 0)
+                        .map(g => {
+                            const isCash = g.type === 'CASH' || g.symbol === 'NAKİT' || g.symbol === 'TRY_CASH';
+                            const unitPrice = isCash ? (g.avgCost || 1) : (prices[g.symbol] || g.avgCost);
+                            return {
+                                ...g,
+                                symbol: isCash ? 'NAKİT' : g.symbol,
+                                marketVal: unitPrice * g.totalQuantity
+                            };
+                        })
+                        .filter(g => g.totalQuantity > 0 && g.marketVal > 0)
                         .sort((a, b) => b.marketVal - a.marketVal);
+
+                    const chartTotalValue = sortedAssets.reduce((sum, a) => sum + a.marketVal, 0) || totalValue;
                     
                     const symbolColorMap: Record<string, string> = {};
                     sortedAssets.forEach((asset, idx) => {
                         symbolColorMap[asset.symbol] = VIBRANT_CHART_COLORS[idx % VIBRANT_CHART_COLORS.length];
                     });
 
-                    const riskData = generateDynamicAnalysis(distributionView, sortedAssets, totalValue, prices, userPortfolioDividends);
+                    const riskData = generateDynamicAnalysis(distributionView, sortedAssets, chartTotalValue, prices, userPortfolioDividends);
                     
                     // Treemap specific
                     const renderTreemap = () => {
                         return (
                             <div className="w-full h-48 rounded-xl overflow-hidden flex gap-1 bg-slate-50 p-1 border border-slate-100 shadow-inner">
                                 {sortedAssets.map((asset) => {
-                                    const weight = (asset.marketVal / totalValue) * 100;
+                                    const weight = (asset.marketVal / chartTotalValue) * 100;
+                                    const isCash = asset.type === 'CASH' || asset.symbol === 'NAKİT' || asset.symbol === 'TRY_CASH';
                                     const avgCost = asset.avgCost || 1;
-                                    const currentPrice = prices[asset.symbol] || avgCost;
-                                    const profitPct = ((currentPrice - avgCost) / avgCost) * 100;
+                                    const currentPrice = isCash ? avgCost : (prices[asset.symbol] || avgCost);
+                                    const profitPct = isCash ? 0 : (((currentPrice - avgCost) / avgCost) * 100);
                                     let color = '';
                                     if (profitPct >= 20) color = 'bg-emerald-700';
                                     else if (profitPct >= 10) color = 'bg-emerald-600';
@@ -2028,12 +2039,13 @@ export default function PortfolioPage() {
 
                     const sectorWeights: Record<string, { value: number, profit: number, count: number }> = {};
                     sortedAssets.forEach(asset => {
-                        const sector = getAssetSector(asset.symbol);
+                        const isCash = asset.type === 'CASH' || asset.symbol === 'NAKİT' || asset.symbol === 'TRY_CASH';
+                        const sector = isCash ? 'Nakit' : getAssetSector(asset.symbol);
                         const avgCost = asset.avgCost || 1;
-                        const currentPrice = prices[asset.symbol] || avgCost;
+                        const currentPrice = isCash ? avgCost : (prices[asset.symbol] || avgCost);
                         const costTotal = avgCost * asset.totalQuantity;
                         const currentTotal = currentPrice * asset.totalQuantity;
-                        const profitValue = currentTotal - costTotal;
+                        const profitValue = isCash ? 0 : (currentTotal - costTotal);
                         
                         if (!sectorWeights[sector]) {
                             sectorWeights[sector] = { value: 0, profit: 0, count: 0 };
@@ -2062,22 +2074,64 @@ export default function PortfolioPage() {
                         'İnşaat': '#64748b', // Koyu Mavi Gri
                         'Madencilik': '#d97706', // Bakır
                         'Tekstil': '#f43f5e', // Gül Kırmızı
-                        'Sağlık': '#ef4444' // Parlak Kırmızı
+                        'Sağlık': '#ef4444', // Parlak Kırmızı
+                        'Nakit': '#0d9488' // Zümrüt / Teal
                     };
                     const fallbackHex = ['#ec4899', '#f59e0b', '#10b981', '#06b6d4', '#8b5cf6', '#ef4444', '#3b82f6', '#84cc16'];
+                    const sectorColorMap: Record<string, string> = {};
+                    sortedSectors.forEach((sec, idx) => {
+                        sectorColorMap[sec.name] = SECTOR_COLORS_HEX[sec.name] || fallbackHex[idx % fallbackHex.length];
+                    });
 
                     const renderSectorMap = () => {
                         if (sortedSectors.length === 0 || totalAssetCount === 0) return null;
                         let currentOffset = 0;
                         const C = 2 * Math.PI * 36;
 
+                        const handleSectorMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            if (!rect.width || !rect.height) return;
+                            const x = ((e.clientX - rect.left) / rect.width) * 100;
+                            const y = ((e.clientY - rect.top) / rect.height) * 100;
+                            const dx = x - 50;
+                            const dy = y - 50;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+
+                            if (dist < 22 || dist > 50) {
+                                if (hoveredSlice !== null) setHoveredSlice(null);
+                                return;
+                            }
+
+                            let angle = Math.atan2(dx, -dy);
+                            if (angle < 0) angle += 2 * Math.PI;
+                            const norm = angle / (2 * Math.PI);
+
+                            let cumulative = 0;
+                            for (const sec of sortedSectors) {
+                                const w = sec.count / totalAssetCount;
+                                if (norm >= cumulative && norm < cumulative + w) {
+                                    const target = `sector_${sec.name}`;
+                                    if (hoveredSlice !== target) setHoveredSlice(target);
+                                    return;
+                                }
+                                cumulative += w;
+                            }
+                            const lastTarget = `sector_${sortedSectors[sortedSectors.length - 1].name}`;
+                            if (hoveredSlice !== lastTarget) setHoveredSlice(lastTarget);
+                        };
+
                         return (
                             <div className="relative w-48 h-48 mx-auto flex items-center justify-center">
-                                <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90 filter drop-shadow-md">
-                                    {sortedSectors.map((sec, idx) => {
+                                <svg
+                                    viewBox="0 0 100 100"
+                                    className="w-full h-full transform -rotate-90 filter drop-shadow-md cursor-pointer"
+                                    onMouseMove={handleSectorMouseMove}
+                                    onMouseLeave={() => setHoveredSlice(null)}
+                                >
+                                    {sortedSectors.map((sec) => {
                                         const weight = sec.count / totalAssetCount;
                                         const strokeLength = weight * C;
-                                        const hexColor = SECTOR_COLORS_HEX[sec.name] || fallbackHex[idx % fallbackHex.length];
+                                        const hexColor = sectorColorMap[sec.name];
                                         const strokeDasharray = `${strokeLength} ${C - strokeLength}`;
                                         const strokeDashoffset = -currentOffset;
                                         currentOffset += strokeLength;
@@ -2090,14 +2144,13 @@ export default function PortfolioPage() {
                                                 cx="50"
                                                 cy="50"
                                                 r="36"
-                                                fill="transparent"
+                                                fill="none"
                                                 stroke={hexColor}
                                                 strokeWidth={isHovered ? "20" : "16"}
                                                 strokeDasharray={strokeDasharray}
                                                 strokeDashoffset={strokeDashoffset}
-                                                className="transition-all duration-300 cursor-pointer"
-                                                onMouseEnter={() => setHoveredSlice(`sector_${sec.name}`)}
-                                                onMouseLeave={() => setHoveredSlice(null)}
+                                                pointerEvents="none"
+                                                style={{ transition: 'stroke-width 200ms ease-out' }}
                                             />
                                         );
                                     })}
@@ -2117,14 +2170,14 @@ export default function PortfolioPage() {
                                         return activeSec ? (
                                             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
                                                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{activeSec.name}</span>
-                                                <span className="block text-sm font-black text-[#00008B] tracking-tight">{activeSec.count} Hisse (%{countPct})</span>
+                                                <span className="block text-sm font-black text-[#00008B] tracking-tight">{activeSec.count} Varlık (%{countPct})</span>
                                                 <span className="text-[9px] font-semibold text-slate-500">{formatCurrency(activeSec.value)}</span>
                                             </motion.div>
                                         ) : null;
                                     })() : (
                                         <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
                                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sektörel Dağılım</span>
-                                            <span className="block text-sm font-black text-[#00008B] tracking-tight">{totalAssetCount} Hisse</span>
+                                            <span className="block text-sm font-black text-[#00008B] tracking-tight">{totalAssetCount} Varlık</span>
                                             <span className="text-[9px] font-semibold text-slate-500">{sortedSectors.length} Sektör</span>
                                         </motion.div>
                                     )}
@@ -2136,12 +2189,48 @@ export default function PortfolioPage() {
                     const renderDonut = () => {
                         let currentOffset = 0;
                         const C = 2 * Math.PI * 36;
+
+                        const handleDonutMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            if (!rect.width || !rect.height) return;
+                            const x = ((e.clientX - rect.left) / rect.width) * 100;
+                            const y = ((e.clientY - rect.top) / rect.height) * 100;
+                            const dx = x - 50;
+                            const dy = y - 50;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+
+                            if (dist < 22 || dist > 50 || sortedAssets.length === 0 || chartTotalValue <= 0) {
+                                if (hoveredSlice !== null) setHoveredSlice(null);
+                                return;
+                            }
+
+                            let angle = Math.atan2(dx, -dy);
+                            if (angle < 0) angle += 2 * Math.PI;
+                            const norm = angle / (2 * Math.PI);
+
+                            let cumulative = 0;
+                            for (const group of sortedAssets) {
+                                const w = group.marketVal / chartTotalValue;
+                                if (norm >= cumulative && norm < cumulative + w) {
+                                    if (hoveredSlice !== group.symbol) setHoveredSlice(group.symbol);
+                                    return;
+                                }
+                                cumulative += w;
+                            }
+                            const lastSymbol = sortedAssets[sortedAssets.length - 1].symbol;
+                            if (hoveredSlice !== lastSymbol) setHoveredSlice(lastSymbol);
+                        };
                         
                         return (
                             <div className="relative w-48 h-48 mx-auto flex items-center justify-center">
-                                <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90 filter drop-shadow-md">
+                                <svg
+                                    viewBox="0 0 100 100"
+                                    className="w-full h-full transform -rotate-90 filter drop-shadow-md cursor-pointer"
+                                    onMouseMove={handleDonutMouseMove}
+                                    onMouseLeave={() => setHoveredSlice(null)}
+                                >
                                     {sortedAssets.map((group) => {
-                                        const weight = (group.marketVal / totalValue);
+                                        const weight = (group.marketVal / chartTotalValue);
                                         const strokeLength = weight * C;
                                         const color = symbolColorMap[group.symbol];
                                         const strokeDasharray = `${strokeLength} ${C - strokeLength}`;
@@ -2154,14 +2243,13 @@ export default function PortfolioPage() {
                                                 cx="50"
                                                 cy="50"
                                                 r="36"
-                                                fill="transparent"
+                                                fill="none"
                                                 stroke={color}
                                                 strokeWidth={hoveredSlice === group.symbol ? "20" : "16"}
                                                 strokeDasharray={strokeDasharray}
                                                 strokeDashoffset={strokeDashoffset}
-                                                className="transition-all duration-300 cursor-pointer"
-                                                onMouseEnter={() => setHoveredSlice(group.symbol)}
-                                                onMouseLeave={() => setHoveredSlice(null)}
+                                                pointerEvents="none"
+                                                style={{ transition: 'stroke-width 200ms ease-out' }}
                                             />
                                         );
                                     })}
@@ -2179,7 +2267,7 @@ export default function PortfolioPage() {
                                     })() : (
                                         <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
                                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Toplam</span>
-                                            <span className="block text-sm font-black text-[#00008B] tracking-tight">{formatCurrency(totalValue)}</span>
+                                            <span className="block text-sm font-black text-[#00008B] tracking-tight">{formatCurrency(chartTotalValue)}</span>
                                         </motion.div>
                                     )}
                                 </div>
@@ -2201,7 +2289,7 @@ export default function PortfolioPage() {
                                 </div>
                             </div>
 
-                            {assets.length > 0 && totalValue > 0 ? (
+                            {sortedAssets.length > 0 && chartTotalValue > 0 ? (
                                 <div className="space-y-6">
                                     {distributionView === 'donut' && renderDonut()}
                                     {distributionView === 'heatmap' && renderTreemap()}
@@ -2265,12 +2353,12 @@ export default function PortfolioPage() {
                                                 return b.marketVal - a.marketVal;
                                             })
                                             .map((group, idx) => {
-                                                const weight = (group.marketVal / totalValue) * 100;
+                                                const weight = (group.marketVal / chartTotalValue) * 100;
                                                 const assetSector = getAssetSector(group.symbol);
                                                 
                                                 // Sektör modunda sektörün canlı rengi, Donut modunda varlığın kendi renk kimliği
                                                 const hexColor = distributionView === 'sector'
-                                                    ? (SECTOR_COLORS_HEX[assetSector] || fallbackHex[idx % fallbackHex.length])
+                                                    ? (sectorColorMap[assetSector] || SECTOR_COLORS_HEX[assetSector] || fallbackHex[idx % fallbackHex.length])
                                                     : symbolColorMap[group.symbol];
                                                 
                                                 const isHovered = distributionView === 'sector'
@@ -2283,7 +2371,7 @@ export default function PortfolioPage() {
                                                         onMouseEnter={() => setHoveredSlice(group.symbol)}
                                                         onMouseLeave={() => setHoveredSlice(null)}
                                                         style={{ backgroundColor: isHovered ? hexColor : '', borderColor: isHovered ? hexColor : '' }}
-                                                        className={cn("flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer relative overflow-hidden", isHovered ? "shadow-lg scale-[1.05] z-10 text-white" : "bg-slate-50/70 border-slate-100 shadow-sm")}
+                                                        className={cn("flex items-center justify-between p-2.5 rounded-xl border transition-[transform,box-shadow] duration-200 cursor-pointer relative overflow-hidden", isHovered ? "shadow-lg scale-[1.05] z-10 text-white" : "bg-slate-50/70 border-slate-100 shadow-sm")}
                                                     >
                                                         <div className="flex flex-col gap-0.5">
                                                             <div className="flex items-center gap-1.5">

@@ -35,35 +35,55 @@ export function TopAssetDistributionCard() {
     const { myAssets = [], prices = {}, isDataLoaded } = useUser();
     const [hoveredSymbol, setHoveredSymbol] = useState<string | null>(null);
 
-    // Mevcut portföy verilerinden dağılım ve yüzde hesaplaması (KESİNLİKLE DOKUNULMADI)
+    // Mevcut portföy verilerinden dağılım ve yüzde hesaplaması (Yalnızca bakiyesi > 0 olan aktif varlıklar ve nakit)
     const { distributionItems, totalValue, activeCount } = useMemo(() => {
         let total = 0;
         const assetMap = new Map<string, { name: string; value: number; type: string }>();
 
-        // Portföydeki varlık türü çeşitliliğini kontrol et
-        const distinctTypes = new Set(myAssets.map((a: any) => a.type || 'STOCK'));
-        const groupByClass = distinctTypes.size > 1;
-
-        myAssets.forEach((asset: any) => {
+        const activeAssets = myAssets.filter((asset: any) => {
+            const qty = Number(asset.quantity) || 0;
+            if (qty <= 0) return false;
             const rawSymbol = asset.symbol ? asset.symbol.toUpperCase().trim() : "";
             const cleanSymbol = rawSymbol.replace(/\.IS$/, '');
-            const currentPrice = prices[rawSymbol] ?? prices[cleanSymbol] ?? prices[`${cleanSymbol}.IS`] ?? asset.avgCost ?? 0;
+            const isCash = asset.type === 'CASH' || cleanSymbol === 'NAKİT' || cleanSymbol === 'TRY_CASH';
+            const currentPrice = isCash
+                ? (asset.avgCost || 1)
+                : (prices[rawSymbol] ?? prices[cleanSymbol] ?? prices[`${cleanSymbol}.IS`] ?? asset.avgCost ?? 0);
+            return (currentPrice * qty) > 0;
+        });
+
+        // Portföydeki aktif varlık türü çeşitliliğini kontrol et
+        const distinctTypes = new Set(activeAssets.map((a: any) => {
+            const sym = a.symbol ? a.symbol.toUpperCase().trim() : "";
+            if (a.type === 'CASH' || sym === 'NAKİT' || sym === 'TRY_CASH') return 'CASH';
+            return a.type || 'STOCK';
+        }));
+        const groupByClass = distinctTypes.size > 1;
+
+        activeAssets.forEach((asset: any) => {
+            const rawSymbol = asset.symbol ? asset.symbol.toUpperCase().trim() : "";
+            const cleanSymbol = rawSymbol.replace(/\.IS$/, '');
+            const isCash = asset.type === 'CASH' || cleanSymbol === 'NAKİT' || cleanSymbol === 'TRY_CASH';
+            const effectiveType = isCash ? 'CASH' : (asset.type || 'STOCK');
+            const currentPrice = isCash
+                ? (asset.avgCost || 1)
+                : (prices[rawSymbol] ?? prices[cleanSymbol] ?? prices[`${cleanSymbol}.IS`] ?? asset.avgCost ?? 0);
             const val = currentPrice * asset.quantity;
 
             total += val;
 
             const groupKey = groupByClass
-                ? (TYPE_NAMES[asset.type] || asset.type || cleanSymbol)
-                : cleanSymbol;
+                ? (TYPE_NAMES[effectiveType] || effectiveType || cleanSymbol)
+                : (isCash ? "Nakit" : cleanSymbol);
 
             if (assetMap.has(groupKey)) {
                 assetMap.get(groupKey)!.value += val;
             } else {
-                assetMap.set(groupKey, { name: groupKey, value: val, type: asset.type || 'STOCK' });
+                assetMap.set(groupKey, { name: groupKey, value: val, type: effectiveType });
             }
         });
 
-        const sorted = Array.from(assetMap.values()).sort((a, b) => b.value - a.value);
+        const sorted = Array.from(assetMap.values()).filter(a => a.value > 0).sort((a, b) => b.value - a.value);
 
         let items: { name: string; value: number; percentage: number; color: string }[] = [];
 
@@ -97,7 +117,7 @@ export function TopAssetDistributionCard() {
         return {
             distributionItems: items,
             totalValue: total,
-            activeCount: myAssets.length
+            activeCount: activeAssets.length
         };
     }, [myAssets, prices]);
 
@@ -121,6 +141,36 @@ export function TopAssetDistributionCard() {
 
     const hasData = distributionItems.length > 0 && totalValue > 0;
     let cumulativeOffset = 0;
+
+    const handleDonutMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        const dx = x - 50;
+        const dy = y - 50;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 26 || dist > 50 || distributionItems.length === 0) {
+            if (hoveredSymbol !== null) setHoveredSymbol(null);
+            return;
+        }
+
+        let angle = Math.atan2(dx, -dy);
+        if (angle < 0) angle += 2 * Math.PI;
+        const norm = (angle / (2 * Math.PI)) * 100;
+
+        let cumulativePct = 0;
+        for (const item of distributionItems) {
+            if (norm >= cumulativePct && norm < cumulativePct + item.percentage) {
+                if (hoveredSymbol !== item.name) setHoveredSymbol(item.name);
+                return;
+            }
+            cumulativePct += item.percentage;
+        }
+        const lastItem = distributionItems[distributionItems.length - 1];
+        if (lastItem && hoveredSymbol !== lastItem.name) setHoveredSymbol(lastItem.name);
+    };
 
     return (
         <div className="bg-[linear-gradient(180deg,#ffffff_0%,#ffffff_55%,#f0f6fe_100%)] border border-slate-200/70 hover:border-blue-200/70 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-xs hover:shadow-sm transition-all duration-300 min-h-[250px] h-full flex flex-col justify-between group">
@@ -149,7 +199,12 @@ export function TopAssetDistributionCard() {
                 <div className="flex items-center gap-3.5 my-auto py-2">
                     {/* Büyütülmüş Donut Grafik (Sol) */}
                     <div className="relative w-28 h-28 sm:w-30 sm:h-30 xl:w-32 xl:h-32 shrink-0 flex items-center justify-center">
-                        <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90 filter drop-shadow-2xs">
+                        <svg
+                            viewBox="0 0 100 100"
+                            className="w-full h-full transform -rotate-90 filter drop-shadow-2xs cursor-pointer"
+                            onMouseMove={handleDonutMouseMove}
+                            onMouseLeave={() => setHoveredSymbol(null)}
+                        >
                             {distributionItems.map((item) => {
                                 const strokeLength = (item.percentage / 100) * CIRCUMFERENCE;
                                 const strokeDasharray = `${strokeLength} ${CIRCUMFERENCE - strokeLength}`;
@@ -164,15 +219,13 @@ export function TopAssetDistributionCard() {
                                         cx="50"
                                         cy="50"
                                         r={RADIUS}
-                                        fill="transparent"
+                                        fill="none"
                                         stroke={item.color}
                                         strokeWidth={isHovered ? 13 : 10.5}
                                         strokeDasharray={strokeDasharray}
                                         strokeDashoffset={strokeDashoffset}
-                                        strokeLinecap="round"
-                                        className="transition-all duration-300 cursor-pointer"
-                                        onMouseEnter={() => setHoveredSymbol(item.name)}
-                                        onMouseLeave={() => setHoveredSymbol(null)}
+                                        pointerEvents="none"
+                                        style={{ transition: 'stroke-width 200ms ease-out' }}
                                     />
                                 );
                             })}
