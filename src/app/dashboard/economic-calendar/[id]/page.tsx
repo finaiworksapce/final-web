@@ -154,7 +154,7 @@ export default function EconomicEventDetailPage() {
             <div className="flex flex-col min-h-screen bg-slate-50 items-center justify-center p-6 text-[#00008B]">
                 <h2 className="text-xl font-black mb-2">Gösterge Bulunamadı</h2>
                 <p className="text-xs text-slate-500 mb-6">İstenen ekonomik veri detayına ve analiz geçmişine ulaşılamadı.</p>
-                <Link href="/dashboard/economic-calendar" className="px-5 py-2.5 rounded-xl bg-[#00008B] text-white font-bold text-xs">
+                <Link href="/dashboard/calendar?type=economic" className="px-5 py-2.5 rounded-xl bg-[#00008B] text-white font-bold text-xs">
                     Takvime Dön
                 </Link>
             </div>
@@ -175,7 +175,7 @@ export default function EconomicEventDetailPage() {
                 {/* Navigation Top Bar */}
                 <div className="flex items-center justify-between">
                     <Link
-                        href="/dashboard/economic-calendar"
+                        href="/dashboard/calendar?type=economic"
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border border-slate-200 text-[#00008B] font-bold text-xs shadow-sm hover:bg-slate-100 transition-all"
                     >
                         <ArrowLeft className="w-4 h-4" /> Ekonomik Takvime Dön
