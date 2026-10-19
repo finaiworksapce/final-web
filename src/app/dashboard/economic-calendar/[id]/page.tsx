@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { 
-    ArrowLeft, Calendar as CalendarIcon, Info, BookOpen, BarChart3, Target, 
-    ChevronDown, ChevronUp, Layers, CheckCircle2, AlertTriangle, ShieldCheck, ArrowRight, Activity, Zap, Sparkles, X, Database
+    ArrowLeft, Calendar as CalendarIcon, Info, BookOpen, Target, 
+    ChevronDown, ChevronUp, Layers, CheckCircle2, ShieldCheck, Activity, Zap, Sparkles, X
 } from "lucide-react";
 import Link from "next/link";
 import { ECONOMIC_CALENDAR_CATALOG, CatalogCalendarEvent } from "@/lib/calendar-catalog";
@@ -80,21 +80,11 @@ export default function EconomicEventDetailPage() {
     const [event, setEvent] = useState<CatalogCalendarEvent | null>(null);
     const [loading, setLoading] = useState(true);
 
-    // REAL HISTORICAL DATABASE RECORDS FROM SUPABASE
-    const [realHistoryEvents, setRealHistoryEvents] = useState<CatalogCalendarEvent[]>([]);
-    const [loadingHistory, setLoadingHistory] = useState(true);
-
     // State: Tooltip modal / popover state
     const [activeTooltip, setActiveTooltip] = useState<TechnicalTermTooltip | null>(null);
 
     // State: Show all scenarios accordion toggle
     const [showAllScenarios, setShowAllScenarios] = useState(false);
-
-    // State: Historical chart timeframe filter
-    const [chartTimeframe, setChartTimeframe] = useState<'12m' | '1y' | '3y'>('12m');
-
-    // State: Chart hover tooltip
-    const [hoveredPoint, setHoveredPoint] = useState<{ month: string; actual: string; forecast: string; previous: string } | null>(null);
 
     useEffect(() => {
         if (!eventId) return;
@@ -117,33 +107,6 @@ export default function EconomicEventDetailPage() {
                 .finally(() => setLoading(false));
         }
     }, [eventId]);
-
-    // FETCH REAL HISTORICAL RECORDS FROM SUPABASE DATABASE
-    useEffect(() => {
-        if (!event) return;
-
-        setLoadingHistory(true);
-        const todayYear = new Date().getFullYear();
-        const startYear = todayYear - 2;
-        const startDate = `${startYear}-01-01`;
-        const endDate = `${todayYear + 1}-12-31`;
-
-        fetch(`/api/calendar?startDate=${startDate}&endDate=${endDate}`)
-            .then(res => res.json())
-            .then(json => {
-                if (json.data && Array.isArray(json.data)) {
-                    const matchingDbRecords = json.data.filter((item: any) => {
-                        const nameMatch = item.event === event.event || item.event.includes(event.event) || event.event.includes(item.event);
-                        const countryMatch = item.country === event.country;
-                        const released = item.actual && item.actual !== 'Bekleniyor' && item.actual !== '-';
-                        return nameMatch && countryMatch && released;
-                    });
-                    setRealHistoryEvents(matchingDbRecords);
-                }
-            })
-            .catch(err => console.error("Real history query error:", err))
-            .finally(() => setLoadingHistory(false));
-    }, [event]);
 
     if (loading) {
         return (
@@ -173,7 +136,6 @@ export default function EconomicEventDetailPage() {
 
     const calc = calculateBackendDifferences(event);
     const finAiAnalysis = generateFinAiAnalysis(event);
-    const hasEnoughRealData = realHistoryEvents.length >= 2;
 
     return (
         <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-slate-50 text-[#00008B] w-full mx-auto relative overflow-hidden">
@@ -480,166 +442,6 @@ export default function EconomicEventDetailPage() {
                             </div>
                         </div>
                     )}
-                </div>
-
-                {/* HISTORICAL GRAPH — GERÇEK TARİHSEL VERİ GRAFİĞİ */}
-                <div className="bg-white border border-slate-200 text-[#00008B] rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-150">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center">
-                                <Database className="w-5 h-5 text-[#00008B]" />
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-black text-[#00008B] tracking-tight">
-                                    FinAi Geçmiş Veri Grafiği
-                                </h3>
-                                <p className="text-xs text-slate-400 font-bold">Kalıcı Veritabanından Doğrulanan Gerçek Kayıtlar</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {loadingHistory ? (
-                        <div className="h-40 flex items-center justify-center text-xs font-bold text-slate-400">
-                            Geçmiş veriler sorgulanıyor...
-                        </div>
-                    ) : realHistoryEvents.length === 0 ? (
-                        <div className="p-8 rounded-2xl bg-slate-50 border border-dashed border-slate-300 text-center space-y-2">
-                            <Database className="w-8 h-8 text-slate-400 mx-auto" />
-                            <h4 className="text-sm font-black text-[#00008B]">Bu gösterge için henüz geçmiş veri bulunmuyor.</h4>
-                            <p className="text-xs text-slate-500 font-medium max-w-lg mx-auto leading-relaxed">
-                                Veritabanımıza gerçekleşen veri kaydoldukça gerçek geçmiş veri grafiği burada otomatik olarak görüntülenecektir.
-                            </p>
-                        </div>
-                    ) : (
-                        <div className="relative pt-6 pb-2">
-                            {hoveredPoint && (
-                                <div className="absolute top-0 right-4 bg-[#00008B] text-white p-3 rounded-2xl text-xs font-bold shadow-lg z-20 space-y-1">
-                                    <div>Dönem: {hoveredPoint.month}</div>
-                                    <div className="text-emerald-300">Açıklanan: {hoveredPoint.actual}</div>
-                                    <div className="text-blue-200">Beklenti: {hoveredPoint.forecast}</div>
-                                    <div className="text-slate-300">Önceki: {hoveredPoint.previous}</div>
-                                </div>
-                            )}
-
-                            <div className="h-48 flex items-end justify-[#00008B] justify-center sm:justify-around gap-4 px-4 border-b border-slate-200 pb-2">
-                                {realHistoryEvents.map((pt, idx) => {
-                                    const valNum = parseFloat((pt.actual || '0').replace(/[^0-9\.\,\-]/g, '').replace(',', '.'));
-                                    const heightPercent = Math.min(Math.max((Math.abs(valNum) / 10) * 100, 20), 90);
-
-                                    return (
-                                        <div
-                                            key={idx}
-                                            onMouseEnter={() => setHoveredPoint({ month: pt.dateFormatted, actual: pt.actual || '-', forecast: pt.forecast || '-', previous: pt.previous || '-' })}
-                                            onMouseLeave={() => setHoveredPoint(null)}
-                                            className="flex-1 max-w-[60px] flex flex-col items-center gap-2 group cursor-pointer"
-                                        >
-                                            <span className="text-[10px] font-black text-slate-500 group-hover:text-[#00008B] transition-colors">
-                                                {pt.actual}
-                                            </span>
-                                            <div className="w-full max-w-[28px] bg-slate-200 group-hover:bg-[#00008B] rounded-t-xl transition-all duration-300 relative overflow-hidden" style={{ height: `${heightPercent}%` }}>
-                                                <div className="absolute inset-0 bg-gradient-to-t from-[#00008B]/80 to-blue-500/80 group-hover:from-[#00008B] group-hover:to-blue-400 transition-all" />
-                                            </div>
-                                            <span className="text-[9px] font-bold text-slate-400 group-hover:text-[#00008B] whitespace-nowrap">
-                                                {pt.dateFormatted.split('.')[1]}/{pt.dateFormatted.split('.')[2].slice(2)}
-                                            </span>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                {/* GRAFİK NASIL OKUNUR? & SON DÖNEMDE NE DEĞİŞTİ? */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4">
-                        <h3 className="text-sm font-black text-[#00008B] uppercase tracking-wider flex items-center gap-2">
-                            <BookOpen className="w-4 h-4 text-[#00008B]" /> Grafik Nasıl Okunur?
-                        </h3>
-                        <div className="space-y-3">
-                            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
-                                <h4 className="text-xs font-black text-[#00008B]">01 — YÖN</h4>
-                                <p className="text-[11px] text-slate-600 font-medium leading-relaxed">
-                                    {profile.chartReadingCards.direction}
-                                </p>
-                            </div>
-                            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
-                                <h4 className="text-xs font-black text-[#00008B]">02 — DEĞİŞİM HIZI</h4>
-                                <p className="text-[11px] text-slate-600 font-medium leading-relaxed">
-                                    {profile.chartReadingCards.changeSpeed}
-                                </p>
-                            </div>
-                            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
-                                <h4 className="text-xs font-black text-[#00008B]">03 — BAĞLAM</h4>
-                                <p className="text-[11px] text-slate-600 font-medium leading-relaxed">
-                                    {profile.chartReadingCards.context}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4">
-                        <h3 className="text-sm font-black text-[#00008B] uppercase tracking-wider flex items-center gap-2">
-                            <Activity className="w-4 h-4 text-[#00008B]" /> Son Dönemde Ne Değişti?
-                        </h3>
-                        <div className="p-5 rounded-2xl bg-blue-50/60 border border-blue-100 space-y-2 h-[calc(100%-2.5rem)] flex flex-col justify-center">
-                            {hasEnoughRealData ? (
-                                <p className="text-xs text-slate-700 font-medium leading-relaxed">
-                                    Son veritabanı kayıtlarına göre göstergenin son gerçekleşen değeri {realHistoryEvents[realHistoryEvents.length - 1]?.actual || '-'} seviyesindedir. Önceki dönem gerçekleşmesi olan {realHistoryEvents[realHistoryEvents.length - 2]?.actual || '-'} seviyesi ile kıyaslandığında dönemsel eğilim makroekonomik beklentiler doğrultusunda şekillenmektedir.
-                                </p>
-                            ) : (
-                                <p className="text-xs text-slate-500 font-medium leading-relaxed">
-                                    FinAi Historical Archive veritabanımızda henüz yeterli sayıda dönemsel gerçek kayıt birikmediği için dinamik trend özeti üretilmemiştir.
-                                </p>
-                            )}
-                        </div>
-                    </div>
-                </div>
-
-                {/* NE ÇIKARAMAYIZ? & FİNANSAL OKURYAZARLIK */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-3">
-                        <div className="flex items-center gap-2 text-rose-600">
-                            <AlertTriangle className="w-5 h-5 text-rose-600" />
-                            <h3 className="text-sm font-black uppercase tracking-wider">Ne Çıkaramayız?</h3>
-                        </div>
-                        <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                            {profile.whatWeCannotInfer}
-                        </p>
-                    </div>
-
-                    <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-3">
-                        <div className="flex items-center gap-2 text-[#00008B]">
-                            <BookOpen className="w-5 h-5 text-[#00008B]" />
-                            <h3 className="text-sm font-black uppercase tracking-wider">Bu Veriyi Anlamak İçin Bilmen Gerekenler</h3>
-                        </div>
-                        <div className="space-y-2">
-                            {profile.financialLiteracyItems.map((item, idx) => (
-                                <div key={idx} className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
-                                    <h4 className="text-xs font-black text-[#00008B]">{item.title}</h4>
-                                    <p className="text-[11px] text-slate-600 font-medium leading-normal">{item.content}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* İLGİLİ GÖSTERGELER */}
-                <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4">
-                    <h3 className="text-sm font-black text-[#00008B] uppercase tracking-wider flex items-center gap-2">
-                        <Activity className="w-4 h-4 text-[#00008B]" /> Bu Veriyi Anlamak İçin Bunlara Da Bak
-                    </h3>
-                    <div className="flex flex-wrap items-center gap-3">
-                        {profile.relatedIndicators.map((rel, idx) => (
-                            <Link
-                                key={idx}
-                                href={`/dashboard/economic-calendar/${encodeURIComponent(rel.id)}`}
-                                className="px-4 py-2 rounded-2xl bg-blue-50 hover:bg-blue-100 text-[#00008B] font-bold text-xs border border-blue-200 transition-all flex items-center gap-2"
-                            >
-                                {rel.name} <ArrowRight className="w-3.5 h-3.5 text-blue-600" />
-                            </Link>
-                        ))}
-                    </div>
                 </div>
             </div>
 
