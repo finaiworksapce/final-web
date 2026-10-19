@@ -408,18 +408,18 @@ function CalendarContent() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // Veri Çekimi
+    // Veri Çekimi & Canlı Periyodik Yenileme
     useEffect(() => {
         let isMounted = true;
 
-        async function loadData() {
-            setLoading(true);
+        async function loadData(isInitial = false) {
+            if (isInitial) setLoading(true);
             try {
                 const [earningsRes, divRes, ipoRes, ecoRes] = await Promise.all([
-                    fetch('/api/halkarz-earnings').then(r => r.json()).catch(() => ({ data: [] })),
-                    fetch('/api/halkarz-dividends').then(r => r.json()).catch(() => ({ data: [] })),
-                    fetch('/api/halkarz-ipo').then(r => r.json()).catch(() => ({ data: [] })),
-                    fetch('/api/calendar').then(r => r.json()).catch(() => ({ data: [] }))
+                    fetch('/api/halkarz-earnings', { cache: 'no-store' }).then(r => r.json()).catch(() => ({ data: [] })),
+                    fetch('/api/halkarz-dividends', { cache: 'no-store' }).then(r => r.json()).catch(() => ({ data: [] })),
+                    fetch('/api/halkarz-ipo', { cache: 'no-store' }).then(r => r.json()).catch(() => ({ data: [] })),
+                    fetch('/api/calendar', { cache: 'no-store' }).then(r => r.json()).catch(() => ({ data: [] }))
                 ]);
 
                 if (isMounted) {
@@ -431,12 +431,32 @@ function CalendarContent() {
             } catch (e) {
                 console.error("Calendar data fetch error:", e);
             } finally {
-                if (isMounted) setLoading(false);
+                if (isMounted && isInitial) setLoading(false);
             }
         }
 
-        loadData();
-        return () => { isMounted = false; };
+        // İlk yükleme
+        loadData(true);
+
+        // Belirli aralıklarla (60 saniyede bir) arka planda otomatik canlı veri yenileme
+        const interval = setInterval(() => {
+            if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
+            loadData(false);
+        }, 60000);
+
+        // Sekmeye dönüldüğünde anında tazeleme
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                loadData(false);
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            isMounted = false;
+            clearInterval(interval);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
     }, []);
 
     // Tarih Sınırlandırması (Kullanıcının 2030 gibi uzak yıllara gitmesini kısıtlar)

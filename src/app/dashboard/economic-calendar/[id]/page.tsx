@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { 
-    ArrowLeft, Calendar as CalendarIcon, Info, BookOpen, Target, 
-    ChevronDown, ChevronUp, Layers, CheckCircle2, ShieldCheck, Activity, Zap, Sparkles, X
+    ArrowLeft, Calendar as CalendarIcon, BookOpen, Target, 
+    ChevronDown, ChevronUp, Layers, CheckCircle2, ShieldCheck, Activity, Zap, Sparkles
 } from "lucide-react";
 import Link from "next/link";
-import { ECONOMIC_CALENDAR_CATALOG, CatalogCalendarEvent } from "@/lib/calendar-catalog";
-import { INDICATOR_PROFILES_DATABASE, IndicatorProfile, TECHNICAL_TERMS, TechnicalTermTooltip } from "@/lib/indicator-profiles";
+import { CatalogCalendarEvent } from "@/lib/calendar-catalog";
+import { getDynamicCalendarCatalog } from "@/lib/calendar-scraper";
+import { INDICATOR_PROFILES_DATABASE, IndicatorProfile } from "@/lib/indicator-profiles";
 import { calculateBackendDifferences, generateFinAiAnalysis } from "@/lib/finai-calendar-analysis-engine";
 import FollowIndicatorButton from "@/components/calendar/FollowIndicatorButton";
 
@@ -80,32 +81,63 @@ export default function EconomicEventDetailPage() {
     const [event, setEvent] = useState<CatalogCalendarEvent | null>(null);
     const [loading, setLoading] = useState(true);
 
-    // State: Tooltip modal / popover state
-    const [activeTooltip, setActiveTooltip] = useState<TechnicalTermTooltip | null>(null);
-
     // State: Show all scenarios accordion toggle
     const [showAllScenarios, setShowAllScenarios] = useState(false);
 
     useEffect(() => {
         if (!eventId) return;
 
-        const catalogResolved = resolveCalendarEvent(eventId, ECONOMIC_CALENDAR_CATALOG);
+        let isMounted = true;
 
-        if (catalogResolved) {
-            setEvent(catalogResolved);
-            setLoading(false);
-        } else {
-            fetch('/api/calendar')
-                .then(res => res.json())
-                .then(json => {
-                    if (json.data && Array.isArray(json.data)) {
-                        const apiResolved = resolveCalendarEvent(eventId, json.data);
-                        if (apiResolved) setEvent(apiResolved);
+        async function fetchEventData(isInitial = false) {
+            try {
+                const res = await fetch('/api/calendar', { cache: 'no-store' });
+                const json = await res.json();
+                if (json.data && Array.isArray(json.data) && isMounted) {
+                    const resolved = resolveCalendarEvent(eventId, json.data);
+                    if (resolved) {
+                        setEvent(resolved);
+                        if (isInitial) setLoading(false);
+                        return;
                     }
-                })
-                .catch(err => console.error(err))
-                .finally(() => setLoading(false));
+                }
+            } catch (err) {
+                console.error("Live calendar event fetch error:", err);
+            }
+
+            // Fallback: Dinamik haftalık takvim kataloğu ile güncel tarihleri çözümle
+            if (isMounted) {
+                const dynamicList = getDynamicCalendarCatalog();
+                const catalogResolved = resolveCalendarEvent(eventId, dynamicList);
+                if (catalogResolved) {
+                    setEvent(catalogResolved);
+                }
+                if (isInitial) setLoading(false);
+            }
         }
+
+        // İlk yükleme
+        fetchEventData(true);
+
+        // Belirli aralıklarla (30 saniyede bir) otomatik canlı veri yenileme
+        const interval = setInterval(() => {
+            if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
+            fetchEventData(false);
+        }, 30000);
+
+        // Sekmeye geri dönüldüğünde anlık yenileme
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                fetchEventData(false);
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            isMounted = false;
+            clearInterval(interval);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
     }, [eventId]);
 
     if (loading) {
@@ -171,80 +203,6 @@ export default function EconomicEventDetailPage() {
                                 <CalendarIcon className="w-4 h-4 text-blue-300" /> {event.dateFormatted || 'Bugün'} · {event.time} TSİ
                             </p>
                         </div>
-                    </div>
-                </div>
-
-                {/* ACTUAL / FORECAST / PREVIOUS KARTLARI */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {/* Actual */}
-                    <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm space-y-2">
-                        <div className="flex items-center justify-between">
-                            <span className="text-[11px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                                Açıklanan (Actual)
-                                <button 
-                                    onClick={() => setActiveTooltip(TECHNICAL_TERMS.actual)} 
-                                    className="text-slate-400 hover:text-[#00008B] transition-colors"
-                                >
-                                    <Info className="w-3.5 h-3.5" />
-                                </button>
-                            </span>
-                            <span className={`px-2 py-0.5 rounded-lg text-[10px] font-black ${
-                                calc.hasActual ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-amber-50 text-amber-600 border border-amber-200'
-                            }`}>
-                                {calc.hasActual ? 'Açıklandı' : 'Bekleniyor'}
-                            </span>
-                        </div>
-                        <div className="text-2xl sm:text-3xl font-black text-[#00008B]">
-                            {event.actual || 'Bekleniyor'}
-                        </div>
-                    </div>
-
-                    {/* Forecast */}
-                    <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm space-y-2">
-                        <div className="flex items-center justify-between">
-                            <span className="text-[11px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                                Beklenti (Forecast)
-                                <button 
-                                    onClick={() => setActiveTooltip(TECHNICAL_TERMS.forecast)} 
-                                    className="text-slate-400 hover:text-[#00008B] transition-colors"
-                                >
-                                    <Info className="w-3.5 h-3.5" />
-                                </button>
-                            </span>
-                            <span className="text-[10px] font-bold text-slate-400">Piyasa Tahmini</span>
-                        </div>
-                        <div className="text-2xl sm:text-3xl font-black text-slate-700">
-                            {event.forecast || '-'}
-                        </div>
-                        {calc.forecastDiffText && (
-                            <div className="pt-2 border-t border-slate-100 text-xs font-bold text-blue-600 flex items-center gap-1">
-                                <CheckCircle2 className="w-3.5 h-3.5 text-blue-500" /> {calc.forecastDiffText}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Previous */}
-                    <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm space-y-2">
-                        <div className="flex items-center justify-between">
-                            <span className="text-[11px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                                Önceki (Previous)
-                                <button 
-                                    onClick={() => setActiveTooltip(TECHNICAL_TERMS.previous)} 
-                                    className="text-slate-400 hover:text-[#00008B] transition-colors"
-                                >
-                                    <Info className="w-3.5 h-3.5" />
-                                </button>
-                            </span>
-                            <span className="text-[10px] font-bold text-slate-400">Geçen Dönem</span>
-                        </div>
-                        <div className="text-2xl sm:text-3xl font-black text-slate-700">
-                            {event.previous || '-'}
-                        </div>
-                        {calc.previousDiffText && (
-                            <div className="pt-2 border-t border-slate-100 text-xs font-bold text-slate-600 flex items-center gap-1">
-                                <Activity className="w-3.5 h-3.5 text-slate-500" /> {calc.previousDiffText}
-                            </div>
-                        )}
                     </div>
                 </div>
 
@@ -445,29 +403,6 @@ export default function EconomicEventDetailPage() {
                 </div>
             </div>
 
-            {/* TEKNİK TERİMLER TOOLTIP MODAL */}
-            {activeTooltip && (
-                <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-6 z-50">
-                    <div className="bg-white text-[#00008B] p-6 rounded-3xl max-w-md w-full border border-slate-200 shadow-2xl space-y-4">
-                        <div className="flex items-center justify-between border-b border-slate-150 pb-3">
-                            <span className="text-xs font-black uppercase text-blue-600">Teknik Terim ⓘ</span>
-                            <button onClick={() => setActiveTooltip(null)} className="text-slate-400 hover:text-slate-700">
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
-                        <div>
-                            <h3 className="text-base font-black text-[#00008B]">{activeTooltip.label} ({activeTooltip.term})</h3>
-                            <p className="text-xs text-slate-600 font-medium mt-2 leading-relaxed">{activeTooltip.definition}</p>
-                        </div>
-                        <button
-                            onClick={() => setActiveTooltip(null)}
-                            className="w-full py-2.5 rounded-2xl bg-[#00008B] text-white text-xs font-black shadow-md hover:bg-[#0808a3] transition-all"
-                        >
-                            Anladım
-                        </button>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
