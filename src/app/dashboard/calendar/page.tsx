@@ -1681,18 +1681,18 @@ function CalendarContent() {
                         ) : (
                             <div className="space-y-3">
                                 <div className="overflow-x-auto scrollbar-none bg-white rounded-2xl border border-emerald-100 p-2 shadow-2xs">
-                                    <table className="w-full text-left border-collapse text-xs font-bold">
+                                    <table className="w-full text-left border-separate border-spacing-y-2 border-spacing-x-0 text-xs font-bold">
                                         <thead>
-                                            <tr className="border-b border-emerald-100 text-[10px] font-black text-slate-400 uppercase bg-emerald-50/40">
-                                                <th className="py-3 px-3.5">Hisse / Şirket</th>
-                                                <th className="py-3 px-3.5">Hakediş / Ödeme Tarihi</th>
-                                                <th className="py-3 px-3.5">Hisse Başına Net Tutar</th>
-                                                <th className="py-3 px-3.5">Temettü Verimi</th>
-                                                <th className="py-3 px-3.5">Durum</th>
-                                                <th className="py-3 px-3.5 text-right">Hatırlatıcı</th>
+                                            <tr className="text-[10px] font-black text-slate-400 uppercase">
+                                                <th className="py-2.5 px-3.5 bg-emerald-50/50 text-emerald-900/60 rounded-l-xl pl-4">Hisse / Şirket</th>
+                                                <th className="py-2.5 px-3.5 bg-emerald-50/50 text-emerald-900/60">Hakediş / Ödeme Tarihi</th>
+                                                <th className="py-2.5 px-3.5 bg-emerald-50/50 text-emerald-900/60">Hisse Başına Net Tutar</th>
+                                                <th className="py-2.5 px-3.5 bg-emerald-50/50 text-emerald-900/60">Temettü Verimi</th>
+                                                <th className="py-2.5 px-3.5 bg-emerald-50/50 text-emerald-900/60">Durum</th>
+                                                <th className="py-2.5 px-3.5 text-right bg-emerald-50/50 text-emerald-900/60 rounded-r-xl pr-4">Hatırlatıcı</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-emerald-100/60">
+                                        <tbody>
                                             {paginatedDividends.map((item, idx) => {
                                                 const isAnnounced = isDividendDateAnnounced(item);
                                                 const ts = getItemTimestamp(item, 'paymentDate');
@@ -1700,15 +1700,15 @@ function CalendarContent() {
                                                 const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
                                                 const isPaid = isAnnounced && ts > 0 && ts < todayStart;
 
-                                                const rowBg = isPaid
-                                                    ? "bg-emerald-600 hover:bg-emerald-700 border-b border-emerald-700 text-white font-medium"
+                                                const cellBg = isPaid
+                                                    ? "bg-emerald-600 group-hover:bg-emerald-700"
                                                     : !isAnnounced
-                                                    ? "bg-slate-50/70 hover:bg-slate-100/80 border-b border-slate-100 text-slate-600"
-                                                    : "bg-white hover:bg-emerald-50/40 border-b border-emerald-100/60 text-slate-800";
+                                                    ? "bg-slate-50/70 group-hover:bg-slate-100/80"
+                                                    : "bg-emerald-50/40 group-hover:bg-emerald-50/70";
 
                                                 return (
-                                                    <tr key={idx} className={`transition-colors ${rowBg}`}>
-                                                        <td className="py-3 px-3.5">
+                                                    <tr key={idx} className="group transition-colors">
+                                                        <td className={`py-3.5 pl-4 pr-3.5 rounded-l-2xl ${cellBg}`}>
                                                             <div className="flex items-center gap-2.5">
                                                                 <div className={`w-8 h-8 rounded-xl border flex items-center justify-center font-black text-xs shrink-0 ${
                                                                     isPaid
@@ -1741,17 +1741,17 @@ function CalendarContent() {
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td className="py-3 px-3.5 whitespace-nowrap font-bold">
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap font-bold ${cellBg}`}>
                                                             {isAnnounced ? (
                                                                 <span className={isPaid ? 'text-white font-black' : 'text-slate-700'}>{item.paymentDate}</span>
                                                             ) : (
                                                                 <span className="text-slate-400 italic font-semibold">Açıklanmadı</span>
                                                             )}
                                                         </td>
-                                                        <td className={`py-3 px-3.5 whitespace-nowrap font-black ${isPaid ? 'text-white' : 'text-emerald-700'}`}>
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap font-black ${cellBg} ${isPaid ? 'text-white' : 'text-emerald-700'}`}>
                                                             {item.netAmountFormatted || `${item.netAmountPerShare ? item.netAmountPerShare.toFixed(2) : '0,00'} TL`}
                                                         </td>
-                                                        <td className="py-3 px-3.5 whitespace-nowrap">
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
                                                             <span className={`inline-flex items-center px-2 py-0.5 rounded-lg border font-black text-xs ${
                                                                 isPaid
                                                                     ? 'bg-emerald-700 text-white border-emerald-500'
@@ -1760,7 +1760,7 @@ function CalendarContent() {
                                                                 %{getItemYield(item).toFixed(2)}
                                                             </span>
                                                         </td>
-                                                        <td className="py-3 px-3.5 whitespace-nowrap">
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
                                                             <span className={`text-[9px] font-black px-2.5 py-0.5 rounded-md border ${
                                                                 isPaid
                                                                     ? 'bg-white text-emerald-700 border-white shadow-xs font-black'
@@ -1771,7 +1771,7 @@ function CalendarContent() {
                                                                 {isPaid ? 'Ödendi' : (!isAnnounced ? 'Açıklanmadı' : 'Yaklaşan')}
                                                             </span>
                                                         </td>
-                                                        <td className="py-3 px-3.5 text-right whitespace-nowrap">
+                                                        <td className={`py-3.5 pl-3.5 pr-4 text-right whitespace-nowrap rounded-r-2xl ${cellBg}`}>
                                                             <button title="Hatırlatıcı Ekle" className={`p-1.5 rounded-lg transition-all ${
                                                                 isPaid
                                                                     ? 'text-white hover:text-emerald-100 hover:bg-emerald-700/80'
@@ -1907,27 +1907,27 @@ function CalendarContent() {
                         ) : (
                             <div className="space-y-3">
                                 <div className="overflow-x-auto scrollbar-none bg-white rounded-2xl border border-blue-100 p-2 shadow-2xs">
-                                    <table className="w-full text-left border-collapse text-xs font-bold">
+                                    <table className="w-full text-left border-separate border-spacing-y-2 border-spacing-x-0 text-xs font-bold">
                                         <thead>
-                                            <tr className="border-b border-blue-100 text-[10px] font-black text-slate-400 uppercase bg-blue-50/40">
-                                                <th className="py-3 px-3.5">Hisse / Şirket</th>
-                                                <th className="py-3 px-3.5">Bilanço Dönemi</th>
-                                                <th className="py-3 px-3.5">Açıklanma Tarihi</th>
-                                                <th className="py-3 px-3.5">Kalan Süre</th>
-                                                <th className="py-3 px-3.5">Durum</th>
-                                                <th className="py-3 px-3.5 text-right">Hatırlatıcı</th>
+                                            <tr className="text-[10px] font-black text-slate-400 uppercase">
+                                                <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60 rounded-l-xl pl-4">Hisse / Şirket</th>
+                                                <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Bilanço Dönemi</th>
+                                                <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Açıklanma Tarihi</th>
+                                                <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Kalan Süre</th>
+                                                <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Durum</th>
+                                                <th className="py-2.5 px-3.5 text-right bg-blue-50/50 text-blue-900/60 rounded-r-xl pr-4">Hatırlatıcı</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-blue-100/60">
+                                        <tbody>
                                             {paginatedEarnings.map((item, idx) => {
                                                 const isAnnounced = item.daysLeft !== undefined && item.daysLeft <= 0;
-                                                const rowBg = isAnnounced
-                                                    ? "bg-blue-600 hover:bg-blue-700 border-b border-blue-700 text-white font-medium"
-                                                    : "hover:bg-blue-50/50 transition-colors";
+                                                const cellBg = isAnnounced
+                                                    ? "bg-blue-600 group-hover:bg-blue-700"
+                                                    : "bg-slate-50/70 group-hover:bg-blue-50/50";
 
                                                 return (
-                                                    <tr key={idx} className={`transition-colors ${rowBg}`}>
-                                                        <td className="py-3 px-3.5">
+                                                    <tr key={idx} className="group transition-colors">
+                                                        <td className={`py-3.5 pl-4 pr-3.5 rounded-l-2xl ${cellBg}`}>
                                                             <div className="flex items-center gap-2.5">
                                                                 <div className={`w-8 h-8 rounded-xl border flex items-center justify-center font-black text-xs shrink-0 ${
                                                                     isAnnounced
@@ -1958,7 +1958,7 @@ function CalendarContent() {
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td className="py-3 px-3.5 whitespace-nowrap">
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
                                                             <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md border ${
                                                                 isAnnounced
                                                                     ? 'bg-blue-700 text-white border-blue-500'
@@ -1967,13 +1967,13 @@ function CalendarContent() {
                                                                 2026/1Ç
                                                             </span>
                                                         </td>
-                                                        <td className={`py-3 px-3.5 whitespace-nowrap font-bold ${isAnnounced ? 'text-white' : 'text-slate-700'}`}>
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap font-bold ${cellBg} ${isAnnounced ? 'text-white' : 'text-slate-700'}`}>
                                                             {item.earningsDate || 'Belirtilmedi'}
                                                         </td>
-                                                        <td className={`py-3 px-3.5 whitespace-nowrap font-semibold ${isAnnounced ? 'text-blue-100' : 'text-slate-500'}`}>
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap font-semibold ${cellBg} ${isAnnounced ? 'text-blue-100' : 'text-slate-500'}`}>
                                                             {item.daysLeft !== undefined && item.daysLeft > 0 ? `${item.daysLeft} gün kaldı` : (isAnnounced ? 'Açıklandı' : 'Yakında')}
                                                         </td>
-                                                        <td className="py-3 px-3.5 whitespace-nowrap">
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
                                                             <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-md border ${
                                                                 isAnnounced
                                                                     ? 'bg-white text-blue-700 border-white shadow-xs font-black'
@@ -1982,7 +1982,7 @@ function CalendarContent() {
                                                                 {isAnnounced ? 'Açıklandı' : 'Bekleniyor'}
                                                             </span>
                                                         </td>
-                                                        <td className="py-3 px-3.5 text-right whitespace-nowrap">
+                                                        <td className={`py-3.5 pl-3.5 pr-4 text-right whitespace-nowrap rounded-r-2xl ${cellBg}`}>
                                                             <button title="Hatırlatıcı Ekle" className={`p-1.5 rounded-lg transition-all ${
                                                                 isAnnounced
                                                                     ? 'text-white hover:text-blue-100 hover:bg-blue-700/80'
@@ -2125,26 +2125,26 @@ function CalendarContent() {
                         ) : (
                             <div className="space-y-3">
                                 <div className="overflow-x-auto scrollbar-none bg-white rounded-2xl border border-purple-100 p-2 shadow-2xs">
-                                    <table className="w-full text-left border-collapse text-xs font-bold">
+                                    <table className="w-full text-left border-separate border-spacing-y-2 border-spacing-x-0 text-xs font-bold">
                                         <thead>
-                                            <tr className="border-b border-purple-100 text-[10px] font-black text-slate-400 uppercase bg-purple-50/40">
-                                                <th className="py-3 px-3.5">Hisse / Şirket</th>
-                                                <th className="py-3 px-3.5">Talep Toplama Tarihleri</th>
-                                                <th className="py-3 px-3.5">Halka Arz Fiyatı</th>
-                                                <th className="py-3 px-3.5">Durum</th>
-                                                <th className="py-3 px-3.5 text-right">Hatırlatıcı</th>
+                                            <tr className="text-[10px] font-black text-slate-400 uppercase">
+                                                <th className="py-2.5 px-3.5 bg-purple-50/50 text-purple-900/60 rounded-l-xl pl-4">Hisse / Şirket</th>
+                                                <th className="py-2.5 px-3.5 bg-purple-50/50 text-purple-900/60">Talep Toplama Tarihleri</th>
+                                                <th className="py-2.5 px-3.5 bg-purple-50/50 text-purple-900/60">Halka Arz Fiyatı</th>
+                                                <th className="py-2.5 px-3.5 bg-purple-50/50 text-purple-900/60">Durum</th>
+                                                <th className="py-2.5 px-3.5 text-right bg-purple-50/50 text-purple-900/60 rounded-r-xl pr-4">Hatırlatıcı</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-purple-100/60">
+                                        <tbody>
                                             {paginatedIpos.map((item, idx) => {
                                                 const isCompleted = getIpoPhase(item) === 'completed';
-                                                const rowBg = isCompleted
-                                                    ? "bg-purple-600 hover:bg-purple-700 border-b border-purple-700 text-white font-medium"
-                                                    : "hover:bg-purple-50/50 transition-colors";
+                                                const cellBg = isCompleted
+                                                    ? "bg-purple-600 group-hover:bg-purple-700"
+                                                    : "bg-slate-50/70 group-hover:bg-purple-50/50";
 
                                                 return (
-                                                    <tr key={idx} className={`transition-colors ${rowBg}`}>
-                                                        <td className="py-3 px-3.5">
+                                                    <tr key={idx} className="group transition-colors">
+                                                        <td className={`py-3.5 pl-4 pr-3.5 rounded-l-2xl ${cellBg}`}>
                                                             <div className="flex items-center gap-2.5">
                                                                 <div className={`w-8 h-8 rounded-xl border flex items-center justify-center font-black text-xs shrink-0 ${
                                                                     isCompleted
@@ -2175,13 +2175,13 @@ function CalendarContent() {
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td className={`py-3 px-3.5 whitespace-nowrap font-bold ${isCompleted ? 'text-white' : 'text-slate-700'}`}>
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap font-bold ${cellBg} ${isCompleted ? 'text-white' : 'text-slate-700'}`}>
                                                             {item.dateRange || 'Yakında'}
                                                         </td>
-                                                        <td className={`py-3 px-3.5 whitespace-nowrap font-black ${isCompleted ? 'text-white' : 'text-purple-700'}`}>
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap font-black ${cellBg} ${isCompleted ? 'text-white' : 'text-purple-700'}`}>
                                                             {item.price ? `${item.price} TL` : 'Belirlenmedi'}
                                                         </td>
-                                                        <td className="py-3 px-3.5 whitespace-nowrap">
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
                                                             <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-md border ${
                                                                 isCompleted
                                                                     ? 'bg-white text-purple-700 border-white shadow-xs font-black'
@@ -2190,7 +2190,7 @@ function CalendarContent() {
                                                                 {getIpoStatusLabel(item)}
                                                             </span>
                                                         </td>
-                                                        <td className="py-3 px-3.5 text-right whitespace-nowrap">
+                                                        <td className={`py-3.5 pl-3.5 pr-4 text-right whitespace-nowrap rounded-r-2xl ${cellBg}`}>
                                                             <button title="Hatırlatıcı Ekle" className={`p-1.5 rounded-lg transition-all ${
                                                                 isCompleted
                                                                     ? 'text-white hover:text-purple-100 hover:bg-purple-700/80'
@@ -2338,51 +2338,51 @@ function CalendarContent() {
                         ) : (
                             <div className="space-y-3">
                                 <div className="overflow-x-auto scrollbar-none bg-white rounded-2xl border border-blue-100 p-2 shadow-2xs">
-                                    <table className="w-full text-left border-collapse text-xs font-bold">
+                                    <table className="w-full text-left border-separate border-spacing-y-2 border-spacing-x-0 text-xs font-bold">
                                         <thead>
-                                            <tr className="border-b border-blue-100 text-[10px] font-black text-slate-400 uppercase bg-blue-50/40">
-                                                <th className="py-3 px-3.5">Tarih / Saat</th>
-                                                <th className="py-3 px-3.5">Ülke</th>
-                                                <th className="py-3 px-3.5">Veri</th>
-                                                <th className="py-3 px-3.5">Önceki</th>
-                                                <th className="py-3 px-3.5">Beklenti</th>
-                                                <th className="py-3 px-3.5">Açıklanan</th>
-                                                <th className="py-3 px-3.5">Önem</th>
-                                                <th className="py-3 px-3.5 text-right">İşlem</th>
+                                            <tr className="text-[10px] font-black text-slate-400 uppercase">
+                                                <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60 rounded-l-xl pl-4">Tarih / Saat</th>
+                                                <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Ülke</th>
+                                                <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Veri</th>
+                                                <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Önceki</th>
+                                                <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Beklenti</th>
+                                                <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Açıklanan</th>
+                                                <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Önem</th>
+                                                <th className="py-2.5 px-3.5 text-right bg-blue-50/50 text-blue-900/60 rounded-r-xl pr-4">İşlem</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-blue-100/50">
+                                        <tbody>
                                             {paginatedEconomicEvents.map((item, idx) => {
                                                 const isReleased = isEconomicEventReleased(item);
                                                 const isHigh = item.impact === 'critical' || item.impact === 'high' || item.impact === 'Yüksek' || item.impact === 'Kritik' || item.impact === 3;
                                                 const isMed = item.impact === 'medium' || item.impact === 'Orta' || item.impact === 2;
                                                 const detailHref = `/dashboard/economic-calendar/${encodeURIComponent(item.id || item.event)}`;
 
-                                                const rowBg = isReleased
-                                                    ? "bg-[#00008B] hover:bg-[#000075] border-b border-blue-900 text-white font-medium"
-                                                    : "bg-white hover:bg-blue-50/40 border-b border-blue-100/60 text-slate-800";
+                                                const cellBg = isReleased
+                                                    ? "bg-[#00008B] group-hover:bg-[#000075]"
+                                                    : "bg-slate-50/70 group-hover:bg-blue-50/50";
 
                                                 return (
-                                                    <tr key={idx} className={`transition-colors ${rowBg}`}>
-                                                        <td className={`py-3 px-3.5 font-black whitespace-nowrap ${isReleased ? 'text-white' : 'text-[#00008B]'}`}>{item.dateFormatted || 'Bugün'} {item.time || '15:30'}</td>
-                                                        <td className={`py-3 px-3.5 font-black whitespace-nowrap ${isReleased ? 'text-white' : 'text-slate-700'}`}>{item.country || 'USD'}</td>
-                                                        <td className="py-3 px-3.5">
+                                                    <tr key={idx} className="group transition-colors">
+                                                        <td className={`py-3.5 pl-4 pr-3.5 font-black whitespace-nowrap rounded-l-2xl ${cellBg} ${isReleased ? 'text-white' : 'text-[#00008B]'}`}>{item.dateFormatted || 'Bugün'} {item.time || '15:30'}</td>
+                                                        <td className={`py-3.5 px-3.5 font-black whitespace-nowrap ${cellBg} ${isReleased ? 'text-white' : 'text-slate-700'}`}>{item.country || 'USD'}</td>
+                                                        <td className={`py-3.5 px-3.5 ${cellBg}`}>
                                                             <Link
                                                                 href={detailHref}
-                                                                className={`hover:underline font-bold transition-colors inline-flex items-center gap-1.5 group ${
+                                                                className={`hover:underline font-bold transition-colors inline-flex items-center gap-1.5 group/link ${
                                                                     isReleased ? 'text-white font-black hover:text-blue-100' : 'text-slate-800'
                                                                 }`}
                                                                 title={`${item.event} Detayına Git`}
                                                             >
                                                                 <span>{item.event}</span>
-                                                                <ExternalLink className={`w-3 h-3 group-hover:text-[#00008B] opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ${
+                                                                <ExternalLink className={`w-3 h-3 group-hover/link:text-white opacity-0 group-hover/link:opacity-100 transition-opacity shrink-0 ${
                                                                     isReleased ? 'text-white/80' : 'text-slate-400'
                                                                 }`} />
                                                             </Link>
                                                         </td>
-                                                        <td className={`py-3 px-3.5 whitespace-nowrap ${isReleased ? 'text-blue-100 font-semibold' : 'text-slate-500'}`}>{item.previous || '—'}</td>
-                                                        <td className={`py-3 px-3.5 whitespace-nowrap ${isReleased ? 'text-blue-100 font-semibold' : 'text-slate-700'}`}>{item.forecast || '—'}</td>
-                                                        <td className="py-3 px-3.5 whitespace-nowrap">
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg} ${isReleased ? 'text-blue-100 font-semibold' : 'text-slate-500'}`}>{item.previous || '—'}</td>
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg} ${isReleased ? 'text-blue-100 font-semibold' : 'text-slate-700'}`}>{item.forecast || '—'}</td>
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
                                                             {isReleased ? (
                                                                 <span className="text-xs font-black text-[#00008B] bg-white border border-white px-2.5 py-0.5 rounded-md shadow-xs">
                                                                     {item.actual}
@@ -2393,7 +2393,7 @@ function CalendarContent() {
                                                                 </span>
                                                             )}
                                                         </td>
-                                                        <td className="py-3 px-3.5 whitespace-nowrap">
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
                                                             <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-md border ${
                                                                 isHigh 
                                                                     ? (isReleased ? 'bg-rose-500 text-white border-rose-400 font-black' : 'bg-rose-50 text-rose-700 border-rose-200') 
@@ -2404,7 +2404,7 @@ function CalendarContent() {
                                                                 {isHigh ? 'Yüksek' : isMed ? 'Orta' : 'Düşük'}
                                                             </span>
                                                         </td>
-                                                        <td className="py-3 px-3.5 text-right whitespace-nowrap">
+                                                        <td className={`py-3.5 pl-3.5 pr-4 text-right whitespace-nowrap rounded-r-2xl ${cellBg}`}>
                                                             <Link
                                                                 href={detailHref}
                                                                 className={`inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg border transition-all hover:scale-105 ${
@@ -2774,16 +2774,16 @@ function CalendarContent() {
                         </div>
 
                         <div className="overflow-x-auto scrollbar-none">
-                            <table className="w-full text-left border-collapse">
+                            <table className="w-full text-left border-separate border-spacing-y-1.5 border-spacing-x-0">
                                 <thead>
-                                    <tr className="border-b border-blue-100/60 text-[10px] font-black text-blue-800/60 uppercase tracking-wider bg-blue-50/30">
-                                        <th className="py-2.5 px-2">Tarih/Saat</th>
-                                        <th className="py-2.5 px-2">Ülke</th>
-                                        <th className="py-2.5 px-2">Veri</th>
-                                        <th className="py-2.5 px-2">Önem</th>
+                                    <tr className="text-[10px] font-black text-blue-800/60 uppercase tracking-wider">
+                                        <th className="py-2 px-2.5 bg-blue-50/50 rounded-l-lg pl-3">Tarih/Saat</th>
+                                        <th className="py-2 px-2 bg-blue-50/50">Ülke</th>
+                                        <th className="py-2 px-2 bg-blue-50/50">Veri</th>
+                                        <th className="py-2 px-2.5 text-right bg-blue-50/50 rounded-r-lg pr-3">Önem</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-blue-100/40 text-xs font-bold">
+                                <tbody className="text-xs font-bold">
                                     {loading ? (
                                         <tr>
                                             <td colSpan={4} className="py-8 text-center text-slate-400">Veriler yükleniyor...</td>
@@ -2795,9 +2795,13 @@ function CalendarContent() {
                                     ) : (
                                         overviewEconomicEvents.map((item, idx) => {
                                             const isReleased = isEconomicEventReleased(item);
+                                            const cellBg = isReleased
+                                                ? "bg-[#00008B] group-hover:bg-[#000075]"
+                                                : "bg-slate-50/60 group-hover:bg-blue-50/50";
+
                                             return (
-                                                <tr key={idx} className={`transition-colors ${isReleased ? 'bg-[#00008B] hover:bg-[#000075] text-white font-medium border-b border-blue-950' : 'hover:bg-blue-50/40'}`}>
-                                                    <td className={`py-2.5 px-2 whitespace-nowrap ${isReleased ? 'text-white' : 'text-[#00008B]'}`}>
+                                                <tr key={idx} className="group transition-colors">
+                                                    <td className={`py-2 px-2.5 whitespace-nowrap rounded-l-xl pl-3 ${cellBg} ${isReleased ? 'text-white' : 'text-[#00008B]'}`}>
                                                         {item.dateFormatted && (
                                                             <span className={`font-bold mr-1.5 text-[10px] ${isReleased ? 'text-blue-200' : 'text-slate-500'}`}>
                                                                 {item.dateFormatted.split('.')[0]}.{item.dateFormatted.split('.')[1]}
@@ -2805,8 +2809,8 @@ function CalendarContent() {
                                                         )}
                                                         <span>{item.time || '15:30'}</span>
                                                     </td>
-                                                    <td className={`py-2.5 px-2 font-black whitespace-nowrap ${isReleased ? 'text-white' : 'text-slate-700'}`}>{item.country || 'USD'}</td>
-                                                    <td className="py-2.5 px-2 text-slate-800 truncate max-w-[130px]">
+                                                    <td className={`py-2 px-2 font-black whitespace-nowrap ${cellBg} ${isReleased ? 'text-white' : 'text-slate-700'}`}>{item.country || 'USD'}</td>
+                                                    <td className={`py-2 px-2 truncate max-w-[130px] ${cellBg}`}>
                                                         <Link
                                                             href={`/dashboard/economic-calendar/${encodeURIComponent(item.id || item.event)}`}
                                                             className={`hover:underline transition-colors truncate block ${isReleased ? 'text-white hover:text-blue-200' : 'text-slate-800 hover:text-[#00008B]'}`}
@@ -2815,7 +2819,7 @@ function CalendarContent() {
                                                             {item.event}
                                                         </Link>
                                                     </td>
-                                                    <td className="py-2.5 px-2 whitespace-nowrap">
+                                                    <td className={`py-2 px-2.5 whitespace-nowrap text-right rounded-r-xl pr-3 ${cellBg}`}>
                                                         <span className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded border ${
                                                             item.impact === 'critical' || item.impact === 'high' || item.impact === 'Yüksek' || item.impact === 'Kritik' || item.impact === 3
                                                                 ? (isReleased ? 'bg-rose-500 text-white border-rose-400 font-black' : 'bg-rose-50 text-rose-700 border-rose-200')
