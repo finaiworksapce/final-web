@@ -482,12 +482,13 @@ export default function PortfolioPage() {
         { id: 'extremes', name: 'Fiyat Hareket Bandı', icon: Activity, desc: 'Destek, Direnç & Maliyet Analizi Bandı' },
     ], []);
 
-    // PORTFÖY GÜNDEMİ İÇİN GERÇEK VERİ EŞLEŞTİRME VE ÖNCELİKLENDİRME MOTORU
-    const portfolioAgendaEvents = useMemo(() => {
+    // PORTFÖY GÜNDEMİ İÇİN GERÇEK VERİ EŞLEŞTİRME VE KRONOLOJİK SIRALAMA MOTORU (EN YAKIN TARİHTEN EN UZAĞA)
+    const allPortfolioAgendaEvents = useMemo(() => {
         if (!groupedAssets || groupedAssets.length === 0) return [];
 
         const userSymbols = new Set(
             groupedAssets
+                .filter(g => g.totalQuantity > 0)
                 .map(g => g.symbol.toUpperCase().replace('.IS', '').trim())
                 .filter(sym => sym !== 'NAKİT' && sym !== 'TRY_CASH')
         );
@@ -497,21 +498,19 @@ export default function PortfolioPage() {
         // Europe/Istanbul Zaman Diliminde Bugünkü Tarih (YYYY-MM-DD)
         const todayIstanbulStr = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Istanbul' });
         const todayDate = new Date(todayIstanbulStr);
-        const thirtyDaysLater = new Date(todayDate.getTime() + 30 * 24 * 60 * 60 * 1000);
 
         interface AgendaEventItem {
             id: string;
             symbol: string;
+            companyName?: string;
             type: 'DIVIDEND' | 'EARNINGS' | 'NEWS';
             typeLabel: string;
             title: string;
             dateStr: string;
             isoDate: string;
             isToday: boolean;
-            priorityScore: number;
+            daysUntil: number;
             valueFormatted?: string;
-            sourceName?: string;
-            link?: string;
         }
 
         const events: AgendaEventItem[] = [];
@@ -531,30 +530,30 @@ export default function PortfolioPage() {
 
                 if (isNaN(itemDate.getTime())) return;
 
-                // Sadece BUGÜN ve SONRAKİ 30 GÜN
-                if (itemDate >= todayDate && itemDate <= thirtyDaysLater) {
+                if (isoDate >= todayIstanbulStr) {
                     const isToday = isoDate === todayIstanbulStr;
+                    const daysUntil = Math.max(0, Math.round((itemDate.getTime() - todayDate.getTime()) / 86400000));
                     const monthName = itemDate.toLocaleDateString('tr-TR', { month: 'long', day: 'numeric' });
 
                     events.push({
                         id: `div-${sym}-${isoDate}`,
                         symbol: sym,
+                        companyName: div.companyName,
                         type: 'DIVIDEND',
                         typeLabel: 'Temettü Ödemesi',
                         title: `${sym} Temettü Dağıtımı`,
                         dateStr: monthName,
                         isoDate,
                         isToday,
-                        priorityScore: isToday ? 1 : 10 + Math.ceil((itemDate.getTime() - todayDate.getTime()) / 86400000),
-                        valueFormatted: div.netAmountFormatted ? `${div.netAmountFormatted} / pay` : undefined,
-                        sourceName: 'HalkArz',
-                        link: div.link || undefined
+                        daysUntil,
+                        valueFormatted: div.netAmountFormatted ? `${div.netAmountFormatted} / pay` : undefined
                     });
                 }
             });
         }
 
         // 2. BİLANÇO DÖNEMİ AÇIKLAMALARI (HalkArz Earnings)
+        const earningsSymbolsAdded = new Set<string>();
         if (Array.isArray(halkarzEarnings)) {
             halkarzEarnings.forEach(earn => {
                 const sym = earn.symbol.toUpperCase().replace('.IS', '').trim();
@@ -569,38 +568,66 @@ export default function PortfolioPage() {
 
                 if (isNaN(itemDate.getTime())) return;
 
-                if (itemDate >= todayDate && itemDate <= thirtyDaysLater) {
+                if (isoDate >= todayIstanbulStr) {
                     const isToday = isoDate === todayIstanbulStr;
+                    const daysUntil = Math.max(0, Math.round((itemDate.getTime() - todayDate.getTime()) / 86400000));
                     const monthName = itemDate.toLocaleDateString('tr-TR', { month: 'long', day: 'numeric' });
+                    earningsSymbolsAdded.add(sym);
 
                     events.push({
                         id: `earn-${sym}-${isoDate}`,
                         symbol: sym,
+                        companyName: earn.companyName,
                         type: 'EARNINGS',
                         typeLabel: 'Bilanço Açıklaması',
                         title: `${sym} Dönemsel Bilanço Açıklaması`,
                         dateStr: monthName,
                         isoDate,
                         isToday,
-                        priorityScore: isToday ? 2 : 20 + Math.ceil((itemDate.getTime() - todayDate.getTime()) / 86400000),
-                        sourceName: 'HalkArz',
-                        link: earn.link || undefined
+                        daysUntil
                     });
                 }
             });
         }
 
-        // ÖNCELİKLENDİRME SIRALAMASI:
-        // 1. Bugün gerçekleşen olaylar ilk sırada (isToday === true)
-        // 2. En yakın gelecek tarihli olaylar
-        // 3. Tür önceliği: Temettü (1) -> Bilanço (2) -> Haber (3)
-        events.sort((a, b) => {
-            if (a.isToday && !b.isToday) return -1;
-            if (!a.isToday && b.isToday) return 1;
-            return a.priorityScore - b.priorityScore;
+        // 3. Yahoo Finance Bilanço Tarihi Yedeği (HalkArz'da yoksa)
+        Object.entries(earningsDates).forEach(([rawSym, ts]) => {
+            const sym = rawSym.toUpperCase().replace('.IS', '').trim();
+            if (!userSymbols.has(sym) || earningsSymbolsAdded.has(sym) || !ts) return;
+            const itemDate = new Date(ts);
+            if (isNaN(itemDate.getTime())) return;
+            const isoDate = itemDate.toLocaleDateString('sv-SE', { timeZone: 'Europe/Istanbul' });
+            if (isoDate >= todayIstanbulStr) {
+                const isToday = isoDate === todayIstanbulStr;
+                const daysUntil = Math.max(0, Math.round((new Date(isoDate).getTime() - todayDate.getTime()) / 86400000));
+                const monthName = new Date(isoDate).toLocaleDateString('tr-TR', { month: 'long', day: 'numeric' });
+                events.push({
+                    id: `earn-yf-${sym}-${isoDate}`,
+                    symbol: sym,
+                    type: 'EARNINGS',
+                    typeLabel: 'Bilanço Açıklaması',
+                    title: `${sym} Dönemsel Bilanço Açıklaması`,
+                    dateStr: monthName,
+                    isoDate,
+                    isToday,
+                    daysUntil
+                });
+            }
         });
 
-        // Mükerrerleri temizle ve EN FAZLA 5 OLAY seç
+        // KRONOLOJİK SIRALAMA: En yakın tarihten en uzak tarihe (isoDate artan)
+        events.sort((a, b) => {
+            if (a.isoDate !== b.isoDate) {
+                return a.isoDate.localeCompare(b.isoDate);
+            }
+            const typeOrder = { DIVIDEND: 1, EARNINGS: 2, NEWS: 3 };
+            if (typeOrder[a.type] !== typeOrder[b.type]) {
+                return typeOrder[a.type] - typeOrder[b.type];
+            }
+            return a.symbol.localeCompare(b.symbol);
+        });
+
+        // Mükerrerleri temizle
         const uniqueEvents: AgendaEventItem[] = [];
         const seenKeys = new Set<string>();
 
@@ -609,12 +636,16 @@ export default function PortfolioPage() {
             if (!seenKeys.has(key)) {
                 seenKeys.add(key);
                 uniqueEvents.push(ev);
-                if (uniqueEvents.length === 5) break;
             }
         }
 
         return uniqueEvents;
-    }, [groupedAssets, halkarzDividends, halkarzEarnings]);
+    }, [groupedAssets, halkarzDividends, halkarzEarnings, earningsDates]);
+
+    // Widget içinde maksimum 5 adet veri gösterilir (en yakın tarihten en uzağa)
+    const portfolioAgendaEvents = useMemo(() => {
+        return allPortfolioAgendaEvents.slice(0, 5);
+    }, [allPortfolioAgendaEvents]);
 
     // Active Focused Widget Name
     const focusedWidgetName = useMemo(() => {
@@ -1570,7 +1601,8 @@ export default function PortfolioPage() {
                         </div>
                     </div>
                 );
-            case 'agenda':
+            case 'agenda': {
+                const visibleAgendaEvents = isFocused ? allPortfolioAgendaEvents : portfolioAgendaEvents;
                 return (
                     <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-xl shadow-[#00008B]/5 space-y-4 flex flex-col justify-between h-full">
                         <div>
@@ -1582,17 +1614,19 @@ export default function PortfolioPage() {
                                     </div>
                                     <div>
                                         <h3 className="text-lg font-black text-[#00008B] tracking-tight">Portföy Gündemi</h3>
-                                        <p className="text-xs text-slate-400 font-medium">Bugün ve yaklaşan gelişmeler</p>
+                                        <p className="text-xs text-slate-400 font-medium">
+                                            {isFocused ? 'Bugün ve yaklaşan tüm gelişmeler' : 'Bugün ve yaklaşan gelişmeler'}
+                                        </p>
                                     </div>
                                 </div>
                                 <span className="text-[10px] font-bold text-[#00008B] bg-blue-50 border border-blue-200/50 px-2.5 py-1 rounded-full">
-                                    {portfolioAgendaEvents.length} OLAY
+                                    {visibleAgendaEvents.length} OLAY
                                 </span>
                             </div>
 
                             {/* OLAY LİSTESİ VEYA BOŞ DURUM */}
                             <div className="mt-4 space-y-3">
-                                {portfolioAgendaEvents.length === 0 ? (
+                                {visibleAgendaEvents.length === 0 ? (
                                     <div className="py-10 px-5 text-center bg-[#0b192c] text-white border border-[#1a2f4c] rounded-2xl sm:rounded-3xl shadow-lg shadow-black/20 relative overflow-hidden group">
                                         {/* Ambient Glow */}
                                         <div className="absolute -top-12 -right-12 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
@@ -1604,71 +1638,100 @@ export default function PortfolioPage() {
                                         </div>
                                     </div>
                                 ) : (
-                                    portfolioAgendaEvents.map((item) => (
-                                        <div
-                                            key={item.id}
-                                            onClick={() => {
-                                                if (item.link) window.open(item.link, '_blank');
-                                            }}
-                                            className={cn(
-                                                "p-4 rounded-2xl border transition-all flex flex-col gap-1.5",
-                                                item.isToday
-                                                    ? "bg-blue-50/60 border-blue-200/80 hover:bg-blue-100/50 shadow-sm"
-                                                    : "bg-slate-50/70 border-slate-100 hover:bg-slate-100/80",
-                                                item.link && "cursor-pointer"
-                                            )}
-                                        >
-                                            <div className="flex items-center justify-between gap-2">
-                                                <div className="flex items-center gap-2">
-                                                    {item.isToday ? (
-                                                        <span className="px-2.5 py-0.5 rounded-lg bg-[#00008B] text-white font-black text-[10px] tracking-wider uppercase shadow-xs">
+                                    visibleAgendaEvents.map((item) => (
+                                        item.isToday ? (
+                                            /* BUGÜNKÜ HAREKETLİLİK: 2X ALAN (DİKKAT ÇEKİCİ KART) */
+                                            <div
+                                                key={item.id}
+                                                className="min-h-[144px] p-5 rounded-2xl border-2 border-[#00008B]/30 bg-gradient-to-br from-blue-50 via-indigo-50/70 to-white shadow-md shadow-[#00008B]/10 ring-2 ring-[#00008B]/10 transition-all flex flex-col justify-between gap-2.5 relative overflow-hidden"
+                                            >
+                                                <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-[#00008B]" />
+
+                                                <div className="flex items-center justify-between gap-2 pl-1.5">
+                                                    <div className="flex items-center gap-2 flex-wrap">
+                                                        <span className="px-3 py-1 rounded-xl bg-[#00008B] text-white font-black text-[11px] tracking-wider uppercase shadow-sm inline-flex items-center gap-1.5">
+                                                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                                                             BUGÜN · {item.symbol}
                                                         </span>
-                                                    ) : (
+                                                        <span className="px-2.5 py-0.5 rounded-lg bg-amber-100/90 text-amber-800 border border-amber-300/70 font-extrabold text-[10px] uppercase tracking-wider">
+                                                            Günün Hareketliliği
+                                                        </span>
+                                                    </div>
+                                                    <span className="text-[11px] font-extrabold text-[#00008B] bg-white/90 border border-blue-200 px-2.5 py-0.5 rounded-lg shrink-0">
+                                                        {item.typeLabel}
+                                                    </span>
+                                                </div>
+
+                                                <div className="pl-1.5 space-y-1">
+                                                    <h4 className="font-black text-[#00008B] text-sm sm:text-[15px] leading-snug">
+                                                        {item.title}
+                                                    </h4>
+                                                    <p className="text-[11px] text-slate-600 font-semibold leading-relaxed">
+                                                        Portföyünüzde yer alan <span className="font-black text-[#00008B]">{item.symbol}</span> varlığı için bugün planlanan <span className="font-bold">{item.typeLabel.toLowerCase()}</span> gerçekleşiyor.
+                                                    </p>
+                                                </div>
+
+                                                <div className="flex items-center justify-between gap-2 pt-2 border-t border-blue-200/60 pl-1.5">
+                                                    <div className="flex items-center gap-2">
+                                                        {item.valueFormatted ? (
+                                                            <span className="text-xs sm:text-sm font-black text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-lg">
+                                                                {item.valueFormatted}
+                                                            </span>
+                                                        ) : (
+                                                            <span className="text-[11px] font-extrabold text-[#00008B]">
+                                                                Tarih: Bugün ({item.dateStr})
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            /* STANDART YAKLAŞAN HAREKETLİLİK: 1X ALAN */
+                                            <div
+                                                key={item.id}
+                                                className="min-h-[70px] p-3.5 rounded-2xl border transition-all flex flex-col justify-between gap-1.5 bg-slate-50/70 border-slate-100"
+                                            >
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <div className="flex items-center gap-2">
                                                         <span className="px-2.5 py-0.5 rounded-lg bg-slate-200 text-slate-700 font-extrabold text-[10px] tracking-wider uppercase">
                                                             {item.dateStr.toUpperCase()} · {item.symbol}
                                                         </span>
+                                                    </div>
+                                                    <span className="text-[10px] font-bold text-slate-400">
+                                                        {item.typeLabel}
+                                                    </span>
+                                                </div>
+
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <h4 className="font-bold text-[#00008B] text-xs leading-snug truncate">
+                                                        {item.title}
+                                                    </h4>
+                                                    {item.valueFormatted && (
+                                                        <span className="text-xs font-black text-emerald-700 shrink-0">
+                                                            {item.valueFormatted}
+                                                        </span>
                                                     )}
                                                 </div>
-                                                <span className="text-[10px] font-bold text-slate-400">
-                                                    {item.typeLabel}
-                                                </span>
                                             </div>
-
-                                            <h4 className="font-bold text-[#00008B] text-xs leading-snug">
-                                                {item.title}
-                                            </h4>
-
-                                            {item.valueFormatted && (
-                                                <span className="text-xs font-black text-emerald-700">
-                                                    {item.valueFormatted}
-                                                </span>
-                                            )}
-
-                                            {item.sourceName && (
-                                                <span className="text-[10px] text-slate-400 font-medium">
-                                                    Kaynak: {item.sourceName}
-                                                </span>
-                                            )}
-                                        </div>
+                                        )
                                     ))
                                 )}
                             </div>
                         </div>
 
-                        {/* TÜM GÜNDEMİ GÖR BAGLANTISI */}
-                        {portfolioAgendaEvents.length > 0 && (
-                            <div className="pt-3 border-t border-slate-100">
-                                <Link
-                                    href="/dashboard/news"
-                                    className="text-xs font-extrabold text-[#00008B] hover:underline flex items-center justify-center gap-1.5 text-center"
-                                >
-                                    Tüm Gündemi Gör <ChevronRight className="w-3.5 h-3.5" />
-                                </Link>
-                            </div>
-                        )}
+                        {/* TÜM GÜNDEMİ GÖR BAGLANTISI (AYRI GÜNDEM SAYFASINA YÖNLENDİRİR) */}
+                        <div className="pt-3 border-t border-slate-100">
+                            <Link
+                                href="/dashboard/portfolio/agenda"
+                                onClick={(e) => e.stopPropagation()}
+                                className="text-xs font-extrabold text-[#00008B] hover:underline flex items-center justify-center gap-1.5 text-center"
+                            >
+                                Tüm Gündemi Gör <ChevronRight className="w-3.5 h-3.5" />
+                            </Link>
+                        </div>
                     </div>
                 );
+            }
 
             case 'quickSummary':
                 const sortedPerformers = [...groupedAssets]
