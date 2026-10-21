@@ -1701,7 +1701,7 @@ function CalendarContent() {
                                                 const isPaid = isAnnounced && ts > 0 && ts < todayStart;
 
                                                 const rowBg = isPaid
-                                                    ? "bg-emerald-100/70 hover:bg-emerald-100/90 border-b border-emerald-200/90 text-emerald-950 font-medium"
+                                                    ? "bg-emerald-600 hover:bg-emerald-700 border-b border-emerald-700 text-white font-medium"
                                                     : !isAnnounced
                                                     ? "bg-slate-50/70 hover:bg-slate-100/80 border-b border-slate-100 text-slate-600"
                                                     : "bg-white hover:bg-emerald-50/40 border-b border-emerald-100/60 text-slate-800";
@@ -1712,7 +1712,7 @@ function CalendarContent() {
                                                             <div className="flex items-center gap-2.5">
                                                                 <div className={`w-8 h-8 rounded-xl border flex items-center justify-center font-black text-xs shrink-0 ${
                                                                     isPaid
-                                                                        ? 'bg-emerald-200 border-emerald-300 text-emerald-900'
+                                                                        ? 'bg-emerald-700 border-emerald-500 text-white'
                                                                         : !isAnnounced
                                                                         ? 'bg-slate-200/80 border-slate-300 text-slate-700'
                                                                         : 'bg-emerald-100/80 border-emerald-200 text-emerald-800'
@@ -1724,17 +1724,17 @@ function CalendarContent() {
                                                                         <Link 
                                                                             href={`/dashboard/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
                                                                             className={`hover:underline font-black text-xs block ${
-                                                                                isPaid ? 'text-emerald-950 hover:text-emerald-800' : 'text-[#00008B] hover:text-emerald-800'
+                                                                                isPaid ? 'text-white hover:text-emerald-100' : 'text-[#00008B] hover:text-emerald-800'
                                                                             }`}
                                                                             title={`${item.symbol} Şirket Detayına Git`}
                                                                         >
                                                                             {item.symbol}
                                                                         </Link>
                                                                     ) : (
-                                                                        <span className="text-xs font-black text-[#00008B] block">{item.symbol || '-'}</span>
+                                                                        <span className={`text-xs font-black block ${isPaid ? 'text-white' : 'text-[#00008B]'}`}>{item.symbol || '-'}</span>
                                                                     )}
                                                                     <span className={`text-[11px] font-bold line-clamp-1 max-w-[220px] ${
-                                                                        isPaid ? 'text-emerald-800/90' : 'text-slate-500'
+                                                                        isPaid ? 'text-emerald-100' : 'text-slate-500'
                                                                     }`} title={item.companyName}>
                                                                         {item.companyName}
                                                                     </span>
@@ -1743,18 +1743,18 @@ function CalendarContent() {
                                                         </td>
                                                         <td className="py-3 px-3.5 whitespace-nowrap font-bold">
                                                             {isAnnounced ? (
-                                                                <span className={isPaid ? 'text-emerald-950' : 'text-slate-700'}>{item.paymentDate}</span>
+                                                                <span className={isPaid ? 'text-white font-black' : 'text-slate-700'}>{item.paymentDate}</span>
                                                             ) : (
                                                                 <span className="text-slate-400 italic font-semibold">Açıklanmadı</span>
                                                             )}
                                                         </td>
-                                                        <td className={`py-3 px-3.5 whitespace-nowrap font-black ${isPaid ? 'text-emerald-900' : 'text-emerald-700'}`}>
+                                                        <td className={`py-3 px-3.5 whitespace-nowrap font-black ${isPaid ? 'text-white' : 'text-emerald-700'}`}>
                                                             {item.netAmountFormatted || `${item.netAmountPerShare ? item.netAmountPerShare.toFixed(2) : '0,00'} TL`}
                                                         </td>
                                                         <td className="py-3 px-3.5 whitespace-nowrap">
                                                             <span className={`inline-flex items-center px-2 py-0.5 rounded-lg border font-black text-xs ${
                                                                 isPaid
-                                                                    ? 'bg-emerald-200/90 text-emerald-950 border-emerald-300'
+                                                                    ? 'bg-emerald-700 text-white border-emerald-500'
                                                                     : 'bg-emerald-100/90 text-emerald-900 border border-emerald-200'
                                                             }`}>
                                                                 %{getItemYield(item).toFixed(2)}
@@ -1763,7 +1763,7 @@ function CalendarContent() {
                                                         <td className="py-3 px-3.5 whitespace-nowrap">
                                                             <span className={`text-[9px] font-black px-2.5 py-0.5 rounded-md border ${
                                                                 isPaid
-                                                                    ? 'bg-emerald-600 text-white border-emerald-700 shadow-2xs'
+                                                                    ? 'bg-white text-emerald-700 border-white shadow-xs font-black'
                                                                     : !isAnnounced
                                                                     ? 'bg-slate-100 text-slate-600 border-slate-200'
                                                                     : 'bg-blue-50 text-blue-700 border-blue-200'
@@ -1774,7 +1774,7 @@ function CalendarContent() {
                                                         <td className="py-3 px-3.5 text-right whitespace-nowrap">
                                                             <button title="Hatırlatıcı Ekle" className={`p-1.5 rounded-lg transition-all ${
                                                                 isPaid
-                                                                    ? 'text-emerald-700 hover:text-emerald-950 hover:bg-emerald-200/80'
+                                                                    ? 'text-white hover:text-emerald-100 hover:bg-emerald-700/80'
                                                                     : 'text-slate-400 hover:text-emerald-700 hover:bg-emerald-100/60'
                                                             }`}>
                                                                 <Bell className="w-4 h-4" />
@@ -1919,54 +1919,81 @@ function CalendarContent() {
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-blue-100/60">
-                                            {paginatedEarnings.map((item, idx) => (
-                                                <tr key={idx} className="hover:bg-blue-50/50 transition-colors">
-                                                    <td className="py-3 px-3.5">
-                                                        <div className="flex items-center gap-2.5">
-                                                            <div className="w-8 h-8 rounded-xl bg-blue-100/80 border border-blue-200 text-blue-800 flex items-center justify-center font-black text-xs shrink-0">
-                                                                {item.symbol?.substring(0, 3)}
+                                            {paginatedEarnings.map((item, idx) => {
+                                                const isAnnounced = item.daysLeft !== undefined && item.daysLeft <= 0;
+                                                const rowBg = isAnnounced
+                                                    ? "bg-blue-600 hover:bg-blue-700 border-b border-blue-700 text-white font-medium"
+                                                    : "hover:bg-blue-50/50 transition-colors";
+
+                                                return (
+                                                    <tr key={idx} className={`transition-colors ${rowBg}`}>
+                                                        <td className="py-3 px-3.5">
+                                                            <div className="flex items-center gap-2.5">
+                                                                <div className={`w-8 h-8 rounded-xl border flex items-center justify-center font-black text-xs shrink-0 ${
+                                                                    isAnnounced
+                                                                        ? 'bg-blue-700 border-blue-500 text-white'
+                                                                        : 'bg-blue-100/80 border-blue-200 text-blue-800'
+                                                                }`}>
+                                                                    {item.symbol?.substring(0, 3)}
+                                                                </div>
+                                                                <div>
+                                                                    {item.symbol && item.symbol.trim() !== '-' ? (
+                                                                        <Link 
+                                                                            href={`/dashboard/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
+                                                                            className={`hover:underline font-black text-xs block ${
+                                                                                isAnnounced ? 'text-white hover:text-blue-100' : 'text-[#00008B] hover:text-blue-800'
+                                                                            }`}
+                                                                            title={`${item.symbol} Şirket Detayına Git`}
+                                                                        >
+                                                                            {item.symbol}
+                                                                        </Link>
+                                                                    ) : (
+                                                                        <span className={`text-xs font-black block ${isAnnounced ? 'text-white' : 'text-[#00008B]'}`}>{item.symbol || '-'}</span>
+                                                                    )}
+                                                                    <span className={`text-[11px] font-bold line-clamp-1 max-w-[220px] ${
+                                                                        isAnnounced ? 'text-blue-100' : 'text-slate-500'
+                                                                    }`} title={item.companyName}>
+                                                                        {item.companyName}
+                                                                    </span>
+                                                                </div>
                                                             </div>
-                                                            <div>
-                                                                {item.symbol && item.symbol.trim() !== '-' ? (
-                                                                    <Link 
-                                                                        href={`/dashboard/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
-                                                                        className="hover:underline font-black text-xs text-[#00008B] hover:text-blue-800 block"
-                                                                        title={`${item.symbol} Şirket Detayına Git`}
-                                                                    >
-                                                                        {item.symbol}
-                                                                    </Link>
-                                                                ) : (
-                                                                    <span className="text-xs font-black text-[#00008B] block">{item.symbol || '-'}</span>
-                                                                )}
-                                                                <span className="text-[11px] font-bold text-slate-500 line-clamp-1 max-w-[220px]" title={item.companyName}>
-                                                                    {item.companyName}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td className="py-3 px-3.5 whitespace-nowrap">
-                                                        <span className="text-[10px] font-extrabold text-blue-800 bg-blue-100/70 border border-blue-200 px-2 py-0.5 rounded-md">
-                                                            2026/1Ç
-                                                        </span>
-                                                    </td>
-                                                    <td className="py-3 px-3.5 whitespace-nowrap text-slate-700 font-bold">
-                                                        {item.earningsDate || 'Belirtilmedi'}
-                                                    </td>
-                                                    <td className="py-3 px-3.5 whitespace-nowrap text-slate-500 font-semibold">
-                                                        {item.daysLeft !== undefined && item.daysLeft > 0 ? `${item.daysLeft} gün kaldı` : 'Yakında'}
-                                                    </td>
-                                                    <td className="py-3 px-3.5 whitespace-nowrap">
-                                                        <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-md border bg-blue-50 text-blue-700 border-blue-200">
-                                                            Bekleniyor
-                                                        </span>
-                                                    </td>
-                                                    <td className="py-3 px-3.5 text-right whitespace-nowrap">
-                                                        <button title="Hatırlatıcı Ekle" className="p-1.5 text-slate-400 hover:text-blue-700 hover:bg-blue-100/60 rounded-lg transition-all">
-                                                            <Bell className="w-4 h-4" />
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            ))}
+                                                        </td>
+                                                        <td className="py-3 px-3.5 whitespace-nowrap">
+                                                            <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md border ${
+                                                                isAnnounced
+                                                                    ? 'bg-blue-700 text-white border-blue-500'
+                                                                    : 'text-blue-800 bg-blue-100/70 border-blue-200'
+                                                            }`}>
+                                                                2026/1Ç
+                                                            </span>
+                                                        </td>
+                                                        <td className={`py-3 px-3.5 whitespace-nowrap font-bold ${isAnnounced ? 'text-white' : 'text-slate-700'}`}>
+                                                            {item.earningsDate || 'Belirtilmedi'}
+                                                        </td>
+                                                        <td className={`py-3 px-3.5 whitespace-nowrap font-semibold ${isAnnounced ? 'text-blue-100' : 'text-slate-500'}`}>
+                                                            {item.daysLeft !== undefined && item.daysLeft > 0 ? `${item.daysLeft} gün kaldı` : (isAnnounced ? 'Açıklandı' : 'Yakında')}
+                                                        </td>
+                                                        <td className="py-3 px-3.5 whitespace-nowrap">
+                                                            <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-md border ${
+                                                                isAnnounced
+                                                                    ? 'bg-white text-blue-700 border-white shadow-xs font-black'
+                                                                    : 'bg-blue-50 text-blue-700 border-blue-200'
+                                                            }`}>
+                                                                {isAnnounced ? 'Açıklandı' : 'Bekleniyor'}
+                                                            </span>
+                                                        </td>
+                                                        <td className="py-3 px-3.5 text-right whitespace-nowrap">
+                                                            <button title="Hatırlatıcı Ekle" className={`p-1.5 rounded-lg transition-all ${
+                                                                isAnnounced
+                                                                    ? 'text-white hover:text-blue-100 hover:bg-blue-700/80'
+                                                                    : 'text-slate-400 hover:text-blue-700 hover:bg-blue-100/60'
+                                                            }`}>
+                                                                <Bell className="w-4 h-4" />
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
                                         </tbody>
                                     </table>
                                 </div>
@@ -2109,49 +2136,72 @@ function CalendarContent() {
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-purple-100/60">
-                                            {paginatedIpos.map((item, idx) => (
-                                                <tr key={idx} className="hover:bg-purple-50/50 transition-colors">
-                                                    <td className="py-3 px-3.5">
-                                                        <div className="flex items-center gap-2.5">
-                                                            <div className="w-8 h-8 rounded-xl bg-purple-100/80 border border-purple-200 text-purple-800 flex items-center justify-center font-black text-xs shrink-0">
-                                                                {item.symbol?.substring(0, 3)}
+                                            {paginatedIpos.map((item, idx) => {
+                                                const isCompleted = getIpoPhase(item) === 'completed';
+                                                const rowBg = isCompleted
+                                                    ? "bg-purple-600 hover:bg-purple-700 border-b border-purple-700 text-white font-medium"
+                                                    : "hover:bg-purple-50/50 transition-colors";
+
+                                                return (
+                                                    <tr key={idx} className={`transition-colors ${rowBg}`}>
+                                                        <td className="py-3 px-3.5">
+                                                            <div className="flex items-center gap-2.5">
+                                                                <div className={`w-8 h-8 rounded-xl border flex items-center justify-center font-black text-xs shrink-0 ${
+                                                                    isCompleted
+                                                                        ? 'bg-purple-700 border-purple-500 text-white'
+                                                                        : 'bg-purple-100/80 border-purple-200 text-purple-800'
+                                                                }`}>
+                                                                    {item.symbol?.substring(0, 3)}
+                                                                </div>
+                                                                <div>
+                                                                    {item.symbol && item.symbol.trim() !== '-' && item.symbol.trim().length >= 2 ? (
+                                                                        <Link 
+                                                                            href={`/dashboard/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
+                                                                            className={`hover:underline font-black text-xs block ${
+                                                                                isCompleted ? 'text-white hover:text-purple-100' : 'text-[#00008B] hover:text-purple-800'
+                                                                            }`}
+                                                                            title={`${item.symbol} Şirket Detayına Git`}
+                                                                        >
+                                                                            {item.symbol}
+                                                                        </Link>
+                                                                    ) : (
+                                                                        <span className={`text-xs font-black block ${isCompleted ? 'text-white' : 'text-[#00008B]'}`}>{item.symbol || '-'}</span>
+                                                                    )}
+                                                                    <span className={`text-[11px] font-bold line-clamp-1 max-w-[220px] ${
+                                                                        isCompleted ? 'text-purple-100' : 'text-slate-500'
+                                                                    }`} title={item.companyName}>
+                                                                        {item.companyName}
+                                                                    </span>
+                                                                </div>
                                                             </div>
-                                                            <div>
-                                                                {item.symbol && item.symbol.trim() !== '-' && item.symbol.trim().length >= 2 ? (
-                                                                    <Link 
-                                                                        href={`/dashboard/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
-                                                                        className="hover:underline font-black text-xs text-[#00008B] hover:text-purple-800 block"
-                                                                        title={`${item.symbol} Şirket Detayına Git`}
-                                                                    >
-                                                                        {item.symbol}
-                                                                    </Link>
-                                                                ) : (
-                                                                    <span className="text-xs font-black text-[#00008B] block">{item.symbol || '-'}</span>
-                                                                )}
-                                                                <span className="text-[11px] font-bold text-slate-500 line-clamp-1 max-w-[220px]" title={item.companyName}>
-                                                                    {item.companyName}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td className="py-3 px-3.5 whitespace-nowrap text-slate-700 font-bold">
-                                                        {item.dateRange || 'Yakında'}
-                                                    </td>
-                                                    <td className="py-3 px-3.5 whitespace-nowrap font-black text-purple-700">
-                                                        {item.price ? `${item.price} TL` : 'Belirlenmedi'}
-                                                    </td>
-                                                    <td className="py-3 px-3.5 whitespace-nowrap">
-                                                        <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-md border ${getIpoStatusBadgeClass(item)}`}>
-                                                            {getIpoStatusLabel(item)}
-                                                        </span>
-                                                    </td>
-                                                    <td className="py-3 px-3.5 text-right whitespace-nowrap">
-                                                        <button title="Hatırlatıcı Ekle" className="p-1.5 text-slate-400 hover:text-purple-700 hover:bg-purple-100/60 rounded-lg transition-all">
-                                                            <Bell className="w-4 h-4" />
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            ))}
+                                                        </td>
+                                                        <td className={`py-3 px-3.5 whitespace-nowrap font-bold ${isCompleted ? 'text-white' : 'text-slate-700'}`}>
+                                                            {item.dateRange || 'Yakında'}
+                                                        </td>
+                                                        <td className={`py-3 px-3.5 whitespace-nowrap font-black ${isCompleted ? 'text-white' : 'text-purple-700'}`}>
+                                                            {item.price ? `${item.price} TL` : 'Belirlenmedi'}
+                                                        </td>
+                                                        <td className="py-3 px-3.5 whitespace-nowrap">
+                                                            <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-md border ${
+                                                                isCompleted
+                                                                    ? 'bg-white text-purple-700 border-white shadow-xs font-black'
+                                                                    : getIpoStatusBadgeClass(item)
+                                                            }`}>
+                                                                {getIpoStatusLabel(item)}
+                                                            </span>
+                                                        </td>
+                                                        <td className="py-3 px-3.5 text-right whitespace-nowrap">
+                                                            <button title="Hatırlatıcı Ekle" className={`p-1.5 rounded-lg transition-all ${
+                                                                isCompleted
+                                                                    ? 'text-white hover:text-purple-100 hover:bg-purple-700/80'
+                                                                    : 'text-slate-400 hover:text-purple-700 hover:bg-purple-100/60'
+                                                            }`}>
+                                                                <Bell className="w-4 h-4" />
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            })}
                                         </tbody>
                                     </table>
                                 </div>
@@ -2309,32 +2359,32 @@ function CalendarContent() {
                                                 const detailHref = `/dashboard/economic-calendar/${encodeURIComponent(item.id || item.event)}`;
 
                                                 const rowBg = isReleased
-                                                    ? "bg-blue-100/70 hover:bg-blue-100/90 border-b border-blue-200/90 text-blue-950 font-medium"
+                                                    ? "bg-[#00008B] hover:bg-[#000075] border-b border-blue-900 text-white font-medium"
                                                     : "bg-white hover:bg-blue-50/40 border-b border-blue-100/60 text-slate-800";
 
                                                 return (
                                                     <tr key={idx} className={`transition-colors ${rowBg}`}>
-                                                        <td className="py-3 px-3.5 text-[#00008B] font-black whitespace-nowrap">{item.dateFormatted || 'Bugün'} {item.time || '15:30'}</td>
-                                                        <td className={`py-3 px-3.5 font-black whitespace-nowrap ${isReleased ? 'text-[#00008B]' : 'text-slate-700'}`}>{item.country || 'USD'}</td>
+                                                        <td className={`py-3 px-3.5 font-black whitespace-nowrap ${isReleased ? 'text-white' : 'text-[#00008B]'}`}>{item.dateFormatted || 'Bugün'} {item.time || '15:30'}</td>
+                                                        <td className={`py-3 px-3.5 font-black whitespace-nowrap ${isReleased ? 'text-white' : 'text-slate-700'}`}>{item.country || 'USD'}</td>
                                                         <td className="py-3 px-3.5">
                                                             <Link
                                                                 href={detailHref}
                                                                 className={`hover:underline font-bold transition-colors inline-flex items-center gap-1.5 group ${
-                                                                    isReleased ? 'text-[#00008B] font-black' : 'text-slate-800'
+                                                                    isReleased ? 'text-white font-black hover:text-blue-100' : 'text-slate-800'
                                                                 }`}
                                                                 title={`${item.event} Detayına Git`}
                                                             >
                                                                 <span>{item.event}</span>
                                                                 <ExternalLink className={`w-3 h-3 group-hover:text-[#00008B] opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ${
-                                                                    isReleased ? 'text-[#00008B]' : 'text-slate-400'
+                                                                    isReleased ? 'text-white/80' : 'text-slate-400'
                                                                 }`} />
                                                             </Link>
                                                         </td>
-                                                        <td className={`py-3 px-3.5 whitespace-nowrap ${isReleased ? 'text-blue-900 font-bold' : 'text-slate-500'}`}>{item.previous || '—'}</td>
-                                                        <td className={`py-3 px-3.5 whitespace-nowrap ${isReleased ? 'text-blue-900 font-bold' : 'text-slate-700'}`}>{item.forecast || '—'}</td>
+                                                        <td className={`py-3 px-3.5 whitespace-nowrap ${isReleased ? 'text-blue-100 font-semibold' : 'text-slate-500'}`}>{item.previous || '—'}</td>
+                                                        <td className={`py-3 px-3.5 whitespace-nowrap ${isReleased ? 'text-blue-100 font-semibold' : 'text-slate-700'}`}>{item.forecast || '—'}</td>
                                                         <td className="py-3 px-3.5 whitespace-nowrap">
                                                             {isReleased ? (
-                                                                <span className="text-xs font-black text-[#00008B] bg-blue-200/90 border border-blue-300 px-2.5 py-0.5 rounded-md shadow-2xs">
+                                                                <span className="text-xs font-black text-[#00008B] bg-white border border-white px-2.5 py-0.5 rounded-md shadow-xs">
                                                                     {item.actual}
                                                                 </span>
                                                             ) : (
@@ -2346,10 +2396,10 @@ function CalendarContent() {
                                                         <td className="py-3 px-3.5 whitespace-nowrap">
                                                             <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-md border ${
                                                                 isHigh 
-                                                                    ? 'bg-rose-50 text-rose-700 border-rose-200' 
+                                                                    ? (isReleased ? 'bg-rose-500 text-white border-rose-400 font-black' : 'bg-rose-50 text-rose-700 border-rose-200') 
                                                                     : isMed 
-                                                                    ? 'bg-blue-100/80 text-blue-800 border-blue-200' 
-                                                                    : 'bg-slate-100 text-slate-600 border-slate-200'
+                                                                    ? (isReleased ? 'bg-blue-800 text-white border-blue-600 font-black' : 'bg-blue-100/80 text-blue-800 border-blue-200') 
+                                                                    : (isReleased ? 'bg-blue-950 text-blue-200 border-blue-800 font-black' : 'bg-slate-100 text-slate-600 border-slate-200')
                                                             }`}>
                                                                 {isHigh ? 'Yüksek' : isMed ? 'Orta' : 'Düşük'}
                                                             </span>
@@ -2359,7 +2409,7 @@ function CalendarContent() {
                                                                 href={detailHref}
                                                                 className={`inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg border transition-all hover:scale-105 ${
                                                                     isReleased
-                                                                        ? 'bg-[#00008B] text-white border-[#00008B] hover:bg-blue-900 shadow-2xs'
+                                                                        ? 'bg-white text-[#00008B] border-white hover:bg-blue-50 shadow-xs'
                                                                         : 'text-blue-900 bg-blue-100/80 hover:bg-blue-200/90 border-blue-200/80'
                                                                 }`}
                                                             >
@@ -2534,26 +2584,37 @@ function CalendarContent() {
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yaklaşan bilanço verisi bulunmuyor.</div>
                         ) : (
                             <div className="space-y-3">
-                                {overviewEarnings.map((item, idx) => (
-                                    <div key={idx} className="flex items-center justify-between p-2.5 rounded-2xl bg-blue-50/50 border border-blue-100/70 hover:bg-blue-100/50 transition-all">
-                                        <div className="flex items-center gap-3">
-                                            <div className="bg-blue-100/80 text-blue-800 px-2 py-1 rounded-xl text-center min-w-[44px]">
-                                                <span className="text-[9px] font-black uppercase block leading-tight">{item.earningsDate?.split('.')[1] || 'MAY'}</span>
-                                                <span className="text-xs font-black block leading-tight">{item.earningsDate?.split('.')[0] || '20'}</span>
+                                {overviewEarnings.map((item, idx) => {
+                                    const isAnnounced = item.daysLeft !== undefined && item.daysLeft <= 0;
+                                    return (
+                                        <div key={idx} className={`flex items-center justify-between p-2.5 rounded-2xl transition-all ${
+                                            isAnnounced
+                                                ? 'bg-blue-600 border border-blue-700 text-white shadow-xs'
+                                                : 'bg-blue-50/50 border border-blue-100/70 hover:bg-blue-100/50'
+                                        }`}>
+                                            <div className="flex items-center gap-3">
+                                                <div className={`px-2 py-1 rounded-xl text-center min-w-[44px] ${
+                                                    isAnnounced ? 'bg-blue-700 text-white' : 'bg-blue-100/80 text-blue-800'
+                                                }`}>
+                                                    <span className="text-[9px] font-black uppercase block leading-tight">{item.earningsDate?.split('.')[1] || 'MAY'}</span>
+                                                    <span className="text-xs font-black block leading-tight">{item.earningsDate?.split('.')[0] || '20'}</span>
+                                                </div>
+                                                <div>
+                                                    <p className={`text-xs font-black ${isAnnounced ? 'text-white' : 'text-[#00008B]'}`}>{item.symbol}</p>
+                                                    <p className={`text-[10px] font-bold truncate max-w-[130px] ${isAnnounced ? 'text-blue-100' : 'text-slate-600'}`}>{item.companyName}</p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p className="text-xs font-black text-[#00008B]">{item.symbol}</p>
-                                                <p className="text-[10px] font-bold text-slate-600 truncate max-w-[130px]">{item.companyName}</p>
+                                            <div className="flex items-center gap-2">
+                                                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-lg border ${
+                                                    isAnnounced ? 'bg-white text-blue-700 border-white' : 'text-blue-700 bg-white/80 border-blue-200/80'
+                                                }`}>2026/1Ç</span>
+                                                <button title="Hatırlat" className={`p-1 ${isAnnounced ? 'text-white hover:text-blue-200' : 'text-blue-400 hover:text-[#00008B]'}`}>
+                                                    <Bell className="w-3.5 h-3.5" />
+                                                </button>
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-[9px] font-bold text-blue-700 bg-white/80 px-2 py-0.5 rounded-lg border border-blue-200/80">2026/1Ç</span>
-                                            <button title="Hatırlat" className="p-1 text-blue-400 hover:text-[#00008B]">
-                                                <Bell className="w-3.5 h-3.5" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
                     </div>
@@ -2584,28 +2645,44 @@ function CalendarContent() {
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yaklaşan temettü ödemesi bulunmuyor.</div>
                         ) : (
                             <div className="space-y-3">
-                                {overviewDividends.map((item, idx) => (
-                                    <div key={idx} className="flex items-center justify-between p-2.5 rounded-2xl bg-emerald-50/50 border border-emerald-100/70 hover:bg-emerald-100/50 transition-all">
-                                        <div className="flex items-center gap-3">
-                                            <div className="bg-emerald-100/80 text-emerald-800 px-2 py-1 rounded-xl text-center min-w-[44px]">
-                                                <span className="text-[9px] font-black uppercase block leading-tight">{item.paymentDate?.split('.')[1] || 'MAY'}</span>
-                                                <span className="text-xs font-black block leading-tight">{item.paymentDate?.split('.')[0] || '19'}</span>
+                                {overviewDividends.map((item, idx) => {
+                                    const isAnnounced = isDividendDateAnnounced(item);
+                                    const ts = getItemTimestamp(item, 'paymentDate');
+                                    const now = new Date();
+                                    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+                                    const isPaid = isAnnounced && ts > 0 && ts < todayStart;
+
+                                    return (
+                                        <div key={idx} className={`flex items-center justify-between p-2.5 rounded-2xl transition-all ${
+                                            isPaid
+                                                ? 'bg-emerald-600 border border-emerald-700 text-white shadow-xs'
+                                                : 'bg-emerald-50/50 border border-emerald-100/70 hover:bg-emerald-100/50'
+                                        }`}>
+                                            <div className="flex items-center gap-3">
+                                                <div className={`px-2 py-1 rounded-xl text-center min-w-[44px] ${
+                                                    isPaid ? 'bg-emerald-700 text-white' : 'bg-emerald-100/80 text-emerald-800'
+                                                }`}>
+                                                    <span className="text-[9px] font-black uppercase block leading-tight">{item.paymentDate?.split('.')[1] || 'MAY'}</span>
+                                                    <span className="text-xs font-black block leading-tight">{item.paymentDate?.split('.')[0] || '19'}</span>
+                                                </div>
+                                                <div>
+                                                    <p className={`text-xs font-black ${isPaid ? 'text-white' : 'text-[#00008B]'}`}>{item.symbol}</p>
+                                                    <p className={`text-[10px] font-bold truncate max-w-[120px] ${isPaid ? 'text-emerald-100' : 'text-slate-600'}`}>{item.companyName}</p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p className="text-xs font-black text-[#00008B]">{item.symbol}</p>
-                                                <p className="text-[10px] font-bold text-slate-600 truncate max-w-[120px]">{item.companyName}</p>
+                                            <div className="flex items-center gap-2">
+                                                <span className={`text-[10px] font-black px-2 py-0.5 rounded-lg border ${
+                                                    isPaid ? 'bg-white text-emerald-700 border-white' : 'text-emerald-800 bg-white/80 border-emerald-200/80'
+                                                }`}>
+                                                    {item.netAmountFormatted || '6,00 TL'}
+                                                </span>
+                                                <button title="Hatırlat" className={`p-1 ${isPaid ? 'text-white hover:text-emerald-200' : 'text-emerald-500 hover:text-[#00008B]'}`}>
+                                                    <Bell className="w-3.5 h-3.5" />
+                                                </button>
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-[10px] font-black text-emerald-800 bg-white/80 px-2 py-0.5 rounded-lg border border-emerald-200/80">
-                                                {item.netAmountFormatted || '6,00 TL'}
-                                            </span>
-                                            <button title="Hatırlat" className="p-1 text-emerald-500 hover:text-[#00008B]">
-                                                <Bell className="w-3.5 h-3.5" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
                     </div>
@@ -2636,24 +2713,35 @@ function CalendarContent() {
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yaklaşan halka arz bulunmuyor.</div>
                         ) : (
                             <div className="relative pl-6 space-y-4 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-purple-200">
-                                {overviewIpos.map((item, idx) => (
-                                    <div key={idx} className="relative flex items-center justify-between p-2 rounded-2xl bg-purple-50/40 border border-purple-100/70 hover:bg-purple-100/40 transition-all">
-                                        <div className="absolute -left-[19px] w-3 h-3 rounded-full bg-purple-600 ring-4 ring-purple-100" />
-                                        
-                                        <div>
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-xs font-black text-[#00008B]">{item.symbol}</span>
-                                                <span className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded border ${getIpoStatusBadgeClass(item)}`}>
-                                                    {getIpoStatusLabel(item)}
-                                                </span>
+                                {overviewIpos.map((item, idx) => {
+                                    const isCompleted = getIpoPhase(item) === 'completed';
+                                    return (
+                                        <div key={idx} className={`relative flex items-center justify-between p-2 rounded-2xl transition-all ${
+                                            isCompleted
+                                                ? 'bg-purple-600 border border-purple-700 text-white shadow-xs'
+                                                : 'bg-purple-50/40 border border-purple-100/70 hover:bg-purple-100/40'
+                                        }`}>
+                                            <div className={`absolute -left-[19px] w-3 h-3 rounded-full ${isCompleted ? 'bg-purple-700 ring-4 ring-purple-300' : 'bg-purple-600 ring-4 ring-purple-100'}`} />
+                                            
+                                            <div>
+                                                <div className="flex items-center gap-2">
+                                                    <span className={`text-xs font-black ${isCompleted ? 'text-white' : 'text-[#00008B]'}`}>{item.symbol}</span>
+                                                    <span className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded border ${
+                                                        isCompleted ? 'bg-white text-purple-700 border-white' : getIpoStatusBadgeClass(item)
+                                                    }`}>
+                                                        {getIpoStatusLabel(item)}
+                                                    </span>
+                                                </div>
+                                                <p className={`text-[10px] font-bold truncate max-w-[140px] ${isCompleted ? 'text-purple-100' : 'text-slate-600'}`}>{item.companyName}</p>
                                             </div>
-                                            <p className="text-[10px] font-bold text-slate-600 truncate max-w-[140px]">{item.companyName}</p>
+                                            <span className={`text-[10px] font-black px-2 py-1 rounded-lg border ${
+                                                isCompleted ? 'bg-white text-purple-700 border-white' : 'text-purple-800 bg-white/80 border-purple-200/80'
+                                            }`}>
+                                                {item.dateRange || 'Yakında'}
+                                            </span>
                                         </div>
-                                        <span className="text-[10px] font-black text-purple-800 bg-white/80 px-2 py-1 rounded-lg border border-purple-200/80">
-                                            {item.dateRange || 'Yakında'}
-                                        </span>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
                     </div>
@@ -2708,20 +2796,20 @@ function CalendarContent() {
                                         overviewEconomicEvents.map((item, idx) => {
                                             const isReleased = isEconomicEventReleased(item);
                                             return (
-                                                <tr key={idx} className={`transition-colors ${isReleased ? 'bg-blue-100/60 hover:bg-blue-100/80 text-blue-950 font-medium' : 'hover:bg-blue-50/40'}`}>
-                                                    <td className="py-2.5 px-2 text-[#00008B] whitespace-nowrap">
+                                                <tr key={idx} className={`transition-colors ${isReleased ? 'bg-[#00008B] hover:bg-[#000075] text-white font-medium border-b border-blue-950' : 'hover:bg-blue-50/40'}`}>
+                                                    <td className={`py-2.5 px-2 whitespace-nowrap ${isReleased ? 'text-white' : 'text-[#00008B]'}`}>
                                                         {item.dateFormatted && (
-                                                            <span className="font-bold text-slate-500 mr-1.5 text-[10px]">
+                                                            <span className={`font-bold mr-1.5 text-[10px] ${isReleased ? 'text-blue-200' : 'text-slate-500'}`}>
                                                                 {item.dateFormatted.split('.')[0]}.{item.dateFormatted.split('.')[1]}
                                                             </span>
                                                         )}
                                                         <span>{item.time || '15:30'}</span>
                                                     </td>
-                                                    <td className="py-2.5 px-2 font-black text-slate-700 whitespace-nowrap">{item.country || 'USD'}</td>
+                                                    <td className={`py-2.5 px-2 font-black whitespace-nowrap ${isReleased ? 'text-white' : 'text-slate-700'}`}>{item.country || 'USD'}</td>
                                                     <td className="py-2.5 px-2 text-slate-800 truncate max-w-[130px]">
                                                         <Link
                                                             href={`/dashboard/economic-calendar/${encodeURIComponent(item.id || item.event)}`}
-                                                            className="hover:text-[#00008B] hover:underline transition-colors truncate block"
+                                                            className={`hover:underline transition-colors truncate block ${isReleased ? 'text-white hover:text-blue-200' : 'text-slate-800 hover:text-[#00008B]'}`}
                                                             title={item.event}
                                                         >
                                                             {item.event}
@@ -2730,8 +2818,8 @@ function CalendarContent() {
                                                     <td className="py-2.5 px-2 whitespace-nowrap">
                                                         <span className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded border ${
                                                             item.impact === 'critical' || item.impact === 'high' || item.impact === 'Yüksek' || item.impact === 'Kritik' || item.impact === 3
-                                                                ? 'bg-rose-50 text-rose-700 border-rose-200'
-                                                                : 'bg-blue-100/80 text-blue-800 border-blue-200'
+                                                                ? (isReleased ? 'bg-rose-500 text-white border-rose-400 font-black' : 'bg-rose-50 text-rose-700 border-rose-200')
+                                                                : (isReleased ? 'bg-blue-800 text-white border-blue-600 font-black' : 'bg-blue-100/80 text-blue-800 border-blue-200')
                                                         }`}>
                                                             {item.impact === 'critical' || item.impact === 'high' || item.impact === 'Yüksek' || item.impact === 3 ? 'Yüksek' : 'Orta'}
                                                         </span>
