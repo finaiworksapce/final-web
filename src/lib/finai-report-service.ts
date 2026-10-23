@@ -1,5 +1,6 @@
 import { PortfolioService, Asset } from './portfolio-service';
 import { TransactionService } from './transaction-service';
+import { getOrFetchCachedPrices } from './server-price-cache';
 import { 
     calculateTWR, 
     calculateAssetContributions, 
@@ -109,34 +110,70 @@ export async function generateFinAiReport(
         daysLimit = 365;
     }
 
-    const history = await PortfolioService.getHistory(historyRange);
-    const transactions: UserTransaction[] = await TransactionService.getTransactions(daysLimit);
+    // 2. Geçmiş Verileri ve Kullanıcı İşlemlerini Yetkili Olarak Çek (Server-Side)
+    let history: any[] = [];
+    let transactions: UserTransaction[] = [];
 
-    // 2. Canlı Fiyatları Çek
-    const uniqueSymbols = Array.from(new Set(assets.map(a => a.symbol))).join(',');
-    let prices: Record<string, number> = {};
+    if (userId) {
+        const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Istanbul' }));
+        let fromDate: Date = new Date(now);
+        if (timeframe === 'weekly') fromDate.setDate(now.getDate() - 7);
+        else if (timeframe === 'monthly') fromDate.setDate(now.getDate() - 30);
+        else fromDate.setFullYear(now.getFullYear() - 1);
+        const fromDateStr = fromDate.toLocaleDateString('sv-SE', { timeZone: 'Europe/Istanbul' });
 
-    if (uniqueSymbols) {
-        try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'https://finalyatirim.com'}/api/finance?symbols=${uniqueSymbols}`, { next: { revalidate: 0 } });
-            const json = await res.json();
-            if (json.results) {
-                json.results.forEach((r: any) => {
-                    if (r.symbol && r.regularMarketPrice) {
-                        const symUpper = r.symbol.toUpperCase();
-                        prices[symUpper] = r.regularMarketPrice;
-                        if (symUpper.endsWith('.IS')) {
-                            prices[symUpper.replace('.IS', '')] = r.regularMarketPrice;
-                        }
-                    }
-                });
-            }
-        } catch (e) {
-            console.error("FinAi price fetch error:", e);
+        const [histRes, txRes] = await Promise.all([
+            supabaseAdmin
+                .from('portfolio_history')
+                .select('*')
+                .eq('user_id', userId)
+                .gte('snapshot_date', fromDateStr)
+                .order('snapshot_date', { ascending: true }),
+            supabaseAdmin
+                .from('user_transactions')
+                .select('*')
+                .eq('user_id', userId)
+                .gte('transaction_date', fromDateStr)
+                .order('transaction_date', { ascending: true })
+        ]);
+
+        if (histRes.data && histRes.data.length > 0) {
+            history = histRes.data;
+        }
+        if (txRes.data && txRes.data.length > 0) {
+            transactions = txRes.data.map((t: any) => ({
+                id: t.id,
+                userId: t.user_id,
+                type: t.transaction_type,
+                symbol: t.symbol,
+                quantity: t.quantity ? Number(t.quantity) : undefined,
+                price: t.price ? Number(t.price) : undefined,
+                amount: Number(t.amount),
+                transactionDate: t.transaction_date
+            }));
         }
     }
 
-    // 3. Mevcut Portföy Değeri ve Varlık Katkılarını Hesapla
+    if (history.length === 0) {
+        history = await PortfolioService.getHistory(historyRange);
+    }
+    if (transactions.length === 0) {
+        transactions = await TransactionService.getTransactions(daysLimit);
+    }
+
+    // 3. Canlı Fiyatları Doğrudan Sunucu Önbellek Kasasından Çek (Harici HTTP Bağımlılığı Olmadan)
+    const uniqueSymbolsArray = Array.from(new Set(assets.map(a => a.symbol)));
+    let prices: Record<string, number> = {};
+
+    if (uniqueSymbolsArray.length > 0) {
+        try {
+            prices = await getOrFetchCachedPrices(uniqueSymbolsArray);
+        } catch (e) {
+            console.error("FinAi price cache fetch error:", e);
+        }
+    }
+
+    // 4. Mevcut Portföy Değeri ve Varlık Katkılarını Hesapla
     let currentTotal = 0;
     let totalCost = 0;
     assets.forEach(asset => {
@@ -147,13 +184,28 @@ export async function generateFinAiReport(
         totalCost += asset.avgCost * asset.quantity;
     });
 
-    // Başlangıç Değeri Belirleme
-    let startValue = currentTotal;
+    // 5. Başlangıç Değeri Belirleme
+    // Eğer snapshot geçmişi varsa ve ilk snapshot ile son durum arasında gerçek fiyat değişimi varsa ilk snapshot'ı al.
+    // Eğer snapshot'lar henüz birikmemişse veya hepsi maliyet tabanıysa, kullanıcının gerçek maliyet tabanını (totalCost) temel al.
+    let startValue = totalCost > 0 ? totalCost : currentTotal;
+
     if (history.length >= 2) {
-        startValue = Number(history[0]?.total_value || currentTotal);
+        const firstSnap = Number(history[0]?.total_value || 0);
+        const lastSnap = Number(history[history.length - 1]?.total_value || 0);
+        if (firstSnap > 0 && Math.abs(firstSnap - lastSnap) > 0.01) {
+            startValue = firstSnap;
+        } else if (totalCost > 0) {
+            startValue = totalCost;
+        }
     } else if (history.length === 1) {
-        startValue = Number(history[0]?.total_value || currentTotal);
+        const singleSnap = Number(history[0]?.total_value || 0);
+        if (singleSnap > 0 && Math.abs(singleSnap - currentTotal) > 0.01) {
+            startValue = singleSnap;
+        } else if (totalCost > 0) {
+            startValue = totalCost;
+        }
     }
+
     if (startValue <= 0) startValue = totalCost > 0 ? totalCost : currentTotal;
 
     const diffValue = currentTotal - startValue;
@@ -270,16 +322,33 @@ function buildPdfCompliantNarrative(p: FinAiBackendPayload): string {
     let text = "";
 
     // 1. ZAMAN DİLİMİNE GÖRE ANLATIM GİRİŞİ (PDF Kuralı 24, 25, 29, 31, 48)
+    const isZeroChange = Math.abs(p.diffTL) < 0.01;
+
     if (p.timeframe === 'weekly') {
-        text += `Son 7 günlük dönemde portföyünüzün toplam değeri ₺${startFormatted} seviyesinden ₺${endFormatted} seviyesine ${isPos ? 'yükseldi' : 'geriledi'}. Bu, ₺${absDiff} tutarında (${isPos ? '+' : '-'}%${absPct}) bir bakiye değişimine karşılık geliyor. `;
+        if (isZeroChange) {
+            text += `Son 7 günlük dönemde portföyünüzün toplam değeri ₺${endFormatted} seviyesinde yatay ve dengeli bir seyir izledi. `;
+        } else {
+            text += `Son 7 günlük dönemde portföyünüzün toplam değeri ₺${startFormatted} seviyesinden ₺${endFormatted} seviyesine ${isPos ? 'yükseldi' : 'geriledi'}. Bu, ₺${absDiff} tutarında (${isPos ? '+' : '-'}%${absPct}) bir bakiye değişimine karşılık geliyor. `;
+        }
         if (p.netCapitalFlow !== 0) {
             text += `Dönem içerisinde gerçekleşen ₺${Math.abs(p.netCapitalFlow).toLocaleString('tr-TR')} net sermaye ${p.netCapitalFlow > 0 ? 'girişi' : 'çıkışı'} ayrıştırıldığında net yatırım performansınız (TWR) %${p.twrPct} olarak gerçekleşti. `;
         }
     } else if (p.timeframe === 'monthly') {
-        text += `Son 30 günlük aylık değerlendirmede portföy bakiyeniz ₺${startFormatted} seviyesinden ₺${endFormatted} seviyesine ulaşarak ${isPos ? '+' : '-'}%${absPct} değişim gösterdi. Sermaye akışlarından arındırılmış aylık gerçek yatırım getirinizi temsil eden TWR oranınız %${p.twrPct} olarak gerçekleşti. `;
+        if (isZeroChange) {
+            text += `Son 30 günlük aylık değerlendirmede portföy bakiyeniz ₺${endFormatted} seviyesinde dengeli kaldı. `;
+        } else {
+            text += `Son 30 günlük aylık değerlendirmede portföy bakiyeniz ₺${startFormatted} seviyesinden ₺${endFormatted} seviyesine ulaşarak ${isPos ? '+' : '-'}%${absPct} değişim gösterdi. `;
+        }
+        if (p.twrPct !== 0) {
+            text += `Sermaye akışlarından arındırılmış aylık gerçek yatırım getirinizi temsil eden TWR oranınız %${p.twrPct} olarak gerçekleşti. `;
+        }
     } else {
         // Tüm Zamanlar (Inception Story)
-        text += `Portföyünüz oluşturulduğu günden bugüne kadar ₺${startFormatted} başlangıç değerinden ₺${endFormatted} seviyesine ulaştı. Bu süreçte gerçekleşen ₺${absDiff} tutarındaki toplam büyümenin yanı sıra birikimli net yatırım performansınız (TWR) %${p.twrPct} seviyesinde seyrediyor. `;
+        if (isZeroChange) {
+            text += `Portföyünüz oluşturulduğu günden bugüne kadar ₺${endFormatted} seviyesinde dengesini korumaktadır. `;
+        } else {
+            text += `Portföyünüz oluşturulduğu günden bugüne kadar ₺${startFormatted} başlangıç değerinden ₺${endFormatted} seviyesine ulaştı. Bu süreçte gerçekleşen ₺${absDiff} tutarındaki toplam büyümenin yanı sıra birikimli net yatırım performansınız (TWR) %${p.twrPct} seviyesinde seyrediyor. `;
+        }
     }
 
     // 2. VARLIK KATKILARI (PDF Kuralı 5, 45 - Yüzde hareketi yerine portföy etkisi)

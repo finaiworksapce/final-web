@@ -135,12 +135,22 @@ export default function FinAiReportViewPage() {
         const diffStr = formatCurrency(Math.abs(portfolioMetrics.netProfit));
         const diffPct = Math.abs(portfolioMetrics.netProfitPct).toFixed(2);
         const isPos = portfolioMetrics.isPositive;
+        const isZeroChange = Math.abs(portfolioMetrics.netProfit) < 0.01;
 
         if (timeframe === 'weekly') {
+            if (isZeroChange) {
+                return `Son 7 günlük değerlendirmede portföyünüzün toplam büyüklüğü ${endStr} seviyesinde dengeli bir seyir izledi. Varlıklarınız mevcut dağılımını korurken BIST endeks trendleri yakından izlenmektedir.`;
+            }
             return `Son 7 günlük değerlendirmede portföyünüzün toplam büyüklüğü ${startStr} maliyet tabanından ${endStr} piyasa değerine ulaştı (${isPos ? '+' : '-'}${diffStr}, %${diffPct}). Bu dönemde getiri dinamiğinin en belirleyici faktörü %${(portfolioMetrics.assetBreakdown[0]?.weight || 0).toFixed(1)} portföy ağırlığına sahip olan ${topDriver} pozisyonu oldu. Küresel risk iştahı ve BIST endeks trendleri yakından izlenmektedir.`;
         } else if (timeframe === 'monthly') {
+            if (isZeroChange) {
+                return `Son 30 günlük aylık incelemede toplam varlık değeriniz ${endStr} seviyesinde dengeli kaldı. Portföy yapısındaki varlık dağılımı korunmaktadır.`;
+            }
             return `Son 30 günlük aylık incelemede toplam varlık değeriniz ${endStr} seviyesinde dengelenerek ${isPos ? '+' : '-' }%${diffPct} net değişim kaydetti. Aylık döneme yayılan fiyatlamada ${topDriver} varlığının performansı öne çıkarken risk dağılımının dengeli kaldığı gözlemlendi.`;
         } else {
+            if (isZeroChange) {
+                return `Portföyünüzün oluşturulduğu ilk günden bugüne varlık büyüklüğünüz ${endStr} seviyesinde dengesini korumaktadır.`;
+            }
             return `Portföyünüzün oluşturulduğu ilk günden bugüne gerçekleşen genel performans değerlendirmesinde kümülatif büyüme ${isPos ? '+' : '-'}${diffStr} (${isPos ? '+' : '-' }%${diffPct}) olarak gerçekleşmiştir. Toplam varlık büyüklüğünüz ${endStr} seviyesindedir.`;
         }
     }, [myAssets, portfolioMetrics, timeframe]);

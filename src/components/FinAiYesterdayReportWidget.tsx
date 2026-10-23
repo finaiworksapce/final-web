@@ -70,11 +70,22 @@ export function FinAiYesterdayReportWidget() {
         const startStr = totalCost.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         const endStr = currentTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+        const isZeroChange = Math.abs(diffVal) < 0.01;
+
         if (timeframe === 'weekly') {
+            if (isZeroChange) {
+                return `Son 7 günlük dönemde portföyünüzün toplam değeri ₺${endStr} seviyesinde yatay ve dengeli bir seyir izledi. Varlıklarınız mevcut dengesini korurken piyasalar yakından takip edilmektedir.`;
+            }
             return `Son 7 günlük dönemde portföyünüzün toplam değeri ₺${startStr} seviyesinden ₺${endStr} seviyesine ${isPos ? 'yükseldi' : 'geriledi'}. Bu, ₺${absDiffStr} tutarında (${isPos ? '+' : '-'}%${absPctStr}) bir bakiye değişimine karşılık geliyor. Bu süreçteki performansın en güçlü belirleyicisi ${topDriver} pozisyonunuz oldu. Piyasalar yakından takip edilmektedir.`;
         } else if (timeframe === 'monthly') {
+            if (isZeroChange) {
+                return `Son 30 günlük aylık değerlendirmede portföy bakiyeniz ₺${endStr} seviyesinde dengeli kaldı. Portföy yapısındaki varlık dağılımı korunmaktadır.`;
+            }
             return `Son 30 günlük aylık değerlendirmede portföy bakiyeniz ₺${startStr} seviyesinden ₺${endStr} seviyesine ulaşarak ${isPos ? '+' : '-'}%${absPctStr} değişim gösterdi. Aylık süreçteki performansı en çok etkileyen varlık ${topDriver} olurken portföy dengesi korunmaktadır.`;
         } else {
+            if (isZeroChange) {
+                return `Portföyünüz oluşturulduğu günden bugüne kadar ₺${endStr} seviyesinde dengesini korumaktadır.`;
+            }
             return `Portföyünüz oluşturulduğu günden bugüne kadar ₺${startStr} başlangıç değerinden ₺${endStr} seviyesine ulaştı. Bu süreçte gerçekleşen ₺${absDiffStr} tutarındaki toplam büyümede ${topDriver} pozisyonunuz liderlik etti.`;
         }
     }, [myAssets, prices, timeframe]);

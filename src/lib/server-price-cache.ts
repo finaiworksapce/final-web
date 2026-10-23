@@ -68,6 +68,11 @@ async function fetchLiveBatchPrices(symbols: string[]): Promise<Record<string, n
 
     if (uniqueSymbols.length === 0) return prices;
 
+    // Cash
+    prices['NAKİT'] = 1;
+    prices['TRY'] = 1;
+    prices['TL'] = 1;
+
     // Commodity & Crypto
     try {
         const liveMap = await fetchLiveCommoditiesAndCrypto();
@@ -80,21 +85,21 @@ async function fetchLiveBatchPrices(symbols: string[]): Promise<Record<string, n
         console.error("Commodities fetch error in cache engine:", e);
     }
 
-    // Stocks & Yahoo Finance
-    const formattedSymbols = uniqueSymbols.map(s => s.endsWith('.IS') || s.includes('=') ? s : `${s}.IS`).join(',');
-    const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(formattedSymbols)}`;
+    // Stocks & Yahoo Finance via authenticated yahoo-finance2 client
+    const stockSymbols = uniqueSymbols.filter(s => s !== 'NAKİT' && s !== 'TRY' && s !== 'TL');
+    if (stockSymbols.length > 0) {
+        const formattedSymbols = stockSymbols.map(s => s.endsWith('.IS') || s.includes('=') ? s : `${s}.IS`);
+        try {
+            // Lazy load / instantiate yahoo-finance2 to ensure reliable server-side crumb & cookie handling
+            const yfModule = require('yahoo-finance2');
+            const YahooFinanceClass = yfModule.YahooFinance || yfModule.default?.YahooFinance || yfModule.default;
+            const yahooFinance = new YahooFinanceClass({ suppressNotices: ['yahooSurvey'] });
 
-    try {
-        const res = await fetch(url, {
-            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-            next: { revalidate: 30 }
-        });
+            const quotesResult = await yahooFinance.quote(formattedSymbols);
+            const quotes = Array.isArray(quotesResult) ? quotesResult : (quotesResult ? [quotesResult] : []);
 
-        if (res.ok) {
-            const data = await res.json();
-            const quotes = data?.quoteResponse?.result || [];
             quotes.forEach((q: any) => {
-                if (q.symbol && typeof q.regularMarketPrice === 'number') {
+                if (q && q.symbol && typeof q.regularMarketPrice === 'number') {
                     const symUpper = q.symbol.toUpperCase();
                     prices[symUpper] = q.regularMarketPrice;
                     if (symUpper.endsWith('.IS')) {
@@ -102,9 +107,9 @@ async function fetchLiveBatchPrices(symbols: string[]): Promise<Record<string, n
                     }
                 }
             });
+        } catch (e) {
+            console.error("Batch Yahoo fetch error in cache engine:", e);
         }
-    } catch (e) {
-        console.error("Batch Yahoo fetch error in cache engine:", e);
     }
 
     return prices;
