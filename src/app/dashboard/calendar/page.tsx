@@ -1751,30 +1751,16 @@ function CalendarContent() {
                                                             {item.netAmountFormatted || `${item.netAmountPerShare ? item.netAmountPerShare.toFixed(2) : '0,00'} TL`}
                                                         </td>
                                                         <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
-                                                            {isPaid ? (
-                                                                <span className="font-black text-xs text-white">
-                                                                    %{getItemYield(item).toFixed(2)}
-                                                                </span>
-                                                            ) : (
-                                                                <span className="inline-flex items-center px-2 py-0.5 rounded-lg border font-black text-xs bg-emerald-100/90 text-emerald-900 border-emerald-200">
-                                                                    %{getItemYield(item).toFixed(2)}
-                                                                </span>
-                                                            )}
+                                                            <span className={`font-black text-xs ${isPaid ? 'text-white' : 'text-emerald-700'}`}>
+                                                                %{getItemYield(item).toFixed(2)}
+                                                            </span>
                                                         </td>
                                                         <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
-                                                            {isPaid ? (
-                                                                <span className="text-xs font-black text-white">
-                                                                    Ödendi
-                                                                </span>
-                                                            ) : (
-                                                                <span className={`text-[9px] font-black px-2.5 py-0.5 rounded-md border ${
-                                                                    !isAnnounced
-                                                                        ? 'bg-slate-100 text-slate-600 border-slate-200'
-                                                                        : 'bg-blue-50 text-blue-700 border-blue-200'
-                                                                }`}>
-                                                                    {!isAnnounced ? 'Açıklanmadı' : 'Yaklaşan'}
-                                                                </span>
-                                                            )}
+                                                            <span className={`text-xs font-bold ${
+                                                                isPaid ? 'text-white' : !isAnnounced ? 'text-slate-400 italic' : 'text-blue-700'
+                                                            }`}>
+                                                                {isPaid ? 'Ödendi' : !isAnnounced ? 'Açıklanmadı' : 'Yaklaşan'}
+                                                            </span>
                                                         </td>
                                                         <td className={`py-3.5 pl-3.5 pr-4 text-right whitespace-nowrap rounded-r-2xl ${cellBg}`}>
                                                             <button title="Hatırlatıcı Ekle" className={`p-1.5 rounded-lg transition-all ${
@@ -1964,15 +1950,9 @@ function CalendarContent() {
                                                             </div>
                                                         </td>
                                                         <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
-                                                            {isAnnounced ? (
-                                                                <span className="text-xs font-black text-white">
-                                                                    2026/1Ç
-                                                                </span>
-                                                            ) : (
-                                                                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-md border text-blue-800 bg-blue-100/70 border-blue-200">
-                                                                    2026/1Ç
-                                                                </span>
-                                                            )}
+                                                            <span className={`text-xs font-bold ${isAnnounced ? 'text-white' : 'text-slate-700'}`}>
+                                                                2026/1Ç
+                                                            </span>
                                                         </td>
                                                         <td className={`py-3.5 px-3.5 whitespace-nowrap font-bold ${cellBg} ${isAnnounced ? 'text-white' : 'text-slate-700'}`}>
                                                             {item.earningsDate || 'Belirtilmedi'}
@@ -1981,15 +1961,9 @@ function CalendarContent() {
                                                             {item.daysLeft !== undefined && item.daysLeft > 0 ? `${item.daysLeft} gün kaldı` : (isAnnounced ? 'Açıklandı' : 'Yakında')}
                                                         </td>
                                                         <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
-                                                            {isAnnounced ? (
-                                                                <span className="text-xs font-black text-white">
-                                                                    Açıklandı
-                                                                </span>
-                                                            ) : (
-                                                                <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-md border bg-blue-50 text-blue-700 border-blue-200">
-                                                                    Bekleniyor
-                                                                </span>
-                                                            )}
+                                                            <span className={`text-xs font-bold ${isAnnounced ? 'text-white' : 'text-blue-700'}`}>
+                                                                {isAnnounced ? 'Açıklandı' : 'Bekleniyor'}
+                                                            </span>
                                                         </td>
                                                         <td className={`py-3.5 pl-3.5 pr-4 text-right whitespace-nowrap rounded-r-2xl ${cellBg}`}>
                                                             <button title="Hatırlatıcı Ekle" className={`p-1.5 rounded-lg transition-all ${
@@ -2191,15 +2165,9 @@ function CalendarContent() {
                                                             {item.price ? `${item.price} TL` : 'Belirlenmedi'}
                                                         </td>
                                                         <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
-                                                            {isCompleted ? (
-                                                                <span className="text-xs font-black text-white">
-                                                                    {getIpoStatusLabel(item)}
-                                                                </span>
-                                                            ) : (
-                                                                <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-md border ${getIpoStatusBadgeClass(item)}`}>
-                                                                    {getIpoStatusLabel(item)}
-                                                                </span>
-                                                            )}
+                                                            <span className={`text-xs font-bold ${isCompleted ? 'text-white' : 'text-purple-700'}`}>
+                                                                {getIpoStatusLabel(item)}
+                                                            </span>
                                                         </td>
                                                         <td className={`py-3.5 pl-3.5 pr-4 text-right whitespace-nowrap rounded-r-2xl ${cellBg}`}>
                                                             <button title="Hatırlatıcı Ekle" className={`p-1.5 rounded-lg transition-all ${
@@ -2404,23 +2372,13 @@ function CalendarContent() {
                                                             )}
                                                         </td>
                                                         <td className={`py-3.5 pl-3.5 pr-4 text-right whitespace-nowrap rounded-r-2xl ${cellBg}`}>
-                                                            {isReleased ? (
-                                                                <span className={`text-xs font-black ${
-                                                                    isHigh ? 'text-rose-300' : isMed ? 'text-blue-200' : 'text-slate-300'
-                                                                }`}>
-                                                                    {isHigh ? 'Yüksek' : isMed ? 'Orta' : 'Düşük'}
-                                                                </span>
-                                                            ) : (
-                                                                <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-md border ${
-                                                                    isHigh 
-                                                                        ? 'bg-rose-50 text-rose-700 border-rose-200' 
-                                                                        : isMed 
-                                                                        ? 'bg-blue-100/80 text-blue-800 border-blue-200' 
-                                                                        : 'bg-slate-100 text-slate-600 border-slate-200'
-                                                                }`}>
-                                                                    {isHigh ? 'Yüksek' : isMed ? 'Orta' : 'Düşük'}
-                                                                </span>
-                                                            )}
+                                                            <span className={`text-xs font-bold ${
+                                                                isReleased
+                                                                    ? (isHigh ? 'text-rose-300' : isMed ? 'text-blue-200' : 'text-slate-300')
+                                                                    : (isHigh ? 'text-rose-600' : isMed ? 'text-blue-700' : 'text-slate-500')
+                                                            }`}>
+                                                                {isHigh ? 'Yüksek' : isMed ? 'Orta' : 'Düşük'}
+                                                            </span>
                                                         </td>
                                                     </tr>
                                                 );
@@ -2742,7 +2700,7 @@ function CalendarContent() {
                                                             {getIpoStatusLabel(item)}
                                                         </span>
                                                     ) : (
-                                                        <span className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded border ${getIpoStatusBadgeClass(item)}`}>
+                                                        <span className="text-xs font-bold text-purple-700">
                                                             {getIpoStatusLabel(item)}
                                                         </span>
                                                     )}
@@ -2754,7 +2712,7 @@ function CalendarContent() {
                                                     {item.dateRange || 'Yakında'}
                                                 </span>
                                             ) : (
-                                                <span className="text-[10px] font-black px-2 py-1 rounded-lg border text-purple-800 bg-white/80 border-purple-200/80">
+                                                <span className="text-xs font-semibold text-slate-600">
                                                     {item.dateRange || 'Yakında'}
                                                 </span>
                                             )}
