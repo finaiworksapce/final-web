@@ -1,7 +1,7 @@
 "use client";
 
 import { CatalogCalendarEvent } from "@/lib/calendar-catalog";
-import { Flame, ArrowRight, Clock } from "lucide-react";
+import { Flame, Clock } from "lucide-react";
 import Link from "next/link";
 
 interface FeaturedEconomicEventsProps {
@@ -59,13 +59,6 @@ export default function FeaturedEconomicEvents({ events }: FeaturedEconomicEvent
                                         {isReleased ? item.actual : (item.forecast || '-')}
                                     </span>
                                 </div>
-
-                                <Link
-                                    href={`/dashboard/economic-calendar/${targetId}`}
-                                    className="px-3 py-1.5 rounded-xl bg-amber-400 text-[#00008B] font-black text-[11px] hover:bg-amber-300 transition-all flex items-center gap-1 shadow-sm"
-                                >
-                                    İncele <ArrowRight className="w-3 h-3" />
-                                </Link>
                             </div>
                         </div>
                     );

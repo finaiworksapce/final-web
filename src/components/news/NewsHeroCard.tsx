@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Clock, ArrowRight, Zap, FileText } from "lucide-react";
+import { Clock, ArrowRight, Zap } from "lucide-react";
 import { EnrichedNewsItem } from "@/app/api/news/route";
 import { NewsThumbnail } from "@/components/news/NewsThumbnail";
 
@@ -108,14 +108,6 @@ export function NewsHeroCard({ mainNews, subNews }: NewsHeroCardProps) {
                             {formatTimeAgo(mainNews.pubDate)}
                         </span>
                     </div>
-
-                    <Link
-                        href={`/dashboard/news/${mainNews.slug}`}
-                        className="px-4 py-2 sm:px-5 sm:py-2.5 bg-white hover:bg-slate-50 text-slate-900 text-xs font-bold rounded-full shadow-md hover:shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
-                    >
-                        <FileText className="w-3.5 h-3.5 text-blue-700" />
-                        Haberi Oku <ArrowRight className="w-3.5 h-3.5 text-slate-700" />
-                    </Link>
                 </div>
             </motion.div>
 

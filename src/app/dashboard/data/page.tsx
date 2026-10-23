@@ -17,7 +17,6 @@ import {
   Trophy,
   Flame,
   X,
-  ExternalLink,
   Filter,
   ChevronDown,
   Coins,
@@ -1259,7 +1258,7 @@ export default function AssetsPage() {
                                     <thead>
                                         <tr className="bg-slate-100/80 border-b border-slate-200 text-[10px] font-black text-slate-600 uppercase tracking-wider select-none">
                                             <th 
-                                                className="py-3 px-4 w-[30%] cursor-pointer hover:bg-slate-200/60 transition-colors"
+                                                className="py-3 px-4 w-[35%] cursor-pointer hover:bg-slate-200/60 transition-colors"
                                                 onClick={() => handleSort('symbol')}
                                             >
                                                 <div className="flex items-center gap-1">
@@ -1321,10 +1320,6 @@ export default function AssetsPage() {
                                                     ) : <ArrowUpDown className="w-2.5 h-2.5 text-slate-400" />}
                                                 </div>
                                             </th>
-
-                                            <th className="py-3 px-2 text-center w-[5%]">
-                                                <span>İncele</span>
-                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100 text-xs">
@@ -1378,18 +1373,6 @@ export default function AssetsPage() {
 
                                                 <td className="py-3 px-2 text-right text-xs font-bold text-slate-600">
                                                     {item.pe > 0 ? item.pe.toFixed(2) : "-"}
-                                                </td>
-
-                                                <td className="py-3 px-2 text-center">
-                                                    <a 
-                                                        href={`/dashboard/varlik/${item.symbol}`} 
-                                                        target="_blank" 
-                                                        rel="noopener noreferrer"
-                                                        className="p-1.5 rounded-lg bg-slate-100 group-hover:bg-[#00008B] group-hover:text-white text-slate-500 inline-block transition-colors"
-                                                        title="Hisse detayını görüntüle"
-                                                    >
-                                                        <ExternalLink className="w-3.5 h-3.5" />
-                                                    </a>
                                                 </td>
                                             </tr>
                                         ))}

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Clock, ArrowRight } from "lucide-react";
+import { Clock } from "lucide-react";
 import { EnrichedNewsItem } from "@/app/api/news/route";
 import { NewsThumbnail } from "@/components/news/NewsThumbnail";
 
@@ -74,13 +74,6 @@ export function NewsCard({ item, index }: NewsCardProps) {
                         {formatTimeAgo(item.pubDate)}
                     </span>
                 </div>
-
-                <Link
-                    href={`/dashboard/news/${item.slug}`}
-                    className="px-3.5 py-1.5 bg-[#00008B] hover:bg-[#0808a3] text-white text-[11px] font-bold rounded-lg shadow-2xs flex items-center gap-1 transition-all hover:scale-105 active:scale-95 cursor-pointer shrink-0"
-                >
-                    Haberi Oku <ArrowRight className="w-3 h-3" />
-                </Link>
             </div>
         </motion.div>
     );

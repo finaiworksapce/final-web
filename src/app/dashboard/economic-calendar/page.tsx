@@ -702,8 +702,7 @@ export default function EconomicCalendarPage() {
                                             <th className="py-3.5 px-3 text-right">AÇIKLANAN</th>
                                             <th className="py-3.5 px-3 text-right">BEKLENTİ</th>
                                             <th className="py-3.5 px-3 text-right">ÖNCEKİ</th>
-                                            <th className="py-3.5 px-4 text-right">FINAI INTELLIGENCE</th>
-                                        </tr>
+                                                                                    </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100 text-xs">
                                         {paginatedEvents.map((item, idx) => {
@@ -777,16 +776,6 @@ export default function EconomicCalendarPage() {
                                                     {/* Previous */}
                                                     <td className="py-4 px-3 text-right font-semibold text-slate-400 align-top">
                                                         {item.previous || '-'}
-                                                    </td>
-
-                                                    {/* FinAi Intelligence CTA */}
-                                                    <td className="py-4 px-4 text-right align-top">
-                                                        <Link
-                                                            href={`/dashboard/economic-calendar/${targetId}`}
-                                                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-[#00008B] hover:text-white text-[#00008B] font-black text-[11px] border border-blue-200 transition-all shadow-xs"
-                                                        >
-                                                            İncele <ArrowRight className="w-3 h-3" />
-                                                        </Link>
                                                     </td>
                                                 </tr>
                                             );

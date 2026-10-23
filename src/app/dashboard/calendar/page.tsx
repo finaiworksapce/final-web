@@ -20,7 +20,6 @@ import {
     Search,
     X,
     AlertCircle,
-    ArrowRight,
     ExternalLink
 } from "lucide-react";
 import { useUser } from "@/components/providers/UserProvider";
@@ -2359,8 +2358,7 @@ function CalendarContent() {
                                                 <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Önceki</th>
                                                 <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Beklenti</th>
                                                 <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Açıklanan</th>
-                                                <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Önem</th>
-                                                <th className="py-2.5 px-3.5 text-right bg-blue-50/50 text-blue-900/60 rounded-r-xl pr-4">İşlem</th>
+                                                <th className="py-2.5 px-3.5 text-right bg-blue-50/50 text-blue-900/60 rounded-r-xl pr-4">Önem</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -2405,7 +2403,7 @@ function CalendarContent() {
                                                                 </span>
                                                             )}
                                                         </td>
-                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
+                                                        <td className={`py-3.5 pl-3.5 pr-4 text-right whitespace-nowrap rounded-r-2xl ${cellBg}`}>
                                                             {isReleased ? (
                                                                 <span className={`text-xs font-black ${
                                                                     isHigh ? 'text-rose-300' : isMed ? 'text-blue-200' : 'text-slate-300'
@@ -2422,25 +2420,6 @@ function CalendarContent() {
                                                                 }`}>
                                                                     {isHigh ? 'Yüksek' : isMed ? 'Orta' : 'Düşük'}
                                                                 </span>
-                                                            )}
-                                                        </td>
-                                                        <td className={`py-3.5 pl-3.5 pr-4 text-right whitespace-nowrap rounded-r-2xl ${cellBg}`}>
-                                                            {isReleased ? (
-                                                                <Link
-                                                                    href={detailHref}
-                                                                    className="inline-flex items-center gap-1.5 text-xs font-black text-white hover:text-blue-200 hover:underline transition-all"
-                                                                >
-                                                                    <span>İncele</span>
-                                                                    <ArrowRight className="w-3.5 h-3.5" />
-                                                                </Link>
-                                                            ) : (
-                                                                <Link
-                                                                    href={detailHref}
-                                                                    className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-black rounded-lg border transition-all hover:scale-105 text-blue-900 bg-blue-100/80 hover:bg-blue-200/90 border-blue-200/80"
-                                                                >
-                                                                    <span>İncele</span>
-                                                                    <ArrowRight className="w-3 h-3" />
-                                                                </Link>
                                                             )}
                                                         </td>
                                                     </tr>
