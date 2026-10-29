@@ -157,7 +157,7 @@ export default function EconomicEventDetailPage() {
 
     return (
         <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-slate-50 text-[#00008B] w-full mx-auto relative overflow-hidden">
-            <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 py-6 md:px-10 lg:py-8 space-y-6 relative z-10 mb-20">
+            <div className="w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6 relative z-10 mb-20">
                 {/* Navigation Top Bar */}
                 <div className="flex items-center justify-between">
                     <Link
@@ -191,7 +191,7 @@ export default function EconomicEventDetailPage() {
                 </div>
 
                 {/* ANA İÇERİK & SAĞ DİKEY ETKİ ZİNCİRİ BAREMİ */}
-                <div className="flex flex-col xl:flex-row gap-6 items-start w-full">
+                <div className="flex flex-col lg:flex-row gap-6 items-start w-full">
 
                     {/* SOL BÖLÜM: 2 KART (TANIM & FINAI INTELLIGENCE), GRAFİK VE GEÇMİŞTE NELER OLDU */}
                     <div className="flex-1 min-w-0 space-y-6 w-full">
