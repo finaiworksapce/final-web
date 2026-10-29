@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { 
-    ArrowLeft, Calendar as CalendarIcon, BookOpen, Target, 
+    ArrowLeft, Calendar as CalendarIcon, Target, 
     ChevronDown, ChevronUp, Layers, CheckCircle2, ShieldCheck, Activity, Zap, Sparkles
 } from "lucide-react";
 import Link from "next/link";
@@ -206,199 +206,210 @@ export default function EconomicEventDetailPage() {
                     </div>
                 </div>
 
-                {/* FINAI INTELLIGENCE ANA BÖLÜMÜ (TEKNİK NİTELEMELER KALDIRILDI) */}
-                <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
-                    <div className="flex items-center gap-3 pb-4 border-b border-slate-150">
-                        <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center">
-                            <Sparkles className="w-5 h-5 text-[#00008B]" />
-                        </div>
-                        <div>
-                            <h2 className="text-xl font-black text-[#00008B] tracking-tight">FINAI INTELLIGENCE</h2>
-                            <p className="text-xs text-slate-400 font-bold">
-                                Bu verinin ne söylediğini, ne anlama geldiğini ve hangi koşullarda önem kazandığını açıklıyoruz.
-                            </p>
-                        </div>
-                    </div>
+                {/* ANA İÇERİK & SAĞ DİKEY ETKİ ZİNCİRİ BAREMİ */}
+                <div className="flex flex-col xl:flex-row gap-6 items-start w-full">
 
-                    {/* FINAI'NİN KISA DEĞERLENDİRMESİ */}
-                    <div className="p-5 rounded-2xl bg-slate-900 text-white space-y-2 shadow-md">
-                        <h3 className="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
-                            <Sparkles className="w-4 h-4 text-amber-400" /> FinAi'nin Kısa Değerlendirmesi
-                        </h3>
-                        <p className="text-xs text-slate-200 font-medium leading-relaxed">
-                            {finAiAnalysis.shortExecutiveSummary}
-                        </p>
-                    </div>
-
-                    {/* DÖRT PARÇALI ANALİZ */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-5 rounded-2xl bg-blue-50/60 border border-blue-100 space-y-2">
-                            <h4 className="text-xs font-black text-[#00008B] uppercase tracking-wider flex items-center gap-1.5">
-                                <CheckCircle2 className="w-4 h-4 text-[#00008B]" /> 01 — NE OLDU?
-                            </h4>
-                            <p className="text-xs font-medium text-slate-700 leading-relaxed">
-                                {finAiAnalysis.whatHappened}
-                            </p>
-                        </div>
-
-                        <div className="p-5 rounded-2xl bg-emerald-50/60 border border-emerald-100 space-y-2">
-                            <h4 className="text-xs font-black text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
-                                <Zap className="w-4 h-4 text-emerald-600" /> 02 — NE ANLAMA GELİYOR?
-                            </h4>
-                            <p className="text-xs font-medium text-slate-700 leading-relaxed">
-                                {finAiAnalysis.whatItMeans}
-                            </p>
-                        </div>
-
-                        <div className="p-5 rounded-2xl bg-purple-50/60 border border-purple-100 space-y-2">
-                            <h4 className="text-xs font-black text-purple-900 uppercase tracking-wider flex items-center gap-1.5">
-                                <Layers className="w-4 h-4 text-purple-600" /> 03 — NELERİ ETKİLEYEBİLİR?
-                            </h4>
-                            <p className="text-xs font-medium text-slate-700 leading-relaxed">
-                                {finAiAnalysis.potentialImpacts}
-                            </p>
-                        </div>
-
-                        <div className="p-5 rounded-2xl bg-amber-50/60 border border-amber-100 space-y-2">
-                            <h4 className="text-xs font-black text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
-                                <ShieldCheck className="w-4 h-4 text-amber-600" /> 04 — NELERE DİKKAT EDİLMELİ?
-                            </h4>
-                            <p className="text-xs font-medium text-slate-700 leading-relaxed">
-                                {finAiAnalysis.pointsToConsider}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* BU VERİ NEDİR? */}
-                <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
-                    <div className="flex items-center gap-3 pb-4 border-b border-slate-150">
-                        <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center">
-                            <BookOpen className="w-5 h-5 text-[#00008B]" />
-                        </div>
-                        <div>
-                            <h2 className="text-xl font-black text-[#00008B]">Bu Veri Nedir?</h2>
-                            <p className="text-xs text-slate-400 font-bold">Gösterge Özeti ve Yorumlama Mantığı</p>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                            <h3 className="text-xs font-black text-[#00008B] uppercase tracking-wider">1. Tanım</h3>
-                            <p className="text-xs text-slate-600 font-medium leading-relaxed">{profile.definition}</p>
-                        </div>
-                        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                            <h3 className="text-xs font-black text-[#00008B] uppercase tracking-wider">2. Ne Ölçer?</h3>
-                            <p className="text-xs text-slate-600 font-medium leading-relaxed">{profile.whatItMeasures}</p>
-                        </div>
-                        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                            <h3 className="text-xs font-black text-[#00008B] uppercase tracking-wider">3. Neden Önemlidir?</h3>
-                            <p className="text-xs text-slate-600 font-medium leading-relaxed">{profile.whyItMatters}</p>
-                        </div>
-                        <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-200 space-y-2">
-                            <h3 className="text-xs font-black text-blue-900 uppercase tracking-wider flex items-center gap-1">
-                                <Sparkles className="w-3.5 h-3.5 text-blue-600" /> 4. Nasıl Yorumlanır?
-                            </h3>
-                            <p className="text-xs text-slate-700 font-medium leading-relaxed">{profile.howToInterpret}</p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* EKONOMİK ETKİ ZİNCİRİ */}
-                <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
-                    <div className="flex items-center gap-3 pb-4 border-b border-slate-150">
-                        <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center">
-                            <Layers className="w-5 h-5 text-[#00008B]" />
-                        </div>
-                        <div>
-                            <h2 className="text-xl font-black text-[#00008B]">Ekonomik Etki Zinciri</h2>
-                            <p className="text-xs text-slate-400 font-bold">Veri Açıklamasından Varlık Fiyatlamalarına Neden-Sonuç Akışı</p>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col lg:flex-row items-stretch justify-between gap-3">
-                        {profile.impactChannels.map((channel, idx) => (
-                            <div key={idx} className="flex-1 flex flex-col lg:flex-row items-center gap-3">
-                                <div className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-1.5">
-                                    <span className="text-[10px] font-black text-blue-600 uppercase tracking-wider block">
-                                        {channel.step}
-                                    </span>
-                                    <h4 className="text-xs font-black text-[#00008B]">{channel.title}</h4>
-                                    <p className="text-[11px] text-slate-500 font-medium leading-normal">{channel.desc}</p>
+                    {/* SOL BÖLÜM: FINAI INTELLIGENCE & SENARYO ANALİZİ */}
+                    <div className="flex-1 min-w-0 space-y-6 w-full">
+                        {/* FINAI INTELLIGENCE ANA BÖLÜMÜ */}
+                        <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+                            <div className="flex items-center gap-3 pb-4 border-b border-slate-150">
+                                <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center">
+                                    <Sparkles className="w-5 h-5 text-[#00008B]" />
                                 </div>
-                                {idx < profile.impactChannels.length - 1 && (
-                                    <span className="text-slate-300 font-black text-sm hidden lg:block">➔</span>
-                                )}
-                                {idx < profile.impactChannels.length - 1 && (
-                                    <span className="text-slate-300 font-black text-sm lg:hidden">↓</span>
-                                )}
+                                <div>
+                                    <h2 className="text-xl font-black text-[#00008B] tracking-tight">FINAI INTELLIGENCE</h2>
+                                    <p className="text-xs text-slate-400 font-bold">
+                                        Bu verinin ne söylediğini, ne anlama geldiğini ve hangi koşullarda önem kazandığını açıklıyoruz.
+                                    </p>
+                                </div>
                             </div>
-                        ))}
-                    </div>
-                </div>
 
-                {/* SENARYO ANALİZİ */}
-                <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
-                    <div className="flex items-center justify-between pb-4 border-b border-slate-150">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center">
-                                <Target className="w-5 h-5 text-[#00008B]" />
-                            </div>
-                            <div>
-                                <h2 className="text-xl font-black text-[#00008B]">Senaryo Analizi</h2>
-                                <p className="text-xs text-slate-400 font-bold">Gerçekleşen Senaryo & Olası Alternatif Durumlar</p>
-                            </div>
-                        </div>
-                        <button
-                            onClick={() => setShowAllScenarios(!showAllScenarios)}
-                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-slate-100 hover:bg-slate-200 text-[#00008B] font-extrabold text-xs transition-all"
-                        >
-                            {showAllScenarios ? 'Diğer Senaryoları Gizle' : 'Diğer Senaryoları Görüntüle'}
-                            {showAllScenarios ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                        </button>
-                    </div>
-
-                    <div className="p-6 rounded-3xl bg-[#00008B] text-white space-y-4 shadow-lg">
-                        <div className="flex items-center justify-between">
-                            <span className="px-3 py-1 rounded-xl bg-emerald-400 text-[#00008B] text-xs font-black">
-                                Gerçekleşen Senaryo
-                            </span>
-                            <span className="text-xs font-bold text-blue-200">
-                                {calc.forecastDiffText || 'Piyasa Paralelinde'}
-                            </span>
-                        </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-medium text-blue-100 pt-2 border-t border-blue-800">
-                            <div>
-                                <span className="text-[10px] text-blue-300 uppercase block font-bold">PİYASA BEKLENTİSİ</span>
-                                <span className="text-sm font-black text-white">{event.forecast || '-'}</span>
-                            </div>
-                            <div>
-                                <span className="text-[10px] text-blue-300 uppercase block font-bold">GERÇEKLEŞEN VERİ</span>
-                                <span className="text-sm font-black text-white">{event.actual || 'Bekleniyor'}</span>
-                            </div>
-                            <div>
-                                <span className="text-[10px] text-blue-300 uppercase block font-bold">OLASI EKONOMİK YANSIMA</span>
-                                <span className="text-xs font-bold text-emerald-300">{finAiAnalysis.whatItMeans.slice(0, 80)}...</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {showAllScenarios && (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-150">
-                            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                                <h4 className="text-xs font-black text-emerald-700">1. Beklentinin Üzerinde Gelirse</h4>
-                                <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                                    Göstergenin öngörülen beklenti seviyesinin üzerinde gerçekleşmesi durumunda faiz beklentileri sıkılaşabilir ve para politikasında temkinli duruş korunabilir.
+                            {/* FINAI'NİN KISA DEĞERLENDİRMESİ */}
+                            <div className="p-5 rounded-2xl bg-slate-900 text-white space-y-2 shadow-md">
+                                <h3 className="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <Sparkles className="w-4 h-4 text-amber-400" /> FinAi'nin Kısa Değerlendirmesi
+                                </h3>
+                                <p className="text-xs text-slate-200 font-medium leading-relaxed">
+                                    {finAiAnalysis.shortExecutiveSummary}
                                 </p>
                             </div>
-                            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                                <h4 className="text-xs font-black text-rose-700">2. Beklentinin Altında Gelirse</h4>
-                                <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                                    Göstergenin piyasa beklentilerinin gerisinde kalması halinde dezenflasyonist veya yavaşlama sinyalleri güçlenebilir, faiz indirimi alanları doğabilir.
-                                </p>
+
+                            {/* DÖRT PARÇALI ANALİZ */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="p-5 rounded-2xl bg-blue-50/60 border border-blue-100 space-y-2">
+                                    <h4 className="text-xs font-black text-[#00008B] uppercase tracking-wider flex items-center gap-1.5">
+                                        <CheckCircle2 className="w-4 h-4 text-[#00008B]" /> 01 — NE OLDU?
+                                    </h4>
+                                    <p className="text-xs font-medium text-slate-700 leading-relaxed">
+                                        {finAiAnalysis.whatHappened}
+                                    </p>
+                                </div>
+
+                                <div className="p-5 rounded-2xl bg-emerald-50/60 border border-emerald-100 space-y-2">
+                                    <h4 className="text-xs font-black text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
+                                        <Zap className="w-4 h-4 text-emerald-600" /> 02 — NE ANLAMA GELİYOR?
+                                    </h4>
+                                    <p className="text-xs font-medium text-slate-700 leading-relaxed">
+                                        {finAiAnalysis.whatItMeans}
+                                    </p>
+                                </div>
+
+                                <div className="p-5 rounded-2xl bg-purple-50/60 border border-purple-100 space-y-2">
+                                    <h4 className="text-xs font-black text-purple-900 uppercase tracking-wider flex items-center gap-1.5">
+                                        <Layers className="w-4 h-4 text-purple-600" /> 03 — NELERİ ETKİLEYEBİLİR?
+                                    </h4>
+                                    <p className="text-xs font-medium text-slate-700 leading-relaxed">
+                                        {finAiAnalysis.potentialImpacts}
+                                    </p>
+                                </div>
+
+                                <div className="p-5 rounded-2xl bg-amber-50/60 border border-amber-100 space-y-2">
+                                    <h4 className="text-xs font-black text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
+                                        <ShieldCheck className="w-4 h-4 text-amber-600" /> 04 — NELERE DİKKAT EDİLMELİ?
+                                    </h4>
+                                    <p className="text-xs font-medium text-slate-700 leading-relaxed">
+                                        {finAiAnalysis.pointsToConsider}
+                                    </p>
+                                </div>
                             </div>
                         </div>
+
+                        {/* SENARYO ANALİZİ */}
+                        <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
+                            <div className="flex items-center justify-between pb-4 border-b border-slate-150">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center">
+                                        <Target className="w-5 h-5 text-[#00008B]" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-xl font-black text-[#00008B]">Senaryo Analizi</h2>
+                                        <p className="text-xs text-slate-400 font-bold">Gerçekleşen Senaryo & Olası Alternatif Durumlar</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setShowAllScenarios(!showAllScenarios)}
+                                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-slate-100 hover:bg-slate-200 text-[#00008B] font-extrabold text-xs transition-all"
+                                >
+                                    {showAllScenarios ? 'Diğer Senaryoları Gizle' : 'Diğer Senaryoları Görüntüle'}
+                                    {showAllScenarios ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                                </button>
+                            </div>
+
+                            <div className="p-6 rounded-3xl bg-[#00008B] text-white space-y-4 shadow-lg">
+                                <div className="flex items-center justify-between">
+                                    <span className="px-3 py-1 rounded-xl bg-emerald-400 text-[#00008B] text-xs font-black">
+                                        Gerçekleşen Senaryo
+                                    </span>
+                                    <span className="text-xs font-bold text-blue-200">
+                                        {calc.forecastDiffText || 'Piyasa Paralelinde'}
+                                    </span>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-medium text-blue-100 pt-2 border-t border-blue-800">
+                                    <div>
+                                        <span className="text-[10px] text-blue-300 uppercase block font-bold">PİYASA BEKLENTİSİ</span>
+                                        <span className="text-sm font-black text-white">{event.forecast || '-'}</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-[10px] text-blue-300 uppercase block font-bold">GERÇEKLEŞEN VERİ</span>
+                                        <span className="text-sm font-black text-white">{event.actual || 'Bekleniyor'}</span>
+                                    </div>
+                                    <div>
+                                        <span className="text-[10px] text-blue-300 uppercase block font-bold">OLASI EKONOMİK YANSIMA</span>
+                                        <span className="text-xs font-bold text-emerald-300">{finAiAnalysis.whatItMeans.slice(0, 80)}...</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {showAllScenarios && (
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-150">
+                                    <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                                        <h4 className="text-xs font-black text-emerald-700">1. Beklentinin Üzerinde Gelirse</h4>
+                                        <p className="text-xs text-slate-600 font-medium leading-relaxed">
+                                            Göstergenin öngörülen beklenti seviyesinin üzerinde gerçekleşmesi durumunda faiz beklentileri sıkılaşabilir ve para politikasında temkinli duruş korunabilir.
+                                        </p>
+                                    </div>
+                                    <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                                        <h4 className="text-xs font-black text-rose-700">2. Beklentinin Altında Gelirse</h4>
+                                        <p className="text-xs text-slate-600 font-medium leading-relaxed">
+                                            Göstergenin piyasa beklentilerinin gerisinde kalması halinde dezenflasyonist veya yavaşlama sinyalleri güçlenebilir, faiz indirimi alanları doğabilir.
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* SAĞ BÖLÜM: EKONOMİK ETKİ ZİNCİRİ (DİKEY AKIŞLI YAN BAREM - SAYFA GENİŞLİĞİNİN ~%10-12'Sİ) */}
+                    {profile.impactChannels && profile.impactChannels.length > 0 && (
+                        <aside className="w-full xl:w-[13%] 2xl:w-[11%] xl:min-w-[160px] xl:max-w-[200px] shrink-0 xl:sticky xl:top-6 self-start">
+                            <div className="bg-white border border-slate-200 rounded-3xl p-3.5 sm:p-4 shadow-sm space-y-3">
+                                {/* Barem Başlığı */}
+                                <div className="flex items-center gap-2 pb-2.5 border-b border-slate-150">
+                                    <div className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0">
+                                        <Layers className="w-3.5 h-3.5 text-[#00008B]" />
+                                    </div>
+                                    <div className="min-w-0">
+                                        <h3 className="text-xs font-black text-[#00008B] leading-tight truncate">Etki Zinciri</h3>
+                                        <p className="text-[9px] text-slate-400 font-bold truncate">Neden → Sonuç</p>
+                                    </div>
+                                </div>
+
+                                {/* Dikey Barem Akışı (Yukarıdan Aşağıya) */}
+                                <div className="flex flex-col items-stretch space-y-1.5">
+                                    {profile.impactChannels.map((channel, idx) => {
+                                        const isFirst = idx === 0;
+                                        const isLast = idx === profile.impactChannels.length - 1;
+
+                                        return (
+                                            <div key={idx} className="flex flex-col items-center">
+                                                <div className={`w-full p-2.5 rounded-2xl border transition-all text-left ${
+                                                    isFirst
+                                                        ? 'bg-[#00008B] text-white border-[#00008B] shadow-sm'
+                                                        : isLast
+                                                        ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
+                                                        : 'bg-slate-50 hover:bg-blue-50/50 border-slate-200 text-slate-800'
+                                                }`}>
+                                                    <div className="flex items-center justify-between gap-1 mb-1">
+                                                        <span className={`text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded ${
+                                                            isFirst
+                                                                ? 'bg-blue-800 text-blue-100'
+                                                                : isLast
+                                                                ? 'bg-emerald-700 text-emerald-100'
+                                                                : 'bg-slate-200 text-slate-600'
+                                                        }`}>
+                                                            {channel.step}
+                                                        </span>
+                                                        <span className={`text-[9px] font-black ${
+                                                            isFirst ? 'text-blue-200' : isLast ? 'text-emerald-100' : 'text-slate-400'
+                                                        }`}>
+                                                            0{idx + 1}
+                                                        </span>
+                                                    </div>
+                                                    <h4 className={`text-[11px] font-black leading-snug ${
+                                                        isFirst || isLast ? 'text-white' : 'text-[#00008B]'
+                                                    }`}>
+                                                        {channel.title}
+                                                    </h4>
+                                                    <p className={`text-[9px] font-medium leading-relaxed mt-1 ${
+                                                        isFirst ? 'text-blue-100' : isLast ? 'text-emerald-50' : 'text-slate-500'
+                                                    }`}>
+                                                        {channel.desc}
+                                                    </p>
+                                                </div>
+
+                                                {!isLast && (
+                                                    <div className="py-1 flex items-center justify-center text-slate-300">
+                                                        <ChevronDown className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </aside>
                     )}
                 </div>
             </div>
