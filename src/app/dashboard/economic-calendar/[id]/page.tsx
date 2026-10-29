@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { 
     ArrowLeft, Calendar as CalendarIcon, Target, 
-    ChevronDown, ChevronUp, Layers, CheckCircle2, ShieldCheck, Activity, Zap, Sparkles
+    ChevronDown, ChevronUp, Layers, Activity, Sparkles, BookOpen, Lightbulb
 } from "lucide-react";
 import Link from "next/link";
 import { CatalogCalendarEvent } from "@/lib/calendar-catalog";
@@ -38,37 +38,19 @@ function resolveCalendarEvent(rawId: string, list: CatalogCalendarEvent[]): Cata
 
     // 3. Match by Slugified Event Name or Slug ID
     const targetSlug = toSlug(decoded);
-    const slugMatch = list.find(e => {
-        const eSlug = toSlug(e.event);
-        return eSlug === targetSlug || e.id.toLowerCase() === targetSlug;
+    const bySlug = list.find(e => {
+        const itemSlug = toSlug(e.event);
+        const itemIdSlug = e.id ? toSlug(e.id) : '';
+        return itemSlug === targetSlug || itemIdSlug === targetSlug;
     });
-    if (slugMatch) return slugMatch;
+    if (bySlug) return bySlug;
 
-    // 4. Parse Legacy Composite ID: ${country}_${eventName}_${date}
-    const underscoreParts = decoded.split('_');
-    if (underscoreParts.length >= 2) {
-        const countryCandidate = underscoreParts[0].toUpperCase();
-        const middleParts = underscoreParts.slice(1, underscoreParts.length - 1).join('_');
-        const middleSlug = toSlug(middleParts);
-
-        if (middleParts || middleSlug) {
-            const compositeMatch = list.find(e => {
-                const countryOk = !countryCandidate || e.country.toUpperCase() === countryCandidate;
-                const nameOk = e.event === middleParts || 
-                               e.event.toLowerCase() === middleParts.toLowerCase() ||
-                               toSlug(e.event) === middleSlug;
-                return countryOk && nameOk;
-            });
-            if (compositeMatch) return compositeMatch;
-        }
-    }
-
-    // 5. Strict Substring Match for Long Log Strings
-    const strictContains = list.find(e => {
+    // 4. Fuzzy / Partial Match
+    const partialMatch = list.find(e => {
         const eLower = e.event.toLowerCase();
-        return cleanLower.includes(eLower) && (cleanLower.length - eLower.length) < 25;
+        return eLower.includes(cleanLower) || cleanLower.includes(eLower);
     });
-    if (strictContains) return strictContains;
+    if (partialMatch) return partialMatch;
 
     return null;
 }
@@ -76,12 +58,11 @@ function resolveCalendarEvent(rawId: string, list: CatalogCalendarEvent[]): Cata
 export default function EconomicEventDetailPage() {
     const params = useParams();
     const router = useRouter();
-    const eventId = params?.id as string;
+    const rawId = params?.id as string;
+    const eventId = rawId ? decodeURIComponent(rawId) : "";
 
     const [event, setEvent] = useState<CatalogCalendarEvent | null>(null);
     const [loading, setLoading] = useState(true);
-
-    // State: Show all scenarios accordion toggle
     const [showAllScenarios, setShowAllScenarios] = useState(false);
 
     useEffect(() => {
@@ -90,12 +71,16 @@ export default function EconomicEventDetailPage() {
         let isMounted = true;
 
         async function fetchEventData(isInitial = false) {
+            if (isInitial) setLoading(true);
+
             try {
-                const res = await fetch('/api/calendar', { cache: 'no-store' });
-                const json = await res.json();
-                if (json.data && Array.isArray(json.data) && isMounted) {
-                    const resolved = resolveCalendarEvent(eventId, json.data);
-                    if (resolved) {
+                // Öncelik: Canlı veritabanı veya API'den anlık takvim çek
+                const res = await fetch('/api/calendar?t=' + Date.now(), { cache: 'no-store' });
+                if (res.ok) {
+                    const data = await res.json();
+                    const liveList: CatalogCalendarEvent[] = data.events || data.economicEvents || (Array.isArray(data) ? data : []);
+                    const resolved = resolveCalendarEvent(eventId, liveList);
+                    if (resolved && isMounted) {
                         setEvent(resolved);
                         if (isInitial) setLoading(false);
                         return;
@@ -182,100 +167,151 @@ export default function EconomicEventDetailPage() {
                     </Link>
                 </div>
 
-                {/* SADELEŞTİRİLMİŞ HEADER BANNER (TAKİP ET BUTONU EKLENDİ) */}
-                <div className="w-full bg-[#00008B] text-white border border-[#00008B] rounded-3xl p-6 md:p-8 shadow-xl shadow-[#00008B]/20 relative overflow-hidden space-y-4">
-                    <div className="relative z-10 space-y-2">
-                        <div className="flex items-center justify-between gap-2">
-                            <div className="flex items-center gap-2 text-blue-200 text-xs font-bold">
-                                <span>{profile.flag}</span>
-                                <span>{event.country}</span>
-                                <span>·</span>
-                                <span>{profile.category}</span>
-                            </div>
-                            <FollowIndicatorButton indicatorName={event.event} />
+                {/* 1. BAŞLIK: KUTUSUZ SALT METİN (LACİVERT RENKTE) */}
+                <div className="w-full space-y-2 pt-1 pb-1">
+                    <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
+                            <span className="text-base">{profile.flag}</span>
+                            <span className="font-black text-[#00008B]">{event.country}</span>
+                            <span className="text-slate-300">·</span>
+                            <span className="text-slate-600 font-semibold">{profile.category}</span>
                         </div>
+                        <FollowIndicatorButton indicatorName={event.event} />
+                    </div>
 
-                        <div>
-                            <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight leading-snug">
-                                {event.event}
-                            </h1>
-                            <p className="text-xs font-bold text-blue-200 mt-1.5 flex items-center gap-2">
-                                <CalendarIcon className="w-4 h-4 text-blue-300" /> {event.dateFormatted || 'Bugün'} · {event.time} TSİ
-                            </p>
-                        </div>
+                    <div>
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#00008B] tracking-tight leading-tight">
+                            {event.event}
+                        </h1>
+                        <p className="text-xs font-bold text-slate-500 mt-2 flex items-center gap-2">
+                            <CalendarIcon className="w-4 h-4 text-[#00008B]" /> {event.dateFormatted || 'Bugün'} · {event.time} TSİ
+                        </p>
                     </div>
                 </div>
 
                 {/* ANA İÇERİK & SAĞ DİKEY ETKİ ZİNCİRİ BAREMİ */}
                 <div className="flex flex-col xl:flex-row gap-6 items-start w-full">
 
-                    {/* SOL BÖLÜM: FINAI INTELLIGENCE & SENARYO ANALİZİ */}
+                    {/* SOL BÖLÜM: 2 KART (TANIM & FINAI INTELLIGENCE), GRAFİK VE GEÇMİŞTE NELER OLDU */}
                     <div className="flex-1 min-w-0 space-y-6 w-full">
-                        {/* FINAI INTELLIGENCE ANA BÖLÜMÜ */}
-                        <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
-                            <div className="flex items-center gap-3 pb-4 border-b border-slate-150">
-                                <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center">
-                                    <Sparkles className="w-5 h-5 text-[#00008B]" />
-                                </div>
-                                <div>
-                                    <h2 className="text-xl font-black text-[#00008B] tracking-tight">FINAI INTELLIGENCE</h2>
-                                    <p className="text-xs text-slate-400 font-bold">
-                                        Bu verinin ne söylediğini, ne anlama geldiğini ve hangi koşullarda önem kazandığını açıklıyoruz.
-                                    </p>
+
+                        {/* 2. BAŞLIĞIN ALTINDA İKİYE BÖLÜNEN ALAN: SOLDA LACİVERT TANIM, SAĞDA BEYAZ FINAI INTELLIGENCE */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+                            {/* SOL: TANIM (LACİVERT WIDGET) */}
+                            <div className="bg-[#00008B] text-white rounded-3xl p-6 md:p-8 shadow-sm flex flex-col justify-between space-y-4">
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-2.5 pb-3 border-b border-blue-900/80">
+                                        <div className="w-9 h-9 rounded-2xl bg-blue-900/60 border border-blue-800 flex items-center justify-center">
+                                            <BookOpen className="w-4 h-4 text-white" />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-lg font-black text-white tracking-tight">Tanım</h2>
+                                            <p className="text-[11px] text-blue-200/80 font-bold">Gösterge Literatür Tanımı</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Şimdilik boş bırakılan içerik alanı (ilerde doldurulacak) */}
+                                    <div className="min-h-[140px] flex items-center justify-center p-6 rounded-2xl bg-blue-950/40 border border-blue-900/60 text-center">
+                                        <p className="text-xs font-bold text-blue-200/60 leading-relaxed max-w-sm">
+                                            Bu göstergenin akademik tanımı ve piyasa literatüründeki kavramsal karşılığı yakında bu alana eklenecektir.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* FINAI'NİN KISA DEĞERLENDİRMESİ */}
-                            <div className="p-5 rounded-2xl bg-slate-900 text-white space-y-2 shadow-md">
-                                <h3 className="text-xs font-black text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
-                                    <Sparkles className="w-4 h-4 text-amber-400" /> FinAi'nin Kısa Değerlendirmesi
-                                </h3>
-                                <p className="text-xs text-slate-200 font-medium leading-relaxed">
-                                    {finAiAnalysis.shortExecutiveSummary}
-                                </p>
+                            {/* SAĞ: FINAI INTELLIGENCE (GÜNLÜK HAYATTAN ÖRNEK - BEYAZ WIDGET) */}
+                            <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm flex flex-col justify-between space-y-4">
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-2.5 pb-3 border-b border-slate-150">
+                                        <div className="w-9 h-9 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center">
+                                            <Sparkles className="w-4 h-4 text-[#00008B]" />
+                                        </div>
+                                        <div>
+                                            <h2 className="text-lg font-black text-[#00008B] tracking-tight">FinAi INTELLIGENCE</h2>
+                                            <p className="text-[11px] text-slate-400 font-bold">Günlük Hayattan Örnek & Somut Yansıma</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Şimdilik boş bırakılan içerik alanı (ilerde doldurulacak) */}
+                                    <div className="min-h-[140px] flex items-center justify-center p-6 rounded-2xl bg-slate-50 border border-slate-150 text-center">
+                                        <p className="text-xs font-bold text-slate-400 leading-relaxed max-w-sm">
+                                            Açıklanan verinin bireysel bütçeye, gündelik tüketime ve sokaktaki reel hayata somut yansımaları yakında eklenecektir.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 3. GEÇMİŞ VERİ GRAFİĞİ (BUĞULU / FROSTED GLASS - BAŞLIK & YAKINDA) */}
+                        <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm space-y-5 relative overflow-hidden">
+                            <div className="flex items-center justify-between pb-3 border-b border-slate-150">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center">
+                                        <Activity className="w-5 h-5 text-[#00008B]" />
+                                    </div>
+                                    <div>
+                                        <h2 className="text-xl font-black text-[#00008B] tracking-tight">Geçmiş Veri Grafiği</h2>
+                                        <p className="text-xs text-slate-400 font-bold">Tarihsel Değişim & Eğilim Trendi</p>
+                                    </div>
+                                </div>
+
+                                <span className="px-3.5 py-1.5 rounded-xl bg-blue-50 border border-blue-200 text-[#00008B] text-xs font-black">
+                                    Yakında
+                                </span>
                             </div>
 
-                            {/* DÖRT PARÇALI ANALİZ */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="p-5 rounded-2xl bg-blue-50/60 border border-blue-100 space-y-2">
-                                    <h4 className="text-xs font-black text-[#00008B] uppercase tracking-wider flex items-center gap-1.5">
-                                        <CheckCircle2 className="w-4 h-4 text-[#00008B]" /> 01 — NE OLDU?
-                                    </h4>
-                                    <p className="text-xs font-medium text-slate-700 leading-relaxed">
-                                        {finAiAnalysis.whatHappened}
-                                    </p>
+                            {/* Buğulu Mock Grafik Alanı */}
+                            <div className="relative rounded-2xl overflow-hidden bg-gradient-to-b from-slate-50 to-slate-100/70 border border-slate-200/80 h-64 sm:h-72 flex items-center justify-center">
+                                {/* Arka planda flu çizim/çubuk grafik silueti */}
+                                <div className="absolute inset-0 p-6 flex flex-col justify-between filter blur-md opacity-35 select-none pointer-events-none">
+                                    <div className="flex justify-between text-[10px] text-slate-400 border-b border-slate-200 pb-2">
+                                        <span>5.50%</span>
+                                        <span>5.25%</span>
+                                        <span>5.00%</span>
+                                        <span>4.75%</span>
+                                        <span>4.50%</span>
+                                    </div>
+                                    <svg viewBox="0 0 800 200" className="w-full h-36" preserveAspectRatio="none">
+                                        <defs>
+                                            <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="0%" stopColor="#00008B" stopOpacity="0.4" />
+                                                <stop offset="100%" stopColor="#00008B" stopOpacity="0.0" />
+                                            </linearGradient>
+                                        </defs>
+                                        <path
+                                            d="M0,140 Q100,110 200,120 T400,60 T600,80 T800,40 L800,200 L0,200 Z"
+                                            fill="url(#chartGradient)"
+                                        />
+                                        <path
+                                            d="M0,140 Q100,110 200,120 T400,60 T600,80 T800,40"
+                                            fill="none"
+                                            stroke="#00008B"
+                                            strokeWidth="3"
+                                        />
+                                    </svg>
+                                    <div className="flex justify-between text-[10px] text-slate-400 pt-2 border-t border-slate-200">
+                                        <span>Oca 2026</span>
+                                        <span>Şub 2026</span>
+                                        <span>Mar 2026</span>
+                                        <span>Nis 2026</span>
+                                        <span>May 2026</span>
+                                    </div>
                                 </div>
 
-                                <div className="p-5 rounded-2xl bg-emerald-50/60 border border-emerald-100 space-y-2">
-                                    <h4 className="text-xs font-black text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
-                                        <Zap className="w-4 h-4 text-emerald-600" /> 02 — NE ANLAMA GELİYOR?
-                                    </h4>
-                                    <p className="text-xs font-medium text-slate-700 leading-relaxed">
-                                        {finAiAnalysis.whatItMeans}
-                                    </p>
-                                </div>
-
-                                <div className="p-5 rounded-2xl bg-purple-50/60 border border-purple-100 space-y-2">
-                                    <h4 className="text-xs font-black text-purple-900 uppercase tracking-wider flex items-center gap-1.5">
-                                        <Layers className="w-4 h-4 text-purple-600" /> 03 — NELERİ ETKİLEYEBİLİR?
-                                    </h4>
-                                    <p className="text-xs font-medium text-slate-700 leading-relaxed">
-                                        {finAiAnalysis.potentialImpacts}
-                                    </p>
-                                </div>
-
-                                <div className="p-5 rounded-2xl bg-amber-50/60 border border-amber-100 space-y-2">
-                                    <h4 className="text-xs font-black text-amber-900 uppercase tracking-wider flex items-center gap-1.5">
-                                        <ShieldCheck className="w-4 h-4 text-amber-600" /> 04 — NELERE DİKKAT EDİLMELİ?
-                                    </h4>
-                                    <p className="text-xs font-medium text-slate-700 leading-relaxed">
-                                        {finAiAnalysis.pointsToConsider}
+                                {/* Üst katman: Frosted Glass Buğu ve Yakında Rozeti */}
+                                <div className="absolute inset-0 bg-white/40 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center">
+                                    <div className="px-5 py-2.5 rounded-2xl bg-[#00008B] text-white shadow-lg shadow-[#00008B]/25 flex items-center gap-2 mb-2 hover:scale-105 transition-transform">
+                                        <Activity className="w-4 h-4 text-emerald-400 animate-pulse" />
+                                        <span className="text-xs font-black tracking-wider uppercase">Yakında</span>
+                                    </div>
+                                    <p className="text-xs font-bold text-slate-600 max-w-sm leading-relaxed">
+                                        Göstergeye ait tarihsel açıklanan veriler ve interaktif geçmiş trend grafiği yakında burada görüntülenecektir.
                                     </p>
                                 </div>
                             </div>
                         </div>
 
-                        {/* SENARYO ANALİZİ */}
+                        {/* 4. EN ALT KISIM: GEÇMİŞTE NELER OLDU (SENARYO ANALİZİ FORMATINDA) */}
                         <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
                             <div className="flex items-center justify-between pb-4 border-b border-slate-150">
                                 <div className="flex items-center gap-3">
@@ -283,8 +319,8 @@ export default function EconomicEventDetailPage() {
                                         <Target className="w-5 h-5 text-[#00008B]" />
                                     </div>
                                     <div>
-                                        <h2 className="text-xl font-black text-[#00008B]">Senaryo Analizi</h2>
-                                        <p className="text-xs text-slate-400 font-bold">Gerçekleşen Senaryo & Olası Alternatif Durumlar</p>
+                                        <h2 className="text-xl font-black text-[#00008B]">Geçmişte Neler Oldu?</h2>
+                                        <p className="text-xs text-slate-400 font-bold">Gerçekleşen Veri Açıklaması & Piyasa Yansıması</p>
                                     </div>
                                 </div>
                                 <button
@@ -299,7 +335,7 @@ export default function EconomicEventDetailPage() {
                             <div className="p-6 rounded-3xl bg-[#00008B] text-white space-y-4 shadow-lg">
                                 <div className="flex items-center justify-between">
                                     <span className="px-3 py-1 rounded-xl bg-emerald-400 text-[#00008B] text-xs font-black">
-                                        Gerçekleşen Senaryo
+                                        Gerçekleşen Durum
                                     </span>
                                     <span className="text-xs font-bold text-blue-200">
                                         {calc.forecastDiffText || 'Piyasa Paralelinde'}
@@ -316,7 +352,7 @@ export default function EconomicEventDetailPage() {
                                         <span className="text-sm font-black text-white">{event.actual || 'Bekleniyor'}</span>
                                     </div>
                                     <div>
-                                        <span className="text-[10px] text-blue-300 uppercase block font-bold">OLASI EKONOMİK YANSIMA</span>
+                                        <span className="text-[10px] text-blue-300 uppercase block font-bold">PİYASAYA ETKİ & YANSIMA</span>
                                         <span className="text-xs font-bold text-emerald-300">{finAiAnalysis.whatItMeans.slice(0, 80)}...</span>
                                     </div>
                                 </div>
@@ -325,15 +361,15 @@ export default function EconomicEventDetailPage() {
                             {showAllScenarios && (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-150">
                                     <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                                        <h4 className="text-xs font-black text-emerald-700">1. Beklentinin Üzerinde Gelirse</h4>
+                                        <h4 className="text-xs font-black text-emerald-700">1. Beklentinin Üzerinde Geldiğinde</h4>
                                         <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                                            Göstergenin öngörülen beklenti seviyesinin üzerinde gerçekleşmesi durumunda faiz beklentileri sıkılaşabilir ve para politikasında temkinli duruş korunabilir.
+                                            Göstergenin piyasa beklentilerinin üzerinde açıklanması faiz ve getiri beklentilerini yukarı yönlü etkileyebilir, politika duruşunda sıkılaşma eğilimini güçlendirebilir.
                                         </p>
                                     </div>
                                     <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                                        <h4 className="text-xs font-black text-rose-700">2. Beklentinin Altında Gelirse</h4>
+                                        <h4 className="text-xs font-black text-rose-700">2. Beklentinin Altında Geldiğinde</h4>
                                         <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                                            Göstergenin piyasa beklentilerinin gerisinde kalması halinde dezenflasyonist veya yavaşlama sinyalleri güçlenebilir, faiz indirimi alanları doğabilir.
+                                            Göstergenin piyasa tahminlerinin altında kalması ekonomik aktivitede soğuma veya dezenflasyonist baskı yaratabilir, gevşeme beklentilerini artırabilir.
                                         </p>
                                     </div>
                                 </div>
