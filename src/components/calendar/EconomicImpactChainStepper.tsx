@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { Layers, Pause, Play, Check } from "lucide-react";
+import { Layers, Check } from "lucide-react";
 
 interface ImpactChannelItem {
   step: string;
@@ -22,14 +22,13 @@ export default function EconomicImpactChainStepper({
   intervalMs = 5000,
 }: EconomicImpactChainStepperProps) {
   const [activeStep, setActiveStep] = useState<number>(0);
-  const [isPaused, setIsPaused] = useState<boolean>(false);
   const [progressKey, setProgressKey] = useState<number>(0);
 
   const totalSteps = channels?.length || 0;
 
-  // 5 Saniyelik Otomatik Döngü (Kısır Döngü)
+  // 5 Saniyelik Kesintisiz Otomatik Döngü (Kısır Döngü)
   useEffect(() => {
-    if (totalSteps <= 1 || isPaused) return;
+    if (totalSteps <= 1) return;
 
     const timer = setInterval(() => {
       setActiveStep((prev) => (prev + 1) % totalSteps);
@@ -37,7 +36,7 @@ export default function EconomicImpactChainStepper({
     }, intervalMs);
 
     return () => clearInterval(timer);
-  }, [totalSteps, isPaused, intervalMs]);
+  }, [totalSteps, intervalMs]);
 
   // Manuel tıklama ile ilgili basamağa geçiş
   const handleStepClick = (newStep: number) => {
@@ -53,41 +52,21 @@ export default function EconomicImpactChainStepper({
         "w-full lg:w-[260px] xl:w-[290px] shrink-0 lg:sticky lg:top-6 self-start",
         className
       )}
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
     >
-      <div className="bg-white border border-slate-200/90 rounded-3xl p-5 sm:p-6 shadow-sm space-y-4">
-        {/* Üst Başlık & Akış Durumu */}
-        <div className="flex items-center justify-between pb-3 border-b border-slate-150">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0">
-              <Layers className="w-4 h-4 text-[#00008B]" />
-            </div>
-            <div className="min-w-0">
-              <h3 className="text-xs font-black text-[#00008B] tracking-tight truncate">
-                Etki Zinciri
-              </h3>
-              <p className="text-[10px] text-slate-400 font-bold truncate">
-                Neden → Sonuç Akışı
-              </p>
-            </div>
+      {/* KUTUSUZ: Dış çerçeve ve kart kutusu kaldırıldı, direkt sayfa zemininde saf tipografi */}
+      <div className="space-y-4 px-1 sm:px-2 pt-1">
+        {/* Üst Başlık (Duraklatıldı vb. metinler kaldırıldı) */}
+        <div className="flex items-center gap-2.5 pb-2.5 border-b border-slate-200">
+          <div className="w-8 h-8 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0">
+            <Layers className="w-4 h-4 text-[#00008B]" />
           </div>
-
-          <div
-            className="flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-50 border border-slate-150 text-[9px] font-bold text-slate-500"
-            title={isPaused ? "Döngü Duraklatıldı (İncelemek için)" : "5s Otomatik Döngü Devam Ediyor"}
-          >
-            {isPaused ? (
-              <>
-                <Pause className="w-2.5 h-2.5 text-amber-500 animate-pulse" />
-                <span className="text-amber-600">Duraklatıldı</span>
-              </>
-            ) : (
-              <>
-                <Play className="w-2 h-2 text-emerald-500 fill-emerald-500" />
-                <span className="text-emerald-700">Canlı Akış</span>
-              </>
-            )}
+          <div className="min-w-0">
+            <h3 className="text-sm font-black text-[#00008B] tracking-tight truncate">
+              Etki Zinciri
+            </h3>
+            <p className="text-[10px] text-slate-500 font-bold truncate">
+              Neden → Sonuç Akışı
+            </p>
           </div>
         </div>
 
@@ -114,7 +93,7 @@ export default function EconomicImpactChainStepper({
                   />
                 )}
 
-                {/* Basamak Noktası / İndikatör (Kutucuk Değil, Dairesel Numara Noktası) */}
+                {/* Basamak Noktası / İndikatör (Dairesel Numara Noktası) */}
                 <div
                   className={cn(
                     "relative z-10 size-7 rounded-full flex items-center justify-center font-black text-[11px] shrink-0 transition-all duration-500",
@@ -138,7 +117,7 @@ export default function EconomicImpactChainStepper({
                     "flex-1 min-w-0 transition-all duration-500",
                     isActive
                       ? "opacity-100 scale-[1.02] origin-left"
-                      : "opacity-45 group-hover:opacity-75"
+                      : "opacity-40 group-hover:opacity-70"
                   )}
                 >
                   {/* Basamak Etiketi */}
@@ -159,7 +138,7 @@ export default function EconomicImpactChainStepper({
                       "transition-all duration-500 leading-snug tracking-tight",
                       isActive
                         ? "text-[13px] font-black text-[#00008B]"
-                        : "text-xs font-bold text-slate-600"
+                        : "text-xs font-bold text-slate-500"
                     )}
                   >
                     {channel.title}
@@ -178,8 +157,8 @@ export default function EconomicImpactChainStepper({
                   </p>
 
                   {/* Sırası gelen yazı için zarif 5 saniyelik alttan ilerleme çizgisi */}
-                  {isActive && !isPaused && (
-                    <div className="mt-2 h-0.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                  {isActive && (
+                    <div className="mt-2 h-0.5 w-full bg-slate-200/80 rounded-full overflow-hidden">
                       <div
                         key={progressKey}
                         className="h-full bg-[#00008B] rounded-full"
