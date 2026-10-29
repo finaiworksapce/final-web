@@ -67,17 +67,17 @@ export const INDICATOR_PROFILES_DATABASE: Record<string, IndicatorProfile> = {
         impactLevel: "critical",
         unit: "%",
         higherIsPositive: false,
-        definition: "Tüketici Fiyat Endeksi (TÜFE), hanehalklarının tükettiği mal ve hizmet sepetinin aylık bazdaki ortalama fiyat değişimini ölçer.",
+        definition: "Aylık Tüketici Fiyat Endeksi (TÜFE), bir ailenin günlük yaşamında tükettiği gıda, giyim, kira ve ulaşım gibi yüzlerce temel ürünün fiyatlarının son 30 gün içinde ortalama ne kadar değiştiğini gösteren resmi ekonomik veridir. Bu veri, Türkiye İstatistik Kurumu (TÜİK) uzmanlarının her ay ülkenin dört bir yanındaki binlerce market, pazar ve mağazayı gezerek topladığı fiş ve etiket fiyatlarıyla hesaplanır. Endeksin temel görevi, halkın cebindeki paranın alım gücünün bir ay öncesine göre ne kadar eridiğini rakamlarla ortaya koymaktır. Verinin yüksek çıkması, çarşı pazardaki fiyatların hızla zamlandığını ve hayat pahalılığının bir önceki aya göre sert biçimde arttığını kanıtlar. Düşük çıkması ise aylık fiyat artışlarının yavaşladığına ve etiketlerin sakinleştiğine işaret eder. Merkez Bankası'nın faiz kararlarından şirketlerin fiyatlama politikalarına kadar tüm ekonomik adımlar öncelikle bu aylık veriye bakılarak şekillendirilir.",
+        realLifeExample: "Her ayın başında mahallenizdeki markete gidip aynı peyniri, sütü, deterjanı ve zeytinyağını sepete doldurduğunuzu düşünün. Kasiyere ödediğiniz toplam tutar bir önceki aya göre fark edilir şekilde arttıysa, cebinizden aynı sepet için daha çok para çıkmış demektir. İşte Aylık TÜFE, tek tek sizin market fişinizdeki bu fiyat farkının tüm Türkiye genelindeki ortalamasını simgeler. Açıklanan oran yüksek olduğunda, maaşınız aynı kalsa bile ay sonunu getirmekte daha çok zorlanır ve dışarıda yemek yemek gibi keyfi harcamalarınızı kısmak zorunda kalırsınız. Tersi durumda yani oran düştüğünde ise fiyatlar hemen ucuzlamaz ama en azından bir önceki ayki gibi kontrolsüzce fırlamaz. Böylece açıklanan tek bir aylık oran, o ay evinize alabileceğiniz ekmekten çocuğunuzun okul masrafına kadar mutfak bütçenizi anında belirler.",
         whatItMeasures: "Hanehalkı harcama sepetindeki aylık fiyat artış hızını ve Türk Lirası'nın satın alma gücündeki aylık erimeyi ölçer.",
         whyItMatters: "TCMB faiz kararlarını, mevduat getirilerini, ev kiralarını ve maaş zam oranlarını doğrudan belirleyen en kritik makro veridir.",
         howToInterpret: "TÜFE'yi değerlendirirken yalnızca mevcut değere değil; önceki döneme, piyasa beklentisine, yıllık enflasyona ve çekirdek fiyat göstergelerine birlikte bakmak gerekir.",
         impactChannels: [
-            { step: "VERİ", title: "Açıklanan TÜFE Oranı", desc: "Aylık fiyat artış hızı verisi açıklanır." },
-            { step: "BEKLENTİLER", title: "Enflasyon Beklentileri", desc: "Piyasanın gelecek dönem enflasyon patikasına dair öngörüleri şekillenir." },
-            { step: "PARA POLİTİKASI", title: "TCMB Duruşu", desc: "Merkez Bankası para politikasında sıkılaşma veya esnetme alanını değerlendirir." },
-            { step: "FAİZLER", title: "Borçlanma & Mevduat", desc: "Politika faizine paralel olarak mevduat ve kredi faiz oranları dengelenir." },
-            { step: "KREDİ / MEVDUAT", title: "Likidite Akışı", desc: "Hanehalkı ve şirketlerin harcama veya tasarruf tercihleri etkilenir." },
-            { step: "FİNANSAL VARLIKLAR", title: "Borsa & Döviz", desc: "Reel getiriler doğrultusunda borsa şirketleri ve döviz kurları dengesini bulur." }
+            { step: "TÜİK", title: "Veri Açıklanır", desc: "Aylık tüketici fiyat artış oranı her ayın başında resmi olarak ilan edilir. Piyasa analistleri veriyi beklentilerle kıyaslar." },
+            { step: "ALIM GÜCÜ", title: "Cepteki Para", desc: "Yüksek aylık enflasyon vatandaşın satın alma gücünü anında aşındırır. İnsanlar temel ihtiyaçlar dışındaki harcamalarını kısmaya başlar." },
+            { step: "MERKEZ BANKASI", title: "Faiz Beklentisi", desc: "Aylık fiyat artışları yüksek gelirse TCMB'nin faizleri artırması veya yüksek tutması beklenir. Bu beklenti borçlanma maliyetlerini yükseltir." },
+            { step: "KREDİ VE MEVDUAT", title: "Bankalar", desc: "Bankalar mevduat getirilerini ve kredi taksitlerini enflasyona göre ayarlar. Parası olanlar getiri arayışıyla vadeli mevduata veya altına yönelir." },
+            { step: "PİYASALAR", title: "Borsa ve Kurlar", desc: "Enflasyon verisi borsa şirketlerinin kar marjlarını ve döviz kurlarını yeniden fiyatlayarak piyasada denge oluşturur." }
         ],
         chartReadingCards: {
             direction: "Grafikteki yukarı yönlü hareket aylık fiyat artışının hızlandığına, aşağı yönlü hareket ise dezenflasyon sürecine işaret eder.",
@@ -104,17 +104,17 @@ export const INDICATOR_PROFILES_DATABASE: Record<string, IndicatorProfile> = {
         impactLevel: "critical",
         unit: "%",
         higherIsPositive: false,
-        definition: "Yıllık TÜFE Enflasyonu, son 12 ay içerisindeki tüketici fiyat seviyesinin birikimli yıllık artış oranını gösterir.",
+        definition: "Yıllık Enflasyon Oranı (TÜFE), ülkede satılan mal ve hizmetlerin genel fiyat seviyesinin son 12 ay boyunca toplamda yüzde kaç arttığını gösteren birikimli hayat pahalılığı karnesidir. Bu oran, her ay açıklanan aylık tüketici fiyat endekslerinin geriye dönük son bir yıl boyunca birbiri ardına eklenmesiyle resmi istatistik kurumu tarafından hesaplanır. Oranın temel amacı, vatandaşın ve şirketlerin son bir yıl içerisinde ne kadar bir satın alma gücü kaybı yaşadığını bütüncül olarak ölçmektir. Yıllık enflasyonun yüksek olması, paranın değerini hızla yitirdiğini ve yaşam maliyetinin geçen yıla kıyasla katlandığını gösterir. Oranın gerilemesi ise fiyatların geriye doğru ucuzladığı anlamına gelmez, sadece son bir yıldaki fiyat artış hızının bir miktar yavaşladığını anlatır. Memur ve emekli maaş zamlarından kiralara uygulanacak yasal tavan artış oranına kadar milyonlarca insanı ilgilendiren tüm sözleşmeler bu veriye göre belirlenir.",
+        realLifeExample: "Tam bir yıl önce bugün kiraladığınız evin kira sözleşmesinin yenilenme zamanının geldiğini hayal edin. Ev sahibiniz kapınızı çaldığında veya bankadan kira artış mesajı geldiğinde, yasal olarak ödenecek yeni tutar doğrudan bu yıllık enflasyon oranına göre hesaplanır. Eğer yıllık enflasyon yüzde elli açıklandıysa, geçen yıl on bin lira ödediğiniz kiranız bir anda on beş bin liraya fırlar. Aynı şekilde geçen yıl doldurduğunuz yıllık kışlık yakıtınız, çocuklarınızın okul kaydı ve yıllık araba kaskonuz da tam bu oran kadar zamlanır. Yıllık enflasyon düşüşe geçtiğinde ise sevinirsiniz çünkü bir sonraki yıl kira ve aidatınız bir önceki yılki kadar sert artmaz. Yani bu veri, bir ayın geçici dalgalanmasını değil, evinizin ve hayatınızın bir yıllık kalıcı geçim yükünü temsil eder.",
         whatItMeasures: "Ülkedeki genel fiyat düzeyinin 1 yıllık zaman ufku içerisindeki toplam artış hızını ölçer.",
         whyItMatters: "Kira artış tavanları, asgari ücret güncellemeleri ve memur/emekli zam oranları resmi olarak bu veriye dayanır.",
         howToInterpret: "Yıllık enflasyonu incelerken baz etkisinin (geçen yılın aynı ayındaki sıra dışı verilerin) oran üzerindeki yapay yükseltici veya düşürücü etkisini göz önüne almak şarttır.",
         impactChannels: [
-            { step: "VERİ", title: "Yıllık TÜFE Verisi", desc: "Son 12 ayın birikimli artış oranı yayınlanır." },
-            { step: "BEKLENTİLER", title: "Reel Faiz Beklentisi", desc: "Mevduat faizlerinin enflasyon karşısındaki koruma gücü ölçülür." },
-            { step: "PARA POLİTİKASI", title: "Sıkılaşma Patikası", desc: "TCMB'nin enflasyon hedefleri doğrultusundaki kararlılığı değerlendirilir." },
-            { step: "FAİZLER", title: "Uzun Vadeli Oranlar", desc: "Tahvil faizleri ve uzun vadeli konut kredileri şekillenir." },
-            { step: "KREDİ / MEVDUAT", title: "Tasarruf Eğilimi", desc: "TL tasarruf ve enflasyondan korunma arayışı yön bulur." },
-            { step: "FİNANSAL VARLIKLAR", title: "Varlık Değerlemeleri", desc: "Şirket değerlemeleri ve reel varlık fiyatları dengelenir." }
+            { step: "YILLIK VERİ", title: "12 Aylık Birikim", desc: "Son 12 ayın toplam enflasyon oranı kamuoyu ile paylaşılır. Ülkenin bir yıllık hayat pahalılığı tablosu netleşir." },
+            { step: "MAAŞ VE KİRALAR", title: "Yasal Artışlar", desc: "Asgari ücret, memur-emekli zamları ve konut-işyeri kira tavanları bu yıllık veriye göre güncellenir." },
+            { step: "REEL FAİZ", title: "Paranın Koruması", desc: "Yatırımcılar bankaların verdiği mevduat faizini yıllık enflasyonla karşılaştırır. Faiz enflasyonun altındaysa parayı korumak için döviz, altın veya gayrimenkule kaçış hızlanır." },
+            { step: "UZUN VADELİ BORÇLAR", title: "Konut ve Taşıt", desc: "Bankalar uzun vadeli konut ve taşıt kredisi faizlerini yıllık enflasyon beklentilerine göre yükseltir veya düşürür." },
+            { step: "ŞİRKET DEĞERLERİ", title: "Borsa Dengesi", desc: "Yıllık yüksek enflasyon şirketlerin maliyetlerini şişirirken, fiyatlarını enflasyona göre artırabilen güçlü hisseler borsada öne çıkar." }
         ],
         chartReadingCards: {
             direction: "Grafikteki gerileme dezenflasyon sürecini temsil eder. Değerin düşmesi fiyatların ucuzladığı anlamına değil, artış hızının yavaşladığı anlamına gelir.",
@@ -127,7 +127,43 @@ export const INDICATOR_PROFILES_DATABASE: Record<string, IndicatorProfile> = {
         ],
         relatedIndicators: [
             { name: "Aylık Tüketici Fiyat Endeksi (TÜFE)", id: "tr_cpi_mom", category: "Enflasyon" },
+            { name: "Aylık Üretici Fiyat Endeksi (ÜFE)", id: "tr_ppi_mom", category: "Enflasyon" },
             { name: "TCMB Politika Faizi Kararı", id: "tr_cbrt_rate", category: "Faiz & Para Politikası" }
+        ]
+    },
+    "Aylık Üretici Fiyat Endeksi (ÜFE)": {
+        id: "tr_ppi_mom",
+        name: "Aylık Üretici Fiyat Endeksi (ÜFE)",
+        country: "TR",
+        flag: "🇹🇷",
+        category: "Enflasyon",
+        impactLevel: "high",
+        unit: "%",
+        higherIsPositive: false,
+        definition: "Aylık Üretici Fiyat Endeksi (ÜFE), tarlada, madende ve fabrikalarda üretilen malların henüz tüketiciye ulaşmadan, fabrika çıkış kapısındaki toptan satış fiyatlarının aylık değişimini ölçen göstergedir. Bu gösterge, sanayi tesislerinden, enerji santrallerinden ve imalatçılardan toplanan hammadde, elektrik ve toptan ürün maliyetleri incelenerek her ay düzenli hesaplanır. Temel görevi, üreticilerin katlandığı maliyet baskısını ve imalat zincirindeki fiyat artışlarını tüketiciye ulaşmadan önceki ilk aşamasında tespit etmektir. ÜFE'nin sert yükselmesi, fabrikaların elektrik, yakıt ve hammaddeye daha fazla para ödediğini ve imalat maliyetlerinin fırladığını gösterir. Üreticiler bu maliyetleri kendi ceplerinden karşılayamayacağı için ÜFE artışları birkaç ay içinde kaçınılmaz olarak market raflarına ve tüketici fiyatlarına zam olarak yansır. Bu sebeple ekonomistler, gelecekte çarşı pazarda yaşanacak tüketici enflasyonunun erken uyarı sinyali olarak öncelikle ÜFE verisini dikkatle takip eder.",
+        realLifeExample: "Mahallenizdeki fırıncının her sabah taze ekmek pişirmek için un, maya, odun ve elektrik aldığını hayal edin. Fırıncının toptancıdan aldığı un çuvalının ve fırını çalıştırmak için ödediği elektrik faturasının toptan fiyatı iki katına çıktığında, fırıncı bu ek maliyeti tek başına üstlenemez. Birkaç hafta dişini sıksa bile en sonunda mecburen tezgahtaki ekmeğin etiketini artırmak ve zam yapmak zorunda kalır. İşte ÜFE tam olarak bu fırıncının, mobilyacının veya süt fabrikasının arka plandaki toptan maliyet artışını gösterir. ÜFE yüksek çıktığında, henüz markette görmediğiniz ürünlerin bile birkaç hafta sonra zamlanacağını önceden anlarsınız. Böylece bu veri, önümüzdeki aylarda mutfak masrafınızın ne kadar artacağını size fabrikaların kapısından fısıldayan bir erken haberci gibidir.",
+        whatItMeasures: "İmalat ve sanayi sektöründeki toptan üretim maliyetlerinin aylık değişim hızını ölçer.",
+        whyItMatters: "Tüketici enflasyonunun öncü göstergesidir ve sanayi şirketlerinin kar marjlarını doğrudan belirler.",
+        howToInterpret: "ÜFE ile TÜFE arasındaki makas incelenmeli; ÜFE yüksek kaldıkça tüketici fiyatları üzerindeki maliyet baskısının süreceği unutulmamalıdır.",
+        impactChannels: [
+            { step: "FABRİKA KAPISI", title: "Toptan Maliyet", desc: "Üreticilerin hammadde, enerji ve işçilik maliyetlerindeki aylık değişim ÜFE olarak açıklanır." },
+            { step: "MALİYET BASKISI", title: "İmalatçı Yükü", desc: "Üretim maliyeti yükselen fabrikalar ürünlerini toptancılara ve perakendecilere daha pahalıya satmaya başlar." },
+            { step: "MARKET RAFLARI", title: "TÜFE'ye Geçiş", desc: "Toptan fiyattaki artış birkaç hafta içinde çarşıdaki, pazardaki ve marketteki etiketlere zam olarak yansır." },
+            { step: "ŞİRKET KARLARI", title: "Marjların Daralması", desc: "Maliyetlerini tüketiciye anında yansıtamayan şirketlerin kar marjları erir ve yatırımları yavaşlar." },
+            { step: "MERKEZ BANKASI", title: "Enflasyon Baskısı", desc: "ÜFE'den gelen baskı tüketici enflasyonunu tetiklediğinde, Merkez Bankası para politikasını sıkı tutmaya devam eder." }
+        ],
+        chartReadingCards: {
+            direction: "Grafikteki yukarı yönlü ivme fabrikaların üretim maliyetlerinin arttığını, aşağı yönlü ivme ise rahatlamayı gösterir.",
+            changeSpeed: "ÜFE eğrisindeki ani kırılmalar döviz kuru ve küresel emtia fiyatlarının üretime yansımasını simgeler.",
+            context: "Üretici fiyatlarının tüketici fiyatlarına geçişkenlik süresi genellikle 1 ile 3 ay arasında seyreder."
+        },
+        whatWeCannotInfer: "ÜFE'nin aylık düşmesi mevcut çarşı pazar fiyatlarının ucuzlayacağını garanti etmez; sadece üreticinin maliyet artışının durulduğunu gösterir.",
+        financialLiteracyItems: [
+            { title: "Maliyet Enflasyonu Nedir?", content: "Hammadde, enerji veya işçilik giderlerinin artması sonucu ürünlerin üretim maliyetinin yükselmesiyle oluşan enflasyon türüdür." }
+        ],
+        relatedIndicators: [
+            { name: "Aylık Tüketici Fiyat Endeksi (TÜFE)", id: "tr_cpi_mom", category: "Enflasyon" },
+            { name: "Yıllık Enflasyon Oranı (TÜFE)", id: "tr_cpi_yoy", category: "Enflasyon" }
         ]
     },
     "Fed Politika Faizi Kararı": {
