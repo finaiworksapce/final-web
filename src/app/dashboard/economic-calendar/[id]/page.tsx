@@ -12,6 +12,7 @@ import { getDynamicCalendarCatalog } from "@/lib/calendar-scraper";
 import { INDICATOR_PROFILES_DATABASE, IndicatorProfile } from "@/lib/indicator-profiles";
 import { calculateBackendDifferences, generateFinAiAnalysis } from "@/lib/finai-calendar-analysis-engine";
 import FollowIndicatorButton from "@/components/calendar/FollowIndicatorButton";
+import EconomicImpactChainStepper from "@/components/calendar/EconomicImpactChainStepper";
 
 function toSlug(str: string): string {
     return str
@@ -377,76 +378,8 @@ export default function EconomicEventDetailPage() {
                         </div>
                     </div>
 
-                    {/* SAĞ BÖLÜM: EKONOMİK ETKİ ZİNCİRİ (DİKEY AKIŞLI YAN BAREM - SAYFA GENİŞLİĞİNİN ~%10-12'Sİ) */}
-                    {profile.impactChannels && profile.impactChannels.length > 0 && (
-                        <aside className="w-full xl:w-[13%] 2xl:w-[11%] xl:min-w-[160px] xl:max-w-[200px] shrink-0 xl:sticky xl:top-6 self-start">
-                            <div className="bg-white border border-slate-200 rounded-3xl p-3.5 sm:p-4 shadow-sm space-y-3">
-                                {/* Barem Başlığı */}
-                                <div className="flex items-center gap-2 pb-2.5 border-b border-slate-150">
-                                    <div className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0">
-                                        <Layers className="w-3.5 h-3.5 text-[#00008B]" />
-                                    </div>
-                                    <div className="min-w-0">
-                                        <h3 className="text-xs font-black text-[#00008B] leading-tight truncate">Etki Zinciri</h3>
-                                        <p className="text-[9px] text-slate-400 font-bold truncate">Neden → Sonuç</p>
-                                    </div>
-                                </div>
-
-                                {/* Dikey Barem Akışı (Yukarıdan Aşağıya) */}
-                                <div className="flex flex-col items-stretch space-y-1.5">
-                                    {profile.impactChannels.map((channel, idx) => {
-                                        const isFirst = idx === 0;
-                                        const isLast = idx === profile.impactChannels.length - 1;
-
-                                        return (
-                                            <div key={idx} className="flex flex-col items-center">
-                                                <div className={`w-full p-2.5 rounded-2xl border transition-all text-left ${
-                                                    isFirst
-                                                        ? 'bg-[#00008B] text-white border-[#00008B] shadow-sm'
-                                                        : isLast
-                                                        ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
-                                                        : 'bg-slate-50 hover:bg-blue-50/50 border-slate-200 text-slate-800'
-                                                }`}>
-                                                    <div className="flex items-center justify-between gap-1 mb-1">
-                                                        <span className={`text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded ${
-                                                            isFirst
-                                                                ? 'bg-blue-800 text-blue-100'
-                                                                : isLast
-                                                                ? 'bg-emerald-700 text-emerald-100'
-                                                                : 'bg-slate-200 text-slate-600'
-                                                        }`}>
-                                                            {channel.step}
-                                                        </span>
-                                                        <span className={`text-[9px] font-black ${
-                                                            isFirst ? 'text-blue-200' : isLast ? 'text-emerald-100' : 'text-slate-400'
-                                                        }`}>
-                                                            0{idx + 1}
-                                                        </span>
-                                                    </div>
-                                                    <h4 className={`text-[11px] font-black leading-snug ${
-                                                        isFirst || isLast ? 'text-white' : 'text-[#00008B]'
-                                                    }`}>
-                                                        {channel.title}
-                                                    </h4>
-                                                    <p className={`text-[9px] font-medium leading-relaxed mt-1 ${
-                                                        isFirst ? 'text-blue-100' : isLast ? 'text-emerald-50' : 'text-slate-500'
-                                                    }`}>
-                                                        {channel.desc}
-                                                    </p>
-                                                </div>
-
-                                                {!isLast && (
-                                                    <div className="py-1 flex items-center justify-center text-slate-300">
-                                                        <ChevronDown className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-                                                    </div>
-                                                )}
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        </aside>
-                    )}
+                    {/* SAĞ BÖLÜM: EKONOMİK ETKİ ZİNCİRİ (5s OTOMATİK DÖNGÜLÜ & BÜYÜTÜLEN DİKEY STEPPER BAREMİ) */}
+                    <EconomicImpactChainStepper channels={profile.impactChannels} />
                 </div>
             </div>
 
