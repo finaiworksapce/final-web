@@ -191,7 +191,7 @@ export default function EconomicEventDetailPage() {
                             {/* SOL: TANIM (LACİVERT KUTU, BEYAZ DÜZ YAZI, İÇ FON YOK) */}
                             <div className="bg-[#00008B] text-white rounded-3xl p-6 md:p-8 shadow-sm flex flex-col justify-between space-y-4">
                                 <div className="space-y-3">
-                                    <div className="flex items-center gap-2.5 pb-3 border-b border-blue-900/80">
+                                    <div className="flex items-center gap-2.5 pb-3 border-b border-white/40">
                                         <div className="w-9 h-9 rounded-2xl bg-blue-900/60 border border-blue-800 flex items-center justify-center">
                                             <BookOpen className="w-4 h-4 text-white" />
                                         </div>
