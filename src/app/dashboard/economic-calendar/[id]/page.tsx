@@ -196,64 +196,60 @@ export default function EconomicEventDetailPage() {
                     {/* SOL BÖLÜM: 2 KART (TANIM & FINAI INTELLIGENCE), GRAFİK VE GEÇMİŞTE NELER OLDU */}
                     <div className="flex-1 min-w-0 space-y-6 w-full">
 
-                        {/* 2. BAŞLIĞIN ALTINDA İKİYE BÖLÜNEN ALAN: SOLDA LACİVERT TANIM, SAĞDA BEYAZ FINAI INTELLIGENCE */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-                            {/* SOL: TANIM (LACİVERT WIDGET) */}
-                            <div className="bg-[#00008B] text-white rounded-3xl p-6 md:p-8 shadow-sm flex flex-col justify-between space-y-4">
-                                <div className="space-y-3">
-                                    <div className="flex items-center gap-2.5 pb-3 border-b border-blue-900/80">
-                                        <div className="w-9 h-9 rounded-2xl bg-blue-900/60 border border-blue-800 flex items-center justify-center">
-                                            <BookOpen className="w-4 h-4 text-white" />
-                                        </div>
-                                        <div>
-                                            <h2 className="text-lg font-black text-white tracking-tight">Tanım</h2>
-                                            <p className="text-[11px] text-blue-200/80 font-bold">Gösterge Literatür Tanımı</p>
-                                        </div>
+                        {/* 2. BAŞLIĞIN ALTINDA İKİYE BÖLÜNEN ALAN: SOLDA TANIM, SAĞDA FINAI INTELLIGENCE (FONSUZ / SALT METİN) */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start py-2">
+                            {/* SOL: TANIM (FONSUZ, İTALİK VE KÜÇÜK METİN) */}
+                            <div className="space-y-3">
+                                <div className="flex items-center gap-2.5 pb-2.5 border-b border-slate-200">
+                                    <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-200/60 flex items-center justify-center">
+                                        <BookOpen className="w-4 h-4 text-[#00008B]" />
                                     </div>
-
-                                    {profile.definition ? (
-                                        <div className="p-1 sm:p-2">
-                                            <p className="text-sm md:text-[15px] font-medium text-blue-100 leading-relaxed tracking-normal">
-                                                {profile.definition}
-                                            </p>
-                                        </div>
-                                    ) : (
-                                        <div className="min-h-[140px] flex items-center justify-center p-6 rounded-2xl bg-blue-950/40 border border-blue-900/60 text-center">
-                                            <p className="text-xs font-bold text-blue-200/60 leading-relaxed max-w-sm">
-                                                Bu göstergenin akademik tanımı ve piyasa literatüründeki kavramsal karşılığı yakında bu alana eklenecektir.
-                                            </p>
-                                        </div>
-                                    )}
+                                    <div>
+                                        <h2 className="text-base sm:text-lg font-black text-[#00008B] tracking-tight">Tanım</h2>
+                                        <p className="text-[11px] text-slate-500 font-bold">Gösterge Literatür Tanımı</p>
+                                    </div>
                                 </div>
+
+                                {profile.definition ? (
+                                    <div className="pt-1">
+                                        <p className="text-xs sm:text-[13px] italic font-normal text-slate-700 leading-relaxed tracking-normal">
+                                            {profile.definition}
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="py-6 text-center">
+                                        <p className="text-xs font-bold text-slate-400 italic leading-relaxed max-w-sm mx-auto">
+                                            Bu göstergenin akademik tanımı ve piyasa literatüründeki kavramsal karşılığı yakında bu alana eklenecektir.
+                                        </p>
+                                    </div>
+                                )}
                             </div>
 
-                            {/* SAĞ: FINAI INTELLIGENCE (GÜNLÜK HAYATTAN ÖRNEK - BEYAZ WIDGET) */}
-                            <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm flex flex-col justify-between space-y-4">
-                                <div className="space-y-3">
-                                    <div className="flex items-center gap-2.5 pb-3 border-b border-slate-150">
-                                        <div className="w-9 h-9 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center">
-                                            <Sparkles className="w-4 h-4 text-[#00008B]" />
-                                        </div>
-                                        <div>
-                                            <h2 className="text-lg font-black text-[#00008B] tracking-tight">FinAi INTELLIGENCE</h2>
-                                            <p className="text-[11px] text-slate-400 font-bold">Günlük Hayattan Örnek & Somut Yansıma</p>
-                                        </div>
+                            {/* SAĞ: FINAI INTELLIGENCE (FONSUZ, İTALİK VE KÜÇÜK METİN) */}
+                            <div className="space-y-3">
+                                <div className="flex items-center gap-2.5 pb-2.5 border-b border-slate-200">
+                                    <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-200/60 flex items-center justify-center">
+                                        <Sparkles className="w-4 h-4 text-[#00008B]" />
                                     </div>
-
-                                    {profile.realLifeExample ? (
-                                        <div className="p-1 sm:p-2">
-                                            <p className="text-sm md:text-[15px] font-medium text-slate-700 leading-relaxed tracking-normal">
-                                                {profile.realLifeExample}
-                                            </p>
-                                        </div>
-                                    ) : (
-                                        <div className="min-h-[140px] flex items-center justify-center p-6 rounded-2xl bg-slate-50 border border-slate-150 text-center">
-                                            <p className="text-xs font-bold text-slate-400 leading-relaxed max-w-sm">
-                                                Açıklanan verinin bireysel bütçeye, gündelik tüketime ve sokaktaki reel hayata somut yansımaları yakında eklenecektir.
-                                            </p>
-                                        </div>
-                                    )}
+                                    <div>
+                                        <h2 className="text-base sm:text-lg font-black text-[#00008B] tracking-tight">FinAi INTELLIGENCE</h2>
+                                        <p className="text-[11px] text-slate-500 font-bold">Günlük Hayattan Örnek & Somut Yansıma</p>
+                                    </div>
                                 </div>
+
+                                {profile.realLifeExample ? (
+                                    <div className="pt-1">
+                                        <p className="text-xs sm:text-[13px] italic font-normal text-slate-700 leading-relaxed tracking-normal">
+                                            {profile.realLifeExample}
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="py-6 text-center">
+                                        <p className="text-xs font-bold text-slate-400 italic leading-relaxed max-w-sm mx-auto">
+                                            Açıklanan verinin bireysel bütçeye, gündelik tüketime ve sokaktaki reel hayata somut yansımaları yakında eklenecektir.
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
