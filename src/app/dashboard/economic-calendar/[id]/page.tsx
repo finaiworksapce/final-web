@@ -211,12 +211,19 @@ export default function EconomicEventDetailPage() {
                                         </div>
                                     </div>
 
-                                    {/* Şimdilik boş bırakılan içerik alanı (ilerde doldurulacak) */}
-                                    <div className="min-h-[140px] flex items-center justify-center p-6 rounded-2xl bg-blue-950/40 border border-blue-900/60 text-center">
-                                        <p className="text-xs font-bold text-blue-200/60 leading-relaxed max-w-sm">
-                                            Bu göstergenin akademik tanımı ve piyasa literatüründeki kavramsal karşılığı yakında bu alana eklenecektir.
-                                        </p>
-                                    </div>
+                                    {profile.definition ? (
+                                        <div className="p-1 sm:p-2">
+                                            <p className="text-sm md:text-[15px] font-medium text-blue-100 leading-relaxed tracking-normal">
+                                                {profile.definition}
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div className="min-h-[140px] flex items-center justify-center p-6 rounded-2xl bg-blue-950/40 border border-blue-900/60 text-center">
+                                            <p className="text-xs font-bold text-blue-200/60 leading-relaxed max-w-sm">
+                                                Bu göstergenin akademik tanımı ve piyasa literatüründeki kavramsal karşılığı yakında bu alana eklenecektir.
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
@@ -233,12 +240,19 @@ export default function EconomicEventDetailPage() {
                                         </div>
                                     </div>
 
-                                    {/* Şimdilik boş bırakılan içerik alanı (ilerde doldurulacak) */}
-                                    <div className="min-h-[140px] flex items-center justify-center p-6 rounded-2xl bg-slate-50 border border-slate-150 text-center">
-                                        <p className="text-xs font-bold text-slate-400 leading-relaxed max-w-sm">
-                                            Açıklanan verinin bireysel bütçeye, gündelik tüketime ve sokaktaki reel hayata somut yansımaları yakında eklenecektir.
-                                        </p>
-                                    </div>
+                                    {profile.realLifeExample ? (
+                                        <div className="p-1 sm:p-2">
+                                            <p className="text-sm md:text-[15px] font-medium text-slate-700 leading-relaxed tracking-normal">
+                                                {profile.realLifeExample}
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div className="min-h-[140px] flex items-center justify-center p-6 rounded-2xl bg-slate-50 border border-slate-150 text-center">
+                                            <p className="text-xs font-bold text-slate-400 leading-relaxed max-w-sm">
+                                                Açıklanan verinin bireysel bütçeye, gündelik tüketime ve sokaktaki reel hayata somut yansımaları yakında eklenecektir.
+                                            </p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

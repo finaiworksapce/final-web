@@ -13,7 +13,8 @@ export interface IndicatorProfile {
     impactLevel: 'low' | 'medium' | 'high' | 'critical';
     unit: string; // '%', 'K', 'B $', 'Puan'
     higherIsPositive: boolean; // Gösterge yönü
-    definition: string; // 1. Tanım
+    definition: string; // 1. Tanım (5-8 Cümle, Jargonsuz)
+    realLifeExample?: string; // 2. FinAi INTELLIGENCE (Günlük Hayattan Örnek, 5-8 Cümle)
     whatItMeasures: string; // 2. Ne ölçer?
     whyItMatters: string; // 3. Neden önemlidir?
     howToInterpret: string; // 4. Nasıl yorumlanır? (YENİ 7.1 SEVİYESİ)
@@ -162,6 +163,41 @@ export const INDICATOR_PROFILES_DATABASE: Record<string, IndicatorProfile> = {
         relatedIndicators: [
             { name: "Tarım Dışı İstihdam Değişimi (NFP)", id: "us_nfp", category: "İstihdam" },
             { name: "ISM İmalat PMI Endeksi", id: "us_ism_pmi", category: "Büyüme & İmalat" }
+        ]
+    },
+    "İngiltere Merkez Bankası (BoE) Faiz Kararı": {
+        id: "uk_boe_rate",
+        name: "İngiltere Merkez Bankası (BoE) Faiz Kararı",
+        country: "UK",
+        flag: "🇬🇧",
+        category: "Faiz & Para Politikası",
+        impactLevel: "critical",
+        unit: "%",
+        higherIsPositive: true,
+        definition: "İngiltere Merkez Bankası (BoE) Faiz Kararı, ülkedeki bankaların birbirine borç verirken uygulayacağı temel borçlanma maliyetinin resmi olarak belirlenmesidir. Bu kritik karar, Para Politikası Kurulu bünyesindeki 9 bağımsız uzmanın toplanıp oy kullanmasıyla iki ayda bir alınır. Kararın temel amacı, çarşı ve pazardaki fiyat artışlarını kontrol altında tutarak İngiliz Sterlini'nin alım gücünü korumaktır. Faiz yükseltildiğinde para harcamak yerine bankada biriktirmek daha cazip hale gelir ve genel tüketim yavaşlar. Faiz indirildiğinde ise kredi çekmek kolaylaşır, piyasaya sıcak para girer ve ekonomik çarklar hızlanır. Küresel finans dünyasının en köklü merkezlerinden biri olduğu için alınan bu faiz kararı hem Sterlin'in değerini hem de dünya piyasalarını doğrudan sarsar.",
+        realLifeExample: "Yeni bir ev almak ya da arabanızı yenilemek için bankadan kredi çekmeyi düşündüğünüzü hayal edin. İngiltere Merkez Bankası faiz artırdığında, bankaların size sunduğu kredi faizleri de anında yükselir. Bu durum, her ay ödeyeceğiniz kredi taksitinin artması ve borçlanmanın çok daha masraflı hale gelmesi anlamına gelir. Taksitler yükselince insanlar büyük harcamalarını erteler, parasını harcamak yerine bankada biriktirmeyi seçer. Alışverişler azalıp dükkanlar müşteri çekmekte zorlanınca da çarşı pazardaki hızlı fiyat artışları yavaşlamaya başlar. Böylece bankanın aldığı tek bir karar, cebinizdeki harçlıktan ay sonundaki kredi kartı ekstrenize kadar tüm bütçenize doğrudan dokunur.",
+        whatItMeasures: "İngiltere ekonomisindeki resmi borçlanma faizini ve para politikasının sıkılık düzeyini ölçer.",
+        whyItMatters: "Küresel finansın merkezi Londra'daki sermaye akışlarını, Sterlin kurunu ve dünya borsalarını doğrudan belirler.",
+        howToInterpret: "Kararla birlikte Para Politikası Kurulu üyelerinin oy dağılımı ve geleceğe dair enflasyon projeksiyonları incelenmelidir.",
+        impactChannels: [
+            { step: "MERKEZ BANKASI", title: "Faiz Oranı Açıklanır", desc: "İngiltere Merkez Bankası yeni faiz oranını kamuoyuyla paylaşır. Piyasa bu kararı önceki beklentilerle kıyaslayarak ilk tepkisini verir." },
+            { step: "STERLİN", title: "Para Birimi Dalgalanır", desc: "Faiz artarsa İngiliz Sterlini yabancı yatırımcı için cazip hale gelip güçlenir. Faiz inerse Sterlin diğer para birimleri karşısında değer kaybeder." },
+            { step: "BANKA KREDİLERİ", title: "Borçlanma Şartları Değişir", desc: "Ticari bankalar kredi faizlerini ve mevduat getirilerini yeni karara göre ayarlar. Vatandaşın ve şirketlerin borçlanma maliyeti doğrudan değişir." },
+            { step: "TÜKETİM & TASARRUF", title: "Harcamalar Yön Değiştirir", desc: "Faizler yüksekken insanlar tasarrufa yönelip harcamaları kısar. Faizler düşükken ise tüketim artar ve şirketler yeni yatırımlara girişir." },
+            { step: "BORSA & PİYASA", title: "Şirket Değerleri Dengelenir", desc: "Yüksek faiz şirket karlarını baskılayıp hisse piyasalarını sakinleştirir. Düşük faiz ise borsalara canlılık ve hareketlilik getirir." }
+        ],
+        chartReadingCards: {
+            direction: "Grafikteki yukarı yönlü basamaklar parasal sıkılaşmayı, aşağı yönlü basamaklar ise faiz indirimi döngüsünü simgeler.",
+            changeSpeed: "Toplantılardaki faiz artış veya indirim sıklığı ekonomideki aciliyet derecesini gösterir.",
+            context: "Kararın yanı sıra Kurul tutanakları ve toplantı sonrası basın açıklaması dikkatle izlenmelidir."
+        },
+        whatWeCannotInfer: "Faiz kararından tek başına Sterlin'in aylarca hangi yöne gideceği kesin olarak çıkarılamaz; küresel jeopolitik ve büyüme verileri de etkilidir.",
+        financialLiteracyItems: [
+            { title: "BoE Para Politikası Kurulu (MPC) Kimlerden Oluşur?", content: "9 üyeden oluşur: Başkan, 3 Başkan Yardımcısı, Baş Ekonomist ve Hazine Bakanı tarafından atanan 4 bağımsız harici uzman." }
+        ],
+        relatedIndicators: [
+            { name: "Fed Politika Faizi Kararı", id: "us_fed_rate", category: "Faiz & Para Politikası" },
+            { name: "S&P Global İmalat PMI (Nihai)", id: "uk_pmi_final", category: "Büyüme & İmalat" }
         ]
     },
     "Default": {
