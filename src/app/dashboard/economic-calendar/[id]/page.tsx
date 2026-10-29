@@ -213,13 +213,13 @@ export default function EconomicEventDetailPage() {
 
                                     {profile.definition ? (
                                         <div className="pt-1">
-                                            <p className="text-xs sm:text-[13px] italic font-normal text-white leading-relaxed tracking-normal">
+                                            <p className="text-xs sm:text-[13px] font-normal text-white leading-relaxed tracking-normal">
                                                 {profile.definition}
                                             </p>
                                         </div>
                                     ) : (
                                         <div className="py-6 text-center">
-                                            <p className="text-xs font-bold text-blue-200/60 italic leading-relaxed max-w-sm mx-auto">
+                                            <p className="text-xs font-bold text-blue-200/60 leading-relaxed max-w-sm mx-auto">
                                                 Bu göstergenin akademik tanımı ve piyasa literatüründeki kavramsal karşılığı yakında bu alana eklenecektir.
                                             </p>
                                         </div>
@@ -227,7 +227,7 @@ export default function EconomicEventDetailPage() {
                                 </div>
                             </div>
 
-                            {/* SAĞ: FINAI INTELLIGENCE (BEYAZ KUTU, LACİVERT/KOYU İTALİK YAZI, İÇ FON YOK) */}
+                            {/* SAĞ: FINAI INTELLIGENCE (BEYAZ KUTU, LACİVERT/KOYU DÜZ YAZI, İÇ FON YOK) */}
                             <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm flex flex-col justify-between space-y-4">
                                 <div className="space-y-3">
                                     <div className="flex items-center gap-2.5 pb-3 border-b border-slate-150">
@@ -242,13 +242,13 @@ export default function EconomicEventDetailPage() {
 
                                     {profile.realLifeExample ? (
                                         <div className="pt-1">
-                                            <p className="text-xs sm:text-[13px] italic font-normal text-slate-800 leading-relaxed tracking-normal">
+                                            <p className="text-xs sm:text-[13px] font-normal text-slate-800 leading-relaxed tracking-normal">
                                                 {profile.realLifeExample}
                                             </p>
                                         </div>
                                     ) : (
                                         <div className="py-6 text-center">
-                                            <p className="text-xs font-bold text-slate-400 italic leading-relaxed max-w-sm mx-auto">
+                                            <p className="text-xs font-bold text-slate-400 leading-relaxed max-w-sm mx-auto">
                                                 Açıklanan verinin bireysel bütçeye, gündelik tüketime ve sokaktaki reel hayata somut yansımaları yakında eklenecektir.
                                             </p>
                                         </div>
