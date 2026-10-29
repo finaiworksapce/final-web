@@ -155,31 +155,11 @@ export default function EconomicImpactChainStepper({
                   >
                     {channel.desc}
                   </p>
-
-                  {/* Sırası gelen yazı için zarif 5 saniyelik alttan ilerleme çizgisi */}
-                  {isActive && (
-                    <div className="mt-2 h-0.5 w-full bg-slate-200/80 rounded-full overflow-hidden">
-                      <div
-                        key={progressKey}
-                        className="h-full bg-[#00008B] rounded-full"
-                        style={{
-                          animation: "progressFill " + intervalMs + "ms linear forwards",
-                        }}
-                      />
-                    </div>
-                  )}
                 </div>
               </div>
             );
           })}
         </div>
-
-        <style>{`
-          @keyframes progressFill {
-            0% { width: 0%; }
-            100% { width: 100%; }
-          }
-        `}</style>
       </div>
     </aside>
   );

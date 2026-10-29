@@ -170,16 +170,6 @@ export default function EconomicEventDetailPage() {
 
                 {/* 1. BAŞLIK: KUTUSUZ SALT METİN (LACİVERT RENKTE) */}
                 <div className="w-full space-y-2 pt-1 pb-1">
-                    <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
-                            <span className="text-base">{profile.flag}</span>
-                            <span className="font-black text-[#00008B]">{event.country}</span>
-                            <span className="text-slate-300">·</span>
-                            <span className="text-slate-600 font-semibold">{profile.category}</span>
-                        </div>
-                        <FollowIndicatorButton indicatorName={event.event} />
-                    </div>
-
                     <div>
                         <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#00008B] tracking-tight leading-tight">
                             {event.event}
@@ -198,7 +188,7 @@ export default function EconomicEventDetailPage() {
 
                         {/* 2. BAŞLIĞIN ALTINDA İKİYE BÖLÜNEN ALAN: SOLDA LACİVERT TANIM, SAĞDA BEYAZ FINAI INTELLIGENCE */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-                            {/* SOL: TANIM (LACİVERT KUTU, BEYAZ İTALİK YAZI, İÇ FON YOK) */}
+                            {/* SOL: TANIM (LACİVERT KUTU, BEYAZ DÜZ YAZI, İÇ FON YOK) */}
                             <div className="bg-[#00008B] text-white rounded-3xl p-6 md:p-8 shadow-sm flex flex-col justify-between space-y-4">
                                 <div className="space-y-3">
                                     <div className="flex items-center gap-2.5 pb-3 border-b border-blue-900/80">
@@ -207,7 +197,6 @@ export default function EconomicEventDetailPage() {
                                         </div>
                                         <div>
                                             <h2 className="text-lg font-black text-white tracking-tight">Tanım</h2>
-                                            <p className="text-[11px] text-blue-200/80 font-bold">Gösterge Literatür Tanımı</p>
                                         </div>
                                     </div>
 
@@ -236,7 +225,6 @@ export default function EconomicEventDetailPage() {
                                         </div>
                                         <div>
                                             <h2 className="text-lg font-black text-[#00008B] tracking-tight">FinAi INTELLIGENCE</h2>
-                                            <p className="text-[11px] text-slate-500 font-bold">Günlük Hayattan Örnek & Somut Yansıma</p>
                                         </div>
                                     </div>
 
@@ -269,10 +257,6 @@ export default function EconomicEventDetailPage() {
                                         <p className="text-xs text-slate-400 font-bold">Tarihsel Değişim & Eğilim Trendi</p>
                                     </div>
                                 </div>
-
-                                <span className="px-3.5 py-1.5 rounded-xl bg-blue-50 border border-blue-200 text-[#00008B] text-xs font-black">
-                                    Yakında
-                                </span>
                             </div>
 
                             {/* Buğulu Mock Grafik Alanı */}
