@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { 
     ArrowLeft, Calendar as CalendarIcon, Target, 
-    ChevronDown, ChevronUp, Layers, Activity, Sparkles, BookOpen, Lightbulb
+    ChevronDown, ChevronUp, Layers, Activity, Sparkles, BookOpen, Lightbulb, ArrowRight
 } from "lucide-react";
 import Link from "next/link";
-import { CatalogCalendarEvent } from "@/lib/calendar-catalog";
+import { CatalogCalendarEvent, ECONOMIC_CALENDAR_CATALOG } from "@/lib/calendar-catalog";
 import { getDynamicCalendarCatalog } from "@/lib/calendar-scraper";
 import { INDICATOR_PROFILES_DATABASE, IndicatorProfile } from "@/lib/indicator-profiles";
 import { calculateBackendDifferences, generateFinAiAnalysis } from "@/lib/finai-calendar-analysis-engine";
@@ -155,6 +155,27 @@ export default function EconomicEventDetailPage() {
     const calc = calculateBackendDifferences(event);
     const finAiAnalysis = generateFinAiAnalysis(event);
 
+    // Etki zincirinin altında önerilecek diğer haberler
+    const relatedNames = profile.relatedIndicators?.map(r => r.name.toLowerCase()) || [];
+    const filteredEvents = ECONOMIC_CALENDAR_CATALOG.filter(e => {
+        if (e.event.toLowerCase() === event.event.toLowerCase()) return false;
+        return (
+            relatedNames.some(rn => e.event.toLowerCase().includes(rn) || rn.includes(e.event.toLowerCase())) ||
+            e.country === event.country ||
+            e.impact === 'critical'
+        );
+    });
+
+    const seenEvents = new Set<string>();
+    const recommendedEvents: CatalogCalendarEvent[] = [];
+    for (const item of filteredEvents) {
+        if (!seenEvents.has(item.event) && item.event !== event.event) {
+            seenEvents.add(item.event);
+            recommendedEvents.push(item);
+        }
+        if (recommendedEvents.length >= 4) break;
+    }
+
     return (
         <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-slate-50 text-[#00008B] w-full mx-auto relative overflow-hidden">
             <div className="w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6 relative z-10 mb-20">
@@ -168,15 +189,20 @@ export default function EconomicEventDetailPage() {
                     </Link>
                 </div>
 
-                {/* 1. BAŞLIK: KUTUSUZ SALT METİN (LACİVERT RENKTE) */}
-                <div className="w-full space-y-2 pt-1 pb-1">
-                    <div>
-                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#00008B] tracking-tight leading-tight">
+                {/* 1. BAŞLIK VE TARİH: TARİH SOLDA, BAŞLIK TAM ORTADA */}
+                <div className="w-full pt-1 pb-2">
+                    {/* Sol tarafta tarih */}
+                    <div className="flex items-center text-xs font-bold text-slate-500 mb-2">
+                        <span className="inline-flex items-center gap-1.5 text-slate-500 font-bold">
+                            <CalendarIcon className="w-4 h-4 text-[#00008B]" /> {event.dateFormatted || 'Bugün'} · {event.time} TSİ
+                        </span>
+                    </div>
+
+                    {/* Ortada Başlık */}
+                    <div className="text-center w-full py-1">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#00008B] tracking-tight leading-tight max-w-4xl mx-auto">
                             {event.event}
                         </h1>
-                        <p className="text-xs font-bold text-slate-500 mt-2 flex items-center gap-2">
-                            <CalendarIcon className="w-4 h-4 text-[#00008B]" /> {event.dateFormatted || 'Bugün'} · {event.time} TSİ
-                        </p>
                     </div>
                 </div>
 
@@ -376,8 +402,52 @@ export default function EconomicEventDetailPage() {
                         </div>
                     </div>
 
-                    {/* SAĞ BÖLÜM: EKONOMİK ETKİ ZİNCİRİ (5s OTOMATİK DÖNGÜLÜ & BÜYÜTÜLEN DİKEY STEPPER BAREMİ) */}
-                    <EconomicImpactChainStepper channels={profile.impactChannels} />
+                    {/* SAĞ BÖLÜM: EKONOMİK ETKİ ZİNCİRİ & ÖNERİLEN DİĞER HABERLER */}
+                    <div className="w-full lg:w-[260px] xl:w-[290px] shrink-0 space-y-6">
+                        <EconomicImpactChainStepper channels={profile.impactChannels} />
+
+                        {/* ETKİ ZİNCİRİNİN ALTINDA: DİĞER ÖNERİLEN HABERLER */}
+                        {recommendedEvents.length > 0 && (
+                            <div className="space-y-3 pt-3 border-t border-slate-200">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0">
+                                        <Sparkles className="w-3.5 h-3.5 text-[#00008B]" />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xs font-black text-[#00008B] tracking-tight uppercase">
+                                            Önerilen Haberler
+                                        </h3>
+                                        <p className="text-[10px] text-slate-400 font-bold">Takip Edilebilecek Göstergeler</p>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    {recommendedEvents.map((rec, idx) => (
+                                        <Link
+                                            key={rec.id || idx}
+                                            href={`/dashboard/economic-calendar/${toSlug(rec.event)}`}
+                                            className="group block p-3 rounded-2xl bg-white border border-slate-200 hover:border-[#00008B] hover:shadow-sm transition-all"
+                                        >
+                                            <div className="flex items-start justify-between gap-2">
+                                                <div className="min-w-0 flex-1">
+                                                    <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 mb-0.5">
+                                                        <span>{rec.flag}</span>
+                                                        <span className="text-[#00008B] font-black">{rec.country}</span>
+                                                        <span>·</span>
+                                                        <span>{rec.time} TSİ</span>
+                                                    </div>
+                                                    <h4 className="text-xs font-bold text-[#00008B] group-hover:text-blue-700 leading-snug line-clamp-2 transition-colors">
+                                                        {rec.event}
+                                                    </h4>
+                                                </div>
+                                                <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#00008B] group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
+                                            </div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 

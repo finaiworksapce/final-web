@@ -49,7 +49,7 @@ export default function EconomicImpactChainStepper({
   return (
     <aside
       className={cn(
-        "w-full lg:w-[260px] xl:w-[290px] shrink-0 lg:sticky lg:top-6 self-start",
+        "w-full",
         className
       )}
     >
