@@ -139,17 +139,17 @@ export const INDICATOR_PROFILES_DATABASE: Record<string, IndicatorProfile> = {
         impactLevel: "critical",
         unit: "%",
         higherIsPositive: true,
-        definition: "Fed (ABD Merkez Bankası) politika faizi kararı, küresel finansal sistemdeki Dolar borçlanma maliyetinin taban seviyesidir.",
+        definition: "Fed Politika Faizi Kararı, ABD Merkez Bankası Federal Açık Piyasa Komitesi (FOMC) tarafından belirlenen ve küresel piyasalarda Dolar borçlanmanın taban maliyetini oluşturan faiz kararıdır. Bu stratejik oran, yılda sekiz defa toplanan komite üyelerinin ekonomik verileri masaya yatırıp oy birliği veya oy çokluğuyla karar almasıyla şekillenir. Kararın asli görevi, Amerika'da hem fiyat istikrarını sağlamak hem de istihdam piyasasının sağlıklı büyümesini temin etmektir. Fed faiz artırdığında dünyadaki Dolar likiditesi daralır, borçlanmak küresel çapta zorlaşır ve enflasyon baskılanmaya çalışılır. Faiz indirildiğinde ise küresel finansal sisteme ucuz likidite akar ve dünya çapında yatırım iştahı tetiklenir. ABD Doları dünya ticaretinin ana para birimi olduğu için bu karar Türkiye dahil tüm dünya ekonomilerini derinden sarsar.",
+        realLifeExample: "Yurt dışından ithal edilen cep telefonlarının, bilgisayarların veya benzin fiyatlarının neden aniden pahalandığını merak ettiğinizi varsayın. Amerika Merkez Bankası faiz artırdığında, dünyadaki tüm yatırımcılar paralarını Dolar'a çevirip güvenli Amerikan tahvillerine yatırmaya başlar. Bu durum Dolar'ın küresel çapta güçlenmesine ve diğer ülkelerin para birimleri karşısında tırmanmasına neden olur. Dolar yükselince Türkiye'ye ithal edilen her teknolojik ürünün ve ham petrolün raf fiyatı doğrudan artar. Fiyatlar artınca da ay sonu kredi kartı ekstreleriniz ve market alışverişi sepetiniz daha hızlı dolup taşar. Böylece okyanusun ötesinde alınan bir faiz kararı, Türkiye'deki bir vatandaşın günlük çarşı pazar masrafına kadar yansır.",
         whatItMeasures: "Küresel Dolar likiditesinin fiyatını ve borçlanma maliyetini ölçer.",
         whyItMatters: "Dünya borsaları, Ons Altın, gelişmekte olan ülke para birimleri ve küresel kredi mekanizması üzerinde birinci derecede etkilidir.",
         howToInterpret: "Fed kararını değerlendirirken yalnızca alınan faiz adımına değil; karar metnindeki şahin/güvercin ifadelere ve Fed Başkanı'nın yönlendirmelerine bakılmalıdır.",
         impactChannels: [
-            { step: "VERİ", title: "Fed Faiz Kararı", desc: "Politika faiz oranı ve karar metni açıklanır." },
-            { step: "BEKLENTİLER", title: "Küresel Dolar Gücü", desc: "Dolar endeksi (DXY) ve küresel likidite algısı değişir." },
-            { step: "PARA POLİTİKASI", title: "Küresel Sıkılaşma/Gevşeme", desc: "Diğer merkez bankalarının hareket alanı etkilenir." },
-            { step: "FAİZLER", title: "Tahvil Verimleri", desc: "ABD 10 Yıllık ve küresel borçlanma faizleri tepki verir." },
-            { step: "KREDİ / MEVDUAT", title: "Küresel Sermaye Akışı", desc: "Gelişmekte olan ülkelere sermaye akışı veya çıkışı yaşanabilir." },
-            { step: "FİNANSAL VARLIKLAR", title: "Altın & Küresel Borsalar", desc: "Ons Altın, Kripto ve küresel hisse senedi piyasaları yeniden fiyatlanır." }
+            { step: "FED KOMİTESİ", title: "Faiz Kararı", desc: "Fed politika faiz oranını ve ekonomik tahmin özetini (Dot Plot) duyurur. Küresel piyasalar açıklanan karara göre anlık pozisyon alır." },
+            { step: "DOLAR ENDEKSİ", title: "DXY ve Kurlar", desc: "Faiz artışı küresel Dolar endeksini (DXY) yukarı taşırken gelişen ülke para birimlerini baskılar. Faiz indirimi ise Dolar'ı zayıflatır." },
+            { step: "ONS ALTIN & EMTİALAR", title: "Emtia Fiyatlaması", desc: "Dolar'ın faizi yükselince faiz getirisi olmayan Ons Altın baskılanır. Faiz düştüğünde ise altın ve gümüşe küresel talep artar." },
+            { step: "KÜRESEL SERMAYE", title: "Fon Akışları", desc: "Yüksek ABD faizleri sermayeyi Amerika'ya geri çeker. Düşük faiz döneminde ise Türkiye gibi gelişmekte olan ülkelere yabancı sıcak para akar." },
+            { step: "DÜNYA VE TÜRKİYE BORSALARI", title: "Hisse Eğilimi", desc: "Küresel faiz artışı Wall Street'ten Borsa İstanbul'a kadar risk iştahını frenler. Faiz gevşemesi ise dünya borsalarında ralliye zemin hazırlar." }
         ],
         chartReadingCards: {
             direction: "Grafikteki merdiven basamakları para politikası döngülerini (sıkılaşma veya gevşeme patikalarını) temsil eder.",
@@ -163,6 +163,41 @@ export const INDICATOR_PROFILES_DATABASE: Record<string, IndicatorProfile> = {
         relatedIndicators: [
             { name: "Tarım Dışı İstihdam Değişimi (NFP)", id: "us_nfp", category: "İstihdam" },
             { name: "ISM İmalat PMI Endeksi", id: "us_ism_pmi", category: "Büyüme & İmalat" }
+        ]
+    },
+    "TCMB Politika Faizi Kararı": {
+        id: "tr_cbrt_rate",
+        name: "TCMB Politika Faizi Kararı",
+        country: "TR",
+        flag: "🇹🇷",
+        category: "Faiz & Para Politikası",
+        impactLevel: "critical",
+        unit: "%",
+        higherIsPositive: true,
+        definition: "Türkiye Cumhuriyet Merkez Bankası (TCMB) Politika Faizi Kararı, bankaların Merkez Bankası'ndan Türk Lirası borçlanırken veya fazla paralarını yatırırken esas alacakları bir haftalık repo faiz oranının belirlenmesidir. Bu hayati karar, Para Politikası Kurulu üyelerinin her ay düzenli olarak toplanıp oy kullanması neticesinde resmi olarak duyurulur. Kararın ana amacı, piyasadaki para bolluğunu veya kıtlığını ayarlayarak çarşıdaki fiyat artışlarını dizginlemek ve Türk Lirası'nın değerini korumaktır. Faiz artırıldığında borçlanma pahalılaşarak harcamalar frenlenir ve tasarruf yapmak daha kazançlı hale gelir. Faiz indirildiğinde ise krediye erişim ucuzlar, işletmeler yeni yatırımlar yapar ve piyasadaki nakit akışı canlanır. Türkiye ekonomisinde döviz kurlarından borsa şirketlerine kadar her türlü fiyatlamayı doğrudan belirleyen en temel makroekonomik karardır.",
+        realLifeExample: "Maaşınızdan artırdığınız birikiminizle yeni bir araba almak ya da paranızı mevduata yatırmak arasında kaldığınızı düşünün. Merkez Bankası politika faizini artırdığında, mahallenizdeki bankaların vadeli mevduat hesaplarına verdiği getiri anında yükselir. Aynı zamanda ihtiyaç ve taşıt kredisi faizleri de tırmanacağı için araba kredisi taksitleri bütçenizi zorlamaya başlar. Bu ortamda insanlar borçlanıp araba veya eşya almayı erteler, parasını bankada yüksek faizle değerlendirmeyi seçer. Herkes harcamasını kısıp beklemeye geçince de satıcılar etiket fiyatlarını sürekli yukarı çekemez ve enflasyonun hızı kesilir. Alınan bu tek bir karar, cebinizdeki harçlıktan ay sonundaki kredi kartı faizinize kadar evinizin tüm bütçesini doğrudan etkiler.",
+        whatItMeasures: "Türkiye'de Türk Lirası'nın resmi borçlanma maliyetini ve para politikasının sıkılık derecesini ölçer.",
+        whyItMatters: "Dolar/TL kuru, konut ve ihtiyaç kredisi faizleri, mevduat getirileri ve Borsa İstanbul şirketlerinin değerlemelerini doğrudan belirler.",
+        howToInterpret: "Kararla birlikte PPK karar metnindeki enflasyon değerlendirmeleri ve faiz patikasına dair yönlendirmeler analiz edilmelidir.",
+        impactChannels: [
+            { step: "MERKEZ BANKASI", title: "Karar Açıklanır", desc: "Para Politikası Kurulu faiz kararını ve gerekçe metnini yayınlar. Piyasa açıklanan oranı daha önceki beklentilerle kıyaslar." },
+            { step: "TÜRK LİRASI", title: "Kur Dalgalanması", desc: "Faiz artışı TL'yi güçlendirerek döviz kurlarını baskılar. Beklenmedik bir faiz indirimi ise yabancı para birimlerinin yükselmesine yol açabilir." },
+            { step: "BANKA FAİZLERİ", title: "Kredi ve Mevduat", desc: "Bankalar kredi faiz oranlarını ve vadeli hesap getirilerini yeni karara göre revize eder. Vatandaşın borçlanma maliyeti doğrudan değişir." },
+            { step: "TÜKETİM & TASARRUF", title: "Harcama Dengesi", desc: "Yüksek faiz ortamında insanlar harcamalarını kısarak paralarını bankada tutar. Düşük faiz döneminde ise alışverişler ve konut-araç talebi hızla artar." },
+            { step: "BORSA İSTANBUL", title: "Hisselerin Fiyatlanması", desc: "Mevduat getirisi çok yükseldiğinde borsa üzerindeki nakit baskısı artar. Faizler gevşediğinde ise ucuzlayan borçlanmayla birlikte şirket hisseleri değer kazanır." }
+        ],
+        chartReadingCards: {
+            direction: "Grafikteki yükseliş sıkı para politikasını, düşüş ise parasal gevşeme sürecini gösterir.",
+            changeSpeed: "Toplantılardaki baz puanlık adımların büyüklüğü Merkez Bankası'nın mücadele kararlılığını yansıtır.",
+            context: "Alınan kararların piyasa enflasyon beklentileriyle ne kadar uyumlu olduğu takip edilmelidir."
+        },
+        whatWeCannotInfer: "Politika faizinin artması enflasyonun o ay hemen düşeceği anlamına gelmez; faiz kararlarının piyasaya yansıması birkaç ay sürer.",
+        financialLiteracyItems: [
+            { title: "Bir Haftalık Repo Faizi Nedir?", content: "Bankaların ellerindeki tahvilleri teminat göstererek Merkez Bankası'ndan 1 haftalık vadeyle TL borçlandığı referans faiz oranıdır." }
+        ],
+        relatedIndicators: [
+            { name: "Aylık Tüketici Fiyat Endeksi (TÜFE)", id: "tr_cpi_mom", category: "Enflasyon" },
+            { name: "Yıllık Enflasyon Oranı (TÜFE)", id: "tr_cpi_yoy", category: "Enflasyon" }
         ]
     },
     "İngiltere Merkez Bankası (BoE) Faiz Kararı": {
