@@ -202,7 +202,7 @@ export default function EconomicEventDetailPage() {
                 </div>
 
                 {/* ANA İÇERİK & SAĞ DİKEY ETKİ ZİNCİRİ BAREMİ */}
-                <div className="flex flex-col lg:flex-row gap-6 items-start w-full">
+                <div className="flex flex-col lg:flex-row gap-6 items-stretch w-full">
 
                     {/* SOL BÖLÜM: 2 KART (TANIM & FINAI INTELLIGENCE), GRAFİK VE GEÇMİŞTE NELER OLDU */}
                     <div className="flex-1 min-w-0 space-y-6 w-full">
@@ -397,13 +397,15 @@ export default function EconomicEventDetailPage() {
                         </div>
                     </div>
 
-                    {/* SAĞ BÖLÜM: EKONOMİK ETKİ ZİNCİRİ & ÖNERİLEN DİĞER HABERLER */}
-                    <div className="w-full lg:w-[260px] xl:w-[290px] shrink-0 space-y-8">
-                        <EconomicImpactChainStepper channels={profile.impactChannels} />
+                    {/* SAĞ BÖLÜM: EKONOMİK ETKİ ZİNCİRİ & EN ALTTAN YUKARI HİZALANAN ÖNERİLEN HABERLER */}
+                    <div className="w-full lg:w-[260px] xl:w-[290px] shrink-0 flex flex-col justify-between">
+                        <div>
+                            <EconomicImpactChainStepper channels={profile.impactChannels} />
+                        </div>
 
-                        {/* ETKİ ZİNCİRİNİN ALTINDA: DİĞER ÖNERİLEN HABERLER */}
+                        {/* EN ALT KISIMDAN YUKARIYA DOĞRU YERLEŞEN ÖNERİLEN HABERLER (GEÇMİŞTE NELER OLDU İLE EN ALTTAN HİZALI) */}
                         {recommendedEvents.length > 0 && (
-                            <div className="space-y-3 pt-6 border-t border-slate-200">
+                            <div className="space-y-3 pt-6 border-t border-slate-200 mt-8 lg:mt-auto">
                                 <div className="flex items-center gap-2">
                                     <div className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0">
                                         <Sparkles className="w-3.5 h-3.5 text-[#00008B]" />
