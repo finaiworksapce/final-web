@@ -13,6 +13,8 @@ import { INDICATOR_PROFILES_DATABASE, IndicatorProfile } from "@/lib/indicator-p
 import { calculateBackendDifferences, generateFinAiAnalysis } from "@/lib/finai-calendar-analysis-engine";
 import FollowIndicatorButton from "@/components/calendar/FollowIndicatorButton";
 import EconomicImpactChainStepper from "@/components/calendar/EconomicImpactChainStepper";
+import IndicatorHistoryBarChart from "@/components/calendar/IndicatorHistoryBarChart";
+import { getIndicatorHistory } from "@/lib/indicator-history-data";
 
 function toSlug(str: string): string {
     return str
@@ -154,6 +156,7 @@ export default function EconomicEventDetailPage() {
 
     const calc = calculateBackendDifferences(event);
     const finAiAnalysis = generateFinAiAnalysis(event);
+    const historySeries = getIndicatorHistory(event.event, event.country);
 
     // Etki zincirinin altında önerilecek diğer haberler
     const relatedNames = profile.relatedIndicators?.map(r => r.name.toLowerCase()) || [];
@@ -266,7 +269,7 @@ export default function EconomicEventDetailPage() {
                             </div>
                         </div>
 
-                        {/* 3. GEÇMİŞ VERİ GRAFİĞİ (BUĞULU / FROSTED GLASS - BAŞLIK & YAKINDA) */}
+                        {/* 3. GEÇMİŞ VERİ GRAFİĞİ (GERÇEK VERİLERLE AÇIKLANAN VE BEKLENEN SÜTUN GRAFİĞİ) */}
                         <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm space-y-5 relative overflow-hidden">
                             <div className="flex items-center justify-between pb-3 border-b border-slate-150">
                                 <div className="flex items-center gap-3">
@@ -275,60 +278,17 @@ export default function EconomicEventDetailPage() {
                                     </div>
                                     <div>
                                         <h2 className="text-xl font-black text-[#00008B] tracking-tight">Geçmiş Veri Grafiği</h2>
-                                        <p className="text-xs text-slate-400 font-bold">Tarihsel Değişim & Eğilim Trendi</p>
+                                        <p className="text-xs text-slate-400 font-bold">Açıklanan ve Beklenen Verilerin Tarihsel Değişimi</p>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Buğulu Mock Grafik Alanı */}
-                            <div className="relative rounded-2xl overflow-hidden bg-gradient-to-b from-slate-50 to-slate-100/70 border border-slate-200/80 h-64 sm:h-72 flex items-center justify-center">
-                                {/* Arka planda flu çizim/çubuk grafik silueti */}
-                                <div className="absolute inset-0 p-6 flex flex-col justify-between filter blur-md opacity-35 select-none pointer-events-none">
-                                    <div className="flex justify-between text-[10px] text-slate-400 border-b border-slate-200 pb-2">
-                                        <span>5.50%</span>
-                                        <span>5.25%</span>
-                                        <span>5.00%</span>
-                                        <span>4.75%</span>
-                                        <span>4.50%</span>
-                                    </div>
-                                    <svg viewBox="0 0 800 200" className="w-full h-36" preserveAspectRatio="none">
-                                        <defs>
-                                            <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="0%" stopColor="#00008B" stopOpacity="0.4" />
-                                                <stop offset="100%" stopColor="#00008B" stopOpacity="0.0" />
-                                            </linearGradient>
-                                        </defs>
-                                        <path
-                                            d="M0,140 Q100,110 200,120 T400,60 T600,80 T800,40 L800,200 L0,200 Z"
-                                            fill="url(#chartGradient)"
-                                        />
-                                        <path
-                                            d="M0,140 Q100,110 200,120 T400,60 T600,80 T800,40"
-                                            fill="none"
-                                            stroke="#00008B"
-                                            strokeWidth="3"
-                                        />
-                                    </svg>
-                                    <div className="flex justify-between text-[10px] text-slate-400 pt-2 border-t border-slate-200">
-                                        <span>Oca 2026</span>
-                                        <span>Şub 2026</span>
-                                        <span>Mar 2026</span>
-                                        <span>Nis 2026</span>
-                                        <span>May 2026</span>
-                                    </div>
-                                </div>
-
-                                {/* Üst katman: Frosted Glass Buğu ve Yakında Rozeti */}
-                                <div className="absolute inset-0 bg-white/40 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center">
-                                    <div className="px-5 py-2.5 rounded-2xl bg-[#00008B] text-white shadow-lg shadow-[#00008B]/25 flex items-center gap-2 mb-2 hover:scale-105 transition-transform">
-                                        <Activity className="w-4 h-4 text-emerald-400 animate-pulse" />
-                                        <span className="text-xs font-black tracking-wider uppercase">Yakında</span>
-                                    </div>
-                                    <p className="text-xs font-bold text-slate-600 max-w-sm leading-relaxed">
-                                        Göstergeye ait tarihsel açıklanan veriler ve interaktif geçmiş trend grafiği yakında burada görüntülenecektir.
-                                    </p>
-                                </div>
-                            </div>
+                            {/* Gerçek Geçmiş Veri Sütun Grafiği */}
+                            <IndicatorHistoryBarChart
+                                data={historySeries.points}
+                                unit={historySeries.unit}
+                                eventName={event.event}
+                            />
                         </div>
 
                         {/* 4. EN ALT KISIM: GEÇMİŞTE NELER OLDU (SENARYO ANALİZİ FORMATINDA) */}
