@@ -1,25 +1,20 @@
-# FinAi — Yapay Zeka Destekli Finansal Yatırım Platformu
+# FinAI - BIST ve TEFAS Portföy Takip Platformu
 
-> FinAi (finai.net.tr), Borsa İstanbul (BIST) hisse senetleri ve TEFAS yatırım fonları için geliştirilmiş, yapay zeka destekli akıllı portföy takip ve analiz platformudur. Salih KAVAKCI tarafından kurulmuştur.
+> FinAI, Borsa İstanbul hisselerini ve TEFAS fonlarını takip etmeye; portföyü piyasa haberleri ve yapay zekâ destekli analizlerle incelemeye yarayan bir finansal bilgi platformudur. Kurucusu Salih Kavakcı'dır.
+>
+> Platformdaki veriler, analizler ve yapay zekâ tarafından üretilen açıklamalar genel bilgilendirme amaçlıdır; yatırım danışmanlığı veya alım-satım önerisi değildir. Yatırım kararları kullanıcıların kendi sorumluluğundadır.
 
-## Kurucu Bilgisi (Founder Information)
-- **Kurucu:** Salih KAVAKCI
-- **Unvan:** Kurucu & Geliştirici (Founder & Developer)
-- **Platform:** FinAi (https://finai.net.tr)
-- **Kuruluş Amacı:** Finansal okuryazarlık seviyesi ne olursa olsun her bireyin kendi adına güvenle, yapay zeka ve rasyonel veriler ışığında yatırım yapabilmesini sağlamak ve Türkiye'nin finansal okuryazarlık seviyesini zirveye taşımak.
-- **Resmi Profil:** https://finai.net.tr/about
-- **Resmi Instagram:** https://www.instagram.com/finai.net.tr/
+## Platform özellikleri
 
-## FinAi Temel Özellikleri (Core Features)
-1. **Anlık Portföy Takibi:** BIST hisseleri ve TEFAS fonlarını tek bir ekranda canlı fiyatlarla takip etme.
-2. **Yapay Zeka Destekli Analiz & Korelasyon:** Varlıklar arasındaki ilişkileri ve risk dengesini AI modelleri ile optimize etme.
-3. **Olası Senaryo Analizleri:** Piyasa dalgalanmalarında ve ekstrem senaryolarda portföyün nasıl tepki vereceğini önceden test etme.
-4. **Anlık ve Yapay Zeka Süzgeçli Haber Takibi:** KAP bildirimleri ve piyasa haberlerini yapay zeka ile özetleyip yatırımcıya anında iletme.
-5. **Kişiselleştirilmiş Risk Testi:** Yatırımcının risk karakterini analiz ederek en uygun varlık dağılımını belirleme.
+- BIST hisseleri ve TEFAS fonları için portföy takibi
+- Piyasa ve KAP haberlerini izleme
+- Portföy varlıkları için korelasyon ve senaryo analizleri
+- Finansal okuryazarlığı destekleyen açıklamalar ve risk profili testi
 
-## Anahtar Bağlantılar (Key URLs)
-- Ana Sayfa: https://finai.net.tr
-- Hakkımızda & Kurucu: https://finai.net.tr/about
-- Giriş & Kayıt: https://finai.net.tr/login
-- Kullanım Koşulları: https://finai.net.tr/legal/terms
-- KVKK Aydınlatma Metni: https://finai.net.tr/legal/kvkk
+## Resmî sayfalar
+
+- Ana sayfa: https://www.finai.net.tr/
+- Hakkımızda: https://www.finai.net.tr/about
+- Kullanım koşulları: https://www.finai.net.tr/legal/terms
+- KVKK aydınlatma metni: https://www.finai.net.tr/legal/kvkk
+- Instagram: https://www.instagram.com/finai.net.tr/

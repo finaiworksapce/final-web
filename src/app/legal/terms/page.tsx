@@ -1,5 +1,27 @@
+import type { Metadata } from 'next';
 import React from 'react';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Kullanım Koşulları',
+  description: 'FinAi platformunun hizmet kapsamı, kullanım kuralları, sorumluluk sınırları ve kullanıcı hakları hakkında bilgi alın.',
+  alternates: { canonical: 'https://www.finai.net.tr/legal/terms' },
+  openGraph: {
+    title: 'Kullanım Koşulları | FinAI',
+    description: 'FinAi platformunun hizmet kapsamı, kullanım kuralları, sorumluluk sınırları ve kullanıcı hakları hakkında bilgi alın.',
+    url: 'https://www.finai.net.tr/legal/terms',
+    siteName: 'FinAI',
+    locale: 'tr_TR',
+    type: 'website',
+    images: [{ url: '/icon-512.png', width: 512, height: 512, alt: 'FinAI logosu' }],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Kullanım Koşulları | FinAI',
+    description: 'FinAi platformunun hizmet kapsamı, kullanım kuralları, sorumluluk sınırları ve kullanıcı hakları hakkında bilgi alın.',
+    images: ['/icon-512.png'],
+  },
+};
 
 export default function TermsOfUse() {
   return (

@@ -1,6 +1,10 @@
 import { Metadata } from 'next';
+import { permanentRedirect } from 'next/navigation';
+import { cache } from 'react';
 import StockDetailClient from './stock-detail-client';
 import halkarzAboutDb from '@/data/halkarz_about_db.json';
+import { FinAiArchiveReader } from '@/lib/api/finai-archive-reader';
+import { SEO_PUBLIC_STOCK_SYMBOL_SET } from '@/lib/seo-public-stock-symbols';
 
 // BIST Şirket Adları Kataloğu
 const STOCK_NAMES: Record<string, string> = {
@@ -36,49 +40,55 @@ interface PageProps {
   params: Promise<{ symbol: string }>;
 }
 
+const getCompanyProfile = cache(async (symbol: string) => {
+  try {
+    return await FinAiArchiveReader.getProfile(symbol);
+  } catch {
+    return null;
+  }
+});
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params;
   const rawSymbol = resolvedParams.symbol || 'ASELS';
   const symbol = rawSymbol.toUpperCase().replace('.IS', '').trim();
-  const fullName = STOCK_NAMES[symbol] || `${symbol} Sanayi ve Ticaret A.Ş.`;
+  const profile = await getCompanyProfile(symbol);
+  const isKnownStock = SEO_PUBLIC_STOCK_SYMBOL_SET.has(symbol) || Boolean(profile?.companyName && (profile.businessSummary || profile.sector));
+  const fullName = profile?.companyName || STOCK_NAMES[symbol] || symbol;
 
-  const title = `${symbol} - ${fullName} Hisse Fiyatı, Temettü & AI Analizi | FinAI`;
-  const description = `${fullName} (${symbol}) canlı borsa fiyatı, 52 haftalık dip/tepe analizi, geçmiş temettü verileri, son dakika KAP bildirimleri ve yapay zeka analizleri FinAI'de.`;
+  const title = `${symbol} Hisse Senedi Fiyatı, Grafik ve Analiz`;
+  const socialTitle = `${title} | FinAI`;
+  const subject = fullName === symbol ? `${symbol} hissesi` : `${fullName} (${symbol})`;
+  const description = `${subject} için hisse fiyatı, grafik ve finansal veriler; mevcutsa temettü ve KAP/haber akışı. Veri güncelliği kaynağa bağlıdır.`;
 
   return {
     title,
     description,
-    keywords: [
-      symbol,
-      fullName,
-      `${symbol} hisse`,
-      `${symbol} hisse senedi`,
-      `${symbol} temettü`,
-      `${symbol} temettü 2026`,
-      `${symbol} canlı fiyat`,
-      `${symbol} KAP haberleri`,
-      `${symbol} bilanço`,
-      `${symbol} grafik`,
-      'BIST 100',
-      'Borsa İstanbul',
-      'FinAI'
-    ],
     openGraph: {
-      title,
+      title: socialTitle,
       description,
-      url: `https://finai.net.tr/varlik/${symbol}`,
+      url: `https://www.finai.net.tr/varlik/${symbol}`,
       siteName: 'FinAI',
       locale: 'tr_TR',
       type: 'website',
+      images: [
+        {
+          url: '/icon-512.png',
+          width: 512,
+          height: 512,
+          alt: 'FinAI logosu',
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
-      title,
+      title: socialTitle,
       description,
     },
     alternates: {
-      canonical: `https://finai.net.tr/varlik/${symbol}`,
+      canonical: `https://www.finai.net.tr/varlik/${symbol}`,
     },
+    ...(!isKnownStock ? { robots: { index: false, follow: true } } : {}),
   };
 }
 
@@ -86,93 +96,35 @@ export default async function Page({ params }: PageProps) {
   const resolvedParams = await params;
   const rawSymbol = resolvedParams.symbol || 'ASELS';
   const symbol = rawSymbol.toUpperCase().replace('.IS', '').trim();
-  const fullName = STOCK_NAMES[symbol] || `${symbol} Sanayi ve Ticaret A.Ş.`;
-  const about = (halkarzAboutDb as Record<string, string>)[symbol] || `${fullName} Borsa İstanbul'da işlem gören şirket.`;
+  if (rawSymbol !== symbol) permanentRedirect(`/varlik/${symbol}`);
+  const profile = await getCompanyProfile(symbol);
+  const fullName = profile?.companyName || STOCK_NAMES[symbol] || symbol;
+  const about = profile?.businessSummary || (halkarzAboutDb as Record<string, string>)[symbol] || null;
+  const hasCompanyIdentity = Boolean(profile?.companyName || STOCK_NAMES[symbol] || about);
 
   // Google JSON-LD Yapılandırılmış Veri (Schema.org)
-  const jsonLd = {
+  const jsonLd = hasCompanyIdentity ? {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Corporation",
-        "@id": `https://finai.net.tr/varlik/${symbol}#corporation`,
+        "@id": `https://www.finai.net.tr/varlik/${symbol}#corporation`,
         "name": fullName,
         "tickerSymbol": `BIST:${symbol}`,
-        "description": about.slice(0, 300),
-        "url": `https://finai.net.tr/varlik/${symbol}`
+        ...(about ? { "description": about.slice(0, 300) } : {}),
+        "url": `https://www.finai.net.tr/varlik/${symbol}`
       },
-      {
-        "@type": "FinancialProduct",
-        "@id": `https://finai.net.tr/varlik/${symbol}#product`,
-        "name": `${symbol} Hisse Senedi`,
-        "category": "Stock",
-        "provider": {
-          "@type": "Organization",
-          "name": "Borsa İstanbul"
-        },
-        "description": `${fullName} (${symbol}) canlı borsa fiyatı, trend analizi ve temettü dağıtım bilgileri.`
-      },
-      {
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Ana Sayfa",
-            "item": "https://finai.net.tr"
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "BIST Hisseleri",
-            "item": "https://finai.net.tr/dashboard/data"
-          },
-          {
-            "@type": "ListItem",
-            "position": 3,
-            "name": `${symbol} - ${fullName}`,
-            "item": `https://finai.net.tr/varlik/${symbol}`
-          }
-        ]
-      },
-      {
-        "@type": "FAQPage",
-        "mainEntity": [
-          {
-            "@type": "Question",
-            "name": `${fullName} (${symbol}) hisse fiyatı ve grafiği nasıl takip edilir?`,
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": `${symbol} hisse senedinin anlık borsa fiyatına, gün içi ve 52 haftalık en yüksek/en düşük seviyelerine ve yapay zeka destekli trend analizlerine FinAI varlık merkezinden canlı olarak ulaşabilirsiniz.`
-            }
-          },
-          {
-            "@type": "Question",
-            "name": `${symbol} temettü (kâr payı) veriyor mu?`,
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": `${fullName} şirketinin geçmiş temettü dağıtım tarihleri, hisse başına net/brüt temettü miktarları ve temettü verimi oranları FinAI temettü tablosunda güncel olarak yer almaktadır.`
-            }
-          },
-          {
-            "@type": "Question",
-            "name": `${symbol} için son dakika KAP bildirimleri ve haberler nereden okunur?`,
-            "acceptedAnswer": {
-              "@type": "Answer",
-              "text": `${symbol} şirketine ait en güncel KAP bildirimleri, finansal analizler ve şirket haberleri FinAI canlı haber akışında anlık olarak yayınlanmaktadır.`
-            }
-          }
-        ]
-      }
     ]
-  };
+  } : null;
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
+        />
+      )}
       <StockDetailClient symbol={symbol} />
     </>
   );

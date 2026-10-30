@@ -1,4 +1,10 @@
 import React from 'react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Yazı Tipi Önizlemesi',
+  robots: { index: false, follow: true },
+};
 
 export default function FontDemo() {
   const sampleHeading = "Bütünleşik Portföy Kontrolü";

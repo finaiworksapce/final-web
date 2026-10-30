@@ -33,7 +33,7 @@ export default function LegalLayout({
                 <ShieldCheck className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-black text-slate-900 tracking-tight">Yasal Metinler</h1>
+                <h2 className="text-3xl font-black text-slate-900 tracking-tight">Yasal Metinler</h2>
                 <p className="text-slate-500 font-medium tracking-wide text-sm mt-1 uppercase">FinAi Kullanıcı Bilgilendirme Merkezi</p>
               </div>
             </div>

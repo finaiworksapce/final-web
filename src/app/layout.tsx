@@ -8,31 +8,15 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://finai.net.tr"),
+  metadataBase: new URL("https://www.finai.net.tr"),
   title: {
-    default: "FinAI - Yapay Zeka Yatırım ve Borsa Asistanı",
+    default: "FinAI | BIST ve TEFAS Portföy Takibi",
     template: "%s | FinAI"
   },
-  description: "BIST hisse senetleri, canlı borsa fiyatları, temettü takvimi, TEFAS fonları ve AI destekli analizler tek bir platformda. Salih KAVAKCI tarafından kuruldu.",
-  authors: [{ name: "Salih KAVAKCI", url: "https://finai.net.tr" }],
+  description: "BIST hisselerinizi ve TEFAS fonlarınızı tek ekranda takip edin. FinAI ile portföyünüzü piyasa haberleri ve yapay zekâ destekli analizlerle inceleyin.",
+  authors: [{ name: "Salih KAVAKCI", url: "https://www.finai.net.tr" }],
   creator: "Salih KAVAKCI",
   publisher: "FinAI",
-  keywords: [
-    "Salih KAVAKCI",
-    "Salih Kavakcı FinAi",
-    "Salih Kavakcı",
-    "FinAi kurucusu Salih Kavakcı",
-    "FinAi",
-    "FinAi yapay zeka",
-    "BIST hisse analizi",
-    "THYAO hisse",
-    "ASELS hisse",
-    "temettü veren hisseler",
-    "BIST portföy takibi",
-    "TEFAS fon analizi",
-    "Finansal okuryazarlık",
-    "Yatırım asistanı"
-  ],
   manifest: "/manifest.json",
   icons: {
     icon: [
@@ -46,9 +30,9 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "FinAI - Yapay Zeka Yatırım Asistanı",
-    description: "BIST ve TEFAS portföyünüzü AI destekli analizlerle tek bir panoda yönetin. Kurucu: Salih KAVAKCI.",
-    url: "https://finai.net.tr",
+    title: "FinAI | BIST ve TEFAS Portföy Takibi",
+    description: "BIST hisselerinizi ve TEFAS fonlarınızı tek ekranda takip edin. Portföyünüzü haberler ve yapay zekâ destekli analizlerle inceleyin.",
+    url: "https://www.finai.net.tr",
     images: [
       {
         url: "/icon-512.png",
@@ -61,8 +45,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "FinAI - Yapay Zeka Yatırım Asistanı",
-    description: "BIST ve TEFAS portföyünüzü AI destekli analizlerle tek bir panoda yönetin. Kurucu: Salih KAVAKCI.",
+    title: "FinAI | BIST ve TEFAS Portföy Takibi",
+    description: "BIST hisselerinizi ve TEFAS fonlarınızı tek ekranda takip edin. Portföyünüzü haberler ve yapay zekâ destekli analizlerle inceleyin.",
     images: ["/icon-512.png"],
   },
 };
@@ -83,8 +67,6 @@ export default function RootLayout({
   return (
     <html lang="tr" className={`${inter.variable} ${outfit.variable} ${spaceGrotesk.variable}`}>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="theme-color" content="#030712" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>

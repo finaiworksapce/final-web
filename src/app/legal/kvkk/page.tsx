@@ -1,4 +1,26 @@
+import type { Metadata } from 'next';
 import React from 'react';
+
+export const metadata: Metadata = {
+  title: 'KVKK Aydınlatma Metni',
+  description: 'FinAi’nin kişisel verileri hangi amaçlarla işlediğini, sakladığını ve kullanıcı haklarını nasıl kullanabileceğinizi öğrenin.',
+  alternates: { canonical: 'https://www.finai.net.tr/legal/kvkk' },
+  openGraph: {
+    title: 'KVKK Aydınlatma Metni | FinAI',
+    description: 'FinAi’nin kişisel verileri hangi amaçlarla işlediğini, sakladığını ve kullanıcı haklarını nasıl kullanabileceğinizi öğrenin.',
+    url: 'https://www.finai.net.tr/legal/kvkk',
+    siteName: 'FinAI',
+    locale: 'tr_TR',
+    type: 'website',
+    images: [{ url: '/icon-512.png', width: 512, height: 512, alt: 'FinAI logosu' }],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'KVKK Aydınlatma Metni | FinAI',
+    description: 'FinAi’nin kişisel verileri hangi amaçlarla işlediğini, sakladığını ve kullanıcı haklarını nasıl kullanabileceğinizi öğrenin.',
+    images: ['/icon-512.png'],
+  },
+};
 
 export default function KVKKPage() {
   return (

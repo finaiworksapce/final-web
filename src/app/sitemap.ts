@@ -1,81 +1,19 @@
 import { MetadataRoute } from 'next';
-import { sectorMapping } from '@/data/sectorMapping';
+import { SEO_PUBLIC_STOCK_SYMBOLS } from '@/lib/seo-public-stock-symbols';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://finai.net.tr';
-  const lastModified = new Date();
+  const baseUrl = 'https://www.finai.net.tr';
 
-  // Sabit Sayfalar
   const staticPages: MetadataRoute.Sitemap = [
-    {
-      url: `${baseUrl}/`,
-      lastModified,
-      changeFrequency: 'daily',
-      priority: 1.0,
-    },
-    {
-      url: `${baseUrl}/dashboard/data`,
-      lastModified,
-      changeFrequency: 'hourly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/dashboard/economic-calendar`,
-      lastModified,
-      changeFrequency: 'hourly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/dashboard/news`,
-      lastModified,
-      changeFrequency: 'hourly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/dashboard/reports`,
-      lastModified,
-      changeFrequency: 'daily',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified,
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/hakkimizda`,
-      lastModified,
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/login`,
-      lastModified,
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/legal/terms`,
-      lastModified,
-      changeFrequency: 'monthly',
-      priority: 0.3,
-    },
-    {
-      url: `${baseUrl}/legal/kvkk`,
-      lastModified,
-      changeFrequency: 'monthly',
-      priority: 0.3,
-    },
-  ];
+    '/',
+    '/about',
+    '/legal/terms',
+    '/legal/kvkk',
+  ].map((path) => ({ url: `${baseUrl}${path}` }));
 
-  // BIST Hisseleri Dinamik Sayfaları (Tüm BIST Şirketleri)
-  const stockSymbols = Object.keys(sectorMapping);
-  const stockPages: MetadataRoute.Sitemap = stockSymbols.map((symbol) => ({
+  // Yalnızca editoryal olarak seçilmiş, şirket kimliği ve anlamlı içeriği olan sayfalar.
+  const stockPages: MetadataRoute.Sitemap = SEO_PUBLIC_STOCK_SYMBOLS.map((symbol) => ({
     url: `${baseUrl}/varlik/${symbol}`,
-    lastModified,
-    changeFrequency: 'daily',
-    priority: 0.85,
   }));
 
   return [...staticPages, ...stockPages];
