@@ -189,20 +189,15 @@ export default function EconomicEventDetailPage() {
                     </Link>
                 </div>
 
-                {/* 1. BAŞLIK VE TARİH: TARİH SOLDA, BAŞLIK TAM ORTADA */}
-                <div className="w-full pt-1 pb-2">
-                    {/* Sol tarafta tarih */}
-                    <div className="flex items-center text-xs font-bold text-slate-500 mb-2">
+                {/* 1. BAŞLIK VE TARİH: BAŞLIK SOLDA, TARİH ALTINDA SOLDA */}
+                <div className="w-full pt-1 pb-2 space-y-2">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#00008B] tracking-tight leading-tight">
+                        {event.event}
+                    </h1>
+                    <div className="flex items-center text-xs font-bold text-slate-500">
                         <span className="inline-flex items-center gap-1.5 text-slate-500 font-bold">
                             <CalendarIcon className="w-4 h-4 text-[#00008B]" /> {event.dateFormatted || 'Bugün'} · {event.time} TSİ
                         </span>
-                    </div>
-
-                    {/* Ortada Başlık */}
-                    <div className="text-center w-full py-1">
-                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#00008B] tracking-tight leading-tight max-w-4xl mx-auto">
-                            {event.event}
-                        </h1>
                     </div>
                 </div>
 
@@ -250,7 +245,7 @@ export default function EconomicEventDetailPage() {
                                             <Sparkles className="w-4 h-4 text-[#00008B]" />
                                         </div>
                                         <div>
-                                            <h2 className="text-lg font-black text-[#00008B] tracking-tight">FinAi INTELLIGENCE</h2>
+                                            <h2 className="text-lg font-black text-[#00008B] tracking-tight">FinAi Intelligence</h2>
                                         </div>
                                     </div>
 
@@ -403,12 +398,12 @@ export default function EconomicEventDetailPage() {
                     </div>
 
                     {/* SAĞ BÖLÜM: EKONOMİK ETKİ ZİNCİRİ & ÖNERİLEN DİĞER HABERLER */}
-                    <div className="w-full lg:w-[260px] xl:w-[290px] shrink-0 space-y-6">
+                    <div className="w-full lg:w-[260px] xl:w-[290px] shrink-0 space-y-8">
                         <EconomicImpactChainStepper channels={profile.impactChannels} />
 
                         {/* ETKİ ZİNCİRİNİN ALTINDA: DİĞER ÖNERİLEN HABERLER */}
                         {recommendedEvents.length > 0 && (
-                            <div className="space-y-3 pt-3 border-t border-slate-200">
+                            <div className="space-y-3 pt-6 border-t border-slate-200">
                                 <div className="flex items-center gap-2">
                                     <div className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0">
                                         <Sparkles className="w-3.5 h-3.5 text-[#00008B]" />
