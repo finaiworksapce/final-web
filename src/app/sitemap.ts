@@ -7,6 +7,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages: MetadataRoute.Sitemap = [
     '/',
     '/about',
+    '/haberler',
+    '/haberler/ekonomi',
+    '/haberler/bilanco',
+    '/haberler/temettu',
+    '/haberler/halka-arz',
     '/legal/terms',
     '/legal/kvkk',
   ].map((path) => ({ url: `${baseUrl}${path}` }));

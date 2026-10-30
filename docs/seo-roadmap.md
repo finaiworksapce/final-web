@@ -1,10 +1,10 @@
 # FinAI SEO çalışma planı
 
 **Güncelleme:** 30 Ekim 2026  
-**Durum:** Taslak ve kod düzenlemeleri çalışma kopyasında; canlıya alınmadı.
-**Kapsam tercihi:** Kullanıcıya görünen sayfa metni ve tasarım korunacak; bu çalışma yalnızca teknik SEO ve arama görünürlüğüne yönelik metadata düzenlemelerini kapsıyor.
+**Durum:** Hisse sayfalarına yönelik ilk SEO düzenlemeleri GitHub `main` dalına gönderildi ve Vercel yayını başarılı. Haber kategorileri için ikinci tur düzenlemeler çalışma kopyasında; henüz yayınlanmadı.
+**Kapsam tercihi:** Mevcut sayfaların metni ve görünümü korunacak. Yeni, herkese açık haber SEO sayfaları ayrı adreslerde yayınlanacak; mevcut haber ekranı değiştirilmeyecek.
 
-**Doğrulama notu:** Next.js üretim derlemesi, Supabase anahtarları yerelde bulunmadığı için yalnızca derleme sırasında geçici örnek değişkenlerle tamamlandı; derleme ve TypeScript kontrolü geçti. Gerçek Supabase/Vercel ortamıyla canlı dağıtım doğrulaması henüz yapılmadı. Next.js ayrıca üst klasördeki başka bir `package-lock.json` nedeniyle workspace kökü uyarısı verdi. `git diff --check` boşluk hatası göstermedi; Windows satır sonu uyarıları var.
+**Doğrulama notu:** Önceki SEO commit'inin Vercel durumu başarılı olarak raporlandı. Bu turda TypeScript kontrolü geçti; üretim derlemesi `.next` klasörüne yazarken Windows `EPERM` izniyle durdu. Yeni haber sayfalarının Vercel dağıtımı henüz yapılmadı. Next.js ayrıca üst klasördeki başka bir `package-lock.json` nedeniyle workspace kökü uyarısı verdi.
 
 Canlı siteye yapılan metin tabanlı taramada ana sayfada mevcut başlık ve müşteri alıntıları görüldü. Çalışma kopyasında da kullanıcıya görünen metin ve tasarım korunuyor. Tarayıcı aracı `robots.txt`, `sitemap.xml` ve hisse URL'lerini okuyamadığı için bu adresler canlıda doğrulanmış sayılmıyor.
 
@@ -18,7 +18,7 @@ Her turda önce değişiklikleri bu çalışma kopyasında yapacağız, sonra sa
 4. **Arama niyeti ve yeni içerik:** Search Console sorguları geldikten sonra sayfa kümelerini ve öncelikleri düzelt. Gerçek kullanıcı faydası ve doğrulanabilir veri varsa TEFAS rehberi/detayı veya yatırım eğitimi içeriği tasarla; hacim tahminine dayanarak toplu sayfa üretme.
 5. **Ölçüm ve iyileştirme:** mobil deneyim ve hız ölçümleri al; Search Console'da sitemap, indeksleme, sorgu, tıklama ve dönüşümleri izle. Her değişiklikten sonra aynı metriklerle karşılaştır.
 
-**Şu anki sonraki iş:** yalnızca teknik SEO değişikliklerini kod ve dağıtım ayarları açısından doğrulamak; Search Console'a erişim olduğunda sorgu/indeksleme raporlarını değerlendirmek. Görünür sayfa metinleri ve tasarım değiştirilmedi.
+**Şu anki sonraki iş:** haber kategorisi SEO sayfalarını dağıtım öncesi doğrulamak ve yayınlamak; sonra Search Console'da kategori ve hisse URL'lerinin indeks durumunu incelemek.
 
 Bu plan, FinAI'nin mevcut ürün özelliklerine göre hazırlandı. Search Console verisi olmadığı için arama ifadeleri aşağıda **doğrulanmamış konu/arama niyeti varsayımlarıdır**; arama hacmi veya sıralama iddiası değildir.
 
@@ -26,6 +26,8 @@ Bu plan, FinAI'nin mevcut ürün özelliklerine göre hazırlandı. Search Conso
 
 - `www.finai.net.tr` adresi canonical host olarak kullanılıyor. Canlı DNS/hosting yönlendirmesinin bu tercihle aynı olduğu dağıtım sonrasında doğrulanmalı.
 - Sitemap ana sayfa, Hakkımızda, yasal sayfalar ve editoryal listede bulunan 27 hisse sayfasını listeliyor.
+- Haber SEO turunda `/haberler` ve dört herkese açık kategori (`ekonomi`, `bilanco`, `temettu`, `halka-arz`) site haritasına eklendi. Kategori sayfaları ayrı canonical/metadata ve kaynaklı canlı haber/takvim kayıtları sunuyor.
+- `/dashboard/news` ve kullanıcıya açık olmayan panel akışı değiştirilmedi; yeni kategoriler panelden bağımsız, kamuya açık sayfalardır.
 - Uygulama/panel, giriş, şifre yenileme ve tasarım önizleme sayfaları `noindex` olarak işaretlendi.
 - Tek robots kaynağı olarak Next.js `app/robots.ts` kullanılıyor; yinelenen `public/robots.txt` kaldırıldı.
 - `/hakkimizda`, asıl sayfa olan `/about` adresine kalıcı yönleniyor.
@@ -44,12 +46,25 @@ Bu plan, FinAI'nin mevcut ürün özelliklerine göre hazırlandı. Search Conso
 - Yasal metin sayfalarındaki ortak şablon başlığı H2 yapıldı; her belge sayfasında yalnızca belge başlığı H1 olarak kalıyor. Hisse JSON-LD içeriği HTML script etiketi içinde güvenli biçimde kaçışlanıyor.
 - `public/llms.txt` canonical adreslere ve ürünün bilgilendirme amaçlı kullanımına göre yenilendi.
 
+## 2.1 Ekonomi ve haber kategorileri — ikinci tur kodlandı, yayın öncesi
+
+- `/haberler` sayfası ekonomi, bilanço, temettü ve halka arz kategorilerine iç bağlantı sağlar.
+- `/haberler/ekonomi`, mevcut doğrulanmış ekonomi ve Borsa İstanbul haber akışını sunucu tarafında sayfaya ekler.
+- `/haberler/bilanco`, `/haberler/temettu` ve `/haberler/halka-arz`, mevcut takvim veri uçlarından gelen şirket ve tarih kayıtlarını gösterir; kaynak bağlantıları ve veri tarihi uyarısı korunur.
+- Her sayfanın ayrı title, description, canonical, Open Graph ve `CollectionPage`/`ItemList` yapılandırılmış verisi vardır.
+- Kategori URL'leri sitemap'e eklendi. Yeni kategori sayfaları mevcut dashboard haber arayüzünün görünümünü değiştirmez.
+- Dağıtım sonrasında Search Console URL Inspection ile bu dört URL'nin taranabilirliği, canonical seçimi ve indeks durumu kontrol edilmeli.
+
 ## 3. Arama niyeti ve sayfa mimarisi — Search Console ile doğrulanacak
 
 | Küme | İlk arama niyeti varsayımı | Hedef sayfa | Mevcut durum / yapılacak |
 |---|---|---|---|
 | Ürün ve portföy takibi | BIST portföy takibi, TEFAS fon takibi, yatırım portföyü takip uygulaması | Ana sayfa | Özellikler mevcut. Arama sorgularından hangilerinin gösterim aldığı Search Console'da incelenecek. |
 | Hisse ve şirket | `[ticker] hisse`, `[şirket] hisse fiyatı`, `[ticker] temettü`, `[ticker] KAP haberleri` | `/varlik/[symbol]` | Sayfa şablonu mevcut. Her sembolde içerik kapsamı, güncellik ve veri kaynakları ayrıca kontrol edilecek. |
+| Ekonomi haberleri | ekonomi haberleri, Türkiye ekonomi gündemi, borsa haberleri | `/haberler/ekonomi` | Kodlandı; dağıtım ve Search Console indeks kontrolü bekliyor. |
+| Bilanço takvimi | bilanço takvimi, şirket bilanço açıklama tarihleri | `/haberler/bilanco` | Kodlandı; dağıtım ve Search Console indeks kontrolü bekliyor. |
+| Temettü takvimi | temettü takvimi, temettü haberleri, hisse başı temettü | `/haberler/temettu` | Kodlandı; dağıtım ve Search Console indeks kontrolü bekliyor. |
+| Halka arz takvimi | halka arz takvimi, yaklaşan halka arzlar | `/haberler/halka-arz` | Kodlandı; dağıtım ve Search Console indeks kontrolü bekliyor. |
 | FinAI markası | FinAI, FinAi portföy, FinAI yapay zekâ | Ana sayfa ve `/about` | Marka ve ürün açıklamaları var. Search Console sorgularıyla marka dışı fırsatlardan ayrılacak. |
 | TEFAS fon bilgisi | TEFAS fonu, fon karşılaştırma/takip | İleride herkese açık fon sayfaları veya rehber | İlgili araçlar şu anda giriş gerektiren alanda. Kamuya açık sayfa ancak veriler ve açıklamalar kullanıcıya anlamlı değer sunuyorsa planlanacak. |
 | Finansal okuryazarlık | Temel yatırım/portföy kavramları | İleride kaynaklı rehber merkezi | Konu ve yazar uzmanlığı netleştikten sonra; toplu ve otomatik içerik üretimi yapılmayacak. |
@@ -86,6 +101,7 @@ Search Console erişimi veya raporu bu çalışma kopyasında henüz yok. Google
 ## Kodda değiştirilen başlıca dosyalar
 
 - `src/app/robots.ts`, `src/app/sitemap.ts`
+- `src/app/haberler/page.tsx`, `src/app/haberler/[category]/page.tsx`
 - `src/middleware.ts` (apex alan adından `www` canonical adrese kalıcı yönlendirme)
 - `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/page-client.tsx`
 - `src/app/about/page.tsx`, `src/app/about/page-client.tsx`, `src/app/hakkimizda/page.tsx`
