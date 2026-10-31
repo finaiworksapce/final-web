@@ -14,7 +14,7 @@ import { calculateBackendDifferences, generateFinAiAnalysis } from "@/lib/finai-
 import FollowIndicatorButton from "@/components/calendar/FollowIndicatorButton";
 import EconomicImpactChainStepper from "@/components/calendar/EconomicImpactChainStepper";
 import IndicatorHistoryBarChart from "@/components/calendar/IndicatorHistoryBarChart";
-import AddToCalendarWidget from "@/components/calendar/AddToCalendarWidget";
+import AddToCalendarWidget, { EventCountdownTimer, AddToCalendarButton } from "@/components/calendar/AddToCalendarWidget";
 import { getIndicatorHistory } from "@/lib/indicator-history-data";
 
 function toSlug(str: string): string {
@@ -194,17 +194,25 @@ export default function EconomicEventDetailPage() {
                 </div>
 
                 {/* 1. BAŞLIK VE TARİH: BAŞLIK SOLDA, TARİH ALTINDA SOLDA */}
-                <div className="w-full pt-1 pb-2 space-y-3">
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#00008B] tracking-tight leading-tight">
-                        {event.event}
-                    </h1>
-                    <div className="flex flex-wrap items-center justify-between gap-3 pt-0.5">
+                <div className="w-full pt-1 pb-2 space-y-2">
+                    {/* Başlık ve Yatayda Takvime Ekle Butonu */}
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#00008B] tracking-tight leading-tight">
+                            {event.event}
+                        </h1>
+                        <div className="shrink-0">
+                            <AddToCalendarButton event={event} />
+                        </div>
+                    </div>
+
+                    {/* Tarih ve Hemen Altında Senkronize Canlı Geri Sayım */}
+                    <div className="space-y-1 pt-0.5">
                         <div className="flex items-center text-xs font-bold text-slate-500">
                             <span className="inline-flex items-center gap-1.5 text-slate-500 font-bold">
                                 <CalendarIcon className="w-4 h-4 text-[#00008B]" /> {event.dateFormatted || 'Bugün'} · {event.time} TSİ
                             </span>
                         </div>
-                        <AddToCalendarWidget event={event} />
+                        <EventCountdownTimer event={event} />
                     </div>
                 </div>
 
