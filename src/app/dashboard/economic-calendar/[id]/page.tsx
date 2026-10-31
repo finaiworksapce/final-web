@@ -17,6 +17,7 @@ import IndicatorHistoryBarChart from "@/components/calendar/IndicatorHistoryBarC
 import PossibleScenariosWidget from "@/components/calendar/PossibleScenariosWidget";
 import AddToCalendarWidget, { EventCountdownTimer, AddToCalendarButton } from "@/components/calendar/AddToCalendarWidget";
 import { getIndicatorHistory } from "@/lib/indicator-history-data";
+import { useUser } from "@/components/providers/UserProvider";
 
 function toSlug(str: string): string {
     return str
@@ -66,6 +67,9 @@ export default function EconomicEventDetailPage() {
     const rawId = params?.id as string;
     const eventId = rawId ? decodeURIComponent(rawId) : "";
 
+    const { userName, user } = useUser();
+    const rawName = userName || user?.user_metadata?.first_name || user?.user_metadata?.full_name || '';
+    const cleanFirstName = rawName.trim().split(/\s+/)[0]?.replace(/^(bey|hanım|sayın)\s*/i, '') || '';
     const [event, setEvent] = useState<CatalogCalendarEvent | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -159,6 +163,20 @@ export default function EconomicEventDetailPage() {
     const calc = calculateBackendDifferences(event);
     const finAiAnalysis = generateFinAiAnalysis(event);
     const historySeries = getIndicatorHistory(event.event, event.country);
+
+    const formattedRealLifeExample = (() => {
+        if (!profile.realLifeExample) return '';
+        if (cleanFirstName) {
+            return profile.realLifeExample.replace(/\{userName\}/g, cleanFirstName);
+        }
+        return profile.realLifeExample
+            .replace(/,\s*\{userName\}\s*,/g, ',')
+            .replace(/\s*\{userName\},\s*/g, ' ')
+            .replace(/,\s*\{userName\}/g, '')
+            .replace(/\{userName\}/g, '')
+            .replace(/\s{2,}/g, ' ')
+            .trim();
+    })();
 
     // Etki zincirinin altında önerilecek diğer haberler
     const relatedNames = profile.relatedIndicators?.map(r => r.name.toLowerCase()) || [];
@@ -268,7 +286,7 @@ export default function EconomicEventDetailPage() {
                                     {profile.realLifeExample ? (
                                         <div className="pt-1">
                                             <p className="text-xs sm:text-[13px] font-normal text-slate-800 leading-relaxed tracking-normal">
-                                                {profile.realLifeExample}
+                                                {formattedRealLifeExample}
                                             </p>
                                         </div>
                                     ) : (
