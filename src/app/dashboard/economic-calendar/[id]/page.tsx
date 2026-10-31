@@ -14,6 +14,7 @@ import { calculateBackendDifferences, generateFinAiAnalysis } from "@/lib/finai-
 import FollowIndicatorButton from "@/components/calendar/FollowIndicatorButton";
 import EconomicImpactChainStepper from "@/components/calendar/EconomicImpactChainStepper";
 import IndicatorHistoryBarChart from "@/components/calendar/IndicatorHistoryBarChart";
+import PossibleScenariosWidget from "@/components/calendar/PossibleScenariosWidget";
 import AddToCalendarWidget, { EventCountdownTimer, AddToCalendarButton } from "@/components/calendar/AddToCalendarWidget";
 import { getIndicatorHistory } from "@/lib/indicator-history-data";
 
@@ -67,7 +68,7 @@ export default function EconomicEventDetailPage() {
 
     const [event, setEvent] = useState<CatalogCalendarEvent | null>(null);
     const [loading, setLoading] = useState(true);
-    const [showAllScenarios, setShowAllScenarios] = useState(false);
+
 
     useEffect(() => {
         if (!eventId) return;
@@ -303,70 +304,11 @@ export default function EconomicEventDetailPage() {
                             />
                         </div>
 
-                        {/* 4. EN ALT KISIM: GEÇMİŞTE NELER OLDU (SENARYO ANALİZİ FORMATINDA) */}
-                        <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 shadow-sm space-y-6">
-                            <div className="flex items-center justify-between pb-4 border-b border-slate-150">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center">
-                                        <Target className="w-5 h-5 text-[#00008B]" />
-                                    </div>
-                                    <div>
-                                        <h2 className="text-xl font-black text-[#00008B]">Geçmişte Neler Oldu?</h2>
-                                        <p className="text-xs text-slate-400 font-bold">Gerçekleşen Veri Açıklaması & Piyasa Yansıması</p>
-                                    </div>
-                                </div>
-                                <button
-                                    onClick={() => setShowAllScenarios(!showAllScenarios)}
-                                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-slate-100 hover:bg-slate-200 text-[#00008B] font-extrabold text-xs transition-all"
-                                >
-                                    {showAllScenarios ? 'Diğer Senaryoları Gizle' : 'Diğer Senaryoları Görüntüle'}
-                                    {showAllScenarios ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                                </button>
-                            </div>
-
-                            <div className="p-6 rounded-3xl bg-[#00008B] text-white space-y-4 shadow-lg">
-                                <div className="flex items-center justify-between">
-                                    <span className="px-3 py-1 rounded-xl bg-emerald-400 text-[#00008B] text-xs font-black">
-                                        Gerçekleşen Durum
-                                    </span>
-                                    <span className="text-xs font-bold text-blue-200">
-                                        {calc.forecastDiffText || 'Piyasa Paralelinde'}
-                                    </span>
-                                </div>
-
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-medium text-blue-100 pt-2 border-t border-blue-800">
-                                    <div>
-                                        <span className="text-[10px] text-blue-300 uppercase block font-bold">PİYASA BEKLENTİSİ</span>
-                                        <span className="text-sm font-black text-white">{event.forecast || '-'}</span>
-                                    </div>
-                                    <div>
-                                        <span className="text-[10px] text-blue-300 uppercase block font-bold">GERÇEKLEŞEN VERİ</span>
-                                        <span className="text-sm font-black text-white">{event.actual || 'Bekleniyor'}</span>
-                                    </div>
-                                    <div>
-                                        <span className="text-[10px] text-blue-300 uppercase block font-bold">PİYASAYA ETKİ & YANSIMA</span>
-                                        <span className="text-xs font-bold text-emerald-300">{finAiAnalysis.whatItMeans.slice(0, 80)}...</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {showAllScenarios && (
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-150">
-                                    <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                                        <h4 className="text-xs font-black text-emerald-700">1. Beklentinin Üzerinde Geldiğinde</h4>
-                                        <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                                            Göstergenin piyasa beklentilerinin üzerinde açıklanması faiz ve getiri beklentilerini yukarı yönlü etkileyebilir, politika duruşunda sıkılaşma eğilimini güçlendirebilir.
-                                        </p>
-                                    </div>
-                                    <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                                        <h4 className="text-xs font-black text-rose-700">2. Beklentinin Altında Geldiğinde</h4>
-                                        <p className="text-xs text-slate-600 font-medium leading-relaxed">
-                                            Göstergenin piyasa tahminlerinin altında kalması ekonomik aktivitede soğuma veya dezenflasyonist baskı yaratabilir, gevşeme beklentilerini artırabilir.
-                                        </p>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+                        {/* 4. EN ALT KISIM: OLASI SENARYOLAR (BEKLENTİNİN ÜSTÜNDE, PARALEL, ALTINDA) */}
+                        <PossibleScenariosWidget 
+                            eventName={event.event} 
+                            country={event.country} 
+                        />
                     </div>
 
                     {/* SAĞ BÖLÜM: EKONOMİK ETKİ ZİNCİRİ & EN ALTTAN YUKARI HİZALANAN ÖNERİLEN HABERLER */}
