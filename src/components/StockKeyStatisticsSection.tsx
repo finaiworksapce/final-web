@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { HelpCircle, RefreshCw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface MetricConfig {
@@ -148,31 +148,18 @@ export default function StockKeyStatisticsSection({
         fontFamily: "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif"
       }}
     >
-      {/* BAŞLIK VE KAPSAM ÇUBUĞU */}
+      {/* BAŞLIK */}
       <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-2">
-        <div className="flex items-center gap-2">
-          <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight flex items-center gap-1.5">
-            Önemli İstatistikler
-          </h3>
-          <div className="group relative cursor-help">
-            <HelpCircle className="w-4 h-4 text-slate-400 hover:text-slate-600 transition-colors" />
-            <div className="absolute left-0 bottom-full mb-2 hidden group-hover:block w-64 p-2.5 bg-slate-900 text-white text-[11px] rounded-xl shadow-xl z-30 pointer-events-none leading-relaxed">
-              BIST ve TradingView doğrulanmış finansallarından hesaplanan temel değerleme, kârlılık, likidite ve büyüme göstergeleri.
-            </div>
-          </div>
-        </div>
+        <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+          Önemli İstatistikler
+        </h3>
 
-        <div className="flex items-center gap-2">
-          {loading && (
-            <span className="flex items-center gap-1 text-[11px] text-[#00008B] font-medium animate-pulse">
-              <RefreshCw className="w-3 h-3 animate-spin" />
-              Veri Alınıyor
-            </span>
-          )}
-          <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200/60">
-            TTM / Konsolide
+        {loading && (
+          <span className="flex items-center gap-1 text-[11px] text-[#00008B] font-medium animate-pulse">
+            <RefreshCw className="w-3 h-3 animate-spin" />
+            Veri Alınıyor
           </span>
-        </div>
+        )}
       </div>
 
       {/* METRİK LİSTESİ: 2 SÜTUN (KUTUSUZ, DÜZ METİN VE SATIR ÇİZGİLERİ İLE) */}
@@ -247,11 +234,6 @@ export default function StockKeyStatisticsSection({
         </div>
       )}
 
-      {/* ALT BİLGİ DİPNOTU */}
-      <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 mt-2">
-        <span>* Veriler TradingView ve BIST finansal tablolarından derlenmiştir.</span>
-        <span className="font-semibold text-[#00008B]">FinAi Intelligence</span>
-      </div>
     </div>
   );
 }
