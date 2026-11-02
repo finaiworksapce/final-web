@@ -39,6 +39,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import halkarzAboutDb from "@/data/halkarz_about_db.json";
 import FinancialRatioHistoryChart from "@/components/FinancialRatioHistoryChart";
 import TradingViewSymbolOverview from "@/components/TradingViewSymbolOverview";
+import StockKeyStatisticsSection from "@/components/StockKeyStatisticsSection";
 import StockScreenerRatiosSection from "@/components/StockScreenerRatiosSection";
 
 // REEL BIST FİYAT KATALOĞU (Yedek Referans)
@@ -857,9 +858,21 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
               </div>
             </div>
 
-            {/* TRADINGVIEW SYMBOL OVERVIEW GRAFİK BİLEŞENİ (YAHOO FINANCE VERİSİ - %50 GENİŞLİK SOLA DAYALI) */}
-            <div className="w-full lg:w-1/2">
-              <TradingViewSymbolOverview symbol={symbol} fullName={fullName} height={460} />
+            {/* GRAFİK VE ÖNEMLİ İSTATİSTİKLER (YAN YANA %50 - %50 DÜZEN) */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+              <div className="w-full h-full">
+                <TradingViewSymbolOverview symbol={symbol} fullName={fullName} height={460} className="h-full" />
+              </div>
+              <div className="w-full h-full">
+                <StockKeyStatisticsSection
+                  symbol={symbol}
+                  ratiosData={ratiosData}
+                  stockData={stockData}
+                  fundamentalsData={fundamentalsData}
+                  loading={ratiosLoading}
+                  className="h-full"
+                />
+              </div>
             </div>
 
             {/* FINAI COMPANY INTELLIGENCE HIGHLIGHTS (3 STRATEJİK BOYUT) */}
