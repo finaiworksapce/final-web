@@ -12,33 +12,33 @@ interface TimeframeConfig {
 function normalizeTimeframe(tf: string): TimeframeConfig {
   const clean = tf.trim().toLowerCase();
   
-  if (clean === '1d' || clean === '1g' || clean === '1gun' || clean === 'day' || clean === 'today') {
-    return { yahooRange: '1d', interval: '5m', label: '1 Gün', normalized: '1D', isIntraday: true };
+  if (clean === '1d|1' || clean === '1d|5' || clean === '1d' || clean === '1g' || clean === '1gun' || clean === 'day' || clean === 'today') {
+    return { yahooRange: '7d', interval: '1m', label: '1 Gün (1 Dakikalık)', normalized: '1d|1', isIntraday: true };
   }
   if (clean === '1h' || clean === '1w' || clean === '1hafta' || clean === 'week') {
-    return { yahooRange: '5d', interval: '15m', label: '1 Hafta', normalized: '1W', isIntraday: false };
+    return { yahooRange: '14d', interval: '15m', label: '1 Hafta', normalized: '1W', isIntraday: false };
   }
-  if (clean === '1m' || clean === '1a' || clean === '1ay' || clean === '1mo' || clean === 'month') {
-    return { yahooRange: '1mo', interval: '1d', label: '1 Ay', normalized: '1M', isIntraday: false };
+  if (clean === '1m|30' || clean === '1m' || clean === '1a' || clean === '1ay' || clean === '1mo' || clean === 'month') {
+    return { yahooRange: '60d', interval: '30m', label: '1 Ay (30 Dakikalık)', normalized: '1m|30', isIntraday: false };
   }
-  if (clean === '3m' || clean === '3a' || clean === '3ay' || clean === '3mo') {
-    return { yahooRange: '3mo', interval: '1d', label: '3 Ay', normalized: '3M', isIntraday: false };
+  if (clean === '3m|60' || clean === '3m' || clean === '3a' || clean === '3ay' || clean === '3mo') {
+    return { yahooRange: '730d', interval: '60m', label: '3 Ay (60 Dakikalık)', normalized: '3m|60', isIntraday: false };
   }
   if (clean === '6m' || clean === '6a' || clean === '6ay' || clean === '6mo') {
-    return { yahooRange: '6mo', interval: '1d', label: '6 Ay', normalized: '6M', isIntraday: false };
+    return { yahooRange: '730d', interval: '1d', label: '6 Ay', normalized: '6M', isIntraday: false };
   }
-  if (clean === '1y' || clean === '1yil' || clean === 'year') {
-    return { yahooRange: '1y', interval: '1d', label: '1 Yıl', normalized: '1Y', isIntraday: false };
+  if (clean === '12m|1d' || clean === '12m|1D' || clean === '1y' || clean === '1yil' || clean === 'year' || clean === '12m') {
+    return { yahooRange: '10y', interval: '1d', label: '1 Yıl (Günlük)', normalized: '12m|1D', isIntraday: false };
   }
-  if (clean === '5y' || clean === '5yil' || clean === '5years' || clean === '60m|1w') {
-    return { yahooRange: '5y', interval: '1wk', label: '5 Yıl', normalized: '5Y', isIntraday: false };
+  if (clean === '60m|1w' || clean === '60m|1W' || clean === '5y' || clean === '5yil' || clean === '5years' || clean === '60m') {
+    return { yahooRange: '20y', interval: '1wk', label: '5 Yıl (Haftalık)', normalized: '60m|1W', isIntraday: false };
   }
-  if (clean === 'all' || clean === 'max' || clean === 'tumu' || clean === 'all|1m') {
-    return { yahooRange: 'max', interval: '1mo', label: 'Tümü', normalized: 'ALL', isIntraday: false };
+  if (clean === 'all|1m' || clean === 'all|1M' || clean === 'all' || clean === 'max' || clean === 'tumu') {
+    return { yahooRange: 'max', interval: '1mo', label: 'Tüm Zamanlar (Aylık)', normalized: 'all|1M', isIntraday: false };
   }
 
-  // Default to 1D
-  return { yahooRange: '1d', interval: '5m', label: '1 Gün', normalized: '1D', isIntraday: true };
+  // Default to 1d|1 (1-minute bars with 7-day deep historical buffer)
+  return { yahooRange: '7d', interval: '1m', label: '1 Gün (1 Dakikalık)', normalized: '1d|1', isIntraday: true };
 }
 
 // EKOFİN.NET CANLI HTTP VERİ ÇEKİCİ (DIRECT LIVE FETCH FROM EKOFIN.NET)
@@ -149,7 +149,7 @@ export async function GET(request: Request) {
     let result = json?.chart?.result?.[0];
 
     // If 1D range yielded no timestamps (e.g. market closed / weekend / early morning), retry with range=5d & interval=5m
-    if (config.normalized === '1D' && (!result || !result.timestamp || result.timestamp.length === 0)) {
+    if ((config.normalized === '1d|1' || config.normalized === '1D') && (!result || !result.timestamp || result.timestamp.length === 0)) {
       const fallback5dUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${cleanSymbol}.IS?range=5d&interval=5m`;
       const res5d = await fetch(fallback5dUrl, {
         headers: { "User-Agent": "Mozilla/5.0" },
@@ -228,19 +228,6 @@ export async function GET(request: Request) {
       }
     }
 
-    // 1G / 1D Intraday Filtering: MUST keep ONLY the last trading session date
-    if (config.normalized === '1D' && parsedCandles.length > 0) {
-      const lastSessionDate = parsedCandles[parsedCandles.length - 1].date;
-      parsedCandles = parsedCandles.filter(cand => cand.date === lastSessionDate);
-    }
-
-    // 1H Intraday Filtering: MUST keep ONLY the last 60 minutes of the last trading session
-    if (config.normalized === '1H' && parsedCandles.length > 0) {
-      const lastSessionDate = parsedCandles[parsedCandles.length - 1].date;
-      const lastSessionCandles = parsedCandles.filter(cand => cand.date === lastSessionDate);
-      parsedCandles = lastSessionCandles.slice(-60);
-    }
-
     // Sort ascending by timestamp & deduplicate
     parsedCandles.sort((a, b) => a.timestamp - b.timestamp);
     const uniqueMap = new Map<number, typeof parsedCandles[0]>();
@@ -255,8 +242,21 @@ export async function GET(request: Request) {
     const lastCandle = finalCandles[finalCandles.length - 1];
     const firstCandle = finalCandles[0];
 
+    // Find previous day's close for BIST daily comparison
+    let dailyPrevClose = meta.chartPreviousClose || meta.previousClose;
+    if (!dailyPrevClose || isNaN(dailyPrevClose)) {
+      const lastDate = lastCandle.date;
+      const prevDayCandles = finalCandles.filter(c => c.date !== lastDate);
+      if (prevDayCandles.length > 0) {
+        dailyPrevClose = prevDayCandles[prevDayCandles.length - 1].close;
+      } else {
+        dailyPrevClose = firstCandle.open;
+      }
+    }
+
     const currentPrice = meta.regularMarketPrice || lastCandle.close;
-    const previousClose = meta.chartPreviousClose || meta.previousClose || firstCandle.open;
+    // For 1d|1 intraday, compare to yesterday's close; for multi-period, compare to period start
+    const previousClose = config.isIntraday ? dailyPrevClose : firstCandle.open;
     const priceChange = currentPrice - previousClose;
     const priceChangePercent = previousClose ? (priceChange / previousClose) * 100 : 0;
 

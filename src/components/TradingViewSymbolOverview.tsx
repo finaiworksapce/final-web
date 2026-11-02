@@ -46,15 +46,15 @@ interface TradingViewSymbolOverviewProps {
   height?: number | string;
 }
 
-// User specified date ranges mapping:
-// "1d|5", "1m|30", "3m|60", "12m|1D", "60m|1W", "all|1M"
+// User specified date ranges mapping from TradingView config:
+// "1d|1", "1m|30", "3m|60", "12m|1D", "60m|1W", "all|1M"
 const DATE_RANGES = [
-  { id: "1d", label: "1G", title: "1 Gün (5 Dakikalık)", isIntraday: true },
-  { id: "1m", label: "1A", title: "1 Ay", isIntraday: false },
-  { id: "3m", label: "3A", title: "3 Ay", isIntraday: false },
-  { id: "1y", label: "1Y", title: "1 Yıl (12 Ay)", isIntraday: false },
-  { id: "5y", label: "5Y", title: "5 Yıl (60 Ay)", isIntraday: false },
-  { id: "all", label: "TÜMÜ", title: "Tüm Geçmiş", isIntraday: false }
+  { id: "1d|1", label: "1G", title: "1 Gün (1 Dakikalık)", isIntraday: true },
+  { id: "1m|30", label: "1A", title: "1 Ay (30 Dakikalık)", isIntraday: false },
+  { id: "3m|60", label: "3A", title: "3 Ay (60 Dakikalık)", isIntraday: false },
+  { id: "12m|1D", label: "1Y", title: "1 Yıl (Günlük)", isIntraday: false },
+  { id: "60m|1W", label: "5Y", title: "5 Yıl (Haftalık)", isIntraday: false },
+  { id: "all|1M", label: "TÜMÜ", title: "Tüm Zamanlar (Aylık)", isIntraday: false }
 ];
 
 export function TradingViewSymbolOverview({
@@ -66,7 +66,7 @@ export function TradingViewSymbolOverview({
   const cleanSymbol = symbol.toUpperCase().replace(".IS", "").trim();
 
   // Active Date Range / Timeframe
-  const [activeRange, setActiveRange] = useState<string>("1d");
+  const [activeRange, setActiveRange] = useState<string>("1d|1");
   const [stockData, setStockData] = useState<StockApiResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -183,7 +183,7 @@ export function TradingViewSymbolOverview({
 
     if (validPoints.length === 0) return;
 
-    const isIntraday = activeRangeConfig.isIntraday;
+    const hasIntradayTime = activeRange === "1d|1" || activeRange === "1m|30" || activeRange === "3m|60";
 
     // Chart Configuration matching the User's exact settings:
     // backgroundColor: "#0F0F0F"
@@ -206,9 +206,13 @@ export function TradingViewSymbolOverview({
         dateFormat: "dd MMMM yyyy",
         timeFormatter: (time: number) => {
           const dateObj = new Date(time * 1000);
-          return isIntraday
-            ? dateObj.toLocaleTimeString("tr-TR", { timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit" })
-            : dateObj.toLocaleDateString("tr-TR", { timeZone: "Europe/Istanbul", day: "2-digit", month: "short", year: "numeric" });
+          if (activeRange === "1d|1") {
+            return dateObj.toLocaleTimeString("tr-TR", { timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit" });
+          }
+          if (activeRange === "1m|30" || activeRange === "3m|60") {
+            return `${dateObj.toLocaleDateString("tr-TR", { timeZone: "Europe/Istanbul", day: "2-digit", month: "short" })} ${dateObj.toLocaleTimeString("tr-TR", { timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit" })}`;
+          }
+          return dateObj.toLocaleDateString("tr-TR", { timeZone: "Europe/Istanbul", day: "2-digit", month: "short", year: "numeric" });
         }
       },
       grid: {
@@ -239,7 +243,7 @@ export function TradingViewSymbolOverview({
       },
       timeScale: {
         borderVisible: false,
-        timeVisible: isIntraday,
+        timeVisible: hasIntradayTime,
         secondsVisible: false,
         rightOffset: 3
       },
@@ -328,9 +332,14 @@ export function TradingViewSymbolOverview({
       const diffPercent = basePrice > 0 ? (diff / basePrice) * 100 : 0;
 
       const dateObj = new Date((param.time as number) * 1000);
-      const timeText = isIntraday
-        ? dateObj.toLocaleTimeString("tr-TR", { timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit" })
-        : dateObj.toLocaleDateString("tr-TR", { timeZone: "Europe/Istanbul", day: "2-digit", month: "short", year: "numeric" });
+      let timeText = "";
+      if (activeRange === "1d|1") {
+        timeText = dateObj.toLocaleTimeString("tr-TR", { timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit" });
+      } else if (activeRange === "1m|30" || activeRange === "3m|60") {
+        timeText = `${dateObj.toLocaleDateString("tr-TR", { timeZone: "Europe/Istanbul", day: "2-digit", month: "short" })} ${dateObj.toLocaleTimeString("tr-TR", { timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit" })}`;
+      } else {
+        timeText = dateObj.toLocaleDateString("tr-TR", { timeZone: "Europe/Istanbul", day: "2-digit", month: "short", year: "numeric" });
+      }
 
       setHoveredPoint({
         price: hoveredPrice,
@@ -340,8 +349,51 @@ export function TradingViewSymbolOverview({
       });
     });
 
-    // Auto-fit content
-    chart.timeScale().fitContent();
+    // Frame initial view based on active range, with deep historical runway preserved to the left
+    if (validPoints.length > 0) {
+      const lastPt = validPoints[validPoints.length - 1];
+
+      if (activeRange === "1d|1") {
+        // Frame to the latest day's session
+        const lastDateStr = new Date(lastPt.timestamp * 1000).toLocaleDateString("en-CA", { timeZone: "Europe/Istanbul" });
+        const dayStartIdx = validPoints.findIndex(pt => {
+          const dStr = new Date(pt.timestamp * 1000).toLocaleDateString("en-CA", { timeZone: "Europe/Istanbul" });
+          return dStr === lastDateStr;
+        });
+        const from = dayStartIdx !== -1 ? dayStartIdx : Math.max(0, validPoints.length - 120);
+        chart.timeScale().setVisibleLogicalRange({ from, to: validPoints.length + 5 });
+      } else if (activeRange === "1m|30") {
+        // Frame to the last 30 days
+        const oneMonthAgo = lastPt.timestamp - 30 * 24 * 3600;
+        const mStartIdx = validPoints.findIndex(pt => pt.timestamp >= oneMonthAgo);
+        const from = mStartIdx !== -1 ? mStartIdx : Math.max(0, validPoints.length - 350);
+        chart.timeScale().setVisibleLogicalRange({ from, to: validPoints.length + 3 });
+      } else if (activeRange === "3m|60") {
+        // Frame to the last 90 days (3 months)
+        const threeMonthsAgo = lastPt.timestamp - 90 * 24 * 3600;
+        const mStartIdx = validPoints.findIndex(pt => pt.timestamp >= threeMonthsAgo);
+        const from = mStartIdx !== -1 ? mStartIdx : Math.max(0, validPoints.length - 550);
+        chart.timeScale().setVisibleLogicalRange({ from, to: validPoints.length + 3 });
+      } else if (activeRange === "12m|1D") {
+        // Frame to the last 365 days (1 year, ~250 trading bars)
+        const oneYearAgo = lastPt.timestamp - 365 * 24 * 3600;
+        const yStartIdx = validPoints.findIndex(pt => pt.timestamp >= oneYearAgo);
+        const from = yStartIdx !== -1 ? yStartIdx : Math.max(0, validPoints.length - 252);
+        chart.timeScale().setVisibleLogicalRange({ from, to: validPoints.length + 3 });
+      } else if (activeRange === "60m|1W") {
+        // Frame to the last 5 years (~260 weekly bars)
+        const fiveYearsAgo = lastPt.timestamp - 5 * 365 * 24 * 3600;
+        const wStartIdx = validPoints.findIndex(pt => pt.timestamp >= fiveYearsAgo);
+        const from = wStartIdx !== -1 ? wStartIdx : Math.max(0, validPoints.length - 260);
+        chart.timeScale().setVisibleLogicalRange({ from, to: validPoints.length + 2 });
+      } else {
+        // "all|1M": Fit all available monthly candles
+        chart.timeScale().fitContent();
+      }
+    }
+
+    const handleMouseLeave = () => setHoveredPoint(null);
+    container.addEventListener("mouseleave", handleMouseLeave);
 
     // Resize Observer for 100% responsiveness
     const resizeObserver = new ResizeObserver((entries) => {
@@ -355,6 +407,7 @@ export function TradingViewSymbolOverview({
     resizeObserver.observe(container);
 
     return () => {
+      container.removeEventListener("mouseleave", handleMouseLeave);
       resizeObserver.disconnect();
       if (chartApiRef.current) {
         chartApiRef.current.remove();
