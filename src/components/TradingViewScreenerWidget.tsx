@@ -705,7 +705,7 @@ function TradingViewScreenerWidget({
           )}
         >
           {col.render(item, (sec) => {
-            setSelectedSector((prev) => (prev === sec ? "" : sec));
+            updateSectorFilter(selectedSector === sec ? "" : sec);
             setGroupBySector(false);
           })}
         </td>
@@ -752,8 +752,7 @@ function TradingViewScreenerWidget({
             <select
               value={selectedSector}
               onChange={(e) => {
-                setSelectedSector(e.target.value);
-                setVisibleLimit(60);
+                updateSectorFilter(e.target.value);
               }}
               className="w-full pl-9 pr-8 py-2.5 rounded-2xl bg-blue-50/60 border border-blue-200/90 text-xs font-black text-[#00008B] appearance-none cursor-pointer focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#00008B]/15 transition-all"
             >
@@ -770,7 +769,7 @@ function TradingViewScreenerWidget({
           {selectedSector && (
             <button
               type="button"
-              onClick={() => setSelectedSector("")}
+              onClick={() => updateSectorFilter("")}
               className="px-2.5 py-2.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-black transition-all flex items-center gap-1 shrink-0"
               title="Sektör Filtresini Kaldır"
             >
@@ -791,6 +790,25 @@ function TradingViewScreenerWidget({
             <FolderKanban className="w-3.5 h-3.5" />
             <span>Sektöre Göre Grupla</span>
           </button>
+
+          {groupBySector && sectorGroups.length > 1 && (
+            <button
+              type="button"
+              onClick={() => {
+                const allCollapsed = sectorGroups.every((g) => collapsedSectors[g.sectorName]);
+                if (allCollapsed) {
+                  setCollapsedSectors({});
+                } else {
+                  const next: Record<string, boolean> = {};
+                  for (const g of sectorGroups) next[g.sectorName] = true;
+                  setCollapsedSectors(next);
+                }
+              }}
+              className="px-3 py-2.5 rounded-2xl text-xs font-black border border-blue-200 bg-blue-50/70 text-[#00008B] hover:bg-blue-100/80 transition-all whitespace-nowrap shrink-0"
+            >
+              {sectorGroups.every((g) => collapsedSectors[g.sectorName]) ? "Tümünü Aç" : "Tümünü Daralt"}
+            </button>
+          )}
         </div>
       </div>
 
@@ -868,7 +886,7 @@ function TradingViewScreenerWidget({
             type="button"
             onClick={() => {
               setSearchQuery("");
-              setSelectedSector("");
+              updateSectorFilter("");
               setActiveScreen("volume_leaders");
             }}
             className="px-4 py-2 rounded-xl bg-[#00008B] text-white text-xs font-black"

@@ -1113,7 +1113,7 @@ export default function AssetsPage() {
             {/* ========================================================================= */}
             <div
                 ref={stockSectionRef}
-                className="w-full bg-white border border-slate-200/90 rounded-[28px] p-3 sm:p-4 shadow-xs overflow-hidden relative"
+                className="w-full bg-white border border-slate-200/90 rounded-[28px] p-4 sm:p-5 shadow-xs overflow-hidden relative"
             >
                 <TradingViewScreenerWidget
                     market="turkey"
@@ -1123,6 +1123,8 @@ export default function AssetsPage() {
                     theme="light"
                     height={720}
                     className="rounded-2xl"
+                    externalSector={selectedSector}
+                    onSectorChange={setSelectedSector}
                 />
             </div>
         </div>
