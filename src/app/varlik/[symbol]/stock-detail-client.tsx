@@ -38,7 +38,6 @@ import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import halkarzAboutDb from "@/data/halkarz_about_db.json";
 import FinancialRatioHistoryChart from "@/components/FinancialRatioHistoryChart";
-import { DataStatusBadge } from "@/components/finai/DataStatusBadge";
 
 // REEL BIST FİYAT KATALOĞU (Yedek Referans)
 const BIST_REAL_PRICES: Record<string, { current: number; high: number; low: number; change: number; changePercent: number; prevClose: number }> = {
@@ -494,14 +493,25 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
 
   const fullName = STOCK_NAMES[symbol] || fundamentalsData?.companyName || `${symbol} Sanayi ve Ticaret A.Ş.`;
 
-  // Instant local about text
-  const aboutText = useMemo(() => {
+  // Instant local about text - Always in Turkish
+  const displayAboutText = useMemo(() => {
+    // 1. Direct Turkish cached database
     const cached = (halkarzAboutDb as Record<string, string>)[symbol];
     if (cached && cached.length > 30) {
       return cached;
     }
-    return `${symbol} (${fullName}), Borsa İstanbul (BIST) piyasasında sürdürülebilir büyüme odaklı faaliyet gösteren, yüksek üretim kapasitesine ve geniş hizmet ağına sahip Türkiye’nin önde gelen kuruluşları arasında yer almaktadır.`;
-  }, [symbol, fullName]);
+    // 2. If companyData.businessSummary exists and is in Turkish (not English)
+    if (companyData?.businessSummary) {
+      const englishMarkers = /\b(provides|operates|banking|services|subsidiary|headquartered|financial services|manufactures|founded in|segments|retail banking|commercial banking)\b/i;
+      if (!englishMarkers.test(companyData.businessSummary)) {
+        return companyData.businessSummary;
+      }
+    }
+    // 3. Fallback Turkish structured description
+    const sector = companyData?.sector || fundamentalsData?.sectorInfo?.displayName || "Borsa İstanbul";
+    const industryText = companyData?.industry ? `${companyData.industry} alanında ` : "";
+    return `${fullName} (${symbol}), ${sector} sektöründe ${industryText}faaliyet gösteren, Borsa İstanbul (BIST) piyasasında işlem gören Türkiye'nin lider kuruluşlarından biridir. Şirket; yenilikçi hizmet anlayışı, geniş operasyon ağı ve kurumsal yönetişim yapısıyla ulusal ve uluslararası pazarlarda sürdürülebilir katma değer üretmeyi sürdürmektedir.`;
+  }, [symbol, fullName, companyData, fundamentalsData]);
 
   // BIST Trading Hours Check (09:55 - 18:10 Istanbul Time)
   const isBistMarketOpen = useMemo(() => {
@@ -673,27 +683,27 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
   ];
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC] w-full overflow-x-hidden relative">
+    <div className="flex min-h-screen bg-[#F8FAFC] w-full overflow-x-clip relative">
       
       {/* ========================================================================= */}
       {/* 1. SOL MENÜ: LACİVERT SOL PANEL (#00008B) - MODÜLER GEZİNTİ */}
       {/* ========================================================================= */}
-      <aside className="w-64 shrink-0 min-h-screen bg-[#00008B] text-white p-5 space-y-6 flex flex-col justify-between shadow-2xl z-20 hidden md:flex">
+      <aside className="w-64 shrink-0 sticky top-0 h-screen max-h-screen overflow-y-auto bg-[#00008B] text-white p-5 space-y-6 flex flex-col justify-between shadow-2xl z-20 hidden md:flex">
         <div className="space-y-6">
           
           {/* SEMBOL, ŞİRKET ADI VE CANLI FİYAT */}
-          <div className="flex items-center gap-3 border-b border-blue-800/80 pb-5">
+          <div className="flex items-center gap-3 border-b border-white/20 pb-5">
             <div className="w-11 h-11 rounded-2xl bg-white text-[#00008B] flex items-center justify-center font-black text-xl shadow-md shrink-0">
               {symbol.slice(0, 1)}
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-baseline justify-between gap-1.5">
                 <h1 className="text-xl font-black text-white tracking-tight truncate">{symbol}</h1>
-                <span className="text-xs font-black text-blue-100 whitespace-nowrap bg-blue-900/60 px-2 py-0.5 rounded-lg border border-blue-700/60">
+                <span className="text-xs font-black text-white whitespace-nowrap bg-blue-900/60 px-2 py-0.5 rounded-lg border border-white/20">
                   {stockData?.currentPrice ? `${stockData.currentPrice.toFixed(2)} ₺` : (BIST_REAL_PRICES[symbol]?.current ? `${BIST_REAL_PRICES[symbol].current.toFixed(2)} ₺` : "--- ₺")}
                 </span>
               </div>
-              <p className="text-[10px] font-bold text-blue-200/80 truncate max-w-[150px] mt-0.5">{fullName}</p>
+              <p className="text-xs font-normal text-white/90 truncate max-w-[150px] mt-0.5">{fullName}</p>
             </div>
           </div>
 
@@ -732,7 +742,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
         </div>
 
         {/* ALT BİLGİ */}
-        <div className="border-t border-blue-800/80 pt-4 text-[10px] font-bold text-blue-200/60 text-center">
+        <div className="border-t border-white/20 pt-4 text-[10px] font-normal text-white/70 text-center">
           FinAI ® Doğrulanmış Finansal Katman
         </div>
       </aside>
@@ -742,61 +752,34 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
       {/* ========================================================================= */}
       <main className="flex-1 bg-[#F8FAFC] min-h-screen p-4 sm:p-6 md:p-8 space-y-6 text-slate-900 max-w-full overflow-hidden">
         
-        {/* ÜST GEZİNTİ VE İŞLEM BARI */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/80 pb-4">
+        {/* MOBİL MODÜL GEZİNTİ PİLL BARI (YALNIZCA KÜÇÜK EKRANLARDA / md:hidden) */}
+        <div className="md:hidden flex items-center gap-1.5 overflow-x-auto pb-3 border-b border-slate-200/80 scrollbar-none max-w-full">
           <Link 
             href="/dashboard/data"
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-black transition-all border border-slate-200 shadow-sm self-start"
+            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white text-slate-700 text-xs font-black border border-slate-200 shadow-sm shrink-0"
           >
-            <ArrowLeft className="w-4 h-4 text-[#00008B]" />
-            Varlık Merkezine Dön
+            <ArrowLeft className="w-3.5 h-3.5 text-[#00008B]" />
+            Geri
           </Link>
-
-          {/* YATAY MODÜL GEZİNTİ PİLL BAR (Tüm Ekranlar & Mobil) */}
-          <div className="flex items-center gap-1.5 overflow-x-auto py-1 scrollbar-none max-w-full">
-            {navItems.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeNavTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => handleTabChange(tab.id)}
-                  className={cn(
-                    "px-3 py-1.5 text-xs font-black rounded-xl transition-all border whitespace-nowrap flex items-center gap-1.5 shadow-sm shrink-0",
-                    isActive
-                      ? "bg-[#00008B] text-white border-[#00008B]"
-                      : "bg-white text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-slate-900"
-                  )}
-                >
-                  <Icon className={cn("w-3.5 h-3.5", isActive ? "text-white" : "text-slate-400")} />
-                  <span>{tab.label}</span>
-                  {tab.count != null && (
-                    <span className={cn(
-                      "text-[9px] px-1.5 py-0.2 rounded-full font-black",
-                      isActive ? "bg-blue-900 text-blue-100" : "bg-slate-100 text-slate-600"
-                    )}>
-                      {tab.count}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="flex items-center gap-2 self-end sm:self-auto">
-            <button 
-              onClick={() => { fetchStockData(activeTimeframe); fetchNews(); }}
-              disabled={loading || newsLoading}
-              className="p-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 transition-all border border-slate-200 disabled:opacity-50 shadow-sm"
-              title="Verileri ve Haberleri Yenile"
-            >
-              <RefreshCw className={cn("w-4 h-4 text-[#00008B]", (loading || newsLoading) && "animate-spin")} />
-            </button>
-            <button className="px-4 py-2 rounded-xl bg-[#00008B] hover:bg-blue-800 text-white text-xs font-black flex items-center gap-1.5 shadow-md">
-              <Plus className="w-4 h-4" />
-              Portföye Ekle
-            </button>
-          </div>
+          {navItems.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeNavTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => handleTabChange(tab.id)}
+                className={cn(
+                  "px-3 py-1.5 text-xs font-black rounded-xl transition-all border whitespace-nowrap flex items-center gap-1.5 shadow-sm shrink-0",
+                  isActive
+                    ? "bg-[#00008B] text-white border-[#00008B]"
+                    : "bg-white text-slate-600 border-slate-200"
+                )}
+              >
+                <Icon className={cn("w-3.5 h-3.5", isActive ? "text-white" : "text-slate-400")} />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
         </div>
 
         {/* ========================================================================= */}
@@ -805,82 +788,69 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
         {activeNavTab === "overview" && (
           <div className="space-y-6">
             
-            {/* ŞİRKET HEADER & BİST PROFİLİ */}
+            {/* ŞİRKET HEADER & BİST PROFİLİ (EKONOMİK TAKVİM TANIM WIDGETI TİPOGRAFİSİ & BEYAZ YAZI) */}
             <div className="bg-[#00008B] text-white rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl border border-blue-900">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-blue-800/80 pb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/20 pb-4">
                 <div>
-                  <div className="flex flex-wrap items-center gap-2.5">
-                    <span className="text-2xl font-black text-white tracking-tight">{symbol}</span>
-                    <span className="text-xs font-black px-3 py-1 rounded-xl bg-blue-900/80 border border-blue-700 text-blue-200">
-                      {companyData?.sector || fundamentalsData?.sectorInfo?.displayName || "BIST Şirketi"}
-                    </span>
-                    {companyData?.industry && (
-                      <span className="text-xs font-bold px-2.5 py-0.5 rounded-lg bg-blue-950/60 border border-blue-800 text-blue-300">
-                        {companyData.industry}
-                      </span>
-                    )}
-                    <DataStatusBadge status={qualityData?.status || 'SUCCESS'} />
-                  </div>
-                  <h2 className="text-sm font-bold text-blue-100 mt-1">{fullName}</h2>
+                  <span className="text-2xl sm:text-3xl font-black text-white tracking-tight">{symbol}</span>
+                  <h2 className="text-xs sm:text-[13px] font-normal text-white mt-1">{fullName}</h2>
                 </div>
 
-                {/* CANLI FİYAT VE GÜNLÜK DEĞİŞİM */}
-                <div className="flex items-center gap-3 self-start sm:self-auto bg-blue-950/60 p-3 rounded-2xl border border-blue-800">
-                  <div className="text-right">
-                    <div className="text-xl font-black text-white">
-                      {stockData?.currentPrice ? `${stockData.currentPrice.toFixed(2)} ₺` : (BIST_REAL_PRICES[symbol]?.current ? `${BIST_REAL_PRICES[symbol].current.toFixed(2)} ₺` : "--- ₺")}
-                    </div>
-                    <div className={cn(
-                      "text-xs font-black flex items-center justify-end gap-1",
-                      (stockData?.changePercent || 0) >= 0 ? "text-emerald-300" : "text-rose-300"
-                    )}>
-                      {(stockData?.changePercent || 0) >= 0 ? "+" : ""}{stockData?.change ? stockData.change.toFixed(2) : "0.00"} ₺ ({(stockData?.changePercent || 0) >= 0 ? "+" : ""}{stockData?.changePercent ? stockData.changePercent.toFixed(2) : "0.00"}%)
-                    </div>
+                {/* CANLI FİYAT VE GÜNLÜK DEĞİŞİM (KUTUSUZ - SADECE YAZI VE RAKAMLAR) */}
+                <div className="text-right self-start sm:self-auto">
+                  <div className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                    {stockData?.currentPrice ? `${stockData.currentPrice.toFixed(2)} ₺` : (BIST_REAL_PRICES[symbol]?.current ? `${BIST_REAL_PRICES[symbol].current.toFixed(2)} ₺` : "--- ₺")}
+                  </div>
+                  <div className={cn(
+                    "text-xs font-bold flex items-center justify-end gap-1 mt-0.5",
+                    (stockData?.changePercent || 0) >= 0 ? "text-emerald-300" : "text-rose-300"
+                  )}>
+                    {(stockData?.changePercent || 0) >= 0 ? "+" : ""}{stockData?.change ? stockData.change.toFixed(2) : "0.00"} ₺ ({(stockData?.changePercent || 0) >= 0 ? "+" : ""}{stockData?.changePercent ? stockData.changePercent.toFixed(2) : "0.00"}%)
                   </div>
                 </div>
               </div>
 
               {/* USD PARA BİRİMİ DÖNÜŞÜM BİLGİLENDİRMESİ */}
               {isUsdFinancials && (
-                <div className="bg-sky-950/70 border border-sky-700/80 p-3.5 rounded-2xl flex items-center gap-3 text-xs text-sky-100">
-                  <Info className="w-4 h-4 text-sky-300 shrink-0" />
-                  <p className="leading-relaxed font-semibold">
+                <div className="bg-blue-900/40 border border-white/20 p-3.5 rounded-2xl flex items-center gap-3 text-xs text-white">
+                  <Info className="w-4 h-4 text-white shrink-0" />
+                  <p className="leading-relaxed font-normal text-xs sm:text-[13px]">
                     <strong className="text-white">Para Birimi Bilgisi:</strong> Şirket finansal tablolarını <strong>USD ($)</strong> bazında raporlamaktadır. F/K ve PD/DD gibi borsa çarpanlarında güncel döviz kuru ile para birimi dönüşümü uygulanmıştır.
                   </p>
                 </div>
               )}
 
-              {/* HAKKINDA METNİ & ŞİRKET KÜNYESİ */}
+              {/* HAKKINDA METNİ & ŞİRKET KÜNYESİ (HER ZAMAN TÜRKÇE, TANIM WIDGETI YAZI TİPİ VE BEYAZ) */}
               <div className="space-y-3 pt-1">
-                <p className="text-blue-100 text-xs md:text-sm font-medium leading-relaxed">
-                  {companyData?.businessSummary || aboutText}
+                <p className="text-xs sm:text-[13px] font-normal text-white leading-relaxed tracking-normal">
+                  {displayAboutText}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-3 pt-2 text-[11px] text-blue-200 border-t border-blue-800/60 font-semibold">
-                  <span className="flex items-center gap-1">
-                    <Globe className="w-3.5 h-3.5 text-blue-300" />
-                    {companyData?.country || "Türkiye"}{companyData?.city ? ` • ${companyData.city}` : ""}
-                  </span>
-                  {companyData?.employees != null && (
-                    <span className="flex items-center gap-1">
-                      <Users className="w-3.5 h-3.5 text-blue-300" />
-                      {companyData.employees.toLocaleString('tr-TR')} Çalışan
+                <div className="flex flex-wrap items-center justify-between gap-3 pt-3 text-xs text-white border-t border-white/20 font-normal">
+                  <div className="flex flex-wrap items-center gap-4 text-white">
+                    <span className="flex items-center gap-1.5 text-white">
+                      <Globe className="w-3.5 h-3.5 text-white" />
+                      {companyData?.country || "Türkiye"}{companyData?.city ? ` • ${companyData.city}` : ""}
                     </span>
-                  )}
+                    {companyData?.employees != null && (
+                      <span className="flex items-center gap-1.5 text-white">
+                        <Users className="w-3.5 h-3.5 text-white" />
+                        {companyData.employees.toLocaleString('tr-TR')} Çalışan
+                      </span>
+                    )}
+                  </div>
+
                   {companyData?.website && (
                     <a 
                       href={companyData.website.startsWith('http') ? companyData.website : `https://${companyData.website}`}
                       target="_blank" 
                       rel="noreferrer"
-                      className="flex items-center gap-1 text-sky-300 hover:text-white underline underline-offset-2"
+                      className="ml-auto flex items-center gap-1.5 text-white hover:text-blue-200 transition-colors font-medium underline underline-offset-4"
                     >
-                      <Building2 className="w-3.5 h-3.5" />
+                      <Building2 className="w-3.5 h-3.5 text-white" />
                       Resmi Web Sitesi
                     </a>
                   )}
-                  <span className="ml-auto text-[10px] text-blue-300/80 italic">
-                    * Veriler FinAi doğrulanmış arşivinden alınmaktadır.
-                  </span>
                 </div>
               </div>
             </div>
