@@ -982,14 +982,6 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
 
             </div>
 
-            {/* ARKA PLAN TRADINGVIEW SCREENER MOTORU: 7 GRUP & 28 TEMEL RASYO */}
-            <StockScreenerRatiosSection
-              symbol={symbol}
-              ratiosData={ratiosData}
-              loading={ratiosLoading}
-              onSelectTooltip={setSelectedRatioTooltip}
-            />
-
           </div>
         )}
 
