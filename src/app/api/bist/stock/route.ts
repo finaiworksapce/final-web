@@ -138,12 +138,26 @@ export async function GET(request: Request) {
     // If intraday 1D returns empty (e.g. before session starts), try 5d range for fallback session extraction
     let primaryUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${cleanSymbol}.IS?range=${config.yahooRange}&interval=${config.interval}`;
     
-    let res = await fetch(primaryUrl, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
-      },
-      next: { revalidate: config.isIntraday ? 15 : 300 }
-    });
+    // For intraday & sub-daily timeframes, also fetch multi-year daily runway in parallel so scrolling left into the past never runs out
+    const shouldFetchHistoricalRunway = config.isIntraday || config.normalized === '1m|30' || config.normalized === '3m|60';
+    const dailyRunwayUrl = shouldFetchHistoricalRunway
+      ? `https://query1.finance.yahoo.com/v8/finance/chart/${cleanSymbol}.IS?range=5y&interval=1d`
+      : null;
+
+    const [res, dailyRes] = await Promise.all([
+      fetch(primaryUrl, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+        },
+        next: { revalidate: config.isIntraday ? 15 : 300 }
+      }),
+      dailyRunwayUrl
+        ? fetch(dailyRunwayUrl, {
+            headers: { "User-Agent": "Mozilla/5.0" },
+            next: { revalidate: 3600 }
+          }).catch(() => null)
+        : Promise.resolve(null)
+    ]);
 
     let json = res.ok ? await res.json() : null;
     let result = json?.chart?.result?.[0];
@@ -225,6 +239,57 @@ export async function GET(request: Request) {
             volume: Math.round(v)
           });
         }
+      }
+    }
+
+    // Stitch deep historical daily runway before earliest primary candle (so scrolling left never hits an empty wall)
+    if (dailyRes && dailyRes.ok && parsedCandles.length > 0) {
+      try {
+        const dailyJson = await dailyRes.json();
+        const dailyResult = dailyJson?.chart?.result?.[0];
+        const dTimestamps: number[] = dailyResult?.timestamp || [];
+        const dQuote = dailyResult?.indicators?.quote?.[0] || {};
+        const dOpens = dQuote.open || [];
+        const dHighs = dQuote.high || [];
+        const dLows = dQuote.low || [];
+        const dCloses = dQuote.close || [];
+        const dVolumes = dQuote.volume || [];
+
+        const earliestPrimaryTs = parsedCandles[0].timestamp;
+        const earliestPrimaryDate = parsedCandles[0].date;
+
+        const olderDailyCandles: typeof parsedCandles = [];
+        for (let i = 0; i < dTimestamps.length; i++) {
+          const c = dCloses[i];
+          const tsSec = dTimestamps[i];
+          if (c !== null && c !== undefined && !isNaN(c) && c > 0 && tsSec < earliestPrimaryTs) {
+            const { date, time, displayLabel } = formatTimestampLabel(tsSec * 1000, "1D");
+            if (date < earliestPrimaryDate) {
+              const o = dOpens[i] ?? c;
+              const h = Math.max(dHighs[i] ?? c, o, c);
+              const l = Math.min(dLows[i] ?? c, o, c);
+              const v = Math.max(0, dVolumes[i] ?? 0);
+              olderDailyCandles.push({
+                timestamp: tsSec,
+                date,
+                time,
+                displayLabel,
+                open: parseFloat(o.toFixed(3)),
+                high: parseFloat(h.toFixed(3)),
+                low: parseFloat(l.toFixed(3)),
+                close: parseFloat(c.toFixed(3)),
+                price: parseFloat(c.toFixed(3)),
+                volume: Math.round(v)
+              });
+            }
+          }
+        }
+
+        if (olderDailyCandles.length > 0) {
+          parsedCandles = [...olderDailyCandles, ...parsedCandles];
+        }
+      } catch (err) {
+        console.warn("Failed to stitch historical daily runway:", err);
       }
     }
 

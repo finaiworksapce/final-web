@@ -206,8 +206,15 @@ export function TradingViewSymbolOverview({
         dateFormat: "dd MMMM yyyy",
         timeFormatter: (time: number) => {
           const dateObj = new Date(time * 1000);
+          const nowStr = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Istanbul" });
+          const dateStr = dateObj.toLocaleDateString("en-CA", { timeZone: "Europe/Istanbul" });
+          const isToday = dateStr === nowStr;
+
           if (activeRange === "1d|1") {
-            return dateObj.toLocaleTimeString("tr-TR", { timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit" });
+            if (isToday) {
+              return dateObj.toLocaleTimeString("tr-TR", { timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit" });
+            }
+            return dateObj.toLocaleDateString("tr-TR", { timeZone: "Europe/Istanbul", day: "2-digit", month: "short" });
           }
           if (activeRange === "1m|30" || activeRange === "3m|60") {
             return `${dateObj.toLocaleDateString("tr-TR", { timeZone: "Europe/Istanbul", day: "2-digit", month: "short" })} ${dateObj.toLocaleTimeString("tr-TR", { timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit" })}`;
@@ -332,9 +339,17 @@ export function TradingViewSymbolOverview({
       const diffPercent = basePrice > 0 ? (diff / basePrice) * 100 : 0;
 
       const dateObj = new Date((param.time as number) * 1000);
+      const nowStr = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Istanbul" });
+      const pointDateStr = dateObj.toLocaleDateString("en-CA", { timeZone: "Europe/Istanbul" });
+      const isToday = pointDateStr === nowStr;
+
       let timeText = "";
       if (activeRange === "1d|1") {
-        timeText = dateObj.toLocaleTimeString("tr-TR", { timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit" });
+        if (isToday) {
+          timeText = dateObj.toLocaleTimeString("tr-TR", { timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit" });
+        } else {
+          timeText = `${dateObj.toLocaleDateString("tr-TR", { timeZone: "Europe/Istanbul", day: "2-digit", month: "short", year: "numeric" })} ${dateObj.toLocaleTimeString("tr-TR", { timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit" })}`;
+        }
       } else if (activeRange === "1m|30" || activeRange === "3m|60") {
         timeText = `${dateObj.toLocaleDateString("tr-TR", { timeZone: "Europe/Istanbul", day: "2-digit", month: "short" })} ${dateObj.toLocaleTimeString("tr-TR", { timeZone: "Europe/Istanbul", hour: "2-digit", minute: "2-digit" })}`;
       } else {
