@@ -38,6 +38,7 @@ import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import halkarzAboutDb from "@/data/halkarz_about_db.json";
 import FinancialRatioHistoryChart from "@/components/FinancialRatioHistoryChart";
+import TradingViewSymbolOverview from "@/components/TradingViewSymbolOverview";
 
 // REEL BIST FİYAT KATALOĞU (Yedek Referans)
 const BIST_REAL_PRICES: Record<string, { current: number; high: number; low: number; change: number; changePercent: number; prevClose: number }> = {
@@ -853,6 +854,11 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   )}
                 </div>
               </div>
+            </div>
+
+            {/* TRADINGVIEW SYMBOL OVERVIEW GRAFİK BİLEŞENİ */}
+            <div className="bg-[#0F0F0F] border border-slate-800 rounded-3xl p-3 sm:p-5 shadow-2xl overflow-hidden">
+              <TradingViewSymbolOverview symbol={symbol} height={500} />
             </div>
 
             {/* FINAI COMPANY INTELLIGENCE HIGHLIGHTS (3 STRATEJİK BOYUT) */}
