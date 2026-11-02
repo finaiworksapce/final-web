@@ -30,8 +30,11 @@ function normalizeTimeframe(tf: string): TimeframeConfig {
   if (clean === '1y' || clean === '1yil' || clean === 'year') {
     return { yahooRange: '1y', interval: '1d', label: '1 Yıl', normalized: '1Y', isIntraday: false };
   }
-  if (clean === '5y' || clean === '5yil' || clean === '5years') {
+  if (clean === '5y' || clean === '5yil' || clean === '5years' || clean === '60m|1w') {
     return { yahooRange: '5y', interval: '1wk', label: '5 Yıl', normalized: '5Y', isIntraday: false };
+  }
+  if (clean === 'all' || clean === 'max' || clean === 'tumu' || clean === 'all|1m') {
+    return { yahooRange: 'max', interval: '1mo', label: 'Tümü', normalized: 'ALL', isIntraday: false };
   }
 
   // Default to 1D
