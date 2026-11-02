@@ -84,6 +84,9 @@ export function TradingViewSymbolOverview({
   const areaSeriesRef = useRef<ISeriesApi<"Area"> | null>(null);
   const volumeSeriesRef = useRef<ISeriesApi<"Histogram"> | null>(null);
 
+  // Dynamic canvas height based on component height prop
+  const chartHeight = typeof height === "number" ? Math.max(280, height - 110) : 340;
+
   // Fetch Yahoo Finance data via /api/bist/stock
   const fetchData = useCallback(async (range: string, signal?: AbortSignal) => {
     setLoading(true);
@@ -194,7 +197,7 @@ export function TradingViewSymbolOverview({
     // fontSize: "10"
     const chart = createChart(container, {
       width: container.clientWidth,
-      height: 380,
+      height: chartHeight,
       layout: {
         background: { type: ColorType.Solid, color: "#FFFFFF" },
         textColor: "#64748B",
@@ -272,11 +275,11 @@ export function TradingViewSymbolOverview({
 
     chartApiRef.current = chart;
 
-    // Up Color: #10B981, Down Color: #EF4444
+    // Up Color: #00008B (FinAi Lacivert), Down Color: #EF4444
     // Line Width: 2, Line Type: 0 (Simple Area)
-    const lineColor = isUp ? "#10B981" : "#EF4444";
-    const topColor = isUp ? "rgba(16, 185, 129, 0.20)" : "rgba(239, 68, 68, 0.20)";
-    const bottomColor = isUp ? "rgba(16, 185, 129, 0.00)" : "rgba(239, 68, 68, 0.00)";
+    const lineColor = isUp ? "#00008B" : "#EF4444";
+    const topColor = isUp ? "rgba(0, 0, 139, 0.18)" : "rgba(239, 68, 68, 0.18)";
+    const bottomColor = isUp ? "rgba(0, 0, 139, 0.00)" : "rgba(239, 68, 68, 0.00)";
 
     const areaSeries = chart.addSeries(AreaSeries, {
       topColor,
@@ -297,9 +300,9 @@ export function TradingViewSymbolOverview({
     areaSeriesRef.current = areaSeries;
 
     // Volume Histogram Series at bottom
-    // Up: rgba(16, 185, 129, 0.35), Down: rgba(239, 68, 68, 0.30)
+    // Up: rgba(0, 0, 139, 0.35), Down: rgba(239, 68, 68, 0.28)
     const volumeSeries = chart.addSeries(HistogramSeries, {
-      color: "rgba(16, 185, 129, 0.35)",
+      color: "rgba(0, 0, 139, 0.35)",
       priceFormat: { type: "volume" },
       priceScaleId: ""
     });
@@ -317,7 +320,7 @@ export function TradingViewSymbolOverview({
       return {
         time: pt.timestamp as UTCTimestamp,
         value: pt.volume || 0,
-        color: isBarUp ? "rgba(16, 185, 129, 0.35)" : "rgba(239, 68, 68, 0.30)"
+        color: isBarUp ? "rgba(0, 0, 139, 0.35)" : "rgba(239, 68, 68, 0.28)"
       };
     });
     volumeSeries.setData(volumeData);
@@ -515,7 +518,7 @@ export function TradingViewSymbolOverview({
               {displayPrice != null ? `${displayPrice.toFixed(2)} ₺` : "— ₺"}
             </div>
             <div className="flex items-center sm:justify-end gap-1.5 text-xs font-bold mt-0.5">
-              <span className={isPositive ? "text-emerald-600 flex items-center gap-0.5" : "text-rose-600 flex items-center gap-0.5"}>
+              <span className={isPositive ? "text-[#00008B] flex items-center gap-0.5" : "text-rose-600 flex items-center gap-0.5"}>
                 {isPositive ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
                 {isPositive ? "+" : ""}{displayChange.toFixed(2)} ₺ ({isPositive ? "+" : ""}{displayChangePercent.toFixed(2)}%)
               </span>
@@ -553,10 +556,13 @@ export function TradingViewSymbolOverview({
       </div>
 
       {/* GRAFİK CANVAS ALANI */}
-      <div className="w-full relative min-h-[380px] my-2 flex-1 [&_a#tv-attr-logo]:!hidden [&_a#tv-attr-logo]:!opacity-0 [&_a#tv-attr-logo]:!pointer-events-none">
+      <div 
+        className="w-full relative my-2 flex-1 [&_a#tv-attr-logo]:!hidden [&_a#tv-attr-logo]:!opacity-0 [&_a#tv-attr-logo]:!pointer-events-none"
+        style={{ minHeight: `${chartHeight}px` }}
+      >
         {loading && (
           <div className="absolute inset-0 z-10 bg-white/80 backdrop-blur-[2px] flex items-center justify-center text-slate-600 text-xs font-medium gap-2">
-            <RefreshCw className="w-4 h-4 animate-spin text-emerald-600" />
+            <RefreshCw className="w-4 h-4 animate-spin text-[#00008B]" />
             Yahoo Finance verisi güncelleniyor...
           </div>
         )}
@@ -573,7 +579,7 @@ export function TradingViewSymbolOverview({
           </div>
         )}
 
-        <div ref={chartContainerRef} className="w-full h-[380px]" />
+        <div ref={chartContainerRef} className="w-full" style={{ height: `${chartHeight}px` }} />
       </div>
     </div>
   );

@@ -312,6 +312,8 @@ export default function StockScreenerRatiosSection({
                               : item.value < 0
                                 ? "text-rose-600"
                                 : "text-[#00008B]";
+                        } else if (item.value < 0 && item.key !== "netDebtToEBITDA") {
+                          valueColorClass = "text-rose-600";
                         } else {
                           valueColorClass = "text-[#00008B]";
                         }

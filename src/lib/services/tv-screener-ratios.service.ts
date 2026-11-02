@@ -189,8 +189,10 @@ function formatMetricValue(val: number | null, style: FormatStyle, currencySymbo
     case 'multiple':
     case 'ratio':
       return `${val.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}x`;
-    case 'percent':
-      return `%${val.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    case 'percent': {
+      const neg = val < 0 ? '-' : '';
+      return `${neg}%${Math.abs(val).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
     case 'signed_percent': {
       const sign = val > 0 ? '+' : val < 0 ? '-' : '';
       return `${sign}%${Math.abs(val).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;

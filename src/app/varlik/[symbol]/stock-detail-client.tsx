@@ -857,8 +857,10 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
               </div>
             </div>
 
-            {/* TRADINGVIEW SYMBOL OVERVIEW GRAFİK BİLEŞENİ (YAHOO FINANCE VERİSİ) */}
-            <TradingViewSymbolOverview symbol={symbol} fullName={fullName} height={520} />
+            {/* TRADINGVIEW SYMBOL OVERVIEW GRAFİK BİLEŞENİ (YAHOO FINANCE VERİSİ - %50 GENİŞLİK SOLA DAYALI) */}
+            <div className="w-full lg:w-1/2">
+              <TradingViewSymbolOverview symbol={symbol} fullName={fullName} height={460} />
+            </div>
 
             {/* FINAI COMPANY INTELLIGENCE HIGHLIGHTS (3 STRATEJİK BOYUT) */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
