@@ -39,6 +39,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import halkarzAboutDb from "@/data/halkarz_about_db.json";
 import FinancialRatioHistoryChart from "@/components/FinancialRatioHistoryChart";
 import TradingViewSymbolOverview from "@/components/TradingViewSymbolOverview";
+import StockScreenerRatiosSection from "@/components/StockScreenerRatiosSection";
 
 // REEL BIST FİYAT KATALOĞU (Yedek Referans)
 const BIST_REAL_PRICES: Record<string, { current: number; high: number; low: number; change: number; changePercent: number; prevClose: number }> = {
@@ -878,7 +879,9 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                     <p className="text-xl font-black text-slate-900">
                       {historicalAnalysisData?.valuationDistribution?.pePercentile != null
                         ? `%${historicalAnalysisData.valuationDistribution.pePercentile} Dilim`
-                        : (stockData?.pe ? `F/K: ${stockData.pe.toFixed(2)}` : 'Veri Mevcut Değil')}
+                        : (ratiosData?.flat?.pe != null
+                            ? `F/K: ${ratiosData.flat.pe.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}x`
+                            : (stockData?.pe ? `F/K: ${stockData.pe.toFixed(2)}` : 'Veri Mevcut Değil'))}
                     </p>
                     <p className="text-[11px] text-slate-500 font-semibold line-clamp-2 mt-0.5">
                       {historicalAnalysisData?.valuationDistribution?.neutralCommentary || "Tarihsel F/K ve PD/DD dağılımı analizi."}
@@ -963,6 +966,14 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
               </div>
 
             </div>
+
+            {/* ARKA PLAN TRADINGVIEW SCREENER MOTORU: 7 GRUP & 28 TEMEL RASYO */}
+            <StockScreenerRatiosSection
+              symbol={symbol}
+              ratiosData={ratiosData}
+              loading={ratiosLoading}
+              onSelectTooltip={setSelectedRatioTooltip}
+            />
 
           </div>
         )}
@@ -1985,130 +1996,13 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
               );
             })()}
 
-            {/* TEMEL RASYOLAR & DEĞERLEME ÇARPANLARI */}
-            <div className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xl space-y-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-100 pb-4 gap-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#00008B] border border-blue-200 flex items-center justify-center shadow-sm">
-                    <Calculator className="w-5 h-5 text-[#00008B]" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-black text-slate-900 tracking-tight">{symbol} Finansal Rasyolar & Değerleme Çarpanları</h3>
-                    <p className="text-xs font-bold text-slate-400">Doğrulanmış Bilanço ve TTM Verilerine Dayalı Finansal Göstergeler</p>
-                  </div>
-                </div>
-
-                {ratiosData?.quality && (
-                  <div className="flex items-center gap-2 text-xs font-black self-start md:self-auto">
-                    <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1 rounded-xl">
-                      Doğrulanmış Rasyo: {ratiosData.quality.availableRatioCount} / {ratiosData.quality.totalRatioCount}
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {ratiosLoading ? (
-                <div className="py-12 flex items-center justify-center text-slate-400 font-bold text-xs gap-2">
-                  <RefreshCw className="w-5 h-5 animate-spin text-[#00008B]" />
-                  Finansal rasyolar hesaplanıyor...
-                </div>
-              ) : ratiosData?.categories ? (
-                <div className="space-y-6">
-                  {/* Kategori Seçiciler */}
-                  <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-                    {[
-                      { id: "valuation", label: "Değerleme (F/K, PD/DD)" },
-                      { id: "profitability", label: "Kârlılık (ROE, ROA)" },
-                      { id: "leverage", label: "Borçluluk" },
-                      { id: "liquidity", label: "Likidite" },
-                      { id: "perShare", label: "Hisse Başına" },
-                      { id: "operational", label: "Operasyonel Verimlilik" }
-                    ].map((cat) => (
-                      <button
-                        key={cat.id}
-                        onClick={() => setActiveRatioCategory(cat.id)}
-                        className={cn(
-                          "px-3.5 py-2 text-xs font-black rounded-xl transition-all border whitespace-nowrap flex items-center gap-1.5",
-                          activeRatioCategory === cat.id
-                            ? "bg-[#00008B] text-white border-[#00008B] shadow-md"
-                            : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-slate-900"
-                        )}
-                      >
-                        {cat.label}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Rasyo Kartları Grid */}
-                  {ratiosData.categories[activeRatioCategory] && (
-                    <div className="space-y-3">
-                      <p className="text-xs font-semibold text-slate-500 bg-slate-50 p-3 rounded-xl border border-slate-100">
-                        {ratiosData.categories[activeRatioCategory].description}
-                      </p>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {ratiosData.categories[activeRatioCategory].ratios.map((item: any) => {
-                          const badge = getRatioStatusBadge(item.status);
-                          return (
-                            <div 
-                              key={item.key}
-                              className="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between"
-                            >
-                              <div className="space-y-2">
-                                <div className="flex items-start justify-between gap-2">
-                                  <span className="text-xs font-black text-slate-800 leading-tight">
-                                    {item.name}
-                                  </span>
-                                  <button
-                                    onClick={() => setSelectedRatioTooltip(item)}
-                                    className="p-1 rounded-lg bg-blue-50 text-[#00008B] hover:bg-blue-100 transition-colors"
-                                    title="FinAI Eğitici Not & Metodoloji"
-                                  >
-                                    <HelpCircle className="w-4 h-4" />
-                                  </button>
-                                </div>
-
-                                <div className="flex items-baseline justify-between pt-1">
-                                  <span className={cn(
-                                    "text-2xl font-black tracking-tight",
-                                    item.status === "available" ? "text-[#00008B]" : "text-slate-400 text-lg"
-                                  )}>
-                                    {item.formattedValue || "Veri Mevcut Değil"}
-                                  </span>
-                                  
-                                  <span 
-                                    title={item.reason}
-                                    className={cn(
-                                      "text-[9px] font-black px-2 py-0.5 rounded-md border uppercase tracking-wider cursor-help",
-                                      badge.className
-                                    )}
-                                  >
-                                    {badge.label}
-                                  </span>
-                                </div>
-                              </div>
-
-                              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 font-bold">
-                                <span className="truncate max-w-[170px]" title={item.methodology}>
-                                  {item.methodology}
-                                </span>
-                                <span className="text-[#00008B] bg-blue-50 px-1.5 py-0.5 rounded font-black">
-                                  {item.periodLabel}
-                                </span>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="py-8 text-center text-slate-400 font-bold text-xs">
-                  Finansal rasyo verisi temin edilemedi.
-                </div>
-              )}
-            </div>
+            {/* TEMEL RASYOLAR & DEĞERLEME ÇARPANLARI (7 KATEGORİ & 28 RASYO) */}
+            <StockScreenerRatiosSection
+              symbol={symbol}
+              ratiosData={ratiosData}
+              loading={ratiosLoading}
+              onSelectTooltip={setSelectedRatioTooltip}
+            />
 
             {/* SEKTÖR KARŞILAŞTIRMASI & MEDYAN ANALİZİ */}
             <div className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xl space-y-6">
