@@ -37,10 +37,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import halkarzAboutDb from "@/data/halkarz_about_db.json";
-import TradingViewStockChart from "@/components/TradingViewStockChart";
 import FinancialRatioHistoryChart from "@/components/FinancialRatioHistoryChart";
 import { DataStatusBadge } from "@/components/finai/DataStatusBadge";
-import { DataQualityPanel } from "@/components/finai/DataQualityPanel";
 
 // REEL BIST FİYAT KATALOĞU (Yedek Referans)
 const BIST_REAL_PRICES: Record<string, { current: number; high: number; low: number; change: number; changePercent: number; prevClose: number }> = {
@@ -595,69 +593,6 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
   const latestBs = fundamentalsData?.ttm?.latestBalanceSheetSnapshot;
   const isBank = fundamentalsData?.sectorInfo?.category === 'BANK';
 
-  // Financial Summary Cards Data
-  // Financial Summary Cards Data (FAZ 13 Madde 7: 8 Temel Finansal Kart)
-  const summaryCards = useMemo(() => {
-    return [
-      {
-        title: "Net Satış Gelirleri (Revenue)",
-        value: ttmIncome?.revenue != null ? formatMoney(ttmIncome.revenue, finCurrency) : "Veri Mevcut Değil",
-        period: fundamentalsData?.ttm?.isVerified ? "Son 4 Çeyrek (TTM)" : "Dönemsel Veri",
-        type: "Yıllıklandırılmış Akış (TTM)",
-        note: isUsdFinancials ? "USD bazlı satış hasılatı" : "Net satış hasılatı"
-      },
-      {
-        title: "Brüt Kâr (Gross Profit)",
-        value: isBank ? "Sektör için uygulanabilir değil" : (ttmIncome?.grossProfit != null ? formatMoney(ttmIncome.grossProfit, finCurrency) : "Veri Mevcut Değil"),
-        period: isBank ? "Banka Modeli" : (fundamentalsData?.ttm?.isVerified ? "Son 4 Çeyrek (TTM)" : "Dönemsel Veri"),
-        type: isBank ? "Uygulanmaz" : "Yıllıklandırılmış Akış (TTM)",
-        note: isBank ? "Bankacılıkta Brüt Kâr kullanılmaz" : "Gelir - Satış Maliyeti"
-      },
-      {
-        title: "Faaliyet Kârı (Operating Income)",
-        value: ttmIncome?.operatingIncome != null ? formatMoney(ttmIncome.operatingIncome, finCurrency) : "Veri Mevcut Değil",
-        period: fundamentalsData?.ttm?.isVerified ? "Son 4 Çeyrek (TTM)" : "Dönemsel Veri",
-        type: "Yıllıklandırılmış Akış (TTM)",
-        note: "Esas faaliyet kârı (EBIT)"
-      },
-      {
-        title: "FAVÖK (EBITDA)",
-        value: isBank ? "Sektör için uygulanabilir değil" : (ttmIncome?.ebitda != null ? formatMoney(ttmIncome.ebitda, finCurrency) : "Veri Mevcut Değil"),
-        period: isBank ? "Banka Modeli" : (fundamentalsData?.ttm?.isVerified ? "Son 4 Çeyrek (TTM)" : "Dönemsel Veri"),
-        type: isBank ? "Uygulanmaz" : "Yıllıklandırılmış Akış (TTM)",
-        note: isBank ? "Bankacılıkta FAVÖK kullanılmaz" : "Faiz ve vergi öncesi operasyonel kâr"
-      },
-      {
-        title: "Net Dönem Kârı (Net Income)",
-        value: ttmIncome?.netIncome != null ? formatMoney(ttmIncome.netIncome, finCurrency) : "Veri Mevcut Değil",
-        period: fundamentalsData?.ttm?.isVerified ? "Son 4 Çeyrek (TTM)" : "Dönemsel Veri",
-        type: "Yıllıklandırılmış Akış (TTM)",
-        note: ttmIncome?.netIncome != null && ttmIncome.netIncome < 0 ? "Net dönem zararı açıklanmıştır" : "Ana ortaklık payları"
-      },
-      {
-        title: "İşletme Nakit Akışı (OCF)",
-        value: ttmCashFlow?.operatingCashFlow != null ? formatMoney(ttmCashFlow.operatingCashFlow, finCurrency) : "Veri Mevcut Değil",
-        period: fundamentalsData?.ttm?.isVerified ? "Son 4 Çeyrek (TTM)" : "Dönemsel Veri",
-        type: "Yıllıklandırılmış Akış (TTM)",
-        note: "Operasyonel faaliyetlerden sağlanan nakit"
-      },
-      {
-        title: "Serbest Nakit Akışı (FCF)",
-        value: ttmCashFlow?.freeCashFlow != null ? formatMoney(ttmCashFlow.freeCashFlow, finCurrency) : "Veri Mevcut Değil",
-        period: fundamentalsData?.ttm?.isVerified ? "Son 4 Çeyrek (TTM)" : "Dönemsel Veri",
-        type: "Yıllıklandırılmış Akış (TTM)",
-        note: "İşletme Nakit Akışı - Yatırım Harcamaları"
-      },
-      {
-        title: "Toplam Özkaynaklar (Equity)",
-        value: latestBs?.totalEquity != null ? formatMoney(latestBs.totalEquity, finCurrency) : "Veri Mevcut Değil",
-        period: "Son Bilanço",
-        type: "Bilanço Snapshot",
-        note: "Şirketin net defter değeri"
-      }
-    ];
-  }, [fundamentalsData, ttmIncome, ttmCashFlow, latestBs, isBank, finCurrency, isUsdFinancials]);
-
   // Multi-Period Statements (Quarterly vs Annual)
   const displayedPeriods = useMemo(() => {
     if (statementPeriodType === 'annual') {
@@ -727,7 +662,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
 
   // Navigation Items (8 Comprehensive Company Intelligence Modules)
   const navItems: { id: NavTabType; label: string; icon: any; count?: number }[] = [
-    { id: "overview", label: "Genel Bakış & Fiyat", icon: BarChart3 },
+    { id: "overview", label: "Genel Bakış", icon: BarChart3 },
     { id: "financials", label: "Finansal Tablolar", icon: TableIcon },
     { id: "analysis", label: "Tarihsel Analiz & Risk", icon: Activity },
     { id: "ratios", label: "Rasyolar & Değerleme", icon: Calculator },
@@ -950,187 +885,8 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
               </div>
             </div>
 
-            {/* FİYAT / PİYASA ÖZETİ & TRADINGVIEW CHART (GRAFİK DOKUNULMAZ) */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-              
-              {/* TRADINGVIEW STOCK CHART BİLEŞENİ (KESİNLİKLE KORUNAN BİLEŞEN) */}
-              <div className="lg:col-span-7 bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between overflow-hidden">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                  <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5 text-[#00008B]" />
-                    {symbol} Fiyat Grafiği
-                  </h3>
-                  <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-blue-50 text-[#00008B] border border-blue-200 flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    TradingView Lightweight Engine
-                  </span>
-                </div>
-
-                <div className="w-full relative min-h-[380px]">
-                  <TradingViewStockChart
-                    symbol={symbol}
-                    chartPoints={stockData?.chartPoints || []}
-                    activeTimeframe={activeTimeframe}
-                    onTimeframeChange={(tf) => setActiveTimeframe(tf)}
-                    loading={loading}
-                    error={stockData?.error || null}
-                    currency="₺"
-                    isMarketOpen={isBistMarketOpen}
-                    marketStatusText={isBistMarketOpen ? "Piyasa Açık (Canlı)" : "Piyasa Kapalı"}
-                    lastUpdated={stockData?.lastUpdated}
-                    currentPrice={stockData?.currentPrice}
-                    priceChange={stockData?.change}
-                    priceChangePercent={stockData?.changePercent}
-                    onRetry={() => fetchStockData(activeTimeframe)}
-                  />
-                </div>
-              </div>
-
-              {/* SAĞ PANEL: PİYASA İSTATİSTİKLERİ */}
-              <div className="lg:col-span-5 bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xl space-y-4 flex flex-col justify-between">
-                <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
-                  <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-                    <Activity className="w-5 h-5 text-[#00008B]" />
-                    Piyasa İstatistikleri
-                  </h3>
-                  <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-blue-50 text-[#00008B] border border-blue-200">
-                    BIST Verisi
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 flex-1">
-                  <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-2xl space-y-1 shadow-sm flex flex-col justify-center">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                      <Coins className="w-3.5 h-3.5 text-blue-600" />
-                      Piyasa Değeri
-                    </span>
-                    <p className="text-sm font-black text-[#00008B] truncate">
-                      {stockData?.marketCap || (fundamentalsData?.marketCap ? formatMoney(fundamentalsData.marketCap, 'TRY') : "Veri Mevcut Değil")}
-                    </p>
-                  </div>
-
-                  <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-2xl space-y-1 shadow-sm flex flex-col justify-center">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                      <BarChart3 className="w-3.5 h-3.5 text-indigo-600" />
-                      İşlem Hacmi (24s)
-                    </span>
-                    <p className="text-sm font-black text-[#00008B] truncate">
-                      {stockData?.volume || "Veri Mevcut Değil"}
-                    </p>
-                  </div>
-
-                  <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-2xl space-y-1 shadow-sm flex flex-col justify-center">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                      <Zap className="w-3.5 h-3.5 text-amber-600" />
-                      52 Haftalık Dip / Tepe
-                    </span>
-                    <p className="text-xs font-black text-slate-800">
-                      {stockData?.low52 ? `${stockData.low52.toFixed(2)} ₺` : "---"} - {stockData?.high52 ? `${stockData.high52.toFixed(2)} ₺` : "---"}
-                    </p>
-                  </div>
-
-                  <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-2xl space-y-1 shadow-sm flex flex-col justify-center">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                      <PieChart className="w-3.5 h-3.5 text-purple-600" />
-                      Dolaşımdaki Paylar
-                    </span>
-                    <p className="text-xs font-black text-[#00008B] truncate">
-                      {fundamentalsData?.sharesOutstanding ? `${(fundamentalsData.sharesOutstanding / 1_000_000).toFixed(0)} Milyon Adet` : "Veri Mevcut Değil"}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="bg-slate-50 border border-slate-200 p-3 rounded-2xl flex items-center justify-between text-xs font-bold text-slate-700">
-                  <span className="flex items-center gap-1.5">
-                    <ShieldCheck className="w-4 h-4 text-[#00008B]" />
-                    Seans Durumu:
-                  </span>
-                  {isBistMarketOpen ? (
-                    <span className="font-black text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-lg border border-emerald-200 flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                      Piyasa Açık (Canlı)
-                    </span>
-                  ) : (
-                    <span className="font-black text-rose-700 bg-rose-100 px-2.5 py-0.5 rounded-lg border border-rose-200">
-                      Piyasa Kapalı
-                    </span>
-                  )}
-                </div>
-              </div>
-
-            </div>
-
-            {/* FİNANSAL ÖZET (7 TEMEL FİNANSAL KART) */}
-            <div className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xl space-y-5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-2">
-                <div>
-                  <h3 className="text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
-                    <PieChart className="w-5 h-5 text-[#00008B]" />
-                    {symbol} Finansal Özet Tablosu
-                  </h3>
-                  <p className="text-xs font-bold text-slate-400">
-                    Şirketin Büyüklüğü, Kârlılığı, Özsermayesi ve Nakit Üretim Gücü
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-2 self-start sm:self-auto">
-                  <span className="text-xs font-black px-3 py-1 rounded-xl bg-blue-50 text-[#00008B] border border-blue-200">
-                    Bilanço Para Birimi: {finCurrency}
-                  </span>
-                  <button 
-                    onClick={() => handleTabChange("financials")}
-                    className="text-xs font-black text-[#00008B] hover:underline flex items-center gap-1 bg-slate-50 px-3 py-1 rounded-xl border border-slate-200"
-                  >
-                    Tüm Tabloları İncele <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-
-              {fundamentalsLoading ? (
-                <div className="py-12 flex items-center justify-center text-slate-400 font-bold text-xs gap-2">
-                  <RefreshCw className="w-5 h-5 animate-spin text-[#00008B]" />
-                  Finansal özet verileri yükleniyor...
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {summaryCards.map((card, idx) => (
-                    <div 
-                      key={idx} 
-                      className={cn(
-                        "bg-slate-50/90 border border-slate-200/90 p-4 rounded-2xl space-y-2.5 shadow-sm hover:border-blue-300 transition-all flex flex-col justify-between",
-                        idx === 0 ? "lg:col-span-2" : ""
-                      )}
-                    >
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-[11px] font-black text-slate-500 uppercase tracking-wider truncate">
-                            {card.title}
-                          </span>
-                          <span className="text-[9px] font-black px-2 py-0.5 rounded bg-white text-[#00008B] border border-slate-200">
-                            {card.period}
-                          </span>
-                        </div>
-
-                        <p className={cn(
-                          "text-xl font-black tracking-tight pt-1",
-                          card.value === "Veri Mevcut Değil" || card.value === "Sektör Dışı (N/A)" ? "text-slate-400 text-base" : "text-[#00008B]"
-                        )}>
-                          {card.value}
-                        </p>
-                      </div>
-
-                      <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[10px] text-slate-400 font-semibold">
-                        <span>{card.type}</span>
-                        <span className="truncate max-w-[140px]" title={card.note}>{card.note}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* FINAI COMPANY INTELLIGENCE HIGHLIGHTS (4 STRATEJİK BOYUT) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* FINAI COMPANY INTELLIGENCE HIGHLIGHTS (3 STRATEJİK BOYUT) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               
               {/* 1. Tarihsel Değerleme Durumu */}
               <div className="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-3 shadow-sm hover:border-blue-300 transition-all flex flex-col justify-between">
@@ -1232,46 +988,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                 </button>
               </div>
 
-              {/* 4. Tarihsel Veri Derinliği */}
-              <div className="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-3 shadow-sm hover:border-blue-300 transition-all flex flex-col justify-between">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                      <Database className="w-3.5 h-3.5 text-purple-600" />
-                      Veri Derinliği
-                    </span>
-                    <span className="text-[9px] font-black px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-100">
-                      Doğrulandı
-                    </span>
-                  </div>
-                  <div className="pt-1">
-                    <p className="text-xl font-black text-slate-900">
-                      {qualityData?.historicalPricesCount ? `${qualityData.historicalPricesCount.toLocaleString('tr-TR')} Bar` : 'Veri Mevcut Değil'}
-                    </p>
-                    <p className="text-[11px] text-slate-500 font-semibold line-clamp-2 mt-0.5">
-                      {qualityData?.statementsEarliest && qualityData?.statementsLatest
-                        ? `Mali Tablo: ${qualityData.statementsEarliest.slice(0, 4)} → ${qualityData.statementsLatest.slice(0, 4)} (${qualityData.quarterlyStatementsCount} Çeyrek)`
-                        : "Doğrulanmış tarihsel veri derinliği karnesi."}
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => handleTabChange("quality")}
-                  className="w-full pt-2 border-t border-slate-100 text-xs font-black text-[#00008B] hover:underline flex items-center justify-between"
-                >
-                  <span>Kalite Karnesini Aç</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
             </div>
-
-            {/* FINAI VERİ KALİTESİ VE DOĞRULAMA KARNESİ */}
-            <DataQualityPanel
-              qualityData={qualityData}
-              symbol={symbol}
-              reportingCurrency={finCurrency}
-            />
 
           </div>
         )}
@@ -1685,12 +1402,6 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
               </div>
             )}
 
-            {/* FINAI VERİ KALİTESİ VE DOĞRULAMA KARNESİ */}
-            <DataQualityPanel
-              qualityData={qualityData}
-              symbol={symbol}
-              reportingCurrency={finCurrency}
-            />
 
           </div>
         )}
@@ -2091,12 +1802,6 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
               </div>
             </div>
 
-            {/* FINAI VERİ KALİTESİ VE DOĞRULAMA KARNESİ */}
-            <DataQualityPanel
-              qualityData={qualityData}
-              symbol={symbol}
-              reportingCurrency={finCurrency}
-            />
 
           </div>
         )}
@@ -3235,11 +2940,6 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
         {/* ========================================================================= */}
         {activeNavTab === "quality" && (
           <div className="space-y-6">
-            <DataQualityPanel
-              qualityData={qualityData}
-              symbol={symbol}
-              reportingCurrency={finCurrency}
-            />
 
             {/* FİNAİ ARŞİV MİMARİSİ VE ŞEFFAFLIK BİLDİRİMİ */}
             <div className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xl space-y-4">
