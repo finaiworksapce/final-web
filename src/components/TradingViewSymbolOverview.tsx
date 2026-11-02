@@ -252,7 +252,9 @@ export function TradingViewSymbolOverview({
         borderVisible: false,
         timeVisible: hasIntradayTime,
         secondsVisible: false,
-        rightOffset: 3
+        rightOffset: 3,
+        fixLeftEdge: true, // KİLİTLEME: En eski veriden daha sola kaydırmayı kilitler
+        lockVisibleTimeRangeOnResize: true
       },
       handleScroll: {
         mouseWheel: true,
@@ -405,7 +407,37 @@ export function TradingViewSymbolOverview({
         // "all|1M": Fit all available monthly candles
         chart.timeScale().fitContent();
       }
+
+      // Dinamik Bar Spacing: Veri setinin toplam genişliğinin ekranın gerisinde kalıp sol tarafın boş kalmasını engeller
+      const containerWidth = container.clientWidth || 800;
+      const totalPoints = validPoints.length;
+      const safeMinBarSpacing = totalPoints > 0 ? Math.max(0.2, containerWidth / (totalPoints + 4)) : 0.5;
+
+      chart.timeScale().applyOptions({
+        fixLeftEdge: true,
+        minBarSpacing: safeMinBarSpacing
+      });
     }
+
+    // Sol Kenar Kilit Muhafızı (Strict Left Boundary Lock Guard)
+    // En eski veriden (index 0) öncesini kesinlikle göstermemek için sola gitmeyi ve aşırı küçültmeyi kilitler
+    let isClamping = false;
+    const onVisibleLogicalRangeChanged = (logicalRange: { from: number; to: number } | null) => {
+      if (!logicalRange || isClamping) return;
+      if (logicalRange.from < 0) {
+        isClamping = true;
+        const currentSpan = logicalRange.to - logicalRange.from;
+        chart.timeScale().setVisibleLogicalRange({
+          from: 0,
+          to: Math.min(validPoints.length + 3, Math.max(10, currentSpan))
+        });
+        requestAnimationFrame(() => {
+          isClamping = false;
+        });
+      }
+    };
+
+    chart.timeScale().subscribeVisibleLogicalRangeChange(onVisibleLogicalRangeChanged);
 
     const handleMouseLeave = () => setHoveredPoint(null);
     container.addEventListener("mouseleave", handleMouseLeave);
@@ -416,12 +448,18 @@ export function TradingViewSymbolOverview({
       const { width } = entries[0].contentRect;
       if (width > 0) {
         chartApiRef.current.applyOptions({ width });
+        // Pencere yeniden boyutlandığında minBarSpacing'i tekrar güvenli seviyede tut
+        if (validPoints.length > 0) {
+          const safeMin = Math.max(0.2, width / (validPoints.length + 4));
+          chartApiRef.current.timeScale().applyOptions({ minBarSpacing: safeMin, fixLeftEdge: true });
+        }
       }
     });
 
     resizeObserver.observe(container);
 
     return () => {
+      chart.timeScale().unsubscribeVisibleLogicalRangeChange(onVisibleLogicalRangeChanged);
       container.removeEventListener("mouseleave", handleMouseLeave);
       resizeObserver.disconnect();
       if (chartApiRef.current) {
