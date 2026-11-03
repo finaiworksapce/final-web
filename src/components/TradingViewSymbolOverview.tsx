@@ -13,6 +13,7 @@ import {
   HistogramSeries
 } from "lightweight-charts";
 import { RefreshCw, TrendingUp, TrendingDown, Clock } from "lucide-react";
+import StockLogo from "@/components/StockLogo";
 
 export interface ChartPoint {
   timestamp: number;
@@ -486,12 +487,13 @@ export function TradingViewSymbolOverview({
         
         {/* SOL: SEMBOL & FİYAT BİLGİSİ */}
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-center font-black text-slate-900 text-lg shrink-0 shadow-sm">
-            {cleanSymbol.slice(0, 1)}
-          </div>
+          <StockLogo symbol={cleanSymbol} className="w-11 h-11 border border-slate-200/80 shadow-xs" />
           <div>
             <div className="flex items-baseline gap-2">
               <span className="text-base font-bold text-slate-900 tracking-tight">{cleanSymbol}</span>
+              <span className="text-[10px] font-bold text-[#ba68c8] bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200/60">
+                GS
+              </span>
               <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/60">
                 BIST
               </span>

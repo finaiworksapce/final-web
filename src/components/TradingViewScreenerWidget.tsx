@@ -17,6 +17,7 @@ import {
   X
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import StockLogo from "@/components/StockLogo";
 import type { BistScreenerStockItem } from "@/app/api/bist/screener/route";
 
 export type ColumnTabId =
@@ -453,26 +454,8 @@ function formatTechnicalRating(score: number | null): React.ReactNode {
   return <span className="text-slate-500 whitespace-nowrap">Nötr</span>;
 }
 
-function StockLogoAvatar({ symbol, logoId }: { symbol: string; logoId: string | null }) {
-  const [imgFailed, setImgFailed] = useState(false);
-
-  if (logoId && !imgFailed) {
-    return (
-      <img
-        src={`https://s3-symbol-logo.tradingview.com/${logoId}.svg`}
-        alt={symbol}
-        loading="lazy"
-        onError={() => setImgFailed(true)}
-        className="w-6 h-6 rounded-full object-cover shrink-0 border border-slate-200/80 bg-white"
-      />
-    );
-  }
-
-  return (
-    <span className="w-6 h-6 rounded-full bg-[#1e53e5] text-white text-[10px] font-bold flex items-center justify-center shrink-0">
-      {symbol.slice(0, 2)}
-    </span>
-  );
+function StockLogoAvatar({ symbol }: { symbol: string; logoId?: string | null }) {
+  return <StockLogo symbol={symbol} className="w-8 h-8 ring-1 ring-slate-200/60 shadow-xs" />;
 }
 
 function getColumnsForTab(tab: ColumnTabId): ColumnDef[] {
@@ -1202,16 +1185,21 @@ function TradingViewScreenerWidget({
                     key={item.symbol}
                     className="hover:bg-[#f0f3fa]/70 transition-colors group border-b border-slate-100 last:border-b-0"
                   >
-                    <td className="py-2 px-3.5 sticky left-0 bg-white group-hover:bg-[#f4f6fb] transition-colors z-10 min-w-[215px] max-w-[260px] border-r border-slate-100/80">
+                    <td className="py-2.5 px-3.5 sticky left-0 bg-white group-hover:bg-[#f4f6fb] transition-colors z-10 min-w-[215px] max-w-[260px] border-r border-slate-100/80">
                       <Link
                         href={`/dashboard/varlik/${item.symbol}`}
-                        className="flex items-center gap-2.5 min-w-0"
+                        className="flex items-center gap-3 min-w-0"
                       >
                         <StockLogoAvatar symbol={item.symbol} logoId={item.logoId} />
                         <div className="min-w-0">
-                          <span className="font-semibold text-xs text-[#2962ff] group-hover:underline block leading-tight">
-                            {item.symbol}
-                          </span>
+                          <div className="flex items-center gap-1.5 leading-tight">
+                            <span className="font-bold text-xs text-[#2962ff] group-hover:underline">
+                              {item.symbol}
+                            </span>
+                            <span className="text-[10px] font-bold text-[#ba68c8]">
+                              GS
+                            </span>
+                          </div>
                           <span
                             className="text-[11px] text-slate-500 truncate block max-w-[185px] leading-tight mt-0.5"
                             title={item.name}

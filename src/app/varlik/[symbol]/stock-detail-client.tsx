@@ -41,6 +41,7 @@ import FinancialRatioHistoryChart from "@/components/FinancialRatioHistoryChart"
 import TradingViewSymbolOverview from "@/components/TradingViewSymbolOverview";
 import StockKeyStatisticsSection from "@/components/StockKeyStatisticsSection";
 import StockScreenerRatiosSection from "@/components/StockScreenerRatiosSection";
+import StockLogo from "@/components/StockLogo";
 
 // REEL BIST FİYAT KATALOĞU (Yedek Referans)
 const BIST_REAL_PRICES: Record<string, { current: number; high: number; low: number; change: number; changePercent: number; prevClose: number }> = {
@@ -711,12 +712,13 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
           
           {/* SEMBOL, ŞİRKET ADI VE CANLI FİYAT */}
           <div className="flex items-center gap-3 border-b border-white/20 pb-5">
-            <div className="w-11 h-11 rounded-2xl bg-white text-[#00008B] flex items-center justify-center font-black text-xl shadow-md shrink-0">
-              {symbol.slice(0, 1)}
-            </div>
+            <StockLogo symbol={symbol} className="w-11 h-11 ring-2 ring-white/30 shadow-md" />
             <div className="min-w-0 flex-1">
               <div className="flex items-baseline justify-between gap-1.5">
-                <h1 className="text-xl font-black text-white tracking-tight truncate">{symbol}</h1>
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <h1 className="text-xl font-black text-white tracking-tight truncate">{symbol}</h1>
+                  <span className="text-[11px] font-bold text-purple-300">GS</span>
+                </div>
                 <span className="text-xs font-black text-white whitespace-nowrap bg-blue-900/60 px-2 py-0.5 rounded-lg border border-white/20">
                   {stockData?.currentPrice ? `${stockData.currentPrice.toFixed(2)} ₺` : (BIST_REAL_PRICES[symbol]?.current ? `${BIST_REAL_PRICES[symbol].current.toFixed(2)} ₺` : "--- ₺")}
                 </span>
@@ -809,9 +811,15 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
             {/* ŞİRKET HEADER & BİST PROFİLİ (EKONOMİK TAKVİM TANIM WIDGETI TİPOGRAFİSİ & BEYAZ YAZI) */}
             <div className="bg-[#00008B] text-white rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl border border-blue-900">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/20 pb-4">
-                <div>
-                  <span className="text-2xl sm:text-3xl font-black text-white tracking-tight">{symbol}</span>
-                  <h2 className="text-xs sm:text-[13px] font-normal text-white mt-1">{fullName}</h2>
+                <div className="flex items-center gap-4">
+                  <StockLogo symbol={symbol} className="w-12 h-12 sm:w-14 sm:h-14 ring-2 ring-white/30 shadow-lg" />
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl sm:text-3xl font-black text-white tracking-tight">{symbol}</span>
+                      <span className="text-xs font-bold text-purple-300 bg-purple-900/40 px-2 py-0.5 rounded-md border border-purple-400/30">GS</span>
+                    </div>
+                    <h2 className="text-xs sm:text-[13px] font-normal text-white mt-1">{fullName}</h2>
+                  </div>
                 </div>
 
                 {/* CANLI FİYAT VE GÜNLÜK DEĞİŞİM (KUTUSUZ - SADECE YAZI VE RAKAMLAR) */}
