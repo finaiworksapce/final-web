@@ -209,6 +209,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
 
   const [ratiosData, setRatiosData] = useState<any>(null);
   const [ratiosLoading, setRatiosLoading] = useState<boolean>(true);
+  const [isAboutExpanded, setIsAboutExpanded] = useState<boolean>(false);
   const [selectedRatioTooltip, setSelectedRatioTooltip] = useState<any>(null);
   const [activeRatioCategory, setActiveRatioCategory] = useState<string>("valuation");
 
@@ -295,6 +296,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
     setNewsList([]);
 
     setLoading(true);
+    setIsAboutExpanded(false);
     setCompanyLoading(true);
     setFundamentalsLoading(true);
     setRatiosLoading(true);
@@ -515,6 +517,19 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
     const industryText = companyData?.industry ? `${companyData.industry} alanında ` : "";
     return `${fullName} (${symbol}), ${sector} sektöründe ${industryText}faaliyet gösteren, Borsa İstanbul (BIST) piyasasında işlem gören Türkiye'nin lider kuruluşlarından biridir. Şirket; yenilikçi hizmet anlayışı, geniş operasyon ağı ve kurumsal yönetişim yapısıyla ulusal ve uluslararası pazarlarda sürdürülebilir katma değer üretmeyi sürdürmektedir.`;
   }, [symbol, fullName, companyData, fundamentalsData]);
+
+  // Split about text into sentences (limit to 5 sentences for initial collapsed view)
+  const { shortAboutText, hasMoreSentences } = useMemo(() => {
+    if (!displayAboutText) return { shortAboutText: "", hasMoreSentences: false };
+    const sentences = displayAboutText.split(/(?<=[.!?])\s+/);
+    if (sentences.length <= 5) {
+      return { shortAboutText: displayAboutText, hasMoreSentences: false };
+    }
+    return {
+      shortAboutText: sentences.slice(0, 5).join(" "),
+      hasMoreSentences: true
+    };
+  }, [displayAboutText]);
 
   // BIST Trading Hours Check (09:55 - 18:10 Istanbul Time)
   const isBistMarketOpen = useMemo(() => {
@@ -823,10 +838,34 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                 </div>
               )}
 
-              {/* HAKKINDA METNİ & ŞİRKET KÜNYESİ (HER ZAMAN TÜRKÇE, TANIM WIDGETI YAZI TİPİ VE BEYAZ) */}
+              {/* HAKKINDA METNİ & ŞİRKET KÜNYESİ (HER ZAMAN TÜRKÇE, 5 CÜMLELİK DARALTMA & DEVAMINI OKU) */}
               <div className="space-y-3 pt-1">
                 <p className="text-xs sm:text-[13px] font-normal text-white leading-relaxed tracking-normal">
-                  {displayAboutText}
+                  {isAboutExpanded || !hasMoreSentences ? (
+                    <>
+                      {displayAboutText}
+                      {hasMoreSentences && (
+                        <button
+                          type="button"
+                          onClick={() => setIsAboutExpanded(false)}
+                          className="ml-2 font-bold text-blue-200 hover:text-white underline underline-offset-2 transition-colors cursor-pointer inline-flex items-center"
+                        >
+                          (Daha Az Göster)
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {shortAboutText}
+                      <button
+                        type="button"
+                        onClick={() => setIsAboutExpanded(true)}
+                        className="ml-2 font-bold text-blue-200 hover:text-white underline underline-offset-2 transition-colors cursor-pointer inline-flex items-center"
+                      >
+                        ... Devamını Oku
+                      </button>
+                    </>
+                  )}
                 </p>
 
                 <div className="flex flex-wrap items-center justify-between gap-3 pt-3 text-xs text-white border-t border-white/20 font-normal">
@@ -873,113 +912,6 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   className="h-full"
                 />
               </div>
-            </div>
-
-            {/* FINAI COMPANY INTELLIGENCE HIGHLIGHTS (3 STRATEJİK BOYUT) */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              
-              {/* 1. Tarihsel Değerleme Durumu */}
-              <div className="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-3 shadow-sm hover:border-blue-300 transition-all flex flex-col justify-between">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                      <Calculator className="w-3.5 h-3.5 text-[#00008B]" />
-                      Değerleme Konumu
-                    </span>
-                    <span className="text-[9px] font-black px-2 py-0.5 rounded bg-blue-50 text-[#00008B] border border-blue-100">
-                      Tarihsel
-                    </span>
-                  </div>
-                  <div className="pt-1">
-                    <p className="text-xl font-black text-slate-900">
-                      {historicalAnalysisData?.valuationDistribution?.pePercentile != null
-                        ? `%${historicalAnalysisData.valuationDistribution.pePercentile} Dilim`
-                        : (ratiosData?.flat?.pe != null
-                            ? `F/K: ${ratiosData.flat.pe.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}x`
-                            : (stockData?.pe ? `F/K: ${stockData.pe.toFixed(2)}` : 'Veri Mevcut Değil'))}
-                    </p>
-                    <p className="text-[11px] text-slate-500 font-semibold line-clamp-2 mt-0.5">
-                      {historicalAnalysisData?.valuationDistribution?.neutralCommentary || "Tarihsel F/K ve PD/DD dağılımı analizi."}
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => handleTabChange("ratios")}
-                  className="w-full pt-2 border-t border-slate-100 text-xs font-black text-[#00008B] hover:underline flex items-center justify-between"
-                >
-                  <span>Tarihsel Dağılımı İncele</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              {/* 2. Risk & Fiyat Davranışı */}
-              <div className="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-3 shadow-sm hover:border-blue-300 transition-all flex flex-col justify-between">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                      <Activity className="w-3.5 h-3.5 text-indigo-600" />
-                      Fiyat Davranışı & Risk
-                    </span>
-                    <span className="text-[9px] font-black px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-100">
-                      1 Yıllık
-                    </span>
-                  </div>
-                  <div className="pt-1">
-                    <p className="text-xl font-black text-slate-900">
-                      {historicalAnalysisData?.priceRiskMetrics?.volatility1Y != null
-                        ? `%${historicalAnalysisData.priceRiskMetrics.volatility1Y.toFixed(1)} Volatilite`
-                        : 'Veri Mevcut Değil'}
-                    </p>
-                    <p className="text-[11px] text-slate-500 font-semibold line-clamp-2 mt-0.5">
-                      {historicalAnalysisData?.priceRiskMetrics?.maxDrawdown != null
-                        ? `Maksimum Tepe-Dip Kaybı: %${historicalAnalysisData.priceRiskMetrics.maxDrawdown.toFixed(1)}`
-                        : "Günlük getirilerin yıllıklandırılmış standart sapması."}
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => handleTabChange("analysis")}
-                  className="w-full pt-2 border-t border-slate-100 text-xs font-black text-[#00008B] hover:underline flex items-center justify-between"
-                >
-                  <span>Risk Metriklerini Gör</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
-              {/* 3. Harici Analist Konsensüsü */}
-              <div className="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-3 shadow-sm hover:border-blue-300 transition-all flex flex-col justify-between">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                      <Target className="w-3.5 h-3.5 text-emerald-600" />
-                      Analist Tahminleri
-                    </span>
-                    <span className="text-[9px] font-black px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-100">
-                      Harici Veri
-                    </span>
-                  </div>
-                  <div className="pt-1">
-                    <p className="text-xl font-black text-slate-900">
-                      {analystData?.targetMeanPrice != null
-                        ? `${analystData.targetMeanPrice.toFixed(2)} ₺`
-                        : 'Analist Verisi Yok'}
-                    </p>
-                    <p className="text-[11px] text-slate-500 font-semibold line-clamp-2 mt-0.5">
-                      {analystData?.numberOfAnalysts != null
-                        ? `${analystData.numberOfAnalysts} piyasa analistinin konsensüs ortalama hedef fiyatı.`
-                        : "Harici analist raporu mevcut değil."}
-                    </p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => handleTabChange("ownership")}
-                  className="w-full pt-2 border-t border-slate-100 text-xs font-black text-[#00008B] hover:underline flex items-center justify-between"
-                >
-                  <span>Analist & Ortaklık Detayları</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-
             </div>
 
           </div>
