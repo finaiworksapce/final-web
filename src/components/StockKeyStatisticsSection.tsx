@@ -284,14 +284,14 @@ export default function StockKeyStatisticsSection({
   const containerHeight = containerRect?.height || 460;
   const isRightSide = smoothPosition.x > containerWidth * 0.52;
 
-  const tooltipWidth = 320;
-  const tooltipHeight = 280;
+  const tooltipWidth = 220;
+  const tooltipHeight = 180;
   const clampedX = isRightSide
-    ? Math.max(12, smoothPosition.x - tooltipWidth - 20)
-    : Math.min(containerWidth - tooltipWidth - 12, smoothPosition.x + 20);
+    ? Math.max(10, smoothPosition.x - tooltipWidth - 14)
+    : Math.min(containerWidth - tooltipWidth - 10, smoothPosition.x + 14);
   const clampedY = Math.max(
-    12,
-    Math.min(containerHeight - tooltipHeight - 12, smoothPosition.y - 120)
+    10,
+    Math.min(containerHeight - tooltipHeight - 10, smoothPosition.y - 80)
   );
 
   return (
@@ -312,7 +312,7 @@ export default function StockKeyStatisticsSection({
       {/* ========================================================================= */}
       <div
         className={cn(
-          "pointer-events-none absolute z-50 w-[320px] rounded-2xl shadow-2xl border border-slate-200/95 bg-white/95 backdrop-blur-md p-3.5 transition-all ease-out",
+          "pointer-events-none absolute z-50 w-[220px] rounded-xl shadow-xl border border-slate-200/95 bg-white/95 backdrop-blur-md p-2.5 transition-all ease-out",
           isVisible && activeRanking ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
         )}
         style={{
@@ -322,68 +322,68 @@ export default function StockKeyStatisticsSection({
         }}
       >
         {activeRanking && activeMetricDef && (
-          <div className="space-y-2.5">
-            {/* BAŞLIK & SEKTÖR ADI (ROZETSİZ, TEMİZ TİPOGRAFİ) */}
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-              <div className="min-w-0 pr-2">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-[#00008B]" />
-                  Sektör Karşılaştırması
+          <div className="space-y-1.5">
+            {/* BAŞLIK & SEKTÖR ADI (KOMPAKT, ROZETSİZ) */}
+            <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
+              <div className="min-w-0 pr-1">
+                <span className="text-[8px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                  <Sparkles className="w-2.5 h-2.5 text-[#00008B]" />
+                  Sektör Kıyaslama
                 </span>
-                <h4 className="text-xs sm:text-sm font-bold text-slate-900 leading-tight truncate">
+                <h4 className="text-[11px] font-bold text-slate-900 leading-tight truncate">
                   {activeMetricDef.fullName}
                 </h4>
               </div>
               {sectorData?.sectorDisplayName && (
-                <span className="text-[11px] font-semibold text-slate-500 shrink-0">
+                <span className="text-[9px] font-semibold text-slate-400 shrink-0 max-w-[70px] truncate text-right">
                   {sectorData.sectorDisplayName}
                 </span>
               )}
             </div>
 
-            {/* SEÇİLİ HİSSE VS SEKTÖR ORTALAMASI (LACİVERT KUTU, ROZETSİZ) */}
-            <div className="grid grid-cols-2 gap-2">
+            {/* SEÇİLİ HİSSE VS SEKTÖR ORTALAMASI (KOMPAKT, LACİVERT KUTU) */}
+            <div className="grid grid-cols-2 gap-1.5">
               {/* Seçili Hisse */}
-              <div className="bg-slate-50 rounded-xl p-2.5 border border-slate-200/80 flex flex-col justify-between">
-                <span className="text-[11px] font-semibold text-slate-500 truncate">
+              <div className="bg-slate-50 rounded-lg p-1.5 border border-slate-200/80 flex flex-col justify-between">
+                <span className="text-[9px] font-semibold text-slate-500 truncate">
                   {symbol} (Seçili)
                 </span>
-                <div className="text-base font-black text-slate-900 tracking-tight my-0.5">
+                <div className="text-xs sm:text-[13px] font-black text-slate-900 tracking-tight my-0.5">
                   {activeRanking.formattedCurrentValue}
                 </div>
-                <span className="text-[10px] font-semibold text-slate-500">
-                  {activeRanking.currentRank ? `Sektörde ${activeRanking.currentRank}. sırada` : "—"}
+                <span className="text-[8px] font-semibold text-slate-500">
+                  {activeRanking.currentRank ? `${activeRanking.currentRank}. sırada` : "—"}
                 </span>
               </div>
 
               {/* Sektör Ortalaması (Lacivert Kutu) */}
-              <div className="bg-[#00008B] text-white rounded-xl p-2.5 shadow-sm flex flex-col justify-between">
-                <span className="text-[11px] font-semibold text-blue-100 truncate">
-                  Sektör Ortalaması
+              <div className="bg-[#00008B] text-white rounded-lg p-1.5 shadow-sm flex flex-col justify-between">
+                <span className="text-[9px] font-semibold text-blue-100 truncate">
+                  Sektör Ort.
                 </span>
-                <div className="text-base font-black text-white tracking-tight my-0.5">
+                <div className="text-xs sm:text-[13px] font-black text-white tracking-tight my-0.5">
                   {activeRanking.formattedSectorAverage}
                 </div>
-                <span className="text-[10px] font-medium text-blue-200">
-                  {activeRanking.totalRanked ? `${activeRanking.totalRanked} şirket medyanı` : "Sektör Medyanı"}
+                <span className="text-[8px] font-medium text-blue-200 truncate">
+                  {activeRanking.totalRanked ? `${activeRanking.totalRanked} şirket` : "Sektör Medyanı"}
                 </span>
               </div>
             </div>
 
-            {/* SEKTÖR SIRALAMASI: AKILLI 5'Lİ LİSTE (SCROLLSUZ) */}
-            <div className="space-y-1.5 pt-0.5">
-              <div className="flex items-center justify-between text-[10px] font-black text-slate-500 uppercase tracking-wider">
-                <span>Sektör Sıralaması (En İyi → En Kötü)</span>
+            {/* SEKTÖR SIRALAMASI: AKILLI 5'Lİ LİSTE (KOMPAKT, SCROLLSUZ) */}
+            <div className="space-y-1 pt-0.5">
+              <div className="flex items-center justify-between text-[8px] font-black text-slate-400 uppercase tracking-wider">
+                <span>Sıralama (En İyi → En Kötü)</span>
                 <span>{activeRanking.totalRanked} Şirket</span>
               </div>
 
-              <div className="overflow-hidden space-y-1">
+              <div className="overflow-hidden space-y-0.5">
                 {leaderboardSlots.map((slot) => {
                   if (slot.type === "ellipsis") {
                     return (
                       <div
                         key={slot.key}
-                        className="flex items-center justify-center py-0.5 text-slate-400 font-black tracking-widest text-xs select-none"
+                        className="flex items-center justify-center py-0 text-slate-300 font-black tracking-widest text-[9px] select-none"
                       >
                         •••
                       </div>
@@ -398,19 +398,19 @@ export default function StockKeyStatisticsSection({
                     <div
                       key={slot.key}
                       className={cn(
-                        "flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors",
+                        "flex items-center justify-between px-1.5 py-0.5 rounded-md text-[10px] transition-colors",
                         isCurrentPeer
-                          ? "bg-[#00008B] text-white font-bold shadow-sm"
+                          ? "bg-[#00008B] text-white font-bold shadow-xs"
                           : isTop3
                             ? "bg-slate-100/90 text-slate-900 font-semibold"
                             : "bg-slate-50 text-slate-700"
                       )}
                     >
-                      <div className="flex items-center gap-2 min-w-0">
+                      <div className="flex items-center gap-1.5 min-w-0">
                         {/* Sıra Numarası */}
                         <span
                           className={cn(
-                            "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black shrink-0",
+                            "w-3.5 h-3.5 rounded-full flex items-center justify-center text-[8px] font-black shrink-0",
                             isCurrentPeer
                               ? "bg-white text-[#00008B]"
                               : peer.rank === 1
@@ -425,11 +425,11 @@ export default function StockKeyStatisticsSection({
                           {peer.rank > 0 ? `#${peer.rank}` : "—"}
                         </span>
 
-                        <span className="truncate">
+                        <span className="truncate text-[10px]">
                           {peer.symbol}
                           {isCurrentPeer && (
-                            <span className="ml-1 text-[9px] bg-white/20 px-1 py-0.5 rounded font-normal">
-                              (Bu Hisse)
+                            <span className="ml-0.5 text-[8px] bg-white/20 px-0.5 py-0 rounded font-normal">
+                              (Bu)
                             </span>
                           )}
                         </span>
@@ -437,7 +437,7 @@ export default function StockKeyStatisticsSection({
 
                       <span
                         className={cn(
-                          "tabular-nums text-right font-bold ml-2 shrink-0",
+                          "tabular-nums text-right font-bold ml-1.5 shrink-0 text-[10px]",
                           isCurrentPeer ? "text-white" : "text-slate-900"
                         )}
                       >
