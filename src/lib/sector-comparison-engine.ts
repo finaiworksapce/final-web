@@ -97,7 +97,7 @@ const SECTOR_CACHE_TTL = 15 * 60 * 1000;
 
 // Sector Universe Peer List Mapping (Active BIST Equity Stocks grouped by SectorCategory)
 // Price-only instruments, certificates, and ETFs are explicitly excluded.
-const SECTOR_PEER_MAP: Record<SectorCategory, string[]> = {
+export const SECTOR_PEER_MAP: Record<SectorCategory, string[]> = {
   BANK: ['GARAN', 'AKBNK', 'YKBNK', 'ISCTR', 'VAKBN', 'HALKB', 'TSKB', 'ALBRK', 'SKBNK', 'ICBCT', 'QNBFK', 'QNBTR', 'KLNMA'],
   INSURANCE: ['ANHYT', 'ANSGR', 'AGESA', 'AKGRT', 'RAYSG', 'TURSG'],
   REIT: ['EKGYO', 'SNGYO', 'TRGYO', 'OZKGY', 'AKFGY', 'ISGYO', 'VKGYO', 'KLGYO', 'HLGYO', 'PSGYO', 'RYGYO', 'KZGYO', 'AGYO', 'SURGY'],
