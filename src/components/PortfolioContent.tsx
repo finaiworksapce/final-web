@@ -1616,7 +1616,7 @@ export default function PortfolioPage() {
                                     </div>
                                     <div>
                                         <h3 className="text-lg font-black text-[#00008B] tracking-tight">Portföy Gündemi</h3>
-                                        <p className="text-xs text-slate-400 font-medium">
+                                        <p className="text-xs font-normal text-slate-500 leading-relaxed tracking-normal">
                                             {isFocused ? 'Bugün ve yaklaşan tüm gelişmeler' : 'Bugün ve yaklaşan gelişmeler'}
                                         </p>
                                     </div>
@@ -1665,11 +1665,11 @@ export default function PortfolioPage() {
                                                 </div>
 
                                                 <div className="pl-1.5 space-y-1">
-                                                    <h4 className="font-black text-[#00008B] text-sm sm:text-[15px] leading-snug">
+                                                    <h4 className="font-black text-[#00008B] text-sm sm:text-[15px] leading-snug tracking-tight">
                                                         {item.title}
                                                     </h4>
-                                                    <p className="text-[11px] text-slate-600 font-semibold leading-relaxed">
-                                                        Portföyünüzde yer alan <span className="font-black text-[#00008B]">{item.symbol}</span> varlığı için bugün planlanan <span className="font-bold">{item.typeLabel.toLowerCase()}</span> gerçekleşiyor.
+                                                    <p className="text-xs sm:text-[13px] font-normal text-slate-800 leading-relaxed tracking-normal">
+                                                        Portföyünüzde yer alan <span className="font-black text-[#00008B]">{item.symbol}</span> varlığı için bugün planlanan <span className="font-semibold">{item.typeLabel.toLowerCase()}</span> gerçekleşiyor.
                                                     </p>
                                                 </div>
 
@@ -1806,7 +1806,7 @@ export default function PortfolioPage() {
                             {/* TABLO BAŞLIĞI VE SAĞ ÜSTTE VARLIK EKLE BUTONU (21st.dev Premium Bar) */}
                             <div className="p-6 border-b border-slate-100/80 flex justify-between items-center bg-gradient-to-r from-slate-50/50 via-white to-slate-50/30 flex-wrap gap-4">
                                 <div className="flex items-center gap-3">
-                                    <h3 className="text-xl font-extrabold text-slate-900 tracking-tight">Portföy Tablosu</h3>
+                                    <h3 className="text-lg font-black text-[#00008B] tracking-tight">Portföy Tablosu</h3>
                                     <div className="text-[10px] font-black text-violet-700 bg-violet-50 border border-violet-200/60 px-3 py-1 rounded-full shadow-xs tracking-wider uppercase">
                                         {groupedAssets.length} VARLIK
                                     </div>
@@ -2364,7 +2364,7 @@ export default function PortfolioPage() {
                             <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center gap-2">
                                     <PieChart className="w-4 h-4 text-[#00008B]" />
-                                    <h3 className="font-bold text-[#00008B] text-xs uppercase tracking-wider">Varlık Dağılımı</h3>
+                                    <h3 className="text-lg font-black text-[#00008B] tracking-tight">Varlık Dağılımı</h3>
                                 </div>
                                 <div className="flex items-center gap-2 bg-slate-50 p-1 rounded-xl">
                                     <button onClick={() => setDistributionView('donut')} className={cn("px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all", distributionView === 'donut' ? "bg-white text-[#00008B] shadow-sm" : "text-slate-400 hover:text-slate-600")}>Varlık</button>
@@ -2481,21 +2481,16 @@ export default function PortfolioPage() {
                 return (
                     <div className="bg-white border border-slate-100 rounded-3xl p-4 sm:p-6 shadow-xl shadow-[#00008B]/5 w-full overflow-x-hidden">
                         {/* ÜST BİLGİ VE ZAMAN PERİYODU SEÇİCİLERİ */}
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 mb-5 border-b border-slate-100 gap-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-5 border-b border-slate-100 gap-4">
                             <div className="flex items-center gap-3">
                                 <img
                                     src="/logo.png"
                                     alt="FinAi"
-                                    className="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0"
+                                    className="w-8 h-8 sm:w-9 sm:h-9 object-contain shrink-0"
                                 />
-                                <div>
-                                    <h3 className="text-base sm:text-lg font-black text-[#00008B] uppercase tracking-tight leading-tight">
-                                        FİYAT ANALİZİ & TREND BANDI
-                                    </h3>
-                                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">
-                                        Zaman Periyotlarına Göre Varlığa Özel Destek, Direnç & Maliyet Analizi
-                                    </p>
-                                </div>
+                                <h3 className="text-lg font-black text-[#00008B] tracking-tight">
+                                    Fiyat Analizi & Trend Bandı
+                                </h3>
                             </div>
 
                             {/* ZAMAN PERİYODU PİLL SEÇİCİSİ (1H, 1A, 3A, 6A, 1Y (52H)) */}
@@ -2505,7 +2500,7 @@ export default function PortfolioPage() {
                                         key={tf}
                                         onClick={(e) => { e.stopPropagation(); setExtremesTimeframe(tf); }}
                                         className={cn(
-                                            "px-3 sm:px-3.5 py-1.5 text-[11px] sm:text-xs font-extrabold uppercase tracking-wider rounded-full transition-all",
+                                            "px-3 sm:px-3.5 py-1.5 text-[11px] sm:text-xs font-bold tracking-tight rounded-full transition-all",
                                             extremesTimeframe === tf 
                                                 ? "bg-[#00008B] text-white shadow-sm" 
                                                 : "text-slate-600 hover:text-[#00008B] hover:bg-slate-50"
@@ -2520,7 +2515,7 @@ export default function PortfolioPage() {
                         {/* LİSTELEME (TEK VARLIK: SOLDA CETVEL, SAĞDA ANALİZ METNİ + DİĞER HİSSE ÖNERİLERİ) */}
                         <div className="w-full overflow-x-hidden">
                             {extremesEntries.length === 0 ? (
-                                <p className="text-xs text-slate-400 py-6 text-center font-medium">Analiz verisi yükleniyor...</p>
+                                <p className="text-xs sm:text-[13px] font-normal text-slate-500 py-6 text-center leading-relaxed tracking-normal">Analiz verisi yükleniyor...</p>
                             ) : (() => {
                                 const activeEntry = extremesEntries.find(([s]) => s === selectedExtremesSymbol) || extremesEntries[0];
                                 const [sym, ext] = activeEntry;
@@ -2561,9 +2556,7 @@ export default function PortfolioPage() {
                                 const regionLeft = hasCost && costPos !== null ? Math.min(pos, costPos) : 0;
                                 const regionWidth = hasCost && costPos !== null ? Math.abs(pos - costPos) : 0;
 
-                                // Periyot etiketleri
-                                const tfShortLabel = extremesTimeframe === '1W' ? '1H' : extremesTimeframe === '1M' ? '1A' : extremesTimeframe === '3M' ? '3A' : extremesTimeframe === '6M' ? '6A' : '52H';
-                                const tfHeaderLabel = extremesTimeframe === '1W' ? '1 HAFTALIK' : extremesTimeframe === '1M' ? '1 AYLIK' : extremesTimeframe === '3M' ? '3 AYLIK' : extremesTimeframe === '6M' ? '6 AYLIK' : '52 HAFTALIK';
+                                // Periyot etiketi
                                 const tfLabel = extremesTimeframe === '1W' ? '1 Haftalık' : extremesTimeframe === '1M' ? '1 Aylık' : extremesTimeframe === '3M' ? '3 Aylık' : extremesTimeframe === '6M' ? '6 Aylık' : '52 Haftalık (1 Yıl)';
 
                                 const currFmt = formatCurrency(currentPrice);
@@ -2571,12 +2564,10 @@ export default function PortfolioPage() {
                                 const highFmt = formatCurrency(high);
                                 const costFmt = hasCost ? formatCurrency(userCost!) : '—';
 
-                                const isBistStock = !['ALTIN', 'GUMUS', 'USD', 'EUR', 'NAKİT', 'NAKIT', 'TRY', 'TL'].includes(sym.toUpperCase());
-
                                 return (
                                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start w-full">
-                                        {/* SOL TARAF (7/12): HİSSE BİLGİSİ, METRİKLER VE DESTEK-DİRENÇ CETVELİ */}
-                                        <div className="lg:col-span-7 space-y-5 min-w-0">
+                                        {/* SOL TARAF (7/12): HİSSE BİLGİSİ, METRİKLER VE PROFESYONEL FİYAT ÇUBUĞU */}
+                                        <div className="lg:col-span-7 space-y-6 min-w-0">
                                             {/* Üst Satır: Hisse Başlığı ve Yalın Metrikler */}
                                             <div className="flex flex-wrap items-center justify-between gap-4">
                                                 <div className="flex items-center gap-3 min-w-0">
@@ -2585,8 +2576,8 @@ export default function PortfolioPage() {
                                                         <span className="text-slate-900 font-black text-lg sm:text-xl block leading-tight tracking-tight">
                                                             {sym}
                                                         </span>
-                                                        <span className="text-xs text-slate-500 font-medium truncate block max-w-[200px] sm:max-w-[260px]">
-                                                            {getAssetName(sym) || "Hisse Senedi"}{isBistStock ? " • BIST Yıldız Pazar" : ""}
+                                                        <span className="text-xs font-normal text-slate-600 truncate block max-w-[200px] sm:max-w-[260px] tracking-normal">
+                                                            {getAssetName(sym) || "Hisse Senedi"}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -2594,12 +2585,12 @@ export default function PortfolioPage() {
                                                 {/* Yalın Fiyat & Maliyet Özeti */}
                                                 <div className="flex flex-wrap items-center gap-5 sm:gap-6">
                                                     <div>
-                                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                                            CANLI FİYAT
+                                                        <span className="text-[11px] font-semibold text-slate-500 tracking-tight block">
+                                                            Canlı Fiyat
                                                         </span>
                                                         <span
                                                             className={cn(
-                                                                "text-sm sm:text-base font-black leading-tight block mt-0.5",
+                                                                "text-sm sm:text-base font-black leading-tight tracking-tight block mt-0.5",
                                                                 hasCost
                                                                     ? isProfit
                                                                         ? "text-emerald-600"
@@ -2612,29 +2603,29 @@ export default function PortfolioPage() {
                                                     </div>
 
                                                     <div>
-                                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                                            ORTALAMA MALİYET
+                                                        <span className="text-[11px] font-semibold text-slate-500 tracking-tight block">
+                                                            Ortalama Maliyet
                                                         </span>
-                                                        <span className="text-sm sm:text-base font-black text-[#00008B] leading-tight block mt-0.5">
+                                                        <span className="text-sm sm:text-base font-black text-[#00008B] leading-tight tracking-tight block mt-0.5">
                                                             {costFmt}
                                                         </span>
                                                     </div>
 
                                                     {hasCost && (
                                                         <div>
-                                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                                                                {isProfit ? "NET GETİRİ FARKI" : "MALİYET FARKI"}
+                                                            <span className="text-[11px] font-semibold text-slate-500 tracking-tight block">
+                                                                {isProfit ? "Net Getiri Farkı" : "Maliyet Farkı"}
                                                             </span>
                                                             <div className="flex items-baseline gap-1 mt-0.5">
                                                                 <span
                                                                     className={cn(
-                                                                        "text-sm sm:text-base font-black leading-tight",
+                                                                        "text-sm sm:text-base font-black leading-tight tracking-tight",
                                                                         isProfit ? "text-emerald-600" : "text-rose-600"
                                                                     )}
                                                                 >
                                                                     {isProfit ? "+" : "-"}%{absPctStr}
                                                                 </span>
-                                                                <span className="text-[10px] font-semibold text-slate-500">
+                                                                <span className="text-[11px] font-normal text-slate-600 tracking-normal">
                                                                     ({priceDiff >= 0 ? "+" : "-"}{formatCurrency(Math.abs(priceDiff))})
                                                                 </span>
                                                             </div>
@@ -2643,179 +2634,114 @@ export default function PortfolioPage() {
                                                 </div>
                                             </div>
 
-                                            {/* Destek – Direnç Cetveli */}
-                                            <div className="space-y-2">
-                                                <h4 className="text-[11px] font-black text-[#00008B] uppercase tracking-wider leading-snug">
-                                                    {tfHeaderLabel} FİYAT KONUMU (DESTEK – DİRENÇ CETVELİ)
-                                                </h4>
+                                            {/* Profesyonel Fiyat Çubuğu (Noktasız, Kurumsal Renkli, Dip ve Zirve Çentikli, Kutusuz Yazılı) */}
+                                            <div className="relative pt-[44px] pb-[44px] px-1 select-none w-full">
+                                                {/* Kurumsal Gri Zemin Çubuğu (Noktasız) */}
+                                                <div className="h-2.5 bg-slate-200/90 rounded-full w-full relative" />
 
-                                                <div className="relative pt-[48px] pb-[48px] select-none w-full">
-                                                    {/* Gri Zemin Cetvel Çubuğu + Noktalar */}
-                                                    <div className="h-4 bg-slate-200/85 rounded-full w-full relative flex items-center justify-between px-4 overflow-hidden">
-                                                        {Array.from({ length: 15 }).map((_, dotIdx) => (
-                                                            <span
-                                                                key={dotIdx}
-                                                                className="w-1 h-1 rounded-full bg-slate-400/70 shrink-0"
-                                                            />
-                                                        ))}
-                                                    </div>
+                                                {/* Sol Uç: Dip Fiyatı Çentiği ve Değeri */}
+                                                <div className="absolute left-1 top-[44px] -translate-y-1/2 flex flex-col items-start z-10 pointer-events-none">
+                                                    <div className="w-[2px] h-4 bg-slate-400 rounded-full" />
+                                                </div>
+                                                <span className="absolute left-1 top-[58px] text-[11px] font-semibold text-slate-500 tracking-normal whitespace-nowrap pointer-events-none">
+                                                    {lowFmt}
+                                                </span>
 
-                                                    {/* Anlık Fiyat ile Maliyet Arasındaki Gradyan Dolgu */}
-                                                    {hasCost && costPos !== null && (
-                                                        <div
-                                                            className="absolute top-[48px] h-4 rounded-full z-10 transition-all duration-500"
-                                                            style={{
-                                                                left: `${regionLeft}%`,
-                                                                width: `${regionWidth}%`,
-                                                                background: pos <= costPos
-                                                                    ? "linear-gradient(90deg, #e11d48 0%, #00008B 100%)"
-                                                                    : "linear-gradient(90deg, #00008B 0%, #10b981 100%)"
-                                                            }}
-                                                        />
-                                                    )}
+                                                {/* Sağ Uç: En Yüksek Zirve Fiyatı Çentiği ve Değeri */}
+                                                <div className="absolute right-1 top-[44px] -translate-y-1/2 flex flex-col items-end z-10 pointer-events-none">
+                                                    <div className="w-[2px] h-4 bg-slate-400 rounded-full" />
+                                                </div>
+                                                <span className="absolute right-1 top-[58px] text-[11px] font-semibold text-slate-500 tracking-normal whitespace-nowrap pointer-events-none">
+                                                    {highFmt}
+                                                </span>
 
-                                                    {/* 1) CANLI FİYAT İŞARETÇİSİ (ÜSTTE) */}
+                                                {/* Anlık Fiyat ile Maliyet Arasındaki Kurumsal Dolgu */}
+                                                {hasCost && costPos !== null && (
                                                     <div
-                                                        className="absolute top-[56px] -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none"
-                                                        style={{ left: `${pos}%` }}
-                                                    >
-                                                        <div
-                                                            className={cn(
-                                                                "w-5 h-5 rounded-full border-[3px] border-white shadow-md",
-                                                                hasCost && !isProfit ? "bg-rose-600" : "bg-emerald-500"
-                                                            )}
-                                                        />
-                                                    </div>
-
-                                                    {/* Canlı Fiyat Dikey Bağlantı Çizgisi */}
-                                                    <div
-                                                        className={cn(
-                                                            "absolute top-[28px] h-[20px] w-[2px] -translate-x-1/2 z-20 pointer-events-none",
-                                                            hasCost && !isProfit ? "bg-rose-500" : "bg-emerald-500"
-                                                        )}
-                                                        style={{ left: `${pos}%` }}
-                                                    />
-
-                                                    {/* Canlı Fiyat Etiketi */}
-                                                    <div
-                                                        className="absolute top-0 z-30 pointer-events-none"
+                                                        className="absolute top-[44px] h-2.5 rounded-full z-10 transition-all duration-500 bg-[#00008B]"
                                                         style={{
-                                                            left: `${pos}%`,
-                                                            transform: pos < 16 ? 'translateX(0%)' : pos > 84 ? 'translateX(-100%)' : 'translateX(-50%)'
+                                                            left: `${regionLeft}%`,
+                                                            width: `${regionWidth}%`,
                                                         }}
-                                                    >
+                                                    />
+                                                )}
+
+                                                {/* 1) CANLI FİYAT İŞARETÇİSİ (ÜSTTE - KUTUSUZ YAZI) */}
+                                                <div
+                                                    className="absolute top-[49px] -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none"
+                                                    style={{ left: `${pos}%` }}
+                                                >
+                                                    <div className="w-4 h-4 rounded-full bg-white border-[3px] border-[#00008B] shadow-xs" />
+                                                </div>
+
+                                                {/* Canlı Fiyat Dikey Bağlantı Çizgisi */}
+                                                <div
+                                                    className="absolute top-[22px] h-[20px] w-[1.5px] bg-[#00008B] -translate-x-1/2 z-20 pointer-events-none"
+                                                    style={{ left: `${pos}%` }}
+                                                />
+
+                                                {/* Canlı Fiyat Kutusuz Metni */}
+                                                <div
+                                                    className="absolute top-[2px] z-30 pointer-events-none"
+                                                    style={{
+                                                        left: `${pos}%`,
+                                                        transform: pos < 14 ? 'translateX(0%)' : pos > 86 ? 'translateX(-100%)' : 'translateX(-50%)'
+                                                    }}
+                                                >
+                                                    <span className="text-xs font-bold text-[#00008B] tracking-normal whitespace-nowrap">
+                                                        Canlı: {currFmt}
+                                                    </span>
+                                                </div>
+
+                                                {/* 2) MALİYET İŞARETÇİSİ (ALTTA - KUTUSUZ YAZI) */}
+                                                {hasCost && costPos !== null && (
+                                                    <>
+                                                        {/* Çubuk Üzerindeki Dikey İşaretçi */}
                                                         <div
-                                                            className={cn(
-                                                                "bg-white rounded-xl px-3 py-1 shadow-sm border inline-flex items-center gap-1.5 whitespace-nowrap",
-                                                                hasCost && !isProfit ? "border-rose-200" : "border-emerald-200"
-                                                            )}
+                                                            className="absolute top-[49px] -translate-x-1/2 -translate-y-1/2 w-2.5 h-5 rounded-full bg-white border-[2.5px] border-slate-700 shadow-xs z-30 pointer-events-none"
+                                                            style={{ left: `${costPos}%` }}
+                                                        />
+
+                                                        {/* Aşağı İnen Bağlantı Çizgisi */}
+                                                        <div
+                                                            className="absolute top-[59px] h-[14px] w-[1.5px] bg-slate-700 -translate-x-1/2 z-20 pointer-events-none"
+                                                            style={{ left: `${costPos}%` }}
+                                                        />
+
+                                                        {/* Sizin Maliyetiniz Kutusuz Metni */}
+                                                        <div
+                                                            className="absolute top-[75px] z-30 pointer-events-none"
+                                                            style={{
+                                                                left: `${costPos}%`,
+                                                                transform: costPos < 18 ? 'translateX(0%)' : costPos > 82 ? 'translateX(-100%)' : 'translateX(-50%)'
+                                                            }}
                                                         >
-                                                            <span
-                                                                className={cn(
-                                                                    "w-2 h-2 rounded-full shrink-0",
-                                                                    hasCost && !isProfit ? "bg-rose-600" : "bg-emerald-500"
-                                                                )}
-                                                            />
-                                                            <span className="text-[11px] font-bold text-slate-800">Canlı:</span>
-                                                            <span
-                                                                className={cn(
-                                                                    "text-[11px] font-black",
-                                                                    hasCost && !isProfit ? "text-rose-600" : "text-emerald-600"
-                                                                )}
-                                                            >
-                                                                {currFmt}
+                                                            <span className="text-xs font-bold text-slate-800 tracking-normal whitespace-nowrap">
+                                                                Sizin Maliyetiniz: {costFmt}
                                                             </span>
                                                         </div>
-                                                    </div>
-
-                                                    {/* 2) MALİYET İŞARETÇİSİ (ALTTA) */}
-                                                    {hasCost && costPos !== null && (
-                                                        <>
-                                                            {/* Çubuk Üzerindeki Dikey Kapsül İşaretçi */}
-                                                            <div
-                                                                className="absolute top-[56px] -translate-x-1/2 -translate-y-1/2 w-3 h-7 rounded-full bg-white border-[3px] border-[#00008B] shadow-md z-30 pointer-events-none"
-                                                                style={{ left: `${costPos}%` }}
-                                                            />
-
-                                                            {/* Kapsülden Aşağı İnen Bağlantı Çizgisi */}
-                                                            <div
-                                                                className="absolute top-[68px] h-[12px] w-[2px] bg-[#00008B] -translate-x-1/2 z-20 pointer-events-none"
-                                                                style={{ left: `${costPos}%` }}
-                                                            />
-
-                                                            {/* Sizin Maliyetiniz Lacivert Etiketi */}
-                                                            <div
-                                                                className="absolute top-[80px] z-30 pointer-events-none"
-                                                                style={{
-                                                                    left: `${costPos}%`,
-                                                                    transform: costPos < 18 ? 'translateX(0%)' : costPos > 82 ? 'translateX(-100%)' : 'translateX(-50%)'
-                                                                }}
-                                                            >
-                                                                <div className="bg-[#00008B] text-white rounded-xl px-3.5 py-1 shadow-sm text-[11px] font-bold whitespace-nowrap inline-flex items-center gap-1">
-                                                                    <span>Sizin Maliyetiniz:</span>
-                                                                    <span className="font-black">{costFmt}</span>
-                                                                </div>
-                                                            </div>
-                                                        </>
-                                                    )}
-                                                </div>
-
-                                                {/* Alt Destek ve Direnç Etiketleri */}
-                                                <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-bold text-slate-500 uppercase tracking-wide">
-                                                    <span>
-                                                        DESTEK ({tfShortLabel} DİP):{" "}
-                                                        <strong className="font-black text-[#00008B]">{lowFmt}</strong>
-                                                    </span>
-                                                    <span>
-                                                        DİRENÇ ({tfShortLabel} ZİRVE):{" "}
-                                                        <strong className="font-black text-[#00008B]">{highFmt}</strong>
-                                                    </span>
-                                                </div>
+                                                    </>
+                                                )}
                                             </div>
                                         </div>
 
-                                        {/* SAĞ TARAF (5/12): ÜSTTE YAZILAR (ANALİZ METNİ), ALTTA DİĞER HİSSE ÖNERİLERİ */}
+                                        {/* SAĞ TARAF (5/12): ÜSTTE YAZILAR (TEK RENK VE TANIM WİDGET TİPOGRAFİSİ), ALTTA DİĞER HİSSE ÖNERİLERİ */}
                                         <div className="lg:col-span-5 flex flex-col justify-between gap-4 lg:border-l lg:border-slate-100 lg:pl-6 min-w-0 h-full">
-                                            {/* Üst Kısım: Analiz Yazısı */}
+                                            {/* Üst Kısım: Analiz Yazısı (Tek Renk & Tanım Widget Yazı Tipi) */}
                                             <div>
                                                 {hasCost ? (
                                                     isProfit ? (
-                                                        <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed font-medium">
-                                                            Portföyünüzün öne çıkan başarılı varlıklarından{" "}
-                                                            <strong className="font-bold text-slate-900">{sym}</strong>,{" "}
-                                                            <strong className="font-bold text-emerald-600">{currFmt}</strong>{" "}
-                                                            güncel fiyatıyla ortalama maliyetinizin{" "}
-                                                            <strong className="font-bold text-emerald-600">%{absPctStr}</strong>{" "}
-                                                            yukarısında seyrediyor. Seçilen {tfLabel} periyodunda{" "}
-                                                            <strong className="font-bold text-[#00008B]">{lowFmt}</strong>{" "}
-                                                            dip noktasından bu yana gösterdiği{" "}
-                                                            <strong className="font-bold text-slate-900">istikrarlı tırmanış</strong>
-                                                            , varlığın üst direnç seviyelerini zorlamasını sağlıyor.
+                                                        <p className="text-xs sm:text-[13px] font-normal text-slate-800 leading-relaxed tracking-normal">
+                                                            Portföyünüzün öne çıkan başarılı varlıklarından {sym}, {currFmt} güncel fiyatıyla ortalama maliyetinizin %{absPctStr} yukarısında seyrediyor. Seçilen {tfLabel} periyodunda {lowFmt} dip noktasından bu yana gösterdiği istikrarlı tırmanış, varlığın üst direnç seviyelerini zorlamasını sağlıyor.
                                                         </p>
                                                     ) : (
-                                                        <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed font-medium">
-                                                            <strong className="font-bold text-[#00008B]">{costFmt}</strong>{" "}
-                                                            maliyetli <strong className="font-bold text-slate-900">{sym}</strong> pozisyonunuz, canlı piyasa koşullarında{" "}
-                                                            <strong className="font-bold text-rose-600">%{absPctStr}</strong>{" "}
-                                                            indirimli bir fiyatla{" "}
-                                                            <strong className="font-bold text-rose-600">{currFmt}</strong>{" "}
-                                                            değerine gerilemiştir. Varlığın {tfLabel} zaman diliminde{" "}
-                                                            <strong className="font-bold text-[#00008B]">{lowFmt}</strong>{" "}
-                                                            sınırına yakınlığı, bu dip seviyelerden{" "}
-                                                            <strong className="font-bold text-slate-900">destek bulma çabasının</strong>{" "}
-                                                            sürdüğünü göstermektedir.
+                                                        <p className="text-xs sm:text-[13px] font-normal text-slate-800 leading-relaxed tracking-normal">
+                                                            {costFmt} maliyetli {sym} pozisyonunuz, canlı piyasa koşullarında %{absPctStr} indirimli bir fiyatla {currFmt} değerine gerilemiştir. Varlığın {tfLabel} zaman diliminde {lowFmt} sınırına yakınlığı, bu dip seviyelerden destek bulma çabasının sürdüğünü göstermektedir.
                                                         </p>
                                                     )
                                                 ) : (
-                                                    <p className="text-xs sm:text-[13px] text-slate-600 leading-relaxed font-medium">
-                                                        Piyasa takibinizde yer alan{" "}
-                                                        <strong className="font-bold text-slate-900">{sym}</strong>, {tfLabel} zaman diliminde{" "}
-                                                        <strong className="font-bold text-[#00008B]">{currFmt}</strong>{" "}
-                                                        canlı fiyatı üzerinden işlem görüyor. Varlık bu periyotta{" "}
-                                                        <strong className="font-bold text-[#00008B]">{lowFmt}</strong>{" "}
-                                                        dip noktası ile{" "}
-                                                        <strong className="font-bold text-slate-900">{highFmt}</strong>{" "}
-                                                        zirvesi arasında dengeli bir fiyat kanalı izlemektedir.
+                                                    <p className="text-xs sm:text-[13px] font-normal text-slate-800 leading-relaxed tracking-normal">
+                                                        Piyasa takibinizde yer alan {sym}, {tfLabel} zaman diliminde {currFmt} canlı fiyatı üzerinden işlem görüyor. Varlık bu periyotta {lowFmt} dip noktası ile {highFmt} zirvesi arasında dengeli bir fiyat kanalı izlemektedir.
                                                     </p>
                                                 )}
                                             </div>
@@ -2823,8 +2749,8 @@ export default function PortfolioPage() {
                                             {/* Alt Kısım: Diğer Hisseler Önerisi / Seçimi */}
                                             {otherEntries.length > 0 && (
                                                 <div className="pt-3 border-t border-slate-100 space-y-2">
-                                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">
-                                                        DİĞER HİSSELERİ İNCELE
+                                                    <span className="text-xs font-bold text-[#00008B] tracking-tight block">
+                                                        Diğer Hisseleri İncele
                                                     </span>
                                                     <div className="flex flex-wrap items-center gap-2">
                                                         {otherEntries.map(([otherSym, otherExt]) => {
@@ -2842,12 +2768,12 @@ export default function PortfolioPage() {
                                                                     className="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50/70 text-slate-800 transition-all cursor-pointer group"
                                                                 >
                                                                     <StockLogo symbol={otherSym} className="w-5 h-5 shrink-0" />
-                                                                    <span className="text-xs font-black text-slate-800 group-hover:text-[#00008B]">
+                                                                    <span className="text-xs font-black text-slate-800 group-hover:text-[#00008B] tracking-tight">
                                                                         {otherSym}
                                                                     </span>
                                                                     <span
                                                                         className={cn(
-                                                                            "text-[11px] font-bold",
+                                                                            "text-[11px] font-bold tracking-normal",
                                                                             otherCost && otherCost > 0
                                                                                 ? otherIsProfit
                                                                                     ? "text-emerald-600"
@@ -3174,7 +3100,8 @@ export default function PortfolioPage() {
                     setFocusedWidget(null);
                 }
             }}
-            className="p-4 md:p-10 space-y-6 md:space-y-8 min-h-full bg-white text-slate-800 rounded-[2rem] md:rounded-[2.5rem] shadow-xl shadow-[#00008B]/5 pb-20 md:pb-24 relative isolate m-1 md:m-2 xl:m-4 border border-slate-100 font-sans max-w-full"
+            style={{ fontFamily: "var(--font-inter), system-ui, -apple-system, sans-serif" }}
+            className="p-4 md:p-10 space-y-6 md:space-y-8 min-h-full bg-white text-slate-800 rounded-[2rem] md:rounded-[2.5rem] shadow-xl shadow-[#00008B]/5 pb-20 md:pb-24 relative isolate m-1 md:m-2 xl:m-4 border border-slate-100 max-w-full"
         >
             
 
