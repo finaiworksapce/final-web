@@ -9,6 +9,7 @@ import {
     AlertCircle 
 } from "lucide-react";
 import Link from "next/link";
+import StockLogo from "@/components/StockLogo";
 
 export interface DailyAgendaItem {
     id: string;
@@ -336,9 +337,15 @@ export function DailyAgendaWidget() {
                                             {item.time}
                                         </span>
                                     ) : null}
-                                    <span className="text-xs font-bold text-slate-700 px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200/60 shrink-0 min-w-[32px] text-center">
-                                        {item.symbolOrCountry}
-                                    </span>
+                                    {item.category === 'economic' ? (
+                                        <span className="text-xs font-bold text-slate-700 px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200/60 shrink-0 min-w-[32px] text-center">
+                                            {item.symbolOrCountry}
+                                        </span>
+                                    ) : (
+                                        <div className="flex items-center justify-center shrink-0">
+                                            <StockLogo symbol={item.symbolOrCountry} className="w-8 h-8 ring-1 ring-slate-200/60 shadow-xs" />
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Orta: Başlık ve Yardımcı Değer */}

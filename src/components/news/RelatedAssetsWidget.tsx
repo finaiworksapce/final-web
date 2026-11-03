@@ -2,8 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import { BarChart2, Droplets, DollarSign, TrendingUp, Globe, Coins, ArrowRight } from "lucide-react";
 import StockLogo, { getStockLogoUrl } from "@/components/StockLogo";
+import { BarChart2, Droplets, DollarSign, TrendingUp, Globe, Coins, ArrowRight } from "lucide-react";
 
 interface RelatedAssetsWidgetProps {
     assets: string[];
@@ -15,13 +15,13 @@ function getAssetIcon(asset: string) {
     if (lower.includes("petrol") || lower.includes("brent") || lower.includes("crude") || lower.includes("enerji")) {
         return <Droplets className="w-3.5 h-3.5 text-blue-500" />;
     }
-    if (lower.includes("eur") || lower.includes("usd") || lower.includes("dolar") || lower.includes("tl") || lower.includes("kur") || lower.includes("dÃ¶viz")) {
+    if (lower.includes("eur") || lower.includes("usd") || lower.includes("dolar") || lower.includes("tl") || lower.includes("kur") || lower.includes("döviz")) {
         return <DollarSign className="w-3.5 h-3.5 text-blue-600" />;
     }
     if (lower.includes("btc") || lower.includes("kripto") || lower.includes("eth") || lower.includes("coin")) {
         return <Coins className="w-3.5 h-3.5 text-amber-500" />;
     }
-    if (lower.includes("bÃ¶lge") || lower.includes("kÃ¼resel") || lower.includes("avrupa") || lower.includes("abd")) {
+    if (lower.includes("bölge") || lower.includes("küresel") || lower.includes("avrupa") || lower.includes("abd")) {
         return <Globe className="w-3.5 h-3.5 text-indigo-500" />;
     }
     return <TrendingUp className="w-3.5 h-3.5 text-blue-600" />;
@@ -38,14 +38,14 @@ export function RelatedAssetsWidget({ assets, className = "" }: RelatedAssetsWid
                         <BarChart2 className="w-3.5 h-3.5" />
                     </div>
                     <h3 className="text-xs sm:text-sm font-black text-[#00008B] tracking-tight">
-                        Ä°lgili VarlÄ±klar
+                        İlgili Varlıklar
                     </h3>
                 </div>
                 <Link 
                     href="/dashboard/varliklar" 
                     className="text-[11px] font-bold text-blue-600 hover:text-blue-800 flex items-center gap-0.5 hover:underline"
                 >
-                    TÃ¼mÃ¼nÃ¼ GÃ¶r <ArrowRight className="w-3 h-3" />
+                    Tümünü Gör <ArrowRight className="w-3 h-3" />
                 </Link>
             </div>
 

@@ -25,7 +25,7 @@ interface GlobalSearchProps {
 
 export function GlobalSearch({
   className = "",
-  placeholder = "Hisse kodu, ÅŸirket veya sektÃ¶r ara...",
+  placeholder = "Hisse kodu, şirket veya sektör ara...",
   onSelect
 }: GlobalSearchProps) {
   const router = useRouter();
@@ -136,11 +136,11 @@ export function GlobalSearch({
           }}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          aria-label="VarlÄ±k ve Åirket Arama"
+          aria-label="Varlık ve Şirket Arama"
           className="w-full bg-slate-50/90 border border-slate-200/80 rounded-2xl py-2 pl-10 pr-10 text-xs font-bold text-[#00008B] placeholder:text-[#00008B]/40 focus:outline-none focus:ring-2 focus:ring-[#00008B]/20 focus:bg-white transition-all shadow-xs"
         />
         {loading ? (
-          <Loader2 className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-600 animate-spin" aria-label="AranÄ±yor..." />
+          <Loader2 className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-600 animate-spin" aria-label="Aranıyor..." />
         ) : query ? (
           <button
             type="button"
@@ -150,7 +150,7 @@ export function GlobalSearch({
               setIsOpen(false);
               inputRef.current?.focus();
             }}
-            aria-label="AramayÄ± Temizle"
+            aria-label="Aramayı Temizle"
             className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#00008B] p-1 rounded-full hover:bg-slate-100 transition-colors"
           >
             <X className="w-3.5 h-3.5" />
@@ -163,20 +163,20 @@ export function GlobalSearch({
         <div 
           id="global-search-results"
           role="listbox"
-          aria-label="Arama SonuÃ§larÄ±"
+          aria-label="Arama Sonuçları"
           className="absolute left-0 right-0 top-full mt-2 bg-white border border-slate-200/90 rounded-2xl shadow-2xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-150 max-h-[380px] overflow-y-auto"
         >
           {results.length === 0 ? (
             <div className="p-4 text-center" role="status" aria-live="polite">
               <Building2 className="w-6 h-6 text-slate-300 mx-auto mb-1.5" />
-              <p className="text-xs font-bold text-slate-700">SonuÃ§ bulunamadÄ±</p>
-              <p className="text-[10px] text-slate-400 mt-0.5">FarklÄ± bir hisse kodu veya ÅŸirket adÄ± deneyin.</p>
+              <p className="text-xs font-bold text-slate-700">Sonuç bulunamadı</p>
+              <p className="text-[10px] text-slate-400 mt-0.5">Farklı bir hisse kodu veya şirket adı deneyin.</p>
             </div>
           ) : (
             <div className="p-1.5 space-y-1">
               <div className="px-3 py-1.5 text-[9px] font-black uppercase tracking-wider text-slate-400 border-b border-slate-100 flex items-center justify-between">
-                <span>EÅŸleÅŸen VarlÄ±klar</span>
-                <span aria-live="polite">{results.length} SonuÃ§</span>
+                <span>Eşleşen Varlıklar</span>
+                <span aria-live="polite">{results.length} Sonuç</span>
               </div>
               {results.map((item, idx) => {
                 const isSelected = selectedIndex === idx;
@@ -208,14 +208,6 @@ export function GlobalSearch({
                             )}
                           >
                             {cleanSym}
-                          </span>
-                          <span
-                            className={cn(
-                              "text-[10px] font-bold",
-                              isSelected ? "text-purple-300" : "text-[#ba68c8]"
-                            )}
-                          >
-                            GS
                           </span>
                           {item.sector && (
                             <span

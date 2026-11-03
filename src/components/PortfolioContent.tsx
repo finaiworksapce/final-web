@@ -4,6 +4,7 @@ import React, { useEffect, useState, useMemo, useRef } from "react";
 import { Plus, Trash2, TrendingUp, TrendingDown, Wallet, PieChart, Info, Brain, X, XCircle, Loader2, AlertTriangle, CheckCircle2, ChevronDown, ChevronRight, History as HistoryIcon, Calendar, RefreshCw, Activity, ExternalLink, BarChart3, FileText, Search, ArrowUpRight, Coins, Layers, Eye, ArrowUpDown, Filter, Lock, Newspaper, Zap, FileSpreadsheet, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import StockLogo from "@/components/StockLogo";
 import { PortfolioService, Asset } from "@/lib/portfolio-service";
 import { supabase } from "@/lib/supabase";
 import { BIST_CATALOG, TEFAS_CATALOG } from "@/lib/asset-catalog";
@@ -1689,28 +1690,31 @@ export default function PortfolioPage() {
                                             /* STANDART YAKLAŞAN HAREKETLİLİK: 1X ALAN */
                                             <div
                                                 key={item.id}
-                                                className="min-h-[70px] p-3.5 rounded-2xl border transition-all flex flex-col justify-between gap-1.5 bg-slate-50/70 border-slate-100"
+                                                className="min-h-[70px] p-3.5 rounded-2xl border transition-all flex items-center gap-3 bg-slate-50/70 border-slate-100"
                                             >
-                                                <div className="flex items-center justify-between gap-2">
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="px-2.5 py-0.5 rounded-lg bg-slate-200 text-slate-700 font-extrabold text-[10px] tracking-wider uppercase">
-                                                            {item.dateStr.toUpperCase()} · {item.symbol}
+                                                <StockLogo symbol={item.symbol} className="w-9 h-9 ring-1 ring-slate-200/60 shadow-xs shrink-0" />
+                                                <div className="flex-1 min-w-0 flex flex-col justify-between gap-1.5">
+                                                    <div className="flex items-center justify-between gap-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="px-2.5 py-0.5 rounded-lg bg-slate-200 text-slate-700 font-extrabold text-[10px] tracking-wider uppercase">
+                                                                {item.dateStr.toUpperCase()} · {item.symbol}
+                                                            </span>
+                                                        </div>
+                                                        <span className="text-[10px] font-bold text-slate-400">
+                                                            {item.typeLabel}
                                                         </span>
                                                     </div>
-                                                    <span className="text-[10px] font-bold text-slate-400">
-                                                        {item.typeLabel}
-                                                    </span>
-                                                </div>
 
-                                                <div className="flex items-center justify-between gap-2">
-                                                    <h4 className="font-bold text-[#00008B] text-xs leading-snug truncate">
-                                                        {item.title}
-                                                    </h4>
-                                                    {item.valueFormatted && (
-                                                        <span className="text-xs font-black text-emerald-700 shrink-0">
-                                                            {item.valueFormatted}
-                                                        </span>
-                                                    )}
+                                                    <div className="flex items-center justify-between gap-2">
+                                                        <h4 className="font-bold text-[#00008B] text-xs leading-snug truncate">
+                                                            {item.title}
+                                                        </h4>
+                                                        {item.valueFormatted && (
+                                                            <span className="text-xs font-black text-emerald-700 shrink-0">
+                                                                {item.valueFormatted}
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         )
@@ -1868,32 +1872,48 @@ export default function PortfolioPage() {
                                                             >
                                                                 {/* SOL TARAFTA İKONSUZ TEMİZ SEMBOL KODU VE UZANTI (BİTİK BÜYÜK FONT) */}
                                                                 <td className="py-4.5 px-6">
-                                                                    <div className="flex flex-col justify-center">
-                                                                        <div className="flex items-center gap-2">
-                                                                            {isCash ? (
-                                                                                <span className="text-lg font-black text-slate-900 tracking-tight leading-none">
-                                                                                    {displaySymbol}
-                                                                                </span>
-                                                                            ) : (
-                                                                                <Link
-                                                                                    href={`/dashboard/varlik/${displaySymbol}`}
-                                                                                    onClick={(e) => e.stopPropagation()}
-                                                                                    className="hover:underline inline-flex items-center gap-1 group/sym"
-                                                                                    title={`${displaySymbol} Şirket & Finansal Detayına Git`}
-                                                                                >
-                                                                                    <span className="text-lg font-black text-slate-900 tracking-tight leading-none group-hover/sym:text-violet-600 transition-colors">{displaySymbol}</span>
-                                                                                    <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover/sym:text-violet-600 transition-colors" />
-                                                                                </Link>
-                                                                            )}
-                                                                            {isCash && (
-                                                                                <span className="px-2.5 py-0.5 rounded-full bg-violet-600 text-white text-[9px] font-black uppercase tracking-wider shadow-xs">
-                                                                                    NAKİT
-                                                                                </span>
-                                                                            )}
+                                                                    <div className="flex items-center gap-3">
+                                                                        {isCash ? (
+                                                                            <div className="w-10 h-10 rounded-full bg-violet-100 border border-violet-200 flex items-center justify-center text-violet-600 shrink-0 shadow-xs">
+                                                                                <Coins className="w-5 h-5" />
+                                                                            </div>
+                                                                        ) : (
+                                                                            <Link
+                                                                                href={`/dashboard/varlik/${displaySymbol}`}
+                                                                                onClick={(e) => e.stopPropagation()}
+                                                                                className="shrink-0"
+                                                                                title={`${displaySymbol} Şirket & Finansal Detayına Git`}
+                                                                            >
+                                                                                <StockLogo symbol={displaySymbol} className="w-10 h-10 ring-1 ring-slate-200/80 shadow-xs" />
+                                                                            </Link>
+                                                                        )}
+                                                                        <div className="flex flex-col justify-center min-w-0">
+                                                                            <div className="flex items-center gap-2">
+                                                                                {isCash ? (
+                                                                                    <span className="text-lg font-black text-slate-900 tracking-tight leading-none">
+                                                                                        {displaySymbol}
+                                                                                    </span>
+                                                                                ) : (
+                                                                                    <Link
+                                                                                        href={`/dashboard/varlik/${displaySymbol}`}
+                                                                                        onClick={(e) => e.stopPropagation()}
+                                                                                        className="hover:underline inline-flex items-center gap-1 group/sym"
+                                                                                        title={`${displaySymbol} Şirket & Finansal Detayına Git`}
+                                                                                    >
+                                                                                        <span className="text-lg font-black text-slate-900 tracking-tight leading-none group-hover/sym:text-violet-600 transition-colors">{displaySymbol}</span>
+                                                                                        <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover/sym:text-violet-600 transition-colors" />
+                                                                                    </Link>
+                                                                                )}
+                                                                                {isCash && (
+                                                                                    <span className="px-2.5 py-0.5 rounded-full bg-violet-600 text-white text-[9px] font-black uppercase tracking-wider shadow-xs">
+                                                                                        NAKİT
+                                                                                    </span>
+                                                                                )}
+                                                                            </div>
+                                                                            <span className="text-xs text-slate-400 font-medium leading-tight mt-1 truncate max-w-[180px] sm:max-w-xs">
+                                                                                {isCash ? "Kullanılabilir Nakit Bakiyesi" : (getAssetName(group.symbol) || "Hisse Senedi")}
+                                                                            </span>
                                                                         </div>
-                                                                        <span className="text-xs text-slate-400 font-medium leading-tight mt-1 truncate max-w-[180px] sm:max-w-xs">
-                                                                            {isCash ? "Kullanılabilir Nakit Bakiyesi" : (getAssetName(group.symbol) || "Hisse Senedi")}
-                                                                        </span>
                                                                     </div>
                                                                 </td>
                                                                 <td className="py-4.5 px-4">
@@ -2558,8 +2578,14 @@ export default function PortfolioPage() {
                                                 <div key={sym} className="space-y-3 p-4 bg-slate-50/70 rounded-2xl border border-slate-100 hover:bg-blue-50/30 transition-all w-full overflow-x-hidden">
                                                     {/* ÜST BAŞLIK VE SON FİYAT */}
                                                     <div className="flex justify-between items-center text-xs">
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="text-[#00008B] font-black text-sm">{sym}</span>
+                                                        <div className="flex items-center gap-2.5">
+                                                            <StockLogo symbol={sym} className="w-8 h-8 ring-1 ring-slate-200/60 shadow-xs shrink-0" />
+                                                            <div>
+                                                                <span className="text-[#00008B] font-black text-sm block leading-tight">{sym}</span>
+                                                                <span className="text-[10px] text-slate-400 font-medium truncate block max-w-[150px] sm:max-w-xs">
+                                                                    {getAssetName(sym) || "Hisse Senedi"}
+                                                                </span>
+                                                            </div>
                                                         </div>
                                                         <div className="flex items-center gap-2">
                                                             <span className="text-[#00008B] bg-blue-50 border border-blue-200/60 px-2.5 py-1 rounded-xl text-xs font-black">

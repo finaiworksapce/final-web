@@ -38,15 +38,15 @@ import type {
 
 // Popular quick switch tickers
 const POPULAR_TICKERS = [
-    { symbol: "THYAO", name: "TÃ¼rk Hava YollarÄ±", sector: "HavacÄ±lÄ±k" },
+    { symbol: "THYAO", name: "Türk Hava Yolları", sector: "Havacılık" },
     { symbol: "ASELS", name: "Aselsan", sector: "Savunma" },
-    { symbol: "BIMAS", name: "BÄ°M MaÄŸazalar", sector: "Perakende" },
-    { symbol: "TUPRS", name: "TÃ¼praÅŸ", sector: "Enerji / Petrol" },
-    { symbol: "KCHOL", name: "KoÃ§ Holding", sector: "Holding" },
-    { symbol: "EREGL", name: "EreÄŸli Demir Ã‡elik", sector: "Demir Ã‡elik" },
-    { symbol: "SISE", name: "ÅiÅŸecam", sector: "Cam / Sanayi" },
+    { symbol: "BIMAS", name: "BİM Mağazalar", sector: "Perakende" },
+    { symbol: "TUPRS", name: "Tüpraş", sector: "Enerji / Petrol" },
+    { symbol: "KCHOL", name: "Koç Holding", sector: "Holding" },
+    { symbol: "EREGL", name: "Ereğli Demir Çelik", sector: "Demir Çelik" },
+    { symbol: "SISE", name: "Şişecam", sector: "Cam / Sanayi" },
     { symbol: "FROTO", name: "Ford Otosan", sector: "Otomotiv" },
-    { symbol: "AKBNK", name: "Akbank", sector: "BankacÄ±lÄ±k" }
+    { symbol: "AKBNK", name: "Akbank", sector: "Bankacılık" }
 ];
 
 // Logo Component
@@ -61,7 +61,7 @@ function ImpactBalanceBadge({ rating }: { rating: ImpactBalanceRating }) {
             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 font-semibold text-xs tracking-wide">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <TrendingUp className="w-3.5 h-3.5" />
-                <span>ETKÄ° DENGESÄ°: POZÄ°TÄ°F</span>
+                <span>ETKİ DENGESİ: POZİTİF</span>
             </div>
         );
     }
@@ -71,7 +71,7 @@ function ImpactBalanceBadge({ rating }: { rating: ImpactBalanceRating }) {
             <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 text-rose-700 dark:text-rose-400 border border-rose-500/20 font-semibold text-xs tracking-wide">
                 <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
                 <TrendingDown className="w-3.5 h-3.5" />
-                <span>ETKÄ° DENGESÄ°: NEGATÄ°F</span>
+                <span>ETKİ DENGESİ: NEGATİF</span>
             </div>
         );
     }
@@ -80,7 +80,7 @@ function ImpactBalanceBadge({ rating }: { rating: ImpactBalanceRating }) {
         <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 font-semibold text-xs tracking-wide">
             <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
             <Scale className="w-3.5 h-3.5" />
-            <span>ETKÄ° DENGESÄ°: DENGELÄ° / NÃ–TR</span>
+            <span>ETKİ DENGESİ: DENGELİ / NÖTR</span>
         </div>
     );
 }
@@ -97,7 +97,7 @@ function FactorRowItem({ factor }: { factor: UIFactorDetail }) {
     const directionLabel = 
         factor.direction === "positive" ? "Pozitif" :
         factor.direction === "negative" ? "Negatif" :
-        "NÃ¶tr";
+        "Nötr";
 
     const directionIcon = 
         factor.direction === "positive" ? <TrendingUp className="w-3 h-3" /> :
@@ -141,7 +141,7 @@ function FactorRowItem({ factor }: { factor: UIFactorDetail }) {
                 {hasChain && (
                     <button 
                         type="button"
-                        aria-label="DetaylarÄ± gÃ¶ster"
+                        aria-label="Detayları göster"
                         className="p-1 rounded-md text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 shrink-0 mt-0.5"
                     >
                         {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -160,7 +160,7 @@ function FactorRowItem({ factor }: { factor: UIFactorDetail }) {
                     >
                         <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1.5 flex items-center gap-1">
                             <ArrowRight className="w-3 h-3 text-indigo-500" />
-                            <span>AktarÄ±m AÅŸamalarÄ±:</span>
+                            <span>Aktarım Aşamaları:</span>
                         </div>
                         <div className="flex flex-wrap items-center gap-1.5">
                             {factor.causeEffectChain!.map((step: string, idx: number) => (
@@ -193,7 +193,7 @@ function AnalysisContent() {
     const [refreshing, setRefreshing] = useState<boolean>(false);
     const [analysis, setAnalysis] = useState<FinAiAnalysisResponse | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [selectedChannel, setSelectedChannel] = useState<string>("TÃœMÃœ");
+    const [selectedChannel, setSelectedChannel] = useState<string>("TÜMÜ");
 
     // Fetch analysis from /api/finai/analysis
     const loadAnalysis = useCallback(async (targetSymbol: string, forceRefresh = false) => {
@@ -217,14 +217,14 @@ function AnalysisContent() {
             const data = await res.json();
 
             if (!res.ok || !data.success) {
-                throw new Error(data.error || "Analiz verisi alÄ±namadÄ±.");
+                throw new Error(data.error || "Analiz verisi alınamadı.");
             }
 
             setAnalysis(data as FinAiAnalysisResponse);
             setSymbol(cleanSymbol);
         } catch (err: any) {
             console.error("[FinAi UI] Analysis load error:", err);
-            setError(err.message || "Analiz yÃ¼klenirken beklenmedik bir hata oluÅŸtu.");
+            setError(err.message || "Analiz yüklenirken beklenmedik bir hata oluştu.");
         } finally {
             setLoading(false);
             setRefreshing(false);
@@ -266,18 +266,18 @@ function AnalysisContent() {
 
     // Available transmission channels for filter
     const availableChannels = useMemo(() => {
-        if (!allFactorsList.length) return ["TÃœMÃœ"];
+        if (!allFactorsList.length) return ["TÜMÜ"];
         const channels = new Set<string>();
         allFactorsList.forEach(f => {
             const ch = f.channelTitleTr || f.channel;
             if (ch) channels.add(ch);
         });
-        return ["TÃœMÃœ", ...Array.from(channels)];
+        return ["TÜMÜ", ...Array.from(channels)];
     }, [allFactorsList]);
 
     const filteredFactors = useMemo(() => {
         if (!allFactorsList.length) return [];
-        if (selectedChannel === "TÃœMÃœ") return allFactorsList;
+        if (selectedChannel === "TÜMÜ") return allFactorsList;
         return allFactorsList.filter(f => (f.channelTitleTr || f.channel) === selectedChannel);
     }, [allFactorsList, selectedChannel]);
 
@@ -308,14 +308,14 @@ function AnalysisContent() {
                                 </span>
                                 <span className="inline-flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
                                     <ShieldCheck className="w-3.5 h-3.5" />
-                                    DoÄŸrulandÄ±
+                                    Doğrulandı
                                 </span>
                             </div>
                             <h1 className="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-1">
-                                Finansal AktarÄ±m KanallarÄ± ve Åirket Etkisi
+                                Finansal Aktarım Kanalları ve Şirket Etkisi
                             </h1>
                             <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">
-                                Ã‡ok kaynaklÄ± doÄŸrulanmÄ±ÅŸ veriler ve ekonomik nedensellik zinciriyle hazÄ±rlanan analiz.
+                                Çok kaynaklı doğrulanmış veriler ve ekonomik nedensellik zinciriyle hazırlanan analiz.
                             </p>
                         </div>
 
@@ -327,7 +327,7 @@ function AnalysisContent() {
                                     type="text"
                                     value={searchInput}
                                     onChange={(e) => setSearchInput(e.target.value)}
-                                    placeholder="BIST sembolÃ¼ ara (Ã¶rn: THYAO)..."
+                                    placeholder="BIST sembolü ara (örn: THYAO)..."
                                     className="pl-9 pr-4 py-2 text-xs md:text-sm rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all w-52 md:w-64"
                                 />
                             </form>
@@ -335,18 +335,18 @@ function AnalysisContent() {
                             <button
                                 onClick={() => loadAnalysis(symbol, true)}
                                 disabled={loading || refreshing}
-                                title="Verileri yeniden doÄŸrula ve analizi tazele"
+                                title="Verileri yeniden doğrula ve analizi tazele"
                                 className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all text-slate-700 dark:text-slate-200 disabled:opacity-50"
                             >
                                 <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? "animate-spin text-indigo-600" : ""}`} />
-                                <span className="hidden sm:inline">GÃ¼ncelle</span>
+                                <span className="hidden sm:inline">Güncelle</span>
                             </button>
                         </div>
                     </div>
 
                     {/* Quick Ticker Switcher Pills */}
                     <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
-                        <span className="text-[11px] font-semibold text-slate-400 shrink-0 mr-1 uppercase">HÄ±zlÄ± SeÃ§im:</span>
+                        <span className="text-[11px] font-semibold text-slate-400 shrink-0 mr-1 uppercase">Hızlı Seçim:</span>
                         {POPULAR_TICKERS.map((t) => {
                             const isSelected = symbol === t.symbol;
                             return (
@@ -372,7 +372,7 @@ function AnalysisContent() {
                     <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900 text-rose-800 dark:text-rose-300 flex items-start gap-3">
                         <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5 text-rose-600 dark:text-rose-400" />
                         <div className="flex-1 text-sm">
-                            <p className="font-semibold">Analiz YÃ¼klenirken Bir Hata OluÅŸtu</p>
+                            <p className="font-semibold">Analiz Yüklenirken Bir Hata Oluştu</p>
                             <p className="text-xs text-rose-700 dark:text-rose-400 mt-0.5">{error}</p>
                         </div>
                         <button
@@ -403,7 +403,7 @@ function AnalysisContent() {
                 {analysis && (
                     <div className="space-y-6">
 
-                        {/* COMPANY BANNER (ÃœST BÃ–LÃœM) - Price is calm, percentage change is NOT the focal point */}
+                        {/* COMPANY BANNER (ÜST BÖLÜM) - Price is calm, percentage change is NOT the focal point */}
                         <div className="p-5 md:p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div className="flex items-center gap-4">
                                 <AssetLogo symbol={analysis.symbol} className="w-13 h-13" />
@@ -415,21 +415,18 @@ function AnalysisContent() {
                                         <span className="px-2 py-0.5 rounded text-xs font-mono font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                                             {analysis.symbol}
                                         </span>
-                                        <span className="px-1.5 py-0.5 rounded text-[10px] font-bold text-[#ba68c8] bg-purple-50 dark:bg-purple-950/40 border border-purple-200/60 dark:border-purple-800/40">
-                                            GS
-                                        </span>
                                         <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
                                             {analysis.sector}
                                         </span>
                                     </div>
                                     <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 dark:text-slate-400 mt-1.5">
-                                        <span>Borsa Ä°stanbul</span>
-                                        <span>â€¢</span>
+                                        <span>Borsa İstanbul</span>
+                                        <span>•</span>
                                         <span>Veri Tarihi: {analysis.priceDate}</span>
                                         {analysis.snapshotAgeMinutes !== undefined && (
                                             <>
-                                                <span>â€¢</span>
-                                                <span>{analysis.snapshotAgeMinutes === 0 ? "GÃ¼ncel" : `${analysis.snapshotAgeMinutes} dk Ã¶nce`}</span>
+                                                <span>•</span>
+                                                <span>{analysis.snapshotAgeMinutes === 0 ? "Güncel" : `${analysis.snapshotAgeMinutes} dk önce`}</span>
                                             </>
                                         )}
                                     </div>
@@ -440,10 +437,10 @@ function AnalysisContent() {
                             <div className="flex items-center md:items-end justify-between md:flex-col gap-2 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100 dark:border-slate-800">
                                 <div className="text-left md:text-right">
                                     <div className="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-                                        {analysis.currentPrice !== null ? `â‚º${analysis.currentPrice.toLocaleString("tr-TR", { minimumFractionDigits: 2 })}` : "â€”"}
+                                        {analysis.currentPrice !== null ? `₺${analysis.currentPrice.toLocaleString("tr-TR", { minimumFractionDigits: 2 })}` : "—"}
                                     </div>
                                     <div className="text-[11px] text-slate-400 font-medium">
-                                        Son Ä°ÅŸlem FiyatÄ±
+                                        Son İşlem Fiyatı
                                     </div>
                                 </div>
                                 <ImpactBalanceBadge rating={analysis.impactBalance} />
@@ -458,7 +455,7 @@ function AnalysisContent() {
                             {/* ========================================================================= */}
                             <div className="lg:col-span-8 space-y-6">
 
-                                {/* SECTION 1: TEK GÃœÃ‡LÃœ ANA ANLATI (FÄ°NAÄ° YORUMU) */}
+                                {/* SECTION 1: TEK GÜÇLÜ ANA ANLATI (FİNAİ YORUMU) */}
                                 <div className="p-6 md:p-7 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-5">
                                     
                                     {/* Editorial Header */}
@@ -471,12 +468,12 @@ function AnalysisContent() {
                                                 </h3>
                                             </div>
                                             <span className="text-[11px] text-slate-400 font-medium">
-                                                Ekonomik Nedensellik & AktarÄ±m Analizi
+                                                Ekonomik Nedensellik & Aktarım Analizi
                                             </span>
                                         </div>
                                     </div>
 
-                                    {/* Net Finansal Etki Dengesi GerekÃ§esi Callout */}
+                                    {/* Net Finansal Etki Dengesi Gerekçesi Callout */}
                                     <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
                                         <div className="font-semibold text-slate-900 dark:text-slate-100 mb-1 flex items-center gap-1.5">
                                             <Scale className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
@@ -498,7 +495,7 @@ function AnalysisContent() {
 
                                         <div>
                                             <h4 className="font-semibold text-slate-900 dark:text-slate-100 text-xs uppercase tracking-wider mb-1 text-indigo-600 dark:text-indigo-400">
-                                                Finansal AktarÄ±m KanallarÄ±
+                                                Finansal Aktarım Kanalları
                                             </h4>
                                             <p>
                                                 {analysis.detailedCommentary}
@@ -506,12 +503,12 @@ function AnalysisContent() {
                                         </div>
                                     </div>
 
-                                    {/* Ã‡eliÅŸen ve Dengelenen GÃ¼Ã§ler (Piyasa Ä°kilemleri) */}
+                                    {/* Çelişen ve Dengelenen Güçler (Piyasa İkilemleri) */}
                                     {analysis.conflictingTensions && analysis.conflictingTensions.length > 0 && (
                                         <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2.5">
                                             <h4 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
                                                 <Scale className="w-3.5 h-3.5 text-amber-500" />
-                                                Piyasadaki Ã‡eliÅŸen ve Dengelenen GÃ¼Ã§ler
+                                                Piyasadaki Çelişen ve Dengelenen Güçler
                                             </h4>
                                             <div className="space-y-2">
                                                 {analysis.conflictingTensions.map((item, idx) => (
@@ -536,15 +533,15 @@ function AnalysisContent() {
 
                                 </div>
 
-                                {/* SECTION 2: ÅÄ°RKETÄ° ETKÄ°LEYEN FAKTÃ–RLER (COMPACT ACCORDION LIST) */}
+                                {/* SECTION 2: ŞİRKETİ ETKİLEYEN FAKTÖRLER (COMPACT ACCORDION LIST) */}
                                 <div className="p-6 md:p-7 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
                                         <div>
                                             <h3 className="font-bold text-base text-slate-900 dark:text-white">
-                                                Åirketi Etkileyen FaktÃ¶rler
+                                                Şirketi Etkileyen Faktörler
                                             </h3>
                                             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                                                DoÄŸrulanmÄ±ÅŸ gÃ¶stergeler ve aktarÄ±m kanallarÄ± (AyrÄ±ntÄ± iÃ§in faktÃ¶re tÄ±klayabilirsiniz).
+                                                Doğrulanmış göstergeler ve aktarım kanalları (Ayrıntı için faktöre tıklayabilirsiniz).
                                             </p>
                                         </div>
 
@@ -575,22 +572,22 @@ function AnalysisContent() {
                                             ))
                                         ) : (
                                             <div className="text-center py-6 text-xs text-slate-400 border border-dashed rounded-xl">
-                                                Bu aktarÄ±m kanalÄ±na ait doÄŸrulanmÄ±ÅŸ faktÃ¶r bulunamadÄ±.
+                                                Bu aktarım kanalına ait doğrulanmış faktör bulunamadı.
                                             </div>
                                         )}
                                     </div>
                                 </div>
 
-                                {/* SECTION 3: SAKÄ°N VE KOMPAKT SENARYO PATÄ°KALARI */}
+                                {/* SECTION 3: SAKİN VE KOMPAKT SENARYO PATİKALARI */}
                                 {analysis.scenarios && (
                                     <div className="p-6 md:p-7 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
                                         <div>
                                             <h3 className="font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
                                                 <Compass className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                                                OlasÄ± Senaryolar
+                                                Olası Senaryolar
                                             </h3>
                                             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                                                Fiyat tahmini deÄŸildir; koÅŸullar deÄŸiÅŸirse ÅŸirket Ã¼zerindeki etkinin nasÄ±l ÅŸekilleneceÄŸini gÃ¶sterir.
+                                                Fiyat tahmini değildir; koşullar değişirse şirket üzerindeki etkinin nasıl şekilleneceğini gösterir.
                                             </p>
                                         </div>
 
@@ -605,7 +602,7 @@ function AnalysisContent() {
                                             </div>
                                             <div className="p-3.5 rounded-xl bg-emerald-50/40 dark:bg-emerald-950/20 border border-emerald-200/50 dark:border-emerald-900/30 space-y-1">
                                                 <div className="text-[11px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wide">
-                                                    Ä°yimser KoÅŸul
+                                                    İyimser Koşul
                                                 </div>
                                                 <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                                                     {analysis.scenarios.optimistic}
@@ -613,7 +610,7 @@ function AnalysisContent() {
                                             </div>
                                             <div className="p-3.5 rounded-xl bg-rose-50/40 dark:bg-rose-950/20 border border-rose-200/50 dark:border-rose-900/30 space-y-1">
                                                 <div className="text-[11px] font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wide">
-                                                    Temkinli KoÅŸul
+                                                    Temkinli Koşul
                                                 </div>
                                                 <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
                                                     {analysis.scenarios.cautious}
@@ -621,12 +618,12 @@ function AnalysisContent() {
                                             </div>
                                         </div>
 
-                                        {/* Kritik Ä°zleme BaÅŸlÄ±klarÄ± */}
+                                        {/* Kritik İzleme Başlıkları */}
                                         {analysis.watchItems && analysis.watchItems.length > 0 && (
                                             <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
                                                 <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
                                                     <Eye className="w-3.5 h-3.5 text-blue-500" />
-                                                    Ã–nÃ¼mÃ¼zdeki DÃ¶nemde Ä°zlenmesi Gereken GeliÅŸmeler
+                                                    Önümüzdeki Dönemde İzlenmesi Gereken Gelişmeler
                                                 </h4>
                                                 <ul className="space-y-1.5">
                                                     {analysis.watchItems.map((item, idx) => (
@@ -644,7 +641,7 @@ function AnalysisContent() {
                                     </div>
                                 )}
 
-                                {/* SECTION 4: FINAI KAVRAM NOTU (Ã–ÄRENME KÃ–ÅESÄ°) */}
+                                {/* SECTION 4: FINAI KAVRAM NOTU (ÖĞRENME KÖŞESİ) */}
                                 {analysis.educationalTakeaway && (
                                     <div className="p-4 md:p-5 rounded-2xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100/80 dark:border-indigo-900/40 flex items-start gap-3">
                                         <div className="p-1.5 rounded-lg bg-indigo-600 text-white shrink-0 mt-0.5">
@@ -652,7 +649,7 @@ function AnalysisContent() {
                                         </div>
                                         <div className="space-y-0.5">
                                             <h4 className="font-bold text-xs uppercase tracking-wide text-indigo-900 dark:text-indigo-300">
-                                                Finansal OkuryazarlÄ±k Notu
+                                                Finansal Okuryazarlık Notu
                                             </h4>
                                             <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
                                                 {analysis.educationalTakeaway}
@@ -673,7 +670,7 @@ function AnalysisContent() {
                                         <div className="flex items-center gap-2">
                                             <TrendIcon className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                                             <span className="font-bold text-xs uppercase tracking-wide text-slate-900 dark:text-white">
-                                                Fiyat GrafiÄŸi
+                                                Fiyat Grafiği
                                             </span>
                                         </div>
                                         <span className="text-[11px] font-mono text-slate-400 font-semibold">
@@ -686,14 +683,14 @@ function AnalysisContent() {
                                     </div>
                                 </div>
 
-                                {/* RIGHT CARD 2: SEKTÃ–R VE PÄ°YASA KARÅILAÅTIRMASI */}
+                                {/* RIGHT CARD 2: SEKTÖR VE PİYASA KARŞILAŞTIRMASI */}
                                 {analysis.peerComparison && (
                                     <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-2">
                                                 <Building2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                                                 <h4 className="font-bold text-xs uppercase tracking-wide text-slate-900 dark:text-white">
-                                                    SektÃ¶r BaÄŸlamÄ±
+                                                    Sektör Bağlamı
                                                 </h4>
                                             </div>
                                             <span className="text-[11px] text-slate-400 font-medium">
@@ -715,10 +712,10 @@ function AnalysisContent() {
                                                         <span className="font-medium text-slate-600 dark:text-slate-400">{m.name}</span>
                                                         <div className="flex items-center gap-2 font-mono text-xs">
                                                             <span className="font-bold text-slate-900 dark:text-slate-100">
-                                                                {typeof m.companyValue === "number" ? m.companyValue.toFixed(2) : (m.companyValue || "â€”")}
+                                                                {typeof m.companyValue === "number" ? m.companyValue.toFixed(2) : (m.companyValue || "—")}
                                                             </span>
                                                             <span className="text-slate-400 text-[10px]">
-                                                                (SektÃ¶r: {typeof m.sectorAvg === "number" ? m.sectorAvg.toFixed(2) : (m.sectorAvg || "â€”")})
+                                                                (Sektör: {typeof m.sectorAvg === "number" ? m.sectorAvg.toFixed(2) : (m.sectorAvg || "—")})
                                                             </span>
                                                         </div>
                                                     </div>
@@ -728,13 +725,13 @@ function AnalysisContent() {
                                     </div>
                                 )}
 
-                                {/* RIGHT CARD 3: YAKLAÅAN Ã–NEMLÄ° GELÄ°ÅMELER */}
+                                {/* RIGHT CARD 3: YAKLAŞAN ÖNEMLİ GELİŞMELER */}
                                 {analysis.upcomingEvents && analysis.upcomingEvents.length > 0 && (
                                     <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
                                         <div className="flex items-center gap-2">
                                             <Calendar className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                                             <h4 className="font-bold text-xs uppercase tracking-wide text-slate-900 dark:text-white">
-                                                YaklaÅŸan GeliÅŸmeler
+                                                Yaklaşan Gelişmeler
                                             </h4>
                                         </div>
 
@@ -762,15 +759,15 @@ function AnalysisContent() {
                                     </div>
                                 )}
 
-                                {/* RIGHT CARD 4: DOÄRULANMIÅ KAYNAKLAR (COMPACT, TRANSPARENT PROVENANCE - NO NUMERIC SCORES) */}
+                                {/* RIGHT CARD 4: DOĞRULANMIŞ KAYNAKLAR (COMPACT, TRANSPARENT PROVENANCE - NO NUMERIC SCORES) */}
                                 <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs space-y-3 text-xs">
                                     <div className="flex items-center justify-between">
                                         <span className="font-semibold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
                                             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                                            <span>Veri KaynaÄŸÄ± & Ä°zlenebilirlik</span>
+                                            <span>Veri Kaynağı & İzlenebilirlik</span>
                                         </span>
                                         <span className="text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1 text-[11px]">
-                                            <CheckCircle2 className="w-3 h-3" /> DoÄŸrulandÄ±
+                                            <CheckCircle2 className="w-3 h-3" /> Doğrulandı
                                         </span>
                                     </div>
 
@@ -778,7 +775,7 @@ function AnalysisContent() {
                                     {analysis.standardProvenance && analysis.standardProvenance.length > 0 ? (
                                         <div className="space-y-2 pt-1 border-t border-slate-100 dark:border-slate-800">
                                             <div className="text-[10px] font-semibold text-slate-400 uppercase">
-                                                ResmÃ® Kaynak HiyerarÅŸisi:
+                                                Resmî Kaynak Hiyerarşisi:
                                             </div>
                                             <div className="space-y-1.5">
                                                 {analysis.standardProvenance.map((item, idx) => {
@@ -798,13 +795,13 @@ function AnalysisContent() {
                                                                     {item.sourceName}
                                                                 </span>
                                                                 <span className={`px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase tracking-wider border shrink-0 ${tierColor}`}>
-                                                                    {item.tier === 'PRIMARY_OFFICIAL' ? 'ResmÃ®' : (item.tier === 'SECONDARY_VERIFIED' ? 'DoÄŸrulanmÄ±ÅŸ' : 'Piyasa')}
+                                                                    {item.tier === 'PRIMARY_OFFICIAL' ? 'Resmî' : (item.tier === 'SECONDARY_VERIFIED' ? 'Doğrulanmış' : 'Piyasa')}
                                                                 </span>
                                                             </div>
                                                             <div className="flex items-center justify-between text-[10px] text-slate-400">
                                                                 <span className="truncate">{item.provider}</span>
                                                                 <span className="font-mono text-[9px] text-emerald-600 dark:text-emerald-400 shrink-0">
-                                                                    {item.sourceStatus === 'VERIFIED' ? 'âœ“ DoÄŸrulandÄ±' : item.sourceStatus}
+                                                                    {item.sourceStatus === 'VERIFIED' ? '✓ Doğrulandı' : item.sourceStatus}
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -815,7 +812,7 @@ function AnalysisContent() {
                                     ) : (
                                         <div className="pt-1.5 border-t border-slate-100 dark:border-slate-800">
                                             <div className="text-[10px] font-semibold text-slate-400 uppercase mb-1">
-                                                KullanÄ±lan Veri KaynaklarÄ±:
+                                                Kullanılan Veri Kaynakları:
                                             </div>
                                             <div className="flex flex-wrap gap-1">
                                                 {genuineSources.length > 0 ? (
@@ -829,7 +826,7 @@ function AnalysisContent() {
                                                     ))
                                                 ) : (
                                                     <span className="text-[11px] text-slate-400 italic">
-                                                        Kaynak bilgisi mevcut deÄŸil
+                                                        Kaynak bilgisi mevcut değil
                                                     </span>
                                                 )}
                                             </div>
@@ -854,7 +851,7 @@ export default function AnalysisPage() {
             <div className="min-h-screen flex items-center justify-center bg-slate-50/50 dark:bg-slate-950">
                 <div className="flex items-center gap-2 text-sm text-slate-500 font-medium">
                     <Loader2 className="w-4 h-4 animate-spin text-indigo-600" />
-                    FinAi Analiz ModÃ¼lÃ¼ YÃ¼kleniyor...
+                    FinAi Analiz Modülü Yükleniyor...
                 </div>
             </div>
         }>
