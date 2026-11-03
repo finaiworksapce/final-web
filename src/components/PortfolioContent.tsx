@@ -2480,26 +2480,34 @@ export default function PortfolioPage() {
                 return (
                     <div className="bg-white border border-slate-100 rounded-3xl p-4 sm:p-6 shadow-xl shadow-[#00008B]/5 w-full overflow-x-hidden">
                         {/* ÜST BİLGİ VE ZAMAN PERİYODU SEÇİCİLERİ */}
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 mb-4 gap-3">
-                            <div className="flex items-center gap-2">
-                                <Activity className="w-5 h-5 text-[#00008B]" />
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-5 mb-5 border-b border-slate-100 gap-4">
+                            <div className="flex items-center gap-3">
+                                <img
+                                    src="/logo.png"
+                                    alt="FinAi"
+                                    className="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0"
+                                />
                                 <div>
-                                    <h3 className="text-sm font-black text-[#00008B] uppercase tracking-wider">Fiyat Analizi & Trend Bandı</h3>
-                                    <p className="text-[10px] text-slate-400 font-bold">Zaman Periyotlarına Göre Varlığa Özel Destek, Direnç & Maliyet Analizi</p>
+                                    <h3 className="text-base sm:text-lg font-black text-[#00008B] uppercase tracking-tight leading-tight">
+                                        FİYAT ANALİZİ & TREND BANDI
+                                    </h3>
+                                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5">
+                                        Zaman Periyotlarına Göre Varlığa Özel Destek, Direnç & Maliyet Analizi
+                                    </p>
                                 </div>
                             </div>
 
-                            {/* ZAMAN PERİYODU PİLL SEÇİCİSİ (1H, 1A, 3A, 6A, 1Y) */}
-                            <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-xl border border-slate-100 self-start sm:self-auto">
+                            {/* ZAMAN PERİYODU PİLL SEÇİCİSİ (1H, 1A, 3A, 6A, 1Y (52H)) */}
+                            <div className="flex items-center gap-1 bg-white p-1.5 rounded-full border border-slate-200/70 shadow-2xs self-start sm:self-auto">
                                 {(['1W', '1M', '3M', '6M', '1Y'] as const).map(tf => (
                                     <button
                                         key={tf}
                                         onClick={(e) => { e.stopPropagation(); setExtremesTimeframe(tf); }}
                                         className={cn(
-                                            "px-2.5 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all",
+                                            "px-3 sm:px-3.5 py-1.5 text-[11px] sm:text-xs font-extrabold uppercase tracking-wider rounded-full transition-all",
                                             extremesTimeframe === tf 
                                                 ? "bg-[#00008B] text-white shadow-sm" 
-                                                : "text-slate-500 hover:text-[#00008B] hover:bg-slate-100"
+                                                : "text-slate-600 hover:text-[#00008B] hover:bg-slate-50"
                                         )}
                                     >
                                         {tf === '1W' ? '1H' : tf === '1M' ? '1A' : tf === '3M' ? '3A' : tf === '6M' ? '6A' : '1Y (52H)'}
@@ -2509,35 +2517,15 @@ export default function PortfolioPage() {
                         </div>
 
                         {/* LİSTELEME */}
-                        <div className={cn("space-y-4 w-full overflow-x-hidden", isFocused ? "max-h-[800px] overflow-y-auto pr-1" : "")}>
-                            {/* CANLI DALGA ANİMASYONU STİL TANIMI (PREFERS-REDUCED-MOTION UYUMLU) */}
-                            <style>{`
-                                @keyframes navyPulseRing {
-                                    0% { transform: scale(1); opacity: 0.8; }
-                                    100% { transform: scale(2.5); opacity: 0; }
-                                }
-                                .animate-navy-pulse-1 {
-                                    animation: navyPulseRing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-                                }
-                                .animate-navy-pulse-2 {
-                                    animation: navyPulseRing 2s cubic-bezier(0, 0, 0.2, 1) 1s infinite;
-                                }
-                                @media (prefers-reduced-motion: reduce) {
-                                    .animate-navy-pulse-1, .animate-navy-pulse-2 {
-                                        animation: none !important;
-                                        display: none !important;
-                                    }
-                                }
-                            `}</style>
-
+                        <div className={cn("space-y-6 w-full overflow-x-hidden", isFocused ? "max-h-[850px] overflow-y-auto pr-1" : "")}>
                             {extremesEntries.length === 0 ? (
                                 <p className="text-xs text-slate-400 py-6 text-center font-medium">Analiz verisi yükleniyor...</p>
                             ) : (() => {
                                 const itemsToDisplay = isFocused ? extremesEntries : extremesEntries.slice(0, 2);
 
                                 return (
-                                    <div className="space-y-4 w-full overflow-x-hidden">
-                                        {itemsToDisplay.map(([sym, ext]) => {
+                                    <div className="space-y-8 w-full overflow-x-hidden">
+                                        {itemsToDisplay.map(([sym, ext], itemIdx) => {
                                             // Dinamik zaman periyodu marjına göre Düşük - Yüksek hesaplama
                                             let marginMultiplier = 1;
                                             if (extremesTimeframe === '1W') marginMultiplier = 0.08;
@@ -2565,202 +2553,585 @@ export default function PortfolioPage() {
                                             const costPos = rawCostPos !== null ? Math.min(100, Math.max(0, rawCostPos)) : null;
 
                                             // Kâr / Zarar & Bölge Hesaplamaları
-                                            const isProfit = hasCost ? currentPrice >= userCost! : false;
+                                            const isProfit = hasCost ? currentPrice >= userCost! : true;
                                             const pctDiff = hasCost && userCost! > 0 ? ((currentPrice - userCost!) / userCost!) * 100 : 0;
-                                            const formattedPctDiff = (isProfit ? "+" : "") + pctDiff.toFixed(1).replace('.', ',') + "% " + (isProfit ? "kâr" : "zarar");
+                                            const absPctStr = Math.abs(pctDiff).toFixed(1).replace('.', ',');
+                                            const priceDiff = hasCost ? currentPrice - userCost! : 0;
 
                                             const regionLeft = hasCost && costPos !== null ? Math.min(pos, costPos) : 0;
                                             const regionWidth = hasCost && costPos !== null ? Math.abs(pos - costPos) : 0;
-                                            const showRegionBadge = hasCost && regionWidth >= 12;
                                             const regionCenterPos = regionLeft + (regionWidth / 2);
 
+                                            // Periyot etiketleri
+                                            const tfShortLabel = extremesTimeframe === '1W' ? '1H' : extremesTimeframe === '1M' ? '1A' : extremesTimeframe === '3M' ? '3A' : extremesTimeframe === '6M' ? '6A' : '52H';
+                                            const tfHeaderLabel = extremesTimeframe === '1W' ? '1 HAFTALIK' : extremesTimeframe === '1M' ? '1 AYLIK' : extremesTimeframe === '3M' ? '3 AYLIK' : extremesTimeframe === '6M' ? '6 AYLIK' : '52 HAFTALIK';
+                                            const tfLabel = extremesTimeframe === '1W' ? '1 Haftalık' : extremesTimeframe === '1M' ? '1 Aylık' : extremesTimeframe === '3M' ? '3 Aylık' : extremesTimeframe === '6M' ? '6 Aylık' : '52 Haftalık (1 Yıl)';
+
+                                            // Destek ve Direnç Mesafeleri
+                                            const distFromLow = Math.max(0, currentPrice - low);
+                                            const pctFromLow = low > 0 ? ((currentPrice - low) / low) * 100 : 0;
+                                            const pctToHigh = currentPrice > 0 ? Math.max(0, ((high - currentPrice) / currentPrice) * 100) : 0;
+
+                                            const currFmt = formatCurrency(currentPrice);
+                                            const lowFmt = formatCurrency(low);
+                                            const highFmt = formatCurrency(high);
+                                            const costFmt = hasCost ? formatCurrency(userCost!) : '—';
+
+                                            const isBistStock = !['ALTIN', 'GUMUS', 'USD', 'EUR', 'NAKİT', 'NAKIT', 'TRY', 'TL'].includes(sym.toUpperCase());
+
                                             return (
-                                                <div key={sym} className="space-y-3 p-4 bg-slate-50/70 rounded-2xl border border-slate-100 hover:bg-blue-50/30 transition-all w-full overflow-x-hidden">
-                                                    {/* ÜST BAŞLIK VE SON FİYAT */}
-                                                    <div className="flex justify-between items-center text-xs">
-                                                        <div className="flex items-center gap-2.5">
-                                                            <StockLogo symbol={sym} className="w-8 h-8 ring-1 ring-slate-200/60 shadow-xs shrink-0" />
-                                                            <div>
-                                                                <span className="text-[#00008B] font-black text-sm block leading-tight">{sym}</span>
-                                                                <span className="text-[10px] text-slate-400 font-medium truncate block max-w-[150px] sm:max-w-xs">
-                                                                    {getAssetName(sym) || "Hisse Senedi"}
+                                                <div
+                                                    key={sym}
+                                                    className={cn(
+                                                        "grid grid-cols-1 lg:grid-cols-2 gap-4 w-full",
+                                                        itemIdx < itemsToDisplay.length - 1 ? "pb-8 border-b border-slate-100" : ""
+                                                    )}
+                                                >
+                                                    {/* SOL SÜTUN: VARLIK ÖZET KARTI + DESTEK-DİRENÇ CETVELİ */}
+                                                    <div className="flex flex-col gap-4">
+                                                        {/* KART 1 (SOL ÜST): VARLIK BİLGİSİ VE 3'LÜ METRİK KUTULARI */}
+                                                        <div className="bg-[#f8fafc] border border-slate-200/60 rounded-3xl p-4 sm:p-5 flex flex-col justify-between">
+                                                            {/* Üst Başlık ve Durum Rozeti */}
+                                                            <div className="flex flex-wrap items-center justify-between gap-3">
+                                                                <div className="flex items-center gap-3 min-w-0">
+                                                                    <div
+                                                                        className={cn(
+                                                                            "w-11 h-11 rounded-full bg-white flex items-center justify-center shrink-0 ring-2 shadow-2xs",
+                                                                            hasCost
+                                                                                ? isProfit
+                                                                                    ? "ring-emerald-200"
+                                                                                    : "ring-rose-200"
+                                                                                : "ring-blue-200"
+                                                                        )}
+                                                                    >
+                                                                        <StockLogo symbol={sym} className="w-9 h-9" />
+                                                                    </div>
+                                                                    <div className="min-w-0">
+                                                                        <span className="text-slate-900 font-black text-lg sm:text-xl block leading-tight tracking-tight">
+                                                                            {sym}
+                                                                        </span>
+                                                                        <span className="text-xs text-slate-500 font-medium truncate block max-w-[200px] sm:max-w-[260px]">
+                                                                            {getAssetName(sym) || "Hisse Senedi"}{isBistStock ? " • BIST Yıldız Pazar" : ""}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+
+                                                                {/* Sağ Üst Durum Rozeti */}
+                                                                {hasCost ? (
+                                                                    isProfit ? (
+                                                                        <div className="bg-emerald-50 border border-emerald-200/80 text-emerald-800 px-3.5 py-1.5 rounded-2xl inline-flex items-center gap-2 text-xs font-bold shrink-0">
+                                                                            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                                                                            <span>Yükseliş Trendinde • Kârda</span>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div className="bg-rose-50 border border-rose-200/80 text-rose-800 px-3.5 py-1.5 rounded-2xl inline-flex items-center gap-2 text-xs font-bold shrink-0">
+                                                                            <span className="w-2 h-2 rounded-full bg-rose-600 shrink-0" />
+                                                                            <span>Destek Bölgesinde • İskontolu</span>
+                                                                        </div>
+                                                                    )
+                                                                ) : (
+                                                                    <div className="bg-blue-50 border border-blue-200/80 text-[#00008B] px-3.5 py-1.5 rounded-2xl inline-flex items-center gap-2 text-xs font-bold shrink-0">
+                                                                        <span className="w-2 h-2 rounded-full bg-[#00008B] shrink-0" />
+                                                                        <span>Piyasa Takibinde • Canlı</span>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+
+                                                            {/* 3'lü Metrik Kutuları */}
+                                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 mt-4">
+                                                                {/* Kutu 1: Canlı Fiyat */}
+                                                                <div
+                                                                    className={cn(
+                                                                        "bg-white rounded-2xl p-3 sm:p-3.5 border shadow-2xs",
+                                                                        hasCost
+                                                                            ? isProfit
+                                                                                ? "border-emerald-200/90"
+                                                                                : "border-rose-200/90"
+                                                                            : "border-blue-200/90"
+                                                                    )}
+                                                                >
+                                                                    <div className="flex items-center gap-1.5">
+                                                                        <span
+                                                                            className={cn(
+                                                                                "w-1.5 h-1.5 rounded-full shrink-0",
+                                                                                hasCost
+                                                                                    ? isProfit
+                                                                                        ? "bg-emerald-500"
+                                                                                        : "bg-rose-600"
+                                                                                    : "bg-[#00008B]"
+                                                                            )}
+                                                                        />
+                                                                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                                                            CANLI FİYAT
+                                                                        </span>
+                                                                    </div>
+                                                                    <div
+                                                                        className={cn(
+                                                                            "text-base sm:text-lg font-black mt-1 leading-tight",
+                                                                            hasCost
+                                                                                ? isProfit
+                                                                                    ? "text-emerald-600"
+                                                                                    : "text-rose-600"
+                                                                                : "text-[#00008B]"
+                                                                        )}
+                                                                    >
+                                                                        {currFmt}
+                                                                    </div>
+                                                                    <div
+                                                                        className={cn(
+                                                                            "text-[10px] font-semibold mt-0.5",
+                                                                            hasCost
+                                                                                ? isProfit
+                                                                                    ? "text-emerald-600/85"
+                                                                                    : "text-rose-600/85"
+                                                                                : "text-slate-500"
+                                                                        )}
+                                                                    >
+                                                                        Anlık Piyasa Değeri
+                                                                    </div>
+                                                                </div>
+
+                                                                {/* Kutu 2: Ortalama Maliyet */}
+                                                                <div className="bg-white border border-slate-200/70 rounded-2xl p-3 sm:p-3.5 shadow-2xs">
+                                                                    <div className="flex items-center gap-1.5">
+                                                                        <span className="w-1.5 h-1.5 rounded-full bg-[#00008B] shrink-0" />
+                                                                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                                                            ORTALAMA MALİYET
+                                                                        </span>
+                                                                    </div>
+                                                                    <div className="text-base sm:text-lg font-black text-[#00008B] mt-1 leading-tight">
+                                                                        {costFmt}
+                                                                    </div>
+                                                                    <div className="text-[10px] font-medium text-slate-500 mt-0.5">
+                                                                        Portföy Alış Ortalamanız
+                                                                    </div>
+                                                                </div>
+
+                                                                {/* Kutu 3: Maliyet Farkı / Net Getiri Farkı */}
+                                                                <div className="bg-slate-100/80 border border-slate-200/60 rounded-2xl p-3 sm:p-3.5">
+                                                                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                                                        {hasCost && isProfit ? "NET GETİRİ FARKI" : "MALİYET FARKI"}
+                                                                    </div>
+                                                                    <div
+                                                                        className={cn(
+                                                                            "text-base sm:text-lg font-black mt-1 leading-tight",
+                                                                            hasCost
+                                                                                ? isProfit
+                                                                                    ? "text-emerald-600"
+                                                                                    : "text-rose-600"
+                                                                                : "text-slate-500"
+                                                                        )}
+                                                                    >
+                                                                        {hasCost ? `${isProfit ? "+" : "-"}%${absPctStr}` : "—"}
+                                                                    </div>
+                                                                    <div
+                                                                        className={cn(
+                                                                            "text-[10px] font-semibold mt-0.5",
+                                                                            hasCost && isProfit ? "text-emerald-600" : "text-slate-600"
+                                                                        )}
+                                                                    >
+                                                                        {hasCost
+                                                                            ? `Hisse Başı ${priceDiff >= 0 ? "+" : "-"}${formatCurrency(Math.abs(priceDiff))}`
+                                                                            : "Maliyet verisi yok"}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* KART 2 (SOL ALT): DESTEK – DİRENÇ CETVELİ */}
+                                                        <div className="bg-[#f8fafc] border border-slate-200/60 rounded-3xl p-4 sm:p-5 flex flex-col justify-between flex-1">
+                                                            <h4 className="text-xs font-black text-[#00008B] uppercase tracking-wider leading-snug">
+                                                                {tfHeaderLabel} FİYAT KONUMU (DESTEK – DİRENÇ CETVELİ)
+                                                            </h4>
+
+                                                            {/* Cetvel ve İşaretçiler Alanı */}
+                                                            <div className="flex items-center gap-2 sm:gap-3 my-2">
+                                                                {/* Sol İkon: Destek Kalkanı */}
+                                                                <div className="w-8 h-8 rounded-xl bg-white border border-slate-200/80 shadow-2xs flex items-center justify-center text-[#00008B] shrink-0">
+                                                                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                                                    </svg>
+                                                                </div>
+
+                                                                {/* Orta Cetvel Çubuğu */}
+                                                                <div className="flex-1 relative pt-[58px] pb-[54px] select-none">
+                                                                    {/* Gri Zemin Cetvel Çubuğu + Noktalar */}
+                                                                    <div className="h-4 bg-slate-200/85 rounded-full w-full relative flex items-center justify-between px-3 overflow-hidden">
+                                                                        {Array.from({ length: 15 }).map((_, dotIdx) => (
+                                                                            <span
+                                                                                key={dotIdx}
+                                                                                className="w-1 h-1 rounded-full bg-slate-400/70 shrink-0"
+                                                                            />
+                                                                        ))}
+                                                                    </div>
+
+                                                                    {/* Anlık Fiyat ile Maliyet Arasındaki Gradyan Dolgu */}
+                                                                    {hasCost && costPos !== null && (
+                                                                        <>
+                                                                            <div
+                                                                                className="absolute top-[58px] h-4 rounded-full z-10 transition-all duration-500"
+                                                                                style={{
+                                                                                    left: `${regionLeft}%`,
+                                                                                    width: `${regionWidth}%`,
+                                                                                    background: pos <= costPos
+                                                                                        ? "linear-gradient(90deg, #e11d48 0%, #00008B 100%)"
+                                                                                        : "linear-gradient(90deg, #00008B 0%, #10b981 100%)"
+                                                                                }}
+                                                                            />
+
+                                                                            {/* Aradaki İskonto / Kâr Marjı Rozeti */}
+                                                                            {regionWidth >= 6 && (
+                                                                                <div
+                                                                                    className={cn(
+                                                                                        "absolute top-[20px] -translate-x-1/2 rounded-full px-2.5 py-0.5 text-[10px] font-bold border shadow-2xs z-10 whitespace-nowrap pointer-events-none",
+                                                                                        isProfit
+                                                                                            ? "bg-emerald-50 border-emerald-200/90 text-emerald-700"
+                                                                                            : "bg-rose-50 border-rose-200/90 text-rose-700"
+                                                                                    )}
+                                                                                    style={{ left: `${regionCenterPos}%` }}
+                                                                                >
+                                                                                    {isProfit ? `+%${absPctStr} Kâr Marjı` : `-%${absPctStr} İskonto`}
+                                                                                </div>
+                                                                            )}
+                                                                        </>
+                                                                    )}
+
+                                                                    {/* 1) CANLI FİYAT İŞARETÇİSİ (ÜSTTE) */}
+                                                                    <div
+                                                                        className="absolute top-[66px] -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none"
+                                                                        style={{ left: `${pos}%` }}
+                                                                    >
+                                                                        <div
+                                                                            className={cn(
+                                                                                "w-5 h-5 rounded-full border-[3px] border-white shadow-md",
+                                                                                hasCost && !isProfit ? "bg-rose-600" : "bg-emerald-500"
+                                                                            )}
+                                                                        />
+                                                                    </div>
+
+                                                                    {/* Canlı Fiyat Dikey Bağlantı Çizgisi */}
+                                                                    <div
+                                                                        className={cn(
+                                                                            "absolute top-[34px] h-[24px] w-[2px] -translate-x-1/2 z-20 pointer-events-none",
+                                                                            hasCost && !isProfit ? "bg-rose-500" : "bg-emerald-500"
+                                                                        )}
+                                                                        style={{ left: `${pos}%` }}
+                                                                    />
+
+                                                                    {/* Canlı Fiyat Beyaz Etiketi */}
+                                                                    <div
+                                                                        className="absolute top-[2px] z-30 pointer-events-none"
+                                                                        style={{
+                                                                            left: `${pos}%`,
+                                                                            transform: pos < 18 ? 'translateX(0%)' : pos > 82 ? 'translateX(-100%)' : 'translateX(-50%)'
+                                                                        }}
+                                                                    >
+                                                                        <div
+                                                                            className={cn(
+                                                                                "bg-white rounded-xl px-3 py-1.5 shadow-md border inline-flex items-center gap-1.5 whitespace-nowrap",
+                                                                                hasCost && !isProfit ? "border-rose-200" : "border-emerald-200"
+                                                                            )}
+                                                                        >
+                                                                            <span
+                                                                                className={cn(
+                                                                                    "w-2 h-2 rounded-full shrink-0",
+                                                                                    hasCost && !isProfit ? "bg-rose-600" : "bg-emerald-500"
+                                                                                )}
+                                                                            />
+                                                                            <span className="text-[11px] font-bold text-slate-800">Canlı:</span>
+                                                                            <span
+                                                                                className={cn(
+                                                                                    "text-[11px] font-black",
+                                                                                    hasCost && !isProfit ? "text-rose-600" : "text-emerald-600"
+                                                                                )}
+                                                                            >
+                                                                                {currFmt}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {/* 2) MALİYET İŞARETÇİSİ (ALTTA) */}
+                                                                    {hasCost && costPos !== null && (
+                                                                        <>
+                                                                            {/* Çubuk Üzerindeki Dikey Kapsül İşaretçi */}
+                                                                            <div
+                                                                                className="absolute top-[66px] -translate-x-1/2 -translate-y-1/2 w-3 h-7 rounded-full bg-white border-[3px] border-[#00008B] shadow-md z-30 pointer-events-none"
+                                                                                style={{ left: `${costPos}%` }}
+                                                                            />
+
+                                                                            {/* Kapsülden Aşağı İnen Bağlantı Çizgisi */}
+                                                                            <div
+                                                                                className="absolute top-[78px] h-[12px] w-[2px] bg-[#00008B] -translate-x-1/2 z-20 pointer-events-none"
+                                                                                style={{ left: `${costPos}%` }}
+                                                                            />
+
+                                                                            {/* Sizin Maliyetiniz Lacivert Etiketi */}
+                                                                            <div
+                                                                                className="absolute top-[90px] z-30 pointer-events-none"
+                                                                                style={{
+                                                                                    left: `${costPos}%`,
+                                                                                    transform: costPos < 22 ? 'translateX(0%)' : costPos > 78 ? 'translateX(-100%)' : 'translateX(-50%)'
+                                                                                }}
+                                                                            >
+                                                                                <div className="bg-[#00008B] text-white rounded-xl px-3.5 py-1.5 shadow-md text-[11px] font-bold whitespace-nowrap inline-flex items-center gap-1">
+                                                                                    <span>Sizin Maliyetiniz:</span>
+                                                                                    <span className="font-black">{costFmt}</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </>
+                                                                    )}
+                                                                </div>
+
+                                                                {/* Sağ İkon: Direnç Hedefi */}
+                                                                <div className="w-8 h-8 rounded-xl bg-white border border-slate-200/80 shadow-2xs flex items-center justify-center text-[#00008B] shrink-0">
+                                                                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                                        <circle cx="12" cy="12" r="9" />
+                                                                        <circle cx="12" cy="12" r="5" />
+                                                                        <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+
+                                                            {/* Alt Destek ve Direnç Etiketleri */}
+                                                            <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-bold text-slate-500 uppercase tracking-wide pt-1">
+                                                                <span>
+                                                                    DESTEK ({tfShortLabel} DİP):{" "}
+                                                                    <strong className="font-black text-[#00008B]">{lowFmt}</strong>
+                                                                </span>
+                                                                <span>
+                                                                    DİRENÇ ({tfShortLabel} ZİRVE):{" "}
+                                                                    <strong className="font-black text-[#00008B]">{highFmt}</strong>
                                                                 </span>
                                                             </div>
                                                         </div>
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="text-[#00008B] bg-blue-50 border border-blue-200/60 px-2.5 py-1 rounded-xl text-xs font-black">
-                                                                Canlı Fiyat: {formatCurrency(currentPrice)}
-                                                            </span>
-                                                        </div>
                                                     </div>
 
-                                                    {/* FİYAT ANALİZİ & TREND BANDI ÇUBUĞU KART ALANI */}
-                                                    <div className="relative pt-[60px] pb-[95px] my-1 select-none w-full px-2 sm:px-4 overflow-x-hidden">
-                                                        {/* ANLIK FİYAT İLE MALİYET ARASINDAKİ BÖLGE (KÂR / ZARAR GÖSTERGESİ) */}
-                                                        {hasCost && costPos !== null && (
-                                                            <>
-                                                                {/* Çubuk içi dolgu */}
-                                                                <div 
-                                                                    className="absolute top-[60px] h-3 z-10 transition-all duration-500 rounded-full overflow-hidden"
-                                                                    style={{
-                                                                        left: `${regionLeft}%`,
-                                                                        width: `${regionWidth}%`,
-                                                                        ...(isProfit 
-                                                                            ? { backgroundColor: '#00008B' }
-                                                                            : { background: 'repeating-linear-gradient(45deg, #00008B, #00008B 3px, #ffffff 3px, #ffffff 6px)' }
-                                                                        )
-                                                                    }}
-                                                                />
-
-                                                                {/* İki işaret arasındaki Kâr / Zarar Pill Kutusu (İki işaret çok yakın değilse gösterilir) */}
-                                                                {showRegionBadge && (
-                                                                    <div 
-                                                                        className="absolute top-[30px] -translate-x-1/2 bg-white border border-[#00008B] rounded-full px-2.5 py-0.5 shadow-xs z-20 pointer-events-none"
-                                                                        style={{ left: `${regionCenterPos}%` }}
-                                                                    >
-                                                                        <span className="font-bold text-[#00008B] text-[9px] sm:text-[11px] whitespace-nowrap">
-                                                                            {formattedPctDiff}
-                                                                        </span>
-                                                                    </div>
-                                                                )}
-                                                            </>
-                                                        )}
-
-                                                        {/* GRİ ZEMİN ÇUBUĞU (BAR TRACK) */}
-                                                        <div className="h-3 bg-slate-200/80 rounded-full w-full relative overflow-hidden" />
-
-                                                        {/* 1) ANLIK FİYAT İŞARETİ (ÇUBUĞUN ÜSTÜNDE) */}
-                                                        <div 
-                                                            className="absolute top-[60px] -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none"
-                                                            style={{ left: `${pos}%` }}
-                                                            aria-label={`Anlık fiyat ${formatCurrency(currentPrice)}`}
+                                                    {/* SAĞ SÜTUN: FİNAİ YAPAY ZEKA İÇGÖRÜSÜ + TEK BAKIŞTA POZİSYON ÖZETİ */}
+                                                    <div className="flex flex-col gap-4">
+                                                        {/* KART 3 (SAĞ ÜST): FİNAİ YAPAY ZEKA İÇGÖRÜSÜ */}
+                                                        <div
+                                                            className={cn(
+                                                                "rounded-3xl p-4 sm:p-5 border flex flex-col justify-between",
+                                                                hasCost
+                                                                    ? isProfit
+                                                                        ? "bg-gradient-to-br from-slate-50/90 via-emerald-50/20 to-emerald-50/50 border-emerald-100/80"
+                                                                        : "bg-gradient-to-br from-slate-50/90 via-rose-50/20 to-rose-50/50 border-rose-100/80"
+                                                                    : "bg-gradient-to-br from-slate-50/90 via-blue-50/20 to-blue-50/50 border-blue-100/80"
+                                                            )}
                                                         >
-                                                            {/* Çubuk üstündeki beyaz/lacivert nokta */}
-                                                            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white border-[3px] sm:border-[4px] border-[#00008B] shadow-md flex items-center justify-center relative">
-                                                                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#00008B] z-10" />
-                                                                {/* Canlı Dalga Animasyonu (Pulse Rings) */}
-                                                                <div className="absolute inset-0 rounded-full border-2 border-[#00008B] bg-transparent animate-navy-pulse-1 pointer-events-none" />
-                                                                <div className="absolute inset-0 rounded-full border-2 border-[#00008B] bg-transparent animate-navy-pulse-2 pointer-events-none" />
-                                                            </div>
-                                                        </div>
-
-                                                        {/* Dikey çizgi (Etiketten çubuğa inen) */}
-                                                        <div 
-                                                            className="absolute top-[28px] w-[3px] bg-[#00008B] -translate-x-1/2 z-20 pointer-events-none"
-                                                            style={{ left: `${pos}%`, height: '32px' }}
-                                                        />
-
-                                                        {/* Anlık Fiyat Etiketi (Çubuğun üstünde) */}
-                                                        <div 
-                                                            className="absolute top-0 z-30 flex flex-col items-center pointer-events-none"
-                                                            style={{
-                                                                left: `${pos}%`,
-                                                                transform: pos < 18 ? 'translateX(0%)' : pos > 82 ? 'translateX(-100%)' : 'translateX(-50%)'
-                                                            }}
-                                                        >
-                                                            <div className="h-[24px] sm:h-[28px] px-2.5 sm:px-3 bg-[#00008B] rounded-[6px] text-white font-bold text-[10px] sm:text-xs flex items-center justify-center shadow-md whitespace-nowrap">
-                                                                Canlı {formatCurrency(currentPrice)}
-                                                            </div>
-                                                        </div>
-
-                                                        {/* 2) MALİYET İŞARETİ (ÇUBUĞUN ALTINDA) */}
-                                                        {hasCost && costPos !== null && (
-                                                            <>
-                                                                {/* Çubuk üzerindeki lacivert elmas */}
-                                                                <div 
-                                                                    className="absolute top-[60px] -translate-x-1/2 -translate-y-1/2 w-[14px] h-[14px] sm:w-[18px] sm:h-[18px] bg-[#00008B] rotate-45 z-30 pointer-events-none"
-                                                                    style={{ left: `${costPos}%` }}
-                                                                    aria-label={`Maliyet ${formatCurrency(userCost!)}`}
-                                                                />
-
-                                                                {/* Elmastan aşağı inen dikey çizgi (DÜŞÜK/YÜKSEK yazısının arkasında z-0 kalacak şekilde) */}
-                                                                <div 
-                                                                    className="absolute top-[60px] w-[3px] bg-[#00008B] -translate-x-1/2 z-0 pointer-events-none"
-                                                                    style={{ left: `${costPos}%`, height: '52px' }}
-                                                                />
-
-                                                                {/* ₺ Madeni Para + Maliyetiniz Metni (DÜŞÜK/YÜKSEK yazısının altında) */}
-                                                                <div 
-                                                                    className="absolute top-[108px] z-20 flex flex-col items-center pointer-events-none"
-                                                                    style={{
-                                                                        left: `${costPos}%`,
-                                                                        transform: costPos < 18 ? 'translateX(0%)' : costPos > 82 ? 'translateX(-100%)' : 'translateX(-50%)'
-                                                                    }}
-                                                                >
-                                                                    {/* 56px Madeni Para */}
-                                                                    <div className="w-[44px] h-[44px] sm:w-[56px] sm:h-[56px] rounded-full bg-white border-[3px] sm:border-[4px] border-[#00008B] shadow-md flex items-center justify-center relative">
-                                                                        <svg className="absolute inset-0 w-full h-full p-1" viewBox="0 0 56 56">
-                                                                            <circle cx="28" cy="28" r="23" fill="none" stroke="#00008B" strokeWidth="1" strokeDasharray="3 3" />
-                                                                        </svg>
-                                                                        <span className="font-black text-[#00008B] text-[20px] sm:text-[26px] leading-none z-10">₺</span>
-                                                                    </div>
-
-                                                                    {/* Maliyet metni */}
-                                                                    <span className="font-bold text-[#00008B] text-[10px] sm:text-xs whitespace-nowrap mt-1">
-                                                                        Maliyetiniz {formatCurrency(userCost!)}
+                                                            <div>
+                                                                {/* Üst Rozet */}
+                                                                <div className="inline-flex items-center gap-1.5 bg-white border border-slate-200/80 rounded-full px-3.5 py-1 shadow-2xs mb-3.5">
+                                                                    <img
+                                                                        src="/logo.png"
+                                                                        alt="FinAi"
+                                                                        className="w-3.5 h-3.5 object-contain shrink-0"
+                                                                    />
+                                                                    <span className="text-xs font-extrabold text-[#00008B]">
+                                                                        FinAi Yapay Zeka İçgörüsü
                                                                     </span>
                                                                 </div>
-                                                            </>
-                                                        )}
 
-                                                        {/* DÜŞÜK VE YÜKSEK ETİKETLERİ (ÇUBUĞUN HEMEN ALTINDA, ÇİZGİNİN ÖNÜNDE) */}
-                                                        <div className="flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-wider absolute top-[76px] left-0 right-0 z-10 pointer-events-none px-2 sm:px-4">
-                                                            <span>DÜŞÜK: {formatCurrency(low)}</span>
-                                                            <span>YÜKSEK: {formatCurrency(high)}</span>
+                                                                {/* Vurgulu İçgörü Metni */}
+                                                                {hasCost ? (
+                                                                    isProfit ? (
+                                                                        <p className="text-xs sm:text-[13px] text-slate-700 leading-relaxed font-medium">
+                                                                            Portföyünüzün öne çıkan başarılı varlıklarından{" "}
+                                                                            <span className="inline-block bg-blue-100/80 text-[#00008B] font-extrabold px-2 py-0.5 rounded-md mx-0.5">
+                                                                                {sym}
+                                                                            </span>
+                                                                            ,{" "}
+                                                                            <span className="inline-block bg-emerald-100/85 text-emerald-700 font-extrabold px-2 py-0.5 rounded-md mx-0.5">
+                                                                                {currFmt}
+                                                                            </span>{" "}
+                                                                            güncel fiyatıyla ortalama maliyetinizin{" "}
+                                                                            <span className="inline-block bg-emerald-100/85 text-emerald-700 font-extrabold px-2 py-0.5 rounded-md mx-0.5">
+                                                                                %{absPctStr}
+                                                                            </span>{" "}
+                                                                            yukarısında seyrediyor. Seçilen {tfLabel} periyodunda{" "}
+                                                                            <span className="inline-block bg-sky-100/85 text-sky-800 font-extrabold px-2 py-0.5 rounded-md mx-0.5">
+                                                                                {lowFmt}
+                                                                            </span>{" "}
+                                                                            dip noktasından bu yana gösterdiği{" "}
+                                                                            <strong className="font-extrabold text-slate-900">
+                                                                                istikrarlı tırmanış
+                                                                            </strong>
+                                                                            , varlığın üst direnç seviyelerini zorlamasını sağlıyor.
+                                                                        </p>
+                                                                    ) : (
+                                                                        <p className="text-xs sm:text-[13px] text-slate-700 leading-relaxed font-medium">
+                                                                            <span className="inline-block bg-blue-100/80 text-[#00008B] font-extrabold px-2 py-0.5 rounded-md mr-1">
+                                                                                {costFmt}
+                                                                            </span>
+                                                                            maliyetli <strong className="font-black text-slate-900">{sym}</strong> pozisyonunuz, canlı piyasa koşullarında{" "}
+                                                                            <span className="inline-block bg-rose-100/85 text-rose-700 font-extrabold px-2 py-0.5 rounded-md mx-0.5">
+                                                                                %{absPctStr}
+                                                                            </span>{" "}
+                                                                            indirimli bir fiyatla{" "}
+                                                                            <span className="inline-block bg-rose-100/85 text-rose-700 font-extrabold px-2 py-0.5 rounded-md mx-0.5">
+                                                                                {currFmt}
+                                                                            </span>{" "}
+                                                                            değerine gerilemiştir. Varlığın {tfLabel} zaman diliminde{" "}
+                                                                            <span className="inline-block bg-sky-100/85 text-sky-800 font-extrabold px-2 py-0.5 rounded-md mx-0.5">
+                                                                                {lowFmt}
+                                                                            </span>{" "}
+                                                                            sınırına yakınlığı, bu dip seviyelerden{" "}
+                                                                            <strong className="font-extrabold text-slate-900">
+                                                                                destek bulma çabasının
+                                                                            </strong>{" "}
+                                                                            sürdüğünü göstermektedir.
+                                                                        </p>
+                                                                    )
+                                                                ) : (
+                                                                    <p className="text-xs sm:text-[13px] text-slate-700 leading-relaxed font-medium">
+                                                                        Piyasa takibinizde yer alan{" "}
+                                                                        <span className="inline-block bg-blue-100/80 text-[#00008B] font-extrabold px-2 py-0.5 rounded-md mx-0.5">
+                                                                            {sym}
+                                                                        </span>
+                                                                        , {tfLabel} zaman diliminde{" "}
+                                                                        <span className="inline-block bg-blue-100/80 text-[#00008B] font-extrabold px-2 py-0.5 rounded-md mx-0.5">
+                                                                            {currFmt}
+                                                                        </span>{" "}
+                                                                        canlı fiyatı üzerinden işlem görüyor. Varlık bu periyotta{" "}
+                                                                        <span className="inline-block bg-sky-100/85 text-sky-800 font-extrabold px-2 py-0.5 rounded-md mx-0.5">
+                                                                            {lowFmt}
+                                                                        </span>{" "}
+                                                                        dip noktası ile{" "}
+                                                                        <strong className="font-extrabold text-slate-900">{highFmt}</strong>{" "}
+                                                                        zirvesi arasında dengeli bir fiyat kanalı izlemektedir.
+                                                                    </p>
+                                                                )}
+                                                            </div>
+
+                                                            {/* Alt Bilgi Çubuğu */}
+                                                            <div className="border-t border-slate-200/60 pt-3 mt-4 flex flex-wrap items-center justify-between gap-2 text-xs">
+                                                                <span className="text-slate-500 font-semibold inline-flex items-center gap-1.5">
+                                                                    <span>📊</span>
+                                                                    <span>Rasyonel Veri Analizi</span>
+                                                                </span>
+                                                                {hasCost ? (
+                                                                    isProfit ? (
+                                                                        <span className="text-emerald-600 italic font-semibold underline decoration-emerald-300 underline-offset-4">
+                                                                            Üst direnç bölgesi takip edilmeli
+                                                                        </span>
+                                                                    ) : (
+                                                                        <span className="text-rose-600 italic font-semibold underline decoration-rose-300 underline-offset-4">
+                                                                            Panik satışı yerine destek izlenmeli
+                                                                        </span>
+                                                                    )
+                                                                ) : (
+                                                                    <span className="text-[#00008B] italic font-semibold underline decoration-blue-300 underline-offset-4">
+                                                                        Destek ve direnç kanalı izlenmeli
+                                                                    </span>
+                                                                )}
+                                                            </div>
                                                         </div>
-                                                    </div>
 
-                                                    {/* MARKA RENK PALETİNDEKİ MÜKEMMEL MAVİ YAPAY ZEKA ANALİZ KUTUSU */}
-                                                    <div className="bg-[#00008B] border border-[#00008B]/20 rounded-2xl p-4 shadow-md text-white w-full overflow-hidden">
-                                                        <p className="text-xs font-medium text-slate-100 leading-relaxed break-words">
-                                                            {(() => {
-                                                                const isProfit = userCost ? currentPrice >= userCost : false;
-                                                                const diffP = userCost ? Math.abs(((currentPrice - userCost) / userCost) * 100).toFixed(1) : null;
-                                                                
-                                                                // Her gün gece 00:00'da kendiliğinden yenilenen tarih tohumu (Day Seed)
-                                                                const today = new Date();
-                                                                const daySeed = today.getFullYear() * 1000 + (today.getMonth() + 1) * 35 + today.getDate();
-                                                                
-                                                                // Her varlık, her zaman dilimi ve her gün için benzersiz şablon indeksi (0..7)
-                                                                const symHash = sym.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-                                                                const tfHash = extremesTimeframe.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-                                                                const variant = (symHash * 7 + tfHash * 13 + daySeed) % 8;
+                                                        {/* KART 4 (SAĞ ALT): TEK BAKIŞTA POZİSYON ÖZETİ */}
+                                                        <div className="bg-[#f8fafc] border border-slate-200/60 rounded-3xl p-4 sm:p-5 flex flex-col justify-between flex-1">
+                                                            <div className="flex items-center justify-between gap-2 mb-3">
+                                                                <h4 className="text-xs font-black text-[#00008B] uppercase tracking-wider">
+                                                                    TEK BAKIŞTA POZİSYON ÖZETİ
+                                                                </h4>
+                                                                {hasCost && isProfit ? (
+                                                                    <span className="text-[11px] font-extrabold text-emerald-600 uppercase tracking-wide">
+                                                                        POZİTİF TREND
+                                                                    </span>
+                                                                ) : (
+                                                                    <span className="text-[11px] font-extrabold text-blue-600 uppercase tracking-wide">
+                                                                        {tfShortLabel} PERİYOT
+                                                                    </span>
+                                                                )}
+                                                            </div>
 
-                                                                const currFmt = formatCurrency(currentPrice);
-                                                                const lowFmt = formatCurrency(low);
-                                                                const highFmt = formatCurrency(high);
-                                                                const costFmt = userCost ? formatCurrency(userCost) : '';
+                                                            <div className="space-y-2.5">
+                                                                {hasCost && isProfit ? (
+                                                                    <>
+                                                                        {/* Satır 1: Dip Noktasından Yükseliş */}
+                                                                        <div className="bg-white border border-slate-200/60 rounded-2xl px-4 py-2.5 flex items-center justify-between gap-2 shadow-2xs">
+                                                                            <div className="flex items-center gap-2 min-w-0">
+                                                                                <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                                                                                <span className="text-xs font-medium text-slate-600 truncate">
+                                                                                    {tfShortLabel} Dip Noktasından Yükseliş
+                                                                                </span>
+                                                                            </div>
+                                                                            <span className="text-xs font-extrabold text-emerald-600 whitespace-nowrap">
+                                                                                +{formatCurrency(distFromLow)} (+%{pctFromLow.toFixed(1).replace('.', ',')})
+                                                                            </span>
+                                                                        </div>
 
-                                                                const tfLabel = extremesTimeframe === '1W' ? '1 Haftalık' : extremesTimeframe === '1M' ? '1 Aylık' : extremesTimeframe === '3M' ? '3 Aylık' : extremesTimeframe === '6M' ? '6 Aylık' : '52 Haftalık (1 Yıl)';
+                                                                        {/* Satır 2: Maliyet Üzeri Net Marj */}
+                                                                        <div className="bg-white border border-slate-200/60 rounded-2xl px-4 py-2.5 flex items-center justify-between gap-2 shadow-2xs">
+                                                                            <div className="flex items-center gap-2 min-w-0">
+                                                                                <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+                                                                                <span className="text-xs font-medium text-slate-600 truncate">
+                                                                                    Maliyet Üzeri Net Marj
+                                                                                </span>
+                                                                            </div>
+                                                                            <span className="text-xs font-extrabold text-[#00008B] whitespace-nowrap">
+                                                                                +{formatCurrency(Math.abs(priceDiff))} (+%{absPctStr} Kâr)
+                                                                            </span>
+                                                                        </div>
 
-                                                                if (userCost && userCost > 0) {
-                                                                    if (isProfit) {
-                                                                        if (variant === 0) return `Maliyet analiziniz detaylı incelendiğinde ${sym}, ${costFmt} olan alış seviyenizin %${diffP} üzerinde oldukça güçlü bir performans göstererek ${currFmt} canlı fiyatından işlem görüyor. Varlık ${tfLabel} zaman diliminde ${lowFmt} dip seviyesinden ivmeyle uzaklaşarak ${highFmt} zirvesine doğru kademeli yükselişini sürdürmektedir.`;
-                                                                        if (variant === 1) return `Portföyünüzün öne çıkan başarılı varlıklarından ${sym}, ${currFmt} güncel fiyatıyla ortalama maliyetinizin %${diffP} yukarısında seyrediyor. Seçilen ${tfLabel} periyodunda ${lowFmt} dip noktasından bu yana gösterdiği istikrarlı tırmanış, varlığın üst direnç seviyelerini zorlamasını sağlıyor.`;
-                                                                        if (variant === 2) return `${tfLabel} grafiğinde son derece güçlü bir duruş sergileyen ${sym}, ${costFmt} maliyetinize göre %${diffP} oranında belirgin bir kazanç sağlamış durumdadır. Varlığın ${highFmt} tavan sınırına yakın kalarak hareket etmesi, yatırımınızın kârlı yapısını ve portföy verimliliğinizi doğrudan destekliyor.`;
-                                                                        if (variant === 3) return `%${diffP} oranındaki yüksek kârlılığıyla dikkat çeken ${sym}, portföyünüzde ${currFmt} canlı fiyatından alıcı bularak değerini koruyor. ${tfLabel} boyunca oluşan ${lowFmt} ve ${highFmt} fiyat aralığı, varlığın kârlı seyrini teyit ederken alım iştahının devam ettiğini gösteriyor.`;
-                                                                        if (variant === 4) return `Pozitif bir yükseliş kanalında hareketini sürdüren ${sym}, ${costFmt} alış fiyatınızın %${diffP} üstüne çıkarak portföy toplam değerinizi artırıyor. Varlık ${tfLabel} zaman dilimindeki tepe noktalarına yakın durarak güçlü ve kârlı konumunu korumaya devam etmektedir.`;
-                                                                        if (variant === 5) return `${currFmt} seviyesinden işlem görerek dikkat çeken ${sym}, ortalama maliyetinize kıyasla %${diffP} daha yüksek bir fiyat seviyesine ulaşmış durumda. ${tfLabel} periyodunda ${lowFmt} tabanının oldukça üzerinde kalması, yatırımlarınızdaki kârlı güvenli alanı genişletmeye devam ediyor.`;
-                                                                        if (variant === 6) return `Yatırımınıza pozitif katkı sunan değerli varlıklardan ${sym}, ${costFmt} olan alış ortalamanızın %${diffP} ilerisinden anlık olarak takip ediliyor. ${tfLabel} süresince oluşan yukarı yönlü grafik hareketi, varlıktaki alım momentumunun henüz kaybolmadığını kanıtlıyor.`;
-                                                                        return `${tfLabel} fiyat bandının üst sınırlarında yer alan ${sym}, alış maliyetinizden %${diffP} daha primli bir noktada ${currFmt} fiyatıyla seyrediyor. Varlığın ${highFmt} zirve çizgisine yakınlaşması, portföyünüzdeki kâr marjını daha da sağlamlaştırıyor.`;
-                                                                    } else {
-                                                                        if (variant === 0) return `Mevcut piyasa şartlarında değerlendirildiğinde ${sym}, ${costFmt} ortalama maliyetinizin %${diffP} altında bir fiyatla iskonto bölgesinde kalmaktadır. ${tfLabel} periyodunda ${lowFmt} seviyesine yakın kalarak bu bölgede yeni bir destek ve taban arayışını sürdürmektedir.`;
-                                                                        if (variant === 1) return `${currFmt} güncel fiyatından işlem gören ${sym}, portföy maliyetinizin %${diffP} gerisinde kalarak alt bantlarda bulunmaktadır. ${tfLabel} boyunca oluşan ${highFmt} zirvesinden uzakta olması, varlığın bu bölgelerden yeniden güç toplama sürecinde olduğuna işaret ediyor.`;
-                                                                        if (variant === 2) return `${tfLabel} grafiği detaylıca incelendiğinde ${sym}, ${costFmt} olan alış fiyatınızın %${diffP} altında ${currFmt} fiyatıyla seyrettiği görülmektedir. Fiyatın ${lowFmt} taban hattına yakınlığı, teknik olarak tepki alımlarının oluşabileceği önemli bir noktaya vurgu yapıyor.`;
-                                                                        if (variant === 3) return `%${diffP} oranında maliyetinizin altında bulunan ${sym}, portföyünüzde ${currFmt} canlı seviyesinden takip edilmektedir. ${tfLabel} aralığındaki ${lowFmt} - ${highFmt} marjı, varlığın mevcut fiyat seviyelerini sindirip dengelenme aşamasında olduğunu teyit ediyor.`;
-                                                                        if (variant === 4) return `${costFmt} maliyetli ${sym} pozisyonunuz, canlı piyasa koşullarında %${diffP} indirimli bir fiyatla ${currFmt} değerine gerilemiştir. Varlığın ${tfLabel} zaman diliminde ${lowFmt} sınırına yakınlığı, bu dip seviyelerden destek bulma çabasının sürdüğünü göstermektedir.`;
-                                                                        if (variant === 5) return `Geçici bir düzeltme evresinden geçen ${sym}, ortalama alış fiyatınızın %${diffP} gerisinde ${currFmt} seviyesinde duruyor. ${tfLabel} periyodundaki bant hareketi, varlığın dip bölgelerden destek alarak yeniden dengelenme çabasında olduğunu gösteriyor.`;
-                                                                        if (variant === 6) return `Piyasa fiyatlaması incelendiğinde ${sym}, ${costFmt} olan portföy ortalamanızın %${diffP} altında ${currFmt} fiyatıyla işlem görüyor. Varlık ${tfLabel} sürecindeki ${lowFmt} tabanı civarında fiyat dengesini yeniden kurup üst dirençlere yönelmeyi hedefliyor.`;
-                                                                        return `${tfLabel} süresince oluşan fiyat aralığında ${sym}, maliyet seviyenizin %${diffP} gerisinden fiyatlanarak ${currFmt} seviyesinde kalıyor. Fiyatın ${highFmt} zirvesinin altında bulunması, varlık için orta vadede yeni bir toparlanma alanı sunmaktadır.`;
-                                                                    }
-                                                                } else {
-                                                                    if (variant === 0) return `Piyasa takibinizde yer alan ${sym}, ${tfLabel} zaman diliminde ${currFmt} canlı fiyatı üzerinden işlem görüyor. Varlık bu periyotta ${lowFmt} dip noktası ile ${highFmt} zirvesi arasında gayet dengeli ve kararlı bir fiyat kanalı izlemektedir.`;
-                                                                    if (variant === 1) return `${tfLabel} grafik bandı detaylı incelendiğinde ${sym}, ${lowFmt} desteğinden aldığı güçle ${currFmt} seviyesine ilerliyor. Fiyatın ${highFmt} tavanına doğru kademeli hareketi, piyasa takibindeki alım iştahını teyit eder niteliktedir.`;
-                                                                    if (variant === 2) return `Dengeli bir fiyat aralığında bulunan ${sym}, ${tfLabel} süresince ${currFmt} değerinden alıcı bulmaya devam ediyor. ${lowFmt} ve ${highFmt} sınırları arasındaki stabil konumu, varlıktaki kararlı piyasa seyrini doğrulamaktadır.`;
-                                                                    return `Seçilen ${tfLabel} periyodu boyunca ${sym}, ${currFmt} anlık fiyatı ile piyasadaki yerini koruyor. Varlık ${lowFmt} en düşük ve ${highFmt} en yüksek seviyeleri arasında yatay ve dengeli bant hareketini sürdürmektedir.`;
-                                                                }
-                                                            })()}
-                                                        </p>
+                                                                        {/* Satır 3: Zirve (Direnç) Hedefi */}
+                                                                        <div className="bg-white border border-slate-200/60 rounded-2xl px-4 py-2.5 flex items-center justify-between gap-2 shadow-2xs">
+                                                                            <div className="flex items-center gap-2 min-w-0">
+                                                                                <span className="w-2 h-2 rounded-full bg-[#00008B] shrink-0" />
+                                                                                <span className="text-xs font-medium text-slate-600 truncate">
+                                                                                    {tfShortLabel} Zirve (Direnç) Hedefi
+                                                                                </span>
+                                                                            </div>
+                                                                            <span className="text-xs font-extrabold text-[#00008B] whitespace-nowrap">
+                                                                                {highFmt} (%{pctToHigh.toFixed(1).replace('.', ',')} Mesafe)
+                                                                            </span>
+                                                                        </div>
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        {/* Satır 1: Destek Noktasına Mesafe */}
+                                                                        <div className="bg-white border border-slate-200/60 rounded-2xl px-4 py-2.5 flex items-center justify-between gap-2 shadow-2xs">
+                                                                            <div className="flex items-center gap-2 min-w-0">
+                                                                                <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+                                                                                <span className="text-xs font-medium text-slate-600 truncate">
+                                                                                    Destek Noktasına Mesafe
+                                                                                </span>
+                                                                            </div>
+                                                                            <span className="text-xs font-extrabold text-[#00008B] whitespace-nowrap">
+                                                                                +{formatCurrency(distFromLow)} (%{pctFromLow.toFixed(1).replace('.', ',')} Üzerinde)
+                                                                            </span>
+                                                                        </div>
+
+                                                                        {/* Satır 2: Başabaş (Maliyet) Hedefi */}
+                                                                        <div className="bg-white border border-slate-200/60 rounded-2xl px-4 py-2.5 flex items-center justify-between gap-2 shadow-2xs">
+                                                                            <div className="flex items-center gap-2 min-w-0">
+                                                                                <span className="w-2 h-2 rounded-full bg-rose-600 shrink-0" />
+                                                                                <span className="text-xs font-medium text-slate-600 truncate">
+                                                                                    {hasCost ? "Başabaş (Maliyet) Hedefi" : "Anlık Piyasa Fiyatı"}
+                                                                                </span>
+                                                                            </div>
+                                                                            <span className="text-xs font-extrabold text-[#00008B] whitespace-nowrap">
+                                                                                {hasCost
+                                                                                    ? `${costFmt} (+${formatCurrency(Math.abs(userCost! - currentPrice))})`
+                                                                                    : currFmt}
+                                                                            </span>
+                                                                        </div>
+
+                                                                        {/* Satır 3: Zirve (Direnç) Potansiyeli */}
+                                                                        <div className="bg-white border border-slate-200/60 rounded-2xl px-4 py-2.5 flex items-center justify-between gap-2 shadow-2xs">
+                                                                            <div className="flex items-center gap-2 min-w-0">
+                                                                                <span className="w-2 h-2 rounded-full bg-[#00008B] shrink-0" />
+                                                                                <span className="text-xs font-medium text-slate-600 truncate">
+                                                                                    {tfShortLabel} Zirve (Direnç) Potansiyeli
+                                                                                </span>
+                                                                            </div>
+                                                                            <span className="text-xs font-extrabold text-[#00008B] whitespace-nowrap">
+                                                                                {highFmt} (+%{pctToHigh.toFixed(1).replace('.', ',')})
+                                                                            </span>
+                                                                        </div>
+                                                                    </>
+                                                                )}
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             );
