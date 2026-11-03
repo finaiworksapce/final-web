@@ -1113,7 +1113,7 @@ export default function AssetsPage() {
             {/* ========================================================================= */}
             <div
                 ref={stockSectionRef}
-                className="w-full bg-white border border-slate-200/90 rounded-[28px] p-4 sm:p-5 shadow-xs overflow-hidden relative"
+                className="w-full bg-white border border-slate-200/90 rounded-[28px] p-3 sm:p-4 shadow-xs relative"
             >
                 <TradingViewScreenerWidget
                     market="turkey"
