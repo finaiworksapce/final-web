@@ -1,35 +1,38 @@
 "use client";
 
 import { useEffect } from "react";
-import { NotFound } from "@/components/ui/not-found-2";
-import { Button } from "@/components/ui/button";
+import ErrorBlock from "@/components/ui/error-1";
 
 export default function ErrorPage({
-    error,
-    reset,
+  error,
+  reset,
 }: {
-    error: Error & { digest?: string };
-    reset: () => void;
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
-    useEffect(() => {
-        console.error(error);
-    }, [error]);
+  useEffect(() => {
+    console.error("Uygulama Arızası / App Runtime Error:", error);
+  }, [error]);
 
-    return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-4">
-            <NotFound />
-            <div className="mt-4 flex flex-col items-center gap-4">
-                <p className="text-sm text-slate-400 max-w-md text-center">
-                    Beklenmedik bir hata oluştu. Lütfen tekrar deneyiniz.
-                </p>
-                <Button
-                    onClick={() => reset()}
-                    variant="outline"
-                    className="border-blue-500/20 text-blue-400 hover:bg-blue-500/10 active:scale-95 transition-all"
-                >
-                    Tekrar Dene
-                </Button>
-            </div>
-        </div>
-    );
+  return (
+    <main className="min-h-screen w-full flex items-center justify-center bg-background">
+      <ErrorBlock
+        code={error?.digest ? "500" : "HATA"}
+        title="Sistem Arızası Tespit Edildi"
+        description={
+          error?.message && !error.message.includes("digest")
+            ? error.message
+            : "Beklenmedik bir teknik arıza meydana geldi. Mühendislerimiz durumdan haberdar edildi. Lütfen tekrar deneyiniz."
+        }
+        showRetry={true}
+        onRetry={() => reset()}
+        retryText="Tekrar Dene"
+        showHome={true}
+        homeHref="/"
+        homeText="Ana Sayfaya Dön"
+        showBack={true}
+        backText="Geri Git"
+      />
+    </main>
+  );
 }

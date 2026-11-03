@@ -54,6 +54,7 @@ export const metadata: Metadata = {
 import { Inter, Outfit, Space_Grotesk } from "next/font/google";
 import { UserProvider } from "@/components/providers/UserProvider";
 import { ToastProvider } from "@/components/providers/ToastProvider";
+import { NetworkStatusProvider } from "@/components/providers/NetworkStatusProvider";
 
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"], variable: '--font-inter' });
 const outfit = Outfit({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"], variable: '--font-outfit' });
@@ -73,7 +74,9 @@ export default function RootLayout({
       <body className="antialiased font-sans text-slate-900 bg-background selection:bg-brand-primary/20 selection:text-brand-primary min-h-screen">
         <UserProvider>
           <ToastProvider>
-            {children}
+            <NetworkStatusProvider>
+              {children}
+            </NetworkStatusProvider>
           </ToastProvider>
         </UserProvider>
       </body>
