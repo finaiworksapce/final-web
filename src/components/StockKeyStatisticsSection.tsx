@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Award, ChevronRight, RefreshCw, Sparkles, Trophy, X } from "lucide-react";
+import { ChevronRight, RefreshCw, Sparkles, X, Trophy, Award } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { MetricSectorRanking, SectorRankingResponse } from "@/lib/services/sector-ranking.service";
+import type { MetricSectorRanking, PeerRankingItem, SectorRankingResponse } from "@/lib/services/sector-ranking.service";
 
 interface MetricConfig {
   key: string;
@@ -52,6 +52,39 @@ function formatFallback(val: number, unitType: "multiple" | "percent" | "signed_
   // signed_percent
   const sign = val > 0 ? "+" : val < 0 ? "-" : "";
   return `${sign}%${Math.abs(val).toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+interface LeaderboardSlot {
+  type: "peer" | "ellipsis";
+  key: string;
+  peer?: PeerRankingItem;
+}
+
+function getSmartLeaderboardSlots(
+  leaderboard: PeerRankingItem[],
+  currentSymbol: string
+): LeaderboardSlot[] {
+  const valid = leaderboard.filter((p) => p.rank > 0);
+  if (valid.length <= 5) {
+    return valid.map((p) => ({ type: "peer", key: p.symbol, peer: p }));
+  }
+
+  const curIdx = valid.findIndex((p) => p.symbol === currentSymbol);
+
+  // Eğer seçili hisse ilk 5 sıradaysa (0, 1, 2, 3, 4) ya da bulunamadıysa: ilk 5'i direkt göster
+  if (curIdx === -1 || curIdx <= 4) {
+    return valid.slice(0, 5).map((p) => ({ type: "peer", key: p.symbol, peer: p }));
+  }
+
+  // Eğer hisse 6. veya daha gerideyse (index >= 5):
+  // 1. ve 2. hisseleri göster, araya ••• koy, mevcut hissenin hemen önündekini ve mevcut hisseyi göster (tam 5 satır)
+  return [
+    { type: "peer", key: valid[0].symbol, peer: valid[0] },
+    { type: "peer", key: valid[1].symbol, peer: valid[1] },
+    { type: "ellipsis", key: "ellipsis-row" },
+    { type: "peer", key: valid[curIdx - 1].symbol, peer: valid[curIdx - 1] },
+    { type: "peer", key: valid[curIdx].symbol, peer: valid[curIdx] },
+  ];
 }
 
 export default function StockKeyStatisticsSection({
@@ -239,20 +272,26 @@ export default function StockKeyStatisticsSection({
     );
   }, [activeMetricKey]);
 
+  // Akıllı 5'li liderlik tablosu (scrollsuz, bağlamsal sıralama)
+  const leaderboardSlots = useMemo(() => {
+    if (!activeRanking?.leaderboard) return [];
+    return getSmartLeaderboardSlots(activeRanking.leaderboard, symbol);
+  }, [activeRanking, symbol]);
+
   // Tooltip koordinatlarının container içinde güvenle kalmasını sağla
   const containerRect = containerRef.current?.getBoundingClientRect();
   const containerWidth = containerRect?.width || 600;
   const containerHeight = containerRect?.height || 460;
   const isRightSide = smoothPosition.x > containerWidth * 0.52;
 
-  const tooltipWidth = 330;
-  const tooltipHeight = 340;
+  const tooltipWidth = 320;
+  const tooltipHeight = 280;
   const clampedX = isRightSide
     ? Math.max(12, smoothPosition.x - tooltipWidth - 20)
     : Math.min(containerWidth - tooltipWidth - 12, smoothPosition.x + 20);
   const clampedY = Math.max(
     12,
-    Math.min(containerHeight - tooltipHeight - 12, smoothPosition.y - 140)
+    Math.min(containerHeight - tooltipHeight - 12, smoothPosition.y - 120)
   );
 
   return (
@@ -273,7 +312,7 @@ export default function StockKeyStatisticsSection({
       {/* ========================================================================= */}
       <div
         className={cn(
-          "pointer-events-none absolute z-50 w-[330px] rounded-2xl shadow-2xl border border-slate-200/95 bg-white/95 backdrop-blur-md p-4 transition-all ease-out",
+          "pointer-events-none absolute z-50 w-[320px] rounded-2xl shadow-2xl border border-slate-200/95 bg-white/95 backdrop-blur-md p-3.5 transition-all ease-out",
           isVisible && activeRanking ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
         )}
         style={{
@@ -283,93 +322,88 @@ export default function StockKeyStatisticsSection({
         }}
       >
         {activeRanking && activeMetricDef && (
-          <div className="space-y-3">
-            {/* BAŞLIK & SEKTÖR ETİKETİ */}
-            <div className="flex items-start justify-between gap-2 border-b border-slate-100 pb-2.5">
-              <div>
+          <div className="space-y-2.5">
+            {/* BAŞLIK & SEKTÖR ADI (ROZETSİZ, TEMİZ TİPOGRAFİ) */}
+            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+              <div className="min-w-0 pr-2">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
                   <Sparkles className="w-3 h-3 text-[#00008B]" />
                   Sektör Karşılaştırması
                 </span>
-                <h4 className="text-sm font-bold text-slate-900 leading-snug">
+                <h4 className="text-xs sm:text-sm font-bold text-slate-900 leading-tight truncate">
                   {activeMetricDef.fullName}
                 </h4>
               </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-[#00008B] border border-blue-200 shrink-0">
-                {sectorData?.sectorDisplayName || "Sektör"}
-              </span>
+              {sectorData?.sectorDisplayName && (
+                <span className="text-[11px] font-semibold text-slate-500 shrink-0">
+                  {sectorData.sectorDisplayName}
+                </span>
+              )}
             </div>
 
-            {/* SEÇİLİ HİSSE VS SEKTÖR ORTALAMASI ÖZETİ */}
-            <div className="grid grid-cols-2 gap-2 bg-slate-50/90 rounded-xl p-2.5 border border-slate-200/80">
+            {/* SEÇİLİ HİSSE VS SEKTÖR ORTALAMASI (LACİVERT KUTU, ROZETSİZ) */}
+            <div className="grid grid-cols-2 gap-2">
               {/* Seçili Hisse */}
-              <div className="space-y-0.5">
-                <span className="text-[10px] font-semibold text-slate-500 flex items-center gap-1">
+              <div className="bg-slate-50 rounded-xl p-2.5 border border-slate-200/80 flex flex-col justify-between">
+                <span className="text-[11px] font-semibold text-slate-500 truncate">
                   {symbol} (Seçili)
                 </span>
-                <div className="text-base font-black text-[#00008B]">
+                <div className="text-base font-black text-slate-900 tracking-tight my-0.5">
                   {activeRanking.formattedCurrentValue}
                 </div>
-                {activeRanking.currentRank != null && (
-                  <span className="inline-flex items-center gap-0.5 text-[9px] font-black px-1.5 py-0.5 rounded bg-[#00008B] text-white">
-                    <Trophy className="w-2.5 h-2.5" />
-                    #{activeRanking.currentRank}. Sırada
-                  </span>
-                )}
+                <span className="text-[10px] font-semibold text-slate-500">
+                  {activeRanking.currentRank ? `Sektörde ${activeRanking.currentRank}. sırada` : "—"}
+                </span>
               </div>
 
-              {/* Sektör Ortalaması */}
-              <div className="space-y-0.5 border-l border-slate-200/80 pl-2.5">
-                <span className="text-[10px] font-semibold text-slate-500">
+              {/* Sektör Ortalaması (Lacivert Kutu) */}
+              <div className="bg-[#00008B] text-white rounded-xl p-2.5 shadow-sm flex flex-col justify-between">
+                <span className="text-[11px] font-semibold text-blue-100 truncate">
                   Sektör Ortalaması
                 </span>
-                <div className="text-base font-black text-slate-800">
+                <div className="text-base font-black text-white tracking-tight my-0.5">
                   {activeRanking.formattedSectorAverage}
                 </div>
-                {activeRanking.betterThanSector != null && (
-                  <span
-                    className={cn(
-                      "inline-flex items-center text-[9px] font-bold px-1.5 py-0.5 rounded",
-                      activeRanking.betterThanSector
-                        ? "bg-emerald-100 text-emerald-800"
-                        : "bg-slate-200 text-slate-700"
-                    )}
-                  >
-                    {activeRanking.betterThanSector ? "Avantajlı" : "Ortalama Altı"}
-                  </span>
-                )}
+                <span className="text-[10px] font-medium text-blue-200">
+                  {activeRanking.totalRanked ? `${activeRanking.totalRanked} şirket medyanı` : "Sektör Medyanı"}
+                </span>
               </div>
             </div>
 
-            {/* AÇIKLAMA YORUMU */}
-            <p className="text-[11px] font-medium text-slate-600 bg-blue-50/50 p-2 rounded-lg border border-blue-100/60 leading-tight">
-              {activeRanking.summaryComment}
-            </p>
-
-            {/* SEKTÖR LİDER TABLOSU: EN İYİDEN EN KÖTÜYE SIRALAMA */}
-            <div className="space-y-1.5">
+            {/* SEKTÖR SIRALAMASI: AKILLI 5'Lİ LİSTE (SCROLLSUZ) */}
+            <div className="space-y-1.5 pt-0.5">
               <div className="flex items-center justify-between text-[10px] font-black text-slate-500 uppercase tracking-wider">
-                <span className="flex items-center gap-1">
-                  <Award className="w-3 h-3 text-[#00008B]" />
-                  Sektör Lider Tablosu (En İyi ⟶ En Kötü)
-                </span>
+                <span>Sektör Sıralaması (En İyi → En Kötü)</span>
                 <span>{activeRanking.totalRanked} Şirket</span>
               </div>
 
-              <div className="max-h-[145px] overflow-y-auto space-y-1 pr-1 custom-scrollbar">
-                {activeRanking.leaderboard.map((peer) => {
+              <div className="overflow-hidden space-y-1">
+                {leaderboardSlots.map((slot) => {
+                  if (slot.type === "ellipsis") {
+                    return (
+                      <div
+                        key={slot.key}
+                        className="flex items-center justify-center py-0.5 text-slate-400 font-black tracking-widest text-xs select-none"
+                      >
+                        •••
+                      </div>
+                    );
+                  }
+
+                  const peer = slot.peer!;
                   const isCurrentPeer = peer.isCurrent;
                   const isTop3 = peer.rank > 0 && peer.rank <= 3;
+
                   return (
                     <div
-                      key={peer.symbol}
+                      key={slot.key}
                       className={cn(
                         "flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs transition-colors",
                         isCurrentPeer
                           ? "bg-[#00008B] text-white font-bold shadow-sm"
                           : isTop3
-                            ? "bg-slate-100/90 text-slate-900 font-semibold hover:bg-slate-200/70"
-                            : "bg-slate-50 text-slate-700 hover:bg-slate-100"
+                            ? "bg-slate-100/90 text-slate-900 font-semibold"
+                            : "bg-slate-50 text-slate-700"
                       )}
                     >
                       <div className="flex items-center gap-2 min-w-0">
@@ -394,7 +428,7 @@ export default function StockKeyStatisticsSection({
                         <span className="truncate">
                           {peer.symbol}
                           {isCurrentPeer && (
-                            <span className="ml-1 text-[9px] bg-white/20 px-1 rounded font-normal">
+                            <span className="ml-1 text-[9px] bg-white/20 px-1 py-0.5 rounded font-normal">
                               (Bu Hisse)
                             </span>
                           )}
@@ -413,12 +447,6 @@ export default function StockKeyStatisticsSection({
                   );
                 })}
               </div>
-            </div>
-
-            {/* DİPNOT */}
-            <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between text-[9px] text-slate-400">
-              <span>* Sektör ortalaması & sıralaması</span>
-              <span className="font-semibold text-[#00008B]">FinAi Sektörel Analiz</span>
             </div>
           </div>
         )}
