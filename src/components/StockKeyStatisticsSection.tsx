@@ -451,9 +451,6 @@ export default function StockKeyStatisticsSection({
           </div>
         )}
       </div>
-          </div>
-        )}
-      </div>
 
       {/* ========================================================================= */}
       {/* PANEL BAŞLIĞI */}
