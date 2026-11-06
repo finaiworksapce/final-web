@@ -131,7 +131,7 @@ function LoginContent() {
       if (data.session) {
          setIsOtpSuccess(true);
          setTimeout(() => {
-           router.replace("/dashboard");
+           router.replace("/onboarding");
            addToast("Hesabınız doğrulandı, hoş geldiniz!", "success");
          }, 3000);
       } else {
@@ -282,7 +282,7 @@ function LoginContent() {
              addToast("E-postanıza 6 haneli bir doğrulama kodu gönderildi.", "success");
              return;
           } else {
-             router.replace("/dashboard");
+             router.replace("/onboarding");
           }
       }
     } catch (error: any) {

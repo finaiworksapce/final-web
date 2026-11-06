@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useUser } from "@/components/providers/UserProvider";
 
 import { DashboardSummaryCards } from "@/components/DashboardSummaryCards";
-import { TopAssetDistributionCard } from "@/components/dashboard/TopAssetDistributionCard";
+import { DynamicAssetAllocationContainer } from "@/components/dashboard/DynamicAssetAllocationContainer";
 import { FinAiYesterdayReportWidget } from "@/components/FinAiYesterdayReportWidget";
 import { MarketOverviewWidget } from "@/components/dashboard/MarketOverviewWidget";
 import { DailyAgendaWidget } from "@/components/dashboard/DailyAgendaWidget";
@@ -126,7 +126,7 @@ export default function DashboardPage() {
                             <DashboardSummaryCards />
                         </div>
                         <div className="flex flex-col min-w-0">
-                            <TopAssetDistributionCard />
+                            <DynamicAssetAllocationContainer />
                         </div>
                         <div className="flex flex-col min-w-0">
                             <FinAiYesterdayReportWidget />
@@ -158,7 +158,7 @@ export default function DashboardPage() {
 
                     {/* 2. VARLIK DAĞILIMI */}
                     <div className="w-full">
-                        <TopAssetDistributionCard />
+                        <DynamicAssetAllocationContainer />
                     </div>
 
                     {/* 3. FİNANSAL RAPOR */}

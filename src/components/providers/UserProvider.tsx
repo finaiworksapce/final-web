@@ -20,6 +20,17 @@ interface UserContextType {
     isAuthenticated: boolean | null;
     authState: AuthState;
     updateProfile: (updates: { [key: string]: any }) => Promise<void>;
+    // Onboarding
+    onboardingCompleted: boolean;
+    financialLiteracyLevel: 'beginner' | 'intermediate' | 'advanced' | null;
+    hasExistingInvestments: boolean | null;
+    recommendedStrategy: string;
+    completeOnboarding: (data: {
+        financialLiteracyLevel: 'beginner' | 'intermediate' | 'advanced';
+        hasExistingInvestments: boolean;
+        onboardingAnswers?: Record<string, any>;
+        recommendedStrategy?: string;
+    }) => Promise<void>;
     // Data states
     myAssets: Asset[];
     prices: Record<string, number>;
@@ -387,6 +398,38 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
+    const onboardingCompleted = Boolean(userMetadata?.onboarding_completed);
+    const financialLiteracyLevel = (userMetadata?.financial_literacy_level as any) || null;
+    const hasExistingInvestments = typeof userMetadata?.has_existing_investments === 'boolean'
+        ? userMetadata.has_existing_investments
+        : null;
+    const recommendedStrategy = userMetadata?.recommended_strategy || userMetadata?.financial_literacy_level || 'beginner';
+
+    const completeOnboarding = async (data: {
+        financialLiteracyLevel: 'beginner' | 'intermediate' | 'advanced';
+        hasExistingInvestments: boolean;
+        onboardingAnswers?: Record<string, any>;
+        recommendedStrategy?: string;
+    }) => {
+        const payload = {
+            onboarding_completed: true,
+            financial_literacy_level: data.financialLiteracyLevel,
+            has_existing_investments: data.hasExistingInvestments,
+            onboarding_answers: data.onboardingAnswers || {},
+            recommended_strategy: data.recommendedStrategy || data.financialLiteracyLevel
+        };
+
+        await updateProfile(payload);
+
+        if (currentUserRef.current?.id) {
+            try {
+                await supabase.from('profiles').update(payload).eq('id', currentUserRef.current.id);
+            } catch (err) {
+                // Table schema differences won't break client state
+            }
+        }
+    };
+
     return (
         <UserContext.Provider value={{
             user,
@@ -400,6 +443,11 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
             isAuthenticated,
             authState,
             updateProfile,
+            onboardingCompleted,
+            financialLiteracyLevel,
+            hasExistingInvestments,
+            recommendedStrategy,
+            completeOnboarding,
             myAssets,
             prices,
             stats,
@@ -430,6 +478,11 @@ export function useUser() {
             isAuthenticated: null,
             authState: 'INITIALIZING',
             updateProfile: async () => { },
+            onboardingCompleted: false,
+            financialLiteracyLevel: null,
+            hasExistingInvestments: null,
+            recommendedStrategy: 'beginner',
+            completeOnboarding: async () => { },
             myAssets: [],
             prices: {},
             stats: [],
@@ -454,6 +507,11 @@ export function useUser() {
             isAuthenticated: null,
             authState: 'INITIALIZING',
             updateProfile: async () => { },
+            onboardingCompleted: false,
+            financialLiteracyLevel: null,
+            hasExistingInvestments: null,
+            recommendedStrategy: 'beginner',
+            completeOnboarding: async () => { },
             myAssets: [],
             prices: {},
             stats: [],
