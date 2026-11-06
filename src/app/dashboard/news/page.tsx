@@ -183,8 +183,8 @@ function NewsContent() {
                 {/* 2. ÜST BAŞLIK ALANI (Referans görseldeki birebir hiyerarşi) */}
                 <div className="space-y-2 pt-1">
                     {/* Haberler Rozeti */}
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 border border-blue-100 rounded-full text-blue-700 text-xs font-semibold shadow-2xs">
-                        <Newspaper className="w-3.5 h-3.5 text-blue-600" />
+                    <div className="inline-flex items-center gap-1.5 text-[#004BFA] text-xs clash-subtitle font-[325] tracking-wide uppercase">
+                        <Newspaper className="w-3.5 h-3.5 text-[#004BFA]" />
                         <span>Haberler</span>
                     </div>
 
@@ -195,9 +195,6 @@ function NewsContent() {
 
                     {/* Açıklama & Sağda Yenile */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-0.5">
-                        <p className="text-slate-500 text-xs sm:text-sm font-normal leading-relaxed max-w-3xl">
-                            Ekonomi, piyasalar, şirketler ve dünya gündemine dair en önemli haberleri FinAi ile takip edin. Doğru analizler, güvenilir kaynaklar.
-                        </p>
 
                         <button
                             onClick={() => fetchNewsData(true)}

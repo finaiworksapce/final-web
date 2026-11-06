@@ -2728,7 +2728,6 @@ function CalendarContent() {
                                 </div>
                                 <div>
                                     <h3 className="text-base font-normal text-[#0E1E38]">Ekonomik Takvim</h3>
-                                    <p className="text-[10px] font-bold text-slate-400">Küresel makroekonomik veriler ve faiz kararları</p>
                                 </div>
                             </div>
                             <Link href="/dashboard/calendar?type=economic" onClick={() => { setActiveFilter('economic'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-xs font-normal text-blue-600 hover:underline">
@@ -2825,7 +2824,6 @@ function CalendarContent() {
                                 </div>
                                 <div>
                                     <h3 className="text-base font-normal text-white">Piyasa Gündemi</h3>
-                                    <p className="text-[10px] font-bold text-slate-400">Yaklaşan önemli tarihler ve özet göstergeler</p>
                                 </div>
                             </div>
                             <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest bg-blue-500/10 px-2.5 py-1 rounded-xl border border-blue-400/20">Canlı Takip</span>

@@ -2489,9 +2489,7 @@ export default function PortfolioPage() {
                                     </svg>
                                 </div>
                                 <div className="min-w-0">
-                                    <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400 mb-1">Portföy analizi</p>
-                                    <h3 className="text-base sm:text-lg font-bold text-[#0E1E38] tracking-tight leading-tight">Fiyat Analizi & Trend Bandı</h3>
-                                    <p className="text-xs text-slate-500 mt-1">Varlıklarınızın seçili dönem içindeki fiyat konumu</p>
+                                    <h3 className="text-base sm:text-lg clash-title font-[500] text-[#040989] tracking-tight leading-tight">Fiyat Analizi & Trend Bandı</h3>
                                 </div>
                             </div>
 
@@ -3133,13 +3131,6 @@ export default function PortfolioPage() {
             {/* Page Header Title Section (DYNAMIC FOCUSED WIDGET NAME & SLEEK BUTTONS) */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-6">
                 <div>
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50/80 border border-blue-200/50 text-[#0E1E38] text-xs font-bold mb-2 shadow-sm">
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#0E1E38]"></span>
-                        </span>
-                        Akıllı Portföy Yönetimi
-                    </div>
                     <h1 className="text-3xl md:text-4xl font-normal text-[#0E1E38] tracking-tight flex items-center gap-3 flex-wrap">
                         Portföyüm
                         {focusedWidget && (
@@ -3154,9 +3145,6 @@ export default function PortfolioPage() {
                             </motion.span>
                         )}
                     </h1>
-                    <p className="text-sm font-medium text-[#0E1E38]/60 mt-1">
-                        BIST hisseleriniz ve TEFAS fonlarınızın canlı analizlerini tek bir ekrandan yönetin.
-                    </p>
                 </div>
 
                 <div className="flex items-center gap-3">

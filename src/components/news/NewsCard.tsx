@@ -46,7 +46,7 @@ export function NewsCard({ item, index }: NewsCardProps) {
 
                     {/* Sağ Taraf: Kategori & Başlık */}
                     <div className="min-w-0 flex-1">
-                        <span className="inline-block text-[9px] sm:text-[10px] font-normal text-blue-700 bg-blue-50 border border-blue-100/80 px-2 py-0.5 rounded uppercase tracking-wider mb-1">
+                        <span className="inline-block text-[10px] sm:text-[11px] clash-subtitle font-[325] text-[#004BFA] uppercase tracking-wider mb-0.5">
                             {item.categoryLabel || "Küresel Piyasalar"}
                         </span>
 

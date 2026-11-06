@@ -79,7 +79,7 @@ function SidebarMarketWidgetsComponent() {
     }, []);
 
     return (
-        <div className="py-3 px-3 md:px-4 border-y border-[#1a2f4c] bg-[#0b192c] text-white select-none relative overflow-hidden">
+        <div className="py-3 px-3 md:px-4 border-y border-white/10 bg-gradient-to-b from-[#02041A] to-[#040989]/90 text-white select-none relative overflow-hidden">
             {/* Ambient Glow */}
             <div className="absolute -top-10 -right-10 w-28 h-28 bg-white/10 rounded-full blur-2xl pointer-events-none" />
             <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-blue-400/10 rounded-full blur-xl pointer-events-none" />

@@ -70,7 +70,7 @@ export default function DashboardPage() {
     }
 
     return (
-        <div className="flex flex-col min-h-[calc(100vh-3.5rem)] bg-[#F5F7FA] text-[#040989] w-full mx-auto relative overflow-x-hidden font-clash">
+        <div className="flex flex-col min-h-[calc(100vh-3.5rem)] bg-gradient-to-b from-[#F5F7FA] via-[#F5F7FA] to-[#D6E4FF]/25 text-[#040989] w-full mx-auto relative overflow-x-hidden font-clash">
             <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[#D6E4FF]/30 blur-[120px] pointer-events-none" />
 
             <div className="w-full max-w-[1600px] mx-auto px-2.5 py-3 sm:px-6 md:px-10 lg:py-6 flex flex-col justify-between gap-4 sm:gap-6 relative z-10 flex-1 min-h-[calc(100vh-3.5rem)] pb-6 md:pb-10">
@@ -101,9 +101,6 @@ export default function DashboardPage() {
                             Hoş Geldiniz, {userName || userEmail?.split('@')[0] || "Salih KAVAKCI"}
                             <motion.span animate={{ rotate: [0, 14, -8, 14, -4, 10, 0, 0] }} transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 1 }}>👋</motion.span>
                         </h1>
-                        <p className="text-xs sm:text-sm clash-desc font-[225] text-[#040989]/75 mt-0.5">
-                            Piyasaları, portföy hareketlerini ve yapay zeka analizlerini tek bir ekranda yönetin.
-                        </p>
                     </div>
 
                     <div className="flex items-center gap-2.5 self-start sm:self-center">

@@ -270,12 +270,12 @@ function DashboardShell({
                     <div className="hidden md:block w-24 shrink-0 pointer-events-none" aria-hidden="true" />
 
                     {/* Fixed Viewport Sidebar: anchored to viewport (top-0 left-0 h-[100dvh]) so scrolling the page never moves the sidebar */}
-                    <aside className="hidden md:flex fixed top-0 left-0 2xl:left-[max(0px,calc((100vw-1920px)/2))] h-[100dvh] w-24 hover:w-80 focus-within:w-80 z-50 border-r border-[#0E1E38]/30 bg-[#02041A] shadow-xl md:shadow-2xl flex-col transition-[width,box-shadow] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group overflow-hidden pointer-events-auto">
+                    <aside className="hidden md:flex fixed top-0 left-0 2xl:left-[max(0px,calc((100vw-1920px)/2))] h-[100dvh] w-24 hover:w-80 focus-within:w-80 z-50 border-r border-[#0E1E38]/30 bg-gradient-to-b from-[#02041A] via-[#040989] to-[#02041A] shadow-xl md:shadow-2xl flex-col transition-[width,box-shadow] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group overflow-hidden pointer-events-auto">
                         {/* Soldan Sağa #0b192c Arka Plan Efekti Overlay (Opak Beyaz Zemin Üzerinde) */}
                         <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none z-0" />
 
                         {/* FinAi Workspace Üst Başlık Alanı: Kapalıyken Beyaz, Açılınca #0b192c */}
-                        <div className="p-3 md:px-5 md:py-4 flex items-center justify-start h-14 md:h-20 shrink-0 border-b border-[#0E1E38]/20 relative z-10 bg-[#02041A] transition-[background-color,border-color] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden">
+                        <div className="p-3 md:px-5 md:py-4 flex items-center justify-start h-14 md:h-20 shrink-0 border-b border-white/10 relative z-10 bg-transparent transition-[background-color,border-color] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden">
                             {/* Subtle Ambient Glow (Açılınca Belirir) */}
                             <div className="absolute -top-10 -right-10 w-28 h-28 bg-white/10 rounded-full blur-2xl pointer-events-none opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-opacity duration-250" />
                             <div className="absolute -bottom-10 -left-10 w-28 h-28 bg-blue-400/15 rounded-full blur-2xl pointer-events-none opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-opacity duration-250" />
@@ -520,10 +520,10 @@ function DashboardShell({
                                         className="fixed inset-y-0 left-0 w-[min(320px,86vw)] h-[100dvh] max-h-[100dvh] bg-white text-[#040989] shadow-2xl z-[80] flex flex-col md:hidden border-r border-slate-200/80 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] relative overflow-hidden"
                                     >
                                         {/* Soldan Sağa #0b192c Efekti Overlay (Opak Beyaz Zemin Üzerinde) */}
-                                        <div className="absolute inset-0 bg-gradient-to-r from-[#0b192c]/[0.05] via-[#0b192c]/[0.015] to-transparent pointer-events-none z-0" />
+                                        <div className="absolute inset-0 bg-gradient-to-r from-[#040989]/[0.04] via-[#040989]/[0.01] to-transparent pointer-events-none z-0" />
 
                                         {/* Drawer Başlık (#0b192c ile dolduruldu) & Kapatma Butonu */}
-                                        <div className="flex items-center justify-between p-4 border-b border-[#1a2f4c] bg-[#0b192c] relative overflow-hidden flex-shrink-0 text-white z-10">
+                                        <div className="flex items-center justify-between p-4 border-b border-white/10 bg-gradient-to-r from-[#02041A] to-[#040989] relative overflow-hidden flex-shrink-0 text-white z-10">
                                             {/* Ambient Glow */}
                                             <div className="absolute -top-8 -right-8 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none" />
 

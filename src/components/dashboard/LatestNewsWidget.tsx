@@ -77,7 +77,7 @@ export function LatestNewsWidget({ news }: LatestNewsWidgetProps) {
                                     </h4>
 
                                     <div>
-                                        <span className="inline-block text-[10px] clash-desc font-[225] text-[#040989] bg-[#D6E4FF]/30 border border-[#D6E4FF]/60 px-2 py-0.5 rounded-md">
+                                        <span className="inline-block text-[10px] clash-subtitle font-[325] text-[#004BFA] uppercase tracking-wider">
                                             {item.categoryLabel || "Ekonomi"}
                                         </span>
                                     </div>

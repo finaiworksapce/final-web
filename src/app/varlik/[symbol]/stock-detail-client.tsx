@@ -174,7 +174,7 @@ function getTrendDisplay(trend?: string) {
   }
 }
 
-export type NavTabType = "overview" | "financials" | "analysis" | "ratios" | "dividends" | "ownership" | "news" | "quality";
+export type NavTabType = "overview" | "financials" | "analysis" | "ratios" | "dividends" | "ownership" | "news";
 
 export default function StockDetailClient({ symbol: rawSymbol }: { symbol: string }) {
   // Clean symbol (Remove .IS suffix for clean UI display)
@@ -246,7 +246,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
   useEffect(() => {
     if (typeof window !== "undefined") {
       const hash = window.location.hash.replace("#", "");
-      if (["overview", "financials", "analysis", "ratios", "dividends", "ownership", "news", "quality"].includes(hash)) {
+      if (["overview", "financials", "analysis", "ratios", "dividends", "ownership", "news"].includes(hash)) {
         setActiveNavTab(hash as NavTabType);
       } else if (hash === "genel") {
         setActiveNavTab("overview");
@@ -262,8 +262,6 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
         setActiveNavTab("ownership");
       } else if (hash === "haberler" || hash === "kap") {
         setActiveNavTab("news");
-      } else if (hash === "kalite" || hash === "derinlik") {
-        setActiveNavTab("quality");
       }
     }
   }, []);
@@ -697,8 +695,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
     { id: "ratios", label: "Rasyolar & Değerleme", icon: Calculator },
     { id: "dividends", label: "Temettü & Kurumsal", icon: Coins, count: combinedDividends.length > 0 ? combinedDividends.length : undefined },
     { id: "ownership", label: "Ortaklık & Analistler", icon: Users },
-    { id: "news", label: "KAP & Haberler", icon: Newspaper, count: newsList.length > 0 ? newsList.length : undefined },
-    { id: "quality", label: "Veri Kalitesi & Derinlik", icon: ShieldCheck }
+    { id: "news", label: "KAP & Haberler", icon: Newspaper, count: newsList.length > 0 ? newsList.length : undefined }
   ];
 
   return (
@@ -717,7 +714,6 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
               <div className="flex items-baseline justify-between gap-1.5">
                 <div className="flex items-center gap-1.5 min-w-0">
                   <h1 className="text-xl font-normal text-white tracking-tight truncate">{symbol}</h1>
-                  <span className="text-[11px] font-bold text-purple-300">GS</span>
                 </div>
                 <span className="text-xs font-normal text-white whitespace-nowrap bg-blue-900/60 px-2 py-0.5 rounded-lg border border-white/20">
                   {stockData?.currentPrice ? `${stockData.currentPrice.toFixed(2)} ₺` : (BIST_REAL_PRICES[symbol]?.current ? `${BIST_REAL_PRICES[symbol].current.toFixed(2)} ₺` : "--- ₺")}
@@ -816,7 +812,6 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="text-2xl sm:text-3xl font-normal text-white tracking-tight">{symbol}</span>
-                      <span className="text-xs font-bold text-purple-300 bg-purple-900/40 px-2 py-0.5 rounded-md border border-purple-400/30">GS</span>
                     </div>
                     <h2 className="text-xs sm:text-[13px] font-normal text-white mt-1">{fullName}</h2>
                   </div>
@@ -2750,59 +2745,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
           </div>
         )}
 
-        {/* ========================================================================= */}
-        {/* MODÜL 8: VERİ KALİTESİ VE DERİNLİK (DATA QUALITY & TRANSPARENCY) */}
-        {/* ========================================================================= */}
-        {activeNavTab === "quality" && (
-          <div className="space-y-6">
-
-            {/* FİNAİ ARŞİV MİMARİSİ VE ŞEFFAFLIK BİLDİRİMİ */}
-            <div className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xl space-y-4">
-              <h4 className="text-base font-normal text-[#0E1E38] flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-[#0E1E38]" />
-                FinAi Veri Bütünlüğü ve Şeffaflık Taahhüdü
-              </h4>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-semibold text-slate-700 leading-relaxed">
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-1.5">
-                  <span className="text-[10px] font-normal text-[#0E1E38] uppercase tracking-wider block">
-                    1. Kayıpsız Supabase-First Katman
-                  </span>
-                  <p>
-                    Tüm tarihsel fiyat barları, resmi bilançolar, temettü ve sermaye hareketleri PostgreSQL/Supabase veritabanında kayıpsız olarak arşivlenmektedir. İstemciye sunulan her metrik, bu doğrulanmış depolama katmanından okunmaktadır.
-                  </p>
-                </div>
-
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-1.5">
-                  <span className="text-[10px] font-normal text-[#0E1E38] uppercase tracking-wider block">
-                    2. Kesinlikle Sentetik Veri Yok
-                  </span>
-                  <p>
-                    FinAi sisteminde eksik veya gecikmeli finansal kalemler asla 0 (sıfır) olarak gösterilmez veya rastgele değerlerle doldurulmaz. Veri yoksa açıkça "Veri Mevcut Değil" veya "Yetersiz Geçmiş Veri" statüsü verilir.
-                  </p>
-                </div>
-
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-1.5">
-                  <span className="text-[10px] font-normal text-[#0E1E38] uppercase tracking-wider block">
-                    3. Resmi Brüt Temettü Korunumu
-                  </span>
-                  <p>
-                    Kâr payı dağıtımlarında şirketlerin genel kurullarında onayladığı resmi brüt tutarlar tescil edilmektedir. Tahmini stopaj veya varsayımsal net hesaplama uygulanmaz.
-                  </p>
-                </div>
-
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-1.5">
-                  <span className="text-[10px] font-normal text-[#0E1E38] uppercase tracking-wider block">
-                    4. Ağırlıklı Hisse Adediyle EPS
-                  </span>
-                  <p>
-                    Hisse Başına Kâr (EPS) hesaplamalarında ödenmiş sermaye yerine dönem içi ağırlıklı ortalama hisse adedi (weighted average shares) kullanılmaktadır.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        
 
       </main>
 

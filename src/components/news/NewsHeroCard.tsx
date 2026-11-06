@@ -80,7 +80,7 @@ export function NewsHeroCard({ mainNews, subNews }: NewsHeroCardProps) {
 
                 {/* 3. Üst Etiketler (Kategori Rozeti) */}
                 <div className="relative z-10 p-5 sm:p-7 md:p-8 flex items-center justify-between gap-3">
-                    <span className="px-3 py-1 bg-blue-900/85 hover:bg-blue-900 text-white text-[10px] sm:text-[11px] font-normal rounded-full uppercase tracking-wider backdrop-blur-md border border-white/20 shadow-xs">
+                    <span className="text-[#5B80FF] text-[11px] sm:text-xs clash-subtitle font-[325] uppercase tracking-wider drop-shadow-sm">
                         {mainNews.categoryLabel || "Küresel Piyasalar"}
                     </span>
                 </div>
@@ -148,7 +148,7 @@ export function NewsHeroCard({ mainNews, subNews }: NewsHeroCardProps) {
                             {/* Metin Alanı */}
                             <div className="min-w-0 flex-1">
                                 <div className="flex items-center gap-1.5 mb-1">
-                                    <span className="text-[9px] font-normal text-blue-700 bg-blue-50 border border-blue-100 px-1.5 py-0.5 rounded uppercase tracking-wider">
+                                    <span className="text-[10px] clash-subtitle font-[325] text-[#004BFA] uppercase tracking-wider">
                                         {item.categoryLabel || "Dünya"}
                                     </span>
                                 </div>
