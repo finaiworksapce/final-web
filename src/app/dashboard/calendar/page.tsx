@@ -2813,7 +2813,7 @@ function CalendarContent() {
                 </div>
 
                 {/* SAĞ: PİYASA GÜNDEMİ & YAKLAŞAN ÖNEMLİ TARİHLER (KOYU SUMMARY PANELİ) */}
-                <div className="bg-[#0c101d] text-white rounded-3xl p-5 sm:p-6 shadow-xl relative overflow-hidden flex flex-col justify-between">
+                <div className="bg-gradient-to-br from-[#02041A] via-[#040989] to-[#02041A] text-white rounded-3xl p-5 sm:p-6 shadow-xl relative overflow-hidden flex flex-col justify-between border border-white/10">
                     <div className="absolute -top-24 -right-24 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
                     
                     <div className="relative z-10 space-y-4">

@@ -1629,14 +1629,14 @@ export default function PortfolioPage() {
                             {/* OLAY LİSTESİ VEYA BOŞ DURUM */}
                             <div className="mt-4 space-y-3">
                                 {visibleAgendaEvents.length === 0 ? (
-                                    <div className="py-10 px-5 text-center bg-[#0b192c] text-white border border-[#1a2f4c] rounded-2xl sm:rounded-3xl shadow-lg shadow-black/20 relative overflow-hidden group">
+                                    <div className="py-10 px-5 text-center bg-gradient-to-br from-[#02041A] via-[#040989] to-[#02041A] text-white border border-[#5B80FF]/30 rounded-2xl sm:rounded-3xl shadow-lg shadow-black/20 relative overflow-hidden group">
                                         {/* Ambient Glow */}
                                         <div className="absolute -top-12 -right-12 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
                                         <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-blue-400/15 rounded-full blur-2xl pointer-events-none" />
 
                                         <div className="relative z-10">
-                                            <p className="text-white font-normal text-sm sm:text-[15px] mb-1.5 tracking-tight">Yaklaşan önemli bir portföy gelişmesi bulunmuyor.</p>
-                                            <span className="text-[11px] sm:text-xs text-blue-200/70 font-medium block leading-relaxed">Portföyünüzdeki şirketlere ait bilanço, temettü veya resmi haberler açıklandıkça burada listelenir.</span>
+                                            <p className="text-[#F5F7FA] font-medium text-sm sm:text-[15px] mb-1.5 tracking-tight">Yaklaşan önemli bir portföy gelişmesi bulunmuyor.</p>
+                                            <span className="text-[11px] sm:text-xs text-[#D6E4FF] font-normal block leading-relaxed">Portföyünüzdeki şirketlere ait bilanço, temettü veya resmi haberler açıklandıkça burada listelenir.</span>
                                         </div>
                                     </div>
                                 ) : (
