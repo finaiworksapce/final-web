@@ -94,17 +94,17 @@ export function FinAiYesterdayReportWidget() {
     return (
         <div className="bg-white rounded-3xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 min-h-[250px] h-full flex flex-col justify-between group">
             {/* 1. Üst Başlık */}
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+            <div className="flex items-center justify-between pb-2 border-b border-[#D6E4FF]/50">
                 <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-lg bg-[#0E1E38]/5 border border-[#0E1E38]/10 flex items-center justify-center text-[#0E1E38] shrink-0">
-                        <Sparkles className="w-3.5 h-3.5 text-[#0E1E38]" />
+                    <div className="w-6 h-6 rounded-lg bg-[#D6E4FF]/30 border border-[#D6E4FF]/60 flex items-center justify-center text-[#040989] shrink-0">
+                        <Sparkles className="w-3.5 h-3.5 text-[#040989]" />
                     </div>
-                    <h3 className="text-xs sm:text-[13px] zodiak-subtitle font-[325] text-[#0E1E38] tracking-tight">
+                    <h3 className="text-xs sm:text-[13px] clash-subtitle font-[325] text-[#040989] tracking-tight">
                         FinAi Portföy Raporu
                     </h3>
                 </div>
 
-                <span className="text-[10px] zodiak-subtitle font-[325] text-white bg-[#0E1E38] font-normal px-2.5 py-0.5 rounded-full shadow-xs">
+                <span className="text-[10px] clash-subtitle font-[325] text-white bg-[#004BFA] font-normal px-2.5 py-0.5 rounded-full shadow-xs">
                     Canlı Analiz
                 </span>
             </div>
@@ -113,18 +113,18 @@ export function FinAiYesterdayReportWidget() {
             <div className="my-auto py-2">
                 {loading && !narrativeToDisplay ? (
                     <div className="py-8 flex flex-col items-center justify-center gap-2 text-center">
-                        <Loader2 className="w-4 h-4 text-[#0E1E38] animate-spin" />
-                        <span className="text-[11px] zodiak-desc font-[225] text-[#0E1E38]/60">Piyasa analizi hazırlanıyor...</span>
+                        <Loader2 className="w-4 h-4 text-[#040989] animate-spin" />
+                        <span className="text-[11px] clash-desc font-[225] text-[#040989]/60">Piyasa analizi hazırlanıyor...</span>
                     </div>
                 ) : (
                     <div className="space-y-1.5">
-                        <h4 className="text-sm sm:text-[15px] zodiak-subtitle font-[325] text-[#0E1E38] tracking-tight leading-snug">
+                        <h4 className="text-sm sm:text-[15px] clash-subtitle font-[325] text-[#040989] tracking-tight leading-snug">
                             {isPositive
                                 ? "Portföy Gelişim ve Büyüme Değerlendirmesi"
                                 : "Piyasa Dinamikleri ve Portföy Dengesi"}
                         </h4>
 
-                        <p className="text-xs zodiak-desc font-[225] text-[#0E1E38]/80 leading-relaxed line-clamp-4">
+                        <p className="text-xs clash-desc font-[225] text-[#040989]/80 leading-relaxed line-clamp-4">
                             {narrativeToDisplay}
                         </p>
                     </div>
@@ -132,16 +132,16 @@ export function FinAiYesterdayReportWidget() {
             </div>
 
             {/* 3. Alt Aksiyon Linki */}
-            <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+            <div className="pt-2 border-t border-[#D6E4FF]/50 flex items-center justify-between">
                 <Link
                     href="/dashboard/portfolio"
-                    className="text-xs zodiak-subtitle font-[325] text-[#0E1E38] hover:text-[#0E1E38]/80 transition-colors inline-flex items-center gap-1.5 group/link"
+                    className="text-xs clash-subtitle font-[325] text-[#040989] hover:text-[#040989]/80 transition-colors inline-flex items-center gap-1.5 group/link"
                 >
                     <span>Detaylı portföy analizi</span>
                     <ArrowRight className="w-3.5 h-3.5 transform group-hover/link:translate-x-1 transition-transform" />
                 </Link>
 
-                <span className="text-[10px] font-numbers font-normal px-2 py-0.5 rounded-md text-[#0E1E38] bg-[#0E1E38]/5 border border-[#0E1E38]/10">
+                <span className="text-[10px] font-numbers font-normal px-2 py-0.5 rounded-md text-[#040989] bg-[#D6E4FF]/30 border border-[#D6E4FF]/60">
                     {isPositive ? '+' : ''}%{displayDiffPercent.toFixed(1)}
                 </span>
             </div>

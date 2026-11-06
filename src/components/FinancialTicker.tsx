@@ -48,15 +48,15 @@ export function FinancialTicker() {
 
     if (loading && data.length === 0) {
         return (
-            <div className="w-full h-12 flex items-center justify-center space-x-4 bg-white border-b border-slate-100">
-                <Activity className="w-4 h-4 text-[#0E1E38] animate-pulse" />
-                <span className="text-xs zodiak-subtitle font-[325] text-[#0E1E38]/70">Piyasa verileri yükleniyor...</span>
+            <div className="w-full h-12 flex items-center justify-center space-x-4 bg-white border-b border-[#D6E4FF]/50">
+                <Activity className="w-4 h-4 text-[#040989] animate-pulse" />
+                <span className="text-xs clash-subtitle font-[325] text-[#040989]/70">Piyasa verileri yükleniyor...</span>
             </div>
         );
     }
 
     return (
-        <div className="w-full bg-white border-b border-slate-100 relative h-10 md:h-12 flex items-center overflow-x-auto scrollbar-none">
+        <div className="w-full bg-white border-b border-[#D6E4FF]/50 relative h-10 md:h-12 flex items-center overflow-x-auto scrollbar-none">
             <div className="flex items-center justify-start md:justify-evenly px-4 py-2 min-w-max md:w-full gap-6 md:gap-2">
                 {FIXED_SYMBOLS.map((sym, index) => {
                     const quote = data.find(q => 
@@ -79,9 +79,9 @@ export function FinancialTicker() {
 
                     return (
                         <div key={sym} className="flex items-center gap-2">
-                            {index > 0 && <div className="w-px h-4 bg-slate-200 -ml-1 hidden md:block" />}
-                            <span className="text-[10px] zodiak-subtitle font-[325] text-[#0E1E38]/70 whitespace-nowrap uppercase tracking-widest">{name}</span>
-                            <span className="text-xs md:text-sm font-numbers font-normal text-[#0E1E38] whitespace-nowrap">
+                            {index > 0 && <div className="w-px h-4 bg-[#D6E4FF] -ml-1 hidden md:block" />}
+                            <span className="text-[10px] clash-subtitle font-[325] text-[#040989]/70 whitespace-nowrap uppercase tracking-widest">{name}</span>
+                            <span className="text-xs md:text-sm font-numbers font-normal text-[#040989] whitespace-nowrap">
                                 {price > 0 ? `₺${price.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'Canlı...'}
                             </span>
                             <div className={`flex items-center text-[10px] md:text-xs font-numbers font-normal whitespace-nowrap ${isPositive ? "text-emerald-700" : "text-rose-700"}`}>

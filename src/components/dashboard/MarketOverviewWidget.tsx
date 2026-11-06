@@ -7,18 +7,18 @@ export function MarketOverviewWidget() {
     return (
         <div className="bg-white rounded-3xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 h-[395px] flex flex-col justify-between group overflow-hidden">
             {/* 1. Üst Başlık */}
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100 shrink-0">
+            <div className="flex items-center justify-between pb-2 border-b border-[#D6E4FF]/50 shrink-0">
                 <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-lg bg-[#0E1E38]/5 border border-[#0E1E38]/10 flex items-center justify-center text-[#0E1E38] shrink-0">
-                        <TrendingUp className="w-3.5 h-3.5 text-[#0E1E38]" />
+                    <div className="w-7 h-7 rounded-lg bg-[#D6E4FF]/30 border border-[#D6E4FF]/60 flex items-center justify-center text-[#040989] shrink-0">
+                        <TrendingUp className="w-3.5 h-3.5 text-[#040989]" />
                     </div>
                     <div>
-                        <h3 className="text-xs sm:text-[13px] zodiak-subtitle font-[325] text-[#0E1E38] tracking-tight">
+                        <h3 className="text-xs sm:text-[13px] clash-subtitle font-[325] text-[#040989] tracking-tight">
                             Piyasa Genel Görünümü
                         </h3>
                     </div>
                 </div>
-                <span className="text-[10px] zodiak-subtitle font-[325] text-white bg-[#0E1E38] font-normal px-2.5 py-0.5 rounded-full shadow-xs">
+                <span className="text-[10px] clash-subtitle font-[325] text-white bg-[#004BFA] font-normal px-2.5 py-0.5 rounded-full shadow-xs">
                     Canlı
                 </span>
             </div>

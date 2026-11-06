@@ -66,7 +66,7 @@ export default function Navbar() {
                             <motion.a
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm zodiak-subtitle text-white bg-[#0E1E38] hover:bg-[#102240] rounded-full shadow-[0_8px_30px_-5px_rgba(20,43,80,0.35)] transition-all hidden sm:block whitespace-nowrap"
+                                className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm clash-subtitle text-white bg-[#0E1E38] hover:bg-[#102240] rounded-full shadow-[0_8px_30px_-5px_rgba(20,43,80,0.35)] transition-all hidden sm:block whitespace-nowrap"
                             >
                                 Panele Git
                             </motion.a>
@@ -77,7 +77,7 @@ export default function Navbar() {
                                 <motion.a
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm zodiak-subtitle text-[#0E1E38] hover:bg-[#78B8F5]/15 rounded-full border-2 border-[#78B8F5] transition-all bg-white relative z-50 block whitespace-nowrap shadow-sm"
+                                    className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm clash-subtitle text-[#0E1E38] hover:bg-[#78B8F5]/15 rounded-full border-2 border-[#78B8F5] transition-all bg-white relative z-50 block whitespace-nowrap shadow-sm"
                                 >
                                     Giriş Yap
                                 </motion.a>
@@ -86,7 +86,7 @@ export default function Navbar() {
                                 <motion.a
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm zodiak-subtitle text-white bg-[#0E1E38] hover:bg-[#102240] rounded-full shadow-[0_8px_30px_-5px_rgba(20,43,80,0.35)] transition-all relative z-50 block whitespace-nowrap"
+                                    className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm clash-subtitle text-white bg-[#0E1E38] hover:bg-[#102240] rounded-full shadow-[0_8px_30px_-5px_rgba(20,43,80,0.35)] transition-all relative z-50 block whitespace-nowrap"
                                 >
                                     Kaydol
                                 </motion.a>

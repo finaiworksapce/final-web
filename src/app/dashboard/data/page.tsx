@@ -27,6 +27,7 @@ import {
   Check
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 import { STOCK_SECTORS } from "@/lib/constants/assets-mapping";
 import TradingViewScreenerWidget from "@/components/TradingViewScreenerWidget";
 import StockLogo from "@/components/StockLogo";
@@ -936,21 +937,30 @@ export default function AssetsPage() {
             {/* ========================================================================= */}
             {/* 1. BÖLÜM: ÜST YARI — SEKTÖRLER YILLIK GETİRİLERİ (HEATMAP) & GÜNÜN ENLERİ */}
             {/* ========================================================================= */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 w-full items-stretch">
+            <motion.div layout className="grid grid-cols-1 lg:grid-cols-2 gap-5 w-full items-stretch">
                 
-                {/* SOL WIDGET: SEKTÖRLER YILLIK GETİRİLERİ (GERÇEK FINANCIAL HEATMAP TASARIMI) */}
-                <div className="bg-white border border-slate-200/90 rounded-[28px] p-5 shadow-xs space-y-4 flex flex-col justify-between">
+                {/* SOL WIDGET: SEKTÖRLER YILLIK GETİRİLERİ */}
+                <motion.div
+                    layout
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ layout: { duration: 0.52, type: "spring", bounce: 0.14 }, opacity: { duration: 0.32 }, y: { duration: 0.32 } }}
+                    className={cn(
+                        "bg-white border border-slate-200/90 rounded-[28px] p-5 shadow-xs space-y-4 flex flex-col justify-between overflow-hidden",
+                        selectedSector && "lg:col-span-2 shadow-[0_22px_55px_-32px_rgba(7,27,66,0.46)]"
+                    )}
+                >
                     <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                         <div className="flex items-center gap-2.5">
                             <div className="w-9 h-9 rounded-xl bg-[#0E1E38] flex items-center justify-center text-white shadow-xs shrink-0">
-                                <BarChart3 className="w-4 h-4 text-sky-300" />
+                                <BarChart3 className="w-4 h-4 text-white" />
                             </div>
                             <div>
                                 <h2 className="text-base font-normal text-[#0E1E38] tracking-tight leading-tight">
                                     Sektörler Yıllık Getirileri (2025 BIST)
                                 </h2>
                                 <p className="text-[10px] font-bold text-slate-400">
-                                    Getiri Büyüklüğüne Göre Renk Yoğunluğu (Filtrelemek İçin Tıklayın)
+                                    Getiriye göre sıralı • Filtrelemek için sütuna tıklayın
                                 </p>
                             </div>
                         </div>
@@ -965,44 +975,83 @@ export default function AssetsPage() {
                         )}
                     </div>
 
-                    {/* FINAI HEATMAP IZGARASI (BELİRGİN PERFORMANS YOĞUNLUĞU) */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 flex-1">
+                    {/* GETİRİ SÜTUN GRAFİĞİ */}
+                    <div className="relative flex-1 pt-4">
+                        <div className="absolute inset-x-0 top-4 bottom-9 flex flex-col justify-between pointer-events-none" aria-hidden="true">
+                            {[100, 75, 50, 25, 0].map((value) => (
+                                <div key={value} className="border-t border-dashed border-slate-100 relative">
+                                    <span className="absolute -top-2.5 -left-0.5 text-[8px] font-semibold text-slate-300 bg-white pr-1">%{value}</span>
+                                </div>
+                            ))}
+                        </div>
+                        <div className={cn("relative grid grid-cols-6 gap-2 sm:gap-3 items-end pl-5", selectedSector ? "h-[294px] sm:h-[316px]" : "h-[248px] sm:h-[260px]")}>
                         {ALL_SECTORS_DATA.slice(0, 6).map((sector, idx) => {
                             const isSelected = selectedSector === sector.name;
-                            const heatmapStyle = getSectorHeatmapStyle(sector.annualReturn, isSelected);
-                            const badgeStyle = getSectorReturnBadgeStyle(sector.annualReturn, isSelected);
+                            const chartHeight = Math.max(18, Math.min(100, (sector.annualReturn / 110) * 100));
+                            const isTopPerformer = idx < 3;
 
                             return (
                                 <button
                                     key={sector.name}
                                     onClick={() => handleSectorClick(sector.name)}
+                                    aria-pressed={isSelected}
+                                    title={`${sector.name}: +${sector.annualReturn}% — Lider: ${sector.leader}`}
                                     className={cn(
-                                        "p-3 rounded-2xl border text-left transition-all relative overflow-hidden flex flex-col justify-between group cursor-pointer shadow-2xs",
-                                        heatmapStyle
+                                        "group h-full min-w-0 flex flex-col justify-end items-center rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38] focus-visible:ring-offset-2",
+                                        isSelected && "bg-sky-50/70"
                                     )}
                                 >
-                                    <div className="flex items-center justify-between w-full mb-1.5">
-                                        <span className="text-[9px] font-normal opacity-60 uppercase tracking-wider">#{idx + 1}</span>
-                                        <span className={cn("text-xs px-1.5 py-0.5 rounded-md border", badgeStyle)}>
-                                            +{sector.annualReturn}%
-                                        </span>
+                                    <div className={cn(
+                                        "mb-2 inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-bold tabular-nums transition-all duration-300",
+                                        isSelected ? "bg-[#071B42] text-white shadow-sm" : "bg-slate-100 text-[#173C78] group-hover:bg-[#0E1E38] group-hover:text-white"
+                                    )}>
+                                        +{sector.annualReturn}%
                                     </div>
-                                    <div>
-                                        <h3 className="text-xs font-normal leading-snug truncate" title={sector.name}>
+                                    <div className={cn("w-full flex items-end justify-center", selectedSector ? "h-[234px] sm:h-[256px]" : "h-[188px] sm:h-[200px]")}>
+                                        <motion.div
+                                            initial={{ scaleY: 0, opacity: 0.35 }}
+                                            animate={{ scaleY: 1, opacity: 1 }}
+                                            transition={{ duration: 0.72, delay: idx * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                                            className={cn(
+                                                "w-full max-w-[64px] min-w-[20px] rounded-t-xl transition-all duration-500 ease-out origin-bottom relative overflow-hidden",
+                                                isSelected
+                                                    ? "bg-gradient-to-t from-[#061633] via-[#0E2B5D] to-white shadow-lg shadow-[#0E1E38]/25"
+                                                    : isTopPerformer
+                                                        ? "bg-gradient-to-t from-[#071B42] via-[#17427F] to-white group-hover:from-[#030C20] group-hover:via-[#0E326B] group-hover:shadow-[0_12px_24px_-12px_rgba(7,27,66,0.65)]"
+                                                        : "bg-gradient-to-t from-[#173C78] via-[#4975AF] to-white group-hover:from-[#071B42] group-hover:via-[#17427F] group-hover:shadow-[0_12px_24px_-12px_rgba(7,27,66,0.55)]"
+                                            )}
+                                            style={{ height: `${chartHeight}%`, transformOrigin: "bottom" }}
+                                        >
+                                            <div className="absolute inset-x-0 top-0 h-px bg-[#EAF2FF]" />
+                                            <motion.div
+                                                aria-hidden="true"
+                                                className="absolute inset-0 bg-gradient-to-b from-white/35 via-transparent to-transparent"
+                                                animate={{ y: ["-100%", "120%"] }}
+                                                transition={{ duration: 2.8, delay: idx * 0.16, repeat: Infinity, repeatDelay: 2.4, ease: "easeInOut" }}
+                                            />
+                                        </motion.div>
+                                    </div>
+                                    <div className="w-full pt-2.5 px-0.5 text-center">
+                                        <p className="text-[9px] sm:text-[10px] font-bold text-[#0E1E38] leading-tight line-clamp-2 min-h-[24px]">
                                             {sector.name}
-                                        </h3>
-                                        <p className="text-[9px] font-bold opacity-75 mt-0.5">
-                                            Lider: <span className="font-normal">{sector.leader}</span>
                                         </p>
+                                        <p className="text-[8px] sm:text-[9px] text-slate-400 mt-0.5 truncate">{sector.leader}</p>
                                     </div>
                                 </button>
                             );
                         })}
+                        </div>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* SAĞ WIDGET: GÜNÜN ENLERİ (SEKMELİ & KONTROLLÜ RENK YOĞUNLUĞU) */}
-                <div className="bg-white border border-slate-200/90 rounded-[28px] p-5 shadow-xs space-y-3.5 flex flex-col justify-between">
+                <motion.div
+                    layout
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ layout: { duration: 0.52, type: "spring", bounce: 0.14 }, opacity: { duration: 0.32, delay: 0.08 }, y: { duration: 0.32, delay: 0.08 } }}
+                    className="bg-white border border-slate-200/90 rounded-[28px] p-5 shadow-xs space-y-3.5 flex flex-col justify-between"
+                >
                     
                     {/* BAŞLIK VE SEKMELER */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-100 pb-3">
@@ -1109,14 +1158,18 @@ export default function AssetsPage() {
                             ));
                         })()}
                     </div>
-                </div>
-            </div>
+                </motion.div>
+            </motion.div>
 
 
             {/* ========================================================================= */}
             {/* 3. BÖLÜM: TRADINGVIEW BIST HİSSE TARAYICISI (VOLUME LEADERS) */}
             {/* ========================================================================= */}
-            <div
+            <motion.div
+                layout
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ layout: { duration: 0.52, type: "spring", bounce: 0.14 }, opacity: { duration: 0.36, delay: 0.16 }, y: { duration: 0.36, delay: 0.16 } }}
                 ref={stockSectionRef}
                 className="w-full bg-white border border-slate-200/90 rounded-[28px] p-3 sm:p-4 shadow-xs relative"
             >
@@ -1131,7 +1184,7 @@ export default function AssetsPage() {
                     externalSector={selectedSector}
                     onSectorChange={setSelectedSector}
                 />
-            </div>
+            </motion.div>
         </div>
     );
 }

@@ -270,19 +270,19 @@ function DashboardShell({
                     <div className="hidden md:block w-24 shrink-0 pointer-events-none" aria-hidden="true" />
 
                     {/* Fixed Viewport Sidebar: anchored to viewport (top-0 left-0 h-[100dvh]) so scrolling the page never moves the sidebar */}
-                    <aside className="hidden md:flex fixed top-0 left-0 2xl:left-[max(0px,calc((100vw-1920px)/2))] h-[100dvh] w-24 hover:w-80 focus-within:w-80 z-50 border-r border-[#0E1E38]/30 bg-[#0E1E38] shadow-xl md:shadow-2xl flex-col transition-[width,box-shadow] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group overflow-hidden pointer-events-auto">
+                    <aside className="hidden md:flex fixed top-0 left-0 2xl:left-[max(0px,calc((100vw-1920px)/2))] h-[100dvh] w-24 hover:w-80 focus-within:w-80 z-50 border-r border-[#0E1E38]/30 bg-[#02041A] shadow-xl md:shadow-2xl flex-col transition-[width,box-shadow] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group overflow-hidden pointer-events-auto">
                         {/* Soldan Sağa #0b192c Arka Plan Efekti Overlay (Opak Beyaz Zemin Üzerinde) */}
                         <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none z-0" />
 
                         {/* FinAi Workspace Üst Başlık Alanı: Kapalıyken Beyaz, Açılınca #0b192c */}
-                        <div className="p-3 md:px-5 md:py-4 flex items-center justify-start h-14 md:h-20 shrink-0 border-b border-[#0E1E38]/20 relative z-10 bg-[#0E1E38] transition-[background-color,border-color] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden">
+                        <div className="p-3 md:px-5 md:py-4 flex items-center justify-start h-14 md:h-20 shrink-0 border-b border-[#0E1E38]/20 relative z-10 bg-[#02041A] transition-[background-color,border-color] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden">
                             {/* Subtle Ambient Glow (Açılınca Belirir) */}
                             <div className="absolute -top-10 -right-10 w-28 h-28 bg-white/10 rounded-full blur-2xl pointer-events-none opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-opacity duration-250" />
                             <div className="absolute -bottom-10 -left-10 w-28 h-28 bg-blue-400/15 rounded-full blur-2xl pointer-events-none opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-opacity duration-250" />
 
                             <Link href="/" className="flex items-center justify-start gap-3 w-full overflow-hidden group/logo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 md:group-hover:focus-visible:ring-white/40 rounded-xl relative z-10">
                                 <FinAiLogo showText={false} className="h-8 w-8 md:h-10 md:w-10 shrink-0 transition-opacity duration-200 motion-reduce:transition-none drop-shadow-sm" />
-                                <span className="text-lg md:text-xl zodiak-title tracking-tight text-white opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1.5 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 whitespace-nowrap hidden md:inline-block motion-reduce:transition-none">
+                                <span className="text-lg md:text-xl clash-title tracking-tight text-white opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1.5 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 whitespace-nowrap hidden md:inline-block motion-reduce:transition-none">
                                     FinAi Workspace
                                 </span>
                             </Link>
@@ -297,7 +297,7 @@ function DashboardShell({
                                         <div key={idx} className="space-y-1">
                                             <div className={`flex items-center justify-between px-3 md:px-3.5 py-2.5 md:py-3 text-sm font-semibold rounded-xl md:rounded-2xl transition-[background-color,color,box-shadow] duration-180 ease-out overflow-hidden whitespace-nowrap h-11 md:h-12 relative group/nav motion-reduce:transition-none ${
                                                 isActive 
-                                                    ? 'text-[#0E1E38] bg-white shadow-sm font-normal' 
+                                                    ? 'text-[#040989] bg-white shadow-sm font-normal' 
                                                     : 'text-white/80 hover:bg-white/10 hover:text-white transition-colors'
                                             }`}>
                                                 {/* Direct Link to Portfolio/Calendar Page */}
@@ -313,7 +313,7 @@ function DashboardShell({
                                                 >
                                                     <item.icon className={`w-5 h-5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-white' : 'text-white/70'}`}
                                                 />
-                                                <span className="opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 ml-2 md:ml-3 uppercase tracking-tight md:tracking-wider text-[10px] md:text-[11px] truncate zodiak-subtitle hidden md:inline-block motion-reduce:transition-none  ${isActive ? 'text-white' : 'text-[#0E1E38]'}">
+                                                <span className="opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 ml-2 md:ml-3 uppercase tracking-tight md:tracking-wider text-[10px] md:text-[11px] truncate clash-subtitle hidden md:inline-block motion-reduce:transition-none  ${isActive ? 'text-white' : 'text-[#040989]'}">
                                                         {item.label}
                                                     </span>
                                                 </Link>
@@ -361,11 +361,11 @@ function DashboardShell({
                                                                     href={sub.href}
                                                                     className={`flex items-center gap-2 px-3 py-1.5 text-[11px] font-semibold rounded-lg transition-colors duration-150 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 ${
                                                                         sub.isSubActive 
-                                                                            ? 'bg-white text-[#0E1E38] shadow-sm font-normal' 
+                                                                            ? 'bg-[#004BFA] text-[#F5F7FA] shadow-md shadow-[#004BFA]/30 font-normal' 
                                                                             : 'text-white/80 hover:bg-white/10 hover:text-white'
                                                                     }`}
                                                                 >
-                                                                    <SubIcon className={`w-3.5 h-3.5 flex-shrink-0 transition-colors duration-150 ${sub.isSubActive ? 'text-white' : 'text-[#0E1E38]'}`} />
+                                                                    <SubIcon className={`w-3.5 h-3.5 flex-shrink-0 transition-colors duration-150 ${sub.isSubActive ? 'text-white' : 'text-[#040989]'}`} />
                                                                     <span className="truncate">{sub.label}</span>
                                                                 </Link>
                                                             );
@@ -380,12 +380,12 @@ function DashboardShell({
                                 return (
                                     <Link key={idx} href={item.href} className={`flex items-center justify-start px-3 md:px-4 py-2.5 md:py-3 text-sm font-semibold rounded-xl md:rounded-2xl transition-[background-color,color,box-shadow] duration-180 ease-out overflow-hidden whitespace-nowrap h-11 md:h-12 relative group/nav focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 motion-reduce:transition-none ${
                                         isActive 
-                                            ? 'text-[#0E1E38] bg-white shadow-sm font-normal' 
+                                            ? 'text-[#040989] bg-white shadow-sm font-normal' 
                                             : 'text-white/80 hover:bg-white/10 hover:text-white transition-colors'
                                     }`}>
                                         <item.icon className={`w-5 h-5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-white' : 'text-white/70'}`}
                                                 />
-                                                <span className="opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 ml-2 md:ml-3 uppercase tracking-tight md:tracking-wider text-[10px] md:text-[11px] truncate zodiak-subtitle hidden md:inline-block motion-reduce:transition-none  ${isActive ? 'text-white' : 'text-[#0E1E38]'}">
+                                                <span className="opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 ml-2 md:ml-3 uppercase tracking-tight md:tracking-wider text-[10px] md:text-[11px] truncate clash-subtitle hidden md:inline-block motion-reduce:transition-none  ${isActive ? 'text-white' : 'text-[#040989]'}">
                                             {item.label}
                                         </span>
                                     </Link>
@@ -414,13 +414,13 @@ function DashboardShell({
                     {/* Main Content */}
                     <main className="flex-1 relative flex flex-col min-w-0 bg-transparent overflow-x-hidden">
                         {/* Header (Glassified & Safe-Area Aware) */}
-                        <header className={`h-12 md:h-16 border-b border-slate-100 flex items-center justify-between px-3 md:px-6 sticky top-0 ${isProfileOpen ? "z-[60]" : "z-40"} bg-white/90 backdrop-blur-xl flex-shrink-0 relative pt-[env(safe-area-inset-top,0px)] transition-none`}>
+                        <header className={`h-12 md:h-16 border-b border-[#D6E4FF]/50 flex items-center justify-between px-3 md:px-6 sticky top-0 ${isProfileOpen ? "z-[60]" : "z-40"} bg-white/90 backdrop-blur-xl flex-shrink-0 relative pt-[env(safe-area-inset-top,0px)] transition-none`}>
                             <div className="flex items-center gap-2.5">
                                 {/* Hamburger Butonu (Dokunmatik Hedef >= 44x44px) */}
                                 <button
                                     ref={hamburgerRef}
                                     onClick={() => setIsMobileMenuOpen(true)}
-                                    className="md:hidden flex flex-col items-center justify-center gap-1.5 w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[#0E1E38] text-white shadow-sm active:scale-95 transition-[transform,background-color] duration-150 shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:active:scale-100"
+                                    className="md:hidden flex flex-col items-center justify-center gap-1.5 w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[#02041A] text-white shadow-sm active:scale-95 transition-[transform,background-color] duration-150 shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:active:scale-100"
                                     aria-label="Menüyü aç"
                                     aria-expanded={isMobileMenuOpen}
                                     aria-controls="mobile-nav-drawer"
@@ -429,7 +429,7 @@ function DashboardShell({
                                     <span className="w-5 h-0.5 bg-white rounded-full block" />
                                     <span className="w-5 h-0.5 bg-white rounded-full block" />
                                 </button>
-                                <h1 className="text-[10px] md:text-[11px] zodiak-subtitle text-[#0E1E38] tracking-[0.2em] uppercase opacity-80 select-none">FinAi Workspace</h1>
+                                <h1 className="text-[10px] md:text-[11px] clash-subtitle text-[#040989] tracking-[0.2em] uppercase opacity-80 select-none">FinAi Workspace</h1>
                             </div>
                             
                             <div className="flex items-center space-x-2 md:space-x-4">
@@ -444,7 +444,7 @@ function DashboardShell({
                                         aria-expanded={isProfileOpen}
                                         aria-controls="profile-dropdown-menu"
                                         aria-haspopup="true"
-                                        className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-100 flex items-center justify-center text-[#0E1E38] zodiak-subtitle hover:bg-slate-200 border border-slate-200 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 focus-visible:ring-offset-2 overflow-hidden border border-[#0a192f]/5"
+                                        className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-100 flex items-center justify-center text-[#040989] clash-subtitle hover:bg-slate-200 border border-slate-200 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 focus-visible:ring-offset-2 overflow-hidden border border-[#0a192f]/5"
                                     >
                                         {avatarUrl ? (
                                             <img src={avatarUrl} alt="Profil" className="w-full h-full object-cover" />
@@ -460,7 +460,7 @@ function DashboardShell({
                                             aria-label="Kullanıcı Menüsü"
                                             className="absolute right-0 mt-3 w-56 bg-white border border-[#0a192f]/10 rounded-xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in-95 duration-150 origin-top-right focus:outline-none"
                                         >
-                                            <div className="px-4 py-2 border-b border-slate-100 mb-1">
+                                            <div className="px-4 py-2 border-b border-[#D6E4FF]/50 mb-1">
                                                 <p className="text-xs font-bold text-[#0a192f]">{userName || "Kullanıcı"}</p>
                                             </div>
                                             <div className="py-1">
@@ -474,7 +474,7 @@ function DashboardShell({
                                                     Kullanıcı Ayarları
                                                 </Link>
                                             </div>
-                                            <div className="border-t border-slate-100 mt-1 py-1">
+                                            <div className="border-t border-[#D6E4FF]/50 mt-1 py-1">
                                                 <button 
                                                     onClick={() => {
                                                         setIsProfileOpen(false);
@@ -517,7 +517,7 @@ function DashboardShell({
                                         animate={{ x: 0 }}
                                         exit={{ x: "-100%" }}
                                         transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-                                        className="fixed inset-y-0 left-0 w-[min(320px,86vw)] h-[100dvh] max-h-[100dvh] bg-white text-[#0E1E38] shadow-2xl z-[80] flex flex-col md:hidden border-r border-slate-200/80 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] relative overflow-hidden"
+                                        className="fixed inset-y-0 left-0 w-[min(320px,86vw)] h-[100dvh] max-h-[100dvh] bg-white text-[#040989] shadow-2xl z-[80] flex flex-col md:hidden border-r border-slate-200/80 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] relative overflow-hidden"
                                     >
                                         {/* Soldan Sağa #0b192c Efekti Overlay (Opak Beyaz Zemin Üzerinde) */}
                                         <div className="absolute inset-0 bg-gradient-to-r from-[#0b192c]/[0.05] via-[#0b192c]/[0.015] to-transparent pointer-events-none z-0" />
@@ -559,8 +559,8 @@ function DashboardShell({
                                                         <div key={idx} className="space-y-0.5">
                                                             <div className={`flex items-center justify-between px-3.5 py-2.5 text-sm font-semibold rounded-xl transition-[background-color,color,box-shadow] duration-180 ease-out motion-reduce:transition-none ${
                                                                 isActive 
-                                                                    ? 'text-[#0E1E38] bg-white shadow-sm font-normal' 
-                                                                    : 'text-slate-700 hover:text-[#0E1E38] hover:bg-slate-100/80 font-medium'
+                                                                    ? 'text-[#040989] bg-white shadow-sm font-normal' 
+                                                                    : 'text-slate-700 hover:text-[#040989] hover:bg-slate-100/80 font-medium'
                                                             }`}>
                                                                 <Link
                                                                     href={item.href}
@@ -611,11 +611,11 @@ function DashboardShell({
                                                                                     onClick={() => setIsMobileMenuOpen(false)}
                                                                                     className={`flex items-center gap-2.5 px-3 py-2 text-xs font-semibold rounded-lg transition-colors duration-150 min-h-[40px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 ${
                                                                                         sub.isSubActive
-                                                                                            ? 'bg-slate-100 text-[#0E1E38] font-normal'
-                                                                                            : 'text-slate-600 hover:text-[#0E1E38] hover:bg-slate-50 font-medium'
+                                                                                            ? 'bg-slate-100 text-[#040989] font-normal'
+                                                                                            : 'text-slate-600 hover:text-[#040989] hover:bg-slate-50 font-medium'
                                                                                     }`}
                                                                                 >
-                                                                                    <SubIcon className={`w-4 h-4 flex-shrink-0 transition-colors duration-150 ${sub.isSubActive ? 'text-[#0E1E38]' : 'text-slate-400'}`} />
+                                                                                    <SubIcon className={`w-4 h-4 flex-shrink-0 transition-colors duration-150 ${sub.isSubActive ? 'text-[#040989]' : 'text-slate-400'}`} />
                                                                                     <span>{sub.label}</span>
                                                                                 </Link>
                                                                             );
@@ -634,8 +634,8 @@ function DashboardShell({
                                                         onClick={() => setIsMobileMenuOpen(false)}
                                                         className={`flex items-center gap-3 px-3.5 py-2.5 text-sm font-semibold rounded-xl transition-[background-color,color,box-shadow] duration-180 ease-out min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 motion-reduce:transition-none ${
                                                             isActive
-                                                                ? 'text-[#0E1E38] bg-white shadow-sm font-normal'
-                                                                : 'text-slate-700 hover:text-[#0E1E38] hover:bg-slate-100/80 font-medium'
+                                                                ? 'text-[#040989] bg-white shadow-sm font-normal'
+                                                                : 'text-slate-700 hover:text-[#040989] hover:bg-slate-100/80 font-medium'
                                                         }`}
                                                     >
                                                         <ItemIcon className={`w-4.5 h-4.5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-white' : 'text-slate-500'}`} />
@@ -646,7 +646,7 @@ function DashboardShell({
                                         </nav>
 
                                         {/* Çıkış Yap */}
-                                        <div className="pt-3 border-t border-slate-100 flex-shrink-0">
+                                        <div className="pt-3 border-t border-[#D6E4FF]/50 flex-shrink-0">
                                             <button
                                                 onClick={() => {
                                                     setIsMobileMenuOpen(false);

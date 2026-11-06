@@ -149,7 +149,7 @@ export default function HomeClient() {
   ];
 
   return (
-    <div ref={containerRef} className="min-h-screen w-full bg-white text-slate-800 relative font-zodiak overflow-x-hidden">
+    <div ref={containerRef} className="min-h-screen w-full bg-white text-slate-800 relative font-clash overflow-x-hidden">
       
       {/* 
           FULL WHITE BACKGROUND (Clean)
@@ -179,10 +179,10 @@ export default function HomeClient() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-                  className="zodiak-title text-[65px] sm:text-[90px] md:text-[120px] lg:text-[135px] leading-[1.0] tracking-tight text-[#0E1E38] py-2 sm:py-4 relative flex justify-center items-center w-full mx-auto"
+                  className="clash-title text-[65px] sm:text-[90px] md:text-[120px] lg:text-[135px] leading-[1.0] tracking-tight text-[#0E1E38] py-2 sm:py-4 relative flex justify-center items-center w-full mx-auto"
                 >
                   <span className="relative inline-block z-10">
-                    <span className="text-[#0E1E38] px-2 zodiak-title">
+                    <span className="text-[#0E1E38] px-2 clash-title">
                       FinAi
                     </span>
                     <svg className="absolute w-full h-2 sm:h-3 -bottom-1 left-0 text-[#78B8F5] opacity-100" viewBox="0 0 100 10" preserveAspectRatio="none">
@@ -196,9 +196,9 @@ export default function HomeClient() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.2 }}
-                  className="zodiak-subtitle text-base sm:text-xl md:text-2xl text-[#0E1E38]/80 max-w-3xl mx-auto leading-relaxed mt-8 sm:mt-12 md:mt-14 px-4 sm:px-0 tracking-normal"
+                  className="clash-subtitle text-base sm:text-xl md:text-2xl text-[#0E1E38]/80 max-w-3xl mx-auto leading-relaxed mt-8 sm:mt-12 md:mt-14 px-4 sm:px-0 tracking-normal"
                 >
-                  Tüm Yatırımlarınızı Yapay Zeka Gücüyle Tek Ekrandan Yönetin, <b className="text-[#0E1E38] zodiak-title">Portföyünüzün Tam Kontrolünü</b> Elinize Alın.
+                  Tüm Yatırımlarınızı Yapay Zeka Gücüyle Tek Ekrandan Yönetin, <b className="text-[#0E1E38] clash-title">Portföyünüzün Tam Kontrolünü</b> Elinize Alın.
                 </motion.p>
 
                 {/* CTAs */}
@@ -208,11 +208,11 @@ export default function HomeClient() {
                   transition={{ duration: 0.7, delay: 0.3 }}
                   className="flex md:hidden flex-row gap-3 justify-center items-center pt-4 sm:pt-6"
                 >
-                    <Link href="/login?tab=register" className="flex items-center justify-center gap-1.5 px-6 py-3 bg-[#0E1E38] hover:bg-[#102240] text-white zodiak-subtitle rounded-full shadow-lg transition-all text-sm tracking-wide">
+                    <Link href="/login?tab=register" className="flex items-center justify-center gap-1.5 px-6 py-3 bg-[#0E1E38] hover:bg-[#102240] text-white clash-subtitle rounded-full shadow-lg transition-all text-sm tracking-wide">
                         Ücretsiz Dene
                         <ArrowRight className="w-4 h-4" />
                     </Link>
-                    <Link href="/login" className="flex items-center justify-center px-6 py-3 bg-[#78B8F5]/15 hover:bg-[#78B8F5]/25 text-[#0E1E38] zodiak-subtitle rounded-full border-2 border-[#78B8F5] shadow-sm transition-all text-sm tracking-wide">
+                    <Link href="/login" className="flex items-center justify-center px-6 py-3 bg-[#78B8F5]/15 hover:bg-[#78B8F5]/25 text-[#0E1E38] clash-subtitle rounded-full border-2 border-[#78B8F5] shadow-sm transition-all text-sm tracking-wide">
                         Giriş Yap
                     </Link>
                 </motion.div>

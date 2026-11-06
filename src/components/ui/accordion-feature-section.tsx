@@ -62,8 +62,8 @@ const FAQAccordionSection = ({ features = defaultFeatures }: Feature197Props) =>
     <section className="py-16 md:py-20 w-full" id="faq">
       <div className="max-w-full lg:max-w-[1536px] mx-auto w-full px-6 md:px-12 lg:px-16">
         <div className="text-center mb-12 lg:mb-16">
-          <h2 className="text-3xl md:text-5xl zodiak-title text-[#0E1E38] mb-4 tracking-tight">Merak Ettikleriniz</h2>
-          <p className="text-[#0E1E38]/60 text-lg sm:text-xl zodiak-desc uppercase tracking-widest text-[13px]">Bize en sık sorulan sorular ve yanıtları.</p>
+          <h2 className="text-3xl md:text-5xl clash-title text-[#0E1E38] mb-4 tracking-tight">Merak Ettikleriniz</h2>
+          <p className="text-[#0E1E38]/60 text-lg sm:text-xl clash-desc uppercase tracking-widest text-[13px]">Bize en sık sorulan sorular ve yanıtları.</p>
         </div>
 
         <div className="flex w-full flex-col md:flex-row items-center md:items-start justify-between gap-12 bg-white p-8 md:p-12 rounded-3xl border border-slate-100 shadow-xl shadow-[#0E1E38]/5">
@@ -81,13 +81,13 @@ const FAQAccordionSection = ({ features = defaultFeatures }: Feature197Props) =>
                     className="cursor-pointer -mx-4 px-4 py-6 md:-mx-6 md:px-6 md:py-8 hover:bg-slate-100/50 active:bg-slate-100 active:scale-[0.98] rounded-2xl !no-underline transition-all group"
                   >
                     <h6
-                      className={`text-xl md:text-2xl zodiak-subtitle transition-colors text-left ${tab.id === activeTabId ? "text-[#0E1E38]" : "text-[#0E1E38]/40 md:group-hover:text-[#0E1E38]"}`}
+                      className={`text-xl md:text-2xl clash-subtitle transition-colors text-left ${tab.id === activeTabId ? "text-[#0E1E38]" : "text-[#0E1E38]/40 md:group-hover:text-[#0E1E38]"}`}
                     >
                       {tab.title}
                     </h6>
                   </AccordionTrigger>
                   <AccordionContent>
-                    <p className="mt-1 text-[#0E1E38]/70 zodiak-desc leading-relaxed pr-6">
+                    <p className="mt-1 text-[#0E1E38]/70 clash-desc leading-relaxed pr-6">
                       {tab.description}
                     </p>
 

@@ -1,10 +1,51 @@
 @import "tailwindcss";
 
 @font-face {
+  font-family: 'Clash Grotesk';
+  src: url('/fonts/ClashGrotesk-Medium.woff2') format('woff2'),
+       url('/fonts/ClashGrotesk-Medium.woff') format('woff'),
+       url('/fonts/ClashGrotesk-Medium.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'ClashGrotesk-Medium';
+  src: url('/fonts/ClashGrotesk-Medium.woff2') format('woff2'),
+       url('/fonts/ClashGrotesk-Medium.woff') format('woff'),
+       url('/fonts/ClashGrotesk-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+
+/* Fallback & backwards compatibility mapping: all existing font-family calls use Clash Grotesk */
+@font-face {
+  font-family: 'Zodiak';
+  src: url('/fonts/ClashGrotesk-Medium.woff2') format('woff2'),
+       url('/fonts/ClashGrotesk-Medium.woff') format('woff'),
+       url('/fonts/ClashGrotesk-Medium.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Zodiak-Variable';
+  src: url('/fonts/ClashGrotesk-Medium.woff2') format('woff2'),
+       url('/fonts/ClashGrotesk-Medium.woff') format('woff'),
+       url('/fonts/ClashGrotesk-Medium.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'Expose-Medium';
-  src: url('/fonts/Expose-Medium.woff2') format('woff2'),
-       url('/fonts/Expose-Medium.woff') format('woff'),
-       url('/fonts/Expose-Medium.ttf') format('truetype');
+  src: url('/fonts/ClashGrotesk-Medium.woff2') format('woff2'),
+       url('/fonts/ClashGrotesk-Medium.woff') format('woff'),
+       url('/fonts/ClashGrotesk-Medium.ttf') format('truetype');
   font-weight: 500;
   font-display: swap;
   font-style: normal;
@@ -12,16 +53,47 @@
 
 @font-face {
   font-family: 'Expose';
-  src: url('/fonts/Expose-Medium.woff2') format('woff2'),
-       url('/fonts/Expose-Medium.woff') format('woff'),
-       url('/fonts/Expose-Medium.ttf') format('truetype');
-  font-weight: 500;
+  src: url('/fonts/ClashGrotesk-Medium.woff2') format('woff2'),
+       url('/fonts/ClashGrotesk-Medium.woff') format('woff'),
+       url('/fonts/ClashGrotesk-Medium.ttf') format('truetype');
+  font-weight: 100 900;
   font-display: swap;
   font-style: normal;
 }
 
+*, *::before, *::after {
+  font-synthesis: none !important;
+}
+
+/* Typography Classes with Exact User Weights (500 / 325 / 225) */
+.font-clash, .font-zodiak {
+  font-family: 'Clash Grotesk', 'ClashGrotesk-Medium', sans-serif !important;
+  font-synthesis: none !important;
+}
+
+.clash-title, .zodiak-title {
+  font-family: 'Clash Grotesk', 'ClashGrotesk-Medium', sans-serif !important;
+  font-weight: 500 !important;
+  font-variation-settings: 'wght' 500 !important;
+  font-synthesis: none !important;
+}
+
+.clash-subtitle, .zodiak-subtitle {
+  font-family: 'Clash Grotesk', 'ClashGrotesk-Medium', sans-serif !important;
+  font-weight: 325 !important;
+  font-variation-settings: 'wght' 325 !important;
+  font-synthesis: none !important;
+}
+
+.clash-desc, .zodiak-desc {
+  font-family: 'Clash Grotesk', 'ClashGrotesk-Medium', sans-serif !important;
+  font-weight: 225 !important;
+  font-variation-settings: 'wght' 225 !important;
+  font-synthesis: none !important;
+}
+
 .font-numbers, .font-expose {
-  font-family: 'Expose-Medium', 'Expose', sans-serif !important;
+  font-family: 'Clash Grotesk', 'ClashGrotesk-Medium', sans-serif !important;
   font-weight: 500 !important;
   font-style: normal;
   font-synthesis: none !important;
@@ -30,133 +102,53 @@
   font-feature-settings: 'tnum' on, 'lnum' on;
 }
 
-
-@font-face {
-  font-family: 'Zodiak';
-  src: url('/fonts/Zodiak-Variable.woff2') format('woff2'),
-       url('/fonts/Zodiak-Variable.woff') format('woff'),
-       url('/fonts/Zodiak-Variable.ttf') format('truetype');
-  font-weight: 100 900;
-  font-display: swap;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Zodiak-Variable';
-  src: url('/fonts/Zodiak-Variable.woff2') format('woff2'),
-       url('/fonts/Zodiak-Variable.woff') format('woff'),
-       url('/fonts/Zodiak-Variable.ttf') format('truetype');
-  font-weight: 100 900;
-  font-display: swap;
-  font-style: normal;
-}
-
-
-/* Expose-Medium for numbers within Zodiak font stack across all pages */
-@font-face {
-  font-family: 'Zodiak';
-  src: url('/fonts/Expose-Medium.woff2') format('woff2'),
-       url('/fonts/Expose-Medium.woff') format('woff'),
-       url('/fonts/Expose-Medium.ttf') format('truetype');
-  font-weight: 100 900;
-  font-display: swap;
-  font-style: normal;
-  unicode-range: U+0030-0039, U+0025, U+20BA; /* Digits 0-9, %, ₺ */
-}
-
-@font-face {
-  font-family: 'Zodiak-Variable';
-  src: url('/fonts/Expose-Medium.woff2') format('woff2'),
-       url('/fonts/Expose-Medium.woff') format('woff'),
-       url('/fonts/Expose-Medium.ttf') format('truetype');
-  font-weight: 100 900;
-  font-display: swap;
-  font-style: normal;
-  unicode-range: U+0030-0039, U+0025, U+20BA; /* Digits 0-9, %, ₺ */
-}
-
-@font-face {
-  font-family: 'Zodiak-Variable';
-  src: url('/fonts/Expose-Medium.woff2') format('woff2'),
-       url('/fonts/Expose-Medium.woff') format('woff'),
-       url('/fonts/Expose-Medium.ttf') format('truetype');
-  font-weight: 100 900;
-  font-display: swap;
-  font-style: normal;
-  unicode-range: U+0030-0039, U+0025, U+20BA; /* Digits 0-9, %, ₺ */
-}
-
-*, *::before, *::after {
-  font-synthesis: none !important;
-}
-
-/* Zodiak Variable Typography Classes (User specification) */
-.font-zodiak {
-  font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif !important;
-  font-synthesis: none !important;
-}
-
-.zodiak-title {
-  font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif !important;
-  font-weight: 500 !important;
-  font-variation-settings: 'wght' 500 !important;
-}
-
-.zodiak-subtitle {
-  font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif !important;
-  font-weight: 325 !important;
-  font-variation-settings: 'wght' 325 !important;
-}
-
-
-/* Global Typography Hierarchy Rules (500 / 325 / 225) across all pages */
+/* Global HTML Tag Hierarchy */
 h1 {
-  font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif;
+  font-family: 'Clash Grotesk', 'ClashGrotesk-Medium', sans-serif;
   font-weight: 500 !important;
   font-variation-settings: 'wght' 500 !important;
+  font-synthesis: none !important;
+  color: #040989;
 }
 
 h2, h3, h4, h5, h6, button, [role="tab"], .btn {
-  font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif;
+  font-family: 'Clash Grotesk', 'ClashGrotesk-Medium', sans-serif;
   font-weight: 325 !important;
   font-variation-settings: 'wght' 325 !important;
+  font-synthesis: none !important;
+  color: #040989;
 }
 
 p, label, li, input, textarea {
-  font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif;
+  font-family: 'Clash Grotesk', 'ClashGrotesk-Medium', sans-serif;
   font-weight: 225;
   font-variation-settings: 'wght' 225;
+  font-synthesis: none !important;
+  color: #040989;
 }
-
-.zodiak-desc {
-  font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif !important;
-  font-weight: 225 !important;
-  font-variation-settings: 'wght' 225 !important;
-}
-
 
 @theme {
   /* Luminous Silver & Navy Palette */
-  --color-background: #eef2f7;
-  --color-foreground: #0E1E38;
+  --color-background: #F5F7FA;
+  --color-foreground: #040989;
 
-  --color-primary: #0E1E38;
-  --color-primary-foreground: #ffffff;
+  --color-primary: #004BFA;
+  --color-primary-foreground: #F5F7FA;
 
-  --color-secondary: #0E1E38;
-  --color-secondary-foreground: #ffffff;
+  --color-secondary: #D6E4FF;
+  --color-secondary-foreground: #040989;
 
-  --color-accent: #0E1E38;
-  --color-accent-foreground: #ffffff;
+  --color-accent: #004BFA;
+  --color-accent-foreground: #F5F7FA;
 
-  --color-muted: #f1f5f9;
-  --color-muted-foreground: #64748b;
+  --color-muted: #F5F7FA;
+  --color-muted-foreground: #5B80FF;
 
   --color-card: #0f172a;
   --color-card-foreground: #f8fafc;
 
-  --color-border: #E2E8F0;
-  --color-input: #E2E8F0;
+  --color-border: #D6E4FF;
+  --color-input: #D6E4FF;
 
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
@@ -273,17 +265,12 @@ p, label, li, input, textarea {
 }
 
 html, body {
-  overflow-x: hidden;
-  max-width: 100vw;
-  width: 100%;
-}
-
-body {
-  background: #FFFFFF;
-  color: #0E1E38;
-  font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif;
+  background: #F5F7FA;
+  color: #040989;
+  font-family: 'Clash Grotesk', 'ClashGrotesk-Medium', sans-serif;
   margin: 0;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 html {

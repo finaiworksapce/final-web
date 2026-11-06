@@ -70,8 +70,8 @@ export default function DashboardPage() {
     }
 
     return (
-        <div className="flex flex-col min-h-[calc(100vh-3.5rem)] bg-white text-[#0E1E38] w-full mx-auto relative overflow-x-hidden font-zodiak">
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-50/50 blur-[120px] pointer-events-none" />
+        <div className="flex flex-col min-h-[calc(100vh-3.5rem)] bg-[#F5F7FA] text-[#040989] w-full mx-auto relative overflow-x-hidden font-clash">
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[#D6E4FF]/30 blur-[120px] pointer-events-none" />
 
             <div className="w-full max-w-[1600px] mx-auto px-2.5 py-3 sm:px-6 md:px-10 lg:py-6 flex flex-col justify-between gap-4 sm:gap-6 relative z-10 flex-1 min-h-[calc(100vh-3.5rem)] pb-6 md:pb-10">
                 <AnimatePresence>
@@ -82,10 +82,10 @@ export default function DashboardPage() {
                             exit={{ opacity: 0 }}
                             className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-white/60 backdrop-blur-md"
                         >
-                            <div className="w-full max-w-md p-8 sm:p-10 rounded-[2.5rem] bg-white border border-slate-100 text-[#0E1E38] shadow-2xl text-center">
+                            <div className="w-full max-w-md p-8 sm:p-10 rounded-[2.5rem] bg-white border border-slate-100 text-[#040989] shadow-2xl text-center">
                                 <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-6 sm:mb-8 relative">
-                                    <Loader2 className="w-20 h-20 sm:w-24 sm:h-24 text-[#0E1E38] animate-spin opacity-20" />
-                                    <TrendingUp className="w-8 h-8 sm:w-10 sm:h-10 text-[#0E1E38] absolute inset-0 m-auto animate-pulse" />
+                                    <Loader2 className="w-20 h-20 sm:w-24 sm:h-24 text-[#040989] animate-spin opacity-20" />
+                                    <TrendingUp className="w-8 h-8 sm:w-10 sm:h-10 text-[#040989] absolute inset-0 m-auto animate-pulse" />
                                 </div>
                                 <h2 className="text-xl sm:text-2xl font-normal mb-2 tracking-tighter">FinAi Hazırlanıyor</h2>
                                 <p className="text-xs sm:text-sm font-normal text-slate-400 animate-pulse">{loadingMessages[loadingStep]}</p>
@@ -97,23 +97,23 @@ export default function DashboardPage() {
                 {/* Header Welcome Area (Zodiak Hierarchy 500/325/225 + 60-30-10) */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 relative z-10 mb-2">
                     <div>
-                        <h1 className="text-2xl sm:text-3xl lg:text-4xl zodiak-title font-[500] text-[#0E1E38] flex items-center gap-2 tracking-tight">
+                        <h1 className="text-2xl sm:text-3xl lg:text-4xl clash-title font-[500] text-[#040989] flex items-center gap-2 tracking-tight">
                             Hoş Geldiniz, {userName || userEmail?.split('@')[0] || "Salih KAVAKCI"}
                             <motion.span animate={{ rotate: [0, 14, -8, 14, -4, 10, 0, 0] }} transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 1 }}>👋</motion.span>
                         </h1>
-                        <p className="text-xs sm:text-sm zodiak-desc font-[225] text-[#0E1E38]/75 mt-0.5">
+                        <p className="text-xs sm:text-sm clash-desc font-[225] text-[#040989]/75 mt-0.5">
                             Piyasaları, portföy hareketlerini ve yapay zeka analizlerini tek bir ekranda yönetin.
                         </p>
                     </div>
 
                     <div className="flex items-center gap-2.5 self-start sm:self-center">
-                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border-0 text-[#0E1E38] text-xs zodiak-subtitle font-[325] shadow-xs">
+                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border-0 text-[#040989] text-xs clash-subtitle font-[325] shadow-xs">
                             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                             <span>Son veri: <span className="font-numbers">{new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</span></span>
                         </div>
                         <Link 
                             href="/dashboard/portfolio" 
-                            className="px-3.5 py-1.5 rounded-xl bg-[#0E1E38] hover:bg-[#0E1E38]/90 text-white font-normal text-xs zodiak-subtitle font-[325] shadow-xs transition-all flex items-center gap-1.5"
+                            className="px-3.5 py-1.5 rounded-xl bg-[#004BFA] hover:bg-[#004BFA]/90 text-white font-normal text-xs clash-subtitle font-[325] shadow-xs transition-all flex items-center gap-1.5"
                         >
                             <span>Portföy Detayı</span>
                             <ArrowRight className="w-3.5 h-3.5" />
