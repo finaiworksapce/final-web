@@ -180,8 +180,8 @@ export default function FinancialRatioHistoryChart({
       {/* Category Tabs */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/70 pb-3">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-[#00008B]" />
-          <h4 className="text-xs font-black text-[#00008B] uppercase tracking-wider">
+          <TrendingUp className="w-4 h-4 text-[#142B50]" />
+          <h4 className="text-xs font-black text-[#142B50] uppercase tracking-wider">
             {symbol} Tarihsel Finansal Trend Analizi
           </h4>
         </div>
@@ -200,7 +200,7 @@ export default function FinancialRatioHistoryChart({
                 className={cn(
                   "px-3 py-1 text-[11px] font-black rounded-xl transition-all border whitespace-nowrap",
                   isCatActive
-                    ? "bg-[#00008B] text-white border-[#00008B] shadow-sm"
+                    ? "bg-[#142B50] text-white border-[#78B8F5] shadow-sm"
                     : "bg-white text-slate-600 border-slate-200 hover:bg-slate-100"
                 )}
               >
@@ -238,7 +238,7 @@ export default function FinancialRatioHistoryChart({
         {currentEdu && (
           <button
             onClick={() => setShowTooltip(!showTooltip)}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 text-[#00008B] hover:bg-blue-100 text-[10px] font-black border border-blue-200 transition-all shrink-0"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 text-[#142B50] hover:bg-blue-100 text-[10px] font-black border border-blue-200 transition-all shrink-0"
           >
             <HelpCircle className="w-3.5 h-3.5" />
             {showTooltip ? 'Bilgiyi Gizle' : 'Rasyo Rehberi'}
@@ -290,7 +290,7 @@ export default function FinancialRatioHistoryChart({
               )}
             >
               <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                <Calendar className="w-3 h-3 text-[#00008B]" />
+                <Calendar className="w-3 h-3 text-[#142B50]" />
                 {pt.periodLabel}
               </span>
 
@@ -302,7 +302,7 @@ export default function FinancialRatioHistoryChart({
                     className={cn(
                       "w-full rounded-lg transition-all duration-500",
                       val >= 0
-                        ? "bg-gradient-to-t from-[#00008B] to-sky-500 shadow-sm"
+                        ? "bg-gradient-to-t from-[#142B50] to-sky-500 shadow-sm"
                         : "bg-gradient-to-t from-rose-600 to-rose-400 shadow-sm"
                     )}
                   />
@@ -319,7 +319,7 @@ export default function FinancialRatioHistoryChart({
                   className={cn(
                     "text-xs font-black tracking-tight block truncate",
                     val != null
-                      ? (val >= 0 ? "text-[#00008B]" : "text-rose-600")
+                      ? (val >= 0 ? "text-[#142B50]" : "text-rose-600")
                       : "text-slate-400 text-[10px]"
                   )}
                   title={pt.reason || pt.formattedText}

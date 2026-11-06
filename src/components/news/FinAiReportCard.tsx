@@ -26,7 +26,7 @@ export function FinAiReportCard({ report, fallbackSummary, className = "" }: Fin
                     <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100/90 flex items-center justify-center text-blue-600 shrink-0 shadow-2xs">
                         <Sparkles className="w-4 h-4 text-blue-600" />
                     </div>
-                    <h3 className="text-base font-black text-[#00008B] tracking-tight">
+                    <h3 className="text-base font-black text-[#142B50] tracking-tight">
                         Özet
                     </h3>
                 </div>

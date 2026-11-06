@@ -44,7 +44,7 @@ export function TubelightNavbar({ items, className }: NavBarProps) {
         className,
       )}
     >
-      <div className="flex items-center gap-2 lg:gap-3 bg-white/50 border border-slate-200/50 backdrop-blur-md py-1.5 px-3 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
+      <div className="flex items-center gap-2 lg:gap-3 bg-white/50 border border-[#78B8F5]/30 bg-white/70 backdrop-blur-md py-1.5 px-3 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
         {items.map((item) => {
           const Icon = item.icon
           const isActive = activeTab === item.name
@@ -56,8 +56,8 @@ export function TubelightNavbar({ items, className }: NavBarProps) {
               onClick={() => setActiveTab(item.name)}
               className={cn(
                 "relative cursor-pointer text-sm lg:text-base font-bold px-4 lg:px-6 py-2 lg:py-2.5 rounded-full transition-colors duration-300 border-b-0",
-                "text-slate-500 hover:text-[#00008B]", // Inaktif renk
-                isActive && "text-[#00008B]", // Aktif yazı rengi (DarkBlue)
+                "text-slate-600 hover:text-[#142B50]", // Inaktif renk
+                isActive && "text-[#142B50]", // Aktif yazı rengi (DarkBlue)
               )}
               style={{ borderBottom: 'none' }}
             >
@@ -69,7 +69,7 @@ export function TubelightNavbar({ items, className }: NavBarProps) {
               {isActive && (
                 <motion.div
                   layoutId="lamp"
-                  className="absolute inset-0 w-full bg-slate-100/80 rounded-full -z-10"
+                  className="absolute inset-0 w-full bg-[#78B8F5]/20 rounded-full -z-10 border border-[#78B8F5]/40"
                   initial={false}
                   transition={{
                     type: "spring",

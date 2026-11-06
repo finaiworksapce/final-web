@@ -24,7 +24,7 @@ export function RelatedNewsWidget({ items, limit = 6, className = "" }: RelatedN
                     <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
                         <Newspaper className="w-3.5 h-3.5" />
                     </div>
-                    <h3 className="text-xs sm:text-sm font-black text-[#00008B] tracking-tight">
+                    <h3 className="text-xs sm:text-sm font-black text-[#142B50] tracking-tight">
                         İlgili Haberler
                     </h3>
                 </div>

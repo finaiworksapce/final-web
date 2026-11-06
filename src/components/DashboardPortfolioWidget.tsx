@@ -109,11 +109,11 @@ export function DashboardPortfolioWidget({ groupedAssets = [], prices = {}, stat
                         className="bg-slate-50 rounded-[2.5rem] p-12 text-center border-2 border-dashed border-slate-200"
                     >
                         <PieChart className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                        <h3 className="text-xl font-black text-[#00008B] mb-2">Yatırım Profilinizi Belirleyin</h3>
+                        <h3 className="text-xl font-black text-[#142B50] mb-2">Yatırım Profilinizi Belirleyin</h3>
                         <p className="text-sm text-slate-400 font-bold mb-8 max-w-xs mx-auto">Size özel fon ve hisse önerileri için 1 dakikalık testi başlatın.</p>
                         <button 
                             onClick={() => setSurveyStarted(true)}
-                            className="px-10 py-4 bg-[#00008B] text-white rounded-2xl font-black text-sm shadow-xl hover:scale-105 transition-all flex items-center gap-2 mx-auto"
+                            className="px-10 py-4 bg-[#142B50] text-white rounded-2xl font-black text-sm shadow-xl hover:scale-105 transition-all flex items-center gap-2 mx-auto"
                         >
                             Anketi Başlat <Zap className="w-4 h-4 fill-white" />
                         </button>
@@ -126,7 +126,7 @@ export function DashboardPortfolioWidget({ groupedAssets = [], prices = {}, stat
                         className="space-y-6"
                     >
                         <div className="text-center mb-8">
-                            <h3 className="text-2xl font-black text-[#00008B] italic uppercase">Yatırım Yolunuzu Seçin</h3>
+                            <h3 className="text-2xl font-black text-[#142B50] italic uppercase">Yatırım Yolunuzu Seçin</h3>
                             <p className="text-xs font-bold text-slate-400 mt-2 uppercase tracking-widest">Fon mu, Hisse mi yoksa her ikisi mi?</p>
                         </div>
                         
@@ -149,7 +149,7 @@ export function DashboardPortfolioWidget({ groupedAssets = [], prices = {}, stat
                             {/* Stock Option */}
                             <button 
                                 onClick={() => setPath('STOCK')}
-                                className="bg-[#00008B] p-8 rounded-[32px] shadow-2xl hover:scale-[1.02] transition-all text-left group relative overflow-hidden"
+                                className="bg-[#142B50] p-8 rounded-[32px] shadow-2xl hover:scale-[1.02] transition-all text-left group relative overflow-hidden"
                             >
                                 <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mt-12" />
                                 <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-6 border border-white/20">
@@ -207,7 +207,7 @@ export function DashboardPortfolioWidget({ groupedAssets = [], prices = {}, stat
                                     <CheckCircle2 className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <h2 className="text-xl font-black text-[#00008B] tracking-tight">{recommendation.title}</h2>
+                                    <h2 className="text-xl font-black text-[#142B50] tracking-tight">{recommendation.title}</h2>
                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{recommendation.persona}</p>
                                 </div>
                             </div>
@@ -227,7 +227,7 @@ export function DashboardPortfolioWidget({ groupedAssets = [], prices = {}, stat
                                                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
                                                 <span className="text-[11px] font-black text-slate-700 uppercase">{item.name}</span>
                                             </div>
-                                            <span className="text-xs font-black text-[#00008B]">%{item.value}</span>
+                                            <span className="text-xs font-black text-[#142B50]">%{item.value}</span>
                                         </div>
                                     ))}
                                 </div>

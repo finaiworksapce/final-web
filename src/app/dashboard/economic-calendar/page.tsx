@@ -390,8 +390,8 @@ export default function EconomicCalendarPage() {
 
         return (
             <div className="flex items-end gap-[2px] h-3.5 w-4" title={isHigh ? "Yüksek Etki" : "Orta Etki"}>
-                <div className={`w-[3px] rounded-xs ${isHigh || isMedium ? 'h-1.5 bg-[#00008B]' : 'h-1 bg-slate-200'}`} />
-                <div className={`w-[3px] rounded-xs ${isHigh || isMedium ? 'h-2.5 bg-[#00008B]' : 'h-1 bg-slate-200'}`} />
+                <div className={`w-[3px] rounded-xs ${isHigh || isMedium ? 'h-1.5 bg-[#142B50]' : 'h-1 bg-slate-200'}`} />
+                <div className={`w-[3px] rounded-xs ${isHigh || isMedium ? 'h-2.5 bg-[#142B50]' : 'h-1 bg-slate-200'}`} />
                 <div className={`w-[3px] rounded-xs ${isHigh ? 'h-3.5 bg-rose-600' : 'h-1 bg-slate-200'}`} />
             </div>
         );
@@ -424,13 +424,13 @@ export default function EconomicCalendarPage() {
     }, [startDate, endDate]);
 
     return (
-        <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-slate-50 text-[#00008B] w-full mx-auto relative overflow-hidden">
+        <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-slate-50 text-[#142B50] w-full mx-auto relative overflow-hidden">
             <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 py-6 md:px-10 lg:py-8 space-y-6 relative z-10 mb-20">
                 {/* Navigation Top Bar */}
                 <div className="flex items-center justify-between">
                     <Link
                         href="/dashboard"
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border border-slate-200 text-[#00008B] font-bold text-xs shadow-sm hover:bg-slate-100 transition-all"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border border-slate-200 text-[#142B50] font-bold text-xs shadow-sm hover:bg-slate-100 transition-all"
                     >
                         <ArrowLeft className="w-4 h-4" /> Ana Sayfaya Dön
                     </Link>
@@ -438,7 +438,7 @@ export default function EconomicCalendarPage() {
 
                 {/* Page Title & Subtitle */}
                 <div className="space-y-1">
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-[#00008B]">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-[#142B50]">
                         EKONOMİK TAKVİM
                     </h1>
                     <p className="text-xs font-bold text-slate-500">
@@ -468,8 +468,8 @@ export default function EconomicCalendarPage() {
                                     }}
                                     className={`px-3.5 py-1.5 text-xs font-black rounded-xl transition-all whitespace-nowrap ${
                                         timeTab === tab.id && !showDatePicker
-                                            ? 'bg-[#00008B] text-white shadow-sm' 
-                                            : 'text-slate-600 hover:text-[#00008B]'
+                                            ? 'bg-[#142B50] text-white shadow-sm' 
+                                            : 'text-slate-600 hover:text-[#142B50]'
                                     }`}
                                 >
                                     {tab.label}
@@ -484,7 +484,7 @@ export default function EconomicCalendarPage() {
                                 }}
                                 className={`px-3.5 py-1.5 text-xs font-black rounded-xl transition-all flex items-center gap-1.5 whitespace-nowrap ${
                                     showDatePicker || timeTab === 'custom'
-                                        ? 'bg-[#00008B] text-white shadow-sm'
+                                        ? 'bg-[#142B50] text-white shadow-sm'
                                         : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'
                                 }`}
                             >
@@ -504,7 +504,7 @@ export default function EconomicCalendarPage() {
                                     }}
                                     className={`px-4 py-2 rounded-2xl font-black text-xs border transition-all flex items-center gap-2 ${
                                         selectedCountries.length < 4
-                                            ? 'bg-blue-50 text-[#00008B] border-blue-300 shadow-sm'
+                                            ? 'bg-blue-50 text-[#142B50] border-blue-300 shadow-sm'
                                             : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                                     }`}
                                 >
@@ -515,7 +515,7 @@ export default function EconomicCalendarPage() {
                                 {isCountryDropdownOpen && (
                                     <div className="absolute right-0 mt-2 w-64 bg-white border border-slate-200 rounded-3xl p-4 shadow-xl z-50 space-y-3">
                                         <div className="flex items-center justify-between border-b border-slate-150 pb-2">
-                                            <span className="text-xs font-black text-[#00008B] uppercase">Ülke Seçimi</span>
+                                            <span className="text-xs font-black text-[#142B50] uppercase">Ülke Seçimi</span>
                                             <button 
                                                 onClick={toggleAllCountries} 
                                                 className="text-[11px] font-bold text-blue-600 hover:underline"
@@ -538,7 +538,7 @@ export default function EconomicCalendarPage() {
                                                             type="checkbox"
                                                             checked={isChecked}
                                                             onChange={() => {}}
-                                                            className="w-4 h-4 rounded border-slate-300 text-[#00008B] focus:ring-[#00008B]"
+                                                            className="w-4 h-4 rounded border-slate-300 text-[#142B50] focus:ring-[#78B8F5]"
                                                         />
                                                         <span className="text-base">{info.flag}</span>
                                                         <span>{info.label}</span>
@@ -559,7 +559,7 @@ export default function EconomicCalendarPage() {
                                     }}
                                     className={`px-4 py-2 rounded-2xl font-black text-xs border transition-all flex items-center gap-2 ${
                                         selectedImpacts.length < 3
-                                            ? 'bg-blue-50 text-[#00008B] border-blue-300 shadow-sm'
+                                            ? 'bg-blue-50 text-[#142B50] border-blue-300 shadow-sm'
                                             : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                                     }`}
                                 >
@@ -570,7 +570,7 @@ export default function EconomicCalendarPage() {
                                 {isImpactDropdownOpen && (
                                     <div className="absolute right-0 mt-2 w-64 bg-white border border-slate-200 rounded-3xl p-4 shadow-xl z-50 space-y-3">
                                         <div className="flex items-center justify-between border-b border-slate-150 pb-2">
-                                            <span className="text-xs font-black text-[#00008B] uppercase">Etki Seviyesi</span>
+                                            <span className="text-xs font-black text-[#142B50] uppercase">Etki Seviyesi</span>
                                             <button 
                                                 onClick={toggleAllImpacts} 
                                                 className="text-[11px] font-bold text-blue-600 hover:underline"
@@ -593,7 +593,7 @@ export default function EconomicCalendarPage() {
                                                             type="checkbox"
                                                             checked={isChecked}
                                                             onChange={() => {}}
-                                                            className="w-4 h-4 rounded border-slate-300 text-[#00008B] focus:ring-[#00008B]"
+                                                            className="w-4 h-4 rounded border-slate-300 text-[#142B50] focus:ring-[#78B8F5]"
                                                         />
                                                         <span>{info.label}</span>
                                                     </label>
@@ -609,7 +609,7 @@ export default function EconomicCalendarPage() {
                     {/* ÖZEL TARİH ARALIĞI SEÇİCİ PANELİ (Görünür olduğunda) */}
                     {showDatePicker && (
                         <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-200 space-y-3 pt-3">
-                            <span className="text-xs font-black text-[#00008B] flex items-center gap-1.5">
+                            <span className="text-xs font-black text-[#142B50] flex items-center gap-1.5">
                                 <CalendarIcon className="w-4 h-4 text-blue-600" /> Özel Tarih Aralığı Seçin
                             </span>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -619,7 +619,7 @@ export default function EconomicCalendarPage() {
                                         type="date"
                                         value={startDate}
                                         onChange={(e) => setStartDate(e.target.value)}
-                                        className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-[#00008B] focus:outline-none"
+                                        className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-[#142B50] focus:outline-none"
                                     />
                                 </div>
                                 <div>
@@ -629,7 +629,7 @@ export default function EconomicCalendarPage() {
                                         value={endDate}
                                         min={startDate}
                                         onChange={(e) => setEndDate(e.target.value)}
-                                        className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-[#00008B] focus:outline-none"
+                                        className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-[#142B50] focus:outline-none"
                                     />
                                 </div>
                             </div>
@@ -649,7 +649,7 @@ export default function EconomicCalendarPage() {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder="Gösterge adı veya duyuru ara..."
-                            className="w-full pl-9 pr-4 py-2 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-bold text-[#00008B] focus:outline-none focus:border-[#00008B]"
+                            className="w-full pl-9 pr-4 py-2 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-bold text-[#142B50] focus:outline-none focus:border-[#78B8F5]"
                         />
                     </div>
                 </div>
@@ -657,7 +657,7 @@ export default function EconomicCalendarPage() {
                 {/* FİLTRE SONUÇ ÖZET BARI */}
                 <div className="flex items-center justify-between px-2 text-xs font-bold text-slate-500">
                     <span className="flex items-center gap-1.5">
-                        <SlidersHorizontal className="w-3.5 h-3.5 text-[#00008B]" />
+                        <SlidersHorizontal className="w-3.5 h-3.5 text-[#142B50]" />
                         <span>{selectedCountries.length} Ülke · {selectedImpacts.length} Etki Seviyesi · Toplam {filteredEvents.length} Ekonomik Veri</span>
                     </span>
                     {filteredEvents.length > 0 && (
@@ -720,7 +720,7 @@ export default function EconomicCalendarPage() {
                                                     }`}
                                                 >
                                                     {/* Saat */}
-                                                    <td className="py-4 px-4 font-mono font-bold text-[#00008B] align-top">
+                                                    <td className="py-4 px-4 font-mono font-bold text-[#142B50] align-top">
                                                         {item.time}
                                                     </td>
 
@@ -749,7 +749,7 @@ export default function EconomicCalendarPage() {
                                                     {/* Haber Başlığı */}
                                                     <td className="py-4 px-3 align-top relative">
                                                         <div className="flex items-start justify-between gap-2">
-                                                            <span className="text-xs font-bold text-[#00008B] block leading-snug">
+                                                            <span className="text-xs font-bold text-[#142B50] block leading-snug">
                                                                 {item.event}
                                                             </span>
                                                             <FollowIndicatorButton indicatorName={item.event} compact />
@@ -764,7 +764,7 @@ export default function EconomicCalendarPage() {
                                                     </td>
 
                                                     {/* Actual */}
-                                                    <td className="py-4 px-3 text-right font-black text-[#00008B] align-top">
+                                                    <td className="py-4 px-3 text-right font-black text-[#142B50] align-top">
                                                         {item.actual || 'Bekleniyor'}
                                                     </td>
 
@@ -791,17 +791,17 @@ export default function EconomicCalendarPage() {
                                 <button
                                     onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
                                     disabled={currentPage === 1}
-                                    className="px-4 py-2 rounded-2xl bg-white border border-slate-200 text-xs font-bold text-[#00008B] disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 transition-all"
+                                    className="px-4 py-2 rounded-2xl bg-white border border-slate-200 text-xs font-bold text-[#142B50] disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 transition-all"
                                 >
                                     ← Önceki Sayfa
                                 </button>
-                                <span className="text-xs font-black text-[#00008B]">
+                                <span className="text-xs font-black text-[#142B50]">
                                     Sayfa {currentPage} / {totalPages}
                                 </span>
                                 <button
                                     onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
                                     disabled={currentPage === totalPages}
-                                    className="px-4 py-2 rounded-2xl bg-white border border-slate-200 text-xs font-bold text-[#00008B] disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 transition-all"
+                                    className="px-4 py-2 rounded-2xl bg-white border border-slate-200 text-xs font-bold text-[#142B50] disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-100 transition-all"
                                 >
                                     Sonraki Sayfa →
                                 </button>

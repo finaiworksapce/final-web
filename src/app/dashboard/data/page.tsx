@@ -623,7 +623,7 @@ function formatVolumeDisplay(num: number): string {
 // SEKTÖR HEATMAP DİNAMİK RENK YOĞUNLUĞU HESAPLAYICI (BELİRGİN AÇIK SEVİYELER)
 function getSectorHeatmapStyle(annualReturn: number, isSelected: boolean) {
   if (isSelected) {
-    return "bg-[#00008B] text-white border-[#00008B] shadow-md ring-2 ring-[#00008B]/30 font-black";
+    return "bg-[#142B50] text-white border-[#78B8F5] shadow-md ring-2 ring-[#78B8F5]/30 font-black";
   }
 
   if (annualReturn >= 90) {
@@ -942,7 +942,7 @@ export default function AssetsPage() {
                 <div className="bg-white border border-slate-200/90 rounded-[28px] p-5 shadow-xs space-y-4 flex flex-col justify-between">
                     <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                         <div className="flex items-center gap-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-[#00008B] flex items-center justify-center text-white shadow-xs shrink-0">
+                            <div className="w-9 h-9 rounded-xl bg-[#142B50] flex items-center justify-center text-white shadow-xs shrink-0">
                                 <BarChart3 className="w-4 h-4 text-sky-300" />
                             </div>
                             <div>
@@ -1047,7 +1047,7 @@ export default function AssetsPage() {
                                 className={cn(
                                     "px-2.5 py-1 rounded-lg text-[10px] font-black transition-all flex items-center gap-1",
                                     activeTopTab === 'volume' 
-                                        ? "bg-[#00008B] text-white shadow-xs" 
+                                        ? "bg-[#142B50] text-white shadow-xs" 
                                         : "text-slate-600 hover:text-slate-900"
                                 )}
                             >
@@ -1074,7 +1074,7 @@ export default function AssetsPage() {
                                         <StockLogo symbol={item.symbol} className="w-8 h-8 ring-1 ring-slate-200/60 shadow-xs" />
                                         <div className="min-w-0">
                                             <div className="flex items-center gap-1.5">
-                                                <span className="font-black text-slate-900 text-xs leading-tight group-hover:text-[#00008B] transition-colors">
+                                                <span className="font-black text-slate-900 text-xs leading-tight group-hover:text-[#142B50] transition-colors">
                                                     {item.symbol}
                                                 </span>
                                                 <span className="text-[9px] font-bold text-[#ba68c8]">
@@ -1093,7 +1093,7 @@ export default function AssetsPage() {
                                     <div className="flex items-center gap-3 shrink-0 text-right">
                                         <span className="font-black text-slate-900 text-xs">₺{item.price.toFixed(2)}</span>
                                         {activeTopTab === 'volume' ? (
-                                            <span className="font-black text-[#00008B] text-xs">
+                                            <span className="font-black text-[#142B50] text-xs">
                                                 {item.volume}
                                             </span>
                                         ) : (

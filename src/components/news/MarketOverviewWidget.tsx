@@ -72,7 +72,7 @@ export function MarketOverviewWidget({ className = "" }: { className?: string })
                     <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
                         <TrendingUp className="w-3.5 h-3.5" />
                     </div>
-                    <h3 className="text-xs sm:text-sm font-black text-[#00008B] tracking-tight">
+                    <h3 className="text-xs sm:text-sm font-black text-[#142B50] tracking-tight">
                         Piyasa Genel Görünümü
                     </h3>
                 </div>

@@ -56,8 +56,8 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
       {/* Başlık ve Skor */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#00008B] border border-blue-200 flex items-center justify-center shadow-sm shrink-0">
-            <ShieldCheck className="w-6 h-6 text-[#00008B]" />
+          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#142B50] border border-blue-200 flex items-center justify-center shadow-sm shrink-0">
+            <ShieldCheck className="w-6 h-6 text-[#142B50]" />
           </div>
           <div>
             <h3 className="text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
@@ -74,7 +74,7 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
         <div className="flex items-center gap-3 bg-slate-50 px-4 py-2.5 rounded-2xl border border-slate-200 self-start sm:self-auto">
           <div className="text-right">
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">Doğrulama Skoru</span>
-            <span className="text-xl font-black text-[#00008B]">{score} / 100</span>
+            <span className="text-xl font-black text-[#142B50]">{score} / 100</span>
           </div>
           <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center font-black text-sm">
             %{score}
@@ -86,7 +86,7 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
         <div className="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl space-y-1">
           <div className="flex items-center gap-1.5 text-slate-400 text-xs font-bold">
-            <TrendingUp className="w-3.5 h-3.5 text-[#00008B]" />
+            <TrendingUp className="w-3.5 h-3.5 text-[#142B50]" />
             <span>Fiyat Serisi</span>
           </div>
           <p className="text-lg font-black text-slate-900">{qualityData.historicalPricesCount.toLocaleString('tr-TR')} Bar</p>
@@ -97,7 +97,7 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
 
         <div className="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl space-y-1">
           <div className="flex items-center gap-1.5 text-slate-400 text-xs font-bold">
-            <FileText className="w-3.5 h-3.5 text-[#00008B]" />
+            <FileText className="w-3.5 h-3.5 text-[#142B50]" />
             <span>Mali Tablolar</span>
           </div>
           <p className="text-lg font-black text-slate-900">
@@ -110,7 +110,7 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
 
         <div className="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl space-y-1">
           <div className="flex items-center gap-1.5 text-slate-400 text-xs font-bold">
-            <DollarSign className="w-3.5 h-3.5 text-[#00008B]" />
+            <DollarSign className="w-3.5 h-3.5 text-[#142B50]" />
             <span>Temettü Geçmişi</span>
           </div>
           <p className="text-lg font-black text-slate-900">{qualityData.dividendsCount} Dağıtım</p>
@@ -121,7 +121,7 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
 
         <div className="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl space-y-1">
           <div className="flex items-center gap-1.5 text-slate-400 text-xs font-bold">
-            <Database className="w-3.5 h-3.5 text-[#00008B]" />
+            <Database className="w-3.5 h-3.5 text-[#142B50]" />
             <span>TTM Uygunluğu</span>
           </div>
           <p className="text-lg font-black text-slate-900">
@@ -139,8 +139,8 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
 
       {/* Tarihsel Veri Derinliği (FAZ 13 Madde 21) */}
       <div className="bg-blue-50/60 rounded-2xl p-4 border border-blue-100 space-y-3">
-        <h4 className="text-xs font-black text-[#00008B] uppercase tracking-wider flex items-center gap-1.5">
-          <Database className="w-4 h-4 text-[#00008B]" />
+        <h4 className="text-xs font-black text-[#142B50] uppercase tracking-wider flex items-center gap-1.5">
+          <Database className="w-4 h-4 text-[#142B50]" />
           Tarihsel Veri Derinliği (Veritabanı Başlangıç / Bitiş Kapsamı)
         </h4>
 
@@ -198,7 +198,7 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
       {/* Uyarılar ve Provenance Bilgileri */}
       <div className="bg-slate-50/80 rounded-2xl p-4 border border-slate-200/80 space-y-3">
         <h4 className="text-xs font-black text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-          <AlertCircle className="w-4 h-4 text-[#00008B]" />
+          <AlertCircle className="w-4 h-4 text-[#142B50]" />
           Veri Provenance & Doğrulama Standartları
         </h4>
 
@@ -209,7 +209,7 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
           </div>
           <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-100">
             <span className="text-slate-400">Raporlama Para Birimi:</span>
-            <span className="font-black text-[#00008B]">{reportingCurrency}</span>
+            <span className="font-black text-[#142B50]">{reportingCurrency}</span>
           </div>
           <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-100">
             <span className="text-slate-400">Döviz Uyuşmazlığı Koruması:</span>

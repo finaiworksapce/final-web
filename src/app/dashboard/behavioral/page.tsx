@@ -9,12 +9,12 @@ export default function BehavioralPage() {
         <div className="p-4 md:p-8 space-y-8 bg-[#F8FAFC] min-h-screen">
             {/* Header Section */}
             <div className="max-w-4xl mx-auto space-y-4">
-                <div className="flex items-center gap-2 px-3 py-1 bg-[#00008B]/5 border border-[#00008B]/10 rounded-full w-fit">
-                    <Brain className="w-3 h-3 text-[#00008B]" />
-                    <span className="text-[10px] font-black text-[#00008B] uppercase tracking-widest">Davranışsal Finans Modülü</span>
+                <div className="flex items-center gap-2 px-3 py-1 bg-[#78B8F5]/15 border border-[#78B8F5]/10 rounded-full w-fit">
+                    <Brain className="w-3 h-3 text-[#142B50]" />
+                    <span className="text-[10px] font-black text-[#142B50] uppercase tracking-widest">Davranışsal Finans Modülü</span>
                 </div>
                 <h1 className="text-5xl font-black text-slate-900 tracking-tight leading-none">
-                    Yatırımcı <span className="text-[#00008B]">Karakteri</span> Testi
+                    Yatırımcı <span className="text-[#142B50]">Karakteri</span> Testi
                 </h1>
                 <p className="text-slate-500 font-medium text-lg max-w-2xl">
                     Piyasa fırtınasında nasıl kararlar veriyorsunuz? 60 saniyelik bu canlı simülasyonla gerçek risk karakterinizi keşfedin.
@@ -36,7 +36,7 @@ export default function BehavioralPage() {
                         className="bg-white p-6 rounded-[32px] border border-slate-100 shadow-sm flex items-center gap-4"
                     >
                         <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0">
-                            <item.icon className="w-6 h-6 text-[#00008B]" />
+                            <item.icon className="w-6 h-6 text-[#142B50]" />
                         </div>
                         <div>
                             <p className="font-black text-slate-900 text-sm">{item.title}</p>

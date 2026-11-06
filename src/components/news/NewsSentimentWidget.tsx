@@ -28,11 +28,11 @@ export function NewsSentimentWidget({ distribution }: NewsSentimentWidgetProps) 
         <div className="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-xl bg-[#00008B] text-white flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-xl bg-[#142B50] text-white flex items-center justify-center">
                         <BrainCircuit className="w-4 h-4" />
                     </div>
                     <div>
-                        <h3 className="text-xs font-black text-[#00008B] uppercase tracking-wider">
+                        <h3 className="text-xs font-black text-[#142B50] uppercase tracking-wider">
                             Piyasa AI Duyarlılık Endeksi
                         </h3>
                         <p className="text-[10px] font-bold text-slate-400">

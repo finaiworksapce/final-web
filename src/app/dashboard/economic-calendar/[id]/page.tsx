@@ -136,8 +136,8 @@ export default function EconomicEventDetailPage() {
 
     if (loading) {
         return (
-            <div className="flex flex-col min-h-screen bg-slate-50 items-center justify-center text-[#00008B]">
-                <div className="w-10 h-10 rounded-full border-4 border-[#00008B] border-t-transparent animate-spin mb-3" />
+            <div className="flex flex-col min-h-screen bg-slate-50 items-center justify-center text-[#142B50]">
+                <div className="w-10 h-10 rounded-full border-4 border-[#78B8F5] border-t-transparent animate-spin mb-3" />
                 <span className="text-xs font-black uppercase tracking-wider">Gösterge Analizi Yükleniyor...</span>
             </div>
         );
@@ -145,10 +145,10 @@ export default function EconomicEventDetailPage() {
 
     if (!event) {
         return (
-            <div className="flex flex-col min-h-screen bg-slate-50 items-center justify-center p-6 text-[#00008B]">
+            <div className="flex flex-col min-h-screen bg-slate-50 items-center justify-center p-6 text-[#142B50]">
                 <h2 className="text-xl font-black mb-2">Gösterge Bulunamadı</h2>
                 <p className="text-xs text-slate-500 mb-6">İstenen ekonomik veri detayına ve analiz geçmişine ulaşılamadı.</p>
-                <Link href="/dashboard/calendar?type=economic" className="px-5 py-2.5 rounded-xl bg-[#00008B] text-white font-bold text-xs">
+                <Link href="/dashboard/calendar?type=economic" className="px-5 py-2.5 rounded-xl bg-[#142B50] text-white font-bold text-xs">
                     Takvime Dön
                 </Link>
             </div>
@@ -200,13 +200,13 @@ export default function EconomicEventDetailPage() {
     }
 
     return (
-        <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-slate-50 text-[#00008B] w-full mx-auto relative overflow-hidden">
+        <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-slate-50 text-[#142B50] w-full mx-auto relative overflow-hidden">
             <div className="w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6 relative z-10 mb-20">
                 {/* Navigation Top Bar */}
                 <div className="flex items-center justify-between">
                     <Link
                         href="/dashboard/calendar?type=economic"
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border border-slate-200 text-[#00008B] font-bold text-xs shadow-sm hover:bg-slate-100 transition-all"
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border border-slate-200 text-[#142B50] font-bold text-xs shadow-sm hover:bg-slate-100 transition-all"
                     >
                         <ArrowLeft className="w-4 h-4" /> Ekonomik Takvime Dön
                     </Link>
@@ -216,7 +216,7 @@ export default function EconomicEventDetailPage() {
                 <div className="w-full pt-1 pb-2 space-y-2">
                     {/* Başlık ve Yatayda Takvime Ekle Butonu */}
                     <div className="flex flex-wrap items-center justify-between gap-4">
-                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#00008B] tracking-tight leading-tight">
+                        <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#142B50] tracking-tight leading-tight">
                             {event.event}
                         </h1>
                         <div className="shrink-0">
@@ -228,7 +228,7 @@ export default function EconomicEventDetailPage() {
                     <div className="space-y-1 pt-0.5">
                         <div className="flex items-center text-xs font-bold text-slate-500">
                             <span className="inline-flex items-center gap-1.5 text-slate-500 font-bold">
-                                <CalendarIcon className="w-4 h-4 text-[#00008B]" /> {event.dateFormatted || 'Bugün'} · {event.time} TSİ
+                                <CalendarIcon className="w-4 h-4 text-[#142B50]" /> {event.dateFormatted || 'Bugün'} · {event.time} TSİ
                             </span>
                         </div>
                         <EventCountdownTimer event={event} />
@@ -244,7 +244,7 @@ export default function EconomicEventDetailPage() {
                         {/* 2. BAŞLIĞIN ALTINDA İKİYE BÖLÜNEN ALAN: SOLDA LACİVERT TANIM, SAĞDA BEYAZ FINAI INTELLIGENCE */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
                             {/* SOL: TANIM (LACİVERT KUTU, BEYAZ DÜZ YAZI, İÇ FON YOK) */}
-                            <div className="bg-[#00008B] text-white rounded-3xl p-6 md:p-8 shadow-sm flex flex-col justify-between space-y-4">
+                            <div className="bg-[#142B50] text-white rounded-3xl p-6 md:p-8 shadow-sm flex flex-col justify-between space-y-4">
                                 <div className="space-y-3">
                                     <div className="flex items-center gap-2.5 pb-3 border-b border-white/40">
                                         <div className="w-9 h-9 rounded-2xl bg-blue-900/60 border border-blue-800 flex items-center justify-center">
@@ -276,10 +276,10 @@ export default function EconomicEventDetailPage() {
                                 <div className="space-y-3">
                                     <div className="flex items-center gap-2.5 pb-3 border-b border-slate-150">
                                         <div className="w-9 h-9 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center">
-                                            <Sparkles className="w-4 h-4 text-[#00008B]" />
+                                            <Sparkles className="w-4 h-4 text-[#142B50]" />
                                         </div>
                                         <div>
-                                            <h2 className="text-lg font-black text-[#00008B] tracking-tight">FinAi Intelligence</h2>
+                                            <h2 className="text-lg font-black text-[#142B50] tracking-tight">FinAi Intelligence</h2>
                                         </div>
                                     </div>
 
@@ -305,10 +305,10 @@ export default function EconomicEventDetailPage() {
                             <div className="flex items-center justify-between pb-3 border-b border-slate-150">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center">
-                                        <Activity className="w-5 h-5 text-[#00008B]" />
+                                        <Activity className="w-5 h-5 text-[#142B50]" />
                                     </div>
                                     <div>
-                                        <h2 className="text-xl font-black text-[#00008B] tracking-tight">Geçmiş Veri Grafiği</h2>
+                                        <h2 className="text-xl font-black text-[#142B50] tracking-tight">Geçmiş Veri Grafiği</h2>
                                         <p className="text-xs text-slate-400 font-bold">Açıklanan ve Beklenen Verilerin Tarihsel Değişimi</p>
                                     </div>
                                 </div>
@@ -340,10 +340,10 @@ export default function EconomicEventDetailPage() {
                             <div className="space-y-3 pt-6 border-t border-slate-200 mt-8 lg:mt-auto">
                                 <div className="flex items-center gap-2">
                                     <div className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0">
-                                        <Sparkles className="w-3.5 h-3.5 text-[#00008B]" />
+                                        <Sparkles className="w-3.5 h-3.5 text-[#142B50]" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xs font-black text-[#00008B] tracking-tight uppercase">
+                                        <h3 className="text-xs font-black text-[#142B50] tracking-tight uppercase">
                                             Önerilen Haberler
                                         </h3>
                                         <p className="text-[10px] text-slate-400 font-bold">Takip Edilebilecek Göstergeler</p>
@@ -355,21 +355,21 @@ export default function EconomicEventDetailPage() {
                                         <Link
                                             key={rec.id || idx}
                                             href={`/dashboard/economic-calendar/${toSlug(rec.event)}`}
-                                            className="group block p-3 rounded-2xl bg-white border border-slate-200 hover:border-[#00008B] hover:shadow-sm transition-all"
+                                            className="group block p-3 rounded-2xl bg-white border border-slate-200 hover:border-[#78B8F5] hover:shadow-sm transition-all"
                                         >
                                             <div className="flex items-start justify-between gap-2">
                                                 <div className="min-w-0 flex-1">
                                                     <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 mb-0.5">
                                                         <span>{rec.flag}</span>
-                                                        <span className="text-[#00008B] font-black">{rec.country}</span>
+                                                        <span className="text-[#142B50] font-black">{rec.country}</span>
                                                         <span>·</span>
                                                         <span>{rec.time} TSİ</span>
                                                     </div>
-                                                    <h4 className="text-xs font-bold text-[#00008B] group-hover:text-blue-700 leading-snug line-clamp-2 transition-colors">
+                                                    <h4 className="text-xs font-bold text-[#142B50] group-hover:text-blue-700 leading-snug line-clamp-2 transition-colors">
                                                         {rec.event}
                                                     </h4>
                                                 </div>
-                                                <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#00008B] group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
+                                                <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#142B50] group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
                                             </div>
                                         </Link>
                                     ))}

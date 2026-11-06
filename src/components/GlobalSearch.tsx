@@ -120,7 +120,7 @@ export function GlobalSearch({
   return (
     <div ref={containerRef} className={cn("relative w-full", className)}>
       <div className="relative flex items-center">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#00008B]/50 pointer-events-none" />
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#142B50]/50 pointer-events-none" />
         <input
           ref={inputRef}
           type="text"
@@ -137,7 +137,7 @@ export function GlobalSearch({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           aria-label="Varlık ve Şirket Arama"
-          className="w-full bg-slate-50/90 border border-slate-200/80 rounded-2xl py-2 pl-10 pr-10 text-xs font-bold text-[#00008B] placeholder:text-[#00008B]/40 focus:outline-none focus:ring-2 focus:ring-[#00008B]/20 focus:bg-white transition-all shadow-xs"
+          className="w-full bg-slate-50/90 border border-slate-200/80 rounded-2xl py-2 pl-10 pr-10 text-xs font-bold text-[#142B50] placeholder:text-[#142B50]/40 focus:outline-none focus:ring-2 focus:ring-[#78B8F5]/20 focus:bg-white transition-all shadow-xs"
         />
         {loading ? (
           <Loader2 className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-600 animate-spin" aria-label="Aranıyor..." />
@@ -151,7 +151,7 @@ export function GlobalSearch({
               inputRef.current?.focus();
             }}
             aria-label="Aramayı Temizle"
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#00008B] p-1 rounded-full hover:bg-slate-100 transition-colors"
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#142B50] p-1 rounded-full hover:bg-slate-100 transition-colors"
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -193,7 +193,7 @@ export function GlobalSearch({
                     className={cn(
                       "w-full text-left px-3 py-2.5 rounded-xl transition-all flex items-center justify-between group",
                       isSelected
-                        ? "bg-[#00008B] text-white shadow-sm"
+                        ? "bg-[#142B50] text-white shadow-sm"
                         : "hover:bg-blue-50/70 text-slate-800"
                     )}
                   >
@@ -204,7 +204,7 @@ export function GlobalSearch({
                           <span
                             className={cn(
                               "font-black text-xs tracking-tight",
-                              isSelected ? "text-white" : "text-[#00008B]"
+                              isSelected ? "text-white" : "text-[#142B50]"
                             )}
                           >
                             {cleanSym}

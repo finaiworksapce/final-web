@@ -330,7 +330,7 @@ export default function StockKeyStatisticsSection({
             <div className="flex items-start justify-between border-b border-slate-100 pb-2">
               <div className="min-w-0 pr-2">
                 <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400 uppercase tracking-wider">
-                  <Sparkles className="w-2.5 h-2.5 text-[#00008B]" />
+                  <Sparkles className="w-2.5 h-2.5 text-[#142B50]" />
                   Sektör Kıyaslama
                 </div>
                 <h4 className="text-xs font-bold text-slate-900 leading-tight mt-0.5 line-clamp-1">
@@ -360,7 +360,7 @@ export default function StockKeyStatisticsSection({
               </div>
 
               {/* Sektör Ortalaması (Lacivert Kutu) */}
-              <div className="bg-[#00008B] text-white rounded-xl p-2 shadow-sm flex flex-col justify-between">
+              <div className="bg-[#142B50] text-white rounded-xl p-2 shadow-sm flex flex-col justify-between">
                 <span className="text-[10px] font-semibold text-blue-200 truncate">
                   Sektör Ort.
                 </span>
@@ -404,7 +404,7 @@ export default function StockKeyStatisticsSection({
                       className={cn(
                         "flex items-center justify-between text-[11px] transition-colors py-0.5",
                         isCurrent
-                          ? "font-black text-[#00008B]"
+                          ? "font-black text-[#142B50]"
                           : "text-slate-700 font-medium"
                       )}
                     >
@@ -414,7 +414,7 @@ export default function StockKeyStatisticsSection({
                           className={cn(
                             "w-5 text-[10px] tabular-nums shrink-0 font-semibold",
                             isCurrent
-                              ? "text-[#00008B] font-black"
+                              ? "text-[#142B50] font-black"
                               : peer.rank <= 3
                                 ? "text-slate-900 font-bold"
                                 : "text-slate-400"
@@ -427,7 +427,7 @@ export default function StockKeyStatisticsSection({
                         <span className="truncate">
                           {peer.symbol}
                           {isCurrent && (
-                            <span className="ml-1 text-[9px] font-bold text-[#00008B]/80">
+                            <span className="ml-1 text-[9px] font-bold text-[#142B50]/80">
                               (Bu Hisse)
                             </span>
                           )}
@@ -438,7 +438,7 @@ export default function StockKeyStatisticsSection({
                       <span
                         className={cn(
                           "tabular-nums text-right ml-2 shrink-0 text-[11px]",
-                          isCurrent ? "text-[#00008B] font-black" : "text-slate-900 font-semibold"
+                          isCurrent ? "text-[#142B50] font-black" : "text-slate-900 font-semibold"
                         )}
                       >
                         {peer.formattedValue}
@@ -467,7 +467,7 @@ export default function StockKeyStatisticsSection({
 
         <div className="flex items-center gap-2">
           {(loading || sectorLoading) && (
-            <span className="flex items-center gap-1 text-[11px] text-[#00008B] font-medium animate-pulse">
+            <span className="flex items-center gap-1 text-[11px] text-[#142B50] font-medium animate-pulse">
               <RefreshCw className="w-3 h-3 animate-spin" />
               Sektör Hesaplanıyor
             </span>
@@ -523,14 +523,14 @@ export default function StockKeyStatisticsSection({
                     <span
                       className={cn(
                         "text-xs sm:text-sm font-semibold transition-colors",
-                        isHovered ? "text-[#00008B] font-bold" : "text-slate-800"
+                        isHovered ? "text-[#142B50] font-bold" : "text-slate-800"
                       )}
                     >
                       {metric.label}
                     </span>
                     <ChevronRight
                       className={cn(
-                        "w-3 h-3 text-[#00008B] transition-all duration-200",
+                        "w-3 h-3 text-[#142B50] transition-all duration-200",
                         isHovered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-1"
                       )}
                     />
@@ -578,14 +578,14 @@ export default function StockKeyStatisticsSection({
                     <span
                       className={cn(
                         "text-xs sm:text-sm font-semibold transition-colors",
-                        isHovered ? "text-[#00008B] font-bold" : "text-slate-800"
+                        isHovered ? "text-[#142B50] font-bold" : "text-slate-800"
                       )}
                     >
                       {metric.label}
                     </span>
                     <ChevronRight
                       className={cn(
-                        "w-3 h-3 text-[#00008B] transition-all duration-200",
+                        "w-3 h-3 text-[#142B50] transition-all duration-200",
                         isHovered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-1"
                       )}
                     />
@@ -598,7 +598,7 @@ export default function StockKeyStatisticsSection({
                         ? "text-slate-400 font-medium"
                         : isNegative
                           ? "text-rose-600 font-bold"
-                          : "text-[#00008B] font-bold"
+                          : "text-[#142B50] font-bold"
                     )}
                   >
                     {formatted}

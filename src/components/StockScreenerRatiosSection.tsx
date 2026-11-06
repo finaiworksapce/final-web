@@ -188,8 +188,8 @@ export default function StockScreenerRatiosSection({
       {/* ÜST BAŞLIK VE ÖZET ETİKETLERİ */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between border-b border-slate-100 pb-4 gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#00008B] border border-blue-200 flex items-center justify-center shadow-sm shrink-0">
-            <Calculator className="w-5 h-5 text-[#00008B]" />
+          <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#142B50] border border-blue-200 flex items-center justify-center shadow-sm shrink-0">
+            <Calculator className="w-5 h-5 text-[#142B50]" />
           </div>
           <div>
             <h3 className="text-lg font-black text-slate-900 tracking-tight">
@@ -222,7 +222,7 @@ export default function StockScreenerRatiosSection({
 
       {loading ? (
         <div className="py-12 flex items-center justify-center text-slate-400 font-bold text-xs gap-2">
-          <RefreshCw className="w-5 h-5 animate-spin text-[#00008B]" />
+          <RefreshCw className="w-5 h-5 animate-spin text-[#142B50]" />
           {symbol} için finansal rasyolar yükleniyor...
         </div>
       ) : resolvedCategories.length > 0 ? (
@@ -234,7 +234,7 @@ export default function StockScreenerRatiosSection({
               className={cn(
                 "px-3.5 py-2 text-xs font-black rounded-xl transition-all border whitespace-nowrap flex items-center gap-1.5",
                 selectedCategory === "all"
-                  ? "bg-[#00008B] text-white border-[#00008B] shadow-md"
+                  ? "bg-[#142B50] text-white border-[#78B8F5] shadow-md"
                   : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-slate-900"
               )}
             >
@@ -251,11 +251,11 @@ export default function StockScreenerRatiosSection({
                   className={cn(
                     "px-3.5 py-2 text-xs font-black rounded-xl transition-all border whitespace-nowrap flex items-center gap-1.5",
                     isActive
-                      ? "bg-[#00008B] text-white border-[#00008B] shadow-md"
+                      ? "bg-[#142B50] text-white border-[#78B8F5] shadow-md"
                       : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-slate-900"
                   )}
                 >
-                  <Icon className={cn("w-3.5 h-3.5", isActive ? "text-white" : "text-[#00008B]")} />
+                  <Icon className={cn("w-3.5 h-3.5", isActive ? "text-white" : "text-[#142B50]")} />
                   <span>{cat.label}</span>
                   <span
                     className={cn(
@@ -281,8 +281,8 @@ export default function StockScreenerRatiosSection({
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/70 pb-3">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-xl bg-white text-[#00008B] border border-blue-200 flex items-center justify-center shadow-xs shrink-0">
-                        <CategoryIcon className="w-4 h-4 text-[#00008B]" />
+                      <div className="w-8 h-8 rounded-xl bg-white text-[#142B50] border border-blue-200 flex items-center justify-center shadow-xs shrink-0">
+                        <CategoryIcon className="w-4 h-4 text-[#142B50]" />
                       </div>
                       <div>
                         <h4 className="text-sm font-black text-slate-900 tracking-tight">
@@ -311,11 +311,11 @@ export default function StockScreenerRatiosSection({
                               ? "text-emerald-700"
                               : item.value < 0
                                 ? "text-rose-600"
-                                : "text-[#00008B]";
+                                : "text-[#142B50]";
                         } else if (item.value < 0 && item.key !== "netDebtToEBITDA") {
                           valueColorClass = "text-rose-600";
                         } else {
-                          valueColorClass = "text-[#00008B]";
+                          valueColorClass = "text-[#142B50]";
                         }
                       }
 
@@ -333,7 +333,7 @@ export default function StockScreenerRatiosSection({
                                 <button
                                   type="button"
                                   onClick={() => onSelectTooltip(item)}
-                                  className="p-1 rounded-lg bg-blue-50 text-[#00008B] hover:bg-blue-100 transition-colors shrink-0"
+                                  className="p-1 rounded-lg bg-blue-50 text-[#142B50] hover:bg-blue-100 transition-colors shrink-0"
                                   title="FinAI Eğitici Not & Metodoloji"
                                 >
                                   <HelpCircle className="w-3.5 h-3.5" />
@@ -372,7 +372,7 @@ export default function StockScreenerRatiosSection({
                               {item.methodology}
                             </span>
                             {item.periodLabel && (
-                              <span className="text-[#00008B] bg-blue-50 px-1.5 py-0.5 rounded font-black shrink-0">
+                              <span className="text-[#142B50] bg-blue-50 px-1.5 py-0.5 rounded font-black shrink-0">
                                 {item.periodLabel}
                               </span>
                             )}

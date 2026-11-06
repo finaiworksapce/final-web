@@ -204,7 +204,7 @@ const StepperIndicator = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "relative flex size-6 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-500 data-[state=active]:bg-[#00008B] data-[state=completed]:bg-emerald-600 data-[state=active]:text-white data-[state=completed]:text-white shadow-xs",
+        "relative flex size-6 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-500 data-[state=active]:bg-[#142B50] data-[state=completed]:bg-emerald-600 data-[state=active]:text-white data-[state=completed]:text-white shadow-xs",
         className,
       )}
       data-state={state}

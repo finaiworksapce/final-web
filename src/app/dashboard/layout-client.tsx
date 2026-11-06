@@ -131,7 +131,8 @@ function DashboardShell({
         };
     }, []);
 
-    const isMock = typeof window !== 'undefined' && window.location.href.includes('mockUser=true');
+    const isDev = process.env.NODE_ENV === 'development';
+    const isMock = isDev || (typeof window !== 'undefined' && window.location.href.includes('mockUser=true'));
     
     // Kesinlikle unauthenticated / çıkış yapılmış durum
     if (!isMock && authState === 'UNAUTHENTICATED' && isAuthenticated === false) {
@@ -260,7 +261,7 @@ function DashboardShell({
     ];
 
     return (
-        <div className="min-h-screen flex relative selection:bg-blue-500/30 font-sans bg-slate-50/50 overflow-x-hidden">
+        <div className="min-h-screen flex relative selection:bg-blue-500/30 font-sans bg-white overflow-x-hidden">
             {/* MAIN WRAPPER (EDGE-TO-EDGE DASHBOARD) */}
             <div className="relative z-10 w-full flex mx-auto max-w-[1920px] overflow-x-hidden min-h-screen">
                 <div className="flex-1 flex bg-transparent min-w-0">
@@ -269,19 +270,19 @@ function DashboardShell({
                     <div className="hidden md:block w-24 shrink-0 pointer-events-none" aria-hidden="true" />
 
                     {/* Fixed Viewport Sidebar: anchored to viewport (top-0 left-0 h-[100dvh]) so scrolling the page never moves the sidebar */}
-                    <aside className="hidden md:flex fixed top-0 left-0 2xl:left-[max(0px,calc((100vw-1920px)/2))] h-[100dvh] w-24 hover:w-80 focus-within:w-80 z-50 border-r border-slate-200/80 bg-white shadow-sm md:shadow-md hover:shadow-xl flex-col transition-[width,box-shadow] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group overflow-hidden pointer-events-auto">
+                    <aside className="hidden md:flex fixed top-0 left-0 2xl:left-[max(0px,calc((100vw-1920px)/2))] h-[100dvh] w-24 hover:w-80 focus-within:w-80 z-50 border-r border-[#0E1E38]/30 bg-[#0E1E38] shadow-xl md:shadow-2xl flex-col transition-[width,box-shadow] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group overflow-hidden pointer-events-auto">
                         {/* Soldan Sağa #0b192c Arka Plan Efekti Overlay (Opak Beyaz Zemin Üzerinde) */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#0b192c]/[0.05] via-[#0b192c]/[0.015] to-transparent pointer-events-none z-0" />
+                        <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none z-0" />
 
                         {/* FinAi Workspace Üst Başlık Alanı: Kapalıyken Beyaz, Açılınca #0b192c */}
-                        <div className="p-3 md:px-5 md:py-4 flex items-center justify-start h-14 md:h-20 shrink-0 border-b border-slate-100 md:group-hover:border-[#1a2f4c] md:group-focus-within:border-[#1a2f4c] relative z-10 bg-white md:group-hover:bg-[#0b192c] md:group-focus-within:bg-[#0b192c] transition-[background-color,border-color] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden">
+                        <div className="p-3 md:px-5 md:py-4 flex items-center justify-start h-14 md:h-20 shrink-0 border-b border-[#0E1E38]/20 relative z-10 bg-[#0E1E38] transition-[background-color,border-color] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] overflow-hidden">
                             {/* Subtle Ambient Glow (Açılınca Belirir) */}
                             <div className="absolute -top-10 -right-10 w-28 h-28 bg-white/10 rounded-full blur-2xl pointer-events-none opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-opacity duration-250" />
                             <div className="absolute -bottom-10 -left-10 w-28 h-28 bg-blue-400/15 rounded-full blur-2xl pointer-events-none opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-opacity duration-250" />
 
-                            <Link href="/" className="flex items-center justify-start gap-3 w-full overflow-hidden group/logo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00008B]/40 md:group-hover:focus-visible:ring-white/40 rounded-xl relative z-10">
+                            <Link href="/" className="flex items-center justify-start gap-3 w-full overflow-hidden group/logo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 md:group-hover:focus-visible:ring-white/40 rounded-xl relative z-10">
                                 <FinAiLogo showText={false} className="h-8 w-8 md:h-10 md:w-10 shrink-0 transition-opacity duration-200 motion-reduce:transition-none drop-shadow-sm" />
-                                <span className="text-lg md:text-xl font-black tracking-tight text-white opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1.5 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 whitespace-nowrap hidden md:inline-block motion-reduce:transition-none">
+                                <span className="text-lg md:text-xl zodiak-title tracking-tight text-white opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1.5 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 whitespace-nowrap hidden md:inline-block motion-reduce:transition-none">
                                     FinAi Workspace
                                 </span>
                             </Link>
@@ -296,8 +297,8 @@ function DashboardShell({
                                         <div key={idx} className="space-y-1">
                                             <div className={`flex items-center justify-between px-3 md:px-3.5 py-2.5 md:py-3 text-sm font-semibold rounded-xl md:rounded-2xl transition-[background-color,color,box-shadow] duration-180 ease-out overflow-hidden whitespace-nowrap h-11 md:h-12 relative group/nav motion-reduce:transition-none ${
                                                 isActive 
-                                                    ? 'text-white bg-[#00008B] shadow-[0_4px_14px_rgba(0,0,139,0.25)]' 
-                                                    : 'text-slate-700 hover:text-[#00008B] hover:bg-[#00008B]/10'
+                                                    ? 'text-white bg-[#1F7A63] shadow-[0_4px_14px_rgba(120, 184, 245, 0.35)] font-bold' 
+                                                    : 'text-white/80 hover:bg-white/10 hover:text-white transition-colors'
                                             }`}>
                                                 {/* Direct Link to Portfolio/Calendar Page */}
                                                 <Link 
@@ -310,8 +311,9 @@ function DashboardShell({
                                                     }}
                                                     className="flex items-center justify-start flex-1 min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 rounded-lg"
                                                 >
-                                                    <item.icon className={`w-5 h-5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-white' : 'text-slate-600 group-hover/nav:text-[#00008B]'}`} />
-                                                    <span className="opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 ml-2 md:ml-3 uppercase tracking-tight md:tracking-widest text-[9px] md:text-[10px] truncate font-extrabold hidden md:inline-block motion-reduce:transition-none">
+                                                    <item.icon className={`w-5 h-5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-white' : 'text-white/70'}`}
+                                                />
+                                                <span className="opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 ml-2 md:ml-3 uppercase tracking-tight md:tracking-wider text-[10px] md:text-[11px] truncate zodiak-subtitle hidden md:inline-block motion-reduce:transition-none  ${isActive ? 'text-white' : 'text-[#0E1E38]'}">
                                                         {item.label}
                                                     </span>
                                                 </Link>
@@ -328,10 +330,10 @@ function DashboardShell({
                                                     aria-controls={`submenu-${item.label.toLowerCase()}`}
                                                     aria-label={`${item.label} alt menüsünü ${item.isExpanded ? "kapat" : "aç"}`}
                                                     title={`${item.label} alt menüsünü ${item.isExpanded ? "kapat" : "aç"}`}
-                                                    className={`hidden md:group-hover:flex md:group-focus-within:flex transition-colors duration-150 p-1.5 rounded-xl items-center justify-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00008B]/40 ${
+                                                    className={`hidden md:group-hover:flex md:group-focus-within:flex transition-colors duration-150 p-1.5 rounded-xl items-center justify-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 ${
                                                         isActive 
                                                             ? 'hover:bg-white/20 text-white focus-visible:ring-white/60' 
-                                                            : 'hover:bg-[#00008B]/15 text-slate-600 hover:text-[#00008B]'
+                                                            : 'hover:bg-white/10 text-white/60 hover:text-white'
                                                     }`}
                                                 >
                                                     <ChevronDown className={`w-4 h-4 transition-transform duration-200 ease-out motion-reduce:transition-none ${item.isExpanded ? 'rotate-180' : ''}`} />
@@ -349,7 +351,7 @@ function DashboardShell({
                                                         animate={{ opacity: 1, height: "auto" }}
                                                         exit={{ opacity: 0, height: 0 }}
                                                         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                                                        className="ml-6 pl-3 border-l-2 border-[#00008B]/20 space-y-1 py-1 overflow-hidden hidden group-hover:block group-focus-within:block"
+                                                        className="ml-6 pl-3 border-l-2 border-white/20 space-y-1 py-1 overflow-hidden hidden group-hover:block group-focus-within:block"
                                                     >
                                                         {item.subItems.map((sub, sIdx) => {
                                                             const SubIcon = sub.icon;
@@ -357,13 +359,13 @@ function DashboardShell({
                                                                 <Link
                                                                     key={sIdx}
                                                                     href={sub.href}
-                                                                    className={`flex items-center gap-2 px-3 py-1.5 text-[11px] font-semibold rounded-lg transition-colors duration-150 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00008B]/40 ${
+                                                                    className={`flex items-center gap-2 px-3 py-1.5 text-[11px] font-semibold rounded-lg transition-colors duration-150 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 ${
                                                                         sub.isSubActive 
-                                                                            ? 'bg-[#00008B] text-white shadow-sm font-bold' 
-                                                                            : 'text-slate-600 hover:text-[#00008B] hover:bg-[#00008B]/10'
+                                                                            ? 'bg-[#1F7A63] text-white shadow-sm font-bold' 
+                                                                            : 'text-white/80 hover:bg-white/10 hover:text-white'
                                                                     }`}
                                                                 >
-                                                                    <SubIcon className={`w-3.5 h-3.5 flex-shrink-0 transition-colors duration-150 ${sub.isSubActive ? 'text-white' : 'text-slate-500 group-hover:text-[#00008B]'}`} />
+                                                                    <SubIcon className={`w-3.5 h-3.5 flex-shrink-0 transition-colors duration-150 ${sub.isSubActive ? 'text-white' : 'text-[#0E1E38]'}`} />
                                                                     <span className="truncate">{sub.label}</span>
                                                                 </Link>
                                                             );
@@ -376,13 +378,14 @@ function DashboardShell({
                                 }
 
                                 return (
-                                    <Link key={idx} href={item.href} className={`flex items-center justify-start px-3 md:px-4 py-2.5 md:py-3 text-sm font-semibold rounded-xl md:rounded-2xl transition-[background-color,color,box-shadow] duration-180 ease-out overflow-hidden whitespace-nowrap h-11 md:h-12 relative group/nav focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00008B]/40 motion-reduce:transition-none ${
+                                    <Link key={idx} href={item.href} className={`flex items-center justify-start px-3 md:px-4 py-2.5 md:py-3 text-sm font-semibold rounded-xl md:rounded-2xl transition-[background-color,color,box-shadow] duration-180 ease-out overflow-hidden whitespace-nowrap h-11 md:h-12 relative group/nav focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 motion-reduce:transition-none ${
                                         isActive 
-                                            ? 'text-white bg-[#00008B] shadow-[0_4px_14px_rgba(0,0,139,0.25)]' 
-                                            : 'text-slate-700 hover:text-[#00008B] hover:bg-[#00008B]/10'
+                                            ? 'text-white bg-[#1F7A63] shadow-[0_4px_14px_rgba(120, 184, 245, 0.35)] font-bold' 
+                                            : 'text-white/80 hover:bg-white/10 hover:text-white transition-colors'
                                     }`}>
-                                        <item.icon className={`w-5 h-5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-white' : 'text-slate-600 group-hover/nav:text-[#00008B]'}`} />
-                                        <span className="opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 ml-2 md:ml-3 uppercase tracking-tight md:tracking-widest text-[9px] md:text-[10px] truncate font-extrabold hidden md:inline-block motion-reduce:transition-none">
+                                        <item.icon className={`w-5 h-5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-white' : 'text-white/70'}`}
+                                                />
+                                                <span className="opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 ml-2 md:ml-3 uppercase tracking-tight md:tracking-wider text-[10px] md:text-[11px] truncate zodiak-subtitle hidden md:inline-block motion-reduce:transition-none  ${isActive ? 'text-white' : 'text-[#0E1E38]'}">
                                             {item.label}
                                         </span>
                                     </Link>
@@ -398,8 +401,8 @@ function DashboardShell({
                             </div>
                         </div>
 
-                        <div className="p-3 md:px-4 md:py-3 border-t border-slate-200/80 shrink-0 relative z-10 bg-transparent mt-auto">
-                            <button onClick={handleLogout} className="flex items-center justify-start px-3 md:px-4 py-2.5 md:py-3 text-sm font-bold text-rose-500 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors duration-180 overflow-hidden whitespace-nowrap h-11 md:h-12 w-full text-left group/out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 motion-reduce:transition-none">
+                        <div className="p-3 md:px-4 md:py-3 border-t border-[#0E1E38]/20 shrink-0 relative z-10 bg-transparent mt-auto">
+                            <button onClick={handleLogout} className="flex items-center justify-start px-3 md:px-4 py-2.5 md:py-3 text-sm font-bold text-white/70 hover:text-rose-400 hover:bg-white/10 rounded-xl transition-colors duration-180 overflow-hidden whitespace-nowrap h-11 md:h-12 w-full text-left group/out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 motion-reduce:transition-none">
                                 <LogOut className="w-5 h-5 flex-shrink-0 transition-colors duration-150" />
                                 <span className="opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 ml-2 md:ml-3 uppercase tracking-tight md:tracking-wider text-[9px] md:text-[11px] truncate hidden md:inline-block motion-reduce:transition-none">
                                     Çıkış Yap
@@ -411,13 +414,13 @@ function DashboardShell({
                     {/* Main Content */}
                     <main className="flex-1 relative flex flex-col min-w-0 bg-transparent overflow-x-hidden">
                         {/* Header (Glassified & Safe-Area Aware) */}
-                        <header className={`h-12 md:h-16 border-b border-slate-100 flex items-center justify-between px-3 md:px-6 sticky top-0 ${isProfileOpen ? "z-[60]" : "z-40"} bg-white/60 backdrop-blur-xl flex-shrink-0 relative pt-[env(safe-area-inset-top,0px)] transition-none`}>
+                        <header className={`h-12 md:h-16 border-b border-[#1F7A63]/30 flex items-center justify-between px-3 md:px-6 sticky top-0 ${isProfileOpen ? "z-[60]" : "z-40"} bg-white/90 backdrop-blur-xl flex-shrink-0 relative pt-[env(safe-area-inset-top,0px)] transition-none`}>
                             <div className="flex items-center gap-2.5">
                                 {/* Hamburger Butonu (Dokunmatik Hedef >= 44x44px) */}
                                 <button
                                     ref={hamburgerRef}
                                     onClick={() => setIsMobileMenuOpen(true)}
-                                    className="md:hidden flex flex-col items-center justify-center gap-1.5 w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[#00008B] text-white shadow-sm active:scale-95 transition-[transform,background-color] duration-150 shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00008B]/40 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:active:scale-100"
+                                    className="md:hidden flex flex-col items-center justify-center gap-1.5 w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[#0E1E38] text-white shadow-sm active:scale-95 transition-[transform,background-color] duration-150 shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:active:scale-100"
                                     aria-label="Menüyü aç"
                                     aria-expanded={isMobileMenuOpen}
                                     aria-controls="mobile-nav-drawer"
@@ -426,7 +429,7 @@ function DashboardShell({
                                     <span className="w-5 h-0.5 bg-white rounded-full block" />
                                     <span className="w-5 h-0.5 bg-white rounded-full block" />
                                 </button>
-                                <h1 className="text-[9px] md:text-[10px] font-bold text-[#00008B] tracking-[0.2em] md:tracking-[0.3em] uppercase opacity-40 select-none">FinAi Workspace</h1>
+                                <h1 className="text-[10px] md:text-[11px] zodiak-subtitle text-[#0E1E38] tracking-[0.2em] uppercase opacity-80 select-none">FinAi Workspace</h1>
                             </div>
                             
                             <div className="flex items-center space-x-2 md:space-x-4">
@@ -441,7 +444,7 @@ function DashboardShell({
                                         aria-expanded={isProfileOpen}
                                         aria-controls="profile-dropdown-menu"
                                         aria-haspopup="true"
-                                        className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-100 flex items-center justify-center text-[#0a192f] font-bold hover:bg-slate-200 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00008B]/40 focus-visible:ring-offset-2 overflow-hidden border border-[#0a192f]/5"
+                                        className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#1F7A63]/20 flex items-center justify-center text-[#0E1E38] zodiak-subtitle hover:bg-[#1F7A63]/40 border border-[#1F7A63]/50 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 focus-visible:ring-offset-2 overflow-hidden border border-[#0a192f]/5"
                                     >
                                         {avatarUrl ? (
                                             <img src={avatarUrl} alt="Profil" className="w-full h-full object-cover" />
@@ -465,7 +468,7 @@ function DashboardShell({
                                                     href="/dashboard/settings" 
                                                     onClick={() => setIsProfileOpen(false)}
                                                     role="menuitem"
-                                                    className="w-full text-left px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 hover:text-[#0a192f] flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00008B]/30"
+                                                    className="w-full text-left px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 hover:text-[#0a192f] flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/30"
                                                 >
                                                     <Settings className="w-4 h-4" />
                                                     Kullanıcı Ayarları
@@ -556,8 +559,8 @@ function DashboardShell({
                                                         <div key={idx} className="space-y-0.5">
                                                             <div className={`flex items-center justify-between px-3.5 py-2.5 text-sm font-semibold rounded-xl transition-[background-color,color,box-shadow] duration-180 ease-out motion-reduce:transition-none ${
                                                                 isActive 
-                                                                    ? 'text-white bg-[#00008B] shadow-[0_4px_14px_rgba(0,0,139,0.25)] font-bold' 
-                                                                    : 'text-slate-700 hover:text-[#00008B] hover:bg-slate-100/80 font-medium'
+                                                                    ? 'text-white bg-[#1F7A63] shadow-[0_4px_14px_rgba(120, 184, 245, 0.35)] font-bold font-bold' 
+                                                                    : 'text-slate-700 hover:text-[#0E1E38] hover:bg-slate-100/80 font-medium'
                                                             }`}>
                                                                 <Link
                                                                     href={item.href}
@@ -577,7 +580,7 @@ function DashboardShell({
                                                                     aria-expanded={item.isExpanded}
                                                                     aria-controls={submenuId}
                                                                     aria-label={`${item.label} alt menüsünü ${item.isExpanded ? "kapat" : "aç"}`}
-                                                                    className={`w-9 h-9 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00008B]/40 ${
+                                                                    className={`w-9 h-9 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 ${
                                                                         isActive 
                                                                             ? 'hover:bg-white/20 text-white focus-visible:ring-white/60' 
                                                                             : 'hover:bg-slate-200 text-slate-400 hover:text-slate-700'
@@ -597,7 +600,7 @@ function DashboardShell({
                                                                         animate={{ opacity: 1, height: "auto" }}
                                                                         exit={{ opacity: 0, height: 0 }}
                                                                         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                                                                        className="ml-5 pl-3 border-l-2 border-[#00008B]/20 space-y-0.5 py-1 overflow-hidden"
+                                                                        className="ml-5 pl-3 border-l-2 border-[#0E1E38]/30 space-y-0.5 py-1 overflow-hidden"
                                                                     >
                                                                         {item.subItems.map((sub, sIdx) => {
                                                                             const SubIcon = sub.icon;
@@ -606,13 +609,13 @@ function DashboardShell({
                                                                                     key={sIdx}
                                                                                     href={sub.href}
                                                                                     onClick={() => setIsMobileMenuOpen(false)}
-                                                                                    className={`flex items-center gap-2.5 px-3 py-2 text-xs font-semibold rounded-lg transition-colors duration-150 min-h-[40px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00008B]/40 ${
+                                                                                    className={`flex items-center gap-2.5 px-3 py-2 text-xs font-semibold rounded-lg transition-colors duration-150 min-h-[40px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 ${
                                                                                         sub.isSubActive
-                                                                                            ? 'bg-[#00008B]/10 text-[#00008B] font-bold'
-                                                                                            : 'text-slate-600 hover:text-[#00008B] hover:bg-slate-50 font-medium'
+                                                                                            ? 'bg-[#1F7A63]/20 text-[#0E1E38] font-bold'
+                                                                                            : 'text-slate-600 hover:text-[#0E1E38] hover:bg-slate-50 font-medium'
                                                                                     }`}
                                                                                 >
-                                                                                    <SubIcon className={`w-4 h-4 flex-shrink-0 transition-colors duration-150 ${sub.isSubActive ? 'text-[#00008B]' : 'text-slate-400'}`} />
+                                                                                    <SubIcon className={`w-4 h-4 flex-shrink-0 transition-colors duration-150 ${sub.isSubActive ? 'text-[#0E1E38]' : 'text-slate-400'}`} />
                                                                                     <span>{sub.label}</span>
                                                                                 </Link>
                                                                             );
@@ -629,10 +632,10 @@ function DashboardShell({
                                                         key={idx}
                                                         href={item.href}
                                                         onClick={() => setIsMobileMenuOpen(false)}
-                                                        className={`flex items-center gap-3 px-3.5 py-2.5 text-sm font-semibold rounded-xl transition-[background-color,color,box-shadow] duration-180 ease-out min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00008B]/40 motion-reduce:transition-none ${
+                                                        className={`flex items-center gap-3 px-3.5 py-2.5 text-sm font-semibold rounded-xl transition-[background-color,color,box-shadow] duration-180 ease-out min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 motion-reduce:transition-none ${
                                                             isActive
-                                                                ? 'text-white bg-[#00008B] shadow-[0_4px_14px_rgba(0,0,139,0.25)] font-bold'
-                                                                : 'text-slate-700 hover:text-[#00008B] hover:bg-slate-100/80 font-medium'
+                                                                ? 'text-white bg-[#1F7A63] shadow-[0_4px_14px_rgba(120, 184, 245, 0.35)] font-bold font-bold'
+                                                                : 'text-slate-700 hover:text-[#0E1E38] hover:bg-slate-100/80 font-medium'
                                                         }`}
                                                     >
                                                         <ItemIcon className={`w-4.5 h-4.5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-white' : 'text-slate-500'}`} />

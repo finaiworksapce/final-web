@@ -44,7 +44,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     const [prices, setPrices] = useState<Record<string, number>>({});
     const [stats, setStats] = useState<any[]>([]);
     const [portfolioHistory, setPortfolioHistory] = useState<any[]>([]);
-    const [isDataLoaded, setIsDataLoaded] = useState(false);
+    const [isDataLoaded, setIsDataLoaded] = useState(process.env.NODE_ENV === 'development');
     const [globalNews, setGlobalNews] = useState<any[]>([]);
 
     const currentUserRef = React.useRef<User | null>(null);
@@ -248,6 +248,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
         // Initial Auth Check
         const checkAuth = async () => {
+            const isDev = process.env.NODE_ENV === 'development';
             try {
                 const { data: { session }, error } = await supabase.auth.getSession();
 

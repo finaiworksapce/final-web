@@ -56,7 +56,7 @@ export function DeleteAccountSection({ onDelete }: DeleteAccountSectionProps) {
                             <div className="p-3 rounded-2xl bg-rose-100 border border-rose-200 text-rose-600">
                                 <AlertTriangle className="h-6 w-6" />
                             </div>
-                            <h4 className="text-base font-black text-[#00008B]">Hesabınızı Silmek Üzeresiniz</h4>
+                            <h4 className="text-base font-black text-[#142B50]">Hesabınızı Silmek Üzeresiniz</h4>
                         </div>
 
                         <p className="text-xs text-slate-600 font-medium">

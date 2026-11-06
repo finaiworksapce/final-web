@@ -251,7 +251,7 @@ export default function RiskTestPage() {
                     </div>
                 </div>
 
-                <Link href="/dashboard" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-[#00008B] text-white rounded-2xl text-sm font-bold tracking-[0.15em] uppercase shadow-xl shadow-[#00008B]/20 hover:-translate-y-1 transition-transform group">
+                <Link href="/dashboard" className="inline-flex items-center justify-center gap-2 px-10 py-4 bg-[#142B50] text-white rounded-2xl text-sm font-bold tracking-[0.15em] uppercase shadow-xl shadow-[#142B50]/20 hover:-translate-y-1 transition-transform group">
                     Portföy Dağılımını İncele
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
@@ -261,11 +261,11 @@ export default function RiskTestPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-white text-[#00008B] w-full relative overflow-hidden">
+    <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-white text-[#142B50] w-full relative overflow-hidden">
         {/* Progress Bar */}
         <div className="w-full h-2 bg-slate-100 absolute top-0 left-0 z-50">
             <motion.div 
-                className="h-full bg-gradient-to-r from-blue-500 to-[#00008B]" 
+                className="h-full bg-gradient-to-r from-blue-500 to-[#142B50]" 
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.5 }}
@@ -273,7 +273,7 @@ export default function RiskTestPage() {
         </div>
 
         <div className="flex-1 w-full max-w-3xl mx-auto px-6 py-12 md:py-20 flex flex-col relative z-10">
-            <button onClick={handleBack} className="self-start flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-[#00008B] transition-colors uppercase tracking-widest mb-12">
+            <button onClick={handleBack} className="self-start flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-[#142B50] transition-colors uppercase tracking-widest mb-12">
                 <ChevronLeft className="w-4 h-4" />
                 {currentStep === 0 ? "İptal Et" : "Geri Dön"}
             </button>
@@ -290,7 +290,7 @@ export default function RiskTestPage() {
                         className="w-full"
                     >
                         <div className="mb-10">
-                            <span className="inline-block px-3 py-1 rounded-full bg-blue-50 text-[#00008B] text-[10px] font-black uppercase tracking-widest mb-6">
+                            <span className="inline-block px-3 py-1 rounded-full bg-blue-50 text-[#142B50] text-[10px] font-black uppercase tracking-widest mb-6">
                                 Soru {currentStep + 1} / {QUESTIONS.length} • {currentQ.category}
                             </span>
                             <h2 className="text-3xl md:text-4xl font-black text-slate-800 leading-tight tracking-tight">
@@ -309,15 +309,15 @@ export default function RiskTestPage() {
                                             className={cn(
                                                 "text-left p-6 rounded-2xl border-2 transition-all duration-300 relative overflow-hidden group",
                                                 isSelected 
-                                                    ? "border-[#00008B] bg-blue-50/50" 
-                                                    : "border-slate-100 hover:border-[#00008B]/30 hover:bg-slate-50"
+                                                    ? "border-[#78B8F5] bg-blue-50/50" 
+                                                    : "border-slate-100 hover:border-[#78B8F5]/30 hover:bg-slate-50"
                                             )}
                                         >
                                             <div className="flex items-center justify-between gap-4 relative z-10">
-                                                <span className={cn("text-base font-medium", isSelected ? "text-[#00008B] font-bold" : "text-slate-600")}>
+                                                <span className={cn("text-base font-medium", isSelected ? "text-[#142B50] font-bold" : "text-slate-600")}>
                                                     {opt.text}
                                                 </span>
-                                                <div className={cn("w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors", isSelected ? "border-[#00008B] bg-[#00008B]" : "border-slate-200")}>
+                                                <div className={cn("w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors", isSelected ? "border-[#78B8F5] bg-[#142B50]" : "border-slate-200")}>
                                                     {isSelected && <CheckCircle2 className="w-4 h-4 text-white" />}
                                                 </div>
                                             </div>
@@ -338,14 +338,14 @@ export default function RiskTestPage() {
                                         placeholder={currentQ.placeholder}
                                         value={answers[currentQ.id]?.text || ""}
                                         onChange={(e) => setAnswers(prev => ({ ...prev, [currentQ.id]: { text: e.target.value, score: 0 } }))}
-                                        className="w-full pl-14 pr-6 py-6 rounded-3xl border-2 border-slate-100 focus:border-[#00008B] focus:ring-4 focus:ring-[#00008B]/10 outline-none text-3xl font-black text-[#00008B] transition-all bg-slate-50/50"
+                                        className="w-full pl-14 pr-6 py-6 rounded-3xl border-2 border-slate-100 focus:border-[#78B8F5] focus:ring-4 focus:ring-[#78B8F5]/10 outline-none text-3xl font-black text-[#142B50] transition-all bg-slate-50/50"
                                         autoFocus
                                     />
                                 </div>
                                 <button 
                                     onClick={() => handleInputNext(answers[currentQ.id]?.text)}
                                     disabled={!answers[currentQ.id]?.text}
-                                    className="w-full flex items-center justify-center gap-2 py-5 bg-[#00008B] disabled:bg-slate-300 disabled:cursor-not-allowed text-white rounded-2xl text-sm font-bold tracking-[0.15em] uppercase shadow-xl shadow-[#00008B]/20 transition-all"
+                                    className="w-full flex items-center justify-center gap-2 py-5 bg-[#142B50] disabled:bg-slate-300 disabled:cursor-not-allowed text-white rounded-2xl text-sm font-bold tracking-[0.15em] uppercase shadow-xl shadow-[#142B50]/20 transition-all"
                                 >
                                     Portföyü Hesapla
                                     <ArrowRight className="w-5 h-5" />

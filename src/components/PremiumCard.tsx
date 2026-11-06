@@ -28,7 +28,7 @@ export function PremiumCard({ userName, totalBalance = "₺0,00" }: PremiumCardP
             className="relative w-full max-w-[225px] aspect-[1.586/1] rounded-[16px] overflow-hidden shadow-2xl cursor-pointer preserve-3d"
         >
             {/* Base Background */}
-            <div className="absolute inset-0 bg-[#001a4d] bg-gradient-to-br from-[#001a4d] via-[#00008B] to-[#001a4d]">
+            <div className="absolute inset-0 bg-[#001a4d] bg-gradient-to-br from-[#001a4d] via-[#142B50] to-[#001a4d]">
                 <div className="absolute inset-0 opacity-20 mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]" />
             </div>
 

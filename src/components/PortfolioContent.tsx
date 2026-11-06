@@ -75,7 +75,7 @@ function AssetLogo({ symbol, className = "w-10 h-10" }: { symbol: string; classN
 
     if (isFailed) {
         return (
-            <div className={cn("rounded-full bg-gradient-to-br from-[#00008B] to-blue-700 text-white flex items-center justify-center font-black text-[10px] shrink-0 shadow-md ring-2 ring-slate-100", className)}>
+            <div className={cn("rounded-full bg-gradient-to-br from-[#142B50] to-blue-700 text-white flex items-center justify-center font-black text-[10px] shrink-0 shadow-md ring-2 ring-slate-100", className)}>
                 {clean.slice(0, 5)}
             </div>
         );
@@ -1509,7 +1509,7 @@ export default function PortfolioPage() {
                 className={cn(
                     "w-full transition-all duration-300 rounded-3xl flex flex-col overflow-hidden",
                     !isFocused && "cursor-pointer hover:border-blue-300 hover:shadow-2xl active:scale-[0.99]",
-                    isFocused && "ring-2 ring-[#00008B]/20 shadow-2xl"
+                    isFocused && "ring-2 ring-[#142B50]/20 shadow-2xl"
                 )}
             >
                 {renderWidgetContent(id, isFocused)}
@@ -1522,10 +1522,10 @@ export default function PortfolioPage() {
         switch(id) {
             case 'performance':
                 return (
-                    <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-xl shadow-[#00008B]/5 space-y-6">
+                    <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-xl shadow-[#142B50]/5 space-y-6">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
                             <div>
-                                <h3 className="text-xl font-black text-[#00008B] tracking-tight">Portföy Performansı</h3>
+                                <h3 className="text-xl font-black text-[#142B50] tracking-tight">Portföy Performansı</h3>
                                 <p className="text-xs text-slate-400 font-medium mt-0.5">Zaman İçindeki Portföy Değeri & Büyüme Trendi</p>
                             </div>
                             <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200 self-start sm:self-auto">
@@ -1536,8 +1536,8 @@ export default function PortfolioPage() {
                                         className={cn(
                                             "px-3 py-1.5 rounded-xl font-extrabold text-xs transition-all",
                                             (tf === '1A' || tf === 'Tümü') 
-                                                ? "bg-[#00008B] text-white shadow-md" 
-                                                : "text-slate-500 hover:text-[#00008B]"
+                                                ? "bg-[#142B50] text-white shadow-md" 
+                                                : "text-slate-500 hover:text-[#142B50]"
                                         )}
                                     >
                                         {tf}
@@ -1551,8 +1551,8 @@ export default function PortfolioPage() {
                             <svg className="w-full h-full overflow-visible" viewBox="0 0 500 180" preserveAspectRatio="none">
                                 <defs>
                                     <linearGradient id="perfGrad" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stopColor="#00008B" stopOpacity="0.35" />
-                                        <stop offset="100%" stopColor="#00008B" stopOpacity="0.0" />
+                                        <stop offset="0%" stopColor="#142B50" stopOpacity="0.35" />
+                                        <stop offset="100%" stopColor="#142B50" stopOpacity="0.0" />
                                     </linearGradient>
                                 </defs>
                                 <line x1="0" y1="30" x2="500" y2="30" stroke="#E2E8F0" strokeDasharray="3 3" />
@@ -1566,7 +1566,7 @@ export default function PortfolioPage() {
                                 <path
                                     d="M 0 150 Q 80 120 160 90 T 320 40 T 420 70 T 500 30"
                                     fill="none"
-                                    stroke="#00008B"
+                                    stroke="#142B50"
                                     strokeWidth="3.5"
                                     strokeLinecap="round"
                                 />
@@ -1580,11 +1580,11 @@ export default function PortfolioPage() {
 
             case 'dailyPnL':
                 return (
-                    <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-xl shadow-[#00008B]/5 space-y-4">
+                    <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-xl shadow-[#142B50]/5 space-y-4">
                         <div className="flex justify-between items-center border-b border-slate-100 pb-3">
                             <div className="flex items-center gap-2">
                                 <TrendingUp className="w-5 h-5 text-emerald-600" />
-                                <h3 className="text-lg font-black text-[#00008B]">Günlük K/Z Değişimi</h3>
+                                <h3 className="text-lg font-black text-[#142B50]">Günlük K/Z Değişimi</h3>
                             </div>
                             <span className={cn("text-xs font-black px-3 py-1 rounded-xl", dailyProfit >= 0 ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700")}>
                                 {dailyProfit >= 0 ? "+" : ""}{formatCurrency(dailyProfit)} ({dailyProfitRatio.toFixed(2)}%)
@@ -1606,22 +1606,22 @@ export default function PortfolioPage() {
             case 'agenda': {
                 const visibleAgendaEvents = isFocused ? allPortfolioAgendaEvents : portfolioAgendaEvents;
                 return (
-                    <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-xl shadow-[#00008B]/5 space-y-4 flex flex-col justify-between h-full">
+                    <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-xl shadow-[#142B50]/5 space-y-4 flex flex-col justify-between h-full">
                         <div>
                             {/* PORTFÖY GÜNDEMİ BAŞLIĞI VE ALT BAŞLIK */}
                             <div className="flex justify-between items-center border-b border-slate-100 pb-4">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-2xl bg-[#00008B]/5 border border-[#00008B]/10 text-[#00008B] flex items-center justify-center">
-                                        <Newspaper className="w-5 h-5 text-[#00008B]" />
+                                    <div className="w-10 h-10 rounded-2xl bg-[#142B50]/5 border border-[#142B50]/10 text-[#142B50] flex items-center justify-center">
+                                        <Newspaper className="w-5 h-5 text-[#142B50]" />
                                     </div>
                                     <div>
-                                        <h3 className="text-lg font-black text-[#00008B] tracking-tight">Portföy Gündemi</h3>
+                                        <h3 className="text-lg font-black text-[#142B50] tracking-tight">Portföy Gündemi</h3>
                                         <p className="text-xs font-normal text-slate-500 leading-relaxed tracking-normal">
                                             {isFocused ? 'Bugün ve yaklaşan tüm gelişmeler' : 'Bugün ve yaklaşan gelişmeler'}
                                         </p>
                                     </div>
                                 </div>
-                                <span className="text-[10px] font-bold text-[#00008B] bg-blue-50 border border-blue-200/50 px-2.5 py-1 rounded-full">
+                                <span className="text-[10px] font-bold text-[#142B50] bg-blue-50 border border-blue-200/50 px-2.5 py-1 rounded-full">
                                     {visibleAgendaEvents.length} OLAY
                                 </span>
                             </div>
@@ -1645,13 +1645,13 @@ export default function PortfolioPage() {
                                             /* BUGÜNKÜ HAREKETLİLİK: 2X ALAN (DİKKAT ÇEKİCİ KART) */
                                             <div
                                                 key={item.id}
-                                                className="min-h-[144px] p-5 rounded-2xl border-2 border-[#00008B]/30 bg-gradient-to-br from-blue-50 via-indigo-50/70 to-white shadow-md shadow-[#00008B]/10 ring-2 ring-[#00008B]/10 transition-all flex flex-col justify-between gap-2.5 relative overflow-hidden"
+                                                className="min-h-[144px] p-5 rounded-2xl border-2 border-[#142B50]/30 bg-gradient-to-br from-blue-50 via-indigo-50/70 to-white shadow-md shadow-[#142B50]/10 ring-2 ring-[#142B50]/10 transition-all flex flex-col justify-between gap-2.5 relative overflow-hidden"
                                             >
-                                                <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-[#00008B]" />
+                                                <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-[#142B50]" />
 
                                                 <div className="flex items-center justify-between gap-2 pl-1.5">
                                                     <div className="flex items-center gap-2 flex-wrap">
-                                                        <span className="px-3 py-1 rounded-xl bg-[#00008B] text-white font-black text-[11px] tracking-wider uppercase shadow-sm inline-flex items-center gap-1.5">
+                                                        <span className="px-3 py-1 rounded-xl bg-[#142B50] text-white font-black text-[11px] tracking-wider uppercase shadow-sm inline-flex items-center gap-1.5">
                                                             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                                                             BUGÜN · {item.symbol}
                                                         </span>
@@ -1659,17 +1659,17 @@ export default function PortfolioPage() {
                                                             Günün Hareketliliği
                                                         </span>
                                                     </div>
-                                                    <span className="text-[11px] font-extrabold text-[#00008B] bg-white/90 border border-blue-200 px-2.5 py-0.5 rounded-lg shrink-0">
+                                                    <span className="text-[11px] font-extrabold text-[#142B50] bg-white/90 border border-blue-200 px-2.5 py-0.5 rounded-lg shrink-0">
                                                         {item.typeLabel}
                                                     </span>
                                                 </div>
 
                                                 <div className="pl-1.5 space-y-1">
-                                                    <h4 className="font-black text-[#00008B] text-sm sm:text-[15px] leading-snug tracking-tight">
+                                                    <h4 className="font-black text-[#142B50] text-sm sm:text-[15px] leading-snug tracking-tight">
                                                         {item.title}
                                                     </h4>
                                                     <p className="text-xs sm:text-[13px] font-normal text-slate-800 leading-relaxed tracking-normal">
-                                                        Portföyünüzde yer alan <span className="font-black text-[#00008B]">{item.symbol}</span> varlığı için bugün planlanan <span className="font-semibold">{item.typeLabel.toLowerCase()}</span> gerçekleşiyor.
+                                                        Portföyünüzde yer alan <span className="font-black text-[#142B50]">{item.symbol}</span> varlığı için bugün planlanan <span className="font-semibold">{item.typeLabel.toLowerCase()}</span> gerçekleşiyor.
                                                     </p>
                                                 </div>
 
@@ -1680,7 +1680,7 @@ export default function PortfolioPage() {
                                                                 {item.valueFormatted}
                                                             </span>
                                                         ) : (
-                                                            <span className="text-[11px] font-extrabold text-[#00008B]">
+                                                            <span className="text-[11px] font-extrabold text-[#142B50]">
                                                                 Tarih: Bugün ({item.dateStr})
                                                             </span>
                                                         )}
@@ -1707,7 +1707,7 @@ export default function PortfolioPage() {
                                                     </div>
 
                                                     <div className="flex items-center justify-between gap-2">
-                                                        <h4 className="font-bold text-[#00008B] text-xs leading-snug truncate">
+                                                        <h4 className="font-bold text-[#142B50] text-xs leading-snug truncate">
                                                             {item.title}
                                                         </h4>
                                                         {item.valueFormatted && (
@@ -1729,7 +1729,7 @@ export default function PortfolioPage() {
                             <Link
                                 href="/dashboard/portfolio/agenda"
                                 onClick={(e) => e.stopPropagation()}
-                                className="text-xs font-extrabold text-[#00008B] hover:underline flex items-center justify-center gap-1.5 text-center"
+                                className="text-xs font-extrabold text-[#142B50] hover:underline flex items-center justify-center gap-1.5 text-center"
                             >
                                 Tüm Gündemi Gör <ChevronRight className="w-3.5 h-3.5" />
                             </Link>
@@ -1752,11 +1752,11 @@ export default function PortfolioPage() {
                 const topLoser = sortedPerformers.length > 0 && sortedPerformers[sortedPerformers.length - 1].pct < 0 ? sortedPerformers[sortedPerformers.length - 1] : null;
 
                 return (
-                    <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-xl shadow-[#00008B]/5 space-y-4">
+                    <div className="bg-white border border-slate-100 rounded-3xl p-5 shadow-xl shadow-[#142B50]/5 space-y-4">
                         <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                             <div className="flex items-center gap-2">
                                 <Zap className="w-4 h-4 text-amber-500" />
-                                <h4 className="font-black text-[#00008B] text-sm">Hızlı Portföy Özeti</h4>
+                                <h4 className="font-black text-[#142B50] text-sm">Hızlı Portföy Özeti</h4>
                             </div>
                             <span className="text-[10px] font-bold text-slate-400">Genel Bakış</span>
                         </div>
@@ -1764,7 +1764,7 @@ export default function PortfolioPage() {
                         <div className="grid grid-cols-2 gap-3 text-xs font-semibold">
                             <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100">
                                 <span className="text-[10px] text-slate-400 block uppercase font-bold">Toplam Varlık Sayısı</span>
-                                <span className="text-base font-black text-[#00008B] mt-0.5 block">{groupedAssets.length} Pozisyon</span>
+                                <span className="text-base font-black text-[#142B50] mt-0.5 block">{groupedAssets.length} Pozisyon</span>
                             </div>
 
                             <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100">
@@ -1791,7 +1791,7 @@ export default function PortfolioPage() {
 
                             <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100">
                                 <span className="text-[10px] text-slate-400 block uppercase font-bold">Nakit Bakiyesi</span>
-                                <span className="text-base font-black text-[#00008B] mt-0.5 block">
+                                <span className="text-base font-black text-[#142B50] mt-0.5 block">
                                     {formatCurrency(Math.max(0, cashBalance))}
                                 </span>
                             </div>
@@ -1806,7 +1806,7 @@ export default function PortfolioPage() {
                             {/* TABLO BAŞLIĞI VE SAĞ ÜSTTE VARLIK EKLE BUTONU (21st.dev Premium Bar) */}
                             <div className="p-6 border-b border-slate-100/80 flex justify-between items-center bg-gradient-to-r from-slate-50/50 via-white to-slate-50/30 flex-wrap gap-4">
                                 <div className="flex items-center gap-3">
-                                    <h3 className="text-lg font-black text-[#00008B] tracking-tight">Portföy Tablosu</h3>
+                                    <h3 className="text-lg font-black text-[#142B50] tracking-tight">Portföy Tablosu</h3>
                                     <div className="text-[10px] font-black text-violet-700 bg-violet-50 border border-violet-200/60 px-3 py-1 rounded-full shadow-xs tracking-wider uppercase">
                                         {groupedAssets.length} VARLIK
                                     </div>
@@ -2254,14 +2254,14 @@ export default function PortfolioPage() {
                                         return activeSec ? (
                                             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
                                                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{activeSec.name}</span>
-                                                <span className="block text-sm font-black text-[#00008B] tracking-tight">{activeSec.count} Varlık (%{countPct})</span>
+                                                <span className="block text-sm font-black text-[#142B50] tracking-tight">{activeSec.count} Varlık (%{countPct})</span>
                                                 <span className="text-[9px] font-semibold text-slate-500">{formatCurrency(activeSec.value)}</span>
                                             </motion.div>
                                         ) : null;
                                     })() : (
                                         <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
                                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Sektörel Dağılım</span>
-                                            <span className="block text-sm font-black text-[#00008B] tracking-tight">{totalAssetCount} Varlık</span>
+                                            <span className="block text-sm font-black text-[#142B50] tracking-tight">{totalAssetCount} Varlık</span>
                                             <span className="text-[9px] font-semibold text-slate-500">{sortedSectors.length} Sektör</span>
                                         </motion.div>
                                     )}
@@ -2345,13 +2345,13 @@ export default function PortfolioPage() {
                                         return activeAsset ? (
                                             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
                                                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{activeAsset.symbol}</span>
-                                                <span className="block text-sm font-black text-[#00008B] tracking-tight">{formatCurrency(activeAsset.marketVal)}</span>
+                                                <span className="block text-sm font-black text-[#142B50] tracking-tight">{formatCurrency(activeAsset.marketVal)}</span>
                                             </motion.div>
                                         ) : null;
                                     })() : (
                                         <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
                                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Toplam</span>
-                                            <span className="block text-sm font-black text-[#00008B] tracking-tight">{formatCurrency(chartTotalValue)}</span>
+                                            <span className="block text-sm font-black text-[#142B50] tracking-tight">{formatCurrency(chartTotalValue)}</span>
                                         </motion.div>
                                     )}
                                 </div>
@@ -2360,16 +2360,16 @@ export default function PortfolioPage() {
                     };
 
                     return (
-                        <div className="bg-white border border-slate-100 rounded-3xl p-6 pb-8 shadow-xl shadow-[#00008B]/5">
+                        <div className="bg-white border border-slate-100 rounded-3xl p-6 pb-8 shadow-xl shadow-[#142B50]/5">
                             <div className="flex items-center justify-between mb-4">
                                 <div className="flex items-center gap-2">
-                                    <PieChart className="w-4 h-4 text-[#00008B]" />
-                                    <h3 className="text-lg font-black text-[#00008B] tracking-tight">Varlık Dağılımı</h3>
+                                    <PieChart className="w-4 h-4 text-[#142B50]" />
+                                    <h3 className="text-lg font-black text-[#142B50] tracking-tight">Varlık Dağılımı</h3>
                                 </div>
                                 <div className="flex items-center gap-2 bg-slate-50 p-1 rounded-xl">
-                                    <button onClick={() => setDistributionView('donut')} className={cn("px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all", distributionView === 'donut' ? "bg-white text-[#00008B] shadow-sm" : "text-slate-400 hover:text-slate-600")}>Varlık</button>
-                                    <button onClick={() => setDistributionView('heatmap')} className={cn("px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all", distributionView === 'heatmap' ? "bg-white text-[#00008B] shadow-sm" : "text-slate-400 hover:text-slate-600")}>Kazanç</button>
-                                    <button onClick={() => setDistributionView('sector')} className={cn("px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all", distributionView === 'sector' ? "bg-white text-[#00008B] shadow-sm" : "text-slate-400 hover:text-slate-600")}>Sektör</button>
+                                    <button onClick={() => setDistributionView('donut')} className={cn("px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all", distributionView === 'donut' ? "bg-white text-[#142B50] shadow-sm" : "text-slate-400 hover:text-slate-600")}>Varlık</button>
+                                    <button onClick={() => setDistributionView('heatmap')} className={cn("px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all", distributionView === 'heatmap' ? "bg-white text-[#142B50] shadow-sm" : "text-slate-400 hover:text-slate-600")}>Kazanç</button>
+                                    <button onClick={() => setDistributionView('sector')} className={cn("px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-lg transition-all", distributionView === 'sector' ? "bg-white text-[#142B50] shadow-sm" : "text-slate-400 hover:text-slate-600")}>Sektör</button>
                                 </div>
                             </div>
 
@@ -2383,7 +2383,7 @@ export default function PortfolioPage() {
                                     {isFocused && (
                                         <>
                                             {/* Risk ve Yoğunlaşma Skoru Paneli */}
-                                            <div className="bg-[#00008B] rounded-2xl p-4 shadow-lg shadow-[#00008B]/20 relative overflow-hidden">
+                                            <div className="bg-[#142B50] rounded-2xl p-4 shadow-lg shadow-[#142B50]/20 relative overflow-hidden">
                                                 <div className="flex items-center gap-2 mb-3">
                                                     <Brain className="w-5 h-5 text-white" />
                                                     <h4 className="text-[12px] font-black text-white uppercase tracking-widest">{riskData.title}</h4>
@@ -2460,7 +2460,7 @@ export default function PortfolioPage() {
                                                         <div className="flex flex-col gap-0.5">
                                                             <div className="flex items-center gap-1.5">
                                                                 <div className={cn("w-2.5 h-2.5 rounded-full shrink-0 shadow-sm transition-transform", isHovered ? "border-2 border-white bg-white" : "")} style={{ backgroundColor: isHovered ? '#fff' : hexColor, transform: isHovered ? 'scale(1.2)' : 'scale(1)' }} />
-                                                                <span className={cn("font-bold text-xs transition-colors", isHovered ? "text-white" : "text-[#00008B]")}>{group.symbol}</span>
+                                                                <span className={cn("font-bold text-xs transition-colors", isHovered ? "text-white" : "text-[#142B50]")}>{group.symbol}</span>
                                                             </div>
                                                             <span className={cn("text-[9px] font-medium transition-colors ml-4", isHovered ? "text-white/80" : "text-slate-400")}>{assetSector}</span>
                                                         </div>
@@ -2479,7 +2479,7 @@ export default function PortfolioPage() {
 
             case 'extremes':
                 return (
-                    <div className="bg-white border border-slate-100 rounded-3xl p-4 sm:p-6 shadow-xl shadow-[#00008B]/5 w-full overflow-x-hidden">
+                    <div className="bg-white border border-slate-100 rounded-3xl p-4 sm:p-6 shadow-xl shadow-[#142B50]/5 w-full overflow-x-hidden">
                         {/* ÜST BİLGİ VE ZAMAN PERİYODU SEÇİCİLERİ */}
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-5 border-b border-slate-100 gap-4">
                             <div className="flex items-center gap-3">
@@ -2488,7 +2488,7 @@ export default function PortfolioPage() {
                                     alt="FinAi"
                                     className="w-8 h-8 sm:w-9 sm:h-9 object-contain shrink-0"
                                 />
-                                <h3 className="text-lg font-black text-[#00008B] tracking-tight">
+                                <h3 className="text-lg font-black text-[#142B50] tracking-tight">
                                     Fiyat Analizi & Trend Bandı
                                 </h3>
                             </div>
@@ -2502,8 +2502,8 @@ export default function PortfolioPage() {
                                         className={cn(
                                             "px-3 sm:px-3.5 py-1.5 text-[11px] sm:text-xs font-bold tracking-tight rounded-full transition-all",
                                             extremesTimeframe === tf 
-                                                ? "bg-[#00008B] text-white shadow-sm" 
-                                                : "text-slate-600 hover:text-[#00008B] hover:bg-slate-50"
+                                                ? "bg-[#142B50] text-white shadow-sm" 
+                                                : "text-slate-600 hover:text-[#142B50] hover:bg-slate-50"
                                         )}
                                     >
                                         {tf === '1W' ? '1H' : tf === '1M' ? '1A' : tf === '3M' ? '3A' : tf === '6M' ? '6A' : '1Y (52H)'}
@@ -2595,7 +2595,7 @@ export default function PortfolioPage() {
                                                                     ? isProfit
                                                                         ? "text-emerald-600"
                                                                         : "text-rose-600"
-                                                                    : "text-[#00008B]"
+                                                                    : "text-[#142B50]"
                                                             )}
                                                         >
                                                             {currFmt}
@@ -2606,7 +2606,7 @@ export default function PortfolioPage() {
                                                         <span className="text-[11px] font-semibold text-slate-500 tracking-tight block">
                                                             Ortalama Maliyet
                                                         </span>
-                                                        <span className="text-sm sm:text-base font-black text-[#00008B] leading-tight tracking-tight block mt-0.5">
+                                                        <span className="text-sm sm:text-base font-black text-[#142B50] leading-tight tracking-tight block mt-0.5">
                                                             {costFmt}
                                                         </span>
                                                     </div>
@@ -2658,7 +2658,7 @@ export default function PortfolioPage() {
                                                 {/* Anlık Fiyat ile Maliyet Arasındaki Kurumsal Dolgu */}
                                                 {hasCost && costPos !== null && (
                                                     <div
-                                                        className="absolute top-[44px] h-2.5 rounded-full z-10 transition-all duration-500 bg-[#00008B]"
+                                                        className="absolute top-[44px] h-2.5 rounded-full z-10 transition-all duration-500 bg-[#142B50]"
                                                         style={{
                                                             left: `${regionLeft}%`,
                                                             width: `${regionWidth}%`,
@@ -2671,12 +2671,12 @@ export default function PortfolioPage() {
                                                     className="absolute top-[49px] -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none"
                                                     style={{ left: `${pos}%` }}
                                                 >
-                                                    <div className="w-4 h-4 rounded-full bg-white border-[3px] border-[#00008B] shadow-xs" />
+                                                    <div className="w-4 h-4 rounded-full bg-white border-[3px] border-[#142B50] shadow-xs" />
                                                 </div>
 
                                                 {/* Canlı Fiyat Dikey Bağlantı Çizgisi */}
                                                 <div
-                                                    className="absolute top-[22px] h-[20px] w-[1.5px] bg-[#00008B] -translate-x-1/2 z-20 pointer-events-none"
+                                                    className="absolute top-[22px] h-[20px] w-[1.5px] bg-[#142B50] -translate-x-1/2 z-20 pointer-events-none"
                                                     style={{ left: `${pos}%` }}
                                                 />
 
@@ -2688,7 +2688,7 @@ export default function PortfolioPage() {
                                                         transform: pos < 14 ? 'translateX(0%)' : pos > 86 ? 'translateX(-100%)' : 'translateX(-50%)'
                                                     }}
                                                 >
-                                                    <span className="text-xs font-bold text-[#00008B] tracking-normal whitespace-nowrap">
+                                                    <span className="text-xs font-bold text-[#142B50] tracking-normal whitespace-nowrap">
                                                         Canlı: {currFmt}
                                                     </span>
                                                 </div>
@@ -2749,7 +2749,7 @@ export default function PortfolioPage() {
                                             {/* Alt Kısım: Diğer Hisseler Önerisi / Seçimi */}
                                             {otherEntries.length > 0 && (
                                                 <div className="pt-3 border-t border-slate-100 space-y-2">
-                                                    <span className="text-xs font-bold text-[#00008B] tracking-tight block">
+                                                    <span className="text-xs font-bold text-[#142B50] tracking-tight block">
                                                         Diğer Hisseleri İncele
                                                     </span>
                                                     <div className="flex flex-wrap items-center gap-2">
@@ -2768,7 +2768,7 @@ export default function PortfolioPage() {
                                                                     className="inline-flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50/70 text-slate-800 transition-all cursor-pointer group"
                                                                 >
                                                                     <StockLogo symbol={otherSym} className="w-5 h-5 shrink-0" />
-                                                                    <span className="text-xs font-black text-slate-800 group-hover:text-[#00008B] tracking-tight">
+                                                                    <span className="text-xs font-black text-slate-800 group-hover:text-[#142B50] tracking-tight">
                                                                         {otherSym}
                                                                     </span>
                                                                     <span
@@ -2778,7 +2778,7 @@ export default function PortfolioPage() {
                                                                                 ? otherIsProfit
                                                                                     ? "text-emerald-600"
                                                                                     : "text-rose-600"
-                                                                                : "text-[#00008B]"
+                                                                                : "text-[#142B50]"
                                                                         )}
                                                                     >
                                                                         {formatCurrency(otherExt.current)}
@@ -2815,25 +2815,25 @@ export default function PortfolioPage() {
                         <div className="relative rounded-3xl overflow-hidden group">
                             {/* KİLİT BUZLU CAM OVERLAY (MÜKEMMEL BUĞULU KİLİT KATMANI) */}
                             <div className="absolute inset-0 z-50 backdrop-blur-md bg-slate-900/40 flex flex-col items-center justify-center p-6 text-center">
-                                <div className="bg-[#00008B] border border-blue-400/30 text-white px-6 py-3.5 rounded-2xl font-black tracking-widest uppercase shadow-2xl shadow-[#00008B]/40 flex items-center gap-2.5 animate-pulse">
+                                <div className="bg-[#142B50] border border-blue-400/30 text-white px-6 py-3.5 rounded-2xl font-black tracking-widest uppercase shadow-2xl shadow-[#142B50]/40 flex items-center gap-2.5 animate-pulse">
                                     <Lock className="w-5 h-5 text-sky-400" />
                                     <span>KORELASYON ANALİZİ YAKINDA AÇILACAKTIR</span>
                                 </div>
-                                <p className="mt-3 text-xs font-bold text-white/90 bg-[#00008B]/80 px-4 py-2 rounded-xl shadow-lg backdrop-blur-xl border border-white/10 max-w-md">
+                                <p className="mt-3 text-xs font-bold text-white/90 bg-[#142B50]/80 px-4 py-2 rounded-xl shadow-lg backdrop-blur-xl border border-white/10 max-w-md">
                                     Yapay zeka destekli portföy risk dengesi ve çiftli varlık korelasyonu çok yakında hizmetinizde.
                                 </p>
                             </div>
 
                             {/* ARKADA BUĞULU GÖRÜNEN KORELASYON WİDGET İÇERİĞİ */}
-                            <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-xl shadow-[#00008B]/5 space-y-6 opacity-60 blur-[3px] pointer-events-none select-none">
+                            <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-xl shadow-[#142B50]/5 space-y-6 opacity-60 blur-[3px] pointer-events-none select-none">
                                 {/* ÜST BAŞLIK VE ZAMAN PERİYODU SEÇİCİLERİ */}
                             <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-100 pb-4 gap-4">
                                 <div className="flex items-center gap-3">
-                                    <div className="p-2.5 bg-[#00008B]/5 border border-[#00008B]/10 rounded-2xl text-[#00008B]">
+                                    <div className="p-2.5 bg-[#142B50]/5 border border-[#142B50]/10 rounded-2xl text-[#142B50]">
                                         <Activity className="w-5 h-5" />
                                     </div>
                                     <div>
-                                        <h3 className="text-base font-black text-[#00008B] uppercase tracking-wider">İç İçe Korelasyon & Trend Kıyaslaması</h3>
+                                        <h3 className="text-base font-black text-[#142B50] uppercase tracking-wider">İç İçe Korelasyon & Trend Kıyaslaması</h3>
                                         <p className="text-xs text-slate-400 font-bold">İki Varlığın Fiyat Hareketlerinin Birlikte veya Zıt İlerleme Analizi</p>
                                     </div>
                                 </div>
@@ -2847,8 +2847,8 @@ export default function PortfolioPage() {
                                             className={cn(
                                                 "px-3 py-1.5 text-xs font-black rounded-xl transition-all uppercase tracking-wider",
                                                 corrTimeframe === tf
-                                                    ? "bg-[#00008B] text-white shadow-md shadow-[#00008B]/20 scale-105"
-                                                    : "text-slate-500 hover:text-[#00008B] hover:bg-white/80"
+                                                    ? "bg-[#142B50] text-white shadow-md shadow-[#142B50]/20 scale-105"
+                                                    : "text-slate-500 hover:text-[#142B50] hover:bg-white/80"
                                             )}
                                         >
                                             {tf === '1D' ? '1G' : tf === '1W' ? '1H' : tf === '1M' ? '1A' : tf === '6M' ? '6A' : '1Y'}
@@ -2862,16 +2862,16 @@ export default function PortfolioPage() {
                                 {/* 1. VARLIK SEÇİCİ */}
                                 <div className="flex items-center justify-between p-3.5 bg-blue-50/50 border border-blue-200/60 rounded-2xl">
                                     <div className="flex items-center gap-2.5">
-                                        <span className="w-3.5 h-3.5 rounded-full bg-[#00008B] ring-4 ring-[#00008B]/20 inline-block" />
+                                        <span className="w-3.5 h-3.5 rounded-full bg-[#142B50] ring-4 ring-[#142B50]/20 inline-block" />
                                         <div className="flex flex-col">
                                             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">1. Varlık</span>
-                                            <span className="text-sm font-black text-[#00008B]">{sel1} ({formatCurrency(price1)})</span>
+                                            <span className="text-sm font-black text-[#142B50]">{sel1} ({formatCurrency(price1)})</span>
                                         </div>
                                     </div>
                                     <select
                                         value={sel1}
                                         onChange={(e) => setCorrAsset1(e.target.value)}
-                                        className="bg-white border border-slate-200 text-xs font-bold text-[#00008B] rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#00008B]"
+                                        className="bg-white border border-slate-200 text-xs font-bold text-[#142B50] rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#142B50]"
                                     >
                                         {availableSymbols.map(sym => (
                                             <option key={sym} value={sym}>{sym}</option>
@@ -2929,8 +2929,8 @@ export default function PortfolioPage() {
                                         <defs>
                                             {/* 1. VARLIK GRADIENT */}
                                             <linearGradient id="gradAsset1" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="0%" stopColor="#00008B" stopOpacity="0.45" />
-                                                <stop offset="100%" stopColor="#00008B" stopOpacity="0.0" />
+                                                <stop offset="0%" stopColor="#142B50" stopOpacity="0.45" />
+                                                <stop offset="100%" stopColor="#142B50" stopOpacity="0.0" />
                                             </linearGradient>
                                             {/* 2. VARLIK GRADIENT */}
                                             <linearGradient id="gradAsset2" x1="0" y1="0" x2="0" y2="1">
@@ -3074,7 +3074,7 @@ export default function PortfolioPage() {
                             </div>
 
                             {/* MARKA RENK PALETİNDEKİ MÜKEMMEL MAVİ YAPAY ZEKA KORELASYON DEĞERLENDİRMESİ */}
-                            <div className="bg-[#00008B] border border-[#00008B]/20 rounded-2xl p-4 shadow-md text-white">
+                            <div className="bg-[#142B50] border border-[#142B50]/20 rounded-2xl p-4 shadow-md text-white">
                                 <p className="text-xs font-medium text-slate-100 leading-relaxed">
                                     {corrScore >= 0 ? (
                                         `Yapay zeka analizimize göre ${sel1} ve ${sel2} varlıkları %${corrScore} oranında yüksek pozitif korelasyon göstermektedir. Bu durum, her iki varlığın piyasa yükseliş ve düşüş trendlerinde neredeyse aynı yönde hareket ettiğini işaret eder. Portföyünüzde risk yığılmasını önlemek adına bu iki varlığın ağırlığını dengelemek faydalı olabilir.`
@@ -3100,8 +3100,8 @@ export default function PortfolioPage() {
                     setFocusedWidget(null);
                 }
             }}
-            style={{ fontFamily: "var(--font-inter), system-ui, -apple-system, sans-serif" }}
-            className="p-4 md:p-10 space-y-6 md:space-y-8 min-h-full bg-white text-slate-800 rounded-[2rem] md:rounded-[2.5rem] shadow-xl shadow-[#00008B]/5 pb-20 md:pb-24 relative isolate m-1 md:m-2 xl:m-4 border border-slate-100 max-w-full"
+            
+            className="p-4 md:p-10 space-y-6 md:space-y-8 min-h-full bg-white text-slate-800 rounded-[2rem] md:rounded-[2.5rem] shadow-xl shadow-[#142B50]/5 pb-20 md:pb-24 relative isolate m-1 md:m-2 xl:m-4 border border-slate-100 max-w-full"
         >
             
 
@@ -3130,28 +3130,28 @@ export default function PortfolioPage() {
             {/* Page Header Title Section (DYNAMIC FOCUSED WIDGET NAME & SLEEK BUTTONS) */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-6">
                 <div>
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50/80 border border-blue-200/50 text-[#00008B] text-xs font-bold mb-2 shadow-sm">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50/80 border border-blue-200/50 text-[#142B50] text-xs font-bold mb-2 shadow-sm">
                         <span className="relative flex h-2 w-2">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00008B]"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#142B50]"></span>
                         </span>
                         Akıllı Portföy Yönetimi
                     </div>
-                    <h1 className="text-3xl md:text-4xl font-black text-[#00008B] tracking-tight flex items-center gap-3 flex-wrap">
+                    <h1 className="text-3xl md:text-4xl font-black text-[#142B50] tracking-tight flex items-center gap-3 flex-wrap">
                         Portföyüm
                         {focusedWidget && (
                             <motion.span 
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={iosSpring065Config}
-                                className="text-xs font-black bg-[#00008B] text-white px-3.5 py-1.5 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-[#00008B]/20"
+                                className="text-xs font-black bg-[#142B50] text-white px-3.5 py-1.5 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-[#142B50]/20"
                             >
                                 <Eye className="w-3.5 h-3.5 text-sky-400" />
                                 Odak Modu: {focusedWidgetName}
                             </motion.span>
                         )}
                     </h1>
-                    <p className="text-sm font-medium text-[#00008B]/60 mt-1">
+                    <p className="text-sm font-medium text-[#142B50]/60 mt-1">
                         BIST hisseleriniz ve TEFAS fonlarınızın canlı analizlerini tek bir ekrandan yönetin.
                     </p>
                 </div>
@@ -3343,8 +3343,8 @@ export default function PortfolioPage() {
                         <div className="w-full xl:col-span-4 space-y-5">
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between px-2 pb-1 border-b border-slate-100">
-                                    <span className="text-xs font-black text-[#00008B] uppercase tracking-widest flex items-center gap-1.5">
-                                        <Layers className="w-4 h-4 text-[#00008B]" />
+                                    <span className="text-xs font-black text-[#142B50] uppercase tracking-widest flex items-center gap-1.5">
+                                        <Layers className="w-4 h-4 text-[#142B50]" />
                                         Diğer Modüller
                                     </span>
                                     <span className="text-[10px] text-slate-400 font-bold">Tıkla Odağa Al</span>
@@ -3368,16 +3368,16 @@ export default function PortfolioPage() {
                                                         className="p-3.5 bg-white border border-slate-100 hover:border-blue-300 rounded-2xl shadow-sm hover:shadow-md cursor-pointer transition-all flex items-center justify-between group"
                                                     >
                                                         <div className="flex items-center gap-3">
-                                                            <div className="p-2 bg-blue-50 text-[#00008B] rounded-xl group-hover:bg-[#00008B] group-hover:text-white transition-colors">
+                                                            <div className="p-2 bg-blue-50 text-[#142B50] rounded-xl group-hover:bg-[#142B50] group-hover:text-white transition-colors">
                                                                 <WidgetIcon className="w-4 h-4" />
                                                             </div>
                                                             <div>
-                                                                <h4 className="text-xs font-extrabold text-[#00008B] group-hover:text-blue-600 transition-colors">{widget.name}</h4>
+                                                                <h4 className="text-xs font-extrabold text-[#142B50] group-hover:text-blue-600 transition-colors">{widget.name}</h4>
                                                                 <p className="text-[10px] text-slate-400 font-medium">{widget.desc}</p>
                                                             </div>
                                                         </div>
 
-                                                        <div className="flex items-center gap-1 text-[10px] font-black text-white bg-[#00008B] px-2.5 py-1.5 rounded-xl border border-blue-900 transition-all shrink-0">
+                                                        <div className="flex items-center gap-1 text-[10px] font-black text-white bg-[#142B50] px-2.5 py-1.5 rounded-xl border border-blue-900 transition-all shrink-0">
                                                             <span>Odağa Al</span>
                                                             <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                                                         </div>
@@ -3398,14 +3398,14 @@ export default function PortfolioPage() {
                 {analysisModal.isOpen && (
                     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
                         <div onClick={() => setAnalysisModal(prev => ({ ...prev, isOpen: false }))} className="absolute inset-0 bg-slate-900/40 backdrop-blur-md" />
-                        <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="relative bg-white border border-slate-100 rounded-3xl p-8 w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-2xl text-[#00008B]">
+                        <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="relative bg-white border border-slate-100 rounded-3xl p-8 w-full max-w-2xl max-h-[85vh] overflow-y-auto shadow-2xl text-[#142B50]">
                             <div className="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
-                                <h2 className="text-xl font-black flex items-center gap-3 text-[#00008B]"><Brain className="w-5 h-5 text-blue-600" />{analysisModal.title}</h2>
-                                <button onClick={() => setAnalysisModal(prev => ({ ...prev, isOpen: false }))} className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-[#00008B] transition-colors"><X className="w-5 h-5" /></button>
+                                <h2 className="text-xl font-black flex items-center gap-3 text-[#142B50]"><Brain className="w-5 h-5 text-blue-600" />{analysisModal.title}</h2>
+                                <button onClick={() => setAnalysisModal(prev => ({ ...prev, isOpen: false }))} className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-[#142B50] transition-colors"><X className="w-5 h-5" /></button>
                             </div>
                             {analysisModal.loading ? (
                                 <div className="py-20 text-center flex flex-col items-center gap-3">
-                                    <Loader2 className="w-8 h-8 animate-spin text-[#00008B]" />
+                                    <Loader2 className="w-8 h-8 animate-spin text-[#142B50]" />
                                     <span className="text-sm font-bold text-slate-400">Yapay Zeka Analizi Hazırlanıyor...</span>
                                 </div>
                             ) : (
@@ -3421,25 +3421,25 @@ export default function PortfolioPage() {
                 {isModalOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                         <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-md" onClick={() => setIsModalOpen(false)} />
-                        <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="relative bg-white border border-slate-100 rounded-[2rem] p-6 sm:p-8 w-full max-w-md shadow-2xl text-[#00008B]">
+                        <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="relative bg-white border border-slate-100 rounded-[2rem] p-6 sm:p-8 w-full max-w-md shadow-2xl text-[#142B50]">
                             <div className="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-2xl bg-[#00008B] text-white flex items-center justify-center shadow-md shadow-[#00008B]/20">
+                                    <div className="w-10 h-10 rounded-2xl bg-[#142B50] text-white flex items-center justify-center shadow-md shadow-[#142B50]/20">
                                         <Plus className="w-5 h-5 stroke-[2.5]" />
                                     </div>
-                                    <h2 className="text-xl font-black text-[#00008B] tracking-tight">Varlık Ekle</h2>
+                                    <h2 className="text-xl font-black text-[#142B50] tracking-tight">Varlık Ekle</h2>
                                 </div>
-                                <button type="button" onClick={() => setIsModalOpen(false)} className="p-2 rounded-xl text-slate-400 hover:text-[#00008B] hover:bg-slate-100 transition-colors"><X className="w-5 h-5" /></button>
+                                <button type="button" onClick={() => setIsModalOpen(false)} className="p-2 rounded-xl text-slate-400 hover:text-[#142B50] hover:bg-slate-100 transition-colors"><X className="w-5 h-5" /></button>
                             </div>
                             <form onSubmit={handleAddAsset} className="space-y-5">
                                 
                                 {/* AKILLI ARAMA ALANI (HİSSE, FON, ALTIN, GÜMÜŞ ÇAPRAZ ÖNERİ - HIGH ELEVATION Z-INDEX) */}
                                 <div className="relative" ref={dropdownRef}>
-                                    <label className="text-[11px] font-extrabold text-[#00008B] uppercase tracking-widest mb-2 block">SEMBOL VEYA VARLIK ADI</label>
+                                    <label className="text-[11px] font-extrabold text-[#142B50] uppercase tracking-widest mb-2 block">SEMBOL VEYA VARLIK ADI</label>
                                     <div className="relative">
                                         <input 
                                             type="text" 
-                                            className="w-full bg-slate-50 border border-slate-200/80 text-[#00008B] font-bold rounded-2xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#00008B]/20 focus:border-[#00008B] transition-all text-sm" 
+                                            className="w-full bg-slate-50 border border-slate-200/80 text-[#142B50] font-bold rounded-2xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#142B50]/20 focus:border-[#142B50] transition-all text-sm" 
                                             value={searchQuery} 
                                             onChange={e => { setSearchQuery(e.target.value); setNewItemValues({...newItemValues, symbol: e.target.value.toUpperCase()}); setIsAssetSelected(false); }} 
                                             onFocus={() => {
@@ -3450,7 +3450,7 @@ export default function PortfolioPage() {
                                             required
                                         />
                                         {isSearching ? (
-                                            <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#00008B] animate-spin" />
+                                            <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#142B50] animate-spin" />
                                         ) : isAssetSelected ? (
                                             <button
                                                 type="button"
@@ -3473,7 +3473,7 @@ export default function PortfolioPage() {
 
                                     {/* Smart Search Dropdown (YÜKSEK Z-INDEX ELEVATION & TEMİZ TIKLAMA SEÇİMİ) */}
                                     {showDropdown && searchResults.length > 0 && (
-                                        <div className="absolute left-0 right-0 top-full mt-2 bg-white/98 backdrop-blur-xl border border-blue-200/90 rounded-2xl shadow-2xl shadow-[#00008B]/25 z-[100] overflow-hidden max-h-60 overflow-y-auto">
+                                        <div className="absolute left-0 right-0 top-full mt-2 bg-white/98 backdrop-blur-xl border border-blue-200/90 rounded-2xl shadow-2xl shadow-[#142B50]/25 z-[100] overflow-hidden max-h-60 overflow-y-auto">
                                             {searchResults.map((res, idx) => (
                                                 <div 
                                                     key={idx}
@@ -3494,10 +3494,10 @@ export default function PortfolioPage() {
                                                     className="px-4 py-3 hover:bg-slate-50 cursor-pointer flex justify-between items-center border-b border-slate-100 last:border-0 transition-colors group"
                                                 >
                                                     <div className="flex flex-col">
-                                                        <span className="font-bold text-[#00008B] text-sm group-hover:text-blue-600 transition-colors">{res.symbol}</span>
+                                                        <span className="font-bold text-[#142B50] text-sm group-hover:text-blue-600 transition-colors">{res.symbol}</span>
                                                         <span className="text-xs text-slate-500 font-medium line-clamp-1">{res.shortname}</span>
                                                     </div>
-                                                    <span className="text-[10px] px-2.5 py-1 rounded-lg bg-blue-50 text-[#00008B] font-bold border border-blue-100/80 uppercase tracking-wider">
+                                                    <span className="text-[10px] px-2.5 py-1 rounded-lg bg-blue-50 text-[#142B50] font-bold border border-blue-100/80 uppercase tracking-wider">
                                                         {res.typeDisp || "HİSSE"}
                                                     </span>
                                                 </div>
@@ -3508,22 +3508,22 @@ export default function PortfolioPage() {
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="text-[11px] font-extrabold text-[#00008B] uppercase tracking-widest mb-2 block">ADET</label>
+                                        <label className="text-[11px] font-extrabold text-[#142B50] uppercase tracking-widest mb-2 block">ADET</label>
                                         <input 
                                             type="number" 
                                             step="any"
-                                            className="w-full bg-slate-50 border border-slate-200/80 text-[#00008B] font-bold rounded-2xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#00008B]/20 focus:border-[#00008B] transition-all text-sm" 
+                                            className="w-full bg-slate-50 border border-slate-200/80 text-[#142B50] font-bold rounded-2xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#142B50]/20 focus:border-[#142B50] transition-all text-sm" 
                                             value={newItemValues.quantity} 
                                             onChange={e => setNewItemValues({...newItemValues, quantity: e.target.value})} 
                                             required 
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-[11px] font-extrabold text-[#00008B] uppercase tracking-widest mb-2 block">BİRİM MALİYET (₺)</label>
+                                        <label className="text-[11px] font-extrabold text-[#142B50] uppercase tracking-widest mb-2 block">BİRİM MALİYET (₺)</label>
                                         <input 
                                             type="number" 
                                             step="any"
-                                            className="w-full bg-slate-50 border border-slate-200/80 text-[#00008B] font-bold rounded-2xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#00008B]/20 focus:border-[#00008B] transition-all text-sm" 
+                                            className="w-full bg-slate-50 border border-slate-200/80 text-[#142B50] font-bold rounded-2xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#142B50]/20 focus:border-[#142B50] transition-all text-sm" 
                                             value={newItemValues.avgCost} 
                                             onChange={e => setNewItemValues({...newItemValues, avgCost: e.target.value})} 
                                             required 
@@ -3538,7 +3538,7 @@ export default function PortfolioPage() {
                                     const calculatedTotal = (!isNaN(q) && !isNaN(c) && q > 0 && c > 0) ? q * c : 0;
                                     return calculatedTotal > 0 ? (
                                         <div className="bg-[#eefcf4] border border-emerald-200/70 p-3.5 px-4 rounded-2xl flex justify-between items-center shadow-xs">
-                                            <span className="text-xs sm:text-sm font-bold text-[#00008B]">Hesaplanan Toplam Maliyet:</span>
+                                            <span className="text-xs sm:text-sm font-bold text-[#142B50]">Hesaplanan Toplam Maliyet:</span>
                                             <span className="text-sm sm:text-base font-extrabold text-emerald-600">
                                                 {calculatedTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ₺
                                             </span>
@@ -3549,7 +3549,7 @@ export default function PortfolioPage() {
                                 <button 
                                     type="submit" 
                                     disabled={loading}
-                                    className="w-full py-4 bg-[#00008B] hover:bg-[#0b2d82] text-white font-extrabold rounded-2xl shadow-lg shadow-[#00008B]/20 transition-all text-sm mt-2 flex items-center justify-center gap-2 active:scale-[0.98] tracking-wide disabled:opacity-50"
+                                    className="w-full py-4 bg-[#142B50] hover:bg-[#0b2d82] text-white font-extrabold rounded-2xl shadow-lg shadow-[#142B50]/20 transition-all text-sm mt-2 flex items-center justify-center gap-2 active:scale-[0.98] tracking-wide disabled:opacity-50"
                                 >
                                     {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Varlık Ekle"}
                                 </button>
@@ -3564,41 +3564,41 @@ export default function PortfolioPage() {
                 {isBuyModalOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                         <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-md" onClick={() => setIsBuyModalOpen(false)} />
-                        <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="relative bg-white border border-emerald-100 rounded-[2rem] p-8 w-full max-w-md shadow-2xl shadow-emerald-950/20 text-[#00008B]">
+                        <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="relative bg-white border border-emerald-100 rounded-[2rem] p-8 w-full max-w-md shadow-2xl shadow-emerald-950/20 text-[#142B50]">
                             <div className="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-md shadow-emerald-900/20">
                                         <Plus className="w-5 h-5" />
                                     </div>
                                     <div>
-                                        <h2 className="text-xl font-black text-[#00008B] tracking-tight">AL — {buySymbol}</h2>
+                                        <h2 className="text-xl font-black text-[#142B50] tracking-tight">AL — {buySymbol}</h2>
                                         <span className="text-xs font-bold text-slate-400">Canlı Fiyat: {prices[buySymbol] ? formatCurrency(prices[buySymbol]) : '-'}</span>
                                     </div>
                                 </div>
-                                <button onClick={() => setIsBuyModalOpen(false)} className="p-2 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-[#00008B] transition-colors"><X className="w-5 h-5" /></button>
+                                <button onClick={() => setIsBuyModalOpen(false)} className="p-2 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-[#142B50] transition-colors"><X className="w-5 h-5" /></button>
                             </div>
 
                             <form onSubmit={handleExecuteBuy} className="space-y-4">
                                 <div className="grid grid-cols-2 gap-3">
                                     <div>
-                                        <label className="text-[11px] font-extrabold text-[#00008B]/70 uppercase tracking-widest mb-1.5 block">Alınacak Adet</label>
+                                        <label className="text-[11px] font-extrabold text-[#142B50]/70 uppercase tracking-widest mb-1.5 block">Alınacak Adet</label>
                                         <input 
                                             type="number" 
                                             step="any"
                                             placeholder="100" 
-                                            className="w-full bg-slate-50 border border-slate-200 text-[#00008B] font-bold rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm" 
+                                            className="w-full bg-slate-50 border border-slate-200 text-[#142B50] font-bold rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm" 
                                             value={buyQuantity} 
                                             onChange={e => setBuyQuantity(e.target.value)} 
                                             required 
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-[11px] font-extrabold text-[#00008B]/70 uppercase tracking-widest mb-1.5 block">Alış Fiyatı (₺)</label>
+                                        <label className="text-[11px] font-extrabold text-[#142B50]/70 uppercase tracking-widest mb-1.5 block">Alış Fiyatı (₺)</label>
                                         <input 
                                             type="number" 
                                             step="any"
                                             placeholder="250.50" 
-                                            className="w-full bg-slate-50 border border-slate-200 text-[#00008B] font-bold rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm" 
+                                            className="w-full bg-slate-50 border border-slate-200 text-[#142B50] font-bold rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm" 
                                             value={buyUnitPrice} 
                                             onChange={e => setBuyUnitPrice(e.target.value)} 
                                             required 
@@ -3608,21 +3608,21 @@ export default function PortfolioPage() {
 
                                 <div className="grid grid-cols-2 gap-3">
                                     <div>
-                                        <label className="text-[11px] font-extrabold text-[#00008B]/70 uppercase tracking-widest mb-1.5 block">Komisyon (₺)</label>
+                                        <label className="text-[11px] font-extrabold text-[#142B50]/70 uppercase tracking-widest mb-1.5 block">Komisyon (₺)</label>
                                         <input 
                                             type="number" 
                                             step="any"
                                             placeholder="0.00" 
-                                            className="w-full bg-slate-50 border border-slate-200 text-[#00008B] font-bold rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm" 
+                                            className="w-full bg-slate-50 border border-slate-200 text-[#142B50] font-bold rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm" 
                                             value={buyCommission} 
                                             onChange={e => setBuyCommission(e.target.value)} 
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-[11px] font-extrabold text-[#00008B]/70 uppercase tracking-widest mb-1.5 block">İşlem Tarihi</label>
+                                        <label className="text-[11px] font-extrabold text-[#142B50]/70 uppercase tracking-widest mb-1.5 block">İşlem Tarihi</label>
                                         <input 
                                             type="date" 
-                                            className="w-full bg-slate-50 border border-slate-200 text-[#00008B] font-bold rounded-2xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-xs" 
+                                            className="w-full bg-slate-50 border border-slate-200 text-[#142B50] font-bold rounded-2xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-xs" 
                                             value={buyDate} 
                                             onChange={e => setBuyDate(e.target.value)} 
                                             required 
@@ -3689,42 +3689,42 @@ export default function PortfolioPage() {
                 {isSellModalOpen && sellTargetGroup && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                         <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-md" onClick={() => setIsSellModalOpen(false)} />
-                        <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="relative bg-white border border-rose-100 rounded-[2rem] p-8 w-full max-w-md shadow-2xl shadow-rose-950/20 text-[#00008B]">
+                        <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="relative bg-white border border-rose-100 rounded-[2rem] p-8 w-full max-w-md shadow-2xl shadow-rose-950/20 text-[#142B50]">
                             <div className="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-2xl bg-rose-600 text-white flex items-center justify-center shadow-md shadow-rose-900/20">
                                         <TrendingDown className="w-5 h-5" />
                                     </div>
                                     <div>
-                                        <h2 className="text-xl font-black text-[#00008B] tracking-tight">SAT — {sellTargetGroup.symbol}</h2>
+                                        <h2 className="text-xl font-black text-[#142B50] tracking-tight">SAT — {sellTargetGroup.symbol}</h2>
                                         <span className="text-xs font-bold text-slate-400">Satılabilir Miktar: {sellTargetGroup.totalQuantity} adet</span>
                                     </div>
                                 </div>
-                                <button onClick={() => setIsSellModalOpen(false)} className="p-2 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-[#00008B] transition-colors"><X className="w-5 h-5" /></button>
+                                <button onClick={() => setIsSellModalOpen(false)} className="p-2 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-[#142B50] transition-colors"><X className="w-5 h-5" /></button>
                             </div>
 
                             <form onSubmit={handleExecuteSell} className="space-y-4">
                                 <div className="grid grid-cols-2 gap-3">
                                     <div>
-                                        <label className="text-[11px] font-extrabold text-[#00008B]/70 uppercase tracking-widest mb-1.5 block">Satılacak Adet</label>
+                                        <label className="text-[11px] font-extrabold text-[#142B50]/70 uppercase tracking-widest mb-1.5 block">Satılacak Adet</label>
                                         <input 
                                             type="number" 
                                             step="any"
                                             max={sellTargetGroup.totalQuantity}
                                             placeholder={`En fazla ${sellTargetGroup.totalQuantity}`} 
-                                            className="w-full bg-slate-50 border border-slate-200 text-[#00008B] font-bold rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-600 text-sm" 
+                                            className="w-full bg-slate-50 border border-slate-200 text-[#142B50] font-bold rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-600 text-sm" 
                                             value={sellQuantity} 
                                             onChange={e => setSellQuantity(e.target.value)} 
                                             required 
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-[11px] font-extrabold text-[#00008B]/70 uppercase tracking-widest mb-1.5 block">Satış Fiyatı (₺)</label>
+                                        <label className="text-[11px] font-extrabold text-[#142B50]/70 uppercase tracking-widest mb-1.5 block">Satış Fiyatı (₺)</label>
                                         <input 
                                             type="number" 
                                             step="any"
                                             placeholder="250.50" 
-                                            className="w-full bg-slate-50 border border-slate-200 text-[#00008B] font-bold rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-600 text-sm" 
+                                            className="w-full bg-slate-50 border border-slate-200 text-[#142B50] font-bold rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-600 text-sm" 
                                             value={sellUnitPrice} 
                                             onChange={e => setSellUnitPrice(e.target.value)} 
                                             required 
@@ -3734,21 +3734,21 @@ export default function PortfolioPage() {
 
                                 <div className="grid grid-cols-2 gap-3">
                                     <div>
-                                        <label className="text-[11px] font-extrabold text-[#00008B]/70 uppercase tracking-widest mb-1.5 block">Komisyon (₺)</label>
+                                        <label className="text-[11px] font-extrabold text-[#142B50]/70 uppercase tracking-widest mb-1.5 block">Komisyon (₺)</label>
                                         <input 
                                             type="number" 
                                             step="any"
                                             placeholder="0.00" 
-                                            className="w-full bg-slate-50 border border-slate-200 text-[#00008B] font-bold rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-600 text-sm" 
+                                            className="w-full bg-slate-50 border border-slate-200 text-[#142B50] font-bold rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-600 text-sm" 
                                             value={sellCommission} 
                                             onChange={e => setSellCommission(e.target.value)} 
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-[11px] font-extrabold text-[#00008B]/70 uppercase tracking-widest mb-1.5 block">İşlem Tarihi</label>
+                                        <label className="text-[11px] font-extrabold text-[#142B50]/70 uppercase tracking-widest mb-1.5 block">İşlem Tarihi</label>
                                         <input 
                                             type="date" 
-                                            className="w-full bg-slate-50 border border-slate-200 text-[#00008B] font-bold rounded-2xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-600 text-xs" 
+                                            className="w-full bg-slate-50 border border-slate-200 text-[#142B50] font-bold rounded-2xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-600 text-xs" 
                                             value={sellDate} 
                                             onChange={e => setSellDate(e.target.value)} 
                                             required 
@@ -3825,18 +3825,18 @@ export default function PortfolioPage() {
                 {isCashModalOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                         <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-md" onClick={() => setIsCashModalOpen(false)} />
-                        <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="relative bg-white border border-emerald-100 rounded-[2rem] p-8 w-full max-w-md shadow-2xl shadow-emerald-950/20 text-[#00008B]">
+                        <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="relative bg-white border border-emerald-100 rounded-[2rem] p-8 w-full max-w-md shadow-2xl shadow-emerald-950/20 text-[#142B50]">
                             <div className="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-2xl bg-emerald-700 text-white flex items-center justify-center shadow-md shadow-emerald-900/20">
                                         <Coins className="w-5 h-5" />
                                     </div>
                                     <div>
-                                        <h2 className="text-xl font-black text-[#00008B] tracking-tight">Nakit İşlemleri</h2>
+                                        <h2 className="text-xl font-black text-[#142B50] tracking-tight">Nakit İşlemleri</h2>
                                         <span className="text-xs font-bold text-slate-400">Mevcut Bakiyeniz: {formatCurrency(cashBalance)}</span>
                                     </div>
                                 </div>
-                                <button onClick={() => setIsCashModalOpen(false)} className="p-2 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-[#00008B] transition-colors"><X className="w-5 h-5" /></button>
+                                <button onClick={() => setIsCashModalOpen(false)} className="p-2 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-[#142B50] transition-colors"><X className="w-5 h-5" /></button>
                             </div>
 
                             <form onSubmit={handleExecuteCash} className="space-y-4">
@@ -3848,7 +3848,7 @@ export default function PortfolioPage() {
                                             "flex-1 py-2.5 rounded-xl font-black text-xs transition-all uppercase tracking-wider",
                                             cashActionType === 'DEPOSIT'
                                                 ? "bg-emerald-600 text-white shadow-md"
-                                                : "text-slate-500 hover:text-[#00008B]"
+                                                : "text-slate-500 hover:text-[#142B50]"
                                         )}
                                     >
                                         + Nakit Yatır
@@ -3860,7 +3860,7 @@ export default function PortfolioPage() {
                                             "flex-1 py-2.5 rounded-xl font-black text-xs transition-all uppercase tracking-wider",
                                             cashActionType === 'WITHDRAWAL'
                                                 ? "bg-rose-600 text-white shadow-md"
-                                                : "text-slate-500 hover:text-[#00008B]"
+                                                : "text-slate-500 hover:text-[#142B50]"
                                         )}
                                     >
                                         - Nakit Çek
@@ -3869,22 +3869,22 @@ export default function PortfolioPage() {
 
                                 <div className="grid grid-cols-2 gap-3">
                                     <div>
-                                        <label className="text-[11px] font-extrabold text-[#00008B]/70 uppercase tracking-widest mb-1.5 block">Tutar (₺)</label>
+                                        <label className="text-[11px] font-extrabold text-[#142B50]/70 uppercase tracking-widest mb-1.5 block">Tutar (₺)</label>
                                         <input 
                                             type="number" 
                                             step="any"
                                             placeholder="1000" 
-                                            className="w-full bg-slate-50 border border-slate-200 text-[#00008B] font-bold rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm" 
+                                            className="w-full bg-slate-50 border border-slate-200 text-[#142B50] font-bold rounded-2xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-sm" 
                                             value={cashAmountInput} 
                                             onChange={e => setCashAmountInput(e.target.value)} 
                                             required 
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-[11px] font-extrabold text-[#00008B]/70 uppercase tracking-widest mb-1.5 block">İşlem Tarihi</label>
+                                        <label className="text-[11px] font-extrabold text-[#142B50]/70 uppercase tracking-widest mb-1.5 block">İşlem Tarihi</label>
                                         <input 
                                             type="date" 
-                                            className="w-full bg-slate-50 border border-slate-200 text-[#00008B] font-bold rounded-2xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-xs" 
+                                            className="w-full bg-slate-50 border border-slate-200 text-[#142B50] font-bold rounded-2xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 text-xs" 
                                             value={cashDateInput} 
                                             onChange={e => setCashDateInput(e.target.value)} 
                                             required 
@@ -3908,7 +3908,7 @@ export default function PortfolioPage() {
                                                 <span>Mevcut Nakit:</span>
                                                 <span className="font-bold text-slate-700">{formatCurrency(cashBalance)}</span>
                                             </div>
-                                            <div className="flex justify-between text-[#00008B] font-extrabold border-t border-slate-200 pt-2 text-sm">
+                                            <div className="flex justify-between text-[#142B50] font-extrabold border-t border-slate-200 pt-2 text-sm">
                                                 <span>İşlem Sonrası Nakit:</span>
                                                 <span className={cn(isWithdrawExceeded ? "text-rose-600" : "text-emerald-700")}>{formatCurrency(nextCash)}</span>
                                             </div>
@@ -3965,7 +3965,7 @@ export default function PortfolioPage() {
                                     Varlığı Portföyden Sil
                                 </h3>
                                 <p className="text-xs text-slate-500 mt-2 leading-relaxed">
-                                    <span className="font-extrabold text-[#00008B]">{deleteConfirm.assetSymbol}</span> varlığını portföyünüzden silmek istediğinize emin misiniz?
+                                    <span className="font-extrabold text-[#142B50]">{deleteConfirm.assetSymbol}</span> varlığını portföyünüzden silmek istediğinize emin misiniz?
                                 </p>
 
                                 <div className="w-full bg-amber-50/80 border border-amber-200/70 rounded-2xl p-3.5 mt-4 text-left flex items-start gap-2.5">

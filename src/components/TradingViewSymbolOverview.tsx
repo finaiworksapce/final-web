@@ -279,8 +279,8 @@ export function TradingViewSymbolOverview({
     // Up Color: #00008B (FinAi Lacivert), Down Color: #EF4444
     // Line Width: 2, Line Type: 0 (Simple Area)
     const lineColor = isUp ? "#00008B" : "#EF4444";
-    const topColor = isUp ? "rgba(0, 0, 139, 0.18)" : "rgba(239, 68, 68, 0.18)";
-    const bottomColor = isUp ? "rgba(0, 0, 139, 0.00)" : "rgba(239, 68, 68, 0.00)";
+    const topColor = isUp ? "rgba(20, 43, 80, 0.18)" : "rgba(239, 68, 68, 0.18)";
+    const bottomColor = isUp ? "rgba(20, 43, 80, 0.00)" : "rgba(239, 68, 68, 0.00)";
 
     const areaSeries = chart.addSeries(AreaSeries, {
       topColor,
@@ -301,9 +301,9 @@ export function TradingViewSymbolOverview({
     areaSeriesRef.current = areaSeries;
 
     // Volume Histogram Series at bottom
-    // Up: rgba(0, 0, 139, 0.35), Down: rgba(239, 68, 68, 0.28)
+    // Up: rgba(20, 43, 80, 0.35), Down: rgba(239, 68, 68, 0.28)
     const volumeSeries = chart.addSeries(HistogramSeries, {
-      color: "rgba(0, 0, 139, 0.35)",
+      color: "rgba(20, 43, 80, 0.35)",
       priceFormat: { type: "volume" },
       priceScaleId: ""
     });
@@ -321,7 +321,7 @@ export function TradingViewSymbolOverview({
       return {
         time: pt.timestamp as UTCTimestamp,
         value: pt.volume || 0,
-        color: isBarUp ? "rgba(0, 0, 139, 0.35)" : "rgba(239, 68, 68, 0.28)"
+        color: isBarUp ? "rgba(20, 43, 80, 0.35)" : "rgba(239, 68, 68, 0.28)"
       };
     });
     volumeSeries.setData(volumeData);
@@ -520,7 +520,7 @@ export function TradingViewSymbolOverview({
               {displayPrice != null ? `${displayPrice.toFixed(2)} ₺` : "— ₺"}
             </div>
             <div className="flex items-center sm:justify-end gap-1.5 text-xs font-bold mt-0.5">
-              <span className={isPositive ? "text-[#00008B] flex items-center gap-0.5" : "text-rose-600 flex items-center gap-0.5"}>
+              <span className={isPositive ? "text-[#142B50] flex items-center gap-0.5" : "text-rose-600 flex items-center gap-0.5"}>
                 {isPositive ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
                 {isPositive ? "+" : ""}{displayChange.toFixed(2)} ₺ ({isPositive ? "+" : ""}{displayChangePercent.toFixed(2)}%)
               </span>
@@ -564,7 +564,7 @@ export function TradingViewSymbolOverview({
       >
         {loading && (
           <div className="absolute inset-0 z-10 bg-white/80 backdrop-blur-[2px] flex items-center justify-center text-slate-600 text-xs font-medium gap-2">
-            <RefreshCw className="w-4 h-4 animate-spin text-[#00008B]" />
+            <RefreshCw className="w-4 h-4 animate-spin text-[#142B50]" />
             Yahoo Finance verisi güncelleniyor...
           </div>
         )}

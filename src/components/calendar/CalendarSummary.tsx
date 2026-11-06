@@ -24,8 +24,8 @@ export default function CalendarSummary({ events, selectedCountriesCount }: Cale
     return (
         <div className="w-full bg-white border border-slate-200 rounded-3xl p-5 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
-                <h3 className="text-xs font-black uppercase tracking-wider text-[#00008B] flex items-center gap-1.5">
-                    <Activity className="w-4 h-4 text-[#00008B]" /> BUGÜN EKONOMİDE GÜNDEM ÖZETİ
+                <h3 className="text-xs font-black uppercase tracking-wider text-[#142B50] flex items-center gap-1.5">
+                    <Activity className="w-4 h-4 text-[#142B50]" /> BUGÜN EKONOMİDE GÜNDEM ÖZETİ
                 </h3>
                 <span className="text-[10px] font-bold text-slate-400">
                     {selectedCountriesCount} Ülke Takip Ediliyor
@@ -44,7 +44,7 @@ export default function CalendarSummary({ events, selectedCountriesCount }: Cale
                         </div>
                         <div>
                             <span className="text-[10px] font-bold text-slate-400 block uppercase">Toplam Veri</span>
-                            <span className="text-xs font-black text-[#00008B] block">{totalCount} Ekonomik Veri</span>
+                            <span className="text-xs font-black text-[#142B50] block">{totalCount} Ekonomik Veri</span>
                         </div>
                     </div>
 

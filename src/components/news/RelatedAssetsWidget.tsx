@@ -37,7 +37,7 @@ export function RelatedAssetsWidget({ assets, className = "" }: RelatedAssetsWid
                     <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
                         <BarChart2 className="w-3.5 h-3.5" />
                     </div>
-                    <h3 className="text-xs sm:text-sm font-black text-[#00008B] tracking-tight">
+                    <h3 className="text-xs sm:text-sm font-black text-[#142B50] tracking-tight">
                         İlgili Varlıklar
                     </h3>
                 </div>
@@ -60,7 +60,7 @@ export function RelatedAssetsWidget({ assets, className = "" }: RelatedAssetsWid
                         <Link
                             key={idx}
                             href={href}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50/80 border border-slate-200/70 hover:border-blue-200 text-slate-800 hover:text-[#00008B] text-xs font-bold transition-all"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50/80 border border-slate-200/70 hover:border-blue-200 text-slate-800 hover:text-[#142B50] text-xs font-bold transition-all"
                         >
                             {getStockLogoUrl(cleanSymbol) ? (
                                 <StockLogo symbol={cleanSymbol} className="w-4 h-4 shadow-2xs" />

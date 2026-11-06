@@ -192,11 +192,11 @@ export default function NotificationsPage() {
     };
 
     return (
-        <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-slate-50 text-[#00008B] w-full mx-auto p-4 sm:p-6 md:p-8 max-w-5xl">
+        <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-slate-50 text-[#142B50] w-full mx-auto p-4 sm:p-6 md:p-8 max-w-5xl">
             {/* Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
                 <div>
-                    <h1 className="text-2xl sm:text-3xl font-black text-[#00008B] tracking-tight">Bildirim Merkezi</h1>
+                    <h1 className="text-2xl sm:text-3xl font-black text-[#142B50] tracking-tight">Bildirim Merkezi</h1>
                     <p className="text-xs font-bold text-slate-500 mt-0.5">Takip ettiğiniz ekonomik göstergeler ve duyuru geçmişiniz.</p>
                 </div>
 
@@ -206,8 +206,8 @@ export default function NotificationsPage() {
                         onClick={() => setActiveTab('notifications')}
                         className={`px-4 py-2 rounded-xl text-xs font-black transition-all ${
                             activeTab === 'notifications' 
-                                ? 'bg-[#00008B] text-white shadow-sm' 
-                                : 'text-slate-600 hover:text-[#00008B]'
+                                ? 'bg-[#142B50] text-white shadow-sm' 
+                                : 'text-slate-600 hover:text-[#142B50]'
                         }`}
                     >
                         Bildirim Geçmişi
@@ -216,8 +216,8 @@ export default function NotificationsPage() {
                         onClick={() => setActiveTab('followed')}
                         className={`px-4 py-2 rounded-xl text-xs font-black transition-all ${
                             activeTab === 'followed' 
-                                ? 'bg-[#00008B] text-white shadow-sm' 
-                                : 'text-slate-600 hover:text-[#00008B]'
+                                ? 'bg-[#142B50] text-white shadow-sm' 
+                                : 'text-slate-600 hover:text-[#142B50]'
                         }`}
                     >
                         Takip Ettiklerim ({followedIndicators.length})
@@ -226,8 +226,8 @@ export default function NotificationsPage() {
                         onClick={() => setActiveTab('settings')}
                         className={`px-4 py-2 rounded-xl text-xs font-black transition-all ${
                             activeTab === 'settings' 
-                                ? 'bg-[#00008B] text-white shadow-sm' 
-                                : 'text-slate-600 hover:text-[#00008B]'
+                                ? 'bg-[#142B50] text-white shadow-sm' 
+                                : 'text-slate-600 hover:text-[#142B50]'
                         }`}
                     >
                         Ayarlar
@@ -244,16 +244,16 @@ export default function NotificationsPage() {
                         </div>
                     ) : notifications.length === 0 ? (
                         <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 space-y-3 p-6 shadow-sm">
-                            <div className="w-14 h-14 bg-blue-50 border border-blue-200 rounded-3xl flex items-center justify-center mx-auto text-[#00008B]">
+                            <div className="w-14 h-14 bg-blue-50 border border-blue-200 rounded-3xl flex items-center justify-center mx-auto text-[#142B50]">
                                 <Bell className="w-7 h-7" />
                             </div>
-                            <h3 className="text-base font-black text-[#00008B]">Henüz Bildiriminiz Bulunmuyor</h3>
+                            <h3 className="text-base font-black text-[#142B50]">Henüz Bildiriminiz Bulunmuyor</h3>
                             <p className="text-xs text-slate-500 font-medium max-w-sm mx-auto leading-relaxed">
                                 Ekonomik takvimdeki göstergeleri takip ederek açıklanma anında ve yaklaştığında anlık web bildirimleri alabilirsiniz.
                             </p>
                             <Link
                                 href="/dashboard/economic-calendar"
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-[#00008B] text-white font-bold text-xs shadow-sm hover:bg-[#0808a3] transition-all"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-[#142B50] text-white font-bold text-xs shadow-sm hover:bg-[#102240] transition-all"
                             >
                                 Ekonomik Takvime Git <ArrowRight className="w-3.5 h-3.5" />
                             </Link>
@@ -276,11 +276,11 @@ export default function NotificationsPage() {
                                     className="p-4 rounded-3xl bg-white border border-slate-200 hover:border-blue-300 transition-all flex items-start justify-between gap-4 group shadow-xs"
                                 >
                                     <div className="flex items-start gap-3">
-                                        <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0 text-[#00008B]">
+                                        <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0 text-[#142B50]">
                                             <Bell className="w-5 h-5" />
                                         </div>
                                         <div className="space-y-1">
-                                            <h4 className="text-sm font-black text-[#00008B] leading-snug group-hover:text-blue-600 transition-colors">
+                                            <h4 className="text-sm font-black text-[#142B50] leading-snug group-hover:text-blue-600 transition-colors">
                                                 {item.title}
                                             </h4>
                                             <p className="text-xs text-slate-600 font-medium leading-relaxed">
@@ -291,7 +291,7 @@ export default function NotificationsPage() {
                                             </span>
                                         </div>
                                     </div>
-                                    <span className="p-2 rounded-xl bg-slate-50 text-slate-400 group-hover:bg-blue-50 group-hover:text-[#00008B] transition-colors shrink-0">
+                                    <span className="p-2 rounded-xl bg-slate-50 text-slate-400 group-hover:bg-blue-50 group-hover:text-[#142B50] transition-colors shrink-0">
                                         <ArrowRight className="w-4 h-4" />
                                     </span>
                                 </Link>
@@ -307,12 +307,12 @@ export default function NotificationsPage() {
                     {/* Header Action Bar */}
                     <div className="flex items-center justify-between bg-white border border-slate-200 p-4 rounded-3xl shadow-xs">
                         <div>
-                            <h3 className="text-sm font-black text-[#00008B]">Takip Edilen Ekonomik Göstergeler</h3>
+                            <h3 className="text-sm font-black text-[#142B50]">Takip Edilen Ekonomik Göstergeler</h3>
                             <p className="text-xs text-slate-500 font-medium">Seçtiğiniz göstergeler açıklandığında veya yaklaşırken bildirim alırsınız.</p>
                         </div>
                         <button
                             onClick={() => setShowAddModal(true)}
-                            className="px-4 py-2 rounded-2xl bg-[#00008B] text-white font-bold text-xs shadow-sm hover:bg-[#0808a3] transition-all flex items-center gap-1.5 shrink-0"
+                            className="px-4 py-2 rounded-2xl bg-[#142B50] text-white font-bold text-xs shadow-sm hover:bg-[#102240] transition-all flex items-center gap-1.5 shrink-0"
                         >
                             <Plus className="w-4 h-4" /> Gösterge Ekle
                         </button>
@@ -324,16 +324,16 @@ export default function NotificationsPage() {
                         </div>
                     ) : followedIndicators.length === 0 ? (
                         <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 space-y-3 p-6 shadow-sm">
-                            <div className="w-14 h-14 bg-blue-50 border border-blue-200 rounded-3xl flex items-center justify-center mx-auto text-[#00008B]">
+                            <div className="w-14 h-14 bg-blue-50 border border-blue-200 rounded-3xl flex items-center justify-center mx-auto text-[#142B50]">
                                 <CalendarIcon className="w-7 h-7" />
                             </div>
-                            <h3 className="text-base font-black text-[#00008B]">Takip Edilen Gösterge Yok</h3>
+                            <h3 className="text-base font-black text-[#142B50]">Takip Edilen Gösterge Yok</h3>
                             <p className="text-xs text-slate-500 font-medium max-w-sm mx-auto leading-relaxed">
                                 Aşağıdaki buton veya ekonomik takvim üzerindeki "Takip Et" butonunu kullanarak takip etmek istediğiniz göstergeleri ekleyebilirsiniz.
                             </p>
                             <button
                                 onClick={() => setShowAddModal(true)}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-[#00008B] text-white font-bold text-xs shadow-sm hover:bg-[#0808a3] transition-all"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-[#142B50] text-white font-bold text-xs shadow-sm hover:bg-[#102240] transition-all"
                             >
                                 <Plus className="w-4 h-4" /> Hemen Gösterge Ekle
                             </button>
@@ -353,7 +353,7 @@ export default function NotificationsPage() {
                                                 <span className="text-[10px] font-black text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-100 uppercase">
                                                     Takip Ediliyor ✓
                                                 </span>
-                                                <h4 className="text-sm font-black text-[#00008B] leading-snug mt-1.5">
+                                                <h4 className="text-sm font-black text-[#142B50] leading-snug mt-1.5">
                                                     {indName}
                                                 </h4>
                                             </div>
@@ -373,7 +373,7 @@ export default function NotificationsPage() {
                                             {nextEvent && (
                                                 <Link
                                                     href={`/dashboard/economic-calendar/${encodeURIComponent(nextEvent.id || nextEvent.event)}`}
-                                                    className="font-bold text-[#00008B] hover:underline flex items-center gap-0.5 text-[11px]"
+                                                    className="font-bold text-[#142B50] hover:underline flex items-center gap-0.5 text-[11px]"
                                                 >
                                                     İncele <ArrowRight className="w-3 h-3" />
                                                 </Link>
@@ -391,11 +391,11 @@ export default function NotificationsPage() {
             {activeTab === 'settings' && (
                 <div className="bg-white border border-slate-200 rounded-3xl p-6 md:p-8 space-y-6 shadow-sm">
                     <div className="flex items-center gap-3 pb-4 border-b border-slate-150">
-                        <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#00008B]">
+                        <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-[#142B50]">
                             <Sliders className="w-5 h-5" />
                         </div>
                         <div>
-                            <h3 className="text-lg font-black text-[#00008B]">Bildirim Zamanlaması ve Tercihler</h3>
+                            <h3 className="text-lg font-black text-[#142B50]">Bildirim Zamanlaması ve Tercihler</h3>
                             <p className="text-xs text-slate-500 font-bold">Takip ettiğiniz ekonomik göstergeler için ne zaman bildirim alacağınızı seçin.</p>
                         </div>
                     </div>
@@ -403,7 +403,7 @@ export default function NotificationsPage() {
                     <div className="space-y-4">
                         <label className="flex items-center justify-between p-4 rounded-2xl bg-blue-50/60 border border-blue-200 cursor-pointer hover:border-blue-300 transition-all">
                             <div>
-                                <span className="text-xs font-black text-[#00008B] flex items-center gap-1.5">
+                                <span className="text-xs font-black text-[#142B50] flex items-center gap-1.5">
                                     ☀️ Günlük Sabah Özeti (08:00 TSİ)
                                 </span>
                                 <span className="text-[11px] text-slate-600 font-medium block mt-0.5">Her sabah 08:00'de günün makro haber manşeti, açıklanacak takvim olayları ve takip ettiğiniz göstergelerin özeti cebinize gelir.</span>
@@ -412,72 +412,72 @@ export default function NotificationsPage() {
                                 type="checkbox"
                                 checked={preferences.daily_morning_summary}
                                 onChange={(e) => setPreferences({ ...preferences, daily_morning_summary: e.target.checked })}
-                                className="w-5 h-5 rounded border-slate-300 text-[#00008B] focus:ring-[#00008B]"
+                                className="w-5 h-5 rounded border-slate-300 text-[#142B50] focus:ring-[#78B8F5]"
                             />
                         </label>
 
                         <label className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 cursor-pointer hover:border-blue-300 transition-all">
                             <div>
-                                <span className="text-xs font-black text-[#00008B] block">Veri Açıklanmadan 10 Dakika Önce</span>
+                                <span className="text-xs font-black text-[#142B50] block">Veri Açıklanmadan 10 Dakika Önce</span>
                                 <span className="text-[11px] text-slate-500 font-medium block">Piyasa duyurusu yaklaşırken cihazınıza uyarı gönderilir (Varsayılan Açık).</span>
                             </div>
                             <input
                                 type="checkbox"
                                 checked={preferences.min_10_before}
                                 onChange={(e) => setPreferences({ ...preferences, min_10_before: e.target.checked })}
-                                className="w-5 h-5 rounded border-slate-300 text-[#00008B] focus:ring-[#00008B]"
+                                className="w-5 h-5 rounded border-slate-300 text-[#142B50] focus:ring-[#78B8F5]"
                             />
                         </label>
 
                         <label className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 cursor-pointer hover:border-blue-300 transition-all">
                             <div>
-                                <span className="text-xs font-black text-[#00008B] block">Veri Açıklanmadan 30 Dakika Önce</span>
+                                <span className="text-xs font-black text-[#142B50] block">Veri Açıklanmadan 30 Dakika Önce</span>
                                 <span className="text-[11px] text-slate-500 font-medium block">Önceden hazırlık yapmak isteyenler için erken bildirim.</span>
                             </div>
                             <input
                                 type="checkbox"
                                 checked={preferences.min_30_before}
                                 onChange={(e) => setPreferences({ ...preferences, min_30_before: e.target.checked })}
-                                className="w-5 h-5 rounded border-slate-300 text-[#00008B] focus:ring-[#00008B]"
+                                className="w-5 h-5 rounded border-slate-300 text-[#142B50] focus:ring-[#78B8F5]"
                             />
                         </label>
 
                         <label className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 cursor-pointer hover:border-blue-300 transition-all">
                             <div>
-                                <span className="text-xs font-black text-[#00008B] block">Veri Açıklandığı Anda</span>
+                                <span className="text-xs font-black text-[#142B50] block">Veri Açıklandığı Anda</span>
                                 <span className="text-[11px] text-slate-500 font-medium block">Resmi gerçekleşen rakam ve piyasa beklentisi anında cebinize gelir.</span>
                             </div>
                             <input
                                 type="checkbox"
                                 checked={preferences.on_release}
                                 onChange={(e) => setPreferences({ ...preferences, on_release: e.target.checked })}
-                                className="w-5 h-5 rounded border-slate-300 text-[#00008B] focus:ring-[#00008B]"
+                                className="w-5 h-5 rounded border-slate-300 text-[#142B50] focus:ring-[#78B8F5]"
                             />
                         </label>
 
                         <label className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 cursor-pointer hover:border-blue-300 transition-all">
                             <div>
-                                <span className="text-xs font-black text-[#00008B] block">Veri Güncellendiğinde</span>
+                                <span className="text-xs font-black text-[#142B50] block">Veri Güncellendiğinde</span>
                                 <span className="text-[11px] text-slate-500 font-medium block">Yayın öncesi tarih, saat veya beklenti rakamları güncellendiğinde anında haber verilir.</span>
                             </div>
                             <input
                                 type="checkbox"
                                 checked={preferences.on_update}
                                 onChange={(e) => setPreferences({ ...preferences, on_update: e.target.checked })}
-                                className="w-5 h-5 rounded border-slate-300 text-[#00008B] focus:ring-[#00008B]"
+                                className="w-5 h-5 rounded border-slate-300 text-[#142B50] focus:ring-[#78B8F5]"
                             />
                         </label>
 
                         <label className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 cursor-pointer hover:border-blue-300 transition-all">
                             <div>
-                                <span className="text-xs font-black text-[#00008B] block">Veri Revize Edildiğinde</span>
+                                <span className="text-xs font-black text-[#142B50] block">Veri Revize Edildiğinde</span>
                                 <span className="text-[11px] text-slate-500 font-medium block">Resmi kurumlar tarafından geçmiş gerçekleşen rakamlar revize edilirse anında haber verilir.</span>
                             </div>
                             <input
                                 type="checkbox"
                                 checked={preferences.on_revision}
                                 onChange={(e) => setPreferences({ ...preferences, on_revision: e.target.checked })}
-                                className="w-5 h-5 rounded border-slate-300 text-[#00008B] focus:ring-[#00008B]"
+                                className="w-5 h-5 rounded border-slate-300 text-[#142B50] focus:ring-[#78B8F5]"
                             />
                         </label>
                     </div>
@@ -496,7 +496,7 @@ export default function NotificationsPage() {
                             <button
                                 onClick={handleSendTestPush}
                                 disabled={sendingTestPush}
-                                className="px-3.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#00008B] font-bold text-xs border border-blue-200 transition-all disabled:opacity-50 flex items-center gap-1"
+                                className="px-3.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#142B50] font-bold text-xs border border-blue-200 transition-all disabled:opacity-50 flex items-center gap-1"
                                 title="Kendi cihazınıza anlık Web Push test bildirimi gönderin"
                             >
                                 <Bell className="w-3.5 h-3.5" />
@@ -506,7 +506,7 @@ export default function NotificationsPage() {
                         <button
                             onClick={handleSavePreferences}
                             disabled={savingPref}
-                            className="px-5 py-2.5 rounded-2xl bg-[#00008B] text-white font-black text-xs shadow-md hover:bg-[#0808a3] transition-all disabled:opacity-50"
+                            className="px-5 py-2.5 rounded-2xl bg-[#142B50] text-white font-black text-xs shadow-md hover:bg-[#102240] transition-all disabled:opacity-50"
                         >
                             {savingPref ? 'Kaydediliyor...' : 'Tercihleri Kaydet'}
                         </button>
@@ -528,11 +528,11 @@ export default function NotificationsPage() {
             {/* ADD INDICATOR MODAL */}
             {showAddModal && (
                 <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-                    <div className="bg-white text-[#00008B] rounded-3xl max-w-lg w-full border border-slate-200 shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+                    <div className="bg-white text-[#142B50] rounded-3xl max-w-lg w-full border border-slate-200 shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
                         {/* Modal Header */}
                         <div className="p-5 border-b border-slate-150 flex items-center justify-between bg-slate-50">
                             <div>
-                                <h3 className="text-base font-black text-[#00008B]">Ekonomik Gösterge Ekle</h3>
+                                <h3 className="text-base font-black text-[#142B50]">Ekonomik Gösterge Ekle</h3>
                                 <p className="text-xs text-slate-500 font-medium">Takip etmek istediğiniz göstergeyi arayın ve listenize ekleyin.</p>
                             </div>
                             <button
@@ -552,7 +552,7 @@ export default function NotificationsPage() {
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                     placeholder="Gösterge adı veya ülke ara (Örn: TÜFE, Faiz, ABD...)"
-                                    className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-bold text-[#00008B] focus:outline-none focus:border-[#00008B] focus:ring-2 focus:ring-[#00008B]/10"
+                                    className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-bold text-[#142B50] focus:outline-none focus:border-[#78B8F5] focus:ring-2 focus:ring-[#78B8F5]/10"
                                 />
                             </div>
                         </div>
@@ -577,7 +577,7 @@ export default function NotificationsPage() {
                                             <div className="flex items-center gap-2.5 min-w-0">
                                                 <span className="text-xl shrink-0">{ind.flag}</span>
                                                 <div className="min-w-0">
-                                                    <h4 className="text-xs font-black text-[#00008B] truncate">
+                                                    <h4 className="text-xs font-black text-[#142B50] truncate">
                                                         {ind.name}
                                                     </h4>
                                                     <span className="text-[10px] font-bold text-slate-500 block">
@@ -592,7 +592,7 @@ export default function NotificationsPage() {
                                                 className={`px-3 py-1.5 rounded-xl font-bold text-xs shrink-0 transition-all ${
                                                     isAlreadyFollowed
                                                         ? 'bg-emerald-50 text-emerald-700 border border-emerald-300'
-                                                        : 'bg-[#00008B] text-white hover:bg-[#0808a3] shadow-xs'
+                                                        : 'bg-[#142B50] text-white hover:bg-[#102240] shadow-xs'
                                                 }`}
                                             >
                                                 {isProcessing ? (
@@ -612,7 +612,7 @@ export default function NotificationsPage() {
                         <div className="p-4 border-t border-slate-150 bg-slate-50 flex justify-end">
                             <button
                                 onClick={() => setShowAddModal(false)}
-                                className="px-5 py-2 rounded-xl bg-[#00008B] text-white font-bold text-xs"
+                                className="px-5 py-2 rounded-xl bg-[#142B50] text-white font-bold text-xs"
                             >
                                 Tamam
                             </button>

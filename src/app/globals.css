@@ -1,18 +1,132 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Expose-Medium';
+  src: url('/fonts/Expose-Medium.woff2') format('woff2'),
+       url('/fonts/Expose-Medium.woff') format('woff'),
+       url('/fonts/Expose-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Expose';
+  src: url('/fonts/Expose-Medium.woff2') format('woff2'),
+       url('/fonts/Expose-Medium.woff') format('woff'),
+       url('/fonts/Expose-Medium.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+.font-numbers, .font-expose {
+  font-family: 'Expose-Medium', 'Expose', sans-serif !important;
+  font-feature-settings: 'tnum' on, 'lnum' on;
+}
+
+
+@font-face {
+  font-family: 'Zodiak';
+  src: url('/fonts/Zodiak-Variable.woff2') format('woff2'),
+       url('/fonts/Zodiak-Variable.woff') format('woff'),
+       url('/fonts/Zodiak-Variable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Zodiak-Variable';
+  src: url('/fonts/Zodiak-Variable.woff2') format('woff2'),
+       url('/fonts/Zodiak-Variable.woff') format('woff'),
+       url('/fonts/Zodiak-Variable.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+
+/* Expose-Medium for numbers within Zodiak font stack across all pages */
+@font-face {
+  font-family: 'Zodiak';
+  src: url('/fonts/Expose-Medium.woff2') format('woff2'),
+       url('/fonts/Expose-Medium.woff') format('woff'),
+       url('/fonts/Expose-Medium.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+  unicode-range: U+0030-0039, U+0025, U+20BA; /* Digits 0-9, %, ₺ */
+}
+
+@font-face {
+  font-family: 'Zodiak-Variable';
+  src: url('/fonts/Expose-Medium.woff2') format('woff2'),
+       url('/fonts/Expose-Medium.woff') format('woff'),
+       url('/fonts/Expose-Medium.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+  unicode-range: U+0030-0039, U+0025, U+20BA; /* Digits 0-9, %, ₺ */
+}
+
+/* Zodiak Variable Typography Classes (User specification) */
+.font-zodiak {
+  font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif !important;
+}
+
+.zodiak-title {
+  font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif !important;
+  font-weight: 500 !important;
+  font-variation-settings: 'wght' 500 !important;
+}
+
+.zodiak-subtitle {
+  font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif !important;
+  font-weight: 325 !important;
+  font-variation-settings: 'wght' 325 !important;
+}
+
+
+/* Global Typography Hierarchy Rules (500 / 325 / 225) across all pages */
+h1 {
+  font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif;
+  font-weight: 500 !important;
+  font-variation-settings: 'wght' 500 !important;
+}
+
+h2, h3, h4, h5, h6, button, [role="tab"], .btn {
+  font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif;
+  font-weight: 325 !important;
+  font-variation-settings: 'wght' 325 !important;
+}
+
+p, label, li, input, textarea {
+  font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif;
+  font-weight: 225;
+  font-variation-settings: 'wght' 225;
+}
+
+.zodiak-desc {
+  font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif !important;
+  font-weight: 225 !important;
+  font-variation-settings: 'wght' 225 !important;
+}
+
+
 @theme {
   /* Luminous Silver & Navy Palette */
   --color-background: #eef2f7;
-  --color-foreground: #0a1e3d;
+  --color-foreground: #142B50;
 
-  --color-primary: #1e50ff;
+  --color-primary: #142B50;
   --color-primary-foreground: #ffffff;
 
-  --color-secondary: #f8fafc;
-  --color-secondary-foreground: #0a1e3d;
+  --color-secondary: #78B8F5;
+  --color-secondary-foreground: #142B50;
 
-  --color-accent: #3b82f6;
-  --color-accent-foreground: #ffffff;
+  --color-accent: #78B8F5;
+  --color-accent-foreground: #142B50;
 
   --color-muted: #f1f5f9;
   --color-muted-foreground: #64748b;
@@ -20,8 +134,8 @@
   --color-card: #0f172a;
   --color-card-foreground: #f8fafc;
 
-  --color-border: #1e293b;
-  --color-input: #1e293b;
+  --color-border: #78B8F5;
+  --color-input: #78B8F5;
 
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
@@ -101,7 +215,7 @@
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(to right, #60a5fa, #a78bfa, #f472b6);
+  background-image: linear-gradient(to right, #142B50, #2E5894, #78B8F5);
 }
 
 @utility premium-frost {
@@ -119,7 +233,7 @@
 }
 
 @utility menu-frost {
-  background: linear-gradient(to right, #1a3c6d 0%, #2a5298 70%, #ffffff 100%);
+  background: linear-gradient(to right, #142B50 0%, #78B8F5 70%, #ffffff 100%);
   backdrop-filter: blur(50px);
 }
 
@@ -130,7 +244,7 @@
 }
 
 @utility navy-glow {
-  background: radial-gradient(circle at left, rgba(30, 80, 255, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle at left, rgba(120, 184, 245, 0.25) 0%, transparent 70%);
 }
 
 :root {
@@ -145,8 +259,8 @@ html, body {
 
 body {
   background: #FFFFFF;
-  color: #00008B;
-  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  color: #142B50;
+  font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif;
   margin: 0;
   -webkit-font-smoothing: antialiased;
 }

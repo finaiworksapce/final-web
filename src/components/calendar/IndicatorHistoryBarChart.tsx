@@ -62,8 +62,8 @@ export default function IndicatorHistoryBarChart({
             {/* Üst Lejant & Birim Bilgisi */}
             <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
                 <div className="flex items-center gap-5">
-                    <div className="flex items-center gap-2 font-bold text-[#00008B]">
-                        <span className="w-3.5 h-3.5 rounded-sm bg-[#00008B] shadow-xs inline-block" />
+                    <div className="flex items-center gap-2 font-bold text-[#142B50]">
+                        <span className="w-3.5 h-3.5 rounded-sm bg-[#142B50] shadow-xs inline-block" />
                         <span>Açıklanan Veri</span>
                     </div>
                     <div className="flex items-center gap-2 font-bold text-slate-500">
@@ -72,7 +72,7 @@ export default function IndicatorHistoryBarChart({
                     </div>
                 </div>
                 <div className="text-[11px] font-bold text-slate-400">
-                    Birim: <span className="text-[#00008B] font-extrabold">{unit}</span>
+                    Birim: <span className="text-[#142B50] font-extrabold">{unit}</span>
                 </div>
             </div>
 
@@ -111,7 +111,7 @@ export default function IndicatorHistoryBarChart({
                         )}
 
                         <ChartTooltip
-                            cursor={{ fill: "rgba(0, 0, 139, 0.04)" }}
+                            cursor={{ fill: "rgba(20, 43, 80, 0.04)" }}
                             content={
                                 <ChartTooltipContent
                                     className="min-w-44 gap-2 border border-slate-200 bg-white/95 backdrop-blur-sm shadow-xl p-3 rounded-xl"
@@ -119,7 +119,7 @@ export default function IndicatorHistoryBarChart({
                                         const period = payload?.[0]?.payload?.period;
                                         return (
                                             <div className="border-b border-slate-100 pb-1.5 mb-1 flex items-center justify-between">
-                                                <span className="text-xs font-black text-[#00008B]">
+                                                <span className="text-xs font-black text-[#142B50]">
                                                     {val} {period ? `(${period})` : ""}
                                                 </span>
                                                 <span className="text-[10px] font-bold text-slate-400">
@@ -140,11 +140,11 @@ export default function IndicatorHistoryBarChart({
                                                             border: isActual ? "none" : "1px dashed #64748b"
                                                         }} 
                                                     />
-                                                    <span className={isActual ? "text-[#00008B] font-bold" : "text-slate-500 font-medium"}>
+                                                    <span className={isActual ? "text-[#142B50] font-bold" : "text-slate-500 font-medium"}>
                                                         {isActual ? "Açıklanan" : "Beklenen"}
                                                     </span>
                                                 </div>
-                                                <span className={`font-mono font-bold ${isActual ? "text-[#00008B]" : "text-slate-700"}`}>
+                                                <span className={`font-mono font-bold ${isActual ? "text-[#142B50]" : "text-slate-700"}`}>
                                                     {value !== null && value !== undefined ? `${value} ${unit}` : "—"}
                                                 </span>
                                             </div>

@@ -113,16 +113,16 @@ export const InfiniteMovingCards = ({
                                     {item.initials}
                                 </div>
                                 <div>
-                                    <span className="block text-base font-bold text-[#00008B]">
+                                    <span className="block text-base font-bold text-[#142B50]">
                                         {item.name}
                                     </span>
-                                    <span className="block text-xs text-[#00008B]/60 font-medium">
+                                    <span className="block text-xs text-[#142B50]/60 font-medium">
                                         {item.role}
                                     </span>
                                 </div>
                             </div>
 
-                            <span className="relative z-20 text-sm leading-[1.6] text-[#00008B]/90 font-medium block mb-4">
+                            <span className="relative z-20 text-sm leading-[1.6] text-[#142B50]/90 font-medium block mb-4">
                                 "{item.quote}"
                             </span>
 
@@ -131,13 +131,13 @@ export const InfiniteMovingCards = ({
                                     {item.tags.map((tag, tIdx) => (
                                         <span key={tIdx} className={cn(
                                             "text-[10px] px-2 py-0.5 rounded-full font-bold border",
-                                            tag.type === 'featured' ? "bg-blue-50 text-[#00008B] border-[#00008B]/20" : "bg-white text-[#00008B]/60 border-slate-100"
+                                            tag.type === 'featured' ? "bg-blue-50 text-[#142B50] border-[#78B8F5]/20" : "bg-white text-[#142B50]/60 border-slate-100"
                                         )}>
                                             {tag.text}
                                         </span>
                                     ))}
                                 </div>
-                                <div className="flex items-center gap-2 text-[10px] font-bold text-[#00008B]/30 uppercase tracking-widest">
+                                <div className="flex items-center gap-2 text-[10px] font-bold text-[#142B50]/30 uppercase tracking-widest">
                                     {item.stats.map((stat, sIdx) => {
                                         const Icon = stat.icon;
                                         return (

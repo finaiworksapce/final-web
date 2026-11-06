@@ -16,7 +16,7 @@ export default function FeaturedEconomicEvents({ events }: FeaturedEconomicEvent
     if (featuredEvents.length === 0) return null;
 
     return (
-        <div className="w-full bg-[#00008B] text-white border border-[#00008B] rounded-3xl p-5 shadow-lg space-y-3">
+        <div className="w-full bg-[#142B50] text-white border border-[#78B8F5] rounded-3xl p-5 shadow-lg space-y-3">
             <div className="flex items-center justify-between">
                 <h3 className="text-xs font-black uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
                     <Flame className="w-4 h-4 text-amber-400 fill-amber-400" /> ÖNE ÇIKAN YÜKSEK ETKİLİ VERİLER

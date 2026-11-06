@@ -66,7 +66,7 @@ export default function Navbar() {
                             <motion.a
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm font-bold text-white bg-[#00008B] hover:bg-black rounded-full shadow-[0_8px_30px_-5px_rgba(0,0,139,0.4)] transition-all hidden sm:block whitespace-nowrap"
+                                className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm zodiak-subtitle text-white bg-[#142B50] hover:bg-[#102240] rounded-full shadow-[0_8px_30px_-5px_rgba(20,43,80,0.35)] transition-all hidden sm:block whitespace-nowrap"
                             >
                                 Panele Git
                             </motion.a>
@@ -77,7 +77,7 @@ export default function Navbar() {
                                 <motion.a
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm font-bold text-[#00008B] hover:bg-slate-100 rounded-full border-2 border-slate-200 hover:border-[#00008B] transition-all bg-white relative z-50 block whitespace-nowrap"
+                                    className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm zodiak-subtitle text-[#142B50] hover:bg-[#78B8F5]/15 rounded-full border-2 border-[#78B8F5] transition-all bg-white relative z-50 block whitespace-nowrap shadow-sm"
                                 >
                                     Giriş Yap
                                 </motion.a>
@@ -86,7 +86,7 @@ export default function Navbar() {
                                 <motion.a
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm font-bold text-white bg-[#00008B] hover:bg-black rounded-full shadow-[0_8px_30px_-5px_rgba(0,0,139,0.4)] transition-all relative z-50 block whitespace-nowrap"
+                                    className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm zodiak-subtitle text-white bg-[#142B50] hover:bg-[#102240] rounded-full shadow-[0_8px_30px_-5px_rgba(20,43,80,0.35)] transition-all relative z-50 block whitespace-nowrap"
                                 >
                                     Kaydol
                                 </motion.a>
@@ -97,7 +97,7 @@ export default function Navbar() {
                     {/* Mobile Hamburger Button */}
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="p-2.5 bg-white/80 backdrop-blur-md rounded-xl border border-slate-200/50 shadow-sm text-[#00008B] sm:hidden"
+                        className="p-2.5 bg-white/80 backdrop-blur-md rounded-xl border border-slate-200/50 shadow-sm text-[#142B50] sm:hidden"
                     >
                         {isOpen ? <X className="w-6 h-6" /> : <LucideMenu className="w-6 h-6" />}
                     </button>
@@ -112,7 +112,7 @@ export default function Navbar() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -20, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className="sm:hidden absolute top-[80px] left-4 right-4 bg-white/95 backdrop-blur-2xl border border-slate-200/50 rounded-3xl shadow-2xl overflow-hidden z-[60]"
+                        className="sm:hidden absolute top-[80px] left-4 right-4 bg-white/95 backdrop-blur-2xl border border-[#78B8F5]/40 rounded-3xl shadow-2xl overflow-hidden z-[60]"
                     >
                         <div className="px-5 py-6 space-y-3">
                             {navItems.map((item) => (
@@ -120,7 +120,7 @@ export default function Navbar() {
                                     key={item.name} 
                                     href={item.url} 
                                     onClick={() => setIsOpen(false)} 
-                                    className="flex items-center gap-4 px-4 py-3.5 text-base font-bold text-[#00008B] hover:bg-slate-50 border border-transparent hover:border-slate-100 rounded-2xl transition-all border-b-0"
+                                    className="flex items-center gap-4 px-4 py-3.5 text-base font-bold text-[#142B50] hover:bg-slate-50 border border-transparent hover:border-slate-100 rounded-2xl transition-all border-b-0"
                                     style={{ borderBottom: 'none' }}
                                 >
                                     <item.icon className="w-5 h-5 text-blue-600" />
@@ -132,7 +132,7 @@ export default function Navbar() {
                                     <Link
                                         href="/login?tab=register"
                                         onClick={() => setIsOpen(false)}
-                                        className="block w-full text-center px-4 py-3.5 text-base font-bold text-white bg-[#00008B] hover:bg-black rounded-2xl shadow-lg shadow-[#00008B]/20 transition-all"
+                                        className="block w-full text-center px-4 py-3.5 text-base font-bold text-white bg-[#142B50] hover:bg-black rounded-2xl shadow-lg shadow-[#142B50]/20 transition-all"
                                     >
                                         Kaydol
                                     </Link>
@@ -140,7 +140,7 @@ export default function Navbar() {
                                 <Link
                                     href={isAuthenticated ? "/dashboard" : "/login"}
                                     onClick={() => setIsOpen(false)}
-                                    className="block w-full text-center px-4 py-3.5 text-base font-bold text-[#00008B] bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 rounded-2xl transition-all"
+                                    className="block w-full text-center px-4 py-3.5 text-base font-bold text-[#142B50] bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 rounded-2xl transition-all"
                                 >
                                     {isAuthenticated ? "Panele Git" : "Giriş Yap"}
                                 </Link>

@@ -5,18 +5,18 @@ import { PieChart, ChevronRight, Layers } from "lucide-react";
 import { useUser } from "@/components/providers/UserProvider";
 import Link from "next/link";
 
-// Referans görseldeki renk paleti (Mavi, Mor, Sarı, Gri, Zümrüt)
+// 60-30-10 Uyumlu Dağılım Paleti
 const DISTRIBUTION_COLORS = [
-    "#2563EB", // Canlı Mavi (Hisse Senetleri vb.)
-    "#8B5CF6", // Mor / Menekşe (Fonlar vb.)
-    "#F59E0B", // Amber / Altın Sarısı
-    "#94A3B8", // Nötr Gri / Nakit
-    "#10B981", // Zümrüt Yeşili
+    "#0E1E38", // %10 Odak Koyu Lacivert (En büyük dilim)
+    "#1F7A63", // %30 İkincil Gökyüzü Mavisi
+    "#2E5894", // Dengeli Orta Lacivert
+    "#A5D2FA", // Açık Mavi Ton
+    "#5A9BE0", // Destekleyici Mavi
 ];
 
 const TYPE_NAMES: Record<string, string> = {
-    STOCK: "Hisse Senetleri",
-    FUND: "Fonlar",
+    STOCK: "Hisse",
+    FUND: "Fon",
     GOLD: "Altın",
     CASH: "Nakit",
     CRYPTO: "Kripto",
@@ -35,12 +35,29 @@ export function TopAssetDistributionCard() {
     const { myAssets = [], prices = {}, isDataLoaded } = useUser();
     const [hoveredSymbol, setHoveredSymbol] = useState<string | null>(null);
 
-    // Mevcut portföy verilerinden dağılım ve yüzde hesaplaması (Yalnızca bakiyesi > 0 olan aktif varlıklar ve nakit)
+    const sampleAssets = useMemo(() => [
+        { symbol: 'THYAO', quantity: 350, avgCost: 285.50, type: 'STOCK' },
+        { symbol: 'ASELS', quantity: 500, avgCost: 61.20, type: 'STOCK' },
+        { symbol: 'TUPRS', quantity: 200, avgCost: 165.00, type: 'STOCK' },
+        { symbol: 'TI2', quantity: 25000, avgCost: 0.25, type: 'FUND' },
+    ], []);
+
+    const samplePrices: Record<string, number> = useMemo(() => ({
+        'THYAO': 324.50,
+        'ASELS': 69.80,
+        'TUPRS': 182.40,
+        'TI2': 0.298,
+    }), []);
+
+    const effectiveAssets = myAssets && myAssets.length > 0 ? myAssets : sampleAssets;
+    const effectivePrices = prices && Object.keys(prices).length > 0 ? prices : samplePrices;
+
+    // Portföy dağılımı ve yüzde hesabı
     const { distributionItems, totalValue, activeCount } = useMemo(() => {
         let total = 0;
         const assetMap = new Map<string, { name: string; value: number; type: string }>();
 
-        const activeAssets = myAssets.filter((asset: any) => {
+        const activeAssets = effectiveAssets.filter((asset: any) => {
             const qty = Number(asset.quantity) || 0;
             if (qty <= 0) return false;
             const rawSymbol = asset.symbol ? asset.symbol.toUpperCase().trim() : "";
@@ -48,11 +65,10 @@ export function TopAssetDistributionCard() {
             const isCash = asset.type === 'CASH' || cleanSymbol === 'NAKİT' || cleanSymbol === 'TRY_CASH';
             const currentPrice = isCash
                 ? (asset.avgCost || 1)
-                : (prices[rawSymbol] ?? prices[cleanSymbol] ?? prices[`${cleanSymbol}.IS`] ?? asset.avgCost ?? 0);
+                : (effectivePrices[rawSymbol] ?? effectivePrices[cleanSymbol] ?? prices[`${cleanSymbol}.IS`] ?? asset.avgCost ?? 0);
             return (currentPrice * qty) > 0;
         });
 
-        // Portföydeki aktif varlık türü çeşitliliğini kontrol et
         const distinctTypes = new Set(activeAssets.map((a: any) => {
             const sym = a.symbol ? a.symbol.toUpperCase().trim() : "";
             if (a.type === 'CASH' || sym === 'NAKİT' || sym === 'TRY_CASH') return 'CASH';
@@ -67,7 +83,7 @@ export function TopAssetDistributionCard() {
             const effectiveType = isCash ? 'CASH' : (asset.type || 'STOCK');
             const currentPrice = isCash
                 ? (asset.avgCost || 1)
-                : (prices[rawSymbol] ?? prices[cleanSymbol] ?? prices[`${cleanSymbol}.IS`] ?? asset.avgCost ?? 0);
+                : (effectivePrices[rawSymbol] ?? effectivePrices[cleanSymbol] ?? prices[`${cleanSymbol}.IS`] ?? asset.avgCost ?? 0);
             const val = currentPrice * asset.quantity;
 
             total += val;
@@ -83,35 +99,33 @@ export function TopAssetDistributionCard() {
             }
         });
 
-        const sorted = Array.from(assetMap.values()).filter(a => a.value > 0).sort((a, b) => b.value - a.value);
+        const sorted = Array.from(assetMap.values()).sort((a, b) => b.value - a.value);
 
-        let items: { name: string; value: number; percentage: number; color: string }[] = [];
+        const items: { name: string; value: number; percentage: number; color: string }[] = [];
+        let otherTotal = 0;
 
-        if (sorted.length > 4) {
-            const top4 = sorted.slice(0, 4);
-            const othersValue = sorted.slice(4).reduce((sum, a) => sum + a.value, 0);
+        sorted.forEach((item, index) => {
+            if (index < 4) {
+                const percentage = total > 0 ? (item.value / total) * 100 : 0;
+                items.push({
+                    name: item.name,
+                    value: item.value,
+                    percentage,
+                    color: DISTRIBUTION_COLORS[index % DISTRIBUTION_COLORS.length]
+                });
+            } else {
+                otherTotal += item.value;
+            }
+        });
 
-            items = [
-                ...top4.map((a, idx) => ({
-                    name: a.name,
-                    value: a.value,
-                    percentage: total > 0 ? (a.value / total) * 100 : 0,
-                    color: DISTRIBUTION_COLORS[idx % DISTRIBUTION_COLORS.length]
-                })),
-                {
-                    name: "Diğer",
-                    value: othersValue,
-                    percentage: total > 0 ? (othersValue / total) * 100 : 0,
-                    color: DISTRIBUTION_COLORS[3]
-                }
-            ];
-        } else {
-            items = sorted.map((a, idx) => ({
-                name: a.name,
-                value: a.value,
-                percentage: total > 0 ? (a.value / total) * 100 : 0,
-                color: DISTRIBUTION_COLORS[idx % DISTRIBUTION_COLORS.length]
-            }));
+        if (otherTotal > 0) {
+            const percentage = total > 0 ? (otherTotal / total) * 100 : 0;
+            items.push({
+                name: "Diğer",
+                value: otherTotal,
+                percentage,
+                color: DISTRIBUTION_COLORS[4]
+            });
         }
 
         return {
@@ -119,46 +133,24 @@ export function TopAssetDistributionCard() {
             totalValue: total,
             activeCount: activeAssets.length
         };
-    }, [myAssets, prices]);
-
-    // Donut SVG ölçüleri (Büyütülmüş & Daha Okunaklı)
-    const RADIUS = 38;
-    const CIRCUMFERENCE = 2 * Math.PI * RADIUS; // ~238.76
-
-    if (!isDataLoaded) {
-        return (
-            <div className="bg-[linear-gradient(180deg,#ffffff_0%,#ffffff_55%,#f0f6fe_100%)] border border-slate-200/70 rounded-2xl sm:rounded-3xl p-4 sm:p-5 min-h-[250px] flex flex-col justify-between animate-pulse">
-                <div className="flex items-center justify-between">
-                    <div className="h-5 w-28 bg-slate-100 rounded-lg" />
-                    <div className="h-4 w-4 bg-slate-100 rounded-md" />
-                </div>
-                <div className="flex items-center justify-center my-auto">
-                    <div className="w-28 h-28 rounded-full border-8 border-slate-100" />
-                </div>
-            </div>
-        );
-    }
+    }, [effectiveAssets, effectivePrices]);
 
     const hasData = distributionItems.length > 0 && totalValue > 0;
+
+    const RADIUS = 30;
+    const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
     let cumulativeOffset = 0;
 
     const handleDonutMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+        if (!hasData) return;
         const rect = e.currentTarget.getBoundingClientRect();
-        if (!rect.width || !rect.height) return;
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        const dx = x - 50;
-        const dy = y - 50;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist < 26 || dist > 50 || distributionItems.length === 0) {
-            if (hoveredSymbol !== null) setHoveredSymbol(null);
-            return;
-        }
-
-        let angle = Math.atan2(dx, -dy);
-        if (angle < 0) angle += 2 * Math.PI;
-        const norm = (angle / (2 * Math.PI)) * 100;
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = e.clientX - cx;
+        const dy = e.clientY - cy;
+        let angle = Math.atan2(dy, dx) * (180 / Math.PI);
+        angle = (angle + 90 + 360) % 360;
+        const norm = (angle / 360) * 100;
 
         let cumulativePct = 0;
         for (const item of distributionItems) {
@@ -173,35 +165,35 @@ export function TopAssetDistributionCard() {
     };
 
     return (
-        <div className="bg-[linear-gradient(180deg,#ffffff_0%,#ffffff_55%,#f0f6fe_100%)] border border-slate-200/70 hover:border-blue-200/70 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-xs hover:shadow-sm transition-all duration-300 min-h-[250px] h-full flex flex-col justify-between group">
-            {/* 1. Üst Başlık (Referans Görsel: İkon + Başlık + Sağda Chevron >) */}
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100/80">
+        <div className="bg-white rounded-3xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 min-h-[250px] h-full flex flex-col justify-between group">
+            {/* 1. Üst Başlık */}
+            <div className="flex items-center justify-between pb-2 border-b border-[#1F7A63]/20">
                 <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-md bg-slate-100/80 flex items-center justify-center text-slate-700 shrink-0">
-                        <PieChart className="w-3.5 h-3.5 text-slate-700" />
+                    <div className="w-6 h-6 rounded-lg bg-[#1F7A63]/20 border border-[#1F7A63]/40 flex items-center justify-center text-[#0E1E38] shrink-0">
+                        <PieChart className="w-3.5 h-3.5 text-[#0E1E38]" />
                     </div>
-                    <h3 className="text-xs sm:text-[13px] font-bold text-slate-900 tracking-tight">
+                    <h3 className="text-xs sm:text-[13px] zodiak-subtitle font-[325] text-[#0E1E38] tracking-tight">
                         Varlık Dağılımı
                     </h3>
                 </div>
 
                 <Link
                     href="/dashboard/portfolio?focus=distribution"
-                    className="text-slate-400 hover:text-slate-700 transition-colors p-0.5"
+                    className="text-[#0E1E38]/60 hover:text-[#0E1E38] transition-colors p-0.5"
                     title="Portföy Dağılımını İncele"
                 >
                     <ChevronRight className="w-4 h-4" />
                 </Link>
             </div>
 
-            {/* 2. Orta İçerik: Bir Tık Büyütülmüş Donut Grafik + Okunaklı Liste */}
+            {/* 2. Orta İçerik: Donut Grafik + Liste */}
             {hasData ? (
                 <div className="flex items-center gap-3.5 my-auto py-2">
-                    {/* Büyütülmüş Donut Grafik (Sol) */}
-                    <div className="relative w-28 h-28 sm:w-30 sm:h-30 xl:w-32 xl:h-32 shrink-0 flex items-center justify-center">
+                    {/* Donut Grafik */}
+                    <div className="relative w-20 h-20 sm:w-22 sm:h-22 shrink-0 flex items-center justify-center">
                         <svg
                             viewBox="0 0 100 100"
-                            className="w-full h-full transform -rotate-90 filter drop-shadow-2xs cursor-pointer"
+                            className="w-full h-full transform -rotate-90 filter drop-shadow-xs cursor-pointer"
                             onMouseMove={handleDonutMouseMove}
                             onMouseLeave={() => setHoveredSymbol(null)}
                         >
@@ -231,19 +223,19 @@ export function TopAssetDistributionCard() {
                             })}
                         </svg>
 
-                        {/* Donut İçi Toplam Bilgisi (Büyütülmüş ve Belirgin) */}
+                        {/* Donut İçi Toplam */}
                         <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none px-1">
-                            <span className="text-[11px] font-normal text-slate-400 leading-tight">
+                            <span className="text-[9px] zodiak-desc font-[225] text-[#0E1E38]/70 leading-tight">
                                 Toplam
                             </span>
-                            <span className="text-sm sm:text-[15px] font-black text-slate-900 tracking-tight mt-0.5 truncate max-w-[86px]">
+                            <span className="text-[11px] sm:text-xs zodiak-title font-[500] text-[#0E1E38] tracking-tight mt-0.5 truncate max-w-[65px]">
                                 {formatCurrency(totalValue)}
                             </span>
                         </div>
                     </div>
 
-                    {/* Dağılım Listesi (Sağ - Büyütülmüş Yazılar ve Ferah Satırlar) */}
-                    <div className="flex-1 min-w-0 space-y-2">
+                    {/* Dağılım Listesi */}
+                    <div className="flex-1 min-w-0 space-y-2 pl-1">
                         {distributionItems.map((item) => {
                             const isHovered = hoveredSymbol === item.name;
                             return (
@@ -251,21 +243,21 @@ export function TopAssetDistributionCard() {
                                     key={item.name}
                                     onMouseEnter={() => setHoveredSymbol(item.name)}
                                     onMouseLeave={() => setHoveredSymbol(null)}
-                                    className={`flex items-center justify-between gap-1.5 py-0.5 px-1 rounded transition-colors cursor-pointer ${
-                                        isHovered ? "bg-slate-50" : ""
+                                    className={`flex items-center justify-between gap-1.5 py-0.5 px-1.5 rounded-lg transition-colors cursor-pointer ${
+                                        isHovered ? "bg-[#1F7A63]/15" : ""
                                     }`}
                                 >
                                     <div className="flex items-center gap-2 min-w-0">
                                         <div
-                                            className="w-2.5 h-2.5 rounded-full shrink-0"
+                                            className="w-2.5 h-2.5 rounded-full shrink-0 shadow-xs"
                                             style={{ backgroundColor: item.color }}
                                         />
-                                        <span className="text-xs sm:text-[13px] font-semibold text-slate-800 truncate max-w-[85px] sm:max-w-[110px]">
+                                        <span className="text-xs zodiak-subtitle font-[325] text-[#0E1E38] truncate flex-1">
                                             {item.name}
                                         </span>
                                     </div>
 
-                                    <span className="text-xs sm:text-[13px] font-bold text-slate-900 tabular-nums ml-auto shrink-0">
+                                    <span className="text-xs font-numbers font-[500] text-[#0E1E38] tabular-nums ml-auto shrink-0">
                                         %{item.percentage.toFixed(1).replace('.', ',')}
                                     </span>
                                 </div>
@@ -276,11 +268,11 @@ export function TopAssetDistributionCard() {
             ) : (
                 /* Boş Varlık Durumu */
                 <div className="flex flex-col items-center justify-center py-4 gap-1 text-center my-auto">
-                    <div className="w-8 h-8 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400">
-                        <Layers className="w-4 h-4 text-slate-300" />
+                    <div className="w-8 h-8 rounded-xl bg-[#1F7A63]/10 border border-[#1F7A63]/30 flex items-center justify-center text-[#0E1E38]/60">
+                        <Layers className="w-4 h-4" />
                     </div>
-                    <p className="text-xs font-semibold text-slate-600">Henüz kayıtlı varlık yok</p>
-                    <p className="text-[10px] text-slate-400 max-w-[180px]">
+                    <p className="text-xs zodiak-subtitle font-[325] text-[#0E1E38]">Henüz kayıtlı varlık yok</p>
+                    <p className="text-[10px] zodiak-desc font-[225] text-[#0E1E38]/60 max-w-[180px]">
                         Portföyünüze varlık eklediğinizde dağılım burada listelenecektir.
                     </p>
                 </div>
@@ -288,4 +280,3 @@ export function TopAssetDistributionCard() {
         </div>
     );
 }
-

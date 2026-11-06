@@ -71,7 +71,7 @@ export function StockLogo({
   return (
     <div
       className={cn(
-        "rounded-full shrink-0 aspect-square flex items-center justify-center font-black text-white bg-gradient-to-br from-[#00008B] to-blue-600 shadow-xs select-none",
+        "rounded-full shrink-0 aspect-square flex items-center justify-center font-black text-white bg-gradient-to-br from-[#142B50] to-blue-600 shadow-xs select-none",
         className
       )}
       title={clean}

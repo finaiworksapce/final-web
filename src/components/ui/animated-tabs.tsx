@@ -47,7 +47,7 @@ export const AnimatedTabs = ({
             {activeTab === tab.id && (
               <motion.div
                 layoutId="active-tab"
-                className={cn("absolute inset-0 bg-[#00008B] rounded-xl shadow-sm", activeTabClassName)}
+                className={cn("absolute inset-0 bg-[#142B50] rounded-xl shadow-sm", activeTabClassName)}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
               />
             )}

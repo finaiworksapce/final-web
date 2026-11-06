@@ -207,8 +207,8 @@ export function TradingViewStockChart({
 
     if (chartType === "area") {
       const areaSeries = chart.addSeries(AreaSeries, {
-        topColor: "rgba(0, 0, 139, 0.25)",
-        bottomColor: "rgba(0, 0, 139, 0.00)",
+        topColor: "rgba(20, 43, 80, 0.25)",
+        bottomColor: "rgba(20, 43, 80, 0.00)",
         lineColor: "#00008B",
         lineWidth: 2,
         crosshairMarkerVisible: true,
@@ -244,7 +244,7 @@ export function TradingViewStockChart({
 
     // Add Volume Histogram Series
     const volumeSeries = chart.addSeries(HistogramSeries, {
-      color: "rgba(0, 0, 139, 0.15)",
+      color: "rgba(20, 43, 80, 0.15)",
       priceFormat: { type: "volume" },
       priceScaleId: ""
     });
@@ -345,7 +345,7 @@ export function TradingViewStockChart({
               onClick={() => setChartType("area")}
               className={cn(
                 "px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 text-[11px]",
-                chartType === "area" ? "bg-white text-[#00008B] shadow-2xs font-black" : "text-slate-500 hover:text-slate-800"
+                chartType === "area" ? "bg-white text-[#142B50] shadow-2xs font-black" : "text-slate-500 hover:text-slate-800"
               )}
               title="Çizgi Grafik"
             >
@@ -356,7 +356,7 @@ export function TradingViewStockChart({
               onClick={() => setChartType("candle")}
               className={cn(
                 "px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 text-[11px]",
-                chartType === "candle" ? "bg-white text-[#00008B] shadow-2xs font-black" : "text-slate-500 hover:text-slate-800"
+                chartType === "candle" ? "bg-white text-[#142B50] shadow-2xs font-black" : "text-slate-500 hover:text-slate-800"
               )}
               title="Mum Grafik (OHLC)"
             >
@@ -375,7 +375,7 @@ export function TradingViewStockChart({
                 className={cn(
                   "px-2.5 py-1 rounded-xl text-xs font-black transition-all border whitespace-nowrap",
                   activeTimeframe === tf.id
-                    ? "bg-[#00008B] text-white border-[#00008B] shadow-xs scale-105"
+                    ? "bg-[#142B50] text-white border-[#78B8F5] shadow-xs scale-105"
                     : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-slate-900"
                 )}
               >
@@ -391,7 +391,7 @@ export function TradingViewStockChart({
         {hoveredData ? (
           <div className="flex items-center gap-4 flex-wrap w-full justify-between">
             <span className="text-slate-500 font-extrabold text-[11px] flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-[#00008B]" />
+              <Calendar className="w-3.5 h-3.5 text-[#142B50]" />
               {hoveredData.time}
             </span>
             <div className="flex items-center gap-3 text-slate-800 text-[11px]">
@@ -402,7 +402,7 @@ export function TradingViewStockChart({
                   <span>D: <strong className="text-rose-700">{hoveredData.low?.toFixed(2)}</strong></span>
                 </>
               )}
-              <span>Kapanış: <strong className="text-[#00008B] font-black">{hoveredData.close?.toFixed(2)} {currency}</strong></span>
+              <span>Kapanış: <strong className="text-[#142B50] font-black">{hoveredData.close?.toFixed(2)} {currency}</strong></span>
               {hoveredData.volume !== undefined && hoveredData.volume > 0 && (
                 <span className="text-slate-400">Hacim: <strong className="text-slate-600">{formatTurkishVolume(hoveredData.volume)}</strong></span>
               )}
@@ -414,7 +414,7 @@ export function TradingViewStockChart({
               Detaylı tarih ve OHLC değerlerini görmek için grafiğin üzerine gelin
             </span>
             {displayPrice > 0 && (
-              <span className="text-xs font-black text-[#00008B]">
+              <span className="text-xs font-black text-[#142B50]">
                 Güncel: {displayPrice.toFixed(2)} {currency}
               </span>
             )}
@@ -426,8 +426,8 @@ export function TradingViewStockChart({
       <div className="relative w-full h-[340px] bg-white rounded-2xl overflow-hidden">
         {loading && (
           <div className="absolute inset-0 bg-white/80 backdrop-blur-xs z-20 flex flex-col items-center justify-center gap-2">
-            <RefreshCw className="w-6 h-6 text-[#00008B] animate-spin" />
-            <span className="text-xs font-black text-[#00008B]">BİST Canlı Grafik Verileri Yükleniyor...</span>
+            <RefreshCw className="w-6 h-6 text-[#142B50] animate-spin" />
+            <span className="text-xs font-black text-[#142B50]">BİST Canlı Grafik Verileri Yükleniyor...</span>
           </div>
         )}
 
@@ -441,7 +441,7 @@ export function TradingViewStockChart({
             {onRetry && (
               <button
                 onClick={onRetry}
-                className="px-4 py-2 bg-[#00008B] hover:bg-blue-800 text-white rounded-xl text-xs font-black shadow-sm transition-all"
+                className="px-4 py-2 bg-[#142B50] hover:bg-blue-800 text-white rounded-xl text-xs font-black shadow-sm transition-all"
               >
                 Yeniden Deneyin
               </button>

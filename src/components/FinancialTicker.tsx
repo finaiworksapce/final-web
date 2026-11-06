@@ -10,7 +10,6 @@ interface Quote {
     shortName?: string;
 }
 
-// Sabit 5 Ana Makro Varlık (Kullanıcı tarafından değiştirilemez)
 const FIXED_SYMBOLS = ["XU100.IS", "TRY=X", "EURTRY=X", "ALTIN", "BTC-TRY"];
 
 const SYMBOL_NAMES: Record<string, string> = {
@@ -27,7 +26,6 @@ export function FinancialTicker() {
     const [data, setData] = useState<Quote[]>([]);
     const [loading, setLoading] = useState(true);
 
-    // Canlı Piyasa Verilerini Çekme (60 saniyede bir otomatik güncelleme)
     useEffect(() => {
         async function fetchData() {
             try {
@@ -44,21 +42,21 @@ export function FinancialTicker() {
         }
 
         fetchData();
-        const interval = setInterval(fetchData, 60000); // 1 dakikada bir otomatik yenile
+        const interval = setInterval(fetchData, 60000);
         return () => clearInterval(interval);
     }, []);
 
     if (loading && data.length === 0) {
         return (
-            <div className="w-full h-12 flex items-center justify-center space-x-4 bg-slate-50 border-b border-slate-100 backdrop-blur-sm">
-                <Activity className="w-4 h-4 text-[#00008B] animate-pulse" />
-                <span className="text-xs font-bold text-slate-500">Piyasa verileri yükleniyor...</span>
+            <div className="w-full h-12 flex items-center justify-center space-x-4 bg-[#1F7A63]/10 border-b border-[#1F7A63]/30 backdrop-blur-sm">
+                <Activity className="w-4 h-4 text-[#0E1E38] animate-pulse" />
+                <span className="text-xs zodiak-subtitle font-[325] text-[#0E1E38]/70">Piyasa verileri yükleniyor...</span>
             </div>
         );
     }
 
     return (
-        <div className="w-full bg-slate-50 border-b border-slate-100 backdrop-blur-md relative h-10 md:h-12 flex items-center overflow-x-auto scrollbar-none">
+        <div className="w-full bg-[#1F7A63]/10 border-b border-[#1F7A63]/30 backdrop-blur-md relative h-10 md:h-12 flex items-center overflow-x-auto scrollbar-none">
             <div className="flex items-center justify-start md:justify-evenly px-4 py-2 min-w-max md:w-full gap-6 md:gap-2">
                 {FIXED_SYMBOLS.map((sym, index) => {
                     const quote = data.find(q => 
@@ -75,19 +73,18 @@ export function FinancialTicker() {
                     const name = SYMBOL_NAMES[sym] || quote.shortName || sym;
 
                     let price = quote.regularMarketPrice;
-                    // ONS Altını Gram Altına Çevir
                     if (sym === "XAUTRY=X" || (sym === "ALTIN" && price > 50000)) {
                         price = price / 31.1034768;
                     }
 
                     return (
                         <div key={sym} className="flex items-center gap-2">
-                            {index > 0 && <div className="w-px h-4 bg-slate-200 -ml-1 hidden md:block" />}
-                            <span className="text-[10px] font-bold text-[#00008B]/50 whitespace-nowrap uppercase tracking-widest">{name}</span>
-                            <span className="text-xs md:text-sm font-black text-[#00008B] whitespace-nowrap">
+                            {index > 0 && <div className="w-px h-4 bg-[#1F7A63]/40 -ml-1 hidden md:block" />}
+                            <span className="text-[10px] zodiak-subtitle font-[325] text-[#0E1E38]/70 whitespace-nowrap uppercase tracking-widest">{name}</span>
+                            <span className="text-xs md:text-sm font-numbers font-[500] text-[#0E1E38] whitespace-nowrap">
                                 {price > 0 ? `₺${price.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'Canlı...'}
                             </span>
-                            <div className={`flex items-center text-[10px] md:text-xs font-bold whitespace-nowrap ${isPositive ? "text-emerald-600" : "text-red-600"}`}>
+                            <div className={`flex items-center text-[10px] md:text-xs font-numbers font-[500] whitespace-nowrap ${isPositive ? "text-emerald-700" : "text-rose-700"}`}>
                                 {isPositive ? <ArrowUp className="w-3 h-3 mr-0.5" /> : <ArrowDown className="w-3 h-3 mr-0.5" />}
                                 %{Math.abs(quote.regularMarketChangePercent || 0).toFixed(2)}
                             </div>

@@ -51,7 +51,7 @@ export const GradientCard = ({
           height: "300px",
           transformStyle: "preserve-3d",
           backgroundColor: "#ffffff",
-          boxShadow: isHovered ? "0 20px 40px -10px rgba(0, 0, 139, 0.2)" : "0 10px 20px -5px rgba(0, 0, 139, 0.1)",
+          boxShadow: isHovered ? "0 20px 40px -10px rgba(20, 43, 80, 0.2)" : "0 10px 20px -5px rgba(20, 43, 80, 0.1)",
         }}
         animate={{
           y: isHovered ? -5 : 0,
@@ -77,7 +77,7 @@ export const GradientCard = ({
         <motion.div
           className="absolute bottom-0 left-0 right-0 h-2/3 z-20"
           style={{
-            background: `radial-gradient(circle at bottom center, rgba(0, 0, 139, 0.15) -20%, rgba(0, 0, 139, 0) 70%)`,
+            background: `radial-gradient(circle at bottom center, rgba(20, 43, 80, 0.15) -20%, rgba(20, 43, 80, 0) 70%)`,
             filter: "blur(30px)",
           }}
           animate={{ opacity: isHovered ? 1 : 0.5 }}
@@ -87,10 +87,10 @@ export const GradientCard = ({
         <motion.div
           className="absolute bottom-0 left-0 right-0 h-[1.5px] z-25"
           style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(0, 0, 139, 0.3) 50%, transparent 100%)",
+            background: "linear-gradient(90deg, transparent 0%, rgba(20, 43, 80, 0.3) 50%, transparent 100%)",
           }}
           animate={{
-            boxShadow: isHovered ? "0 0 15px 2px rgba(0, 0, 139, 0.2)" : "0 0 5px 0px rgba(0, 0, 139, 0.1)"
+            boxShadow: isHovered ? "0 0 15px 2px rgba(20, 43, 80, 0.2)" : "0 0 5px 0px rgba(20, 43, 80, 0.1)"
           }}
         />
 
@@ -98,14 +98,14 @@ export const GradientCard = ({
         <div className="relative flex flex-col h-full p-5 z-40 justify-between">
           <div className="space-y-4">
             <div className="flex items-center">
-                <span className="text-[10px] font-black text-[#00008B] uppercase tracking-[0.25em] opacity-30">Gündem</span>
+                <span className="text-[10px] font-black text-[#142B50] uppercase tracking-[0.25em] opacity-30">Gündem</span>
             </div>
 
             <div className="space-y-2">
-                <h3 className="text-[14px] font-black text-[#00008B] line-clamp-3 leading-[1.3] tracking-tight">
+                <h3 className="text-[14px] font-black text-[#142B50] line-clamp-3 leading-[1.3] tracking-tight">
                 {title}
                 </h3>
-                <p className="text-[11px] text-[#00008B]/60 line-clamp-6 leading-relaxed font-medium italic">
+                <p className="text-[11px] text-[#142B50]/60 line-clamp-6 leading-relaxed font-medium italic">
                 {aiSummary || description.replace(/<[^>]*>/g, '').trim()}
                 </p>
             </div>
@@ -114,7 +114,7 @@ export const GradientCard = ({
           <a
             href={`/dashboard/news?url=${encodeURIComponent(link)}`}
             onClick={(e) => e.stopPropagation()}
-            className="flex items-center text-[#00008B] text-[10px] font-bold group mt-2 hover:translate-x-1 transition-transform"
+            className="flex items-center text-[#142B50] text-[10px] font-bold group mt-2 hover:translate-x-1 transition-transform"
           >
             Haberin Devamı
             <motion.svg className="ml-1 w-3 h-3" viewBox="0 0 16 16" fill="none" animate={{ x: isHovered ? 3 : 0 }}>

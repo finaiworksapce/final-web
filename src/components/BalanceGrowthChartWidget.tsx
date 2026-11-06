@@ -146,17 +146,17 @@ export function BalanceGrowthChartWidget() {
                 {/* Header */}
                 <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-1.5 sm:gap-3">
-                        <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg sm:rounded-2xl bg-[#00008B]/5 border border-[#00008B]/10 flex items-center justify-center shrink-0">
-                            <LineChart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#00008B]" />
+                        <div className="w-6 h-6 sm:w-9 sm:h-9 rounded-lg sm:rounded-2xl bg-[#78B8F5]/15 border border-[#78B8F5]/10 flex items-center justify-center shrink-0">
+                            <LineChart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#142B50]" />
                         </div>
                         <div>
-                            <h3 className="text-xs sm:text-base font-black text-[#00008B] tracking-tight truncate">Varlık Gelişimi</h3>
+                            <h3 className="text-xs sm:text-base font-black text-[#142B50] tracking-tight truncate">Varlık Gelişimi</h3>
                             <p className="text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest hidden sm:block">Günlük Kapanış</p>
                         </div>
                     </div>
 
                     {/* Tüm Günler Etiketi */}
-                    <div className="flex items-center gap-1 text-[8px] sm:text-[10px] font-extrabold text-[#00008B] bg-[#00008B]/5 px-2 py-0.5 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-2xl border border-[#00008B]/10">
+                    <div className="flex items-center gap-1 text-[8px] sm:text-[10px] font-extrabold text-[#142B50] bg-[#78B8F5]/15 px-2 py-0.5 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-2xl border border-[#78B8F5]/10">
                         <span>7 Gün</span>
                     </div>
                 </div>
@@ -164,8 +164,8 @@ export function BalanceGrowthChartWidget() {
                 {/* --- Yeni Kullanıcı Durumu --- */}
                 {isNewUser && (
                     <div className="flex flex-col items-center justify-center py-6 gap-2">
-                        <div className="w-10 h-10 rounded-2xl bg-[#00008B]/5 border border-[#00008B]/10 flex items-center justify-center">
-                            <TrendingUp className="w-5 h-5 text-[#00008B]/40" />
+                        <div className="w-10 h-10 rounded-2xl bg-[#78B8F5]/15 border border-[#78B8F5]/10 flex items-center justify-center">
+                            <TrendingUp className="w-5 h-5 text-[#142B50]/40" />
                         </div>
                         <div className="text-center max-w-xs">
                             <p className="text-xs font-black text-slate-700">Grafik Başlıyor</p>
@@ -177,7 +177,7 @@ export function BalanceGrowthChartWidget() {
                 {/* --- Yüklenme Durumu --- */}
                 {!isNewUser && loading && (
                     <div className="flex items-center justify-center h-36 sm:h-48">
-                        <div className="w-5 h-5 border-2 border-[#00008B] border-t-transparent rounded-full animate-spin" />
+                        <div className="w-5 h-5 border-2 border-[#78B8F5] border-t-transparent rounded-full animate-spin" />
                     </div>
                 )}
 
@@ -199,7 +199,7 @@ export function BalanceGrowthChartWidget() {
                                 Değişim
                             </span>
                             <div className="flex items-center gap-1 sm:gap-2 mt-0.5">
-                                <span className="text-sm sm:text-2xl font-black text-[#00008B] truncate">
+                                <span className="text-sm sm:text-2xl font-black text-[#142B50] truncate">
                                     ₺{latestBalance.toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                                 </span>
                                 <span className={`flex items-center text-[9px] sm:text-xs font-black px-1 sm:px-2 py-0.5 rounded border ${
@@ -250,7 +250,7 @@ export function BalanceGrowthChartWidget() {
                                     color:           '#ffffff',
                                     fontSize:        '10px',
                                     fontWeight:      'bold',
-                                    boxShadow:       '0 10px 25px -5px rgba(0, 0, 139, 0.3)'
+                                    boxShadow:       '0 10px 25px -5px rgba(20, 43, 80, 0.3)'
                                 }}
                                 labelStyle={{ color: '#ffffff', fontWeight: 'bold', marginBottom: 2 }}
                                 itemStyle={{ color: '#ffffff' }}

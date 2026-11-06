@@ -66,7 +66,7 @@ export const BehavioralTest: React.FC<BehavioralTestProps> = ({ onFinish }) => {
     return (
         <div className="w-full max-w-4xl mx-auto bg-white rounded-[40px] border border-slate-100 shadow-2xl overflow-hidden">
             {/* High Stakes Header */}
-            <div className="bg-[#00008B] p-8 text-white flex justify-between items-center relative overflow-hidden">
+            <div className="bg-[#142B50] p-8 text-white flex justify-between items-center relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-full bg-white/5 skew-x-[-20deg] translate-x-10"></div>
                 
                 <div className="flex items-center gap-4 relative z-10">
@@ -127,7 +127,7 @@ export const BehavioralTest: React.FC<BehavioralTestProps> = ({ onFinish }) => {
                     {!isPlaying && !result && (
                         <button 
                             onClick={() => setIsPlaying(true)}
-                            className="w-full py-8 bg-[#00008B] text-white rounded-[24px] font-black uppercase tracking-widest text-lg hover:scale-[1.02] active:scale-95 transition-all shadow-2xl flex items-center justify-center gap-3"
+                            className="w-full py-8 bg-[#142B50] text-white rounded-[24px] font-black uppercase tracking-widest text-lg hover:scale-[1.02] active:scale-95 transition-all shadow-2xl flex items-center justify-center gap-3"
                         >
                             <Brain className="w-6 h-6" /> TESTİ BAŞLAT (ZATEN İÇERİDESİNİZ)
                         </button>

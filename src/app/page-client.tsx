@@ -46,7 +46,7 @@ export default function HomeClient() {
       <div className="min-h-screen w-full bg-white flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Image src="/logo.png" alt="FinAi Logo" width={64} height={64} className="animate-pulse object-contain" priority />
-          <p className="text-sm font-semibold text-[#00008B] tracking-wide">Yönlendiriliyorsunuz...</p>
+          <p className="text-sm font-semibold text-[#142B50] tracking-wide">Yönlendiriliyorsunuz...</p>
         </div>
       </div>
     );
@@ -71,7 +71,7 @@ export default function HomeClient() {
       quote: "TEFAS fonlarını kolayca analiz edip portföyüme ekliyorum. Arayüzü çok sade ve kullanışlı.",
       tags: [{ text: 'Bireysel', type: 'featured' as const }, { text: 'TEFAS', type: 'default' as const }],
       stats: [{ icon: Brain, text: 'AI Asistan' }],
-      avatarGradient: 'linear-gradient(135deg, #0284c7, #0369a1)',
+      avatarGradient: 'linear-gradient(135deg, #78B8F5, #142B50)',
     },
     {
       id: 3,
@@ -81,7 +81,7 @@ export default function HomeClient() {
       quote: "AI asistan sayesinde korelasyon analizlerimi hızlıca yapıp portföyümü dengeliyorum.",
       tags: [{ text: 'Strateji', type: 'featured' as const }, { text: 'Korelasyon', type: 'default' as const }],
       stats: [{ icon: Target, text: 'Verimli' }],
-      avatarGradient: 'linear-gradient(135deg, #4338ca, #3730a3)',
+      avatarGradient: 'linear-gradient(135deg, #142B50, #2E5894)',
     },
     {
       id: 4,
@@ -101,7 +101,7 @@ export default function HomeClient() {
       quote: "KAP ve piyasa haberlerini yapay zeka süzgecinden geçirip anında bildirmesi harika bir zaman kazancı.",
       tags: [{ text: 'Anlık Haber', type: 'featured' as const }, { text: 'KAP', type: 'default' as const }],
       stats: [{ icon: Zap, text: 'Hızlı' }],
-      avatarGradient: 'linear-gradient(135deg, #1d4ed8, #3b82f6)',
+      avatarGradient: 'linear-gradient(135deg, #78B8F5, #2E5894)',
     },
     {
       id: 6,
@@ -111,7 +111,7 @@ export default function HomeClient() {
       quote: "Kişiye özel risk testi ile yatırım karakterimi netleştirip kendime en uygun varlık dağılımını keşfettim.",
       tags: [{ text: 'Risk Testi', type: 'featured' as const }, { text: 'Karakter', type: 'default' as const }],
       stats: [{ icon: Users, text: 'Kişisel' }],
-      avatarGradient: 'linear-gradient(135deg, #312e81, #4338ca)',
+      avatarGradient: 'linear-gradient(135deg, #142B50, #78B8F5)',
     },
   ];
 
@@ -149,7 +149,7 @@ export default function HomeClient() {
   ];
 
   return (
-    <div ref={containerRef} className="min-h-screen w-full bg-white text-slate-800 relative font-sans overflow-x-hidden">
+    <div ref={containerRef} className="min-h-screen w-full bg-white text-slate-800 relative font-zodiak overflow-x-hidden">
       
       {/* 
           FULL WHITE BACKGROUND (Clean)
@@ -165,6 +165,7 @@ export default function HomeClient() {
         <div className="min-h-screen flex flex-col justify-between pt-20 sm:pt-24 pb-4 sm:pb-6 relative w-full overflow-hidden">
           
           {/* HERO SECTION */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] max-w-full h-[400px] bg-[#78B8F5]/20 blur-[120px] rounded-full pointer-events-none -z-0" />
           <section
             id="hero"
             className="my-auto w-full flex flex-col justify-center relative py-4 sm:py-6"
@@ -178,13 +179,13 @@ export default function HomeClient() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-                  className="font-[family-name:var(--font-outfit)] text-[65px] sm:text-[90px] md:text-[120px] lg:text-[135px] leading-[1.0] font-black tracking-tight text-[#00008B] py-2 sm:py-4 relative flex justify-center items-center w-full mx-auto"
+                  className="zodiak-title text-[65px] sm:text-[90px] md:text-[120px] lg:text-[135px] leading-[1.0] tracking-tight text-[#142B50] py-2 sm:py-4 relative flex justify-center items-center w-full mx-auto"
                 >
                   <span className="relative inline-block z-10">
-                    <span className="text-[#00008B] px-2 font-black">
+                    <span className="text-[#142B50] px-2 zodiak-title">
                       FinAi
                     </span>
-                    <svg className="absolute w-full h-2 sm:h-3 -bottom-1 left-0 text-[#00008B] opacity-80" viewBox="0 0 100 10" preserveAspectRatio="none">
+                    <svg className="absolute w-full h-2 sm:h-3 -bottom-1 left-0 text-[#78B8F5] opacity-100" viewBox="0 0 100 10" preserveAspectRatio="none">
                       <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="6" fill="transparent" />
                     </svg>
                   </span>
@@ -195,9 +196,9 @@ export default function HomeClient() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.2 }}
-                  className="font-sans text-base sm:text-xl md:text-2xl text-[#00008B]/80 max-w-3xl mx-auto leading-relaxed font-medium mt-8 sm:mt-12 md:mt-14 px-4 sm:px-0 tracking-normal"
+                  className="zodiak-subtitle text-base sm:text-xl md:text-2xl text-[#142B50]/80 max-w-3xl mx-auto leading-relaxed mt-8 sm:mt-12 md:mt-14 px-4 sm:px-0 tracking-normal"
                 >
-                  Tüm Yatırımlarınızı Yapay Zeka Gücüyle Tek Ekrandan Yönetin, <b className="text-[#00008B] font-bold">Portföyünüzün Tam Kontrolünü</b> Elinize Alın.
+                  Tüm Yatırımlarınızı Yapay Zeka Gücüyle Tek Ekrandan Yönetin, <b className="text-[#142B50] zodiak-title">Portföyünüzün Tam Kontrolünü</b> Elinize Alın.
                 </motion.p>
 
                 {/* CTAs */}
@@ -207,11 +208,11 @@ export default function HomeClient() {
                   transition={{ duration: 0.7, delay: 0.3 }}
                   className="flex md:hidden flex-row gap-3 justify-center items-center pt-4 sm:pt-6"
                 >
-                    <Link href="/login?tab=register" className="flex items-center justify-center gap-1.5 px-6 py-3 bg-[#00008B] hover:bg-[#0b2d82] text-white font-bold rounded-full shadow-lg transition-all text-sm tracking-wide">
+                    <Link href="/login?tab=register" className="flex items-center justify-center gap-1.5 px-6 py-3 bg-[#142B50] hover:bg-[#102240] text-white zodiak-subtitle rounded-full shadow-lg transition-all text-sm tracking-wide">
                         Ücretsiz Dene
                         <ArrowRight className="w-4 h-4" />
                     </Link>
-                    <Link href="/login" className="flex items-center justify-center px-6 py-3 bg-white hover:bg-slate-50 text-[#00008B] font-bold rounded-full border border-slate-200 hover:border-[#00008B] shadow-sm transition-all text-sm tracking-wide">
+                    <Link href="/login" className="flex items-center justify-center px-6 py-3 bg-[#78B8F5]/15 hover:bg-[#78B8F5]/25 text-[#142B50] zodiak-subtitle rounded-full border-2 border-[#78B8F5] shadow-sm transition-all text-sm tracking-wide">
                         Giriş Yap
                     </Link>
                 </motion.div>

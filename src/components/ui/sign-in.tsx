@@ -40,7 +40,7 @@ const TypingText = ({ text }: { text: string }) => {
   
     return (
       <motion.div
-        className="flex overflow-hidden text-3xl md:text-5xl font-bold tracking-tighter text-[#00008B]"
+        className="flex overflow-hidden text-3xl md:text-5xl tracking-tighter text-[#142B50] zodiak-title"
         variants={container}
         initial="hidden"
         animate="visible"
@@ -53,7 +53,7 @@ const TypingText = ({ text }: { text: string }) => {
         <motion.div
           animate={{ opacity: [0, 1, 0] }}
           transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-          className="ml-1 w-1 h-8 md:h-12 bg-blue-600 rounded-full"
+          className="ml-1 w-1 h-8 md:h-12 bg-[#78B8F5] rounded-full"
         />
       </motion.div>
     );
@@ -95,19 +95,19 @@ interface SignInPageProps {
 // --- SUB-COMPONENTS ---
 
 const GlassInputWrapper = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-  <div className={`rounded-2xl border border-border bg-foreground/5 backdrop-blur-sm transition-all duration-300 focus-within:border-blue-500/70 focus-within:bg-blue-500/10 ${className}`}>
+  <div className={`rounded-2xl border border-[#78B8F5]/30 bg-white backdrop-blur-sm transition-all duration-300 focus-within:border-[#78B8F5] focus-within:ring-2 focus-within:ring-[#78B8F5]/30 focus-within:bg-[#78B8F5]/5 ${className}`}>
     {children}
   </div>
 );
 
 const FeatureCard = ({ feature, delay }: { feature: FeatureItem, delay: string }) => (
-  <div className={`animate-testimonial ${delay} flex items-start gap-3 rounded-[20px] bg-white shadow-[0_10px_30px_rgba(0,0,139,0.08)] border border-slate-100 p-4 w-full h-full`}>
-    <div className="flex-shrink-0 w-10 h-10 rounded-[14px] bg-[#00008B]/5 border border-[#00008B]/10 flex items-center justify-center text-[#00008B]">
+  <div className={`animate-testimonial ${delay} flex items-start gap-3 rounded-[20px] bg-white shadow-[0_10px_30px_rgba(20, 43, 80, 0.08)] border border-slate-100 p-4 w-full h-full`}>
+    <div className="flex-shrink-0 w-10 h-10 rounded-[14px] bg-[#78B8F5]/15 border border-[#78B8F5]/10 flex items-center justify-center text-[#142B50]">
       {feature.icon}
     </div>
     <div className="text-left flex-1 min-w-0 pr-1">
-      <p className="font-bold text-[#00008B] text-[13px] leading-tight mb-1 truncate">{feature.title}</p>
-      <p className="text-[#00008B]/80 font-medium text-[11px] leading-snug line-clamp-3">{feature.description}</p>
+      <p className="zodiak-subtitle text-[#142B50] text-[14px] leading-tight mb-1 truncate">{feature.title}</p>
+      <p className="text-[#142B50]/80 zodiak-desc text-[12px] leading-snug line-clamp-3">{feature.description}</p>
     </div>
   </div>
 );
@@ -115,7 +115,7 @@ const FeatureCard = ({ feature, delay }: { feature: FeatureItem, delay: string }
 // --- MAIN COMPONENT ---
 
 export const SignInPage: React.FC<SignInPageProps> = ({
-  title = <span className="font-light text-foreground tracking-tighter">FinAi'ye Hoş Geldiniz</span>,
+  title = <span className="zodiak-title text-foreground tracking-tighter">FinAi'ye Hoş Geldiniz</span>,
   description = "Hesabınıza giriş yapın ve yapay zeka destekli yatırım yolculuğunuza devam edin.",
   heroImageSrc,
   features = [],
@@ -246,52 +246,52 @@ export const SignInPage: React.FC<SignInPageProps> = ({
   };
 
   return (
-    <div className="min-h-[100dvh] flex flex-col md:flex-row font-sans w-full bg-background overflow-hidden relative">
+    <div className="min-h-[100dvh] flex flex-col md:flex-row font-zodiak w-full bg-background overflow-hidden relative">
       <Link href="/" className="absolute top-7 left-7 z-50 group flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-all duration-300">
         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-        <span className="text-[10px] font-bold uppercase tracking-[0.15em] opacity-0 group-hover:opacity-100 transition-opacity">Ana Sayfa</span>
+        <span className="text-[10px] zodiak-subtitle uppercase tracking-[0.15em] opacity-0 group-hover:opacity-100 transition-opacity">Ana Sayfa</span>
       </Link>
       {/* Light Gradient effect for FinAi branding */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none md:hidden">
-          <div className="absolute top-[-10%] left-[-10%] w-[70vw] h-[70vw] rounded-full bg-blue-400/20 blur-[120px] mix-blend-multiply" />
-          <div className="absolute top-[20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-indigo-300/20 blur-[130px] mix-blend-multiply" />
+          <div className="absolute top-[-10%] left-[-10%] w-[70vw] h-[70vw] rounded-full bg-[#78B8F5]/25 blur-[120px] mix-blend-multiply" />
+          <div className="absolute top-[20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-[#78B8F5]/15 blur-[130px] mix-blend-multiply" />
       </div>
 
       {/* Left column: sign-in form */}
       <section className="flex-1 flex items-center justify-center p-8 z-10 relative bg-background/80 backdrop-blur-xl md:bg-transparent md:backdrop-blur-none">
         <div className="w-full max-w-md">
           <div className="flex flex-col gap-6">
-            <h1 className="animate-element animate-delay-100 text-4xl md:text-5xl font-semibold leading-tight">
-              {isForgotPasswordMode ? <span className="font-light text-foreground tracking-tighter">Şifremi Unuttum</span> : isVerifyingOtp ? <span className="font-light text-foreground tracking-tighter">E-postanızı Doğrulayın</span> : isLoginMode ? title : <span className="font-light text-foreground tracking-tighter">Ayrıcalığa Katılın</span>}
+            <h1 className="animate-element animate-delay-100 text-4xl md:text-5xl leading-tight zodiak-title">
+              {isForgotPasswordMode ? <span className="zodiak-title text-foreground tracking-tighter">Şifremi Unuttum</span> : isVerifyingOtp ? <span className="zodiak-title text-foreground tracking-tighter">E-postanızı Doğrulayın</span> : isLoginMode ? title : <span className="zodiak-title text-foreground tracking-tighter">Ayrıcalığa Katılın</span>}
             </h1>
-            <p className="animate-element animate-delay-200 text-muted-foreground">
+            <p className="animate-element animate-delay-200 text-muted-foreground zodiak-desc text-base">
               {isForgotPasswordMode ? "Yeni şifre oluşturmak için kayıtlı e-posta adresinizi girin." : isVerifyingOtp ? "E-posta adresinize gönderilen 8 haneli güvenlik kodunu girin." : isLoginMode ? description : "Yeni nesil yapay zeka asistanınla hemen tanış."}
             </p>
 
             {isForgotPasswordMode ? (
               <form key="forgot-password" className="space-y-5" onSubmit={onForgotPassword}>
                 <div className="animate-element animate-delay-200">
-                  <label className="text-sm font-medium text-muted-foreground mb-1 block">Kayıtlı E-Posta Adresi</label>
+                  <label className="text-sm zodiak-subtitle text-muted-foreground mb-1 block">Kayıtlı E-Posta Adresi</label>
                   <GlassInputWrapper>
-                    <input name="email" type="email" required placeholder="ornek@mail.com" className="w-full bg-transparent text-sm p-4 rounded-2xl focus:outline-none" />
+                    <input name="email" type="email" required placeholder="ornek@mail.com" className="w-full bg-transparent text-sm p-4 rounded-2xl focus:outline-none zodiak-desc" />
                   </GlassInputWrapper>
                 </div>
-                <button type="submit" disabled={isLoading} className="animate-element animate-delay-300 w-full rounded-2xl bg-blue-600 py-4 font-semibold text-white hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/30 disabled:opacity-50">
+                <button type="submit" disabled={isLoading} className="animate-element animate-delay-300 w-full rounded-2xl bg-[#142B50] py-4 zodiak-subtitle text-white hover:bg-[#102240] text-base transition-all shadow-xl shadow-[#142B50]/25 hover:shadow-2xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 cursor-pointer">
                   {isLoading ? "Gönderiliyor..." : "Sıfırlama Bağlantısı Gönder"}
                 </button>
                 <div className="animate-element animate-delay-400 text-center pt-2">
-                  <a href="#" onClick={(e) => { e.preventDefault(); onCancelForgotPassword?.(); }} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Geri Dön</a>
+                  <a href="#" onClick={(e) => { e.preventDefault(); onCancelForgotPassword?.(); }} className="text-sm zodiak-subtitle text-muted-foreground hover:text-foreground transition-colors">Geri Dön</a>
                 </div>
               </form>
             ) : isVerifyingOtp ? (
               <form key="otp" className="space-y-5" onSubmit={onVerifyOtp}>
                 <div className="animate-element animate-delay-200">
-                  <label className="text-sm font-medium text-muted-foreground mb-1 block">Doğrulama Kodu</label>
+                  <label className="text-sm zodiak-subtitle text-muted-foreground mb-1 block">Doğrulama Kodu</label>
                   <GlassInputWrapper>
                     <input name="otpCode" type="text" maxLength={8} required placeholder="" className="w-full bg-transparent text-center text-3xl font-bold tracking-[0.3em] p-4 rounded-2xl focus:outline-none" />
                   </GlassInputWrapper>
                 </div>
-                <button type="submit" disabled={isLoading || isOtpSuccess} className="animate-element animate-delay-300 w-full rounded-2xl bg-blue-600 py-4 font-semibold text-white hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/30 disabled:opacity-50">
+                <button type="submit" disabled={isLoading || isOtpSuccess} className="animate-element animate-delay-300 w-full rounded-2xl bg-[#142B50] py-4 zodiak-subtitle text-white hover:bg-[#102240] text-base transition-all shadow-xl shadow-[#142B50]/25 hover:shadow-2xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 cursor-pointer">
                   {isLoading ? "Doğrulanıyor..." : "Hesabı Onayla"}
                 </button>
                 <div className="animate-element animate-delay-400 text-center text-base pt-2">
@@ -299,11 +299,11 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                     type="button" 
                     onClick={onResendOtp}
                     disabled={isLoading || resendTimer > 0}
-                    className="text-blue-600 font-semibold hover:underline disabled:text-muted-foreground disabled:no-underline transition-all duration-300 flex items-center justify-center gap-2 mx-auto"
+                    className="text-[#142B50] zodiak-subtitle hover:text-[#78B8F5] hover:underline disabled:text-muted-foreground disabled:no-underline transition-all duration-300 flex items-center justify-center gap-2 mx-auto"
                   >
                     <span>Kodu Tekrar Gönder</span>
                     {resendTimer > 0 && (
-                      <span className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded-md text-xs border border-blue-100 animate-pulse">
+                      <span className="px-2 py-0.5 bg-[#78B8F5]/20 text-[#142B50] rounded-md text-xs border border-[#78B8F5]/40 animate-pulse">
                         {resendTimer} sn
                       </span>
                     )}
@@ -315,22 +315,22 @@ export const SignInPage: React.FC<SignInPageProps> = ({
               {!isLoginMode && (
                 <div className="grid grid-cols-2 gap-4 animate-element animate-delay-200">
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground mb-1 block">Ad</label>
+                    <label className="text-sm zodiak-subtitle text-muted-foreground mb-1 block">Ad</label>
                     <GlassInputWrapper>
-                      <input name="firstName" type="text" required placeholder="Adınız" className="w-full bg-transparent text-sm p-4 rounded-2xl focus:outline-none" />
+                      <input name="firstName" type="text" required placeholder="Adınız" className="w-full bg-transparent text-sm p-4 rounded-2xl focus:outline-none zodiak-desc" />
                     </GlassInputWrapper>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground mb-1 block">Soyad</label>
+                    <label className="text-sm zodiak-subtitle text-muted-foreground mb-1 block">Soyad</label>
                     <GlassInputWrapper>
-                      <input name="lastName" type="text" required placeholder="Soyadınız" className="w-full bg-transparent text-sm p-4 rounded-2xl focus:outline-none" />
+                      <input name="lastName" type="text" required placeholder="Soyadınız" className="w-full bg-transparent text-sm p-4 rounded-2xl focus:outline-none zodiak-desc" />
                     </GlassInputWrapper>
                   </div>
                 </div>
               )}
 
               <div className={`animate-element ${isLoginMode ? "animate-delay-200" : "animate-delay-300"}`}>
-                <label className="text-sm font-medium text-muted-foreground mb-1 block">E-Posta Adresi</label>
+                <label className="text-sm zodiak-subtitle text-muted-foreground mb-1 block">E-Posta Adresi</label>
                 <GlassInputWrapper className={emailError && !isLoginMode ? "border-red-500/50 bg-red-500/5 shadow-[0_0_15px_rgba(239,68,68,0.1)]" : ""}>
                   <input 
                     name="email" 
@@ -339,7 +339,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                     placeholder="ornek@mail.com" 
                     value={emailValue}
                     onChange={(e) => onEmailChange?.(e.target.value)}
-                    className="w-full bg-transparent text-sm p-4 rounded-2xl focus:outline-none" 
+                    className="w-full bg-transparent text-sm p-4 rounded-2xl focus:outline-none zodiak-desc" 
                   />
                 </GlassInputWrapper>
                 {emailError && !isLoginMode && (
@@ -350,7 +350,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
               </div>
 
               <div className={`animate-element ${isLoginMode ? "animate-delay-300" : "animate-delay-400"}`}>
-                <label className="text-sm font-medium text-muted-foreground mb-1 block">Şifre</label>
+                <label className="text-sm zodiak-subtitle text-muted-foreground mb-1 block">Şifre</label>
                 <GlassInputWrapper>
                   <div className="relative">
                     <input 
@@ -360,7 +360,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                       value={passwordValue}
                       onChange={(e) => setPasswordValue(e.target.value)}
                       placeholder="••••••••" 
-                      className="w-full bg-transparent text-sm p-4 pr-12 rounded-2xl focus:outline-none" 
+                      className="w-full bg-transparent text-sm p-4 pr-12 rounded-2xl focus:outline-none zodiak-desc" 
                     />
                     <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-3 flex items-center">
                       {showPassword ? <EyeOff className="w-5 h-5 text-muted-foreground hover:text-foreground transition-colors" /> : <Eye className="w-5 h-5 text-muted-foreground hover:text-foreground transition-colors" />}
@@ -391,10 +391,10 @@ export const SignInPage: React.FC<SignInPageProps> = ({
 
               {!isLoginMode && (
                 <div className="animate-element animate-delay-300">
-                  <label className="text-sm font-medium text-muted-foreground mb-1 block">Şifre Tekrar</label>
+                  <label className="text-sm zodiak-subtitle text-muted-foreground mb-1 block">Şifre Tekrar</label>
                   <GlassInputWrapper>
                     <div className="relative">
-                      <input name="confirmPassword" type={showPassword ? 'text' : 'password'} required placeholder="••••••••" className="w-full bg-transparent text-sm p-4 pr-12 rounded-2xl focus:outline-none" />
+                      <input name="confirmPassword" type={showPassword ? 'text' : 'password'} required placeholder="••••••••" className="w-full bg-transparent text-sm p-4 pr-12 rounded-2xl focus:outline-none zodiak-desc" />
                     </div>
                   </GlassInputWrapper>
                 </div>
@@ -409,11 +409,11 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                         name="kvkk" 
                         checked={termsAccepted}
                         onChange={(e) => setTermsAccepted(e.target.checked)}
-                        className="custom-checkbox w-4 h-4 rounded border-slate-300 text-[#00008B] focus:ring-[#00008B] transition-all" 
+                        className="custom-checkbox w-4 h-4 rounded border-slate-300 text-[#142B50] focus:ring-[#78B8F5] transition-all" 
                       />
                     </div>
-                    <span className="text-[11px] leading-tight text-muted-foreground select-none">
-                      <button type="button" onClick={() => openLegal('terms')} className="font-bold text-[#00008B] hover:underline">Kullanım Koşulları</button> ve <button type="button" onClick={() => openLegal('kvkk')} className="font-bold text-[#00008B] hover:underline">KVKK Aydınlatma Metnini</button> okudum, kabul ediyorum.
+                    <span className="text-[11px] leading-tight text-muted-foreground select-none zodiak-desc">
+                      <button type="button" onClick={() => openLegal('terms')} className="zodiak-subtitle text-[#142B50] hover:underline">Kullanım Koşulları</button> ve <button type="button" onClick={() => openLegal('kvkk')} className="zodiak-subtitle text-[#142B50] hover:underline">KVKK Aydınlatma Metnini</button> okudum, kabul ediyorum.
                     </span>
                   </label>
                 </div>
@@ -422,23 +422,23 @@ export const SignInPage: React.FC<SignInPageProps> = ({
               {isLoginMode && (
                 <div className="animate-element animate-delay-500 flex items-center justify-between text-sm">
                   <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" name="rememberMe" className="custom-checkbox w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600" />
-                    <span className="text-foreground/90 font-medium">Beni hatırla</span>
+                    <input type="checkbox" name="rememberMe" className="custom-checkbox w-4 h-4 rounded border-gray-300 text-[#142B50] focus:ring-[#78B8F5]" />
+                    <span className="text-foreground/90 zodiak-desc text-sm">Beni hatırla</span>
                   </label>
-                  <a href="#" onClick={(e) => { e.preventDefault(); onResetPassword?.(); }} className="hover:underline font-medium text-blue-600 transition-colors">Şifremi unuttum</a>
+                  <a href="#" onClick={(e) => { e.preventDefault(); onResetPassword?.(); }} className="hover:underline zodiak-subtitle text-[#142B50] hover:text-[#78B8F5] transition-colors text-sm">Şifremi unuttum</a>
                 </div>
               )}
 
-              <button type="submit" disabled={isLoading} className={`animate-element ${isLoginMode ? "animate-delay-600" : "animate-delay-700"} w-full rounded-2xl bg-blue-600 py-4 font-semibold text-white hover:bg-blue-700 transition-colors shadow-lg shadow-blue-500/30 disabled:opacity-50`}>
+              <button type="submit" disabled={isLoading} className={`animate-element ${isLoginMode ? "animate-delay-600" : "animate-delay-700"} w-full rounded-2xl bg-[#142B50] py-4 zodiak-subtitle text-white hover:bg-[#102240] text-base transition-all shadow-xl shadow-[#142B50]/25 hover:shadow-2xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 cursor-pointer`}>
                 {isLoading ? "İşlem Yapılıyor..." : (isLoginMode ? "Giriş Yap" : "Hesap Oluştur")}
               </button>
             </form>
             )}
 
             {!isVerifyingOtp && !isForgotPasswordMode && (
-              <p className="animate-element animate-delay-900 text-center font-medium text-sm text-muted-foreground pt-4">
+              <p className="animate-element animate-delay-900 text-center text-sm text-muted-foreground pt-4 zodiak-desc">
                 {isLoginMode ? "Yeni nesil yatırıma katılmak ister misin? " : "Zaten bir hesabın var mı? "}
-                <a href="#" onClick={(e) => { e.preventDefault(); onToggleMode?.(); }} className="text-blue-600 font-semibold hover:underline transition-colors">
+                <a href="#" onClick={(e) => { e.preventDefault(); onToggleMode?.(); }} className="text-[#142B50] zodiak-subtitle hover:text-[#78B8F5] hover:underline transition-colors ml-1">
                    {isLoginMode ? "Hesap Oluştur" : "Giriş Yap"}
                 </a>
               </p>
@@ -453,7 +453,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
           <div className="w-full h-full flex flex-col gap-6 animate-slide-right animate-delay-300">
             {/* Logo Area - Top 70% height (flex-[2.33]) */}
             <div 
-               className={`flex-[2.33] rounded-[40px] shadow-[0_20px_60px_rgba(0,0,139,0.06)] border border-slate-100 overflow-hidden flex items-center justify-center ${heroImageSrc.includes('logo') ? 'bg-white' : 'bg-cover bg-center'}`} 
+               className={`flex-[2.33] rounded-[40px] shadow-[0_20px_60px_rgba(20, 43, 80, 0.06)] border border-slate-100 overflow-hidden flex items-center justify-center ${heroImageSrc.includes('logo') ? 'bg-white' : 'bg-cover bg-center'}`} 
                style={!heroImageSrc.includes('logo') ? { backgroundImage: `url(${heroImageSrc})` } : {}}
             >
                {heroImageSrc.includes('logo') ? (
@@ -463,7 +463,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                    transition={{ duration: 1, ease: "easeOut" }}
                    src={heroImageSrc} 
                    alt="FinAi Logo" 
-                   className="w-[45%] h-auto object-contain drop-shadow-[0_10px_35px_rgba(0,0,139,0.15)]" 
+                   className="w-[45%] h-auto object-contain drop-shadow-[0_10px_35px_rgba(20, 43, 80, 0.15)]" 
                  />
                ) : (
                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
@@ -505,7 +505,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                 initial={{ scale: 0.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: "spring", damping: 15 }}
-                className="w-20 h-20 bg-blue-600 rounded-3xl mx-auto flex items-center justify-center shadow-xl shadow-blue-500/20 mb-8"
+                className="w-20 h-20 bg-[#142B50] rounded-3xl mx-auto flex items-center justify-center shadow-xl shadow-[#142B50]/30 border border-[#78B8F5]/30 mb-8"
               >
                 <motion.div
                   initial={{ pathLength: 0 }}

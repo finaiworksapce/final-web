@@ -30,7 +30,7 @@ export default function EconomicEventCard({ item, statusInfo, isRecentlyUpdated 
             {/* Header: Time, Country, Impact Badge */}
             <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                    <span className="text-sm font-black text-[#00008B] flex items-center gap-1 font-mono">
+                    <span className="text-sm font-black text-[#142B50] flex items-center gap-1 font-mono">
                         <Clock className="w-3.5 h-3.5 text-blue-600" /> {item.time}
                     </span>
                     <span className="text-sm">{item.flag || '🌐'}</span>
@@ -44,7 +44,7 @@ export default function EconomicEventCard({ item, statusInfo, isRecentlyUpdated 
             {/* Event Title & Follow Button */}
             <div className="flex items-start justify-between gap-2">
                 <div>
-                    <h4 className="text-sm font-black text-[#00008B] leading-snug">
+                    <h4 className="text-sm font-black text-[#142B50] leading-snug">
                         {item.event}
                     </h4>
                     <p className="text-[11px] text-slate-500 font-medium line-clamp-1 mt-0.5">
@@ -58,7 +58,7 @@ export default function EconomicEventCard({ item, statusInfo, isRecentlyUpdated 
             <div className="grid grid-cols-3 gap-2 p-2.5 rounded-2xl bg-slate-50 border border-slate-100 text-xs">
                 <div>
                     <span className="text-[10px] font-bold text-slate-400 block uppercase">Açıklanan</span>
-                    <span className="font-black text-[#00008B] block mt-0.5">
+                    <span className="font-black text-[#142B50] block mt-0.5">
                         {item.actual || 'Bekleniyor'}
                     </span>
                 </div>
@@ -90,7 +90,7 @@ export default function EconomicEventCard({ item, statusInfo, isRecentlyUpdated 
                 </span>
                 <Link
                     href={`/dashboard/economic-calendar/${targetId}`}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#00008B] font-black text-xs border border-blue-200 transition-all"
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#142B50] font-black text-xs border border-blue-200 transition-all"
                 >
                     FinAi Intelligence'ı incele <ArrowRight className="w-3.5 h-3.5 text-blue-600" />
                 </Link>

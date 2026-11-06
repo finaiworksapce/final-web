@@ -18,7 +18,7 @@ export function KapLiveFeedWidget({ kapNews }: KapLiveFeedWidgetProps) {
     };
 
     return (
-        <div className="bg-[#00008B] text-white rounded-3xl p-6 shadow-xl shadow-[#00008B]/20 space-y-5 border border-blue-900 h-full flex flex-col justify-between">
+        <div className="bg-[#142B50] text-white rounded-3xl p-6 shadow-xl shadow-[#142B50]/20 space-y-5 border border-blue-900 h-full flex flex-col justify-between">
             <div>
                 {/* Header */}
                 <div className="flex items-center justify-between pb-4 border-b border-white/10">

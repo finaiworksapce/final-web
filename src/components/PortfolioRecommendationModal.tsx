@@ -101,7 +101,7 @@ export function PortfolioRecommendationModal({ data, userName, investmentAmount 
           </div>
           <div className="flex items-center justify-between pt-1.5 border-t border-slate-100">
               <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Aktarım:</span>
-              <span className="text-[11px] font-black text-[#00008B]">{allocatedAmount}</span>
+              <span className="text-[11px] font-black text-[#142B50]">{allocatedAmount}</span>
           </div>
         </div>
       );
@@ -116,11 +116,11 @@ export function PortfolioRecommendationModal({ data, userName, investmentAmount 
         {/* Header - Küçültüldü */}
         <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50/50">
             <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#00008B] to-blue-600 flex items-center justify-center shadow-md shadow-[#00008B]/20">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#142B50] to-blue-600 flex items-center justify-center shadow-md shadow-[#142B50]/20">
                     <Sparkles className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                    <h2 className="text-sm md:text-base font-black text-[#00008B] tracking-tight">
+                    <h2 className="text-sm md:text-base font-black text-[#142B50] tracking-tight">
                         {displayName}, Özel Portföyün
                     </h2>
                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
@@ -140,11 +140,11 @@ export function PortfolioRecommendationModal({ data, userName, investmentAmount 
                 {/* SOL SÜTUN */}
                 <div className="flex flex-col gap-5 h-full">
                     {/* AI Analiz Kutusu */}
-                    <div className="bg-[#00008B]/[0.02] border border-[#00008B]/10 rounded-2xl p-4 relative">
-                        <div className="absolute -top-2.5 -left-2.5 w-6 h-6 rounded-full bg-[#00008B] flex items-center justify-center border-[3px] border-white shadow-md">
+                    <div className="bg-[#142B50]/[0.02] border border-[#78B8F5]/10 rounded-2xl p-4 relative">
+                        <div className="absolute -top-2.5 -left-2.5 w-6 h-6 rounded-full bg-[#142B50] flex items-center justify-center border-[3px] border-white shadow-md">
                             <Brain className="w-3 h-3 text-white" />
                         </div>
-                        <h3 className="text-[9px] font-black text-[#00008B]/50 uppercase tracking-widest mb-2">Yapay Zeka Analizi</h3>
+                        <h3 className="text-[9px] font-black text-[#142B50]/50 uppercase tracking-widest mb-2">Yapay Zeka Analizi</h3>
                         <p className="text-[11px] font-medium text-slate-700 leading-relaxed italic">
                             "{data.aiAnalysis}"
                         </p>
@@ -168,13 +168,13 @@ export function PortfolioRecommendationModal({ data, userName, investmentAmount 
                                                 <span className="text-xs font-black text-slate-800 pr-2">{item.asset}</span>
                                                 <span className="text-sm font-black" style={{ color: item.color }}>%{item.percentage}</span>
                                             </div>
-                                            <div className="text-[9px] font-bold text-slate-400">Aylık: <span className="text-[#00008B]">{allocatedAmount}</span></div>
+                                            <div className="text-[9px] font-bold text-slate-400">Aylık: <span className="text-[#142B50]">{allocatedAmount}</span></div>
                                         </div>
                                     </div>
-                                    <div className="bg-white rounded-lg p-2 border border-[#00008B]/5 flex items-start gap-1.5">
-                                        <Info className="w-3 h-3 text-[#00008B]/60 shrink-0 mt-0.5" />
+                                    <div className="bg-white rounded-lg p-2 border border-[#78B8F5]/5 flex items-start gap-1.5">
+                                        <Info className="w-3 h-3 text-[#142B50]/60 shrink-0 mt-0.5" />
                                         <p className="text-[9px] text-slate-600 font-medium leading-tight">
-                                            <span className="font-bold text-[#00008B]">Neden Önerdik:</span> {item.description}
+                                            <span className="font-bold text-[#142B50]">Neden Önerdik:</span> {item.description}
                                         </p>
                                     </div>
                                 </div>
@@ -210,14 +210,14 @@ export function PortfolioRecommendationModal({ data, userName, investmentAmount 
                             </PieChart>
                         </ResponsiveContainer>
                         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                            <div className="text-xl font-black text-[#00008B]">%100</div>
+                            <div className="text-xl font-black text-[#142B50]">%100</div>
                             <span className="text-[8px] font-bold text-slate-400 tracking-widest uppercase">Toplam</span>
                         </div>
                     </div>
 
                     {/* Potansiyel (Simülasyon) Modülü */}
                     {simulations && (
-                    <div className="bg-gradient-to-br from-[#00008B] to-blue-700 rounded-2xl p-4 shadow-lg shadow-[#00008B]/20 text-white relative overflow-hidden">
+                    <div className="bg-gradient-to-br from-[#142B50] to-blue-700 rounded-2xl p-4 shadow-lg shadow-[#142B50]/20 text-white relative overflow-hidden">
                         <div className="absolute -right-5 -top-5 w-24 h-24 bg-white/10 rounded-full blur-xl" />
                         <div className="relative z-10">
                             <div className="flex items-center justify-between mb-4">

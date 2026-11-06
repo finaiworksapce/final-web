@@ -69,7 +69,7 @@ export function NewsHeroCard({ mainNews, subNews }: NewsHeroCardProps) {
                     className={`absolute inset-0 z-[1] transition-opacity duration-300 ${
                         hasValidBg 
                             ? "bg-gradient-to-r from-slate-950/95 via-slate-950/70 md:via-slate-950/60 to-transparent"
-                            : "bg-gradient-to-br from-[#00008B] via-[#000066] to-[#0a1e3d]"
+                            : "bg-gradient-to-br from-[#142B50] via-[#000066] to-[#0a1e3d]"
                     }`} 
                 />
 

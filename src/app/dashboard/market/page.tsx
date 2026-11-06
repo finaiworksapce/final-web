@@ -118,7 +118,7 @@ export default function MarketPage() {
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
                             {/* VS Icon */}
                             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 hidden lg:flex w-16 h-16 rounded-full bg-white border-8 border-[#F8FAFC] items-center justify-center shadow-xl">
-                                <ArrowLeftRight className="w-6 h-6 text-[#00008B]" />
+                                <ArrowLeftRight className="w-6 h-6 text-[#142B50]" />
                             </div>
 
                             {/* LEFT: FUNDS */}
@@ -164,7 +164,7 @@ export default function MarketPage() {
                             {/* RIGHT: STOCKS */}
                             <motion.div 
                                 whileHover={{ scale: 1.01 }}
-                                className="bg-[#00008B] rounded-[40px] p-8 md:p-12 shadow-2xl space-y-8 relative overflow-hidden group text-white"
+                                className="bg-[#142B50] rounded-[40px] p-8 md:p-12 shadow-2xl space-y-8 relative overflow-hidden group text-white"
                             >
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
                                 <div className="flex items-center gap-4">
@@ -195,7 +195,7 @@ export default function MarketPage() {
                                 </div>
                                 <button 
                                     onClick={() => { setPath('STOCK'); setTestStarted(true); }}
-                                    className="w-full py-5 bg-white text-[#00008B] rounded-[24px] font-black uppercase tracking-widest text-sm hover:bg-blue-50 transition-all shadow-xl flex items-center justify-center gap-3"
+                                    className="w-full py-5 bg-white text-[#142B50] rounded-[24px] font-black uppercase tracking-widest text-sm hover:bg-blue-50 transition-all shadow-xl flex items-center justify-center gap-3"
                                 >
                                     Sadece Hisselerden Devam Et <ArrowRight className="w-5 h-5" />
                                 </button>
@@ -218,7 +218,7 @@ export default function MarketPage() {
                         {/* Comparison Table */}
                         <div className="max-w-4xl mx-auto bg-white rounded-[40px] border border-slate-100 p-8 md:p-12 shadow-sm overflow-hidden">
                             <h3 className="text-xl font-black text-slate-900 mb-8 uppercase italic flex items-center gap-3">
-                                <Scale className="w-6 h-6 text-[#00008B]" /> Profesyonel Karşılaştırma
+                                <Scale className="w-6 h-6 text-[#142B50]" /> Profesyonel Karşılaştırma
                             </h3>
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left">
@@ -226,7 +226,7 @@ export default function MarketPage() {
                                         <tr className="border-b border-slate-50">
                                             <th className="py-4 text-xs font-black uppercase tracking-widest text-slate-400">Kriter</th>
                                             <th className="py-4 text-xs font-black uppercase tracking-widest text-blue-600">Yatırım Fonu</th>
-                                            <th className="py-4 text-xs font-black uppercase tracking-widest text-[#00008B]">Hisse Senedi</th>
+                                            <th className="py-4 text-xs font-black uppercase tracking-widest text-[#142B50]">Hisse Senedi</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-50">

@@ -60,7 +60,7 @@ export function BalanceChart({ totalBalance, changePercent, isPositive, history 
                                 backgroundColor: 'rgba(255, 255, 255, 0.95)', 
                                 border: 'none', 
                                 borderRadius: '12px', 
-                                boxShadow: '0 10px 25px -5px rgba(0,0,139,0.15)',
+                                boxShadow: '0 10px 25px -5px rgba(20, 43, 80, 0.15)',
                                 padding: '12px'
                             }}
                             formatter={(value: any) => [

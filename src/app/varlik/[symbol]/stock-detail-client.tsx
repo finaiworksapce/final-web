@@ -707,7 +707,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
       {/* ========================================================================= */}
       {/* 1. SOL MENÜ: LACİVERT SOL PANEL (#00008B) - MODÜLER GEZİNTİ */}
       {/* ========================================================================= */}
-      <aside className="w-64 shrink-0 sticky top-0 h-screen max-h-screen overflow-y-auto bg-[#00008B] text-white p-5 space-y-6 flex flex-col justify-between shadow-2xl z-20 hidden md:flex">
+      <aside className="w-64 shrink-0 sticky top-0 h-screen max-h-screen overflow-y-auto bg-[#142B50] text-white p-5 space-y-6 flex flex-col justify-between shadow-2xl z-20 hidden md:flex">
         <div className="space-y-6">
           
           {/* SEMBOL, ŞİRKET ADI VE CANLI FİYAT */}
@@ -739,18 +739,18 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   className={cn(
                     "w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-xs font-black transition-all border text-left",
                     isActive
-                      ? "bg-white text-[#00008B] border-white shadow-xl scale-[1.02]"
+                      ? "bg-white text-[#142B50] border-white shadow-xl scale-[1.02]"
                       : "bg-blue-950/40 text-blue-100 border-blue-800/40 hover:bg-blue-800/70 hover:text-white"
                   )}
                 >
                   <div className="flex items-center gap-3">
-                    <Icon className={cn("w-4 h-4", isActive ? "text-[#00008B]" : "text-blue-300")} />
+                    <Icon className={cn("w-4 h-4", isActive ? "text-[#142B50]" : "text-blue-300")} />
                     <span>{tab.label}</span>
                   </div>
                   {tab.count != null && (
                     <span className={cn(
                       "text-[10px] px-2 py-0.5 rounded-full font-black",
-                      isActive ? "bg-blue-100 text-[#00008B]" : "bg-blue-900/80 text-blue-200 border border-blue-700/60"
+                      isActive ? "bg-blue-100 text-[#142B50]" : "bg-blue-900/80 text-blue-200 border border-blue-700/60"
                     )}>
                       {tab.count}
                     </span>
@@ -778,7 +778,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
             href="/dashboard/data"
             className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white text-slate-700 text-xs font-black border border-slate-200 shadow-sm shrink-0"
           >
-            <ArrowLeft className="w-3.5 h-3.5 text-[#00008B]" />
+            <ArrowLeft className="w-3.5 h-3.5 text-[#142B50]" />
             Geri
           </Link>
           {navItems.map((tab) => {
@@ -791,7 +791,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                 className={cn(
                   "px-3 py-1.5 text-xs font-black rounded-xl transition-all border whitespace-nowrap flex items-center gap-1.5 shadow-sm shrink-0",
                   isActive
-                    ? "bg-[#00008B] text-white border-[#00008B]"
+                    ? "bg-[#142B50] text-white border-[#78B8F5]"
                     : "bg-white text-slate-600 border-slate-200"
                 )}
               >
@@ -809,7 +809,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
           <div className="space-y-6">
             
             {/* ŞİRKET HEADER & BİST PROFİLİ (EKONOMİK TAKVİM TANIM WIDGETI TİPOGRAFİSİ & BEYAZ YAZI) */}
-            <div className="bg-[#00008B] text-white rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl border border-blue-900">
+            <div className="bg-[#142B50] text-white rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl border border-blue-900">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/20 pb-4">
                 <div className="flex items-center gap-4">
                   <StockLogo symbol={symbol} className="w-12 h-12 sm:w-14 sm:h-14 ring-2 ring-white/30 shadow-lg" />
@@ -935,7 +935,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
               <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-3">
                 <div>
                   <h3 className="text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
-                    <TableIcon className="w-5 h-5 text-[#00008B]" />
+                    <TableIcon className="w-5 h-5 text-[#142B50]" />
                     {symbol} Finansal Tablolar
                     {fundamentalsData?.source && (
                       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-50 text-emerald-700 border border-emerald-200 tracking-wider">
@@ -957,8 +957,8 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                       className={cn(
                         "px-2.5 py-1 text-[11px] font-black rounded-lg transition-all",
                         statementPeriodType === "quarterly"
-                          ? "bg-white text-[#00008B] shadow-sm"
-                          : "text-slate-500 hover:text-[#00008B]"
+                          ? "bg-white text-[#142B50] shadow-sm"
+                          : "text-slate-500 hover:text-[#142B50]"
                       )}
                     >
                       Çeyreklik (3A)
@@ -968,8 +968,8 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                       className={cn(
                         "px-2.5 py-1 text-[11px] font-black rounded-lg transition-all",
                         statementPeriodType === "annual"
-                          ? "bg-white text-[#00008B] shadow-sm"
-                          : "text-slate-500 hover:text-[#00008B]"
+                          ? "bg-white text-[#142B50] shadow-sm"
+                          : "text-slate-500 hover:text-[#142B50]"
                       )}
                     >
                       Yıllık (12A)
@@ -989,8 +989,8 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                         className={cn(
                           "px-3 py-1.5 text-xs font-black rounded-lg transition-all",
                           activeFinancialTab === tab.id
-                            ? "bg-[#00008B] text-white shadow-sm"
-                            : "text-slate-600 hover:text-[#00008B]"
+                            ? "bg-[#142B50] text-white shadow-sm"
+                            : "text-slate-600 hover:text-[#142B50]"
                         )}
                       >
                         {tab.label}
@@ -1014,7 +1014,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                           </th>
                         ))}
                         {statementPeriodType === 'quarterly' && fundamentalsData?.ttm?.isVerified && (
-                          <th className="py-3 px-4 text-right text-[#00008B] bg-blue-50/50">
+                          <th className="py-3 px-4 text-right text-[#142B50] bg-blue-50/50">
                             TTM (Son 4 Çeyrek)
                           </th>
                         )}
@@ -1031,7 +1031,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                               </td>
                             ))}
                             {statementPeriodType === 'quarterly' && fundamentalsData?.ttm?.isVerified && (
-                              <td className="py-3 px-4 text-right text-[#00008B] font-black bg-blue-50/30">
+                              <td className="py-3 px-4 text-right text-[#142B50] font-black bg-blue-50/30">
                                 {ttmIncome?.revenue != null ? formatMoney(ttmIncome.revenue, finCurrency) : "Eksik Veri"}
                               </td>
                             )}
@@ -1044,7 +1044,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                               </td>
                             ))}
                             {statementPeriodType === 'quarterly' && fundamentalsData?.ttm?.isVerified && (
-                              <td className="py-3 px-4 text-right text-[#00008B] bg-blue-50/30">
+                              <td className="py-3 px-4 text-right text-[#142B50] bg-blue-50/30">
                                 {ttmIncome?.grossProfit != null ? formatMoney(ttmIncome.grossProfit, finCurrency) : "Eksik Veri"}
                               </td>
                             )}
@@ -1057,7 +1057,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                               </td>
                             ))}
                             {statementPeriodType === 'quarterly' && fundamentalsData?.ttm?.isVerified && (
-                              <td className="py-3 px-4 text-right text-[#00008B] bg-blue-50/30">
+                              <td className="py-3 px-4 text-right text-[#142B50] bg-blue-50/30">
                                 {ttmIncome?.operatingIncome != null ? formatMoney(ttmIncome.operatingIncome, finCurrency) : "Eksik Veri"}
                               </td>
                             )}
@@ -1070,7 +1070,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                               </td>
                             ))}
                             {statementPeriodType === 'quarterly' && fundamentalsData?.ttm?.isVerified && (
-                              <td className="py-3 px-4 text-right text-[#00008B] bg-blue-50/30">
+                              <td className="py-3 px-4 text-right text-[#142B50] bg-blue-50/30">
                                 {isBank ? "Sektör Dışı (N/A)" : (ttmIncome?.ebitda != null ? formatMoney(ttmIncome.ebitda, finCurrency) : "Eksik Veri")}
                               </td>
                             )}
@@ -1078,12 +1078,12 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                           <tr className="hover:bg-slate-50 bg-slate-50/40">
                             <td className="py-3 px-4 font-black text-slate-900">Net Dönem Kârı (Net Income)</td>
                             {displayedPeriods.map((q: any, i: number) => (
-                              <td key={i} className="py-3 px-4 text-right font-black text-[#00008B]">
+                              <td key={i} className="py-3 px-4 text-right font-black text-[#142B50]">
                                 {q.incomeStatement?.netIncome != null ? formatMoney(q.incomeStatement.netIncome, finCurrency) : "Eksik Veri"}
                               </td>
                             ))}
                             {statementPeriodType === 'quarterly' && fundamentalsData?.ttm?.isVerified && (
-                              <td className="py-3 px-4 text-right text-[#00008B] font-black bg-blue-50/60">
+                              <td className="py-3 px-4 text-right text-[#142B50] font-black bg-blue-50/60">
                                 {ttmIncome?.netIncome != null ? formatMoney(ttmIncome.netIncome, finCurrency) : "Eksik Veri"}
                               </td>
                             )}
@@ -1114,7 +1114,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                           <tr className="hover:bg-slate-50 bg-slate-50/40">
                             <td className="py-3 px-4 font-black text-slate-900">Toplam Varlıklar (Total Assets)</td>
                             {displayedPeriods.map((q: any, i: number) => (
-                              <td key={i} className="py-3 px-4 text-right font-black text-[#00008B]">
+                              <td key={i} className="py-3 px-4 text-right font-black text-[#142B50]">
                                 {q.balanceSheet?.totalAssets != null ? formatMoney(q.balanceSheet.totalAssets, finCurrency) : "Eksik Veri"}
                               </td>
                             ))}
@@ -1141,7 +1141,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                           <tr className="hover:bg-slate-50 bg-slate-50/40">
                             <td className="py-3 px-4 font-black text-slate-900">Toplam Özkaynaklar (Equity)</td>
                             {displayedPeriods.map((q: any, i: number) => (
-                              <td key={i} className="py-3 px-4 text-right font-black text-[#00008B]">
+                              <td key={i} className="py-3 px-4 text-right font-black text-[#142B50]">
                                 {q.balanceSheet?.totalEquity != null ? formatMoney(q.balanceSheet.totalEquity, finCurrency) : "Eksik Veri"}
                               </td>
                             ))}
@@ -1160,7 +1160,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                               </td>
                             ))}
                             {statementPeriodType === 'quarterly' && fundamentalsData?.ttm?.isVerified && (
-                              <td className="py-3 px-4 text-right text-[#00008B] bg-blue-50/30 font-black">
+                              <td className="py-3 px-4 text-right text-[#142B50] bg-blue-50/30 font-black">
                                 {ttmCashFlow?.operatingCashFlow != null ? formatMoney(ttmCashFlow.operatingCashFlow, finCurrency) : "Eksik Veri"}
                               </td>
                             )}
@@ -1181,12 +1181,12 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                           <tr className="hover:bg-slate-50 bg-slate-50/40">
                             <td className="py-3 px-4 font-black text-slate-900">Serbest Nakit Akışı (Free Cash Flow)</td>
                             {displayedPeriods.map((q: any, i: number) => (
-                              <td key={i} className="py-3 px-4 text-right font-black text-[#00008B]">
+                              <td key={i} className="py-3 px-4 text-right font-black text-[#142B50]">
                                 {q.cashFlowStatement?.freeCashFlow != null ? formatMoney(q.cashFlowStatement.freeCashFlow, finCurrency) : "Eksik Veri"}
                               </td>
                             ))}
                             {statementPeriodType === 'quarterly' && fundamentalsData?.ttm?.isVerified && (
-                              <td className="py-3 px-4 text-right text-[#00008B] font-black bg-blue-50/60">
+                              <td className="py-3 px-4 text-right text-[#142B50] font-black bg-blue-50/60">
                                 {ttmCashFlow?.freeCashFlow != null ? formatMoney(ttmCashFlow.freeCashFlow, finCurrency) : "Eksik Veri"}
                               </td>
                             )}
@@ -1261,14 +1261,14 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3 gap-2">
                   <div>
                     <h4 className="text-base font-black text-slate-900 flex items-center gap-2">
-                      <Activity className="w-5 h-5 text-[#00008B]" />
+                      <Activity className="w-5 h-5 text-[#142B50]" />
                       Çeyreklik Finansal Karşılaştırmalar (QoQ & YoY)
                     </h4>
                     <p className="text-xs font-bold text-slate-400">
                       Son Raporlanan Çeyrek Değerlerinin Bir Önceki Çeyrek (QoQ) ve Önceki Yılın Aynı Çeyreği (YoY) ile Karşılaştırması
                     </p>
                   </div>
-                  <span className="text-[10px] font-black px-2.5 py-1 rounded-xl bg-blue-50 text-[#00008B] border border-blue-200 self-start sm:self-auto">
+                  <span className="text-[10px] font-black px-2.5 py-1 rounded-xl bg-blue-50 text-[#142B50] border border-blue-200 self-start sm:self-auto">
                     FAZ 12 Analitik Motor Çıktısı
                   </span>
                 </div>
@@ -1349,7 +1349,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
               <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-3">
                 <div>
                   <h3 className="text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5 text-[#00008B]" />
+                    <TrendingUp className="w-5 h-5 text-[#142B50]" />
                     {symbol} Tarihsel Finansal Trendler & Rasyo Grafiği
                   </h3>
                   <p className="text-xs font-bold text-slate-400">
@@ -1364,8 +1364,8 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                     className={cn(
                       "px-2.5 py-1 text-[11px] font-black rounded-lg transition-all",
                       statementPeriodType === "quarterly"
-                        ? "bg-[#00008B] text-white shadow-sm"
-                        : "text-slate-600 hover:text-[#00008B]"
+                        ? "bg-[#142B50] text-white shadow-sm"
+                        : "text-slate-600 hover:text-[#142B50]"
                     )}
                   >
                     Çeyreklik (3A)
@@ -1375,8 +1375,8 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                     className={cn(
                       "px-2.5 py-1 text-[11px] font-black rounded-lg transition-all",
                       statementPeriodType === "annual"
-                        ? "bg-[#00008B] text-white shadow-sm"
-                        : "text-slate-600 hover:text-[#00008B]"
+                        ? "bg-[#142B50] text-white shadow-sm"
+                        : "text-slate-600 hover:text-[#142B50]"
                     )}
                   >
                     Yıllık (12A)
@@ -1403,7 +1403,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
               <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3 gap-2">
                 <div>
                   <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5 text-[#00008B]" />
+                    <TrendingUp className="w-5 h-5 text-[#142B50]" />
                     {symbol} Büyüme Analizi (YoY & CAGR)
                   </h3>
                   <p className="text-xs font-bold text-slate-400">
@@ -1414,7 +1414,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   className="group relative inline-flex items-center gap-1 text-[11px] text-slate-400 bg-slate-50 px-3 py-1 rounded-xl border border-slate-200 cursor-help"
                   title="Trend, mevcut tarihsel finansal dönemlerdeki değişimi gösterir; gelecekteki performansı garanti etmez."
                 >
-                  <HelpCircle className="w-3.5 h-3.5 text-[#00008B]" />
+                  <HelpCircle className="w-3.5 h-3.5 text-[#142B50]" />
                   <span>Metodoloji Bilgisi</span>
                 </div>
               </div>
@@ -1494,7 +1494,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                       {item.cagr != null && !item.isNotApplicable && (
                         <div className="pt-2 border-t border-slate-200/60 text-[10px] text-slate-500 font-semibold flex items-center justify-between">
                           <span>Bileşik Hız (CAGR):</span>
-                          <span className="font-bold text-[#00008B]">{item.cagr >= 0 ? "+" : ""}%{item.cagr.toFixed(1)}</span>
+                          <span className="font-bold text-[#142B50]">{item.cagr >= 0 ? "+" : ""}%{item.cagr.toFixed(1)}</span>
                         </div>
                       )}
                     </div>
@@ -1513,7 +1513,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
               <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3 gap-2">
                 <div>
                   <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-                    <PieChart className="w-5 h-5 text-[#00008B]" />
+                    <PieChart className="w-5 h-5 text-[#142B50]" />
                     {symbol} Kârlılık Analizi & Marj Gelişimi
                   </h3>
                   <p className="text-xs font-bold text-slate-400">
@@ -1584,7 +1584,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                           {item.name}
                         </span>
                       </div>
-                      <p className="text-xl font-black text-[#00008B] pt-1">
+                      <p className="text-xl font-black text-[#142B50] pt-1">
                         {item.isNotApplicable
                           ? "Sektör için uygulanabilir değil"
                           : (item.val != null ? `%${item.val.toFixed(2)}` : "Veri Mevcut Değil")}
@@ -1603,7 +1603,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
               <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-3 gap-2">
                 <div>
                   <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
-                    <Activity className="w-5 h-5 text-[#00008B]" />
+                    <Activity className="w-5 h-5 text-[#142B50]" />
                     {symbol} Fiyat Davranışı & Risk Metrikleri
                   </h3>
                   <p className="text-xs font-bold text-slate-400">
@@ -1624,7 +1624,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   <div>
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">1 Yıllık Volatilite</span>
-                      <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-blue-50 text-[#00008B] border border-blue-100">Yıllıklandırılmış</span>
+                      <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-blue-50 text-[#142B50] border border-blue-100">Yıllıklandırılmış</span>
                     </div>
                     <p className="text-2xl font-black text-slate-900 pt-1">
                       {historicalAnalysisData?.priceRiskMetrics?.volatility1Y != null
@@ -1642,7 +1642,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   <div>
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">3 Yıllık Volatilite</span>
-                      <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-blue-50 text-[#00008B] border border-blue-100">Yıllıklandırılmış</span>
+                      <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-blue-50 text-[#142B50] border border-blue-100">Yıllıklandırılmış</span>
                     </div>
                     <p className="text-2xl font-black text-slate-900 pt-1">
                       {historicalAnalysisData?.priceRiskMetrics?.volatility3Y != null
@@ -1660,7 +1660,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   <div>
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">5 Yıllık Volatilite</span>
-                      <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-blue-50 text-[#00008B] border border-blue-100">Yıllıklandırılmış</span>
+                      <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-blue-50 text-[#142B50] border border-blue-100">Yıllıklandırılmış</span>
                     </div>
                     <p className="text-2xl font-black text-slate-900 pt-1">
                       {historicalAnalysisData?.priceRiskMetrics?.volatility5Y != null
@@ -1771,8 +1771,8 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                 <div className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xl space-y-6">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#00008B] border border-blue-200 flex items-center justify-center shadow-sm">
-                        <TrendingUp className="w-5 h-5 text-[#00008B]" />
+                      <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#142B50] border border-blue-200 flex items-center justify-center shadow-sm">
+                        <TrendingUp className="w-5 h-5 text-[#142B50]" />
                       </div>
                       <div>
                         <h3 className="text-lg font-black text-slate-900 tracking-tight">
@@ -1785,7 +1785,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                     </div>
 
                     <div className="flex items-center gap-2 self-start sm:self-auto">
-                      <span className="text-[10px] font-black px-3 py-1 rounded-xl bg-blue-50 text-[#00008B] border border-blue-200">
+                      <span className="text-[10px] font-black px-3 py-1 rounded-xl bg-blue-50 text-[#142B50] border border-blue-200">
                         {valDist.sampleSize ? `${valDist.sampleSize} Dönem Örneklemi` : 'Tarihsel Analiz'}
                       </span>
                     </div>
@@ -1802,7 +1802,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                           <span className="text-[11px] font-semibold text-slate-400">Tarihsel Değerleme Bandı</span>
                         </div>
                         {pePct != null ? (
-                          <span className="text-xs font-black px-2.5 py-1 rounded-xl bg-blue-100 text-[#00008B] border border-blue-200">
+                          <span className="text-xs font-black px-2.5 py-1 rounded-xl bg-blue-100 text-[#142B50] border border-blue-200">
                             %{pePct} Persentil
                           </span>
                         ) : (
@@ -1816,8 +1816,8 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                           <span className="text-sm font-black text-slate-700">{peMin != null ? peMin.toFixed(2) : '—'}</span>
                         </div>
                         <div className="bg-white p-2.5 rounded-xl border border-blue-200 shadow-sm">
-                          <span className="text-[9px] font-black text-[#00008B] uppercase block">Tarihsel Medyan</span>
-                          <span className="text-sm font-black text-[#00008B]">{peMed != null ? peMed.toFixed(2) : '—'}</span>
+                          <span className="text-[9px] font-black text-[#142B50] uppercase block">Tarihsel Medyan</span>
+                          <span className="text-sm font-black text-[#142B50]">{peMed != null ? peMed.toFixed(2) : '—'}</span>
                         </div>
                         <div className="bg-white p-2.5 rounded-xl border border-slate-200">
                           <span className="text-[9px] font-black text-slate-400 uppercase block">Tarihsel Max</span>
@@ -1838,7 +1838,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                             {peCur != null && peCur >= peMin && peCur <= peMax && (
                               <div
                                 style={{ left: `${getPosition(peCur, peMin, peMax)}%` }}
-                                className="absolute -top-1 w-6 h-6 bg-[#00008B] text-white rounded-full border-2 border-white shadow-md flex items-center justify-center -translate-x-1/2 z-20"
+                                className="absolute -top-1 w-6 h-6 bg-[#142B50] text-white rounded-full border-2 border-white shadow-md flex items-center justify-center -translate-x-1/2 z-20"
                                 title={`Güncel F/K: ${peCur.toFixed(2)} (%${pePct || 0} Persentil)`}
                               >
                                 <span className="w-2 h-2 rounded-full bg-white animate-ping"></span>
@@ -1847,7 +1847,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                           </div>
                           <div className="flex justify-between text-[10px] font-bold text-slate-400 px-1">
                             <span>Min: {peMin.toFixed(2)}</span>
-                            <span className="text-[#00008B] font-black">
+                            <span className="text-[#142B50] font-black">
                               Güncel: {peCur != null ? peCur.toFixed(2) : 'Veri Mevcut Değil'}
                             </span>
                             <span>Max: {peMax.toFixed(2)}</span>
@@ -1868,7 +1868,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                           <span className="text-[11px] font-semibold text-slate-400">Özsermaye Çarpanı Dağılımı</span>
                         </div>
                         {pbPct != null ? (
-                          <span className="text-xs font-black px-2.5 py-1 rounded-xl bg-blue-100 text-[#00008B] border border-blue-200">
+                          <span className="text-xs font-black px-2.5 py-1 rounded-xl bg-blue-100 text-[#142B50] border border-blue-200">
                             %{pbPct} Persentil
                           </span>
                         ) : (
@@ -1882,8 +1882,8 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                           <span className="text-sm font-black text-slate-700">{pbMin != null ? pbMin.toFixed(2) : '—'}</span>
                         </div>
                         <div className="bg-white p-2.5 rounded-xl border border-blue-200 shadow-sm">
-                          <span className="text-[9px] font-black text-[#00008B] uppercase block">Tarihsel Medyan</span>
-                          <span className="text-sm font-black text-[#00008B]">{pbMed != null ? pbMed.toFixed(2) : '—'}</span>
+                          <span className="text-[9px] font-black text-[#142B50] uppercase block">Tarihsel Medyan</span>
+                          <span className="text-sm font-black text-[#142B50]">{pbMed != null ? pbMed.toFixed(2) : '—'}</span>
                         </div>
                         <div className="bg-white p-2.5 rounded-xl border border-slate-200">
                           <span className="text-[9px] font-black text-slate-400 uppercase block">Tarihsel Max</span>
@@ -1904,7 +1904,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                             {pbCur != null && pbCur >= pbMin && pbCur <= pbMax && (
                               <div
                                 style={{ left: `${getPosition(pbCur, pbMin, pbMax)}%` }}
-                                className="absolute -top-1 w-6 h-6 bg-[#00008B] text-white rounded-full border-2 border-white shadow-md flex items-center justify-center -translate-x-1/2 z-20"
+                                className="absolute -top-1 w-6 h-6 bg-[#142B50] text-white rounded-full border-2 border-white shadow-md flex items-center justify-center -translate-x-1/2 z-20"
                                 title={`Güncel PD/DD: ${pbCur.toFixed(2)} (%${pbPct || 0} Persentil)`}
                               >
                                 <span className="w-2 h-2 rounded-full bg-white animate-ping"></span>
@@ -1913,7 +1913,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                           </div>
                           <div className="flex justify-between text-[10px] font-bold text-slate-400 px-1">
                             <span>Min: {pbMin.toFixed(2)}</span>
-                            <span className="text-[#00008B] font-black">
+                            <span className="text-[#142B50] font-black">
                               Güncel: {pbCur != null ? pbCur.toFixed(2) : 'Veri Mevcut Değil'}
                             </span>
                             <span>Max: {pbMax.toFixed(2)}</span>
@@ -1928,7 +1928,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   <div className="space-y-2 pt-1 border-t border-slate-100">
                     {valDist.neutralCommentary && (
                       <p className="text-xs font-semibold text-slate-700 bg-blue-50/50 p-3 rounded-xl border border-blue-100 flex items-center gap-2">
-                        <Info className="w-4 h-4 text-[#00008B] shrink-0" />
+                        <Info className="w-4 h-4 text-[#142B50] shrink-0" />
                         <span><strong>Tarihsel Konum:</strong> {valDist.neutralCommentary}</span>
                       </p>
                     )}
@@ -1955,8 +1955,8 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
             <div className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xl space-y-6">
               <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-100 pb-4 gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#00008B] border border-blue-200 flex items-center justify-center shadow-sm">
-                    <Layers className="w-5 h-5 text-[#00008B]" />
+                  <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#142B50] border border-blue-200 flex items-center justify-center shadow-sm">
+                    <Layers className="w-5 h-5 text-[#142B50]" />
                   </div>
                   <div>
                     <h3 className="text-lg font-black text-slate-900 tracking-tight">{symbol} Sektör Karşılaştırması</h3>
@@ -1968,7 +1968,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
 
                 {comparisonData && (
                   <div className="flex flex-wrap items-center gap-2 text-xs font-black self-start md:self-auto">
-                    <span className="bg-blue-50 text-[#00008B] border border-blue-200 px-3 py-1 rounded-xl">
+                    <span className="bg-blue-50 text-[#142B50] border border-blue-200 px-3 py-1 rounded-xl">
                       Sektör: {comparisonData.sectorDisplayName}
                     </span>
                     <span className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1 rounded-xl">
@@ -1980,7 +1980,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
 
               {comparisonLoading ? (
                 <div className="py-12 flex items-center justify-center text-slate-400 font-bold text-xs gap-2">
-                  <RefreshCw className="w-5 h-5 animate-spin text-[#00008B]" />
+                  <RefreshCw className="w-5 h-5 animate-spin text-[#142B50]" />
                   Sektör akran verileri ve medyanlar hesaplanıyor...
                 </div>
               ) : comparisonData?.metrics ? (
@@ -2021,7 +2021,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                                 <HelpCircle className="w-3.5 h-3.5" />
                               </button>
                             </td>
-                            <td className="py-3.5 px-4 font-black text-[#00008B]">
+                            <td className="py-3.5 px-4 font-black text-[#142B50]">
                               {m.formattedCompanyValue || "Veri Mevcut Değil"}
                             </td>
                             <td className="py-3.5 px-4 font-semibold text-slate-600">
@@ -2070,7 +2070,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   {comparisonData.growth && (
                     <div className="space-y-3 pt-2">
                       <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                        <Activity className="w-4 h-4 text-[#00008B]" />
+                        <Activity className="w-4 h-4 text-[#142B50]" />
                         Karşılaştırmalı Yıllık Büyüme Oranları (YoY)
                       </h4>
 
@@ -2115,7 +2115,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
               <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-3">
                 <div>
                   <h3 className="text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5 text-[#00008B]" />
+                    <TrendingUp className="w-5 h-5 text-[#142B50]" />
                     {symbol} Tarihsel Finansal Trendler & Rasyo Analizi
                   </h3>
                   <p className="text-xs font-bold text-slate-400">
@@ -2130,8 +2130,8 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                     className={cn(
                       "px-2.5 py-1 text-[11px] font-black rounded-lg transition-all",
                       statementPeriodType === "quarterly"
-                        ? "bg-[#00008B] text-white shadow-sm"
-                        : "text-slate-600 hover:text-[#00008B]"
+                        ? "bg-[#142B50] text-white shadow-sm"
+                        : "text-slate-600 hover:text-[#142B50]"
                     )}
                   >
                     Çeyreklik (3A)
@@ -2141,8 +2141,8 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                     className={cn(
                       "px-2.5 py-1 text-[11px] font-black rounded-lg transition-all",
                       statementPeriodType === "annual"
-                        ? "bg-[#00008B] text-white shadow-sm"
-                        : "text-slate-600 hover:text-[#00008B]"
+                        ? "bg-[#142B50] text-white shadow-sm"
+                        : "text-slate-600 hover:text-[#142B50]"
                     )}
                   >
                     Yıllık (12A)
@@ -2176,8 +2176,8 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
             <div className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xl space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#00008B] border border-blue-200 flex items-center justify-center shadow-sm">
-                    <Coins className="w-5 h-5 text-[#00008B]" />
+                  <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#142B50] border border-blue-200 flex items-center justify-center shadow-sm">
+                    <Coins className="w-5 h-5 text-[#142B50]" />
                   </div>
                   <div>
                     <h3 className="text-lg font-black text-slate-900 tracking-tight">{symbol} Temettü Dağıtım Geçmişi & Kâr Payı</h3>
@@ -2192,7 +2192,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
 
               {dividendLoading ? (
                 <div className="py-12 flex items-center justify-center text-slate-400 font-bold text-xs gap-2">
-                  <RefreshCw className="w-5 h-5 animate-spin text-[#00008B]" />
+                  <RefreshCw className="w-5 h-5 animate-spin text-[#142B50]" />
                   Temettü verileri yükleniyor...
                 </div>
               ) : combinedDividends.length > 0 ? (
@@ -2202,7 +2202,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-1">
                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">Son Temettü Tarihi</span>
-                      <p className="text-base font-black text-[#00008B]">{combinedDividends[0]?.paymentDate || "—"}</p>
+                      <p className="text-base font-black text-[#142B50]">{combinedDividends[0]?.paymentDate || "—"}</p>
                       <span className="text-[9px] text-slate-400 font-medium block">Resmi Hak Kullanımı</span>
                     </div>
 
@@ -2214,7 +2214,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
 
                     <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-1">
                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">Son Temettü Verimi</span>
-                      <p className="text-base font-black text-[#00008B]">
+                      <p className="text-base font-black text-[#142B50]">
                         {combinedDividends[0]?.yieldPercent > 0 ? `%${combinedDividends[0].yieldPercent.toFixed(2)}` : "—"}
                       </p>
                       <span className="text-[9px] text-slate-400 font-medium block">Güncel Borsa Fiyatına Göre</span>
@@ -2237,7 +2237,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                         {combinedDividends.map((item: any, idx: number) => (
                           <tr key={idx} className="hover:bg-slate-50 transition-colors">
                             <td className="py-3 px-4 font-black text-slate-900">{item.paymentDate}</td>
-                            <td className="py-3 px-4 text-[#00008B] font-black">{item.netAmountFormatted}</td>
+                            <td className="py-3 px-4 text-[#142B50] font-black">{item.netAmountFormatted}</td>
                             <td className="py-3 px-4 text-emerald-700 font-black">
                               {item.yieldPercent > 0 ? `%${item.yieldPercent.toFixed(2)}` : "—"}
                             </td>
@@ -2267,8 +2267,8 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
             <div className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xl space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#00008B] border border-blue-200 flex items-center justify-center shadow-sm">
-                    <Briefcase className="w-5 h-5 text-[#00008B]" />
+                  <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#142B50] border border-blue-200 flex items-center justify-center shadow-sm">
+                    <Briefcase className="w-5 h-5 text-[#142B50]" />
                   </div>
                   <div>
                     <h3 className="text-lg font-black text-slate-900 tracking-tight">{symbol} Kurumsal Hareketler & Sermaye Artırımları</h3>
@@ -2276,14 +2276,14 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   </div>
                 </div>
 
-                <span className="text-xs font-black px-3 py-1 bg-blue-50 text-[#00008B] rounded-xl border border-blue-200 self-start sm:self-auto">
+                <span className="text-xs font-black px-3 py-1 bg-blue-50 text-[#142B50] rounded-xl border border-blue-200 self-start sm:self-auto">
                   {corporateActionsData?.splits ? `${corporateActionsData.splits.length} Sermaye Hareketi` : 'Resmi Kayıtlar'}
                 </span>
               </div>
 
               {corporateActionsLoading ? (
                 <div className="py-8 flex items-center justify-center text-slate-400 font-bold text-xs gap-2">
-                  <RefreshCw className="w-4 h-4 animate-spin text-[#00008B]" />
+                  <RefreshCw className="w-4 h-4 animate-spin text-[#142B50]" />
                   Sermaye hareketleri yükleniyor...
                 </div>
               ) : corporateActionsData?.splits && corporateActionsData.splits.length > 0 ? (
@@ -2308,15 +2308,15 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                               <td className="py-3 px-4 font-black text-slate-900">{s.eventDate}</td>
                               <td className="py-3 px-4 text-slate-800">
                                 <span className="inline-flex items-center gap-1.5">
-                                  <span className="w-2 h-2 rounded-full bg-[#00008B]"></span>
+                                  <span className="w-2 h-2 rounded-full bg-[#142B50]"></span>
                                   Hisse Bölünmesi / Sermaye Artırımı
                                 </span>
                               </td>
-                              <td className="py-3 px-4 text-[#00008B] font-black">{ratioFormatted}</td>
+                              <td className="py-3 px-4 text-[#142B50] font-black">{ratioFormatted}</td>
                               <td className="py-3 px-4 text-slate-600 font-mono text-[11px]">{s.splitRatio ?? '—'}</td>
                               <td className="py-3 px-4 text-[10px] text-slate-400 font-medium">BIST / KAP Kayıtları</td>
                               <td className="py-3 px-4 text-right">
-                                <span className="px-2 py-0.5 rounded text-[10px] font-black bg-blue-50 text-[#00008B] border border-blue-200">
+                                <span className="px-2 py-0.5 rounded text-[10px] font-black bg-blue-50 text-[#142B50] border border-blue-200">
                                   Tamamlandı
                                 </span>
                               </td>
@@ -2351,8 +2351,8 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
             <div className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xl space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#00008B] border border-blue-200 flex items-center justify-center shadow-sm">
-                    <Users className="w-5 h-5 text-[#00008B]" />
+                  <div className="w-10 h-10 rounded-2xl bg-blue-50 text-[#142B50] border border-blue-200 flex items-center justify-center shadow-sm">
+                    <Users className="w-5 h-5 text-[#142B50]" />
                   </div>
                   <div>
                     <h3 className="text-lg font-black text-slate-900 tracking-tight">{symbol} Ortaklık Yapısı & Sermaye Dağılımı</h3>
@@ -2360,14 +2360,14 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   </div>
                 </div>
 
-                <span className="text-xs font-black px-3 py-1 bg-blue-50 text-[#00008B] rounded-xl border border-blue-200 self-start sm:self-auto">
+                <span className="text-xs font-black px-3 py-1 bg-blue-50 text-[#142B50] rounded-xl border border-blue-200 self-start sm:self-auto">
                   Resmi KAP & BIST Bildirimleri
                 </span>
               </div>
 
               {ownershipLoading ? (
                 <div className="py-12 flex items-center justify-center text-slate-400 font-bold text-xs gap-2">
-                  <RefreshCw className="w-5 h-5 animate-spin text-[#00008B]" />
+                  <RefreshCw className="w-5 h-5 animate-spin text-[#142B50]" />
                   Ortaklık bilgileri yükleniyor...
                 </div>
               ) : (
@@ -2376,7 +2376,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-1">
                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">Kurumsal Sahiplik</span>
-                      <p className="text-2xl font-black text-[#00008B]">
+                      <p className="text-2xl font-black text-[#142B50]">
                         {ownershipData?.institutionsPercentHeld != null
                           ? `%${(ownershipData.institutionsPercentHeld * 100).toFixed(2)}`
                           : "Veri Mevcut Değil"}
@@ -2419,7 +2419,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   {ownershipData?.topInstitutions && ownershipData.topInstitutions.length > 0 ? (
                     <div className="space-y-3">
                       <h4 className="text-sm font-black text-slate-900 flex items-center gap-2">
-                        <Users className="w-4 h-4 text-[#00008B]" />
+                        <Users className="w-4 h-4 text-[#142B50]" />
                         Önemli Kurumsal Pay Sahipleri
                       </h4>
 
@@ -2438,7 +2438,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                             {ownershipData.topInstitutions.map((inst: any, idx: number) => (
                               <tr key={idx} className="hover:bg-slate-50 transition-colors">
                                 <td className="py-3 px-4 font-black text-slate-900">{inst.holder || "—"}</td>
-                                <td className="py-3 px-4 text-right text-[#00008B] font-black">
+                                <td className="py-3 px-4 text-right text-[#142B50] font-black">
                                   {inst.percentage != null ? `%${(inst.percentage * 100).toFixed(2)}` : "—"}
                                 </td>
                                 <td className="py-3 px-4 text-right text-slate-800">
@@ -2485,7 +2485,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
 
               {analystLoading ? (
                 <div className="py-12 flex items-center justify-center text-slate-400 font-bold text-xs gap-2">
-                  <RefreshCw className="w-5 h-5 animate-spin text-[#00008B]" />
+                  <RefreshCw className="w-5 h-5 animate-spin text-[#142B50]" />
                   Analist konsensüs verileri taranıyor...
                 </div>
               ) : analystData && (analystData.targetMeanPrice != null || analystData.numberOfAnalysts != null) ? (
@@ -2494,7 +2494,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl space-y-1">
                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">Ortalama Hedef Fiyat</span>
-                      <p className="text-2xl font-black text-[#00008B]">
+                      <p className="text-2xl font-black text-[#142B50]">
                         {analystData.targetMeanPrice != null ? `${analystData.targetMeanPrice.toFixed(2)} ₺` : "—"}
                       </p>
                       {analystData.targetMeanPrice != null && stockData?.currentPrice ? (
@@ -2548,7 +2548,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                             ? "bg-emerald-50 text-emerald-800 border-emerald-200"
                             : analystData.recommendationKey.includes('sell')
                             ? "bg-rose-50 text-rose-800 border-rose-200"
-                            : "bg-blue-50 text-[#00008B] border-blue-200"
+                            : "bg-blue-50 text-[#142B50] border-blue-200"
                         )}>
                           {analystData.recommendationKey === 'strong_buy' ? 'Güçlü Al (Strong Buy)'
                             : analystData.recommendationKey === 'buy' ? 'Al (Buy)'
@@ -2599,11 +2599,11 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
           <div className="space-y-6">
             
             {/* HABER STÜDYOSU BAŞLIĞI VE CANLI DURUM */}
-            <div className="bg-[#00008B] text-white rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl border border-blue-900">
+            <div className="bg-[#142B50] text-white rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl border border-blue-900">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-blue-800/80 pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-white text-[#00008B] flex items-center justify-center font-black text-xl shadow-md">
-                    <Newspaper className="w-6 h-6 text-[#00008B]" />
+                  <div className="w-12 h-12 rounded-2xl bg-white text-[#142B50] flex items-center justify-center font-black text-xl shadow-md">
+                    <Newspaper className="w-6 h-6 text-[#142B50]" />
                   </div>
                   <div>
                     <h2 className="text-xl font-black text-white tracking-tight">{symbol} KAP & Haberler Stüdyosu</h2>
@@ -2619,9 +2619,9 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                   <button 
                     onClick={fetchNews}
                     disabled={newsLoading}
-                    className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-blue-50 text-[#00008B] text-xs font-black transition-all flex items-center gap-1.5 shadow-md"
+                    className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-blue-50 text-[#142B50] text-xs font-black transition-all flex items-center gap-1.5 shadow-md"
                   >
-                    <RefreshCw className={cn("w-3.5 h-3.5 text-[#00008B]", newsLoading && "animate-spin")} />
+                    <RefreshCw className={cn("w-3.5 h-3.5 text-[#142B50]", newsLoading && "animate-spin")} />
                     Yenile
                   </button>
                 </div>
@@ -2643,14 +2643,14 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                       className={cn(
                         "px-3 py-1.5 text-xs font-black rounded-xl transition-all border whitespace-nowrap flex items-center gap-1.5",
                         newsCategoryFilter === cat.id
-                          ? "bg-white text-[#00008B] border-white shadow-md font-black"
+                          ? "bg-white text-[#142B50] border-white shadow-md font-black"
                           : "bg-blue-950/60 text-blue-200 border-blue-800/60 hover:bg-blue-800/60 hover:text-white"
                       )}
                     >
                       <span>{cat.label}</span>
                       <span className={cn(
                         "text-[9px] px-1.5 py-0.2 rounded-full font-bold",
-                        newsCategoryFilter === cat.id ? "bg-blue-100 text-[#00008B]" : "bg-blue-900 text-blue-300"
+                        newsCategoryFilter === cat.id ? "bg-blue-100 text-[#142B50]" : "bg-blue-900 text-blue-300"
                       )}>
                         {cat.count}
                       </span>
@@ -2683,7 +2683,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
             {/* HABER KARTLARI LİSTESİ */}
             {newsLoading ? (
               <div className="bg-white border border-slate-200/90 rounded-3xl p-12 flex flex-col items-center justify-center text-slate-400 font-bold text-xs gap-3 shadow-xl">
-                <RefreshCw className="w-6 h-6 animate-spin text-[#00008B]" />
+                <RefreshCw className="w-6 h-6 animate-spin text-[#142B50]" />
                 <span>{symbol} güncel haberleri ve KAP bildirimleri taranıyor...</span>
               </div>
             ) : filteredNews.length > 0 ? (
@@ -2691,7 +2691,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                 {filteredNews.map((article) => (
                   <div 
                     key={article.id}
-                    className="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-4 hover:border-[#00008B] hover:shadow-lg transition-all flex flex-col justify-between"
+                    className="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-4 hover:border-[#78B8F5] hover:shadow-lg transition-all flex flex-col justify-between"
                   >
                     <div className="space-y-3">
                       <div className="flex items-center justify-between gap-2">
@@ -2701,7 +2701,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                             ? "bg-amber-50 text-amber-800 border-amber-200"
                             : (article.category || "").includes("Analiz") || (article.category || "").includes("Finans")
                             ? "bg-emerald-50 text-emerald-800 border-emerald-200"
-                            : "bg-blue-50 text-[#00008B] border-blue-200"
+                            : "bg-blue-50 text-[#142B50] border-blue-200"
                         )}>
                           {article.category || "Haber"}
                         </span>
@@ -2710,7 +2710,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
 
                       <h4 
                         onClick={() => setSelectedArticle(article)}
-                        className="font-black text-slate-900 text-sm leading-snug hover:text-[#00008B] cursor-pointer transition-colors line-clamp-2"
+                        className="font-black text-slate-900 text-sm leading-snug hover:text-[#142B50] cursor-pointer transition-colors line-clamp-2"
                       >
                         {article.title}
                       </h4>
@@ -2724,7 +2724,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                       <span className="text-[10px] text-slate-400 font-medium">BIST / KAP Akışı</span>
                       <button 
                         onClick={() => setSelectedArticle(article)}
-                        className="inline-flex items-center gap-1 text-xs font-black text-[#00008B] hover:underline"
+                        className="inline-flex items-center gap-1 text-xs font-black text-[#142B50] hover:underline"
                       >
                         Haberi Detaylı Oku <ChevronRight className="w-3.5 h-3.5" />
                       </button>
@@ -2739,7 +2739,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                 {newsSearchQuery && (
                   <button 
                     onClick={() => { setNewsSearchQuery(""); setNewsCategoryFilter("all"); }}
-                    className="mt-3 px-4 py-1.5 rounded-xl bg-blue-50 text-[#00008B] text-xs font-black border border-blue-200 inline-flex items-center gap-1"
+                    className="mt-3 px-4 py-1.5 rounded-xl bg-blue-50 text-[#142B50] text-xs font-black border border-blue-200 inline-flex items-center gap-1"
                   >
                     Filtreleri Temizle
                   </button>
@@ -2759,13 +2759,13 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
             {/* FİNAİ ARŞİV MİMARİSİ VE ŞEFFAFLIK BİLDİRİMİ */}
             <div className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xl space-y-4">
               <h4 className="text-base font-black text-slate-900 flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-[#00008B]" />
+                <ShieldCheck className="w-5 h-5 text-[#142B50]" />
                 FinAi Veri Bütünlüğü ve Şeffaflık Taahhüdü
               </h4>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-semibold text-slate-700 leading-relaxed">
                 <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-1.5">
-                  <span className="text-[10px] font-black text-[#00008B] uppercase tracking-wider block">
+                  <span className="text-[10px] font-black text-[#142B50] uppercase tracking-wider block">
                     1. Kayıpsız Supabase-First Katman
                   </span>
                   <p>
@@ -2774,7 +2774,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                 </div>
 
                 <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-1.5">
-                  <span className="text-[10px] font-black text-[#00008B] uppercase tracking-wider block">
+                  <span className="text-[10px] font-black text-[#142B50] uppercase tracking-wider block">
                     2. Kesinlikle Sentetik Veri Yok
                   </span>
                   <p>
@@ -2783,7 +2783,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                 </div>
 
                 <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-1.5">
-                  <span className="text-[10px] font-black text-[#00008B] uppercase tracking-wider block">
+                  <span className="text-[10px] font-black text-[#142B50] uppercase tracking-wider block">
                     3. Resmi Brüt Temettü Korunumu
                   </span>
                   <p>
@@ -2792,7 +2792,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                 </div>
 
                 <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 space-y-1.5">
-                  <span className="text-[10px] font-black text-[#00008B] uppercase tracking-wider block">
+                  <span className="text-[10px] font-black text-[#142B50] uppercase tracking-wider block">
                     4. Ağırlıklı Hisse Adediyle EPS
                   </span>
                   <p>
@@ -2831,7 +2831,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
 
               <div className="space-y-2 border-b border-slate-100 pb-3 pr-10">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-black px-2.5 py-0.5 rounded-md bg-blue-50 text-[#00008B] border border-blue-200 uppercase">
+                  <span className="text-[10px] font-black px-2.5 py-0.5 rounded-md bg-blue-50 text-[#142B50] border border-blue-200 uppercase">
                     FinAI Öğretici Analiz
                   </span>
                   <span className="text-xs font-bold text-slate-400">• {symbol}</span>
@@ -2854,7 +2854,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                 )}
 
                 <div className="bg-blue-50/70 border border-blue-100 p-3.5 rounded-2xl space-y-1">
-                  <span className="font-black text-[#00008B] block uppercase tracking-wider text-[10px]">
+                  <span className="font-black text-[#142B50] block uppercase tracking-wider text-[10px]">
                     Bu Oran Neyi Ölçer?
                   </span>
                   <p className="text-slate-800">{selectedRatioTooltip.educationalTooltip?.whatItMeasures || "Oran analizi şirket kârlılığı ve değerlemesini ölçer."}</p>
@@ -2888,7 +2888,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                 </span>
                 <button 
                   onClick={() => setSelectedRatioTooltip(null)}
-                  className="px-5 py-2 rounded-xl bg-[#00008B] hover:bg-blue-800 text-white text-xs font-black transition-all shadow-md"
+                  className="px-5 py-2 rounded-xl bg-[#142B50] hover:bg-blue-800 text-white text-xs font-black transition-all shadow-md"
                 >
                   Anladım
                 </button>
@@ -2921,7 +2921,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
 
               <div className="space-y-3 border-b border-slate-100 pb-4 pr-10">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-black px-2.5 py-0.5 rounded-md bg-blue-50 text-[#00008B] border border-blue-200 uppercase">
+                  <span className="text-[10px] font-black px-2.5 py-0.5 rounded-md bg-blue-50 text-[#142B50] border border-blue-200 uppercase">
                     {selectedArticle.category}
                   </span>
                   <span className="text-xs font-bold text-slate-400">• {selectedArticle.pubDate}</span>
@@ -2941,7 +2941,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
               <div className="flex items-center justify-end pt-2">
                 <button 
                   onClick={() => setSelectedArticle(null)}
-                  className="px-6 py-2.5 rounded-xl bg-[#00008B] hover:bg-blue-800 text-white text-xs font-black transition-all shadow-md"
+                  className="px-6 py-2.5 rounded-xl bg-[#142B50] hover:bg-blue-800 text-white text-xs font-black transition-all shadow-md"
                 >
                   Kapat
                 </button>

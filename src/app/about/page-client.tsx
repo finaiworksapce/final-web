@@ -22,7 +22,7 @@ import { FinAiLogo } from "@/components/ui/logo";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white text-slate-900 font-sans flex flex-col selection:bg-blue-100 selection:text-[#00008B]">
+    <div className="min-h-screen bg-white text-slate-900 font-sans flex flex-col selection:bg-blue-100 selection:text-[#142B50]">
       {/* Navbar */}
       <Navbar />
 
@@ -37,9 +37,9 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-[#00008B]/10 text-xs font-bold text-[#00008B] uppercase tracking-wider"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-[#78B8F5]/10 text-xs font-bold text-[#142B50] uppercase tracking-wider"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#00008B]" />
+              <Sparkles className="w-3.5 h-3.5 text-[#142B50]" />
               Hakkımızda & Vizyonumuz
             </motion.div>
 
@@ -50,7 +50,7 @@ export default function AboutPage() {
               className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]"
             >
               Yatırımda Karmaşaya Son, <br />
-              <span className="text-[#00008B]">Bilinçli Geleceğe Güçlü Adım.</span>
+              <span className="text-[#142B50]">Bilinçli Geleceğe Güçlü Adım.</span>
             </motion.h1>
 
             <motion.p
@@ -78,18 +78,18 @@ export default function AboutPage() {
             <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
 
             <div className="flex flex-col md:flex-row items-start gap-8 relative z-10">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#00008B] text-white flex items-center justify-center font-black text-2xl sm:text-3xl shadow-lg shadow-[#00008B]/20 shrink-0">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#142B50] text-white flex items-center justify-center font-black text-2xl sm:text-3xl shadow-lg shadow-[#142B50]/20 shrink-0">
                 SK
               </div>
 
               <div className="space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/70 pb-4">
                   <div>
-                    <h2 className="text-2xl font-black text-[#00008B]">Salih KAVAKCI</h2>
+                    <h2 className="text-2xl font-black text-[#142B50]">Salih KAVAKCI</h2>
                     <p className="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-widest mt-0.5">FinAi Kurucusu</p>
                   </div>
-                  <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 bg-white rounded-full border border-slate-200 text-[#00008B] shadow-sm self-start sm:self-auto">
-                    <Award className="w-3.5 h-3.5 text-[#00008B]" /> Kurucu Mesajı
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 bg-white rounded-full border border-slate-200 text-[#142B50] shadow-sm self-start sm:self-auto">
+                    <Award className="w-3.5 h-3.5 text-[#142B50]" /> Kurucu Mesajı
                   </span>
                 </div>
 
@@ -125,7 +125,7 @@ export default function AboutPage() {
               className="bg-white border-2 border-slate-200/80 rounded-3xl p-8 sm:p-10 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
             >
               <div>
-                <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#00008B] mb-6 shadow-sm">
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#142B50] mb-6 shadow-sm">
                   <Target className="w-7 h-7" />
                 </div>
                 <h3 className="text-2xl font-black text-slate-900 mb-4 tracking-tight">Misyonumuz</h3>
@@ -138,11 +138,11 @@ export default function AboutPage() {
 
               <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col gap-3">
                 <div className="flex items-center gap-3 text-sm font-bold text-slate-800">
-                  <CheckCircle2 className="w-4 h-4 text-[#00008B] shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[#142B50] shrink-0" />
                   <span>Finansal okuryazar olmasanız bile yatırıma güvenle başlama imkanı</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm font-bold text-slate-800">
-                  <CheckCircle2 className="w-4 h-4 text-[#00008B] shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-[#142B50] shrink-0" />
                   <span>Her adımda neyin neden yapıldığını açıklayan yapay zeka</span>
                 </div>
               </div>
@@ -154,7 +154,7 @@ export default function AboutPage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="bg-gradient-to-br from-[#00008B] to-[#1e3a8a] text-white rounded-3xl p-8 sm:p-10 shadow-xl flex flex-col justify-between"
+              className="bg-gradient-to-br from-[#142B50] to-[#1e3a8a] text-white rounded-3xl p-8 sm:p-10 shadow-xl flex flex-col justify-between"
             >
               <div>
                 <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-white mb-6 shadow-sm">
@@ -202,10 +202,10 @@ export default function AboutPage() {
               transition={{ duration: 0.4, delay: 0.1 }}
               className="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 hover:bg-white hover:shadow-lg transition-all duration-300"
             >
-              <div className="w-12 h-12 rounded-xl bg-blue-100/70 text-[#00008B] flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-xl bg-blue-100/70 text-[#142B50] flex items-center justify-center mb-4">
                 <LineChart className="w-6 h-6" />
               </div>
-              <h4 className="text-lg font-bold text-[#00008B] mb-2">Veriye Dayalı Rasyonellik</h4>
+              <h4 className="text-lg font-bold text-[#142B50] mb-2">Veriye Dayalı Rasyonellik</h4>
               <p className="text-sm text-slate-600 font-medium leading-relaxed">
                 Duygusal ve kulaktan dolma kararlar yerine, tamamen matematiksel korelasyonlara ve doğrulanmış piyasa verilerine dayanıyoruz.
               </p>
@@ -219,10 +219,10 @@ export default function AboutPage() {
               transition={{ duration: 0.4, delay: 0.2 }}
               className="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 hover:bg-white hover:shadow-lg transition-all duration-300"
             >
-              <div className="w-12 h-12 rounded-xl bg-blue-100/70 text-[#00008B] flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-xl bg-blue-100/70 text-[#142B50] flex items-center justify-center mb-4">
                 <ShieldCheck className="w-6 h-6" />
               </div>
-              <h4 className="text-lg font-bold text-[#00008B] mb-2">Yapay Zeka ve Şeffaflık</h4>
+              <h4 className="text-lg font-bold text-[#142B50] mb-2">Yapay Zeka ve Şeffaflık</h4>
               <p className="text-sm text-slate-600 font-medium leading-relaxed">
                 Yapay zekanın sunduğu tüm analizlerde neyin nereden geldiğini açık ve net cümlelerle açıklayarak paylaşıyoruz.
               </p>
@@ -236,10 +236,10 @@ export default function AboutPage() {
               transition={{ duration: 0.4, delay: 0.3 }}
               className="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 hover:bg-white hover:shadow-lg transition-all duration-300"
             >
-              <div className="w-12 h-12 rounded-xl bg-blue-100/70 text-[#00008B] flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-xl bg-blue-100/70 text-[#142B50] flex items-center justify-center mb-4">
                 <Lightbulb className="w-6 h-6" />
               </div>
-              <h4 className="text-lg font-bold text-[#00008B] mb-2">Veriyi Lehe Çevirme</h4>
+              <h4 className="text-lg font-bold text-[#142B50] mb-2">Veriyi Lehe Çevirme</h4>
               <p className="text-sm text-slate-600 font-medium leading-relaxed">
                 Piyasadaki karmaşık veri yığınlarını sadeleştirerek yatırımcının kendi stratejisi adına birer avantaja dönüştürmesini sağlıyoruz.
               </p>
@@ -253,10 +253,10 @@ export default function AboutPage() {
               transition={{ duration: 0.4, delay: 0.4 }}
               className="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 hover:bg-white hover:shadow-lg transition-all duration-300"
             >
-              <div className="w-12 h-12 rounded-xl bg-blue-100/70 text-[#00008B] flex items-center justify-center mb-4">
+              <div className="w-12 h-12 rounded-xl bg-blue-100/70 text-[#142B50] flex items-center justify-center mb-4">
                 <BookOpen className="w-6 h-6" />
               </div>
-              <h4 className="text-lg font-bold text-[#00008B] mb-2">Finansal Okuryazarlık</h4>
+              <h4 className="text-lg font-bold text-[#142B50] mb-2">Finansal Okuryazarlık</h4>
               <p className="text-sm text-slate-600 font-medium leading-relaxed">
                 Kullanıcının platformu kullandıkça piyasayı daha iyi okuyan, bilinçli ve bağımsız bir yatırımcı haline gelmesini destekliyoruz.
               </p>
@@ -329,14 +329,14 @@ export default function AboutPage() {
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/login?tab=register"
-              className="w-full sm:w-auto px-8 py-4 bg-[#00008B] hover:bg-black text-white font-bold rounded-full shadow-xl shadow-[#00008B]/20 transition-all flex items-center justify-center gap-2 text-base tracking-wide"
+              className="w-full sm:w-auto px-8 py-4 bg-[#142B50] hover:bg-black text-white font-bold rounded-full shadow-xl shadow-[#142B50]/20 transition-all flex items-center justify-center gap-2 text-base tracking-wide"
             >
               Hemen Ücretsiz Başla
               <ArrowRight className="w-5 h-5" />
             </Link>
             <Link
               href="/"
-              className="w-full sm:w-auto px-8 py-4 bg-slate-100 hover:bg-slate-200 text-[#00008B] font-bold rounded-full border border-slate-200 transition-all text-base tracking-wide"
+              className="w-full sm:w-auto px-8 py-4 bg-slate-100 hover:bg-slate-200 text-[#142B50] font-bold rounded-full border border-slate-200 transition-all text-base tracking-wide"
             >
               Özellikleri İncele
             </Link>

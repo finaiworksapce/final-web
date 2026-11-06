@@ -38,8 +38,8 @@ export function PortfolioHeatmap({ assets = [], prices = {} }: PortfolioHeatmapP
 
     return (
         <div className="p-4 h-full flex flex-col justify-between">
-            <div className="flex items-center justify-between mb-3 border-b border-[#00008B]/5 pb-2">
-                <h4 className="text-[9px] font-black text-[#00008B] uppercase tracking-widest">Portföy Isı Haritası</h4>
+            <div className="flex items-center justify-between mb-3 border-b border-[#78B8F5]/5 pb-2">
+                <h4 className="text-[9px] font-black text-[#142B50] uppercase tracking-widest">Portföy Isı Haritası</h4>
                 <div className="flex gap-1">
                     <div className="w-2 h-2 bg-emerald-500 rounded-sm" />
                     <div className="w-2 h-2 bg-rose-500 rounded-sm" />

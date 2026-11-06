@@ -1470,16 +1470,16 @@ function CalendarContent() {
                     {activeFilter !== 'all' && (
                         <button
                             onClick={() => handleFilterSelect('all')}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-[#00008B] transition-all mb-2.5 shadow-2xs"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-[#142B50] transition-all mb-2.5 shadow-2xs"
                         >
                             <ArrowLeft className="w-3.5 h-3.5" /> Tüm Takvime Dön
                         </button>
                     )}
                     <div className="flex items-center gap-2.5">
-                        <div className="w-9 h-9 rounded-2xl bg-[#00008B]/5 border border-[#00008B]/10 flex items-center justify-center text-[#00008B]">
+                        <div className="w-9 h-9 rounded-2xl bg-[#78B8F5]/15 border border-[#78B8F5]/10 flex items-center justify-center text-[#142B50]">
                             <CalendarIcon className="w-5 h-5" />
                         </div>
-                        <h1 className="text-xl sm:text-2xl font-black text-[#00008B] tracking-tight">
+                        <h1 className="text-xl sm:text-2xl font-black text-[#142B50] tracking-tight">
                             {activeFilter === 'dividends' && 'Temettü Takvimi'}
                             {activeFilter === 'earnings' && 'Bilanço Takvimi'}
                             {activeFilter === 'ipo' && 'Halka Arz Takvimi'}
@@ -1500,7 +1500,7 @@ function CalendarContent() {
                 <div className="flex items-center gap-2 self-start md:self-auto">
                     <button
                         onClick={handleToday}
-                        className="px-3.5 py-2 text-xs font-black text-[#00008B] bg-[#00008B]/5 hover:bg-[#00008B]/10 border border-[#00008B]/10 rounded-xl transition-all shadow-xs"
+                        className="px-3.5 py-2 text-xs font-black text-[#142B50] bg-[#78B8F5]/15 hover:bg-[#78B8F5]/20 border border-[#78B8F5]/10 rounded-xl transition-all shadow-xs"
                     >
                         Bugün
                     </button>
@@ -1508,18 +1508,18 @@ function CalendarContent() {
                         <button
                             onClick={handlePrevMonth}
                             disabled={isPrevMonthDisabled}
-                            className="p-1.5 text-slate-600 hover:text-[#00008B] hover:bg-white rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                            className="p-1.5 text-slate-600 hover:text-[#142B50] hover:bg-white rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                             aria-label="Önceki Ay"
                         >
                             <ChevronLeft className="w-4 h-4" />
                         </button>
-                        <span className="px-3 text-xs font-black text-[#00008B] min-w-[110px] text-center capitalize">
+                        <span className="px-3 text-xs font-black text-[#142B50] min-w-[110px] text-center capitalize">
                             {formattedViewMonthYear}
                         </span>
                         <button
                             onClick={handleNextMonth}
                             disabled={isNextMonthDisabled}
-                            className="p-1.5 text-slate-600 hover:text-[#00008B] hover:bg-white rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                            className="p-1.5 text-slate-600 hover:text-[#142B50] hover:bg-white rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                             aria-label="Sonraki Ay"
                         >
                             <ChevronRight className="w-4 h-4" />
@@ -1531,7 +1531,7 @@ function CalendarContent() {
             {/* Üst Kategori Filtre Butonları */}
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1">
                 {[
-                    { id: 'all', label: 'Tümü', icon: Sparkles, activeStyle: 'bg-[#00008B] text-white border-[#00008B] shadow-md shadow-[#00008B]/20', inactiveStyle: 'bg-white text-slate-600 border-slate-200/80 hover:border-[#00008B]/30 hover:text-[#00008B]' },
+                    { id: 'all', label: 'Tümü', icon: Sparkles, activeStyle: 'bg-[#142B50] text-white border-[#78B8F5] shadow-md shadow-[#142B50]/20', inactiveStyle: 'bg-white text-slate-600 border-slate-200/80 hover:border-[#78B8F5]/30 hover:text-[#142B50]' },
                     { id: 'earnings', label: 'Bilanço', icon: Building2, activeStyle: 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-600/20', inactiveStyle: 'bg-blue-50/60 text-blue-700 border-blue-200/60 hover:bg-blue-100/60' },
                     { id: 'dividends', label: 'Temettü', icon: Coins, activeStyle: 'bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-600/20', inactiveStyle: 'bg-emerald-50/60 text-emerald-700 border-emerald-200/60 hover:bg-emerald-100/60' },
                     { id: 'ipo', label: 'Halka Arz', icon: TrendingUp, activeStyle: 'bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-600/20', inactiveStyle: 'bg-purple-50/60 text-purple-700 border-purple-200/60 hover:bg-purple-100/60' },
@@ -1565,7 +1565,7 @@ function CalendarContent() {
                                 <Coins className="w-4 h-4" />
                             </div>
                             <div>
-                                <h2 className="text-base font-black text-[#00008B]">Temettü Takvimi ve Filtreleme</h2>
+                                <h2 className="text-base font-black text-[#142B50]">Temettü Takvimi ve Filtreleme</h2>
                                 <p className="text-[11px] font-bold text-slate-400">Şirket adına, verime, tutara ve tarihe göre temettü araması yapın</p>
                             </div>
                         </div>
@@ -1669,7 +1669,7 @@ function CalendarContent() {
                             </div>
                         )}
 
-                        <span className="text-xs font-black text-[#00008B] block mb-3">Toplam {filteredDividends.length} Temettü Kaydı</span>
+                        <span className="text-xs font-black text-[#142B50] block mb-3">Toplam {filteredDividends.length} Temettü Kaydı</span>
                         {loading ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yükleniyor...</div>
                         ) : filteredDividends.length === 0 ? (
@@ -1716,14 +1716,14 @@ function CalendarContent() {
                                                                         <Link 
                                                                             href={`/dashboard/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
                                                                             className={`hover:underline font-black text-xs block ${
-                                                                                isPaid ? 'text-white hover:text-emerald-100' : 'text-[#00008B] hover:text-emerald-800'
+                                                                                isPaid ? 'text-white hover:text-emerald-100' : 'text-[#142B50] hover:text-emerald-800'
                                                                             }`}
                                                                             title={`${item.symbol} Şirket Detayına Git`}
                                                                         >
                                                                             {item.symbol}
                                                                         </Link>
                                                                     ) : (
-                                                                        <span className={`text-xs font-black block ${isPaid ? 'text-white' : 'text-[#00008B]'}`}>{item.symbol || '-'}</span>
+                                                                        <span className={`text-xs font-black block ${isPaid ? 'text-white' : 'text-[#142B50]'}`}>{item.symbol || '-'}</span>
                                                                     )}
                                                                     <span className={`text-[11px] font-bold line-clamp-1 max-w-[220px] ${
                                                                         isPaid ? 'text-emerald-100' : 'text-slate-500'
@@ -1796,7 +1796,7 @@ function CalendarContent() {
                                 <Building2 className="w-4 h-4" />
                             </div>
                             <div>
-                                <h2 className="text-base font-black text-[#00008B]">Bilanço Takvimi ve Filtreleme</h2>
+                                <h2 className="text-base font-black text-[#142B50]">Bilanço Takvimi ve Filtreleme</h2>
                                 <p className="text-[11px] font-bold text-slate-400">Şirket adına, döneme, açıklama durumuna ve tarihe göre bilanço araması yapın</p>
                             </div>
                         </div>
@@ -1879,7 +1879,7 @@ function CalendarContent() {
                     )}
 
                     <div className="pt-2">
-                        <span className="text-xs font-black text-[#00008B] block mb-3">Toplam {filteredEarnings.length} Bilanço Kaydı</span>
+                        <span className="text-xs font-black text-[#142B50] block mb-3">Toplam {filteredEarnings.length} Bilanço Kaydı</span>
                         {loading ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yükleniyor...</div>
                         ) : filteredEarnings.length === 0 ? (
@@ -1919,14 +1919,14 @@ function CalendarContent() {
                                                                         <Link 
                                                                             href={`/dashboard/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
                                                                             className={`hover:underline font-black text-xs block ${
-                                                                                isAnnounced ? 'text-white hover:text-blue-100' : 'text-[#00008B] hover:text-blue-800'
+                                                                                isAnnounced ? 'text-white hover:text-blue-100' : 'text-[#142B50] hover:text-blue-800'
                                                                             }`}
                                                                             title={`${item.symbol} Şirket Detayına Git`}
                                                                         >
                                                                             {item.symbol}
                                                                         </Link>
                                                                     ) : (
-                                                                        <span className={`text-xs font-black block ${isAnnounced ? 'text-white' : 'text-[#00008B]'}`}>{item.symbol || '-'}</span>
+                                                                        <span className={`text-xs font-black block ${isAnnounced ? 'text-white' : 'text-[#142B50]'}`}>{item.symbol || '-'}</span>
                                                                     )}
                                                                     <span className={`text-[11px] font-bold line-clamp-1 max-w-[220px] ${
                                                                         isAnnounced ? 'text-blue-100' : 'text-slate-500'
@@ -1993,7 +1993,7 @@ function CalendarContent() {
                                 <TrendingUp className="w-4 h-4" />
                             </div>
                             <div>
-                                <h2 className="text-base font-black text-[#00008B]">Halka Arz Takvimi ve Filtreleme</h2>
+                                <h2 className="text-base font-black text-[#142B50]">Halka Arz Takvimi ve Filtreleme</h2>
                                 <p className="text-[11px] font-bold text-slate-400">Şirket adına, başvuru durumuna, fiyata ve tarihe göre halka arz araması yapın</p>
                             </div>
                         </div>
@@ -2083,7 +2083,7 @@ function CalendarContent() {
                             </div>
                         )}
 
-                        <span className="text-xs font-black text-[#00008B] block mb-3">Toplam {filteredIpos.length} Halka Arz Kaydı</span>
+                        <span className="text-xs font-black text-[#142B50] block mb-3">Toplam {filteredIpos.length} Halka Arz Kaydı</span>
                         {loading ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yükleniyor...</div>
                         ) : filteredIpos.length === 0 ? (
@@ -2122,14 +2122,14 @@ function CalendarContent() {
                                                                         <Link 
                                                                             href={`/dashboard/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
                                                                             className={`hover:underline font-black text-xs block ${
-                                                                                isCompleted ? 'text-white hover:text-purple-100' : 'text-[#00008B] hover:text-purple-800'
+                                                                                isCompleted ? 'text-white hover:text-purple-100' : 'text-[#142B50] hover:text-purple-800'
                                                                             }`}
                                                                             title={`${item.symbol} Şirket Detayına Git`}
                                                                         >
                                                                             {item.symbol}
                                                                         </Link>
                                                                     ) : (
-                                                                        <span className={`text-xs font-black block ${isCompleted ? 'text-white' : 'text-[#00008B]'}`}>{item.symbol || '-'}</span>
+                                                                        <span className={`text-xs font-black block ${isCompleted ? 'text-white' : 'text-[#142B50]'}`}>{item.symbol || '-'}</span>
                                                                     )}
                                                                     <span className={`text-[11px] font-bold line-clamp-1 max-w-[220px] ${
                                                                         isCompleted ? 'text-purple-100' : 'text-slate-500'
@@ -2191,7 +2191,7 @@ function CalendarContent() {
                                 <Globe2 className="w-4 h-4" />
                             </div>
                             <div>
-                                <h2 className="text-base font-black text-[#00008B]">Ekonomik Takvim ve Filtreleme</h2>
+                                <h2 className="text-base font-black text-[#142B50]">Ekonomik Takvim ve Filtreleme</h2>
                                 <p className="text-[11px] font-bold text-slate-400">Veri adına, ülkeye, önem seviyesine ve açıklama durumuna göre makroekonomik arama yapın</p>
                             </div>
                         </div>
@@ -2281,12 +2281,12 @@ function CalendarContent() {
                             <div className="mb-3 flex items-start sm:items-center gap-2.5 p-3.5 rounded-2xl bg-blue-50/90 border border-blue-200 text-blue-950 text-xs font-semibold shadow-xs">
                                 <AlertCircle className="w-4 h-4 text-blue-600 shrink-0 mt-0.5 sm:mt-0" />
                                 <p>
-                                    <span className="font-extrabold text-[#00008B]">Bilgilendirme:</span> <strong>En Yakın Tarih</strong> sıralamasında yalnızca henüz açıklanmamış (beklenen) ekonomik veriler en yakın tarihten başlayarak listelenir; açıklanmış geçmiş veriler bu sıralamada gizlenir. Tüm verileri görmek için <button type="button" onClick={() => { setEcoSort('default'); updateEconomicUrlParams({ sort: 'default' }); }} className="underline font-black text-[#00008B] hover:text-blue-900">Varsayılan sıralama</button> modunu kullanabilirsiniz.
+                                    <span className="font-extrabold text-[#142B50]">Bilgilendirme:</span> <strong>En Yakın Tarih</strong> sıralamasında yalnızca henüz açıklanmamış (beklenen) ekonomik veriler en yakın tarihten başlayarak listelenir; açıklanmış geçmiş veriler bu sıralamada gizlenir. Tüm verileri görmek için <button type="button" onClick={() => { setEcoSort('default'); updateEconomicUrlParams({ sort: 'default' }); }} className="underline font-black text-[#142B50] hover:text-blue-900">Varsayılan sıralama</button> modunu kullanabilirsiniz.
                                 </p>
                             </div>
                         )}
 
-                        <span className="text-xs font-black text-[#00008B] block mb-3">Toplam {filteredEconomicEvents.length} Ekonomik Veri Kaydı</span>
+                        <span className="text-xs font-black text-[#142B50] block mb-3">Toplam {filteredEconomicEvents.length} Ekonomik Veri Kaydı</span>
                         {loading ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yükleniyor...</div>
                         ) : filteredEconomicEvents.length === 0 ? (
@@ -2318,12 +2318,12 @@ function CalendarContent() {
                                                 const detailHref = `/dashboard/economic-calendar/${encodeURIComponent(item.id || item.event)}`;
 
                                                 const cellBg = isReleased
-                                                    ? "bg-[#00008B] group-hover:bg-[#000075]"
+                                                    ? "bg-[#142B50] group-hover:bg-[#000075]"
                                                     : "bg-slate-50/70 group-hover:bg-blue-50/50";
 
                                                 return (
                                                     <tr key={idx} className="group transition-colors">
-                                                        <td className={`py-3.5 pl-4 pr-3.5 font-black whitespace-nowrap rounded-l-2xl ${cellBg} ${isReleased ? 'text-white' : 'text-[#00008B]'}`}>{item.dateFormatted || 'Bugün'} {item.time || '15:30'}</td>
+                                                        <td className={`py-3.5 pl-4 pr-3.5 font-black whitespace-nowrap rounded-l-2xl ${cellBg} ${isReleased ? 'text-white' : 'text-[#142B50]'}`}>{item.dateFormatted || 'Bugün'} {item.time || '15:30'}</td>
                                                         <td className={`py-3.5 px-3.5 font-black whitespace-nowrap ${cellBg} ${isReleased ? 'text-white' : 'text-slate-700'}`}>{item.country || 'USD'}</td>
                                                         <td className={`py-3.5 px-3.5 ${cellBg}`}>
                                                             <Link
@@ -2394,7 +2394,7 @@ function CalendarContent() {
                 <div className="lg:col-span-5 bg-white border border-slate-100 rounded-3xl p-5 shadow-sm flex flex-col justify-between">
                     <div>
                         <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
-                            <h3 className="text-sm font-black text-[#00008B] capitalize">{formattedViewMonthYear}</h3>
+                            <h3 className="text-sm font-black text-[#142B50] capitalize">{formattedViewMonthYear}</h3>
                             <span className="text-[10px] font-bold text-slate-400">Aylık Görünüm</span>
                         </div>
 
@@ -2423,9 +2423,9 @@ function CalendarContent() {
                                         onClick={() => setSelectedDate(cell.date)}
                                         className={`h-9 w-full rounded-xl text-xs font-black transition-all flex flex-col items-center justify-center relative ${
                                             isSelected
-                                                ? 'bg-[#00008B] text-white shadow-md shadow-[#00008B]/30 scale-105 z-10'
+                                                ? 'bg-[#142B50] text-white shadow-md shadow-[#142B50]/30 scale-105 z-10'
                                                 : isTodayCell
-                                                ? 'bg-blue-50 text-[#00008B] border border-blue-200'
+                                                ? 'bg-blue-50 text-[#142B50] border border-blue-200'
                                                 : cell.isCurrentMonth
                                                 ? 'text-slate-700 hover:bg-slate-100'
                                                 : 'text-slate-300 hover:bg-slate-50'
@@ -2433,7 +2433,7 @@ function CalendarContent() {
                                     >
                                         <span>{cell.dayNum}</span>
                                         {(cell.isCurrentMonth && dayHasEvents(cell.date)) && (
-                                            <span className={`w-1 h-1 rounded-full absolute bottom-1 ${isSelected ? 'bg-white' : 'bg-[#00008B]'}`} />
+                                            <span className={`w-1 h-1 rounded-full absolute bottom-1 ${isSelected ? 'bg-white' : 'bg-[#142B50]'}`} />
                                         )}
                                     </button>
                                 );
@@ -2447,10 +2447,10 @@ function CalendarContent() {
                     <div>
                         <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
                             <div>
-                                <h3 className="text-sm font-black text-[#00008B] capitalize">{formattedSelectedDayHeader}</h3>
+                                <h3 className="text-sm font-black text-[#142B50] capitalize">{formattedSelectedDayHeader}</h3>
                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Günün Ajandası</p>
                             </div>
-                            <span className="text-xs font-black text-[#00008B] bg-[#00008B]/5 px-2.5 py-1 rounded-xl border border-[#00008B]/10">
+                            <span className="text-xs font-black text-[#142B50] bg-[#78B8F5]/15 px-2.5 py-1 rounded-xl border border-[#78B8F5]/10">
                                 {selectedDayAgenda.length} Etkinlik
                             </span>
                         </div>
@@ -2458,7 +2458,7 @@ function CalendarContent() {
                         {/* Agenda List */}
                         {loading ? (
                             <div className="flex flex-col items-center justify-center py-12 gap-2">
-                                <Loader2 className="w-6 h-6 text-[#00008B] animate-spin" />
+                                <Loader2 className="w-6 h-6 text-[#142B50] animate-spin" />
                                 <span className="text-xs font-bold text-slate-400">Ajanda verileri yükleniyor...</span>
                             </div>
                         ) : selectedDayAgenda.length === 0 ? (
@@ -2485,13 +2485,13 @@ function CalendarContent() {
                                                 <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-lg border shrink-0 ${item.categoryColor}`}>
                                                     {item.category}
                                                 </span>
-                                                <span className="text-xs font-black text-[#00008B] shrink-0">{item.symbol}</span>
+                                                <span className="text-xs font-black text-[#142B50] shrink-0">{item.symbol}</span>
                                                 <div className="min-w-0">
                                                     <p className="text-xs font-bold text-slate-800 truncate">{item.title}</p>
                                                     <p className="text-[10px] text-slate-500 truncate">{item.subtitle}</p>
                                                 </div>
                                             </div>
-                                            <button title="Hatırlatıcı Ekle" className="p-1.5 text-slate-400 hover:text-[#00008B] hover:bg-white rounded-lg transition-all shrink-0">
+                                            <button title="Hatırlatıcı Ekle" className="p-1.5 text-slate-400 hover:text-[#142B50] hover:bg-white rounded-lg transition-all shrink-0">
                                                 <Bell className="w-3.5 h-3.5" />
                                             </button>
                                         </div>
@@ -2515,7 +2515,7 @@ function CalendarContent() {
                                 <div className="w-7 h-7 rounded-xl bg-blue-100/70 border border-blue-200/80 flex items-center justify-center text-blue-700">
                                     <Building2 className="w-4 h-4" />
                                 </div>
-                                <h3 className="text-sm font-black text-[#00008B]">Bilanço Takvimi</h3>
+                                <h3 className="text-sm font-black text-[#142B50]">Bilanço Takvimi</h3>
                             </div>
                             <Link href="/dashboard/calendar?type=earnings" onClick={() => { setActiveFilter('earnings'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-[10px] font-extrabold text-blue-600 hover:underline">
                                 Tümünü Gör
@@ -2545,7 +2545,7 @@ function CalendarContent() {
                                                 </div>
                                                 <StockLogo symbol={item.symbol} className="w-8 h-8 shrink-0 ring-1 ring-white/30 shadow-xs" />
                                                 <div>
-                                                    <p className={`text-xs font-black ${isAnnounced ? 'text-white' : 'text-[#00008B]'}`}>{item.symbol}</p>
+                                                    <p className={`text-xs font-black ${isAnnounced ? 'text-white' : 'text-[#142B50]'}`}>{item.symbol}</p>
                                                     <p className={`text-[10px] font-bold truncate max-w-[130px] ${isAnnounced ? 'text-blue-100' : 'text-slate-600'}`}>{item.companyName}</p>
                                                 </div>
                                             </div>
@@ -2555,7 +2555,7 @@ function CalendarContent() {
                                                 ) : (
                                                     <span className="text-[9px] font-bold px-2 py-0.5 rounded-lg border text-blue-700 bg-white/80 border-blue-200/80">2026/1Ç</span>
                                                 )}
-                                                <button title="Hatırlat" className={`p-1 ${isAnnounced ? 'text-white hover:text-blue-200' : 'text-blue-400 hover:text-[#00008B]'}`}>
+                                                <button title="Hatırlat" className={`p-1 ${isAnnounced ? 'text-white hover:text-blue-200' : 'text-blue-400 hover:text-[#142B50]'}`}>
                                                     <Bell className="w-3.5 h-3.5" />
                                                 </button>
                                             </div>
@@ -2566,7 +2566,7 @@ function CalendarContent() {
                         )}
                     </div>
 
-                    <Link href="/dashboard/calendar?type=earnings" onClick={() => { setActiveFilter('earnings'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 pt-3 border-t border-blue-100/60 flex items-center justify-center text-xs font-black text-[#00008B] hover:text-blue-600 transition-colors">
+                    <Link href="/dashboard/calendar?type=earnings" onClick={() => { setActiveFilter('earnings'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 pt-3 border-t border-blue-100/60 flex items-center justify-center text-xs font-black text-[#142B50] hover:text-blue-600 transition-colors">
                         Tüm Bilançoları Gör →
                     </Link>
                 </div>
@@ -2579,7 +2579,7 @@ function CalendarContent() {
                                 <div className="w-7 h-7 rounded-xl bg-emerald-100/70 border border-emerald-200/80 flex items-center justify-center text-emerald-700">
                                     <Coins className="w-4 h-4" />
                                 </div>
-                                <h3 className="text-sm font-black text-[#00008B]">Temettü Takvimi</h3>
+                                <h3 className="text-sm font-black text-[#142B50]">Temettü Takvimi</h3>
                             </div>
                             <Link href="/dashboard/calendar?type=dividend" onClick={() => { setActiveFilter('dividends'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-[10px] font-extrabold text-emerald-600 hover:underline">
                                 Tümünü Gör
@@ -2614,7 +2614,7 @@ function CalendarContent() {
                                                 </div>
                                                 <StockLogo symbol={item.symbol} className="w-8 h-8 shrink-0 ring-1 ring-white/30 shadow-xs" />
                                                 <div>
-                                                    <p className={`text-xs font-black ${isPaid ? 'text-white' : 'text-[#00008B]'}`}>{item.symbol}</p>
+                                                    <p className={`text-xs font-black ${isPaid ? 'text-white' : 'text-[#142B50]'}`}>{item.symbol}</p>
                                                     <p className={`text-[10px] font-bold truncate max-w-[120px] ${isPaid ? 'text-emerald-100' : 'text-slate-600'}`}>{item.companyName}</p>
                                                 </div>
                                             </div>
@@ -2628,7 +2628,7 @@ function CalendarContent() {
                                                         {item.netAmountFormatted || '6,00 TL'}
                                                     </span>
                                                 )}
-                                                <button title="Hatırlat" className={`p-1 ${isPaid ? 'text-white hover:text-emerald-200' : 'text-emerald-500 hover:text-[#00008B]'}`}>
+                                                <button title="Hatırlat" className={`p-1 ${isPaid ? 'text-white hover:text-emerald-200' : 'text-emerald-500 hover:text-[#142B50]'}`}>
                                                     <Bell className="w-3.5 h-3.5" />
                                                 </button>
                                             </div>
@@ -2639,7 +2639,7 @@ function CalendarContent() {
                         )}
                     </div>
 
-                    <Link href="/dashboard/calendar?type=dividend" onClick={() => { setActiveFilter('dividends'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 pt-3 border-t border-emerald-100/60 flex items-center justify-center text-xs font-black text-[#00008B] hover:text-emerald-600 transition-colors">
+                    <Link href="/dashboard/calendar?type=dividend" onClick={() => { setActiveFilter('dividends'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 pt-3 border-t border-emerald-100/60 flex items-center justify-center text-xs font-black text-[#142B50] hover:text-emerald-600 transition-colors">
                         Tüm Temettüleri Gör →
                     </Link>
                 </div>
@@ -2652,7 +2652,7 @@ function CalendarContent() {
                                 <div className="w-7 h-7 rounded-xl bg-purple-100/70 border border-purple-200/80 flex items-center justify-center text-purple-700">
                                     <TrendingUp className="w-4 h-4" />
                                 </div>
-                                <h3 className="text-sm font-black text-[#00008B]">Halka Arz Takvimi</h3>
+                                <h3 className="text-sm font-black text-[#142B50]">Halka Arz Takvimi</h3>
                             </div>
                             <Link href="/dashboard/calendar?type=ipo" onClick={() => { setActiveFilter('ipo'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-[10px] font-extrabold text-purple-600 hover:underline">
                                 Tümünü Gör
@@ -2679,7 +2679,7 @@ function CalendarContent() {
                                                 <StockLogo symbol={item.symbol} className="w-8 h-8 shrink-0 ring-1 ring-white/30 shadow-xs" />
                                                 <div>
                                                     <div className="flex items-center gap-2">
-                                                        <span className={`text-xs font-black ${isCompleted ? 'text-white' : 'text-[#00008B]'}`}>{item.symbol}</span>
+                                                        <span className={`text-xs font-black ${isCompleted ? 'text-white' : 'text-[#142B50]'}`}>{item.symbol}</span>
                                                     {isCompleted ? (
                                                         <span className="text-[10px] font-black text-purple-200">
                                                             {getIpoStatusLabel(item)}
@@ -2709,7 +2709,7 @@ function CalendarContent() {
                         )}
                     </div>
 
-                    <Link href="/dashboard/calendar?type=ipo" onClick={() => { setActiveFilter('ipo'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 pt-3 border-t border-purple-100/60 flex items-center justify-center text-xs font-black text-[#00008B] hover:text-purple-600 transition-colors">
+                    <Link href="/dashboard/calendar?type=ipo" onClick={() => { setActiveFilter('ipo'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 pt-3 border-t border-purple-100/60 flex items-center justify-center text-xs font-black text-[#142B50] hover:text-purple-600 transition-colors">
                         Tüm Halka Arzları Gör →
                     </Link>
                 </div>
@@ -2727,7 +2727,7 @@ function CalendarContent() {
                                     <Globe2 className="w-4 h-4" />
                                 </div>
                                 <div>
-                                    <h3 className="text-base font-black text-[#00008B]">Ekonomik Takvim</h3>
+                                    <h3 className="text-base font-black text-[#142B50]">Ekonomik Takvim</h3>
                                     <p className="text-[10px] font-bold text-slate-400">Küresel makroekonomik veriler ve faiz kararları</p>
                                 </div>
                             </div>
@@ -2759,12 +2759,12 @@ function CalendarContent() {
                                         overviewEconomicEvents.map((item, idx) => {
                                             const isReleased = isEconomicEventReleased(item);
                                             const cellBg = isReleased
-                                                ? "bg-[#00008B] group-hover:bg-[#000075]"
+                                                ? "bg-[#142B50] group-hover:bg-[#000075]"
                                                 : "bg-slate-50/60 group-hover:bg-blue-50/50";
 
                                             return (
                                                 <tr key={idx} className="group transition-colors">
-                                                    <td className={`py-2 px-2.5 whitespace-nowrap rounded-l-xl pl-3 ${cellBg} ${isReleased ? 'text-white' : 'text-[#00008B]'}`}>
+                                                    <td className={`py-2 px-2.5 whitespace-nowrap rounded-l-xl pl-3 ${cellBg} ${isReleased ? 'text-white' : 'text-[#142B50]'}`}>
                                                         {item.dateFormatted && (
                                                             <span className={`font-bold mr-1.5 text-[10px] ${isReleased ? 'text-blue-200' : 'text-slate-500'}`}>
                                                                 {item.dateFormatted.split('.')[0]}.{item.dateFormatted.split('.')[1]}
@@ -2776,7 +2776,7 @@ function CalendarContent() {
                                                     <td className={`py-2 px-2 truncate max-w-[130px] ${cellBg}`}>
                                                         <Link
                                                             href={`/dashboard/economic-calendar/${encodeURIComponent(item.id || item.event)}`}
-                                                            className={`hover:underline transition-colors truncate block ${isReleased ? 'text-white hover:text-blue-200' : 'text-slate-800 hover:text-[#00008B]'}`}
+                                                            className={`hover:underline transition-colors truncate block ${isReleased ? 'text-white hover:text-blue-200' : 'text-slate-800 hover:text-[#142B50]'}`}
                                                             title={item.event}
                                                         >
                                                             {item.event}
@@ -2808,7 +2808,7 @@ function CalendarContent() {
                         </div>
                     </div>
 
-                    <Link href="/dashboard/calendar?type=economic" onClick={() => { setActiveFilter('economic'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 pt-3 border-t border-blue-100/60 flex items-center justify-center text-xs font-black text-[#00008B] hover:text-blue-600 transition-colors">
+                    <Link href="/dashboard/calendar?type=economic" onClick={() => { setActiveFilter('economic'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 pt-3 border-t border-blue-100/60 flex items-center justify-center text-xs font-black text-[#142B50] hover:text-blue-600 transition-colors">
                         Tüm Ekonomik Verileri Gör →
                     </Link>
                 </div>
@@ -2877,7 +2877,7 @@ export default function CalendarPage() {
     return (
         <Suspense fallback={
             <div className="w-full min-h-screen bg-slate-50/50 p-8 flex items-center justify-center">
-                <div className="flex items-center gap-2 text-xs font-bold text-[#00008B]">
+                <div className="flex items-center gap-2 text-xs font-bold text-[#142B50]">
                     <Loader2 className="w-5 h-5 animate-spin" />
                     Takvim Yükleniyor...
                 </div>

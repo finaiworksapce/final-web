@@ -5,7 +5,7 @@ import { FinAiLogo } from "@/components/ui/logo";
 
 export default function Footer() {
     return (
-        <footer className="bg-[#00008B] mt-auto text-white">
+        <footer className="bg-[#142B50] mt-auto text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div className="space-y-4">
@@ -21,17 +21,17 @@ export default function Footer() {
                     <div>
                         <h3 className="font-bold mb-4 text-white">Ürün</h3>
                         <ul className="space-y-2 text-sm text-white/80 font-medium">
-                            <li><Link href="#features" className="hover:underline transition-colors text-white/80 hover:text-white">Özellikler</Link></li>
-                            <li><Link href="/login" className="hover:underline transition-colors text-white/80 hover:text-white">Giriş Yap</Link></li>
+                            <li><Link href="#features" className="hover:underline transition-colors text-white/80 hover:text-[#78B8F5]">Özellikler</Link></li>
+                            <li><Link href="/login" className="hover:underline transition-colors text-white/80 hover:text-[#78B8F5]">Giriş Yap</Link></li>
                         </ul>
                     </div>
 
                     <div>
                         <h3 className="font-bold mb-4 text-white">Şirket</h3>
                         <ul className="space-y-2 text-sm text-white/80 font-medium">
-                            <li><Link href="/about" className="hover:underline transition-colors text-white/80 hover:text-white">Hakkımızda</Link></li>
-                            <li><Link href="/legal/terms" className="hover:underline transition-colors text-white/80 hover:text-white">Kullanım Şartları</Link></li>
-                            <li><Link href="/legal/kvkk" className="hover:underline transition-colors text-white/80 hover:text-white">KVKK Aydınlatma Metni</Link></li>
+                            <li><Link href="/about" className="hover:underline transition-colors text-white/80 hover:text-[#78B8F5]">Hakkımızda</Link></li>
+                            <li><Link href="/legal/terms" className="hover:underline transition-colors text-white/80 hover:text-[#78B8F5]">Kullanım Şartları</Link></li>
+                            <li><Link href="/legal/kvkk" className="hover:underline transition-colors text-white/80 hover:text-[#78B8F5]">KVKK Aydınlatma Metni</Link></li>
                         </ul>
                     </div>
 
@@ -63,7 +63,7 @@ export default function Footer() {
             </div>
 
             {/* Alt Telif Yazısı (İnce Çizgisiz, Bütünleşik Mavi Arka Plan) */}
-            <div className="py-6 px-4 text-center text-xs text-white/60 font-bold uppercase tracking-widest bg-[#00008B]">
+            <div className="py-6 px-4 text-center text-xs text-white/60 font-bold uppercase tracking-widest bg-[#142B50]">
                 © {new Date().getFullYear()} FinAi. Tüm hakları saklıdır.
             </div>
         </footer>
