@@ -98,14 +98,14 @@ export const GradientCard = ({
         <div className="relative flex flex-col h-full p-5 z-40 justify-between">
           <div className="space-y-4">
             <div className="flex items-center">
-                <span className="text-[10px] font-black text-[#142B50] uppercase tracking-[0.25em] opacity-30">Gündem</span>
+                <span className="text-[10px] font-normal text-[#0E1E38] uppercase tracking-[0.25em] opacity-30">Gündem</span>
             </div>
 
             <div className="space-y-2">
-                <h3 className="text-[14px] font-black text-[#142B50] line-clamp-3 leading-[1.3] tracking-tight">
+                <h3 className="text-[14px] font-normal text-[#0E1E38] line-clamp-3 leading-[1.3] tracking-tight">
                 {title}
                 </h3>
-                <p className="text-[11px] text-[#142B50]/60 line-clamp-6 leading-relaxed font-medium italic">
+                <p className="text-[11px] text-[#0E1E38]/60 line-clamp-6 leading-relaxed font-medium italic">
                 {aiSummary || description.replace(/<[^>]*>/g, '').trim()}
                 </p>
             </div>
@@ -114,7 +114,7 @@ export const GradientCard = ({
           <a
             href={`/dashboard/news?url=${encodeURIComponent(link)}`}
             onClick={(e) => e.stopPropagation()}
-            className="flex items-center text-[#142B50] text-[10px] font-bold group mt-2 hover:translate-x-1 transition-transform"
+            className="flex items-center text-[#0E1E38] text-[10px] font-bold group mt-2 hover:translate-x-1 transition-transform"
           >
             Haberin Devamı
             <motion.svg className="ml-1 w-3 h-3" viewBox="0 0 16 16" fill="none" animate={{ x: isHovered ? 3 : 0 }}>

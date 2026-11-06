@@ -321,7 +321,7 @@ export function TradingViewStockChart({
         {/* SOL: PİYASA VE SON VERİ DURUMU */}
         <div className="flex items-center gap-2.5">
           <span className={cn(
-            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-black border",
+            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[10px] font-normal border",
             isMarketOpen
               ? "bg-emerald-50 text-emerald-700 border-emerald-200"
               : "bg-slate-100 text-slate-600 border-slate-200"
@@ -345,7 +345,7 @@ export function TradingViewStockChart({
               onClick={() => setChartType("area")}
               className={cn(
                 "px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 text-[11px]",
-                chartType === "area" ? "bg-white text-[#142B50] shadow-2xs font-black" : "text-slate-500 hover:text-slate-800"
+                chartType === "area" ? "bg-white text-[#0E1E38] shadow-2xs font-normal" : "text-slate-500 hover:text-slate-800"
               )}
               title="Çizgi Grafik"
             >
@@ -356,7 +356,7 @@ export function TradingViewStockChart({
               onClick={() => setChartType("candle")}
               className={cn(
                 "px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 text-[11px]",
-                chartType === "candle" ? "bg-white text-[#142B50] shadow-2xs font-black" : "text-slate-500 hover:text-slate-800"
+                chartType === "candle" ? "bg-white text-[#0E1E38] shadow-2xs font-normal" : "text-slate-500 hover:text-slate-800"
               )}
               title="Mum Grafik (OHLC)"
             >
@@ -373,10 +373,10 @@ export function TradingViewStockChart({
                 onClick={() => onTimeframeChange(tf.id)}
                 title={tf.title}
                 className={cn(
-                  "px-2.5 py-1 rounded-xl text-xs font-black transition-all border whitespace-nowrap",
+                  "px-2.5 py-1 rounded-xl text-xs font-normal transition-all border whitespace-nowrap",
                   activeTimeframe === tf.id
-                    ? "bg-[#142B50] text-white border-[#78B8F5] shadow-xs scale-105"
-                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-slate-900"
+                    ? "bg-[#0E1E38] text-white border-[#78B8F5] shadow-xs scale-105"
+                    : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-[#0E1E38]"
                 )}
               >
                 {tf.label}
@@ -390,19 +390,19 @@ export function TradingViewStockChart({
       <div className="min-h-[42px] bg-slate-50/80 border border-slate-200/80 rounded-2xl p-2.5 px-4 flex items-center justify-between gap-2 text-xs font-bold shadow-2xs">
         {hoveredData ? (
           <div className="flex items-center gap-4 flex-wrap w-full justify-between">
-            <span className="text-slate-500 font-extrabold text-[11px] flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-[#142B50]" />
+            <span className="text-slate-500 font-normal text-[11px] flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5 text-[#0E1E38]" />
               {hoveredData.time}
             </span>
             <div className="flex items-center gap-3 text-slate-800 text-[11px]">
               {chartType === "candle" && (
                 <>
-                  <span>A: <strong className="text-slate-900">{hoveredData.open?.toFixed(2)}</strong></span>
+                  <span>A: <strong className="text-[#0E1E38]">{hoveredData.open?.toFixed(2)}</strong></span>
                   <span>Y: <strong className="text-emerald-700">{hoveredData.high?.toFixed(2)}</strong></span>
                   <span>D: <strong className="text-rose-700">{hoveredData.low?.toFixed(2)}</strong></span>
                 </>
               )}
-              <span>Kapanış: <strong className="text-[#142B50] font-black">{hoveredData.close?.toFixed(2)} {currency}</strong></span>
+              <span>Kapanış: <strong className="text-[#0E1E38] font-normal">{hoveredData.close?.toFixed(2)} {currency}</strong></span>
               {hoveredData.volume !== undefined && hoveredData.volume > 0 && (
                 <span className="text-slate-400">Hacim: <strong className="text-slate-600">{formatTurkishVolume(hoveredData.volume)}</strong></span>
               )}
@@ -414,7 +414,7 @@ export function TradingViewStockChart({
               Detaylı tarih ve OHLC değerlerini görmek için grafiğin üzerine gelin
             </span>
             {displayPrice > 0 && (
-              <span className="text-xs font-black text-[#142B50]">
+              <span className="text-xs font-normal text-[#0E1E38]">
                 Güncel: {displayPrice.toFixed(2)} {currency}
               </span>
             )}
@@ -426,8 +426,8 @@ export function TradingViewStockChart({
       <div className="relative w-full h-[340px] bg-white rounded-2xl overflow-hidden">
         {loading && (
           <div className="absolute inset-0 bg-white/80 backdrop-blur-xs z-20 flex flex-col items-center justify-center gap-2">
-            <RefreshCw className="w-6 h-6 text-[#142B50] animate-spin" />
-            <span className="text-xs font-black text-[#142B50]">BİST Canlı Grafik Verileri Yükleniyor...</span>
+            <RefreshCw className="w-6 h-6 text-[#0E1E38] animate-spin" />
+            <span className="text-xs font-normal text-[#0E1E38]">BİST Canlı Grafik Verileri Yükleniyor...</span>
           </div>
         )}
 
@@ -435,13 +435,13 @@ export function TradingViewStockChart({
           <div className="absolute inset-0 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200 flex flex-col items-center justify-center p-6 text-center gap-3">
             <AlertCircle className="w-8 h-8 text-rose-500" />
             <div>
-              <p className="text-sm font-black text-slate-800">Grafik Verisi Alınamıyor</p>
+              <p className="text-sm font-normal text-slate-800">Grafik Verisi Alınamıyor</p>
               <p className="text-xs text-slate-500 mt-0.5">{error || "Seçilen dönem için doğrulanmış fiyat verisi bulunamadı."}</p>
             </div>
             {onRetry && (
               <button
                 onClick={onRetry}
-                className="px-4 py-2 bg-[#142B50] hover:bg-blue-800 text-white rounded-xl text-xs font-black shadow-sm transition-all"
+                className="px-4 py-2 bg-[#0E1E38] hover:bg-blue-800 text-white rounded-xl text-xs font-normal shadow-sm transition-all"
               >
                 Yeniden Deneyin
               </button>

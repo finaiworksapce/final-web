@@ -72,10 +72,10 @@ export default function PossibleScenariosWidget({
             {/* BAŞLIK */}
             <div className="flex items-center gap-2.5">
                 <div className="w-9 h-9 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0">
-                    <SlidersHorizontal className="w-4 h-4 text-[#142B50]" />
+                    <SlidersHorizontal className="w-4 h-4 text-[#0E1E38]" />
                 </div>
                 <div>
-                    <h2 className="text-lg font-black text-[#142B50] tracking-tight">Olası Senaryolar</h2>
+                    <h2 className="text-lg font-normal text-[#0E1E38] tracking-tight">Olası Senaryolar</h2>
                 </div>
             </div>
 
@@ -90,13 +90,13 @@ export default function PossibleScenariosWidget({
                             onClick={() => setActiveTab(tab.id)}
                             className={cn(
                                 "relative px-4 py-2 text-xs sm:text-sm font-bold rounded-xl transition-colors cursor-pointer select-none",
-                                isActive ? "text-white" : "text-slate-600 hover:text-slate-900"
+                                isActive ? "text-white" : "text-slate-600 hover:text-[#0E1E38]"
                             )}
                         >
                             {isActive && (
                                 <motion.div
                                     layoutId="active-scenario-tab"
-                                    className="absolute inset-0 bg-[#142B50] rounded-xl shadow-sm"
+                                    className="absolute inset-0 bg-[#0E1E38] rounded-xl shadow-sm"
                                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                                 />
                             )}

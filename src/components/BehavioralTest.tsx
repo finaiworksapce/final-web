@@ -66,7 +66,7 @@ export const BehavioralTest: React.FC<BehavioralTestProps> = ({ onFinish }) => {
     return (
         <div className="w-full max-w-4xl mx-auto bg-white rounded-[40px] border border-slate-100 shadow-2xl overflow-hidden">
             {/* High Stakes Header */}
-            <div className="bg-[#142B50] p-8 text-white flex justify-between items-center relative overflow-hidden">
+            <div className="bg-[#0E1E38] p-8 text-white flex justify-between items-center relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-full bg-white/5 skew-x-[-20deg] translate-x-10"></div>
                 
                 <div className="flex items-center gap-4 relative z-10">
@@ -74,15 +74,15 @@ export const BehavioralTest: React.FC<BehavioralTestProps> = ({ onFinish }) => {
                         <AlertTriangle className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-blue-200">Stres Testi: Çıkış Stratejisi</p>
-                        <h2 className="text-xl font-black italic">SATIŞ ZAMANLAMASI</h2>
+                        <p className="text-[10px] font-normal uppercase tracking-widest text-blue-200">Stres Testi: Çıkış Stratejisi</p>
+                        <h2 className="text-xl font-normal italic">SATIŞ ZAMANLAMASI</h2>
                     </div>
                 </div>
                 
                 <div className="flex gap-8 relative z-10">
                     <div className="text-right">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-blue-200">Anlık Portföy Değeri</p>
-                        <p className={`text-2xl font-black ${balance >= 100000 ? 'text-emerald-400' : 'text-red-400'}`}>
+                        <p className="text-[10px] font-normal uppercase tracking-widest text-blue-200">Anlık Portföy Değeri</p>
+                        <p className={`text-2xl font-normal ${balance >= 100000 ? 'text-emerald-400' : 'text-red-400'}`}>
                             {balance.toLocaleString('tr-TR', { maximumFractionDigits: 0 })} ₺
                         </p>
                     </div>
@@ -98,7 +98,7 @@ export const BehavioralTest: React.FC<BehavioralTestProps> = ({ onFinish }) => {
                                 initial={{ opacity: 0, x: 50 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0 }}
-                                className="absolute top-4 right-4 z-20 px-6 py-2 bg-red-600 text-white rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-2 shadow-2xl"
+                                className="absolute top-4 right-4 z-20 px-6 py-2 bg-red-600 text-white rounded-full text-[10px] font-normal uppercase tracking-widest flex items-center gap-2 shadow-2xl"
                             >
                                 <Zap className="w-4 h-4 fill-white" /> {currentEvent}
                             </motion.div>
@@ -127,7 +127,7 @@ export const BehavioralTest: React.FC<BehavioralTestProps> = ({ onFinish }) => {
                     {!isPlaying && !result && (
                         <button 
                             onClick={() => setIsPlaying(true)}
-                            className="w-full py-8 bg-[#142B50] text-white rounded-[24px] font-black uppercase tracking-widest text-lg hover:scale-[1.02] active:scale-95 transition-all shadow-2xl flex items-center justify-center gap-3"
+                            className="w-full py-8 bg-[#0E1E38] text-white rounded-[24px] font-normal uppercase tracking-widest text-lg hover:scale-[1.02] active:scale-95 transition-all shadow-2xl flex items-center justify-center gap-3"
                         >
                             <Brain className="w-6 h-6" /> TESTİ BAŞLAT (ZATEN İÇERİDESİNİZ)
                         </button>
@@ -136,7 +136,7 @@ export const BehavioralTest: React.FC<BehavioralTestProps> = ({ onFinish }) => {
                     {isPlaying && (
                         <button 
                             onClick={handleSell}
-                            className="w-full py-10 bg-red-600 text-white rounded-[32px] font-black uppercase tracking-[0.2em] text-xl transition-all shadow-2xl shadow-red-600/40 hover:bg-red-700 animate-bounce-subtle flex flex-col items-center justify-center"
+                            className="w-full py-10 bg-red-600 text-white rounded-[32px] font-normal uppercase tracking-[0.2em] text-xl transition-all shadow-2xl shadow-red-600/40 hover:bg-red-700 animate-bounce-subtle flex flex-col items-center justify-center"
                         >
                             <span className="text-[10px] opacity-70 mb-1">TEHLİKE ANINDA</span>
                             SATIŞ YAP VE ÇIK!
@@ -157,14 +157,14 @@ export const BehavioralTest: React.FC<BehavioralTestProps> = ({ onFinish }) => {
                                     <Trophy className="w-8 h-8 text-blue-400" />
                                 </div>
                                 <div>
-                                    <h3 className="text-2xl font-black text-white uppercase italic tracking-tight">KARAR ANALİZİ</h3>
+                                    <h3 className="text-2xl font-normal text-white uppercase italic tracking-tight">KARAR ANALİZİ</h3>
                                     <p className="text-sm font-bold text-slate-500">Reflekslerinizi ölçtük.</p>
                                 </div>
                             </div>
                             
                             <div className="space-y-4">
                                 <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
-                                    <p className="text-xs font-black uppercase tracking-widest text-blue-400 mb-2">Psikolojik Teşhis</p>
+                                    <p className="text-xs font-normal uppercase tracking-widest text-blue-400 mb-2">Psikolojik Teşhis</p>
                                     <p className="text-lg font-bold text-slate-200 leading-relaxed">{result.description}</p>
                                 </div>
                             </div>
@@ -172,7 +172,7 @@ export const BehavioralTest: React.FC<BehavioralTestProps> = ({ onFinish }) => {
                             <div className="flex gap-4">
                                 <button 
                                     onClick={() => onFinish?.(actions)}
-                                    className="flex-1 py-5 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl hover:bg-blue-500 transition-all flex items-center justify-center gap-2"
+                                    className="flex-1 py-5 bg-blue-600 text-white rounded-2xl font-normal uppercase tracking-widest text-sm shadow-xl hover:bg-blue-500 transition-all flex items-center justify-center gap-2"
                                 >
                                     Analizi Onayla <ArrowRightCircle className="w-5 h-5" />
                                 </button>

@@ -109,11 +109,11 @@ export function DashboardPortfolioWidget({ groupedAssets = [], prices = {}, stat
                         className="bg-slate-50 rounded-[2.5rem] p-12 text-center border-2 border-dashed border-slate-200"
                     >
                         <PieChart className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                        <h3 className="text-xl font-black text-[#142B50] mb-2">Yatırım Profilinizi Belirleyin</h3>
+                        <h3 className="text-xl font-normal text-[#0E1E38] mb-2">Yatırım Profilinizi Belirleyin</h3>
                         <p className="text-sm text-slate-400 font-bold mb-8 max-w-xs mx-auto">Size özel fon ve hisse önerileri için 1 dakikalık testi başlatın.</p>
                         <button 
                             onClick={() => setSurveyStarted(true)}
-                            className="px-10 py-4 bg-[#142B50] text-white rounded-2xl font-black text-sm shadow-xl hover:scale-105 transition-all flex items-center gap-2 mx-auto"
+                            className="px-10 py-4 bg-[#0E1E38] text-white rounded-2xl font-normal text-sm shadow-xl hover:scale-105 transition-all flex items-center gap-2 mx-auto"
                         >
                             Anketi Başlat <Zap className="w-4 h-4 fill-white" />
                         </button>
@@ -126,7 +126,7 @@ export function DashboardPortfolioWidget({ groupedAssets = [], prices = {}, stat
                         className="space-y-6"
                     >
                         <div className="text-center mb-8">
-                            <h3 className="text-2xl font-black text-[#142B50] italic uppercase">Yatırım Yolunuzu Seçin</h3>
+                            <h3 className="text-2xl font-normal text-[#0E1E38] italic uppercase">Yatırım Yolunuzu Seçin</h3>
                             <p className="text-xs font-bold text-slate-400 mt-2 uppercase tracking-widest">Fon mu, Hisse mi yoksa her ikisi mi?</p>
                         </div>
                         
@@ -139,9 +139,9 @@ export function DashboardPortfolioWidget({ groupedAssets = [], prices = {}, stat
                                 <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                                     <Landmark className="w-6 h-6 text-blue-600" />
                                 </div>
-                                <h4 className="text-lg font-black text-slate-900 mb-2 uppercase italic">Yatırım Fonları</h4>
+                                <h4 className="text-lg font-normal text-[#0E1E38] mb-2 uppercase italic">Yatırım Fonları</h4>
                                 <p className="text-xs text-slate-400 font-medium leading-relaxed mb-6">Uzmanlar yönetsin, ben sadece büyümeyi izleyeyim diyenler için.</p>
-                                <div className="flex items-center gap-2 text-[10px] font-black text-blue-600 uppercase tracking-widest">
+                                <div className="flex items-center gap-2 text-[10px] font-normal text-blue-600 uppercase tracking-widest">
                                     Seç ve Devam Et <ArrowRightCircle className="w-4 h-4" />
                                 </div>
                             </button>
@@ -149,15 +149,15 @@ export function DashboardPortfolioWidget({ groupedAssets = [], prices = {}, stat
                             {/* Stock Option */}
                             <button 
                                 onClick={() => setPath('STOCK')}
-                                className="bg-[#142B50] p-8 rounded-[32px] shadow-2xl hover:scale-[1.02] transition-all text-left group relative overflow-hidden"
+                                className="bg-[#0E1E38] p-8 rounded-[32px] shadow-2xl hover:scale-[1.02] transition-all text-left group relative overflow-hidden"
                             >
                                 <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full -mr-12 -mt-12" />
                                 <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-6 border border-white/20">
                                     <Building2 className="w-6 h-6 text-white" />
                                 </div>
-                                <h4 className="text-lg font-black text-white mb-2 uppercase italic">Hisse Senetleri</h4>
+                                <h4 className="text-lg font-normal text-white mb-2 uppercase italic">Hisse Senetleri</h4>
                                 <p className="text-xs text-blue-200/60 font-medium leading-relaxed mb-6">Şirketlere doğrudan ortak olayım, kontrol bende olsun diyenler için.</p>
-                                <div className="flex items-center gap-2 text-[10px] font-black text-white uppercase tracking-widest">
+                                <div className="flex items-center gap-2 text-[10px] font-normal text-white uppercase tracking-widest">
                                     Seç ve Devam Et <ArrowRightCircle className="w-4 h-4" />
                                 </div>
                             </button>
@@ -165,7 +165,7 @@ export function DashboardPortfolioWidget({ groupedAssets = [], prices = {}, stat
                         
                         <button 
                             onClick={() => setPath('MIXED')}
-                            className="w-full py-5 bg-slate-900 text-white rounded-[24px] font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-black transition-all"
+                            className="w-full py-5 bg-slate-900 text-white rounded-[24px] font-normal uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-black transition-all"
                         >
                             <LayoutGrid className="w-4 h-4" /> Karma (Dengeli) Yoldan İlerle
                         </button>
@@ -178,10 +178,10 @@ export function DashboardPortfolioWidget({ groupedAssets = [], prices = {}, stat
                         className="bg-white border border-slate-100 rounded-[32px] p-10 shadow-2xl"
                     >
                         <div className="flex justify-between items-center mb-8">
-                            <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full">Soru {currentStep + 1} / {questions.length}</span>
-                            <button onClick={() => { setPath(null); setCurrentStep(0); }} className="text-[10px] font-black text-slate-400 uppercase">Geri</button>
+                            <span className="text-[10px] font-normal text-blue-600 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full">Soru {currentStep + 1} / {questions.length}</span>
+                            <button onClick={() => { setPath(null); setCurrentStep(0); }} className="text-[10px] font-normal text-slate-400 uppercase">Geri</button>
                         </div>
-                        <h4 className="text-2xl font-black text-slate-900 mb-8 tracking-tight">{questions[currentStep].question}</h4>
+                        <h4 className="text-2xl font-normal text-[#0E1E38] mb-8 tracking-tight">{questions[currentStep].question}</h4>
                         <div className="space-y-3">
                             {questions[currentStep].options.map((opt, i) => (
                                 <button 
@@ -189,7 +189,7 @@ export function DashboardPortfolioWidget({ groupedAssets = [], prices = {}, stat
                                     onClick={() => handleAnswer(opt.score)}
                                     className="w-full text-left p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-blue-500 hover:bg-white transition-all group"
                                 >
-                                    <div className="font-black text-slate-800 group-hover:text-blue-600">{opt.label}</div>
+                                    <div className="font-normal text-slate-800 group-hover:text-blue-600">{opt.label}</div>
                                 </button>
                             ))}
                         </div>
@@ -207,8 +207,8 @@ export function DashboardPortfolioWidget({ groupedAssets = [], prices = {}, stat
                                     <CheckCircle2 className="w-6 h-6" />
                                 </div>
                                 <div>
-                                    <h2 className="text-xl font-black text-[#142B50] tracking-tight">{recommendation.title}</h2>
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{recommendation.persona}</p>
+                                    <h2 className="text-xl font-normal text-[#0E1E38] tracking-tight">{recommendation.title}</h2>
+                                    <p className="text-[10px] font-normal text-slate-400 uppercase tracking-widest">{recommendation.persona}</p>
                                 </div>
                             </div>
                             <button onClick={() => { setRecommendation(null); setSurveyStarted(false); setPath(null); setCurrentStep(0); }} className="p-2 hover:bg-slate-100 rounded-full text-slate-300">
@@ -225,9 +225,9 @@ export function DashboardPortfolioWidget({ groupedAssets = [], prices = {}, stat
                                         <div key={i} className="flex justify-between items-center p-3 bg-slate-50 rounded-xl border border-slate-100">
                                             <div className="flex items-center gap-2">
                                                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
-                                                <span className="text-[11px] font-black text-slate-700 uppercase">{item.name}</span>
+                                                <span className="text-[11px] font-normal text-slate-700 uppercase">{item.name}</span>
                                             </div>
-                                            <span className="text-xs font-black text-[#142B50]">%{item.value}</span>
+                                            <span className="text-xs font-normal text-[#0E1E38]">%{item.value}</span>
                                         </div>
                                     ))}
                                 </div>

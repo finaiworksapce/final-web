@@ -28,7 +28,7 @@ export function PremiumCard({ userName, totalBalance = "₺0,00" }: PremiumCardP
             className="relative w-full max-w-[225px] aspect-[1.586/1] rounded-[16px] overflow-hidden shadow-2xl cursor-pointer preserve-3d"
         >
             {/* Base Background */}
-            <div className="absolute inset-0 bg-[#001a4d] bg-gradient-to-br from-[#001a4d] via-[#142B50] to-[#001a4d]">
+            <div className="absolute inset-0 bg-[#001a4d] bg-gradient-to-br from-[#001a4d] via-[#0E1E38] to-[#001a4d]">
                 <div className="absolute inset-0 opacity-20 mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]" />
             </div>
 
@@ -38,7 +38,7 @@ export function PremiumCard({ userName, totalBalance = "₺0,00" }: PremiumCardP
                 <div className="flex justify-between items-start">
                     <div className="flex items-center gap-1">
                         <FinAiLogo className="drop-shadow-lg" size="xs" />
-                        <span className="text-[8px] font-black tracking-tighter">
+                        <span className="text-[8px] font-normal tracking-tighter">
                             FinAi<span className="text-blue-400">.</span>
                         </span>
                     </div>
@@ -53,7 +53,7 @@ export function PremiumCard({ userName, totalBalance = "₺0,00" }: PremiumCardP
                 </div>
 
                 {/* Bottom: Just the balance amount */}
-                <p className="text-lg font-black tracking-tight leading-none">{totalBalance}</p>
+                <p className="text-lg font-normal tracking-tight leading-none">{totalBalance}</p>
             </div>
 
             {/* Reflection Effect */}

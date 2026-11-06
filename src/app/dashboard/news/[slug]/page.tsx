@@ -147,7 +147,7 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
     const relatedLimit = paragraphCount <= 2 ? 2 : paragraphCount <= 5 ? 4 : 5;
 
     return (
-        <div className="min-h-screen bg-slate-50/50 text-[#142B50] pb-24">
+        <div className="min-h-screen bg-slate-50/50 text-[#0E1E38] pb-24">
             {/* Top Bar with Return Link and Share */}
             <div className="bg-white/80 backdrop-blur-xl border-b border-slate-200/80 sticky top-16 z-30 px-4 sm:px-8 py-3">
                 <div className="max-w-[1600px] mx-auto flex items-center justify-between">
@@ -161,7 +161,7 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
                     <div className="flex items-center gap-2">
                         <button
                             onClick={handleShare}
-                            className="px-3 py-1.5 text-slate-600 hover:text-[#142B50] hover:bg-slate-100 rounded-xl transition-all flex items-center gap-1.5 text-xs font-bold"
+                            className="px-3 py-1.5 text-slate-600 hover:text-[#0E1E38] hover:bg-slate-100 rounded-xl transition-all flex items-center gap-1.5 text-xs font-bold"
                             title="Haberi Paylaş"
                         >
                             {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
@@ -172,7 +172,7 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
                                 href={article.sourceUrl}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="px-3 py-1.5 text-slate-600 hover:text-[#142B50] hover:bg-slate-100 rounded-xl transition-all flex items-center gap-1.5 text-xs font-bold"
+                                className="px-3 py-1.5 text-slate-600 hover:text-[#0E1E38] hover:bg-slate-100 rounded-xl transition-all flex items-center gap-1.5 text-xs font-bold"
                                 title="Orijinal Kaynak"
                             >
                                 <ExternalLink className="w-3.5 h-3.5" />
@@ -190,19 +190,19 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
                 {loading ? (
                     <div className="bg-white border border-slate-200/80 rounded-3xl p-16 text-center space-y-4 shadow-xs">
                         <div className="relative w-12 h-12 mx-auto">
-                            <Loader2 className="w-12 h-12 text-[#142B50] animate-spin" />
-                            <FileText className="w-5 h-5 text-[#142B50] absolute inset-0 m-auto animate-pulse" />
+                            <Loader2 className="w-12 h-12 text-[#0E1E38] animate-spin" />
+                            <FileText className="w-5 h-5 text-[#0E1E38] absolute inset-0 m-auto animate-pulse" />
                         </div>
-                        <h3 className="text-base font-black text-[#142B50]">Haber Detayı Hazırlanıyor</h3>
+                        <h3 className="text-base font-normal text-[#0E1E38]">Haber Detayı Hazırlanıyor</h3>
                         <p className="text-xs text-slate-400 font-bold">Tam metin ve FinAi Özeti derleniyor...</p>
                     </div>
                 ) : error ? (
                     <div className="bg-red-50 border border-red-200 text-red-700 p-8 rounded-3xl flex items-center gap-4">
                         <AlertCircle className="w-8 h-8 text-red-500 shrink-0" />
                         <div>
-                            <h3 className="font-black text-base">Haber Yüklenemedi</h3>
+                            <h3 className="font-normal text-base">Haber Yüklenemedi</h3>
                             <p className="text-xs text-red-600 mt-1">{error}</p>
-                            <Link href="/dashboard/news" className="inline-block mt-4 text-xs font-black underline">
+                            <Link href="/dashboard/news" className="inline-block mt-4 text-xs font-normal underline">
                                 Haberler Sayfasına Geri Dön
                             </Link>
                         </div>
@@ -220,13 +220,13 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
                         >
                             {/* 1. Breadcrumb */}
                             <nav className="flex items-center gap-1.5 text-xs text-slate-400 font-bold">
-                                <Link href="/dashboard/news" className="hover:text-[#142B50] transition-colors">
+                                <Link href="/dashboard/news" className="hover:text-[#0E1E38] transition-colors">
                                     Haberler
                                 </Link>
                                 <ChevronRight className="w-3.5 h-3.5 text-slate-300" />
                                 <Link 
                                     href={`/dashboard/news?category=${newsItem.category}`} 
-                                    className="hover:text-[#142B50] transition-colors"
+                                    className="hover:text-[#0E1E38] transition-colors"
                                 >
                                     {newsItem.categoryLabel}
                                 </Link>
@@ -234,24 +234,24 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
 
                             {/* 2. Kategori Rozeti */}
                             <div>
-                                <span className="inline-flex items-center px-3 py-1 bg-blue-50 text-blue-700 text-xs font-black rounded-lg uppercase tracking-wider border border-blue-100">
+                                <span className="inline-flex items-center px-3 py-1 bg-blue-50 text-blue-700 text-xs font-normal rounded-lg uppercase tracking-wider border border-blue-100">
                                     {newsItem.categoryLabel}
                                 </span>
                             </div>
 
                             {/* 3. Büyük Haber Başlığı */}
-                            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#142B50] tracking-tight leading-tight">
+                            <h1 className="text-2xl sm:text-3xl md:text-4xl font-normal text-[#0E1E38] tracking-tight leading-tight">
                                 {article.title || newsItem.title}
                             </h1>
 
                             {/* 4. Editör & Zaman Çubuğu */}
                             <div className="flex flex-wrap items-center justify-between gap-4 py-3.5 border-y border-slate-100 text-xs text-slate-500 font-bold">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-9 h-9 rounded-full bg-[#142B50] text-white font-black text-sm flex items-center justify-center shadow-xs">
+                                    <div className="w-9 h-9 rounded-full bg-[#0E1E38] text-white font-normal text-sm flex items-center justify-center shadow-xs">
                                         F
                                     </div>
                                     <div>
-                                        <p className="text-xs sm:text-sm font-black text-[#142B50]">FinAi Ekonomi Masası</p>
+                                        <p className="text-xs sm:text-sm font-normal text-[#0E1E38]">FinAi Ekonomi Masası</p>
                                         <p className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Piyasa & Finans İstihbaratı</p>
                                     </div>
                                 </div>
@@ -294,7 +294,7 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-1.5 text-blue-600">
                                             <ExternalLink className="w-3.5 h-3.5" />
-                                            <span className="text-[11px] font-black uppercase tracking-wider">Kaynak Referansı</span>
+                                            <span className="text-[11px] font-normal uppercase tracking-wider">Kaynak Referansı</span>
                                         </div>
                                         <p className="text-xs text-slate-600 font-medium">
                                             Bu içerik <span className="font-bold text-slate-800">{newsItem.source}</span> bülteninden FinAi okuyucuları için derlenmiştir.
@@ -304,7 +304,7 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
                                         href={article.sourceUrl || newsItem.link}
                                         target="_blank"
                                         rel="noreferrer"
-                                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white hover:bg-slate-100 border border-slate-200/80 text-blue-600 hover:text-blue-800 text-xs font-black rounded-xl transition-all shadow-2xs shrink-0"
+                                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white hover:bg-slate-100 border border-slate-200/80 text-blue-600 hover:text-blue-800 text-xs font-normal rounded-xl transition-all shadow-2xs shrink-0"
                                     >
                                         Orijinal Kaynak <ExternalLink className="w-3 h-3" />
                                     </a>

@@ -8,7 +8,7 @@ import Link from "next/link";
 // 60-30-10 Uyumlu Dağılım Paleti
 const DISTRIBUTION_COLORS = [
     "#0E1E38", // %10 Odak Koyu Lacivert (En büyük dilim)
-    "#1F7A63", // %30 İkincil Gökyüzü Mavisi
+    "#2E5894", // %30 İkincil Gökyüzü Mavisi
     "#2E5894", // Dengeli Orta Lacivert
     "#A5D2FA", // Açık Mavi Ton
     "#5A9BE0", // Destekleyici Mavi
@@ -167,9 +167,9 @@ export function TopAssetDistributionCard() {
     return (
         <div className="bg-white rounded-3xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 min-h-[250px] h-full flex flex-col justify-between group">
             {/* 1. Üst Başlık */}
-            <div className="flex items-center justify-between pb-2 border-b border-[#1F7A63]/20">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
                 <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-lg bg-[#1F7A63]/20 border border-[#1F7A63]/40 flex items-center justify-center text-[#0E1E38] shrink-0">
+                    <div className="w-6 h-6 rounded-lg bg-[#0E1E38]/5 border border-[#0E1E38]/10 flex items-center justify-center text-[#0E1E38] shrink-0">
                         <PieChart className="w-3.5 h-3.5 text-[#0E1E38]" />
                     </div>
                     <h3 className="text-xs sm:text-[13px] zodiak-subtitle font-[325] text-[#0E1E38] tracking-tight">
@@ -228,7 +228,7 @@ export function TopAssetDistributionCard() {
                             <span className="text-[9px] zodiak-desc font-[225] text-[#0E1E38]/70 leading-tight">
                                 Toplam
                             </span>
-                            <span className="text-[11px] sm:text-xs zodiak-title font-[500] text-[#0E1E38] tracking-tight mt-0.5 truncate max-w-[65px]">
+                            <span className="text-[11px] sm:text-xs zodiak-title font-normal text-[#0E1E38] tracking-tight mt-0.5 truncate max-w-[65px]">
                                 {formatCurrency(totalValue)}
                             </span>
                         </div>
@@ -244,7 +244,7 @@ export function TopAssetDistributionCard() {
                                     onMouseEnter={() => setHoveredSymbol(item.name)}
                                     onMouseLeave={() => setHoveredSymbol(null)}
                                     className={`flex items-center justify-between gap-1.5 py-0.5 px-1.5 rounded-lg transition-colors cursor-pointer ${
-                                        isHovered ? "bg-[#1F7A63]/15" : ""
+                                        isHovered ? "bg-[#0E1E38]/5" : ""
                                     }`}
                                 >
                                     <div className="flex items-center gap-2 min-w-0">
@@ -257,7 +257,7 @@ export function TopAssetDistributionCard() {
                                         </span>
                                     </div>
 
-                                    <span className="text-xs font-numbers font-[500] text-[#0E1E38] tabular-nums ml-auto shrink-0">
+                                    <span className="text-xs font-numbers font-normal text-[#0E1E38] tabular-nums ml-auto shrink-0">
                                         %{item.percentage.toFixed(1).replace('.', ',')}
                                     </span>
                                 </div>
@@ -268,7 +268,7 @@ export function TopAssetDistributionCard() {
             ) : (
                 /* Boş Varlık Durumu */
                 <div className="flex flex-col items-center justify-center py-4 gap-1 text-center my-auto">
-                    <div className="w-8 h-8 rounded-xl bg-[#1F7A63]/10 border border-[#1F7A63]/30 flex items-center justify-center text-[#0E1E38]/60">
+                    <div className="w-8 h-8 rounded-xl bg-[#0E1E38]/5 border border-[#0E1E38]/10 flex items-center justify-center text-[#0E1E38]/60">
                         <Layers className="w-4 h-4" />
                     </div>
                     <p className="text-xs zodiak-subtitle font-[325] text-[#0E1E38]">Henüz kayıtlı varlık yok</p>

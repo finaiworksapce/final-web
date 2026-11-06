@@ -24,8 +24,8 @@ export default function CalendarSummary({ events, selectedCountriesCount }: Cale
     return (
         <div className="w-full bg-white border border-slate-200 rounded-3xl p-5 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
-                <h3 className="text-xs font-black uppercase tracking-wider text-[#142B50] flex items-center gap-1.5">
-                    <Activity className="w-4 h-4 text-[#142B50]" /> BUGÜN EKONOMİDE GÜNDEM ÖZETİ
+                <h3 className="text-xs font-normal uppercase tracking-wider text-[#0E1E38] flex items-center gap-1.5">
+                    <Activity className="w-4 h-4 text-[#0E1E38]" /> BUGÜN EKONOMİDE GÜNDEM ÖZETİ
                 </h3>
                 <span className="text-[10px] font-bold text-slate-400">
                     {selectedCountriesCount} Ülke Takip Ediliyor
@@ -39,42 +39,42 @@ export default function CalendarSummary({ events, selectedCountriesCount }: Cale
             ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
                     <div className="p-3 rounded-2xl bg-blue-50/60 border border-blue-100 flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-xs">
+                        <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-normal text-xs">
                             {totalCount}
                         </div>
                         <div>
                             <span className="text-[10px] font-bold text-slate-400 block uppercase">Toplam Veri</span>
-                            <span className="text-xs font-black text-[#142B50] block">{totalCount} Ekonomik Veri</span>
+                            <span className="text-xs font-normal text-[#0E1E38] block">{totalCount} Ekonomik Veri</span>
                         </div>
                     </div>
 
                     <div className="p-3 rounded-2xl bg-rose-50/60 border border-rose-100 flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-xl bg-rose-600 text-white flex items-center justify-center font-black text-xs">
+                        <div className="w-8 h-8 rounded-xl bg-rose-600 text-white flex items-center justify-center font-normal text-xs">
                             <Flame className="w-4 h-4" />
                         </div>
                         <div>
                             <span className="text-[10px] font-bold text-slate-400 block uppercase">Yüksek Etkili</span>
-                            <span className="text-xs font-black text-rose-700 block">{highImpactCount} Yüksek Etki</span>
+                            <span className="text-xs font-normal text-rose-700 block">{highImpactCount} Yüksek Etki</span>
                         </div>
                     </div>
 
                     <div className="p-3 rounded-2xl bg-emerald-50/60 border border-emerald-100 flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black text-xs">
+                        <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-normal text-xs">
                             <CheckCircle2 className="w-4 h-4" />
                         </div>
                         <div>
                             <span className="text-[10px] font-bold text-slate-400 block uppercase">Açıklanan</span>
-                            <span className="text-xs font-black text-emerald-800 block">{releasedCount} Veri Açıklandı</span>
+                            <span className="text-xs font-normal text-emerald-800 block">{releasedCount} Veri Açıklandı</span>
                         </div>
                     </div>
 
                     <div className="p-3 rounded-2xl bg-amber-50/60 border border-amber-100 flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-xl bg-amber-600 text-white flex items-center justify-center font-black text-xs">
+                        <div className="w-8 h-8 rounded-xl bg-amber-600 text-white flex items-center justify-center font-normal text-xs">
                             <Clock className="w-4 h-4" />
                         </div>
                         <div>
                             <span className="text-[10px] font-bold text-slate-400 block uppercase">Beklenen</span>
-                            <span className="text-xs font-black text-amber-800 block">{pendingCount} Veri Bekliyor</span>
+                            <span className="text-xs font-normal text-amber-800 block">{pendingCount} Veri Bekliyor</span>
                         </div>
                     </div>
                 </div>

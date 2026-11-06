@@ -148,7 +148,7 @@ function NewsContent() {
                 <div className="absolute inset-0 bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9]/60 to-[#e2e8f0]/30" />
 
                 {/* Sol Üst: Çok hafif gazete dokusu filigranı (FINANCIAL TIMES) */}
-                <div className="absolute -top-12 -left-8 w-[520px] h-[340px] opacity-[0.04] rotate-[-12deg] pointer-events-none font-serif text-[42px] leading-tight font-black tracking-widest text-slate-900 overflow-hidden">
+                <div className="absolute -top-12 -left-8 w-[520px] h-[340px] opacity-[0.04] rotate-[-12deg] pointer-events-none font-serif text-[42px] leading-tight font-normal tracking-widest text-[#0E1E38] overflow-hidden">
                     FINANCIAL TIMES
                     <div className="text-[12px] font-sans tracking-normal mt-2">
                         GLOBAL MARKETS • ECONOMY • STOCKS • COMMODITIES • FOREX • CURRENCIES • CRYPTO
@@ -189,7 +189,7 @@ function NewsContent() {
                     </div>
 
                     {/* Ana Başlık */}
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-normal text-[#0E1E38] tracking-tight">
                         Finans dünyasından en güncel gelişmeler
                     </h1>
 
@@ -245,7 +245,7 @@ function NewsContent() {
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1 border-b border-slate-200/80">
                                 <div className="flex items-center gap-2">
                                     <span className="w-2.5 h-2.5 rounded-full bg-blue-600 shrink-0" />
-                                    <h2 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+                                    <h2 className="text-base sm:text-lg font-bold text-[#0E1E38] tracking-tight">
                                         {selectedCategory === 'all' ? 'Günün Tüm Haberleri' : currentTabInfo.sectionTitle}
                                     </h2>
                                 </div>
@@ -258,7 +258,7 @@ function NewsContent() {
                                     >
                                         <Filter className="w-3.5 h-3.5 text-blue-600" />
                                         <span className="text-slate-400 font-medium">Kategori:</span>
-                                        <span className="text-slate-900 font-bold">{currentTabInfo.label}</span>
+                                        <span className="text-[#0E1E38] font-bold">{currentTabInfo.label}</span>
                                         <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`} />
                                     </button>
 

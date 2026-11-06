@@ -56,11 +56,11 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
       {/* Başlık ve Skor */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#142B50] border border-blue-200 flex items-center justify-center shadow-sm shrink-0">
-            <ShieldCheck className="w-6 h-6 text-[#142B50]" />
+          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-[#0E1E38] border border-blue-200 flex items-center justify-center shadow-sm shrink-0">
+            <ShieldCheck className="w-6 h-6 text-[#0E1E38]" />
           </div>
           <div>
-            <h3 className="text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
+            <h3 className="text-lg font-normal text-[#0E1E38] tracking-tight flex items-center gap-2">
               {symbol} Veri Kalitesi & Doğrulama Karnesi
               <DataStatusBadge status={qualityData.status || 'SUCCESS'} />
             </h3>
@@ -73,10 +73,10 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
         {/* Skor Rozeti */}
         <div className="flex items-center gap-3 bg-slate-50 px-4 py-2.5 rounded-2xl border border-slate-200 self-start sm:self-auto">
           <div className="text-right">
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider block">Doğrulama Skoru</span>
-            <span className="text-xl font-black text-[#142B50]">{score} / 100</span>
+            <span className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block">Doğrulama Skoru</span>
+            <span className="text-xl font-normal text-[#0E1E38]">{score} / 100</span>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center font-black text-sm">
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center font-normal text-sm">
             %{score}
           </div>
         </div>
@@ -86,10 +86,10 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
         <div className="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl space-y-1">
           <div className="flex items-center gap-1.5 text-slate-400 text-xs font-bold">
-            <TrendingUp className="w-3.5 h-3.5 text-[#142B50]" />
+            <TrendingUp className="w-3.5 h-3.5 text-[#0E1E38]" />
             <span>Fiyat Serisi</span>
           </div>
-          <p className="text-lg font-black text-slate-900">{qualityData.historicalPricesCount.toLocaleString('tr-TR')} Bar</p>
+          <p className="text-lg font-normal text-[#0E1E38]">{qualityData.historicalPricesCount.toLocaleString('tr-TR')} Bar</p>
           <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 inline-block">
             Günlük Doğrulandı
           </span>
@@ -97,10 +97,10 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
 
         <div className="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl space-y-1">
           <div className="flex items-center gap-1.5 text-slate-400 text-xs font-bold">
-            <FileText className="w-3.5 h-3.5 text-[#142B50]" />
+            <FileText className="w-3.5 h-3.5 text-[#0E1E38]" />
             <span>Mali Tablolar</span>
           </div>
-          <p className="text-lg font-black text-slate-900">
+          <p className="text-lg font-normal text-[#0E1E38]">
             {qualityData.quarterlyStatementsCount}Ç / {qualityData.annualStatementsCount}Y
           </p>
           <span className="text-[10px] text-blue-700 font-bold bg-blue-50 px-2 py-0.5 rounded border border-blue-200 inline-block">
@@ -110,10 +110,10 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
 
         <div className="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl space-y-1">
           <div className="flex items-center gap-1.5 text-slate-400 text-xs font-bold">
-            <DollarSign className="w-3.5 h-3.5 text-[#142B50]" />
+            <DollarSign className="w-3.5 h-3.5 text-[#0E1E38]" />
             <span>Temettü Geçmişi</span>
           </div>
-          <p className="text-lg font-black text-slate-900">{qualityData.dividendsCount} Dağıtım</p>
+          <p className="text-lg font-normal text-[#0E1E38]">{qualityData.dividendsCount} Dağıtım</p>
           <span className="text-[10px] text-purple-700 font-bold bg-purple-50 px-2 py-0.5 rounded border border-purple-200 inline-block">
             Brüt Korunmuş (Net Stopajsız)
           </span>
@@ -121,10 +121,10 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
 
         <div className="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl space-y-1">
           <div className="flex items-center gap-1.5 text-slate-400 text-xs font-bold">
-            <Database className="w-3.5 h-3.5 text-[#142B50]" />
+            <Database className="w-3.5 h-3.5 text-[#0E1E38]" />
             <span>TTM Uygunluğu</span>
           </div>
-          <p className="text-lg font-black text-slate-900">
+          <p className="text-lg font-normal text-[#0E1E38]">
             {qualityData.ttmEligible ? 'Uygun (4Ç+)' : 'Yetersiz Geçmiş'}
           </p>
           <span className={`text-[10px] font-bold px-2 py-0.5 rounded border inline-block ${
@@ -139,15 +139,15 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
 
       {/* Tarihsel Veri Derinliği (FAZ 13 Madde 21) */}
       <div className="bg-blue-50/60 rounded-2xl p-4 border border-blue-100 space-y-3">
-        <h4 className="text-xs font-black text-[#142B50] uppercase tracking-wider flex items-center gap-1.5">
-          <Database className="w-4 h-4 text-[#142B50]" />
+        <h4 className="text-xs font-normal text-[#0E1E38] uppercase tracking-wider flex items-center gap-1.5">
+          <Database className="w-4 h-4 text-[#0E1E38]" />
           Tarihsel Veri Derinliği (Veritabanı Başlangıç / Bitiş Kapsamı)
         </h4>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs font-semibold">
           <div className="p-3 bg-white rounded-xl border border-blue-100 space-y-1">
-            <span className="text-slate-400 text-[10px] uppercase font-black block">Fiyat Geçmişi</span>
-            <p className="text-slate-900 font-black text-sm">
+            <span className="text-slate-400 text-[10px] uppercase font-normal block">Fiyat Geçmişi</span>
+            <p className="text-[#0E1E38] font-normal text-sm">
               {qualityData.historicalPricesEarliest && qualityData.historicalPricesLatest
                 ? `${qualityData.historicalPricesEarliest.slice(0, 4)} → ${qualityData.historicalPricesLatest.slice(0, 4)}`
                 : (qualityData.historicalPricesCount > 0 ? `${qualityData.historicalPricesCount} Bar` : 'Veri Yok')}
@@ -158,8 +158,8 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
           </div>
 
           <div className="p-3 bg-white rounded-xl border border-blue-100 space-y-1">
-            <span className="text-slate-400 text-[10px] uppercase font-black block">Mali Tablolar</span>
-            <p className="text-slate-900 font-black text-sm">
+            <span className="text-slate-400 text-[10px] uppercase font-normal block">Mali Tablolar</span>
+            <p className="text-[#0E1E38] font-normal text-sm">
               {qualityData.statementsEarliest && qualityData.statementsLatest
                 ? `${qualityData.statementsEarliest.slice(0, 4)} → ${qualityData.statementsLatest.slice(0, 4)}`
                 : (qualityData.quarterlyStatementsCount > 0 ? `${qualityData.quarterlyStatementsCount} Çeyrek` : 'Veri Yok')}
@@ -170,8 +170,8 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
           </div>
 
           <div className="p-3 bg-white rounded-xl border border-blue-100 space-y-1">
-            <span className="text-slate-400 text-[10px] uppercase font-black block">Temettü Olayları</span>
-            <p className="text-slate-900 font-black text-sm">
+            <span className="text-slate-400 text-[10px] uppercase font-normal block">Temettü Olayları</span>
+            <p className="text-[#0E1E38] font-normal text-sm">
               {qualityData.dividendsCount > 0 && qualityData.dividendsEarliest && qualityData.dividendsLatest
                 ? `${qualityData.dividendsEarliest.slice(0, 4)} → ${qualityData.dividendsLatest.slice(0, 4)}`
                 : (qualityData.dividendsCount > 0 ? `${qualityData.dividendsCount} Olay` : 'Temettü Yok')}
@@ -182,8 +182,8 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
           </div>
 
           <div className="p-3 bg-white rounded-xl border border-blue-100 space-y-1">
-            <span className="text-slate-400 text-[10px] uppercase font-black block">Kurumsal Hareketler</span>
-            <p className="text-slate-900 font-black text-sm">
+            <span className="text-slate-400 text-[10px] uppercase font-normal block">Kurumsal Hareketler</span>
+            <p className="text-[#0E1E38] font-normal text-sm">
               {qualityData.splitsCount > 0 && qualityData.splitsEarliest && qualityData.splitsLatest
                 ? `${qualityData.splitsEarliest.slice(0, 4)} → ${qualityData.splitsLatest.slice(0, 4)}`
                 : (qualityData.splitsCount > 0 ? `${qualityData.splitsCount} Olay` : 'Bölünme Yok')}
@@ -197,8 +197,8 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
 
       {/* Uyarılar ve Provenance Bilgileri */}
       <div className="bg-slate-50/80 rounded-2xl p-4 border border-slate-200/80 space-y-3">
-        <h4 className="text-xs font-black text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-          <AlertCircle className="w-4 h-4 text-[#142B50]" />
+        <h4 className="text-xs font-normal text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+          <AlertCircle className="w-4 h-4 text-[#0E1E38]" />
           Veri Provenance & Doğrulama Standartları
         </h4>
 
@@ -209,7 +209,7 @@ export const DataQualityPanel: React.FC<DataQualityPanelProps> = ({
           </div>
           <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-100">
             <span className="text-slate-400">Raporlama Para Birimi:</span>
-            <span className="font-black text-[#142B50]">{reportingCurrency}</span>
+            <span className="font-normal text-[#0E1E38]">{reportingCurrency}</span>
           </div>
           <div className="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-100">
             <span className="text-slate-400">Döviz Uyuşmazlığı Koruması:</span>

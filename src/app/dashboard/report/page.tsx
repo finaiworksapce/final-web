@@ -161,7 +161,7 @@ export default function FinAiReportViewPage() {
     const displayTwr = report?.twrPercent !== undefined ? report.twrPercent : portfolioMetrics.netProfitPct;
 
     return (
-        <div className="min-h-screen bg-slate-50/70 text-slate-900 pb-16">
+        <div className="min-h-screen bg-slate-50/70 text-[#0E1E38] pb-16">
             {/* Üst Bar / Geri Dönüş */}
             <div className="bg-white border-b border-slate-200/80 sticky top-0 z-30 shadow-2xs">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
@@ -178,7 +178,7 @@ export default function FinAiReportViewPage() {
                             <div className="w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-200/60 flex items-center justify-center text-emerald-600">
                                 <Sparkles className="w-4 h-4 text-emerald-600" />
                             </div>
-                            <h1 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight">
+                            <h1 className="text-sm sm:text-base font-bold text-[#0E1E38] tracking-tight">
                                 FinAi Finansal Rapor
                             </h1>
                         </div>
@@ -219,7 +219,7 @@ export default function FinAiReportViewPage() {
                                 • {new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' })}
                             </span>
                         </div>
-                        <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight">
+                        <h2 className="text-xl sm:text-2xl lg:text-3xl font-normal text-[#0E1E38] tracking-tight">
                             Portföy Gelişim ve Değerlendirme Raporu
                         </h2>
                         <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1 max-w-2xl">
@@ -233,7 +233,7 @@ export default function FinAiReportViewPage() {
                             onClick={() => setTimeframe('weekly')}
                             className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
                                 timeframe === 'weekly'
-                                    ? 'bg-white text-slate-900 shadow-xs'
+                                    ? 'bg-white text-[#0E1E38] shadow-xs'
                                     : 'text-slate-500 hover:text-slate-800'
                             }`}
                         >
@@ -243,7 +243,7 @@ export default function FinAiReportViewPage() {
                             onClick={() => setTimeframe('monthly')}
                             className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
                                 timeframe === 'monthly'
-                                    ? 'bg-white text-slate-900 shadow-xs'
+                                    ? 'bg-white text-[#0E1E38] shadow-xs'
                                     : 'text-slate-500 hover:text-slate-800'
                             }`}
                         >
@@ -253,7 +253,7 @@ export default function FinAiReportViewPage() {
                             onClick={() => setTimeframe('all-time')}
                             className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
                                 timeframe === 'all-time'
-                                    ? 'bg-white text-slate-900 shadow-xs'
+                                    ? 'bg-white text-[#0E1E38] shadow-xs'
                                     : 'text-slate-500 hover:text-slate-800'
                             }`}
                         >
@@ -266,7 +266,7 @@ export default function FinAiReportViewPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">
                         <span className="text-xs font-medium text-slate-400 block">Toplam Portföy Değeri</span>
-                        <div className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
+                        <div className="text-xl sm:text-2xl font-normal text-[#0E1E38] mt-1">
                             {formatCurrency(portfolioMetrics.totalVal)}
                         </div>
                         <span className="text-[11px] text-slate-400 mt-1 block">
@@ -276,7 +276,7 @@ export default function FinAiReportViewPage() {
 
                     <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">
                         <span className="text-xs font-medium text-slate-400 block">Dönem Net Getirisi</span>
-                        <div className={`text-xl sm:text-2xl font-black mt-1 flex items-center gap-1 ${
+                        <div className={`text-xl sm:text-2xl font-normal mt-1 flex items-center gap-1 ${
                             portfolioMetrics.isPositive ? 'text-emerald-600' : 'text-rose-600'
                         }`}>
                             {portfolioMetrics.isPositive ? <TrendingUp className="w-5 h-5" /> : <TrendingDown className="w-5 h-5" />}
@@ -289,7 +289,7 @@ export default function FinAiReportViewPage() {
 
                     <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">
                         <span className="text-xs font-medium text-slate-400 block">Zaman Ağırlıklı Getiri (TWR)</span>
-                        <div className="text-xl sm:text-2xl font-black text-blue-600 mt-1 flex items-center gap-1">
+                        <div className="text-xl sm:text-2xl font-normal text-blue-600 mt-1 flex items-center gap-1">
                             <Percent className="w-5 h-5" />
                             <span>%{displayTwr.toFixed(2)}</span>
                         </div>
@@ -300,7 +300,7 @@ export default function FinAiReportViewPage() {
 
                     <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">
                         <span className="text-xs font-medium text-slate-400 block">Aktif Varlık & Çeşitlilik</span>
-                        <div className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
+                        <div className="text-xl sm:text-2xl font-normal text-[#0E1E38] mt-1">
                             {portfolioMetrics.assetBreakdown.length} Pozisyon
                         </div>
                         <span className="text-[11px] text-emerald-600 font-semibold mt-1 block">
@@ -317,7 +317,7 @@ export default function FinAiReportViewPage() {
                                 <FileText className="w-4 h-4 text-emerald-600" />
                             </div>
                             <div>
-                                <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+                                <h3 className="text-base sm:text-lg font-bold text-[#0E1E38] tracking-tight">
                                     FinAi Yapay Zekâ Değerlendirme Anlatısı
                                 </h3>
                                 <p className="text-xs text-slate-400 font-medium">
@@ -372,7 +372,7 @@ export default function FinAiReportViewPage() {
                 <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-8 shadow-xs space-y-4">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+                            <h3 className="text-base sm:text-lg font-bold text-[#0E1E38] tracking-tight">
                                 Varlık Performans ve Katkı Dökümü
                             </h3>
                             <p className="text-xs text-slate-400 font-medium">
@@ -404,7 +404,7 @@ export default function FinAiReportViewPage() {
                                         return (
                                             <tr key={asset.symbol} className="hover:bg-slate-50/80 transition-colors">
                                                 <td className="py-3.5 px-3">
-                                                    <div className="font-bold text-slate-900">{asset.cleanSymbol}</div>
+                                                    <div className="font-bold text-[#0E1E38]">{asset.cleanSymbol}</div>
                                                     <div className="text-[10px] text-slate-400 font-medium">{asset.type}</div>
                                                 </td>
                                                 <td className="py-3.5 px-3 font-semibold text-slate-700 tabular-nums">
@@ -413,10 +413,10 @@ export default function FinAiReportViewPage() {
                                                 <td className="py-3.5 px-3 text-slate-600 tabular-nums">
                                                     {formatCurrency(asset.avgCost)}
                                                 </td>
-                                                <td className="py-3.5 px-3 font-bold text-slate-900 tabular-nums">
+                                                <td className="py-3.5 px-3 font-bold text-[#0E1E38] tabular-nums">
                                                     {formatCurrency(asset.currentPrice)}
                                                 </td>
-                                                <td className="py-3.5 px-3 font-bold text-slate-900 tabular-nums">
+                                                <td className="py-3.5 px-3 font-bold text-[#0E1E38] tabular-nums">
                                                     {formatCurrency(asset.totalValue)}
                                                 </td>
                                                 <td className="py-3.5 px-3">

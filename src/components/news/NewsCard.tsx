@@ -46,12 +46,12 @@ export function NewsCard({ item, index }: NewsCardProps) {
 
                     {/* Sağ Taraf: Kategori & Başlık */}
                     <div className="min-w-0 flex-1">
-                        <span className="inline-block text-[9px] sm:text-[10px] font-extrabold text-blue-700 bg-blue-50 border border-blue-100/80 px-2 py-0.5 rounded uppercase tracking-wider mb-1">
+                        <span className="inline-block text-[9px] sm:text-[10px] font-normal text-blue-700 bg-blue-50 border border-blue-100/80 px-2 py-0.5 rounded uppercase tracking-wider mb-1">
                             {item.categoryLabel || "Küresel Piyasalar"}
                         </span>
 
                         <Link href={`/dashboard/news/${item.slug}`} className="block">
-                            <h3 className="text-xs sm:text-[13px] font-bold text-slate-900 group-hover:text-blue-600 leading-snug transition-colors line-clamp-2">
+                            <h3 className="text-xs sm:text-[13px] font-bold text-[#0E1E38] group-hover:text-blue-600 leading-snug transition-colors line-clamp-2">
                                 {item.title}
                             </h3>
                         </Link>

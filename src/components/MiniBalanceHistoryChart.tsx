@@ -56,7 +56,7 @@ export function MiniBalanceHistoryChart({ history = [] }: MiniBalanceHistoryChar
                 <div className="w-8 h-8 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center">
                     <div className="w-1.5 h-1.5 rounded-full bg-slate-200 animate-pulse" />
                 </div>
-                <p className="text-[8px] font-black text-slate-300 uppercase tracking-widest leading-tight">
+                <p className="text-[8px] font-normal text-slate-300 uppercase tracking-widest leading-tight">
                     Veriler Analiz<br/>Ediliyor...
                 </p>
             </div>
@@ -72,7 +72,7 @@ export function MiniBalanceHistoryChart({ history = [] }: MiniBalanceHistoryChar
         <div className="h-full w-full p-2 flex flex-col">
             <div className="flex items-center justify-between px-2 pt-1 mb-1">
                 <div className="flex flex-col">
-                    <span className="text-[8px] font-black text-[#142B50] uppercase tracking-widest opacity-60 leading-none mb-0.5">Bakiye Gelişimi</span>
+                    <span className="text-[8px] font-normal text-[#0E1E38] uppercase tracking-widest opacity-60 leading-none mb-0.5">Bakiye Gelişimi</span>
                     {displayData[0]?.isSimulated && (
                         <span className="text-[6px] font-bold text-slate-300 uppercase tracking-tighter leading-none">Analiz Modu</span>
                     )}
@@ -81,7 +81,7 @@ export function MiniBalanceHistoryChart({ history = [] }: MiniBalanceHistoryChar
                     "flex items-center gap-1 px-1.5 py-0.5 rounded-full",
                     isUp ? "bg-emerald-500/5 text-emerald-500" : "bg-rose-500/5 text-rose-500"
                 )}>
-                    <span className="text-[7px] font-black tracking-tighter">
+                    <span className="text-[7px] font-normal tracking-tighter">
                         {isUp ? '↑' : '↓'} %{Math.abs(((displayData[displayData.length-1].balance - displayData[0].balance) / (displayData[0].balance || 1)) * 100).toFixed(1)}
                     </span>
                 </div>
@@ -101,8 +101,8 @@ export function MiniBalanceHistoryChart({ history = [] }: MiniBalanceHistoryChar
                                 if (active && payload && payload.length) {
                                     return (
                                         <div className="bg-white/95 backdrop-blur-md border border-slate-100 p-2 rounded-lg shadow-xl ring-1 ring-black/5">
-                                            <p className="text-[7px] font-black text-slate-400 uppercase mb-0.5">{payload[0].payload.displayDate}</p>
-                                            <p className="text-[10px] font-black text-[#142B50]">
+                                            <p className="text-[7px] font-normal text-slate-400 uppercase mb-0.5">{payload[0].payload.displayDate}</p>
+                                            <p className="text-[10px] font-normal text-[#0E1E38]">
                                                 {new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(payload[0].value as number)}
                                             </p>
                                         </div>

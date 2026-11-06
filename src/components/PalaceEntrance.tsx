@@ -137,8 +137,8 @@ export default function PalaceEntrance() {
                         <div className="absolute top-2 left-1/2 -translate-x-1/2 px-4 py-1 rounded-lg border border-amber-500/40" style={{
                             background: "linear-gradient(135deg, #1a1a2e, #16213e)",
                         }}>
-                            <span className="text-white font-extrabold text-xs tracking-wider">Fin</span>
-                            <span className="text-blue-400 font-extrabold text-xs tracking-wider">Ai</span>
+                            <span className="text-white font-normal text-xs tracking-wider">Fin</span>
+                            <span className="text-blue-400 font-normal text-xs tracking-wider">Ai</span>
                         </div>
 
                         {/* Upper windows */}

@@ -107,7 +107,7 @@ export const SynchronizedCorrelationChart = ({
                 <div className="space-y-4">
                     <div className="flex items-center gap-2">
                         <Activity className="w-4 h-4 text-indigo-600" />
-                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Karşılaştırmalı Performans Endeksi</span>
+                        <span className="text-[10px] font-normal text-slate-400 uppercase tracking-[0.3em]">Karşılaştırmalı Performans Endeksi</span>
                     </div>
 
                     <div className="flex items-center gap-8">
@@ -122,12 +122,12 @@ export const SynchronizedCorrelationChart = ({
                         >
                             <div className="flex items-center gap-2.5 mb-1">
                                 <div className="w-3 h-3 rounded-full bg-blue-500 shadow-sm" />
-                                <span className="text-lg font-black text-slate-900 tracking-tight">{sourceSymbol.replace('.IS', '')}</span>
+                                <span className="text-lg font-normal text-[#0E1E38] tracking-tight">{sourceSymbol.replace('.IS', '')}</span>
                             </div>
                             {currentPoint && (
                                 <div className="flex items-center gap-2 ml-5">
                                     <span className="text-xs font-bold text-slate-500">₺{currentPoint.srcPrice.toLocaleString('tr-TR')}</span>
-                                    <span className={cn("text-xs font-black", currentPoint.srcPct >= 0 ? "text-emerald-600" : "text-rose-600")}>
+                                    <span className={cn("text-xs font-normal", currentPoint.srcPct >= 0 ? "text-emerald-600" : "text-rose-600")}>
                                         {currentPoint.srcPct > 0 ? '+' : ''}{currentPoint.srcPct}%
                                     </span>
                                 </div>
@@ -147,12 +147,12 @@ export const SynchronizedCorrelationChart = ({
                         >
                             <div className="flex items-center gap-2.5 mb-1">
                                 <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-sm" />
-                                <span className="text-lg font-black text-indigo-600 tracking-tight">{targetSymbol.replace('.IS', '')}</span>
+                                <span className="text-lg font-normal text-indigo-600 tracking-tight">{targetSymbol.replace('.IS', '')}</span>
                             </div>
                             {currentPoint && (
                                 <div className="flex items-center gap-2 ml-5">
                                     <span className="text-xs font-bold text-slate-500">₺{currentPoint.tgtPrice.toLocaleString('tr-TR')}</span>
-                                    <span className={cn("text-xs font-black", currentPoint.tgtPct >= 0 ? "text-emerald-600" : "text-rose-600")}>
+                                    <span className={cn("text-xs font-normal", currentPoint.tgtPct >= 0 ? "text-emerald-600" : "text-rose-600")}>
                                         {currentPoint.tgtPct > 0 ? '+' : ''}{currentPoint.tgtPct}%
                                     </span>
                                 </div>
@@ -165,7 +165,7 @@ export const SynchronizedCorrelationChart = ({
                 <div className="flex flex-col items-end gap-2">
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Korelasyon Skoru</span>
                     <div className={cn(
-                        "px-6 py-3 rounded-2xl border text-sm font-black flex items-center gap-3 transition-all duration-700",
+                        "px-6 py-3 rounded-2xl border text-sm font-normal flex items-center gap-3 transition-all duration-700",
                         correlationValue > 0.85
                             ? "bg-rose-50 border-rose-200 text-rose-600"
                             : "bg-indigo-50 border-indigo-200 text-indigo-700"
@@ -247,7 +247,7 @@ export const SynchronizedCorrelationChart = ({
                             <div className="w-8 h-8 rounded-lg bg-white border border-slate-100 flex items-center justify-center shadow-sm">
                                 <TrendingUp className="w-4 h-4 text-indigo-500" />
                             </div>
-                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Canlı Uyum Akışı</span>
+                            <span className="text-[10px] font-normal text-slate-400 uppercase tracking-[0.2em]">Canlı Uyum Akışı</span>
                         </div>
                         <div className="flex gap-[4px] h-4 items-end">
                             {chartData.map((d, i) => (
@@ -281,13 +281,13 @@ export const SynchronizedCorrelationChart = ({
                                         <Zap className="w-7 h-7 fill-current" />
                                     </div>
                                     <div className="space-y-2">
-                                        <span className="text-[10px] font-black text-indigo-200 uppercase tracking-widest">{activeEvent.date}</span>
-                                        <h4 className="text-xl font-black text-white leading-tight">{activeEvent.title}</h4>
+                                        <span className="text-[10px] font-normal text-indigo-200 uppercase tracking-widest">{activeEvent.date}</span>
+                                        <h4 className="text-xl font-normal text-white leading-tight">{activeEvent.title}</h4>
                                     </div>
                                     <p className="text-sm text-indigo-100 leading-relaxed font-medium italic opacity-80">"{activeEvent.description}"</p>
                                 </div>
                                 <div className="mt-auto pt-6 border-t border-white/10">
-                                    <div className="p-4 rounded-2xl bg-black/20 text-[10px] text-white/70 font-black uppercase tracking-widest">
+                                    <div className="p-4 rounded-2xl bg-black/20 text-[10px] text-white/70 font-normal uppercase tracking-widest">
                                         MAKRO ETKİ: {activeEvent.impact}
                                     </div>
                                 </div>
@@ -301,30 +301,30 @@ export const SynchronizedCorrelationChart = ({
                             >
                                 <div className="flex items-center justify-between pb-6 border-b border-slate-100">
                                     <Calendar className="w-4 h-4 text-slate-400" />
-                                    <span className="text-xs font-black text-slate-900 uppercase tracking-widest tabular-nums">{currentPoint.displayDate} {new Date(currentPoint.date).getFullYear()}</span>
+                                    <span className="text-xs font-normal text-[#0E1E38] uppercase tracking-widest tabular-nums">{currentPoint.displayDate} {new Date(currentPoint.date).getFullYear()}</span>
                                 </div>
 
                                 <div className="space-y-10">
                                     <div className="space-y-4">
-                                        <div className="flex items-center justify-between text-[10px] font-black text-blue-600 uppercase tracking-widest">
+                                        <div className="flex items-center justify-between text-[10px] font-normal text-blue-600 uppercase tracking-widest">
                                             <span>{sourceSymbol.replace('.IS', '')}</span>
                                             <span className={cn(currentPoint.srcPct >= 0 ? "text-emerald-600" : "text-rose-600")}>{currentPoint.srcPct}%</span>
                                         </div>
-                                        <div className="text-3xl font-black text-slate-900 tracking-tighter tabular-nums">₺{currentPoint.srcPrice.toLocaleString('tr-TR', { minimumFractionDigits: 4 })}</div>
+                                        <div className="text-3xl font-normal text-[#0E1E38] tracking-tighter tabular-nums">₺{currentPoint.srcPrice.toLocaleString('tr-TR', { minimumFractionDigits: 4 })}</div>
                                     </div>
 
                                     <div className="space-y-4">
-                                        <div className="flex items-center justify-between text-[10px] font-black text-indigo-700 uppercase tracking-widest">
+                                        <div className="flex items-center justify-between text-[10px] font-normal text-indigo-700 uppercase tracking-widest">
                                             <span>{targetSymbol.replace('.IS', '')}</span>
                                             <span className={cn(currentPoint.tgtPct >= 0 ? "text-emerald-600" : "text-rose-600")}>{currentPoint.tgtPct}%</span>
                                         </div>
-                                        <div className="text-3xl font-black text-indigo-600 tracking-tighter tabular-nums">₺{currentPoint.tgtPrice.toLocaleString('tr-TR', { minimumFractionDigits: 4 })}</div>
+                                        <div className="text-3xl font-normal text-indigo-600 tracking-tighter tabular-nums">₺{currentPoint.tgtPrice.toLocaleString('tr-TR', { minimumFractionDigits: 4 })}</div>
                                     </div>
                                 </div>
 
                                 <div className="mt-auto p-5 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
-                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">UYUM</span>
-                                    <span className="text-2xl font-black text-indigo-700 tabular-nums">{currentPoint.rolling?.toFixed(2) || '0.00'}</span>
+                                    <span className="text-[10px] font-normal text-slate-400 uppercase tracking-widest">UYUM</span>
+                                    <span className="text-2xl font-normal text-indigo-700 tabular-nums">{currentPoint.rolling?.toFixed(2) || '0.00'}</span>
                                 </div>
                             </motion.div>
                         ) : (
@@ -333,7 +333,7 @@ export const SynchronizedCorrelationChart = ({
                                     <Brain className="w-10 h-10 text-slate-300 animate-pulse" />
                                 </div>
                                 <div className="space-y-2 px-4">
-                                    <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.3em]">Derin Analiz</h4>
+                                    <h4 className="text-[11px] font-normal text-slate-400 uppercase tracking-[0.3em]">Derin Analiz</h4>
                                     <p className="text-[10px] text-slate-400 font-bold leading-relaxed">Varlık hareketlerini ve piyasa tepkilerini incelemek için grafiğe odaklanın.</p>
                                 </div>
                             </div>

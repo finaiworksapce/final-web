@@ -267,9 +267,9 @@ export function DailyAgendaWidget() {
             {/* 1. Üst Başlık & Kategori Filtreleri */}
             <div className="relative z-10 shrink-0">
                 {/* Başlık Satırı */}
-                <div className="flex items-center justify-between pb-2.5 border-b border-[#1F7A63]/20">
+                <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
                     <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-lg bg-[#1F7A63]/20 border border-[#1F7A63]/40 flex items-center justify-center text-[#0E1E38] shrink-0">
+                        <div className="w-7 h-7 rounded-lg bg-[#0E1E38]/5 border border-[#0E1E38]/10 flex items-center justify-center text-[#0E1E38] shrink-0">
                             <CalendarIcon className="w-3.5 h-3.5 text-[#0E1E38]" />
                         </div>
                         <div className="flex items-center gap-1.5 flex-wrap">
@@ -284,7 +284,7 @@ export function DailyAgendaWidget() {
 
                     <Link
                         href={activeCategory !== 'all' ? `/dashboard/calendar?type=${activeCategory === 'dividends' ? 'dividend' : activeCategory}` : "/dashboard/calendar"}
-                        className="inline-flex items-center gap-1 text-xs zodiak-subtitle font-[325] text-[#0E1E38] hover:text-[#1F7A63] transition-colors group/link"
+                        className="inline-flex items-center gap-1 text-xs zodiak-subtitle font-[325] text-[#0E1E38] hover:text-[#0E1E38]/80 transition-colors group/link"
                     >
                         <span>Tümünü Gör</span>
                         <ArrowRight className="w-3 h-3 transform group-hover/link:translate-x-0.5 transition-transform" />
@@ -302,7 +302,7 @@ export function DailyAgendaWidget() {
                                 className={`px-3 py-1 text-xs zodiak-subtitle font-[325] rounded-lg transition-all shrink-0 ${
                                     isActive
                                         ? "bg-[#0E1E38] text-white shadow-xs"
-                                        : "bg-[#1F7A63]/15 text-[#0E1E38] hover:bg-[#1F7A63]/30"
+                                        : "bg-slate-100 text-[#0E1E38]/75 hover:bg-slate-200/80"
                                 }`}
                             >
                                 {tab.label}
@@ -313,34 +313,34 @@ export function DailyAgendaWidget() {
             </div>
 
             {/* 2. Ajanda Satırları */}
-            <div className="relative z-10 flex-1 min-h-0 my-2 overflow-y-auto pr-1.5 custom-scrollbar [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#1F7A63]/30 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#1F7A63]/50">
+            <div className="relative z-10 flex-1 min-h-0 my-2 overflow-y-auto pr-1.5 custom-scrollbar [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-slate-300">
                 {loading ? (
                     <div className="py-12 flex flex-col items-center justify-center gap-2 text-center">
                         <Loader2 className="w-5 h-5 text-[#0E1E38] animate-spin" />
                         <span className="text-xs zodiak-desc font-[225] text-[#0E1E38]/60">Günün gelişmeleri yükleniyor...</span>
                     </div>
                 ) : filteredItems.length > 0 ? (
-                    <div className="divide-y divide-[#1F7A63]/20 space-y-0.5">
+                    <div className="divide-y divide-slate-100 space-y-0.5">
                         {filteredItems.map((item) => (
                             <Link
                                 key={item.id}
                                 href={item.link || '/dashboard/calendar'}
-                                className="flex items-center justify-between gap-2.5 py-2 px-1.5 hover:bg-[#1F7A63]/10 rounded-xl transition-colors group/item block"
+                                className="flex items-center justify-between gap-2.5 py-2 px-1.5 hover:bg-slate-50 rounded-xl transition-colors group/item block"
                             >
                                 {/* Sol: Saat + Ülke / Sembol */}
                                 <div className="flex items-center gap-2 shrink-0">
                                     {item.category === 'economic' && item.time ? (
-                                        <span className="text-xs font-mono font-numbers font-[500] text-[#0E1E38]/80 w-11 shrink-0">
+                                        <span className="text-xs font-mono font-numbers font-normal text-[#0E1E38]/80 w-11 shrink-0">
                                             {item.time}
                                         </span>
                                     ) : null}
                                     {item.category === 'economic' ? (
-                                        <span className="text-xs zodiak-subtitle font-[325] text-[#0E1E38] px-2 py-0.5 rounded-md bg-[#1F7A63]/20 border border-[#1F7A63]/40 shrink-0 min-w-[32px] text-center">
+                                        <span className="text-xs zodiak-subtitle font-[325] text-[#0E1E38] px-2 py-0.5 rounded-md bg-[#0E1E38]/5 border border-[#0E1E38]/10 shrink-0 min-w-[32px] text-center">
                                             {item.symbolOrCountry}
                                         </span>
                                     ) : (
                                         <div className="flex items-center justify-center shrink-0">
-                                            <StockLogo symbol={item.symbolOrCountry} className="w-8 h-8 ring-1 ring-[#1F7A63]/40 shadow-xs" />
+                                            <StockLogo symbol={item.symbolOrCountry} className="w-8 h-8 ring-1 ring-slate-200 shadow-xs" />
                                         </div>
                                     )}
                                 </div>
@@ -360,7 +360,7 @@ export function DailyAgendaWidget() {
                                 {/* Sağ: Etki + Kategori Badge */}
                                 <div className="flex items-center gap-1.5 shrink-0">
                                     {renderImpactBars(item.impact)}
-                                    <span className="text-[10px] zodiak-subtitle font-[325] px-2 py-0.5 rounded-md shrink-0 bg-[#1F7A63]/20 text-[#0E1E38] border border-[#1F7A63]/30">
+                                    <span className="text-[10px] zodiak-subtitle font-[325] px-2 py-0.5 rounded-md shrink-0 bg-slate-100 text-[#0E1E38] border border-slate-200">
                                         {item.categoryLabel}
                                     </span>
                                 </div>
@@ -370,7 +370,7 @@ export function DailyAgendaWidget() {
                 ) : (
                     /* Boş Durum (Empty State) */
                     <div className="py-10 flex flex-col items-center justify-center text-center gap-1.5 px-4">
-                        <div className="w-8 h-8 rounded-xl bg-[#1F7A63]/10 border border-[#1F7A63]/30 flex items-center justify-center text-[#0E1E38]/60 mb-1">
+                        <div className="w-8 h-8 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-[#0E1E38]/60 mb-1">
                             <AlertCircle className="w-4 h-4 text-[#0E1E38]/60" />
                         </div>
                         <p className="text-xs zodiak-subtitle font-[325] text-[#0E1E38]">
@@ -384,7 +384,7 @@ export function DailyAgendaWidget() {
             </div>
 
             {/* 3. Alt Bilgi & Yönlendirme */}
-            <div className="relative z-10 shrink-0 pt-2.5 border-t border-[#1F7A63]/20 flex items-center justify-between text-xs">
+            <div className="relative z-10 shrink-0 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-1.5">
                     <Clock className="w-3.5 h-3.5 text-[#0E1E38]" />
                     <span className="text-[11px] zodiak-desc font-[225] text-[#0E1E38]/70">Bugünün piyasa ve şirket gelişmeleri</span>
@@ -392,7 +392,7 @@ export function DailyAgendaWidget() {
 
                 <Link
                     href={activeCategory !== 'all' ? `/dashboard/calendar?type=${activeCategory === 'dividends' ? 'dividend' : activeCategory}` : "/dashboard/calendar"}
-                    className="text-[11px] zodiak-subtitle font-[325] text-[#0E1E38] hover:text-[#1F7A63] transition-colors inline-flex items-center gap-1"
+                    className="text-[11px] zodiak-subtitle font-[325] text-[#0E1E38] hover:text-[#0E1E38]/80 transition-colors inline-flex items-center gap-1"
                 >
                     <span>Tüm Takvim</span>
                     <ArrowRight className="w-3 h-3" />

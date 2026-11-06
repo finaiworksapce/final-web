@@ -102,7 +102,7 @@ const StressTestSection = ({ tests, src, tgt }: { tests: CorrelationPair['stress
         <div className="space-y-4 mt-8">
             <div className="flex items-center gap-2 mb-2">
                 <AlertTriangle className="w-4 h-4 text-amber-500" />
-                <h4 className="text-[10px] font-black text-slate-800 uppercase tracking-widest">Tarihsel Stres Reaksiyonu</h4>
+                <h4 className="text-[10px] font-normal text-slate-800 uppercase tracking-widest">Tarihsel Stres Reaksiyonu</h4>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {tests.map((test, i) => (
@@ -110,22 +110,22 @@ const StressTestSection = ({ tests, src, tgt }: { tests: CorrelationPair['stress
                         <div className="text-[9px] font-bold text-slate-500 mb-3 border-b border-slate-100 pb-2 uppercase tracking-tighter">{test.name}</div>
                         <div className="flex items-center justify-between">
                             <div className="flex flex-col">
-                                <span className="text-[8px] text-slate-400 uppercase font-black">{src}</span>
-                                <span className={cn("text-xs font-black", test.srcReturn >= 0 ? "text-emerald-600" : "text-rose-600")}>
+                                <span className="text-[8px] text-slate-400 uppercase font-normal">{src}</span>
+                                <span className={cn("text-xs font-normal", test.srcReturn >= 0 ? "text-emerald-600" : "text-rose-600")}>
                                     {test.srcReturn >= 0 ? '+' : ''}{test.srcReturn}%
                                 </span>
                             </div>
                             <div className="h-6 w-px bg-slate-200" />
                             <div className="flex flex-col">
-                                <span className="text-[8px] text-slate-400 uppercase font-black">{tgt}</span>
-                                <span className={cn("text-xs font-black", test.tgtReturn >= 0 ? "text-emerald-600" : "text-rose-600")}>
+                                <span className="text-[8px] text-slate-400 uppercase font-normal">{tgt}</span>
+                                <span className={cn("text-xs font-normal", test.tgtReturn >= 0 ? "text-emerald-600" : "text-rose-600")}>
                                     {test.tgtReturn >= 0 ? '+' : ''}{test.tgtReturn}%
                                 </span>
                             </div>
                             <div className="h-6 w-px bg-slate-200" />
                             <div className="flex flex-col items-end">
-                                <span className="text-[8px] text-slate-400 uppercase font-black">Ayrışma</span>
-                                <span className="text-xs font-black text-indigo-600">%{test.divergence.toFixed(1)}</span>
+                                <span className="text-[8px] text-slate-400 uppercase font-normal">Ayrışma</span>
+                                <span className="text-xs font-normal text-indigo-600">%{test.divergence.toFixed(1)}</span>
                             </div>
                         </div>
                     </div>
@@ -146,14 +146,14 @@ const SimilarityGalaxy = ({ selectedSymbol, pairs }: { selectedSymbol: string | 
             <div className="absolute top-8 left-8 z-10">
                 <div className="flex items-center gap-2 mb-1">
                     <Orbit className="w-4 h-4 text-indigo-600" />
-                    <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-widest">Varlık Benzerlik Haritası</h3>
+                    <h3 className="text-[11px] font-normal text-[#0E1E38] uppercase tracking-widest">Varlık Benzerlik Haritası</h3>
                 </div>
                 <p className="text-[10px] text-slate-500 max-w-[220px]">Merkeze olan yakınlık, varlıkların piyasa hareketlerine ne kadar "ikiz" gibi tepki verdiğini gösterir.</p>
             </div>
 
             <div className="relative w-full h-full flex items-center justify-center">
                 <div className="w-16 h-16 rounded-full bg-indigo-50 border-2 border-indigo-200 flex items-center justify-center z-20 shadow-xl shadow-indigo-100 animate-pulse">
-                    <span className="text-xs font-black text-indigo-900">{clean(selectedSymbol)}</span>
+                    <span className="text-xs font-normal text-indigo-900">{clean(selectedSymbol)}</span>
                 </div>
 
                 <div className="absolute w-[80px] h-[80px] rounded-full border border-rose-100 pointer-events-none" />
@@ -189,8 +189,8 @@ const SimilarityGalaxy = ({ selectedSymbol, pairs }: { selectedSymbol: string | 
             </div>
 
             <div className="absolute bottom-8 right-8 flex flex-col gap-1.5 p-3 rounded-xl border border-slate-100 bg-slate-50/50">
-                <div className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-rose-500" /> <span className="text-[8px] text-slate-500 uppercase font-black tracking-tighter">İç Çember: Yüksek Risk</span></div>
-                <div className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> <span className="text-[8px] text-slate-500 uppercase font-black tracking-tighter">Dış Çember: Optimal</span></div>
+                <div className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-rose-500" /> <span className="text-[8px] text-slate-500 uppercase font-normal tracking-tighter">İç Çember: Yüksek Risk</span></div>
+                <div className="flex items-center gap-1.5"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> <span className="text-[8px] text-slate-500 uppercase font-normal tracking-tighter">Dış Çember: Optimal</span></div>
             </div>
         </div>
     );
@@ -336,7 +336,7 @@ export default function CorrelationAnalysisPage() {
             <div className="min-h-screen flex flex-col items-center justify-center bg-white">
                 <div className="text-center">
                     <Loader2 className="w-10 h-10 text-slate-800 animate-spin mx-auto mb-6" />
-                    <h2 className="text-lg font-bold text-slate-900 mb-2">Finansal Analiz Motoru</h2>
+                    <h2 className="text-lg font-bold text-[#0E1E38] mb-2">Finansal Analiz Motoru</h2>
                     <p className="text-slate-500 text-sm">Varlık ilişkileri ve güncel piyasa verileri işleniyor...</p>
                 </div>
             </div>
@@ -347,7 +347,7 @@ export default function CorrelationAnalysisPage() {
         return (
             <div className="min-h-screen p-8 bg-slate-50 flex flex-col items-center justify-center text-center">
                 <AlertTriangle className="w-12 h-12 text-rose-500 mb-6" />
-                <h2 className="text-2xl font-bold text-slate-900 mb-2">Analiz Hatası</h2>
+                <h2 className="text-2xl font-bold text-[#0E1E38] mb-2">Analiz Hatası</h2>
                 <p className="text-slate-500 max-w-md mb-8">{error}</p>
                 <button onClick={() => window.location.reload()} className="px-6 py-2.5 bg-slate-900 text-white rounded-xl font-bold transition-all hover:bg-slate-800 shadow-lg shadow-slate-200">Tekrar Dene</button>
             </div>
@@ -355,7 +355,7 @@ export default function CorrelationAnalysisPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#f8fafc] p-6 md:p-10 font-sans text-slate-900">
+        <div className="min-h-screen bg-[#f8fafc] p-6 md:p-10 font-sans text-[#0E1E38]">
             <div className="max-w-7xl mx-auto">
                 <div className="flex items-center justify-between mb-10">
                     <div className="flex items-center gap-4">
@@ -367,18 +367,18 @@ export default function CorrelationAnalysisPage() {
                                 <Scale className="w-4 h-4 text-indigo-600" />
                                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Analytics Terminal</span>
                             </div>
-                            <h1 className="text-2xl font-black text-slate-900 tracking-tight leading-none">Risk & Korelasyon Analizi</h1>
+                            <h1 className="text-2xl font-normal text-[#0E1E38] tracking-tight leading-none">Risk & Korelasyon Analizi</h1>
                         </div>
                     </div>
 
                     <div className="hidden md:flex items-center gap-3 bg-white border border-slate-200 p-2 rounded-2xl shadow-sm">
                         <div className="px-4 py-2 border-r border-slate-100 text-center">
-                            <div className="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Aktif Varlık</div>
-                            <div className="text-sm font-black text-slate-900">{uniqueSymbols.length}</div>
+                            <div className="text-[9px] font-normal text-slate-400 uppercase tracking-tighter">Aktif Varlık</div>
+                            <div className="text-sm font-normal text-[#0E1E38]">{uniqueSymbols.length}</div>
                         </div>
                         <div className="px-4 py-2 text-center">
-                            <div className="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Güven Skoru</div>
-                            <div className="text-sm font-black text-emerald-600">%94.2</div>
+                            <div className="text-[9px] font-normal text-slate-400 uppercase tracking-tighter">Güven Skoru</div>
+                            <div className="text-sm font-normal text-emerald-600">%94.2</div>
                         </div>
                     </div>
                 </div>
@@ -407,11 +407,11 @@ export default function CorrelationAnalysisPage() {
                         <div className="bg-white rounded-[2rem] border border-slate-200 shadow-sm overflow-hidden">
                             <div className="p-8 border-b border-slate-100 flex items-center justify-between bg-slate-50/30">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-black text-sm shadow-xl shadow-slate-200">
+                                    <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-normal text-sm shadow-xl shadow-slate-200">
                                         {selectedAsset ? clean(selectedAsset).substring(0, 2) : '?'}
                                     </div>
                                     <div>
-                                        <h2 className="text-lg font-black text-slate-900">{selectedAsset ? clean(selectedAsset) : ''} Odaklı Risk Matrisi</h2>
+                                        <h2 className="text-lg font-normal text-[#0E1E38]">{selectedAsset ? clean(selectedAsset) : ''} Odaklı Risk Matrisi</h2>
                                         <p className="text-xs text-slate-400 font-medium">Bu varlık ile diğer portföy üyeleri arasındaki çapraz etkileşimler</p>
                                     </div>
                                 </div>
@@ -435,27 +435,27 @@ export default function CorrelationAnalysisPage() {
                                                     <div className="flex flex-col">
                                                         <div className="flex items-center gap-2">
                                                             <div className="flex flex-col">
-                                                                <span className="text-[10px] font-black text-slate-400 uppercase leading-none mb-1">{clean(pair.source)}</span>
-                                                                <span className="text-sm font-black text-slate-900 leading-none">₺{prices[pair.source]?.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) || '---'}</span>
+                                                                <span className="text-[10px] font-normal text-slate-400 uppercase leading-none mb-1">{clean(pair.source)}</span>
+                                                                <span className="text-sm font-normal text-[#0E1E38] leading-none">₺{prices[pair.source]?.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) || '---'}</span>
                                                             </div>
                                                             <ChevronRight className="w-5 h-5 text-slate-200 mx-2" />
                                                             <div className="flex flex-col">
-                                                                <span className="text-[10px] font-black text-slate-400 uppercase leading-none mb-1">{clean(pair.target)}</span>
-                                                                <span className="text-sm font-black text-indigo-600 leading-none">₺{prices[pair.target]?.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) || '---'}</span>
+                                                                <span className="text-[10px] font-normal text-slate-400 uppercase leading-none mb-1">{clean(pair.target)}</span>
+                                                                <span className="text-sm font-normal text-indigo-600 leading-none">₺{prices[pair.target]?.toLocaleString('tr-TR', { minimumFractionDigits: 2 }) || '---'}</span>
                                                             </div>
                                                         </div>
                                                         <div className="flex items-center gap-2 mt-1.5">
                                                             {pair.confidence && pair.confidence >= 80 ? (
-                                                                <div className="flex items-center gap-1 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-md text-[8px] text-emerald-700 font-black tracking-tighter uppercase leading-none">
+                                                                <div className="flex items-center gap-1 bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded-md text-[8px] text-emerald-700 font-normal tracking-tighter uppercase leading-none">
                                                                     <CheckCircle2 className="w-2.5 h-2.5" /> Yüksek Veri Güveni
                                                                 </div>
                                                             ) : (
-                                                                <div className="flex items-center gap-1 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-md text-[8px] text-amber-700 font-black tracking-tighter uppercase leading-none">
+                                                                <div className="flex items-center gap-1 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-md text-[8px] text-amber-700 font-normal tracking-tighter uppercase leading-none">
                                                                     Ön Analiz Aşaması
                                                                 </div>
                                                             )}
                                                             {pair.sharedComposition && pair.sharedComposition.similarity > 50 && (
-                                                                <div className="flex items-center gap-1 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md text-[8px] text-indigo-700 font-black tracking-tighter uppercase leading-none">
+                                                                <div className="flex items-center gap-1 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-md text-[8px] text-indigo-700 font-normal tracking-tighter uppercase leading-none">
                                                                     Yapısal Çakışma Tespit Edildi
                                                                 </div>
                                                             )}
@@ -465,12 +465,12 @@ export default function CorrelationAnalysisPage() {
 
                                                 <div className="flex items-center gap-10 w-full sm:w-auto justify-between sm:justify-end">
                                                     <div className="flex flex-col items-center sm:items-end">
-                                                        <span className="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-1">Duyarlılık (β)</span>
-                                                        <span className="text-xs font-black text-slate-900">{pair.beta?.toFixed(2) || '1.00'}</span>
+                                                        <span className="text-[9px] text-slate-400 font-normal uppercase tracking-widest mb-1">Duyarlılık (β)</span>
+                                                        <span className="text-xs font-normal text-[#0E1E38]">{pair.beta?.toFixed(2) || '1.00'}</span>
                                                     </div>
                                                     <div className="flex flex-col items-center sm:items-end">
-                                                        <span className="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-1">Korelasyon</span>
-                                                        <span className="text-xl font-black tabular-nums" style={{ color: getColor(pair.value) }}>{pair.value.toFixed(2)}</span>
+                                                        <span className="text-[9px] text-slate-400 font-normal uppercase tracking-widest mb-1">Korelasyon</span>
+                                                        <span className="text-xl font-normal tabular-nums" style={{ color: getColor(pair.value) }}>{pair.value.toFixed(2)}</span>
                                                     </div>
                                                     <div className="p-1 rounded-full bg-slate-50 border border-slate-200 group-hover:bg-slate-900 group-hover:text-white transition-all">
                                                         <ChevronDown className={cn("w-4 h-4 transition-transform duration-300", isExpanded && "rotate-180")} />
@@ -503,7 +503,7 @@ export default function CorrelationAnalysisPage() {
                                                                     <div className="flex items-center justify-between">
                                                                         <div className="flex items-center gap-2">
                                                                             <Target className="w-4 h-4 text-indigo-600" />
-                                                                            <h4 className="text-[10px] font-black text-slate-800 uppercase tracking-widest">Dağılım Grafiği</h4>
+                                                                            <h4 className="text-[10px] font-normal text-slate-800 uppercase tracking-widest">Dağılım Grafiği</h4>
                                                                         </div>
                                                                         <Info className="w-3.5 h-3.5 text-slate-300" />
                                                                     </div>
@@ -525,7 +525,7 @@ export default function CorrelationAnalysisPage() {
                                                                     </div>
                                                                     <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
                                                                         <p className="text-[10px] text-slate-500 italic leading-relaxed">
-                                                                            <span className="text-slate-900 font-bold not-italic">Görsel Rehber:</span> {pair.value > 0.8 ? "Noktalar belirgin bir hat üzerinde toplanmış; bu varlıklar neredeyse aynı yöne bakıyor." : "Noktalar dağınık bir yapıda; bu durum varlıkların birbirinden bağımsız hareket ettiğini gösterir."}
+                                                                            <span className="text-[#0E1E38] font-bold not-italic">Görsel Rehber:</span> {pair.value > 0.8 ? "Noktalar belirgin bir hat üzerinde toplanmış; bu varlıklar neredeyse aynı yöne bakıyor." : "Noktalar dağınık bir yapıda; bu durum varlıkların birbirinden bağımsız hareket ettiğini gösterir."}
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -534,7 +534,7 @@ export default function CorrelationAnalysisPage() {
                                                                     <div className="flex items-center justify-between">
                                                                         <div className="flex items-center gap-2">
                                                                             <Activity className="w-4 h-4 text-indigo-600" />
-                                                                            <h4 className="text-[10px] font-black text-slate-800 uppercase tracking-widest">Aylık Yoğunluk Haritası</h4>
+                                                                            <h4 className="text-[10px] font-normal text-slate-800 uppercase tracking-widest">Aylık Yoğunluk Haritası</h4>
                                                                         </div>
                                                                         <Sparkles className="w-3.5 h-3.5 text-indigo-600 animate-pulse" />
                                                                     </div>
@@ -543,7 +543,7 @@ export default function CorrelationAnalysisPage() {
                                                                     </div>
                                                                     <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
                                                                         <p className="text-[10px] text-slate-500 italic leading-relaxed">
-                                                                            <span className="text-slate-900 font-bold not-italic">Trend Analizi:</span> {pair.heatmap && pair.heatmap.filter(h => (h.value || 0) > 0.7).length > 3 ? "Yılın büyük bölümünde yüksek uyum var; bu iki varlık sürekli birbirini takip ediyor." : "Renkler değişkenlik gösteriyor; bu durum belirli dönemlerde varlıkların farklı tepkiler verdiğini kanıtlar."}
+                                                                            <span className="text-[#0E1E38] font-bold not-italic">Trend Analizi:</span> {pair.heatmap && pair.heatmap.filter(h => (h.value || 0) > 0.7).length > 3 ? "Yılın büyük bölümünde yüksek uyum var; bu iki varlık sürekli birbirini takip ediyor." : "Renkler değişkenlik gösteriyor; bu durum belirli dönemlerde varlıkların farklı tepkiler verdiğini kanıtlar."}
                                                                         </p>
                                                                     </div>
                                                                     <StressTestSection tests={pair.stressTests} src={clean(pair.source)} tgt={clean(pair.target)} />
@@ -552,14 +552,14 @@ export default function CorrelationAnalysisPage() {
 
                                                             <div className="bg-white border-2 border-slate-900 rounded-[2rem] p-10 shadow-xl relative overflow-hidden group">
                                                                 <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:scale-110 transition-transform duration-700">
-                                                                    <Brain className="w-32 h-32 text-slate-900" />
+                                                                    <Brain className="w-32 h-32 text-[#0E1E38]" />
                                                                 </div>
                                                                 <div className="relative z-10">
                                                                     <div className="flex items-center gap-3 mb-6">
                                                                         <div className="p-2 rounded-xl bg-slate-900 text-white">
                                                                             <Zap className="w-5 h-5 fill-current" />
                                                                         </div>
-                                                                        <h4 className="text-xs font-black text-slate-900 uppercase tracking-[0.2em]">Yapay Zeka Destekli Risk Raporu</h4>
+                                                                        <h4 className="text-xs font-normal text-[#0E1E38] uppercase tracking-[0.2em]">Yapay Zeka Destekli Risk Raporu</h4>
                                                                     </div>
                                                                     <p className="text-base text-slate-700 leading-relaxed font-medium mb-8 max-w-3xl">{getDetailedInsight(pair)}</p>
                                                                     <div className="pt-8 border-t border-slate-100 flex items-center gap-4">
@@ -567,8 +567,8 @@ export default function CorrelationAnalysisPage() {
                                                                             <TrendingUp className="w-5 h-5" />
                                                                         </div>
                                                                         <div className="flex flex-col">
-                                                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Aksiyon Önerisi</span>
-                                                                            <p className="text-sm text-slate-900 font-bold">{getRecommendation(pair)}</p>
+                                                                            <span className="text-[10px] font-normal text-slate-400 uppercase tracking-widest">Aksiyon Önerisi</span>
+                                                                            <p className="text-sm text-[#0E1E38] font-bold">{getRecommendation(pair)}</p>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -590,10 +590,10 @@ export default function CorrelationAnalysisPage() {
                             <div className="relative z-10">
                                 <div className="flex items-center gap-2 mb-6">
                                     <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                                    <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">Çeşitlendirme Gücü</h3>
+                                    <h3 className="text-xs font-normal text-[#0E1E38] uppercase tracking-widest">Çeşitlendirme Gücü</h3>
                                 </div>
                                 <div className="flex items-end gap-2 mb-6">
-                                    <span className="text-6xl font-black text-slate-900 tracking-tighter tabular-nums">{diversificationScore}</span>
+                                    <span className="text-6xl font-normal text-[#0E1E38] tracking-tighter tabular-nums">{diversificationScore}</span>
                                     <span className="text-sm text-slate-400 mb-2 font-bold">/ 100</span>
                                 </div>
                                 <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden mb-6 p-0.5 border border-slate-50">
@@ -610,13 +610,13 @@ export default function CorrelationAnalysisPage() {
                         <div className="bg-white border border-slate-200 rounded-[2rem] p-8 shadow-sm">
                             <div className="flex items-center gap-2 mb-6">
                                 <BarChart3 className="w-4 h-4 text-indigo-600" />
-                                <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">Varlık İlişkileri</h3>
+                                <h3 className="text-xs font-normal text-[#0E1E38] uppercase tracking-widest">Varlık İlişkileri</h3>
                             </div>
                             <div className="overflow-hidden bg-slate-50 rounded-2xl p-4 border border-slate-100">
                                 <div className="grid gap-[3px]" style={{ gridTemplateColumns: `20px repeat(${uniqueSymbols.length}, 1fr)` }}>
                                     <div />
                                     {uniqueSymbols.map((s, i) => (
-                                        <div key={i} className="text-center group relative"><span className="text-[8px] font-bold text-slate-400 group-hover:text-slate-900 transition-colors uppercase">{clean(s).substring(0, 3)}</span></div>
+                                        <div key={i} className="text-center group relative"><span className="text-[8px] font-bold text-slate-400 group-hover:text-[#0E1E38] transition-colors uppercase">{clean(s).substring(0, 3)}</span></div>
                                     ))}
                                     {uniqueSymbols.map((rowSym, i) => (
                                         <div key={`row-${i}`} className="contents">

@@ -86,7 +86,7 @@ function SidebarMarketWidgetsComponent() {
 
             {/* Başlık & Canlı Rozeti */}
             <div className="flex items-center justify-between px-1 mb-2 relative z-10">
-                <span className="text-[10px] font-black tracking-widest uppercase text-blue-200/80">
+                <span className="text-[10px] font-normal tracking-widest uppercase text-blue-200/80">
                     PİYASA
                 </span>
                 <div className="flex items-center gap-1.5">
@@ -117,7 +117,7 @@ function SidebarMarketWidgetsComponent() {
 
                             {/* Sağ: Değer & Yüzde Değişimi */}
                             <div className="flex items-center gap-2 shrink-0">
-                                <span className="text-[11px] font-extrabold text-white tabular-nums">
+                                <span className="text-[11px] font-normal text-white tabular-nums">
                                     {formatPrice(item.price, decimals)}{item.currencySuffix}
                                 </span>
                                 <span

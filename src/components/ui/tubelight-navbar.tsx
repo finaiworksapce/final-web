@@ -56,8 +56,8 @@ export function TubelightNavbar({ items, className }: NavBarProps) {
               onClick={() => setActiveTab(item.name)}
               className={cn(
                 "relative cursor-pointer text-sm lg:text-base font-bold px-4 lg:px-6 py-2 lg:py-2.5 rounded-full transition-colors duration-300 border-b-0",
-                "text-slate-600 hover:text-[#142B50]", // Inaktif renk
-                isActive && "text-[#142B50]", // Aktif yazı rengi (DarkBlue)
+                "text-slate-600 hover:text-[#0E1E38]", // Inaktif renk
+                isActive && "text-[#0E1E38]", // Aktif yazı rengi (DarkBlue)
               )}
               style={{ borderBottom: 'none' }}
             >

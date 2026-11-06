@@ -50,7 +50,7 @@ export function NewsThumbnail({
     return (
         <div className={`shrink-0 border border-slate-100 bg-gradient-to-br from-slate-50 to-blue-50/50 flex flex-col items-center justify-center text-slate-400 relative select-none shadow-2xs group-hover:border-blue-100 transition-colors ${aspectClasses[aspectRatio]} ${className}`}>
             <Newspaper className="w-6 h-6 sm:w-8 sm:h-8 text-slate-300 group-hover:text-blue-500 transition-colors" />
-            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-slate-400 mt-1.5">FinAi Özel</span>
+            <span className="text-[9px] sm:text-[10px] font-normal uppercase tracking-wider text-slate-400 mt-1.5">FinAi Özel</span>
             {caption && (
                 <div className="absolute bottom-2 left-3 right-3 text-slate-500 text-[10px] font-medium truncate text-center">
                     {caption}

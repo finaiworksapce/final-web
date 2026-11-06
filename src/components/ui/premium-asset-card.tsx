@@ -51,7 +51,7 @@ export function PremiumAssetCard({ symbol, onClick, className }: PremiumAssetCar
                             <Brain className="h-5 w-5 text-blue-400" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-black tracking-tighter text-white group-hover:text-blue-400 transition-colors">
+                            <h3 className="text-xl font-normal tracking-tighter text-white group-hover:text-blue-400 transition-colors">
                                 {symbol}
                             </h3>
                             <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold group-hover:text-slate-400">

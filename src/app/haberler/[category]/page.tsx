@@ -130,7 +130,7 @@ export default async function PublicNewsCategoryPage({ params }: { params: Promi
   };
 
   return (
-    <main className="mx-auto min-h-screen max-w-5xl px-5 py-12 text-slate-900 sm:px-8">
+    <main className="mx-auto min-h-screen max-w-5xl px-5 py-12 text-[#0E1E38] sm:px-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, '\\u003c') }} />
       <nav aria-label="İçerik yolu" className="text-sm text-slate-500"><Link href="/haberler" className="hover:text-blue-700">Haberler</Link><span className="px-2">/</span>{page.heading}</nav>
       <h1 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">{page.heading}</h1>

@@ -10,11 +10,11 @@ export default function BehavioralPage() {
             {/* Header Section */}
             <div className="max-w-4xl mx-auto space-y-4">
                 <div className="flex items-center gap-2 px-3 py-1 bg-[#78B8F5]/15 border border-[#78B8F5]/10 rounded-full w-fit">
-                    <Brain className="w-3 h-3 text-[#142B50]" />
-                    <span className="text-[10px] font-black text-[#142B50] uppercase tracking-widest">Davranışsal Finans Modülü</span>
+                    <Brain className="w-3 h-3 text-[#0E1E38]" />
+                    <span className="text-[10px] font-normal text-[#0E1E38] uppercase tracking-widest">Davranışsal Finans Modülü</span>
                 </div>
-                <h1 className="text-5xl font-black text-slate-900 tracking-tight leading-none">
-                    Yatırımcı <span className="text-[#142B50]">Karakteri</span> Testi
+                <h1 className="text-5xl font-normal text-[#0E1E38] tracking-tight leading-none">
+                    Yatırımcı <span className="text-[#0E1E38]">Karakteri</span> Testi
                 </h1>
                 <p className="text-slate-500 font-medium text-lg max-w-2xl">
                     Piyasa fırtınasında nasıl kararlar veriyorsunuz? 60 saniyelik bu canlı simülasyonla gerçek risk karakterinizi keşfedin.
@@ -36,10 +36,10 @@ export default function BehavioralPage() {
                         className="bg-white p-6 rounded-[32px] border border-slate-100 shadow-sm flex items-center gap-4"
                     >
                         <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0">
-                            <item.icon className="w-6 h-6 text-[#142B50]" />
+                            <item.icon className="w-6 h-6 text-[#0E1E38]" />
                         </div>
                         <div>
-                            <p className="font-black text-slate-900 text-sm">{item.title}</p>
+                            <p className="font-normal text-[#0E1E38] text-sm">{item.title}</p>
                             <p className="text-xs text-slate-400 font-medium">{item.desc}</p>
                         </div>
                     </motion.div>
@@ -63,7 +63,7 @@ export default function BehavioralPage() {
                         <Brain className="w-10 h-10" />
                     </div>
                     <div>
-                        <h4 className="text-xl font-black italic mb-2 tracking-tight">FinAi Bilgi Notu</h4>
+                        <h4 className="text-xl font-normal italic mb-2 tracking-tight">FinAi Bilgi Notu</h4>
                         <p className="text-blue-100 text-sm leading-relaxed font-medium">
                             Bu test, "Behavioral Finance" (Davranışsal Finans) teorilerini temel alır. 
                             Finansal başarının %20'si teknik bilgi, %80'si ise psikolojik dayanıklılıktır. 

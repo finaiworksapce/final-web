@@ -39,7 +39,7 @@ export function PortfolioHeatmap({ assets = [], prices = {} }: PortfolioHeatmapP
     return (
         <div className="p-4 h-full flex flex-col justify-between">
             <div className="flex items-center justify-between mb-3 border-b border-[#78B8F5]/5 pb-2">
-                <h4 className="text-[9px] font-black text-[#142B50] uppercase tracking-widest">Portföy Isı Haritası</h4>
+                <h4 className="text-[9px] font-normal text-[#0E1E38] uppercase tracking-widest">Portföy Isı Haritası</h4>
                 <div className="flex gap-1">
                     <div className="w-2 h-2 bg-emerald-500 rounded-sm" />
                     <div className="w-2 h-2 bg-rose-500 rounded-sm" />
@@ -67,7 +67,7 @@ export function PortfolioHeatmap({ assets = [], prices = {} }: PortfolioHeatmapP
                             className="relative aspect-square rounded-md cursor-help flex flex-col items-center justify-center overflow-hidden group/item"
                             style={{ backgroundColor: bgColor }}
                         >
-                            <span className="text-[8px] font-black text-white drop-shadow-sm truncate w-full text-center px-1">
+                            <span className="text-[8px] font-normal text-white drop-shadow-sm truncate w-full text-center px-1">
                                 {asset.symbol.split(':')[1] || asset.symbol}
                             </span>
                             <span className="text-[7px] font-bold text-white/80 leading-none">

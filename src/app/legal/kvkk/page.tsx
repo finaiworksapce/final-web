@@ -27,7 +27,7 @@ export default function KVKKPage() {
     <div className="space-y-10 not-prose">
       {/* Başlık ve Giriş */}
       <section className="border-b border-slate-100 pb-8">
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight mb-4">
+        <h1 className="text-3xl font-normal text-[#0E1E38] tracking-tight mb-4">
           FinAi Kullanıcı Aydınlatma Metni
         </h1>
         <p className="text-slate-600 leading-relaxed text-base">
@@ -37,7 +37,7 @@ export default function KVKKPage() {
 
       {/* 1. Veri Sorumlusu */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           1. Veri Sorumlusu
         </h2>
         <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 text-sm text-slate-700 space-y-1.5">
@@ -49,36 +49,36 @@ export default function KVKKPage() {
 
       {/* 2. İşlenen Kişisel Veriler */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           2. İşlenen Kişisel Veriler
         </h2>
         <ul className="space-y-2.5 text-sm text-slate-600">
           <li className="flex items-start gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2 flex-shrink-0" />
-            <span><strong className="text-slate-900">Kimlik:</strong> ad, soyad</span>
+            <span><strong className="text-[#0E1E38]">Kimlik:</strong> ad, soyad</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2 flex-shrink-0" />
-            <span><strong className="text-slate-900">İletişim:</strong> e-posta adresi</span>
+            <span><strong className="text-[#0E1E38]">İletişim:</strong> e-posta adresi</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2 flex-shrink-0" />
-            <span><strong className="text-slate-900">Finansal:</strong> sizin girdiğiniz portföy bilgileri (BIST hisseleri, TEFAS fonları ve yatırım tutarları)</span>
+            <span><strong className="text-[#0E1E38]">Finansal:</strong> sizin girdiğiniz portföy bilgileri (BIST hisseleri, TEFAS fonları ve yatırım tutarları)</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2 flex-shrink-0" />
-            <span><strong className="text-slate-900">İşlem güvenliği:</strong> IP adresi, giriş tarih ve saat kayıtları</span>
+            <span><strong className="text-[#0E1E38]">İşlem güvenliği:</strong> IP adresi, giriş tarih ve saat kayıtları</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2 flex-shrink-0" />
-            <span><strong className="text-slate-900">Kullanım:</strong> yapay zekâ asistanına yönelttiğiniz sorular ve asistanın ürettiği yanıtlar</span>
+            <span><strong className="text-[#0E1E38]">Kullanım:</strong> yapay zekâ asistanına yönelttiğiniz sorular ve asistanın ürettiği yanıtlar</span>
           </li>
         </ul>
       </section>
 
       {/* 3. İşleme Amaçları ve Hukuki Sebepler */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           3. İşleme Amaçları ve Hukuki Sebepler
         </h2>
         <div className="space-y-3 text-sm text-slate-600 leading-relaxed">
@@ -99,7 +99,7 @@ export default function KVKKPage() {
 
       {/* 4. Toplama Yöntemi */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           4. Toplama Yöntemi
         </h2>
         <p className="text-sm text-slate-600 leading-relaxed">
@@ -109,7 +109,7 @@ export default function KVKKPage() {
 
       {/* 5. Verilerin Aktarımı */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           5. Verilerin Aktarımı
         </h2>
         <div className="space-y-3 text-sm text-slate-600 leading-relaxed">
@@ -130,7 +130,7 @@ export default function KVKKPage() {
 
       {/* 6. Saklama Süresi */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           6. Saklama Süresi
         </h2>
         <p className="text-sm text-slate-600 leading-relaxed">
@@ -140,7 +140,7 @@ export default function KVKKPage() {
 
       {/* 7. Yapay Zekâ ile Yapılan Analizler */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           7. Yapay Zekâ ile Yapılan Analizler
         </h2>
         <p className="text-sm text-slate-600 leading-relaxed">
@@ -150,7 +150,7 @@ export default function KVKKPage() {
 
       {/* 8. Haklarınız (KVKK m.11) */}
       <section className="space-y-4">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           8. Haklarınız (KVKK m.11)
         </h2>
         <ul className="space-y-2 text-sm text-slate-600">
@@ -195,7 +195,7 @@ export default function KVKKPage() {
 
       {/* 9. Başvuru Yöntemi */}
       <section className="space-y-3 bg-blue-50/50 border border-blue-100 rounded-2xl p-6">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           9. Başvuru Yöntemi
         </h2>
         <p className="text-sm text-slate-700 leading-relaxed">

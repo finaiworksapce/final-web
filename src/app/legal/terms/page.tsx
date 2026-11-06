@@ -28,7 +28,7 @@ export default function TermsOfUse() {
     <div className="space-y-10 not-prose">
       {/* Başlık */}
       <section className="border-b border-slate-100 pb-8">
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight mb-4">
+        <h1 className="text-3xl font-normal text-[#0E1E38] tracking-tight mb-4">
           FinAi Kullanım Koşulları
         </h1>
         <p className="text-slate-600 leading-relaxed text-base">
@@ -48,7 +48,7 @@ export default function TermsOfUse() {
 
       {/* 1. Taraflar ve Kabul */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           1. Taraflar ve Kabul
         </h2>
         <p className="text-sm text-slate-600 leading-relaxed">
@@ -58,7 +58,7 @@ export default function TermsOfUse() {
 
       {/* 2. Hizmetin Tanımı */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           2. Hizmetin Tanımı
         </h2>
         <p className="text-sm text-slate-600 leading-relaxed">
@@ -68,7 +68,7 @@ export default function TermsOfUse() {
 
       {/* 3. Yatırım Danışmanlığı Değildir */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           3. Yatırım Danışmanlığı Değildir
         </h2>
         <p className="text-sm text-slate-600 leading-relaxed">
@@ -78,7 +78,7 @@ export default function TermsOfUse() {
 
       {/* 4. Yapay Zekâ Destekli İçerik */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           4. Yapay Zekâ Destekli İçerik
         </h2>
         <p className="text-sm text-slate-600 leading-relaxed">
@@ -88,7 +88,7 @@ export default function TermsOfUse() {
 
       {/* 5. Veriler ve Veri Kaynakları */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           5. Veriler ve Veri Kaynakları
         </h2>
         <p className="text-sm text-slate-600 leading-relaxed">
@@ -98,7 +98,7 @@ export default function TermsOfUse() {
 
       {/* 6. Üyelik ve Kullanıcı Yükümlülükleri */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           6. Üyelik ve Kullanıcı Yükümlülükleri
         </h2>
         <div className="space-y-2.5 text-sm text-slate-600 leading-relaxed">
@@ -119,7 +119,7 @@ export default function TermsOfUse() {
 
       {/* 7. Fikri Mülkiyet */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           7. Fikri Mülkiyet
         </h2>
         <p className="text-sm text-slate-600 leading-relaxed">
@@ -129,7 +129,7 @@ export default function TermsOfUse() {
 
       {/* 8. Sorumluluğun Sınırlandırılması */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           8. Sorumluluğun Sınırlandırılması
         </h2>
         <p className="text-sm text-slate-600 leading-relaxed">
@@ -139,7 +139,7 @@ export default function TermsOfUse() {
 
       {/* 9. Hesabın Askıya Alınması ve Kapatılması */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           9. Hesabın Askıya Alınması ve Kapatılması
         </h2>
         <p className="text-sm text-slate-600 leading-relaxed">
@@ -149,7 +149,7 @@ export default function TermsOfUse() {
 
       {/* 10. Kişisel Veriler ve Çerezler */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           10. Kişisel Veriler ve Çerezler
         </h2>
         <p className="text-sm text-slate-600 leading-relaxed">
@@ -159,7 +159,7 @@ export default function TermsOfUse() {
 
       {/* 11. Mücbir Sebep */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           11. Mücbir Sebep
         </h2>
         <p className="text-sm text-slate-600 leading-relaxed">
@@ -169,7 +169,7 @@ export default function TermsOfUse() {
 
       {/* 12. Değişiklikler */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           12. Değişiklikler
         </h2>
         <p className="text-sm text-slate-600 leading-relaxed">
@@ -179,7 +179,7 @@ export default function TermsOfUse() {
 
       {/* 13. Uygulanacak Hukuk ve Uyuşmazlık */}
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           13. Uygulanacak Hukuk ve Uyuşmazlık
         </h2>
         <p className="text-sm text-slate-600 leading-relaxed">
@@ -189,7 +189,7 @@ export default function TermsOfUse() {
 
       {/* 14. Bölünebilirlik ve İletişim */}
       <section className="space-y-3 bg-slate-50 border border-slate-200/80 rounded-2xl p-6">
-        <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <h2 className="text-xl font-bold text-[#0E1E38] tracking-tight">
           14. Bölünebilirlik ve İletişim
         </h2>
         <p className="text-sm text-slate-600 leading-relaxed">

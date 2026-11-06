@@ -103,20 +103,20 @@ export function EconomicCalendarWidget({ isDetailedPage = false }: EconomicCalen
             if (actualNum !== null && forecastNum !== null) {
                 if (actualNum > forecastNum) {
                     return (
-                        <span className="font-black text-emerald-400 flex items-center justify-end gap-0.5">
+                        <span className="font-normal text-emerald-400 flex items-center justify-end gap-0.5">
                             <span className="text-[10px]">▲</span> {item.actual}
                         </span>
                     );
                 } else if (actualNum < forecastNum) {
                     return (
-                        <span className="font-black text-rose-400 flex items-center justify-end gap-0.5">
+                        <span className="font-normal text-rose-400 flex items-center justify-end gap-0.5">
                             <span className="text-[10px]">▼</span> {item.actual}
                         </span>
                     );
                 }
             }
 
-            return <span className="font-black text-white">{item.actual}</span>;
+            return <span className="font-normal text-white">{item.actual}</span>;
         }
 
         // Check if event time is within the next 30 minutes (or past 15 mins)
@@ -128,7 +128,7 @@ export function EconomicCalendarWidget({ isDetailedPage = false }: EconomicCalen
             // Son 30 dakika: "Yakında 🔥" (Sarı - Beyaz Yanıp Söner)
             if (diffMinutes <= 30 && diffMinutes >= -30) {
                 return (
-                    <span className="font-black text-amber-300 animate-pulse tracking-wider bg-amber-400/20 px-2 py-0.5 rounded-lg border border-amber-300/40 inline-block shadow-sm">
+                    <span className="font-normal text-amber-300 animate-pulse tracking-wider bg-amber-400/20 px-2 py-0.5 rounded-lg border border-amber-300/40 inline-block shadow-sm">
                         Yakında 🔥
                     </span>
                 );
@@ -153,7 +153,7 @@ export function EconomicCalendarWidget({ isDetailedPage = false }: EconomicCalen
     return (
         <div
             onClick={handleCardClick}
-            className={`w-full h-full bg-[#142B50] text-white border border-[#78B8F5] rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-xl shadow-[#142B50]/20 font-sans flex flex-col justify-between min-h-[220px] sm:min-h-[300px] transition-all relative overflow-hidden group min-w-0 ${
+            className={`w-full h-full bg-[#0E1E38] text-white border border-[#78B8F5] rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-xl shadow-[#0E1E38]/20 font-sans flex flex-col justify-between min-h-[220px] sm:min-h-[300px] transition-all relative overflow-hidden group min-w-0 ${
                 !isDetailedPage ? 'cursor-pointer hover:border-white/30' : ''
             }`}
         >
@@ -168,7 +168,7 @@ export function EconomicCalendarWidget({ isDetailedPage = false }: EconomicCalen
                             <Calendar className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-white" />
                         </div>
                         <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-                            <h3 className="text-xs sm:text-xl font-black tracking-tight text-white flex items-center gap-1 sm:gap-2 truncate">
+                            <h3 className="text-xs sm:text-xl font-normal tracking-tight text-white flex items-center gap-1 sm:gap-2 truncate">
                                 Ekonomik Takvim <span className="text-[10px] sm:text-sm font-semibold text-blue-200">({todayFormattedDate})</span>
                             </h3>
                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shrink-0" title="Saniyelik Canlı Akış" />
@@ -202,7 +202,7 @@ export function EconomicCalendarWidget({ isDetailedPage = false }: EconomicCalen
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-1.5">
                                             <span className="text-sm">{item.flag || '🌐'}</span>
-                                            <span className="text-xs font-black text-white">{item.country}</span>
+                                            <span className="text-xs font-normal text-white">{item.country}</span>
                                             <span className="text-[10px] font-bold text-blue-200 bg-white/10 px-2 py-0.5 rounded-md border border-white/10 ml-1">
                                                 {item.time}
                                             </span>
@@ -213,7 +213,7 @@ export function EconomicCalendarWidget({ isDetailedPage = false }: EconomicCalen
                                     </div>
 
                                     {/* Title */}
-                                    <h4 className="text-xs font-black text-white leading-snug">
+                                    <h4 className="text-xs font-normal text-white leading-snug">
                                         {item.event}
                                     </h4>
 
@@ -221,15 +221,15 @@ export function EconomicCalendarWidget({ isDetailedPage = false }: EconomicCalen
                                     <div className="grid grid-cols-3 gap-2 pt-1.5 border-t border-white/10 text-center">
                                         <div className="bg-white/5 p-1.5 rounded-xl border border-white/10">
                                             <span className="text-[9px] font-bold text-blue-200 block uppercase tracking-wider">Açıklanan</span>
-                                            <span className="text-xs font-black block mt-0.5">{renderActualValue(item)}</span>
+                                            <span className="text-xs font-normal block mt-0.5">{renderActualValue(item)}</span>
                                         </div>
                                         <div className="bg-white/5 p-1.5 rounded-xl border border-white/10">
                                             <span className="text-[9px] font-bold text-blue-200 block uppercase tracking-wider">Beklenen</span>
-                                            <span className="text-xs font-black text-blue-200 block mt-0.5">{item.forecast || '-'}</span>
+                                            <span className="text-xs font-normal text-blue-200 block mt-0.5">{item.forecast || '-'}</span>
                                         </div>
                                         <div className="bg-white/5 p-1.5 rounded-xl border border-white/10">
                                             <span className="text-[9px] font-bold text-blue-200 block uppercase tracking-wider">Önceki</span>
-                                            <span className="text-xs font-black text-blue-200 block mt-0.5">{item.previous || '-'}</span>
+                                            <span className="text-xs font-normal text-blue-200 block mt-0.5">{item.previous || '-'}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -240,7 +240,7 @@ export function EconomicCalendarWidget({ isDetailedPage = false }: EconomicCalen
                         <div className="hidden md:block overflow-x-auto max-h-[500px] overflow-y-auto pr-1 w-full scrollbar-thin">
                             <table className="w-full text-left border-collapse min-w-[480px]">
                                 <thead>
-                                    <tr className="border-b border-white/15 text-[9px] sm:text-[10px] font-black text-blue-200 uppercase tracking-wider pb-1.5">
+                                    <tr className="border-b border-white/15 text-[9px] sm:text-[10px] font-normal text-blue-200 uppercase tracking-wider pb-1.5">
                                         <th className="py-1.5 px-2 w-14 text-blue-200">Saat</th>
                                         <th className="py-1.5 px-2 w-16 text-blue-200">Ülke</th>
                                         <th className="py-1.5 px-1.5 w-10 text-center text-blue-200">Etki</th>
@@ -263,7 +263,7 @@ export function EconomicCalendarWidget({ isDetailedPage = false }: EconomicCalen
                                             <td className="py-2 px-2 align-top">
                                                 <div className="flex items-center gap-1">
                                                     <span className="text-xs">{item.flag || '🌐'}</span>
-                                                    <span className="text-[11px] font-black text-white">
+                                                    <span className="text-[11px] font-normal text-white">
                                                         {item.country}
                                                     </span>
                                                 </div>
@@ -302,7 +302,7 @@ export function EconomicCalendarWidget({ isDetailedPage = false }: EconomicCalen
 
             {/* Footer - Bugünün Tarihi */}
             <div className="mt-2 pt-2 border-t border-white/15 flex items-center justify-between text-[9px] sm:text-[11px] font-bold text-white">
-                <span className="flex items-center gap-1.5 font-black tracking-wider text-white">
+                <span className="flex items-center gap-1.5 font-normal tracking-wider text-white">
                     Tarih: {todayFormattedDate}
                 </span>
                 <span className="text-white/80 font-bold flex items-center gap-1">

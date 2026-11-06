@@ -72,7 +72,7 @@ export function MarketOverviewWidget({ className = "" }: { className?: string })
                     <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
                         <TrendingUp className="w-3.5 h-3.5" />
                     </div>
-                    <h3 className="text-xs sm:text-sm font-black text-[#142B50] tracking-tight">
+                    <h3 className="text-xs sm:text-sm font-normal text-[#0E1E38] tracking-tight">
                         Piyasa Genel Görünümü
                     </h3>
                 </div>
@@ -93,7 +93,7 @@ export function MarketOverviewWidget({ className = "" }: { className?: string })
                         <span className="text-[10px] font-bold text-slate-500 truncate" title={item.label}>
                             {item.label}
                         </span>
-                        <span className="text-xs sm:text-sm font-black text-slate-900 mt-1">
+                        <span className="text-xs sm:text-sm font-normal text-[#0E1E38] mt-1">
                             {item.price}
                         </span>
                         <div className={`flex items-center gap-0.5 text-[10px] font-bold mt-0.5 ${

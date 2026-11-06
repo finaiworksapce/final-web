@@ -71,7 +71,7 @@ function ResetPasswordContent() {
         className="w-full max-w-md bg-white/80 backdrop-blur-xl p-10 rounded-[32px] shadow-[0_20px_50px_rgba(20, 43, 80, 0.1)] border border-white relative z-10"
       >
         <div className="text-center mb-10">
-          <div className="bg-[#142B50] w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-blue-900/20">
+          <div className="bg-[#0E1E38] w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-blue-900/20">
             <Lock className="text-white w-8 h-8" />
           </div>
           <h1 className="text-3xl font-bold text-[#0f172a] mb-3">Yeni Şifre Belirle</h1>
@@ -99,7 +99,7 @@ function ResetPasswordContent() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent block p-4 pr-12 transition-all group-hover:bg-white"
+                  className="w-full bg-slate-50 border border-slate-200 text-[#0E1E38] text-sm rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent block p-4 pr-12 transition-all group-hover:bg-white"
                   placeholder="••••••••"
                   required
                 />
@@ -120,7 +120,7 @@ function ResetPasswordContent() {
                   type={showPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 text-slate-900 text-sm rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent block p-4 transition-all hover:bg-white"
+                  className="w-full bg-slate-50 border border-slate-200 text-[#0E1E38] text-sm rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent block p-4 transition-all hover:bg-white"
                   placeholder="••••••••"
                   required
                 />
@@ -130,7 +130,7 @@ function ResetPasswordContent() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#142B50] text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all shadow-lg shadow-blue-900/20 active:scale-[0.98] disabled:opacity-50"
+              className="w-full bg-[#0E1E38] text-white font-bold py-4 rounded-2xl hover:bg-blue-800 transition-all shadow-lg shadow-blue-900/20 active:scale-[0.98] disabled:opacity-50"
             >
               {isLoading ? "Güncelleniyor..." : "Şifreyi Güncelle"}
             </button>

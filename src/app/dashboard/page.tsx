@@ -87,8 +87,8 @@ export default function DashboardPage() {
                                     <Loader2 className="w-20 h-20 sm:w-24 sm:h-24 text-[#0E1E38] animate-spin opacity-20" />
                                     <TrendingUp className="w-8 h-8 sm:w-10 sm:h-10 text-[#0E1E38] absolute inset-0 m-auto animate-pulse" />
                                 </div>
-                                <h2 className="text-xl sm:text-2xl font-black mb-2 tracking-tighter">FinAi Hazırlanıyor</h2>
-                                <p className="text-xs sm:text-sm font-bold text-slate-400 animate-pulse">{loadingMessages[loadingStep]}</p>
+                                <h2 className="text-xl sm:text-2xl font-normal mb-2 tracking-tighter">FinAi Hazırlanıyor</h2>
+                                <p className="text-xs sm:text-sm font-normal text-slate-400 animate-pulse">{loadingMessages[loadingStep]}</p>
                             </div>
                         </motion.div>
                     )}
@@ -113,7 +113,7 @@ export default function DashboardPage() {
                         </div>
                         <Link 
                             href="/dashboard/portfolio" 
-                            className="px-3.5 py-1.5 rounded-xl bg-[#1F7A63] hover:bg-[#1F7A63]/90 text-white font-bold text-xs zodiak-subtitle font-[325] shadow-xs transition-all flex items-center gap-1.5"
+                            className="px-3.5 py-1.5 rounded-xl bg-[#0E1E38] hover:bg-[#0E1E38]/90 text-white font-normal text-xs zodiak-subtitle font-[325] shadow-xs transition-all flex items-center gap-1.5"
                         >
                             <span>Portföy Detayı</span>
                             <ArrowRight className="w-3.5 h-3.5" />

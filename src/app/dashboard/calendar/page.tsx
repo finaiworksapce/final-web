@@ -94,7 +94,7 @@ function TablePagination({
                                         window.scrollTo({ top: 0, behavior: 'smooth' });
                                     }}
                                     aria-label={`Sayfa ${p}`}
-                                    className={`w-8 h-8 rounded-xl text-xs font-black transition-all ${
+                                    className={`w-8 h-8 rounded-xl text-xs font-normal transition-all ${
                                         p === currentPage
                                             ? activeStyles
                                             : `bg-white text-slate-700 border ${borderStyles}`
@@ -1470,16 +1470,16 @@ function CalendarContent() {
                     {activeFilter !== 'all' && (
                         <button
                             onClick={() => handleFilterSelect('all')}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-black text-[#142B50] transition-all mb-2.5 shadow-2xs"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-normal text-[#0E1E38] transition-all mb-2.5 shadow-2xs"
                         >
                             <ArrowLeft className="w-3.5 h-3.5" /> Tüm Takvime Dön
                         </button>
                     )}
                     <div className="flex items-center gap-2.5">
-                        <div className="w-9 h-9 rounded-2xl bg-[#78B8F5]/15 border border-[#78B8F5]/10 flex items-center justify-center text-[#142B50]">
+                        <div className="w-9 h-9 rounded-2xl bg-[#78B8F5]/15 border border-[#78B8F5]/10 flex items-center justify-center text-[#0E1E38]">
                             <CalendarIcon className="w-5 h-5" />
                         </div>
-                        <h1 className="text-xl sm:text-2xl font-black text-[#142B50] tracking-tight">
+                        <h1 className="text-xl sm:text-2xl font-normal text-[#0E1E38] tracking-tight">
                             {activeFilter === 'dividends' && 'Temettü Takvimi'}
                             {activeFilter === 'earnings' && 'Bilanço Takvimi'}
                             {activeFilter === 'ipo' && 'Halka Arz Takvimi'}
@@ -1500,7 +1500,7 @@ function CalendarContent() {
                 <div className="flex items-center gap-2 self-start md:self-auto">
                     <button
                         onClick={handleToday}
-                        className="px-3.5 py-2 text-xs font-black text-[#142B50] bg-[#78B8F5]/15 hover:bg-[#78B8F5]/20 border border-[#78B8F5]/10 rounded-xl transition-all shadow-xs"
+                        className="px-3.5 py-2 text-xs font-normal text-[#0E1E38] bg-[#78B8F5]/15 hover:bg-[#78B8F5]/20 border border-[#78B8F5]/10 rounded-xl transition-all shadow-xs"
                     >
                         Bugün
                     </button>
@@ -1508,18 +1508,18 @@ function CalendarContent() {
                         <button
                             onClick={handlePrevMonth}
                             disabled={isPrevMonthDisabled}
-                            className="p-1.5 text-slate-600 hover:text-[#142B50] hover:bg-white rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                            className="p-1.5 text-slate-600 hover:text-[#0E1E38] hover:bg-white rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                             aria-label="Önceki Ay"
                         >
                             <ChevronLeft className="w-4 h-4" />
                         </button>
-                        <span className="px-3 text-xs font-black text-[#142B50] min-w-[110px] text-center capitalize">
+                        <span className="px-3 text-xs font-normal text-[#0E1E38] min-w-[110px] text-center capitalize">
                             {formattedViewMonthYear}
                         </span>
                         <button
                             onClick={handleNextMonth}
                             disabled={isNextMonthDisabled}
-                            className="p-1.5 text-slate-600 hover:text-[#142B50] hover:bg-white rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
+                            className="p-1.5 text-slate-600 hover:text-[#0E1E38] hover:bg-white rounded-lg transition-all disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                             aria-label="Sonraki Ay"
                         >
                             <ChevronRight className="w-4 h-4" />
@@ -1531,7 +1531,7 @@ function CalendarContent() {
             {/* Üst Kategori Filtre Butonları */}
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1">
                 {[
-                    { id: 'all', label: 'Tümü', icon: Sparkles, activeStyle: 'bg-[#142B50] text-white border-[#78B8F5] shadow-md shadow-[#142B50]/20', inactiveStyle: 'bg-white text-slate-600 border-slate-200/80 hover:border-[#78B8F5]/30 hover:text-[#142B50]' },
+                    { id: 'all', label: 'Tümü', icon: Sparkles, activeStyle: 'bg-[#0E1E38] text-white border-[#78B8F5] shadow-md shadow-[#0E1E38]/20', inactiveStyle: 'bg-white text-slate-600 border-slate-200/80 hover:border-[#78B8F5]/30 hover:text-[#0E1E38]' },
                     { id: 'earnings', label: 'Bilanço', icon: Building2, activeStyle: 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-600/20', inactiveStyle: 'bg-blue-50/60 text-blue-700 border-blue-200/60 hover:bg-blue-100/60' },
                     { id: 'dividends', label: 'Temettü', icon: Coins, activeStyle: 'bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-600/20', inactiveStyle: 'bg-emerald-50/60 text-emerald-700 border-emerald-200/60 hover:bg-emerald-100/60' },
                     { id: 'ipo', label: 'Halka Arz', icon: TrendingUp, activeStyle: 'bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-600/20', inactiveStyle: 'bg-purple-50/60 text-purple-700 border-purple-200/60 hover:bg-purple-100/60' },
@@ -1543,7 +1543,7 @@ function CalendarContent() {
                         <button
                             key={tab.id}
                             onClick={() => handleFilterSelect(tab.id as any)}
-                            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-black rounded-2xl border transition-all whitespace-nowrap shadow-xs ${
+                            className={`flex items-center gap-2 px-4 py-2.5 text-xs font-normal rounded-2xl border transition-all whitespace-nowrap shadow-xs ${
                                 isActive ? tab.activeStyle : tab.inactiveStyle
                             }`}
                         >
@@ -1565,7 +1565,7 @@ function CalendarContent() {
                                 <Coins className="w-4 h-4" />
                             </div>
                             <div>
-                                <h2 className="text-base font-black text-[#142B50]">Temettü Takvimi ve Filtreleme</h2>
+                                <h2 className="text-base font-normal text-[#0E1E38]">Temettü Takvimi ve Filtreleme</h2>
                                 <p className="text-[11px] font-bold text-slate-400">Şirket adına, verime, tutara ve tarihe göre temettü araması yapın</p>
                             </div>
                         </div>
@@ -1589,7 +1589,7 @@ function CalendarContent() {
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs font-bold">
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Tarih</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Tarih</label>
                             <select value={divDateFilter} onChange={(e) => { const v = e.target.value as any; setDivDateFilter(v); updateDividendUrlParams({ date: v }); }} className="w-full p-2 bg-white border border-emerald-200/80 rounded-xl text-slate-700">
                                 <option value="all">Tümü</option>
                                 <option value="today">Bugün</option>
@@ -1598,7 +1598,7 @@ function CalendarContent() {
                             </select>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Durum</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Durum</label>
                             <select value={divStatusFilter} onChange={(e) => { const v = e.target.value as any; setDivStatusFilter(v); updateDividendUrlParams({ status: v }); }} className="w-full p-2 bg-white border border-emerald-200/80 rounded-xl text-slate-700">
                                 <option value="all">Tüm Durumlar</option>
                                 <option value="upcoming">Yaklaşan</option>
@@ -1606,7 +1606,7 @@ function CalendarContent() {
                             </select>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Verim</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Verim</label>
                             <select value={divYieldFilter} onChange={(e) => { const v = e.target.value as any; setDivYieldFilter(v); updateDividendUrlParams({ yield: v }); }} className="w-full p-2 bg-white border border-emerald-200/80 rounded-xl text-slate-700">
                                 <option value="all">Tüm Verimler</option>
                                 <option value="0-2">%0 – %2</option>
@@ -1615,7 +1615,7 @@ function CalendarContent() {
                             </select>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Net Tutar</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Net Tutar</label>
                             <select value={divAmountFilter} onChange={(e) => { const v = e.target.value as any; setDivAmountFilter(v); updateDividendUrlParams({ amount: v }); }} className="w-full p-2 bg-white border border-emerald-200/80 rounded-xl text-slate-700">
                                 <option value="all">Tüm Tutarlar</option>
                                 <option value="low">Düşük (&lt; 2 TL)</option>
@@ -1624,14 +1624,14 @@ function CalendarContent() {
                             </select>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Portföy</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Portföy</label>
                             <button onClick={() => { const v = !divPortfolioOnly; setDivPortfolioOnly(v); updateDividendUrlParams({ portfolio: v }); }} className={`w-full p-2 rounded-xl border transition-all flex items-center justify-center gap-1.5 ${divPortfolioOnly ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-slate-700 border-emerald-200/80'}`}>
                                 <Briefcase className="w-3.5 h-3.5" />
                                 <span>Portföyümdekiler</span>
                             </button>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Sıralama</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Sıralama</label>
                             <select value={divSort} onChange={(e) => { const v = e.target.value as any; setDivSort(v); updateDividendUrlParams({ sort: v }); }} className="w-full p-2 bg-white border border-emerald-200/80 rounded-xl text-slate-700">
                                 <option value="default">Varsayılan</option>
                                 <option value="date-asc">En Yakın Tarih</option>
@@ -1647,14 +1647,14 @@ function CalendarContent() {
 
                     {divActiveChips.length > 0 && (
                         <div className="flex items-center gap-2 flex-wrap pt-2 border-t border-emerald-100/60">
-                            <span className="text-[10px] font-extrabold text-slate-400 uppercase">Aktif Filtreler:</span>
+                            <span className="text-[10px] font-normal text-slate-400 uppercase">Aktif Filtreler:</span>
                             {divActiveChips.map(chip => (
-                                <span key={chip.id} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-black bg-emerald-100/80 text-emerald-900 border border-emerald-200">
+                                <span key={chip.id} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-normal bg-emerald-100/80 text-emerald-900 border border-emerald-200">
                                     <span>{chip.label}</span>
                                     <button onClick={chip.clear} className="hover:bg-emerald-200/80 rounded-full p-0.5"><X className="w-3 h-3 text-emerald-800" /></button>
                                 </span>
                             ))}
-                            <button onClick={clearAllDividendFilters} className="text-xs font-extrabold text-rose-600 hover:underline ml-2">Filtreleri Temizle</button>
+                            <button onClick={clearAllDividendFilters} className="text-xs font-normal text-rose-600 hover:underline ml-2">Filtreleri Temizle</button>
                         </div>
                     )}
 
@@ -1664,26 +1664,26 @@ function CalendarContent() {
                             <div className="mb-3 flex items-start sm:items-center gap-2.5 p-3.5 rounded-2xl bg-amber-50/90 border border-amber-200 text-amber-900 text-xs font-semibold shadow-xs">
                                 <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5 sm:mt-0" />
                                 <p>
-                                    <span className="font-extrabold text-amber-950">Bilgilendirme:</span> Sıralamada <strong>{divSort === 'date-asc' ? 'En Yakın Tarih' : 'En Uzak Tarih'}</strong> seçildiğinde, kesin temettü dağıtım tarihi henüz açıklanmayan hisseler listelenmez. Tarihi açıklanmayan hisseleri de görmek için <button type="button" onClick={() => { setDivSort('default'); updateDividendUrlParams({ sort: 'default' }); }} className="underline font-black text-amber-900 hover:text-amber-950">Varsayılan sıralama</button> modunu kullanabilirsiniz.
+                                    <span className="font-normal text-amber-950">Bilgilendirme:</span> Sıralamada <strong>{divSort === 'date-asc' ? 'En Yakın Tarih' : 'En Uzak Tarih'}</strong> seçildiğinde, kesin temettü dağıtım tarihi henüz açıklanmayan hisseler listelenmez. Tarihi açıklanmayan hisseleri de görmek için <button type="button" onClick={() => { setDivSort('default'); updateDividendUrlParams({ sort: 'default' }); }} className="underline font-normal text-amber-900 hover:text-amber-950">Varsayılan sıralama</button> modunu kullanabilirsiniz.
                                 </p>
                             </div>
                         )}
 
-                        <span className="text-xs font-black text-[#142B50] block mb-3">Toplam {filteredDividends.length} Temettü Kaydı</span>
+                        <span className="text-xs font-normal text-[#0E1E38] block mb-3">Toplam {filteredDividends.length} Temettü Kaydı</span>
                         {loading ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yükleniyor...</div>
                         ) : filteredDividends.length === 0 ? (
                             <div className="py-12 bg-white rounded-2xl border border-dashed border-emerald-200 flex flex-col items-center justify-center gap-2 text-center">
                                 <Clock className="w-8 h-8 text-emerald-300" />
-                                <p className="text-sm font-black text-slate-700">Sonuç bulunamadı</p>
-                                <button onClick={clearAllDividendFilters} className="px-4 py-2 text-xs font-black text-white bg-emerald-600 rounded-xl">Filtreleri Temizle</button>
+                                <p className="text-sm font-normal text-slate-700">Sonuç bulunamadı</p>
+                                <button onClick={clearAllDividendFilters} className="px-4 py-2 text-xs font-normal text-white bg-emerald-600 rounded-xl">Filtreleri Temizle</button>
                             </div>
                         ) : (
                             <div className="space-y-3">
                                 <div className="overflow-x-auto scrollbar-none bg-white rounded-2xl border border-emerald-100 p-2 shadow-2xs">
                                     <table className="w-full text-left border-separate border-spacing-y-2 border-spacing-x-0 text-xs font-bold">
                                         <thead>
-                                            <tr className="text-[10px] font-black text-slate-400 uppercase">
+                                            <tr className="text-[10px] font-normal text-slate-400 uppercase">
                                                 <th className="py-2.5 px-3.5 bg-emerald-50/50 text-emerald-900/60 rounded-l-xl pl-4">Hisse / Şirket</th>
                                                 <th className="py-2.5 px-3.5 bg-emerald-50/50 text-emerald-900/60">Hakediş / Ödeme Tarihi</th>
                                                 <th className="py-2.5 px-3.5 bg-emerald-50/50 text-emerald-900/60">Hisse Başına Net Tutar</th>
@@ -1715,15 +1715,15 @@ function CalendarContent() {
                                                                     {item.symbol && item.symbol.trim() !== '-' ? (
                                                                         <Link 
                                                                             href={`/dashboard/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
-                                                                            className={`hover:underline font-black text-xs block ${
-                                                                                isPaid ? 'text-white hover:text-emerald-100' : 'text-[#142B50] hover:text-emerald-800'
+                                                                            className={`hover:underline font-normal text-xs block ${
+                                                                                isPaid ? 'text-white hover:text-emerald-100' : 'text-[#0E1E38] hover:text-emerald-800'
                                                                             }`}
                                                                             title={`${item.symbol} Şirket Detayına Git`}
                                                                         >
                                                                             {item.symbol}
                                                                         </Link>
                                                                     ) : (
-                                                                        <span className={`text-xs font-black block ${isPaid ? 'text-white' : 'text-[#142B50]'}`}>{item.symbol || '-'}</span>
+                                                                        <span className={`text-xs font-normal block ${isPaid ? 'text-white' : 'text-[#0E1E38]'}`}>{item.symbol || '-'}</span>
                                                                     )}
                                                                     <span className={`text-[11px] font-bold line-clamp-1 max-w-[220px] ${
                                                                         isPaid ? 'text-emerald-100' : 'text-slate-500'
@@ -1735,16 +1735,16 @@ function CalendarContent() {
                                                         </td>
                                                         <td className={`py-3.5 px-3.5 whitespace-nowrap font-bold ${cellBg}`}>
                                                             {isAnnounced ? (
-                                                                <span className={isPaid ? 'text-white font-black' : 'text-slate-700'}>{item.paymentDate}</span>
+                                                                <span className={isPaid ? 'text-white font-normal' : 'text-slate-700'}>{item.paymentDate}</span>
                                                             ) : (
                                                                 <span className="text-slate-400 italic font-semibold">Açıklanmadı</span>
                                                             )}
                                                         </td>
-                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap font-black ${cellBg} ${isPaid ? 'text-white' : 'text-emerald-700'}`}>
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap font-normal ${cellBg} ${isPaid ? 'text-white' : 'text-emerald-700'}`}>
                                                             {item.netAmountFormatted || `${item.netAmountPerShare ? item.netAmountPerShare.toFixed(2) : '0,00'} TL`}
                                                         </td>
                                                         <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
-                                                            <span className={`font-black text-xs ${isPaid ? 'text-white' : 'text-emerald-700'}`}>
+                                                            <span className={`font-normal text-xs ${isPaid ? 'text-white' : 'text-emerald-700'}`}>
                                                                 %{getItemYield(item).toFixed(2)}
                                                             </span>
                                                         </td>
@@ -1796,7 +1796,7 @@ function CalendarContent() {
                                 <Building2 className="w-4 h-4" />
                             </div>
                             <div>
-                                <h2 className="text-base font-black text-[#142B50]">Bilanço Takvimi ve Filtreleme</h2>
+                                <h2 className="text-base font-normal text-[#0E1E38]">Bilanço Takvimi ve Filtreleme</h2>
                                 <p className="text-[11px] font-bold text-slate-400">Şirket adına, döneme, açıklama durumuna ve tarihe göre bilanço araması yapın</p>
                             </div>
                         </div>
@@ -1820,7 +1820,7 @@ function CalendarContent() {
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 text-xs font-bold">
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Tarih</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Tarih</label>
                             <select value={earnDateFilter} onChange={(e) => { const v = e.target.value as any; setEarnDateFilter(v); updateEarningsUrlParams({ date: v }); }} className="w-full p-2 bg-white border border-blue-200/80 rounded-xl text-slate-700">
                                 <option value="all">Tüm Tarihler</option>
                                 <option value="today">Bugün</option>
@@ -1830,7 +1830,7 @@ function CalendarContent() {
                             </select>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Dönem</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Dönem</label>
                             <select value={earnPeriodFilter} onChange={(e) => { const v = e.target.value as any; setEarnPeriodFilter(v); updateEarningsUrlParams({ period: v }); }} className="w-full p-2 bg-white border border-blue-200/80 rounded-xl text-slate-700">
                                 <option value="all">Tüm Dönemler</option>
                                 <option value="1q">1. Çeyrek (1Ç)</option>
@@ -1840,7 +1840,7 @@ function CalendarContent() {
                             </select>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Durum</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Durum</label>
                             <select value={earnStatusFilter} onChange={(e) => { const v = e.target.value as any; setEarnStatusFilter(v); updateEarningsUrlParams({ status: v }); }} className="w-full p-2 bg-white border border-blue-200/80 rounded-xl text-slate-700">
                                 <option value="all">Tüm Durumlar</option>
                                 <option value="upcoming">Yaklaşan</option>
@@ -1848,14 +1848,14 @@ function CalendarContent() {
                             </select>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Portföy</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Portföy</label>
                             <button onClick={() => { const v = !earnPortfolioOnly; setEarnPortfolioOnly(v); updateEarningsUrlParams({ portfolio: v }); }} className={`w-full p-2 rounded-xl border transition-all flex items-center justify-center gap-1.5 ${earnPortfolioOnly ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-slate-700 border-blue-200/80'}`}>
                                 <Briefcase className="w-3.5 h-3.5" />
                                 <span>Portföyümdekiler</span>
                             </button>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Sıralama</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Sıralama</label>
                             <select value={earnSort} onChange={(e) => { const v = e.target.value as any; setEarnSort(v); updateEarningsUrlParams({ sort: v }); }} className="w-full p-2 bg-white border border-blue-200/80 rounded-xl text-slate-700">
                                 <option value="date-asc">En Yakın Tarih</option>
                                 <option value="date-desc">En Uzak Tarih</option>
@@ -1867,33 +1867,33 @@ function CalendarContent() {
 
                     {earnActiveChips.length > 0 && (
                         <div className="flex items-center gap-2 flex-wrap pt-2 border-t border-blue-100/60">
-                            <span className="text-[10px] font-extrabold text-slate-400 uppercase">Aktif Filtreler:</span>
+                            <span className="text-[10px] font-normal text-slate-400 uppercase">Aktif Filtreler:</span>
                             {earnActiveChips.map(chip => (
-                                <span key={chip.id} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-black bg-blue-100/80 text-blue-900 border border-blue-200">
+                                <span key={chip.id} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-normal bg-blue-100/80 text-blue-900 border border-blue-200">
                                     <span>{chip.label}</span>
                                     <button onClick={chip.clear} className="hover:bg-blue-200/80 rounded-full p-0.5"><X className="w-3 h-3 text-blue-800" /></button>
                                 </span>
                             ))}
-                            <button onClick={clearAllEarningsFilters} className="text-xs font-extrabold text-rose-600 hover:underline ml-2">Filtreleri Temizle</button>
+                            <button onClick={clearAllEarningsFilters} className="text-xs font-normal text-rose-600 hover:underline ml-2">Filtreleri Temizle</button>
                         </div>
                     )}
 
                     <div className="pt-2">
-                        <span className="text-xs font-black text-[#142B50] block mb-3">Toplam {filteredEarnings.length} Bilanço Kaydı</span>
+                        <span className="text-xs font-normal text-[#0E1E38] block mb-3">Toplam {filteredEarnings.length} Bilanço Kaydı</span>
                         {loading ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yükleniyor...</div>
                         ) : filteredEarnings.length === 0 ? (
                             <div className="py-12 bg-white rounded-2xl border border-dashed border-blue-200 flex flex-col items-center justify-center gap-2 text-center">
                                 <Clock className="w-8 h-8 text-blue-300" />
-                                <p className="text-sm font-black text-slate-700">Sonuç bulunamadı</p>
-                                <button onClick={clearAllEarningsFilters} className="px-4 py-2 text-xs font-black text-white bg-blue-600 rounded-xl">Filtreleri Temizle</button>
+                                <p className="text-sm font-normal text-slate-700">Sonuç bulunamadı</p>
+                                <button onClick={clearAllEarningsFilters} className="px-4 py-2 text-xs font-normal text-white bg-blue-600 rounded-xl">Filtreleri Temizle</button>
                             </div>
                         ) : (
                             <div className="space-y-3">
                                 <div className="overflow-x-auto scrollbar-none bg-white rounded-2xl border border-blue-100 p-2 shadow-2xs">
                                     <table className="w-full text-left border-separate border-spacing-y-2 border-spacing-x-0 text-xs font-bold">
                                         <thead>
-                                            <tr className="text-[10px] font-black text-slate-400 uppercase">
+                                            <tr className="text-[10px] font-normal text-slate-400 uppercase">
                                                 <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60 rounded-l-xl pl-4">Hisse / Şirket</th>
                                                 <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Bilanço Dönemi</th>
                                                 <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Açıklanma Tarihi</th>
@@ -1918,15 +1918,15 @@ function CalendarContent() {
                                                                     {item.symbol && item.symbol.trim() !== '-' ? (
                                                                         <Link 
                                                                             href={`/dashboard/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
-                                                                            className={`hover:underline font-black text-xs block ${
-                                                                                isAnnounced ? 'text-white hover:text-blue-100' : 'text-[#142B50] hover:text-blue-800'
+                                                                            className={`hover:underline font-normal text-xs block ${
+                                                                                isAnnounced ? 'text-white hover:text-blue-100' : 'text-[#0E1E38] hover:text-blue-800'
                                                                             }`}
                                                                             title={`${item.symbol} Şirket Detayına Git`}
                                                                         >
                                                                             {item.symbol}
                                                                         </Link>
                                                                     ) : (
-                                                                        <span className={`text-xs font-black block ${isAnnounced ? 'text-white' : 'text-[#142B50]'}`}>{item.symbol || '-'}</span>
+                                                                        <span className={`text-xs font-normal block ${isAnnounced ? 'text-white' : 'text-[#0E1E38]'}`}>{item.symbol || '-'}</span>
                                                                     )}
                                                                     <span className={`text-[11px] font-bold line-clamp-1 max-w-[220px] ${
                                                                         isAnnounced ? 'text-blue-100' : 'text-slate-500'
@@ -1993,7 +1993,7 @@ function CalendarContent() {
                                 <TrendingUp className="w-4 h-4" />
                             </div>
                             <div>
-                                <h2 className="text-base font-black text-[#142B50]">Halka Arz Takvimi ve Filtreleme</h2>
+                                <h2 className="text-base font-normal text-[#0E1E38]">Halka Arz Takvimi ve Filtreleme</h2>
                                 <p className="text-[11px] font-bold text-slate-400">Şirket adına, başvuru durumuna, fiyata ve tarihe göre halka arz araması yapın</p>
                             </div>
                         </div>
@@ -2017,7 +2017,7 @@ function CalendarContent() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 text-xs font-bold">
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Tarih</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Tarih</label>
                             <select value={ipoDateFilter} onChange={(e) => { const v = e.target.value as any; setIpoDateFilter(v); updateIpoUrlParams({ date: v }); }} className="w-full p-2 bg-white border border-purple-200/80 rounded-xl text-slate-700">
                                 <option value="all">Tüm Tarihler</option>
                                 <option value="today">Bugün</option>
@@ -2026,7 +2026,7 @@ function CalendarContent() {
                             </select>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Durum</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Durum</label>
                             <select value={ipoStatusFilter} onChange={(e) => { const v = e.target.value as any; setIpoStatusFilter(v); updateIpoUrlParams({ status: v }); }} className="w-full p-2 bg-white border border-purple-200/80 rounded-xl text-slate-700">
                                 <option value="all">Tüm Durumlar</option>
                                 <option value="talep-toplama">Talep Toplama</option>
@@ -2038,7 +2038,7 @@ function CalendarContent() {
                             </select>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Fiyat</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Fiyat</label>
                             <select value={ipoPriceFilter} onChange={(e) => { const v = e.target.value as any; setIpoPriceFilter(v); updateIpoUrlParams({ price: v }); }} className="w-full p-2 bg-white border border-purple-200/80 rounded-xl text-slate-700">
                                 <option value="all">Tüm Fiyatlar</option>
                                 <option value="0-25">0 – 25 TL</option>
@@ -2048,7 +2048,7 @@ function CalendarContent() {
                             </select>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Sıralama</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Sıralama</label>
                             <select value={ipoSort} onChange={(e) => { const v = e.target.value as any; setIpoSort(v); updateIpoUrlParams({ sort: v }); }} className="w-full p-2 bg-white border border-purple-200/80 rounded-xl text-slate-700">
                                 <option value="default">Varsayılan Sıralama</option>
                                 <option value="date-asc">En Yakın Tarih</option>
@@ -2061,14 +2061,14 @@ function CalendarContent() {
 
                     {ipoActiveChips.length > 0 && (
                         <div className="flex items-center gap-2 flex-wrap pt-2 border-t border-purple-100/60">
-                            <span className="text-[10px] font-extrabold text-slate-400 uppercase">Aktif Filtreler:</span>
+                            <span className="text-[10px] font-normal text-slate-400 uppercase">Aktif Filtreler:</span>
                             {ipoActiveChips.map(chip => (
-                                <span key={chip.id} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-black bg-purple-100/80 text-purple-900 border border-purple-200">
+                                <span key={chip.id} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-normal bg-purple-100/80 text-purple-900 border border-purple-200">
                                     <span>{chip.label}</span>
                                     <button onClick={chip.clear} className="hover:bg-purple-200/80 rounded-full p-0.5"><X className="w-3 h-3 text-purple-800" /></button>
                                 </span>
                             ))}
-                            <button onClick={clearAllIpoFilters} className="text-xs font-extrabold text-rose-600 hover:underline ml-2">Filtreleri Temizle</button>
+                            <button onClick={clearAllIpoFilters} className="text-xs font-normal text-rose-600 hover:underline ml-2">Filtreleri Temizle</button>
                         </div>
                     )}
 
@@ -2078,26 +2078,26 @@ function CalendarContent() {
                             <div className="mb-3 flex items-start sm:items-center gap-2.5 p-3.5 rounded-2xl bg-amber-50/90 border border-amber-200 text-amber-900 text-xs font-semibold shadow-xs">
                                 <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5 sm:mt-0" />
                                 <p>
-                                    <span className="font-extrabold text-amber-950">Bilgilendirme:</span> Sıralamada <strong>{ipoSort === 'date-asc' ? 'En Yakın Tarih' : 'En Uzak Tarih'}</strong> seçildiğinde, yalnızca talep toplama tarihleri resmi olarak açıklanmış şirketler listelenir. Tarihi henüz kesinleşmemiş (taslak/başvuru sürecindeki) halka arzları da görmek için <button type="button" onClick={() => { setIpoSort('default'); updateIpoUrlParams({ sort: 'default' }); }} className="underline font-black text-amber-900 hover:text-amber-950">Varsayılan sıralama</button> modunu kullanabilirsiniz.
+                                    <span className="font-normal text-amber-950">Bilgilendirme:</span> Sıralamada <strong>{ipoSort === 'date-asc' ? 'En Yakın Tarih' : 'En Uzak Tarih'}</strong> seçildiğinde, yalnızca talep toplama tarihleri resmi olarak açıklanmış şirketler listelenir. Tarihi henüz kesinleşmemiş (taslak/başvuru sürecindeki) halka arzları da görmek için <button type="button" onClick={() => { setIpoSort('default'); updateIpoUrlParams({ sort: 'default' }); }} className="underline font-normal text-amber-900 hover:text-amber-950">Varsayılan sıralama</button> modunu kullanabilirsiniz.
                                 </p>
                             </div>
                         )}
 
-                        <span className="text-xs font-black text-[#142B50] block mb-3">Toplam {filteredIpos.length} Halka Arz Kaydı</span>
+                        <span className="text-xs font-normal text-[#0E1E38] block mb-3">Toplam {filteredIpos.length} Halka Arz Kaydı</span>
                         {loading ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yükleniyor...</div>
                         ) : filteredIpos.length === 0 ? (
                             <div className="py-12 bg-white rounded-2xl border border-dashed border-purple-200 flex flex-col items-center justify-center gap-2 text-center">
                                 <Clock className="w-8 h-8 text-purple-300" />
-                                <p className="text-sm font-black text-slate-700">Sonuç bulunamadı</p>
-                                <button onClick={clearAllIpoFilters} className="px-4 py-2 text-xs font-black text-white bg-purple-600 rounded-xl">Filtreleri Temizle</button>
+                                <p className="text-sm font-normal text-slate-700">Sonuç bulunamadı</p>
+                                <button onClick={clearAllIpoFilters} className="px-4 py-2 text-xs font-normal text-white bg-purple-600 rounded-xl">Filtreleri Temizle</button>
                             </div>
                         ) : (
                             <div className="space-y-3">
                                 <div className="overflow-x-auto scrollbar-none bg-white rounded-2xl border border-purple-100 p-2 shadow-2xs">
                                     <table className="w-full text-left border-separate border-spacing-y-2 border-spacing-x-0 text-xs font-bold">
                                         <thead>
-                                            <tr className="text-[10px] font-black text-slate-400 uppercase">
+                                            <tr className="text-[10px] font-normal text-slate-400 uppercase">
                                                 <th className="py-2.5 px-3.5 bg-purple-50/50 text-purple-900/60 rounded-l-xl pl-4">Hisse / Şirket</th>
                                                 <th className="py-2.5 px-3.5 bg-purple-50/50 text-purple-900/60">Talep Toplama Tarihleri</th>
                                                 <th className="py-2.5 px-3.5 bg-purple-50/50 text-purple-900/60">Halka Arz Fiyatı</th>
@@ -2121,15 +2121,15 @@ function CalendarContent() {
                                                                     {item.symbol && item.symbol.trim() !== '-' && item.symbol.trim().length >= 2 ? (
                                                                         <Link 
                                                                             href={`/dashboard/varlik/${item.symbol.toUpperCase().replace(/\.IS$/, '').trim()}`}
-                                                                            className={`hover:underline font-black text-xs block ${
-                                                                                isCompleted ? 'text-white hover:text-purple-100' : 'text-[#142B50] hover:text-purple-800'
+                                                                            className={`hover:underline font-normal text-xs block ${
+                                                                                isCompleted ? 'text-white hover:text-purple-100' : 'text-[#0E1E38] hover:text-purple-800'
                                                                             }`}
                                                                             title={`${item.symbol} Şirket Detayına Git`}
                                                                         >
                                                                             {item.symbol}
                                                                         </Link>
                                                                     ) : (
-                                                                        <span className={`text-xs font-black block ${isCompleted ? 'text-white' : 'text-[#142B50]'}`}>{item.symbol || '-'}</span>
+                                                                        <span className={`text-xs font-normal block ${isCompleted ? 'text-white' : 'text-[#0E1E38]'}`}>{item.symbol || '-'}</span>
                                                                     )}
                                                                     <span className={`text-[11px] font-bold line-clamp-1 max-w-[220px] ${
                                                                         isCompleted ? 'text-purple-100' : 'text-slate-500'
@@ -2142,7 +2142,7 @@ function CalendarContent() {
                                                         <td className={`py-3.5 px-3.5 whitespace-nowrap font-bold ${cellBg} ${isCompleted ? 'text-white' : 'text-slate-700'}`}>
                                                             {item.dateRange || 'Yakında'}
                                                         </td>
-                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap font-black ${cellBg} ${isCompleted ? 'text-white' : 'text-purple-700'}`}>
+                                                        <td className={`py-3.5 px-3.5 whitespace-nowrap font-normal ${cellBg} ${isCompleted ? 'text-white' : 'text-purple-700'}`}>
                                                             {item.price ? `${item.price} TL` : 'Belirlenmedi'}
                                                         </td>
                                                         <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
@@ -2191,7 +2191,7 @@ function CalendarContent() {
                                 <Globe2 className="w-4 h-4" />
                             </div>
                             <div>
-                                <h2 className="text-base font-black text-[#142B50]">Ekonomik Takvim ve Filtreleme</h2>
+                                <h2 className="text-base font-normal text-[#0E1E38]">Ekonomik Takvim ve Filtreleme</h2>
                                 <p className="text-[11px] font-bold text-slate-400">Veri adına, ülkeye, önem seviyesine ve açıklama durumuna göre makroekonomik arama yapın</p>
                             </div>
                         </div>
@@ -2215,7 +2215,7 @@ function CalendarContent() {
 
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 text-xs font-bold">
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Tarih</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Tarih</label>
                             <select value={ecoDateFilter} onChange={(e) => { const v = e.target.value as any; setEcoDateFilter(v); updateEconomicUrlParams({ date: v }); }} className="w-full p-2 bg-white border border-blue-200/80 rounded-xl text-slate-700">
                                 <option value="all">Tüm Tarihler</option>
                                 <option value="today">Bugün</option>
@@ -2225,7 +2225,7 @@ function CalendarContent() {
                             </select>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Ülke / Bölge</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Ülke / Bölge</label>
                             <select value={ecoCountryFilter} onChange={(e) => { const v = e.target.value as any; setEcoCountryFilter(v); updateEconomicUrlParams({ country: v }); }} className="w-full p-2 bg-white border border-blue-200/80 rounded-xl text-slate-700">
                                 <option value="all">Tüm Ülkeler</option>
                                 <option value="tr">Türkiye (TRY)</option>
@@ -2235,7 +2235,7 @@ function CalendarContent() {
                             </select>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Önem Seviyesi</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Önem Seviyesi</label>
                             <select value={ecoImportanceFilter} onChange={(e) => { const v = e.target.value as any; setEcoImportanceFilter(v); updateEconomicUrlParams({ importance: v }); }} className="w-full p-2 bg-white border border-blue-200/80 rounded-xl text-slate-700">
                                 <option value="all">Tüm Önem Düzeyleri</option>
                                 <option value="high">Yüksek Önem</option>
@@ -2244,7 +2244,7 @@ function CalendarContent() {
                             </select>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Durum</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Durum</label>
                             <select value={ecoStatusFilter} onChange={(e) => { const v = e.target.value as any; setEcoStatusFilter(v); updateEconomicUrlParams({ status: v }); }} className="w-full p-2 bg-white border border-blue-200/80 rounded-xl text-slate-700">
                                 <option value="all">Tüm Durumlar</option>
                                 <option value="pending">Bekleniyor</option>
@@ -2252,7 +2252,7 @@ function CalendarContent() {
                             </select>
                         </div>
                         <div>
-                            <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block mb-1">Sıralama</label>
+                            <label className="text-[10px] font-normal text-slate-400 uppercase tracking-wider block mb-1">Sıralama</label>
                             <select value={ecoSort} onChange={(e) => { const v = e.target.value as any; setEcoSort(v); updateEconomicUrlParams({ sort: v }); }} className="w-full p-2 bg-white border border-blue-200/80 rounded-xl text-slate-700">
                                 <option value="default">Varsayılan Sıralama</option>
                                 <option value="date-asc">En Yakın Tarih (Beklenenler)</option>
@@ -2264,14 +2264,14 @@ function CalendarContent() {
 
                     {ecoActiveChips.length > 0 && (
                         <div className="flex items-center gap-2 flex-wrap pt-2 border-t border-blue-100/60">
-                            <span className="text-[10px] font-extrabold text-slate-400 uppercase">Aktif Filtreler:</span>
+                            <span className="text-[10px] font-normal text-slate-400 uppercase">Aktif Filtreler:</span>
                             {ecoActiveChips.map(chip => (
-                                <span key={chip.id} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-black bg-blue-100/80 text-blue-900 border border-blue-200">
+                                <span key={chip.id} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-xs font-normal bg-blue-100/80 text-blue-900 border border-blue-200">
                                     <span>{chip.label}</span>
                                     <button onClick={chip.clear} className="hover:bg-blue-200/80 rounded-full p-0.5"><X className="w-3 h-3 text-blue-800" /></button>
                                 </span>
                             ))}
-                            <button onClick={clearAllEconomicFilters} className="text-xs font-extrabold text-rose-600 hover:underline ml-2">Filtreleri Temizle</button>
+                            <button onClick={clearAllEconomicFilters} className="text-xs font-normal text-rose-600 hover:underline ml-2">Filtreleri Temizle</button>
                         </div>
                     )}
 
@@ -2281,26 +2281,26 @@ function CalendarContent() {
                             <div className="mb-3 flex items-start sm:items-center gap-2.5 p-3.5 rounded-2xl bg-blue-50/90 border border-blue-200 text-blue-950 text-xs font-semibold shadow-xs">
                                 <AlertCircle className="w-4 h-4 text-blue-600 shrink-0 mt-0.5 sm:mt-0" />
                                 <p>
-                                    <span className="font-extrabold text-[#142B50]">Bilgilendirme:</span> <strong>En Yakın Tarih</strong> sıralamasında yalnızca henüz açıklanmamış (beklenen) ekonomik veriler en yakın tarihten başlayarak listelenir; açıklanmış geçmiş veriler bu sıralamada gizlenir. Tüm verileri görmek için <button type="button" onClick={() => { setEcoSort('default'); updateEconomicUrlParams({ sort: 'default' }); }} className="underline font-black text-[#142B50] hover:text-blue-900">Varsayılan sıralama</button> modunu kullanabilirsiniz.
+                                    <span className="font-normal text-[#0E1E38]">Bilgilendirme:</span> <strong>En Yakın Tarih</strong> sıralamasında yalnızca henüz açıklanmamış (beklenen) ekonomik veriler en yakın tarihten başlayarak listelenir; açıklanmış geçmiş veriler bu sıralamada gizlenir. Tüm verileri görmek için <button type="button" onClick={() => { setEcoSort('default'); updateEconomicUrlParams({ sort: 'default' }); }} className="underline font-normal text-[#0E1E38] hover:text-blue-900">Varsayılan sıralama</button> modunu kullanabilirsiniz.
                                 </p>
                             </div>
                         )}
 
-                        <span className="text-xs font-black text-[#142B50] block mb-3">Toplam {filteredEconomicEvents.length} Ekonomik Veri Kaydı</span>
+                        <span className="text-xs font-normal text-[#0E1E38] block mb-3">Toplam {filteredEconomicEvents.length} Ekonomik Veri Kaydı</span>
                         {loading ? (
                             <div className="py-8 text-center text-xs font-bold text-slate-400">Yükleniyor...</div>
                         ) : filteredEconomicEvents.length === 0 ? (
                             <div className="py-12 bg-white rounded-2xl border border-dashed border-blue-200 flex flex-col items-center justify-center gap-2 text-center">
                                 <Clock className="w-8 h-8 text-blue-300" />
-                                <p className="text-sm font-black text-slate-700">Sonuç bulunamadı</p>
-                                <button onClick={clearAllEconomicFilters} className="px-4 py-2 text-xs font-black text-white bg-blue-600 rounded-xl">Filtreleri Temizle</button>
+                                <p className="text-sm font-normal text-slate-700">Sonuç bulunamadı</p>
+                                <button onClick={clearAllEconomicFilters} className="px-4 py-2 text-xs font-normal text-white bg-blue-600 rounded-xl">Filtreleri Temizle</button>
                             </div>
                         ) : (
                             <div className="space-y-3">
                                 <div className="overflow-x-auto scrollbar-none bg-white rounded-2xl border border-blue-100 p-2 shadow-2xs">
                                     <table className="w-full text-left border-separate border-spacing-y-2 border-spacing-x-0 text-xs font-bold">
                                         <thead>
-                                            <tr className="text-[10px] font-black text-slate-400 uppercase">
+                                            <tr className="text-[10px] font-normal text-slate-400 uppercase">
                                                 <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60 rounded-l-xl pl-4">Tarih / Saat</th>
                                                 <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Ülke</th>
                                                 <th className="py-2.5 px-3.5 bg-blue-50/50 text-blue-900/60">Veri</th>
@@ -2318,18 +2318,18 @@ function CalendarContent() {
                                                 const detailHref = `/dashboard/economic-calendar/${encodeURIComponent(item.id || item.event)}`;
 
                                                 const cellBg = isReleased
-                                                    ? "bg-[#142B50] group-hover:bg-[#000075]"
+                                                    ? "bg-[#0E1E38] group-hover:bg-[#000075]"
                                                     : "bg-slate-50/70 group-hover:bg-blue-50/50";
 
                                                 return (
                                                     <tr key={idx} className="group transition-colors">
-                                                        <td className={`py-3.5 pl-4 pr-3.5 font-black whitespace-nowrap rounded-l-2xl ${cellBg} ${isReleased ? 'text-white' : 'text-[#142B50]'}`}>{item.dateFormatted || 'Bugün'} {item.time || '15:30'}</td>
-                                                        <td className={`py-3.5 px-3.5 font-black whitespace-nowrap ${cellBg} ${isReleased ? 'text-white' : 'text-slate-700'}`}>{item.country || 'USD'}</td>
+                                                        <td className={`py-3.5 pl-4 pr-3.5 font-normal whitespace-nowrap rounded-l-2xl ${cellBg} ${isReleased ? 'text-white' : 'text-[#0E1E38]'}`}>{item.dateFormatted || 'Bugün'} {item.time || '15:30'}</td>
+                                                        <td className={`py-3.5 px-3.5 font-normal whitespace-nowrap ${cellBg} ${isReleased ? 'text-white' : 'text-slate-700'}`}>{item.country || 'USD'}</td>
                                                         <td className={`py-3.5 px-3.5 ${cellBg}`}>
                                                             <Link
                                                                 href={detailHref}
                                                                 className={`hover:underline font-bold transition-colors inline-flex items-center gap-1.5 group/link ${
-                                                                    isReleased ? 'text-white font-black hover:text-blue-100' : 'text-slate-800'
+                                                                    isReleased ? 'text-white font-normal hover:text-blue-100' : 'text-slate-800'
                                                                 }`}
                                                                 title={`${item.event} Detayına Git`}
                                                             >
@@ -2343,7 +2343,7 @@ function CalendarContent() {
                                                         <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg} ${isReleased ? 'text-blue-100 font-semibold' : 'text-slate-700'}`}>{item.forecast || '—'}</td>
                                                         <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
                                                             {isReleased ? (
-                                                                <span className="text-xs font-black text-white">
+                                                                <span className="text-xs font-normal text-white">
                                                                     {item.actual}
                                                                 </span>
                                                             ) : (
@@ -2394,14 +2394,14 @@ function CalendarContent() {
                 <div className="lg:col-span-5 bg-white border border-slate-100 rounded-3xl p-5 shadow-sm flex flex-col justify-between">
                     <div>
                         <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
-                            <h3 className="text-sm font-black text-[#142B50] capitalize">{formattedViewMonthYear}</h3>
+                            <h3 className="text-sm font-normal text-[#0E1E38] capitalize">{formattedViewMonthYear}</h3>
                             <span className="text-[10px] font-bold text-slate-400">Aylık Görünüm</span>
                         </div>
 
                         {/* Days of Week */}
                         <div className="grid grid-cols-7 text-center mb-2">
                             {['PZT', 'SAL', 'ÇAR', 'PER', 'CUM', 'CMT', 'PZR'].map((day, idx) => (
-                                <span key={idx} className="text-[10px] font-black text-slate-400 py-1">
+                                <span key={idx} className="text-[10px] font-normal text-slate-400 py-1">
                                     {day}
                                 </span>
                             ))}
@@ -2421,11 +2421,11 @@ function CalendarContent() {
                                     <button
                                         key={idx}
                                         onClick={() => setSelectedDate(cell.date)}
-                                        className={`h-9 w-full rounded-xl text-xs font-black transition-all flex flex-col items-center justify-center relative ${
+                                        className={`h-9 w-full rounded-xl text-xs font-normal transition-all flex flex-col items-center justify-center relative ${
                                             isSelected
-                                                ? 'bg-[#142B50] text-white shadow-md shadow-[#142B50]/30 scale-105 z-10'
+                                                ? 'bg-[#0E1E38] text-white shadow-md shadow-[#0E1E38]/30 scale-105 z-10'
                                                 : isTodayCell
-                                                ? 'bg-blue-50 text-[#142B50] border border-blue-200'
+                                                ? 'bg-blue-50 text-[#0E1E38] border border-blue-200'
                                                 : cell.isCurrentMonth
                                                 ? 'text-slate-700 hover:bg-slate-100'
                                                 : 'text-slate-300 hover:bg-slate-50'
@@ -2433,7 +2433,7 @@ function CalendarContent() {
                                     >
                                         <span>{cell.dayNum}</span>
                                         {(cell.isCurrentMonth && dayHasEvents(cell.date)) && (
-                                            <span className={`w-1 h-1 rounded-full absolute bottom-1 ${isSelected ? 'bg-white' : 'bg-[#142B50]'}`} />
+                                            <span className={`w-1 h-1 rounded-full absolute bottom-1 ${isSelected ? 'bg-white' : 'bg-[#0E1E38]'}`} />
                                         )}
                                     </button>
                                 );
@@ -2447,10 +2447,10 @@ function CalendarContent() {
                     <div>
                         <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
                             <div>
-                                <h3 className="text-sm font-black text-[#142B50] capitalize">{formattedSelectedDayHeader}</h3>
+                                <h3 className="text-sm font-normal text-[#0E1E38] capitalize">{formattedSelectedDayHeader}</h3>
                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">Günün Ajandası</p>
                             </div>
-                            <span className="text-xs font-black text-[#142B50] bg-[#78B8F5]/15 px-2.5 py-1 rounded-xl border border-[#78B8F5]/10">
+                            <span className="text-xs font-normal text-[#0E1E38] bg-[#78B8F5]/15 px-2.5 py-1 rounded-xl border border-[#78B8F5]/10">
                                 {selectedDayAgenda.length} Etkinlik
                             </span>
                         </div>
@@ -2458,7 +2458,7 @@ function CalendarContent() {
                         {/* Agenda List */}
                         {loading ? (
                             <div className="flex flex-col items-center justify-center py-12 gap-2">
-                                <Loader2 className="w-6 h-6 text-[#142B50] animate-spin" />
+                                <Loader2 className="w-6 h-6 text-[#0E1E38] animate-spin" />
                                 <span className="text-xs font-bold text-slate-400">Ajanda verileri yükleniyor...</span>
                             </div>
                         ) : selectedDayAgenda.length === 0 ? (
@@ -2481,17 +2481,17 @@ function CalendarContent() {
                                     return (
                                         <div key={idx} className={`flex items-center justify-between p-3 rounded-2xl border transition-all ${rowBg}`}>
                                             <div className="flex items-center gap-3 min-w-0">
-                                                <span className="text-xs font-black text-slate-600 w-10 shrink-0">{item.time}</span>
-                                                <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-lg border shrink-0 ${item.categoryColor}`}>
+                                                <span className="text-xs font-normal text-slate-600 w-10 shrink-0">{item.time}</span>
+                                                <span className={`text-[10px] font-normal px-2 py-0.5 rounded-lg border shrink-0 ${item.categoryColor}`}>
                                                     {item.category}
                                                 </span>
-                                                <span className="text-xs font-black text-[#142B50] shrink-0">{item.symbol}</span>
+                                                <span className="text-xs font-normal text-[#0E1E38] shrink-0">{item.symbol}</span>
                                                 <div className="min-w-0">
                                                     <p className="text-xs font-bold text-slate-800 truncate">{item.title}</p>
                                                     <p className="text-[10px] text-slate-500 truncate">{item.subtitle}</p>
                                                 </div>
                                             </div>
-                                            <button title="Hatırlatıcı Ekle" className="p-1.5 text-slate-400 hover:text-[#142B50] hover:bg-white rounded-lg transition-all shrink-0">
+                                            <button title="Hatırlatıcı Ekle" className="p-1.5 text-slate-400 hover:text-[#0E1E38] hover:bg-white rounded-lg transition-all shrink-0">
                                                 <Bell className="w-3.5 h-3.5" />
                                             </button>
                                         </div>
@@ -2515,9 +2515,9 @@ function CalendarContent() {
                                 <div className="w-7 h-7 rounded-xl bg-blue-100/70 border border-blue-200/80 flex items-center justify-center text-blue-700">
                                     <Building2 className="w-4 h-4" />
                                 </div>
-                                <h3 className="text-sm font-black text-[#142B50]">Bilanço Takvimi</h3>
+                                <h3 className="text-sm font-normal text-[#0E1E38]">Bilanço Takvimi</h3>
                             </div>
-                            <Link href="/dashboard/calendar?type=earnings" onClick={() => { setActiveFilter('earnings'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-[10px] font-extrabold text-blue-600 hover:underline">
+                            <Link href="/dashboard/calendar?type=earnings" onClick={() => { setActiveFilter('earnings'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-[10px] font-normal text-blue-600 hover:underline">
                                 Tümünü Gör
                             </Link>
                         </div>
@@ -2540,22 +2540,22 @@ function CalendarContent() {
                                                 <div className={`px-2 py-1 rounded-xl text-center min-w-[44px] ${
                                                     isAnnounced ? 'bg-blue-700 text-white' : 'bg-blue-100/80 text-blue-800'
                                                 }`}>
-                                                    <span className="text-[9px] font-black uppercase block leading-tight">{item.earningsDate?.split('.')[1] || 'MAY'}</span>
-                                                    <span className="text-xs font-black block leading-tight">{item.earningsDate?.split('.')[0] || '20'}</span>
+                                                    <span className="text-[9px] font-normal uppercase block leading-tight">{item.earningsDate?.split('.')[1] || 'MAY'}</span>
+                                                    <span className="text-xs font-normal block leading-tight">{item.earningsDate?.split('.')[0] || '20'}</span>
                                                 </div>
                                                 <StockLogo symbol={item.symbol} className="w-8 h-8 shrink-0 ring-1 ring-white/30 shadow-xs" />
                                                 <div>
-                                                    <p className={`text-xs font-black ${isAnnounced ? 'text-white' : 'text-[#142B50]'}`}>{item.symbol}</p>
+                                                    <p className={`text-xs font-normal ${isAnnounced ? 'text-white' : 'text-[#0E1E38]'}`}>{item.symbol}</p>
                                                     <p className={`text-[10px] font-bold truncate max-w-[130px] ${isAnnounced ? 'text-blue-100' : 'text-slate-600'}`}>{item.companyName}</p>
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 {isAnnounced ? (
-                                                    <span className="text-xs font-black text-white">2026/1Ç</span>
+                                                    <span className="text-xs font-normal text-white">2026/1Ç</span>
                                                 ) : (
                                                     <span className="text-[9px] font-bold px-2 py-0.5 rounded-lg border text-blue-700 bg-white/80 border-blue-200/80">2026/1Ç</span>
                                                 )}
-                                                <button title="Hatırlat" className={`p-1 ${isAnnounced ? 'text-white hover:text-blue-200' : 'text-blue-400 hover:text-[#142B50]'}`}>
+                                                <button title="Hatırlat" className={`p-1 ${isAnnounced ? 'text-white hover:text-blue-200' : 'text-blue-400 hover:text-[#0E1E38]'}`}>
                                                     <Bell className="w-3.5 h-3.5" />
                                                 </button>
                                             </div>
@@ -2566,7 +2566,7 @@ function CalendarContent() {
                         )}
                     </div>
 
-                    <Link href="/dashboard/calendar?type=earnings" onClick={() => { setActiveFilter('earnings'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 pt-3 border-t border-blue-100/60 flex items-center justify-center text-xs font-black text-[#142B50] hover:text-blue-600 transition-colors">
+                    <Link href="/dashboard/calendar?type=earnings" onClick={() => { setActiveFilter('earnings'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 pt-3 border-t border-blue-100/60 flex items-center justify-center text-xs font-normal text-[#0E1E38] hover:text-blue-600 transition-colors">
                         Tüm Bilançoları Gör →
                     </Link>
                 </div>
@@ -2579,9 +2579,9 @@ function CalendarContent() {
                                 <div className="w-7 h-7 rounded-xl bg-emerald-100/70 border border-emerald-200/80 flex items-center justify-center text-emerald-700">
                                     <Coins className="w-4 h-4" />
                                 </div>
-                                <h3 className="text-sm font-black text-[#142B50]">Temettü Takvimi</h3>
+                                <h3 className="text-sm font-normal text-[#0E1E38]">Temettü Takvimi</h3>
                             </div>
-                            <Link href="/dashboard/calendar?type=dividend" onClick={() => { setActiveFilter('dividends'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-[10px] font-extrabold text-emerald-600 hover:underline">
+                            <Link href="/dashboard/calendar?type=dividend" onClick={() => { setActiveFilter('dividends'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-[10px] font-normal text-emerald-600 hover:underline">
                                 Tümünü Gör
                             </Link>
                         </div>
@@ -2609,26 +2609,26 @@ function CalendarContent() {
                                                 <div className={`px-2 py-1 rounded-xl text-center min-w-[44px] ${
                                                     isPaid ? 'bg-emerald-700 text-white' : 'bg-emerald-100/80 text-emerald-800'
                                                 }`}>
-                                                    <span className="text-[9px] font-black uppercase block leading-tight">{item.paymentDate?.split('.')[1] || 'MAY'}</span>
-                                                    <span className="text-xs font-black block leading-tight">{item.paymentDate?.split('.')[0] || '19'}</span>
+                                                    <span className="text-[9px] font-normal uppercase block leading-tight">{item.paymentDate?.split('.')[1] || 'MAY'}</span>
+                                                    <span className="text-xs font-normal block leading-tight">{item.paymentDate?.split('.')[0] || '19'}</span>
                                                 </div>
                                                 <StockLogo symbol={item.symbol} className="w-8 h-8 shrink-0 ring-1 ring-white/30 shadow-xs" />
                                                 <div>
-                                                    <p className={`text-xs font-black ${isPaid ? 'text-white' : 'text-[#142B50]'}`}>{item.symbol}</p>
+                                                    <p className={`text-xs font-normal ${isPaid ? 'text-white' : 'text-[#0E1E38]'}`}>{item.symbol}</p>
                                                     <p className={`text-[10px] font-bold truncate max-w-[120px] ${isPaid ? 'text-emerald-100' : 'text-slate-600'}`}>{item.companyName}</p>
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 {isPaid ? (
-                                                    <span className="text-xs font-black text-white">
+                                                    <span className="text-xs font-normal text-white">
                                                         {item.netAmountFormatted || '6,00 TL'}
                                                     </span>
                                                 ) : (
-                                                    <span className="text-[10px] font-black px-2 py-0.5 rounded-lg border text-emerald-800 bg-white/80 border-emerald-200/80">
+                                                    <span className="text-[10px] font-normal px-2 py-0.5 rounded-lg border text-emerald-800 bg-white/80 border-emerald-200/80">
                                                         {item.netAmountFormatted || '6,00 TL'}
                                                     </span>
                                                 )}
-                                                <button title="Hatırlat" className={`p-1 ${isPaid ? 'text-white hover:text-emerald-200' : 'text-emerald-500 hover:text-[#142B50]'}`}>
+                                                <button title="Hatırlat" className={`p-1 ${isPaid ? 'text-white hover:text-emerald-200' : 'text-emerald-500 hover:text-[#0E1E38]'}`}>
                                                     <Bell className="w-3.5 h-3.5" />
                                                 </button>
                                             </div>
@@ -2639,7 +2639,7 @@ function CalendarContent() {
                         )}
                     </div>
 
-                    <Link href="/dashboard/calendar?type=dividend" onClick={() => { setActiveFilter('dividends'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 pt-3 border-t border-emerald-100/60 flex items-center justify-center text-xs font-black text-[#142B50] hover:text-emerald-600 transition-colors">
+                    <Link href="/dashboard/calendar?type=dividend" onClick={() => { setActiveFilter('dividends'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 pt-3 border-t border-emerald-100/60 flex items-center justify-center text-xs font-normal text-[#0E1E38] hover:text-emerald-600 transition-colors">
                         Tüm Temettüleri Gör →
                     </Link>
                 </div>
@@ -2652,9 +2652,9 @@ function CalendarContent() {
                                 <div className="w-7 h-7 rounded-xl bg-purple-100/70 border border-purple-200/80 flex items-center justify-center text-purple-700">
                                     <TrendingUp className="w-4 h-4" />
                                 </div>
-                                <h3 className="text-sm font-black text-[#142B50]">Halka Arz Takvimi</h3>
+                                <h3 className="text-sm font-normal text-[#0E1E38]">Halka Arz Takvimi</h3>
                             </div>
-                            <Link href="/dashboard/calendar?type=ipo" onClick={() => { setActiveFilter('ipo'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-[10px] font-extrabold text-purple-600 hover:underline">
+                            <Link href="/dashboard/calendar?type=ipo" onClick={() => { setActiveFilter('ipo'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-[10px] font-normal text-purple-600 hover:underline">
                                 Tümünü Gör
                             </Link>
                         </div>
@@ -2679,9 +2679,9 @@ function CalendarContent() {
                                                 <StockLogo symbol={item.symbol} className="w-8 h-8 shrink-0 ring-1 ring-white/30 shadow-xs" />
                                                 <div>
                                                     <div className="flex items-center gap-2">
-                                                        <span className={`text-xs font-black ${isCompleted ? 'text-white' : 'text-[#142B50]'}`}>{item.symbol}</span>
+                                                        <span className={`text-xs font-normal ${isCompleted ? 'text-white' : 'text-[#0E1E38]'}`}>{item.symbol}</span>
                                                     {isCompleted ? (
-                                                        <span className="text-[10px] font-black text-purple-200">
+                                                        <span className="text-[10px] font-normal text-purple-200">
                                                             {getIpoStatusLabel(item)}
                                                         </span>
                                                     ) : (
@@ -2694,7 +2694,7 @@ function CalendarContent() {
                                                 </div>
                                             </div>
                                             {isCompleted ? (
-                                                <span className="text-xs font-black text-white">
+                                                <span className="text-xs font-normal text-white">
                                                     {item.dateRange || 'Yakında'}
                                                 </span>
                                             ) : (
@@ -2709,7 +2709,7 @@ function CalendarContent() {
                         )}
                     </div>
 
-                    <Link href="/dashboard/calendar?type=ipo" onClick={() => { setActiveFilter('ipo'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 pt-3 border-t border-purple-100/60 flex items-center justify-center text-xs font-black text-[#142B50] hover:text-purple-600 transition-colors">
+                    <Link href="/dashboard/calendar?type=ipo" onClick={() => { setActiveFilter('ipo'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 pt-3 border-t border-purple-100/60 flex items-center justify-center text-xs font-normal text-[#0E1E38] hover:text-purple-600 transition-colors">
                         Tüm Halka Arzları Gör →
                     </Link>
                 </div>
@@ -2727,11 +2727,11 @@ function CalendarContent() {
                                     <Globe2 className="w-4 h-4" />
                                 </div>
                                 <div>
-                                    <h3 className="text-base font-black text-[#142B50]">Ekonomik Takvim</h3>
+                                    <h3 className="text-base font-normal text-[#0E1E38]">Ekonomik Takvim</h3>
                                     <p className="text-[10px] font-bold text-slate-400">Küresel makroekonomik veriler ve faiz kararları</p>
                                 </div>
                             </div>
-                            <Link href="/dashboard/calendar?type=economic" onClick={() => { setActiveFilter('economic'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-xs font-extrabold text-blue-600 hover:underline">
+                            <Link href="/dashboard/calendar?type=economic" onClick={() => { setActiveFilter('economic'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-xs font-normal text-blue-600 hover:underline">
                                 Tümünü Gör →
                             </Link>
                         </div>
@@ -2739,7 +2739,7 @@ function CalendarContent() {
                         <div className="overflow-x-auto scrollbar-none">
                             <table className="w-full text-left border-separate border-spacing-y-1.5 border-spacing-x-0">
                                 <thead>
-                                    <tr className="text-[10px] font-black text-blue-800/60 uppercase tracking-wider">
+                                    <tr className="text-[10px] font-normal text-blue-800/60 uppercase tracking-wider">
                                         <th className="py-2 px-2.5 bg-blue-50/50 rounded-l-lg pl-3">Tarih/Saat</th>
                                         <th className="py-2 px-2 bg-blue-50/50">Ülke</th>
                                         <th className="py-2 px-2 bg-blue-50/50">Veri</th>
@@ -2759,12 +2759,12 @@ function CalendarContent() {
                                         overviewEconomicEvents.map((item, idx) => {
                                             const isReleased = isEconomicEventReleased(item);
                                             const cellBg = isReleased
-                                                ? "bg-[#142B50] group-hover:bg-[#000075]"
+                                                ? "bg-[#0E1E38] group-hover:bg-[#000075]"
                                                 : "bg-slate-50/60 group-hover:bg-blue-50/50";
 
                                             return (
                                                 <tr key={idx} className="group transition-colors">
-                                                    <td className={`py-2 px-2.5 whitespace-nowrap rounded-l-xl pl-3 ${cellBg} ${isReleased ? 'text-white' : 'text-[#142B50]'}`}>
+                                                    <td className={`py-2 px-2.5 whitespace-nowrap rounded-l-xl pl-3 ${cellBg} ${isReleased ? 'text-white' : 'text-[#0E1E38]'}`}>
                                                         {item.dateFormatted && (
                                                             <span className={`font-bold mr-1.5 text-[10px] ${isReleased ? 'text-blue-200' : 'text-slate-500'}`}>
                                                                 {item.dateFormatted.split('.')[0]}.{item.dateFormatted.split('.')[1]}
@@ -2772,11 +2772,11 @@ function CalendarContent() {
                                                         )}
                                                         <span>{item.time || '15:30'}</span>
                                                     </td>
-                                                    <td className={`py-2 px-2 font-black whitespace-nowrap ${cellBg} ${isReleased ? 'text-white' : 'text-slate-700'}`}>{item.country || 'USD'}</td>
+                                                    <td className={`py-2 px-2 font-normal whitespace-nowrap ${cellBg} ${isReleased ? 'text-white' : 'text-slate-700'}`}>{item.country || 'USD'}</td>
                                                     <td className={`py-2 px-2 truncate max-w-[130px] ${cellBg}`}>
                                                         <Link
                                                             href={`/dashboard/economic-calendar/${encodeURIComponent(item.id || item.event)}`}
-                                                            className={`hover:underline transition-colors truncate block ${isReleased ? 'text-white hover:text-blue-200' : 'text-slate-800 hover:text-[#142B50]'}`}
+                                                            className={`hover:underline transition-colors truncate block ${isReleased ? 'text-white hover:text-blue-200' : 'text-slate-800 hover:text-[#0E1E38]'}`}
                                                             title={item.event}
                                                         >
                                                             {item.event}
@@ -2784,13 +2784,13 @@ function CalendarContent() {
                                                     </td>
                                                     <td className={`py-2 px-2.5 whitespace-nowrap text-right rounded-r-xl pr-3 ${cellBg}`}>
                                                         {isReleased ? (
-                                                            <span className={`text-[11px] font-black ${
+                                                            <span className={`text-[11px] font-normal ${
                                                                 item.impact === 'critical' || item.impact === 'high' || item.impact === 'Yüksek' || item.impact === 3 ? 'text-rose-300' : 'text-blue-200'
                                                             }`}>
                                                                 {item.impact === 'critical' || item.impact === 'high' || item.impact === 'Yüksek' || item.impact === 3 ? 'Yüksek' : 'Orta'}
                                                             </span>
                                                         ) : (
-                                                            <span className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded border ${
+                                                            <span className={`text-[9px] font-normal px-1.5 py-0.5 rounded border ${
                                                                 item.impact === 'critical' || item.impact === 'high' || item.impact === 'Yüksek' || item.impact === 'Kritik' || item.impact === 3
                                                                     ? 'bg-rose-50 text-rose-700 border-rose-200'
                                                                     : 'bg-blue-100/80 text-blue-800 border-blue-200'
@@ -2808,7 +2808,7 @@ function CalendarContent() {
                         </div>
                     </div>
 
-                    <Link href="/dashboard/calendar?type=economic" onClick={() => { setActiveFilter('economic'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 pt-3 border-t border-blue-100/60 flex items-center justify-center text-xs font-black text-[#142B50] hover:text-blue-600 transition-colors">
+                    <Link href="/dashboard/calendar?type=economic" onClick={() => { setActiveFilter('economic'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="mt-4 pt-3 border-t border-blue-100/60 flex items-center justify-center text-xs font-normal text-[#0E1E38] hover:text-blue-600 transition-colors">
                         Tüm Ekonomik Verileri Gör →
                     </Link>
                 </div>
@@ -2824,7 +2824,7 @@ function CalendarContent() {
                                     <Sparkles className="w-4 h-4 animate-pulse" />
                                 </div>
                                 <div>
-                                    <h3 className="text-base font-black text-white">Piyasa Gündemi</h3>
+                                    <h3 className="text-base font-normal text-white">Piyasa Gündemi</h3>
                                     <p className="text-[10px] font-bold text-slate-400">Yaklaşan önemli tarihler ve özet göstergeler</p>
                                 </div>
                             </div>
@@ -2834,19 +2834,19 @@ function CalendarContent() {
                         <div className="grid grid-cols-2 gap-3">
                             <Link href="/dashboard/calendar?type=earnings" onClick={() => { setActiveFilter('earnings'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-3.5 backdrop-blur-md cursor-pointer hover:bg-blue-500/20 transition-all block">
                                 <span className="text-[10px] font-bold text-blue-300 uppercase block mb-1">Bilanço</span>
-                                <span className="text-base font-black text-blue-400 block">{earnings.length || 5} Şirket</span>
+                                <span className="text-base font-normal text-blue-400 block">{earnings.length || 5} Şirket</span>
                                 <span className="text-[9px] text-blue-200/60">Yaklaşan Sonuçlar</span>
                             </Link>
 
                             <Link href="/dashboard/calendar?type=dividend" onClick={() => { setActiveFilter('dividends'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-3.5 backdrop-blur-md cursor-pointer hover:bg-emerald-500/20 transition-all block">
                                 <span className="text-[10px] font-bold text-emerald-300 uppercase block mb-1">Temettü</span>
-                                <span className="text-base font-black text-emerald-400 block">{dividends.length || 4} Ödeme</span>
+                                <span className="text-base font-normal text-emerald-400 block">{dividends.length || 4} Ödeme</span>
                                 <span className="text-[9px] text-emerald-200/60">Hak Hakediş</span>
                             </Link>
 
                             <Link href="/dashboard/calendar?type=ipo" onClick={() => { setActiveFilter('ipo'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="bg-purple-500/10 border border-purple-500/20 rounded-2xl p-3.5 backdrop-blur-md cursor-pointer hover:bg-purple-500/20 transition-all block">
                                 <span className="text-[10px] font-bold text-purple-300 uppercase block mb-1">Halka Arz</span>
-                                <span className="text-base font-black text-purple-400 block">
+                                <span className="text-base font-normal text-purple-400 block">
                                     {activeOrUpcomingIpoCount > 0 ? activeOrUpcomingIpoCount : (ipos.length || 0)} {activeOrUpcomingIpoCount > 0 ? 'Aktif / Yaklaşan' : 'Talep Toplama'}
                                 </span>
                                 <span className="text-[9px] text-purple-200/60">Talep Toplama Takvimi</span>
@@ -2854,7 +2854,7 @@ function CalendarContent() {
 
                             <Link href="/dashboard/calendar?type=economic" onClick={() => { setActiveFilter('economic'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="bg-blue-500/10 border border-blue-500/20 rounded-2xl p-3.5 backdrop-blur-md cursor-pointer hover:bg-blue-500/20 transition-all block">
                                 <span className="text-[10px] font-bold text-blue-300 uppercase block mb-1">Ekonomik Veri</span>
-                                <span className="text-base font-black text-blue-400 block">{economicEvents.length || 7} Önemli Veri</span>
+                                <span className="text-base font-normal text-blue-400 block">{economicEvents.length || 7} Önemli Veri</span>
                                 <span className="text-[9px] text-blue-200/60">Makro Göstergeler</span>
                             </Link>
                         </div>
@@ -2877,7 +2877,7 @@ export default function CalendarPage() {
     return (
         <Suspense fallback={
             <div className="w-full min-h-screen bg-slate-50/50 p-8 flex items-center justify-center">
-                <div className="flex items-center gap-2 text-xs font-bold text-[#142B50]">
+                <div className="flex items-center gap-2 text-xs font-bold text-[#0E1E38]">
                     <Loader2 className="w-5 h-5 animate-spin" />
                     Takvim Yükleniyor...
                 </div>

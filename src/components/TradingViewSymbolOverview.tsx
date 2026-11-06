@@ -476,7 +476,7 @@ export function TradingViewSymbolOverview({
 
   return (
     <div 
-      className={`bg-white text-slate-900 rounded-3xl p-5 sm:p-7 shadow-sm border border-slate-200/90 flex flex-col justify-between select-none ${className}`}
+      className={`bg-white text-[#0E1E38] rounded-3xl p-5 sm:p-7 shadow-sm border border-slate-200/90 flex flex-col justify-between select-none ${className}`}
       style={{
         fontFamily: "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
         minHeight: typeof height === "number" ? `${height}px` : height
@@ -490,7 +490,7 @@ export function TradingViewSymbolOverview({
           <StockLogo symbol={cleanSymbol} className="w-11 h-11 border border-slate-200/80 shadow-xs" />
           <div>
             <div className="flex items-baseline gap-2">
-              <span className="text-base font-bold text-slate-900 tracking-tight">{cleanSymbol}</span>
+              <span className="text-base font-bold text-[#0E1E38] tracking-tight">{cleanSymbol}</span>
               <span className="text-[10px] font-bold text-[#ba68c8] bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200/60">
                 GS
               </span>
@@ -516,11 +516,11 @@ export function TradingViewSymbolOverview({
           
           {/* FİYAT & DEĞİŞİM (VALUES TRACKING) */}
           <div className="text-left sm:text-right">
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            <div className="text-2xl sm:text-3xl font-normal text-[#0E1E38] tracking-tight">
               {displayPrice != null ? `${displayPrice.toFixed(2)} ₺` : "— ₺"}
             </div>
             <div className="flex items-center sm:justify-end gap-1.5 text-xs font-bold mt-0.5">
-              <span className={isPositive ? "text-[#142B50] flex items-center gap-0.5" : "text-rose-600 flex items-center gap-0.5"}>
+              <span className={isPositive ? "text-[#0E1E38] flex items-center gap-0.5" : "text-rose-600 flex items-center gap-0.5"}>
                 {isPositive ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
                 {isPositive ? "+" : ""}{displayChange.toFixed(2)} ₺ ({isPositive ? "+" : ""}{displayChangePercent.toFixed(2)}%)
               </span>
@@ -544,8 +544,8 @@ export function TradingViewSymbolOverview({
                   title={range.title}
                   className={`px-2.5 py-1 text-xs rounded-lg transition-all ${
                     isActive
-                      ? "bg-white text-slate-900 font-bold shadow-sm border border-slate-200/60"
-                      : "text-slate-500 hover:text-slate-900 hover:bg-white/60 font-medium"
+                      ? "bg-white text-[#0E1E38] font-bold shadow-sm border border-slate-200/60"
+                      : "text-slate-500 hover:text-[#0E1E38] hover:bg-white/60 font-medium"
                   }`}
                 >
                   {range.label}
@@ -564,7 +564,7 @@ export function TradingViewSymbolOverview({
       >
         {loading && (
           <div className="absolute inset-0 z-10 bg-white/80 backdrop-blur-[2px] flex items-center justify-center text-slate-600 text-xs font-medium gap-2">
-            <RefreshCw className="w-4 h-4 animate-spin text-[#142B50]" />
+            <RefreshCw className="w-4 h-4 animate-spin text-[#0E1E38]" />
             Yahoo Finance verisi güncelleniyor...
           </div>
         )}

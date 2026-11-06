@@ -58,7 +58,7 @@ const FormInput = ({
     helperText?: string;
 }) => (
     <div className="space-y-1.5">
-        <label className="block text-xs font-bold text-[#142B50] uppercase tracking-wider">
+        <label className="block text-xs font-bold text-[#0E1E38] uppercase tracking-wider">
             {label}
         </label>
         <div className="relative flex items-center">
@@ -104,7 +104,7 @@ const FormSelect = ({
     helperText?: string;
 }) => (
     <div className="space-y-1.5">
-        <label className="block text-xs font-bold text-[#142B50] uppercase tracking-wider">
+        <label className="block text-xs font-bold text-[#0E1E38] uppercase tracking-wider">
             {label}
         </label>
         <div className="relative flex items-center">
@@ -150,15 +150,15 @@ const SettingsCard = ({
     icon?: any;
     children: React.ReactNode;
 }) => (
-    <div className="bg-white/80 backdrop-blur-xl border border-slate-200/80 rounded-3xl p-6 md:p-8 shadow-xl shadow-[#142B50]/5 transition-all">
+    <div className="bg-white/80 backdrop-blur-xl border border-slate-200/80 rounded-3xl p-6 md:p-8 shadow-xl shadow-[#0E1E38]/5 transition-all">
         <div className="flex items-center gap-3 pb-5 mb-6 border-b border-slate-100">
             {Icon && (
-                <div className="w-10 h-10 rounded-2xl bg-[#78B8F5]/15 border border-[#78B8F5]/10 flex items-center justify-center text-[#142B50] shrink-0 shadow-sm">
+                <div className="w-10 h-10 rounded-2xl bg-[#78B8F5]/15 border border-[#78B8F5]/10 flex items-center justify-center text-[#0E1E38] shrink-0 shadow-sm">
                     <Icon className="w-5 h-5" />
                 </div>
             )}
             <div>
-                <h3 className="text-lg font-black text-[#142B50] tracking-tight">{title}</h3>
+                <h3 className="text-lg font-normal text-[#0E1E38] tracking-tight">{title}</h3>
                 {description && <p className="text-xs text-slate-500 font-medium mt-0.5">{description}</p>}
             </div>
         </div>
@@ -428,24 +428,24 @@ function SettingsContent() {
             {/* Header Area */}
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/60 text-[#142B50] text-xs font-bold mb-2">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/60 text-[#0E1E38] text-xs font-bold mb-2">
                         <span className="relative flex h-2 w-2">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#142B50]"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#0E1E38]"></span>
                         </span>
                         Akıllı Profil & Tercihler
                     </div>
-                    <h1 className="text-3xl md:text-4xl font-black text-[#142B50] tracking-tight">
+                    <h1 className="text-3xl md:text-4xl font-normal text-[#0E1E38] tracking-tight">
                         Ayarlar
                     </h1>
-                    <p className="text-sm font-medium text-[#142B50]/60 mt-1">
+                    <p className="text-sm font-medium text-[#0E1E38]/60 mt-1">
                         Kişisel bilgilerinizi, yatırım stratejinizi, yapay zeka tercihlerinizi ve güvenlik ayarlarınızı yönetin.
                     </p>
                 </div>
             </div>
 
             {/* Navigation Tabs (Crystal Glass Pill Style) */}
-            <div className="bg-white/80 backdrop-blur-xl border border-slate-200/80 p-2 rounded-3xl shadow-xl shadow-[#142B50]/5 flex flex-col sm:flex-row gap-2">
+            <div className="bg-white/80 backdrop-blur-xl border border-slate-200/80 p-2 rounded-3xl shadow-xl shadow-[#0E1E38]/5 flex flex-col sm:flex-row gap-2">
                 {tabs.map((tab) => {
                     const TabIcon = tab.icon;
                     const isActive = activeTab === tab.id;
@@ -456,18 +456,18 @@ function SettingsContent() {
                             className={cn(
                                 "flex-1 flex items-center gap-3 px-5 py-3.5 rounded-2xl transition-all text-left",
                                 isActive
-                                    ? "bg-[#142B50] text-white shadow-lg shadow-[#142B50]/20 scale-[1.01]"
-                                    : "text-[#142B50]/70 hover:text-[#142B50] hover:bg-blue-50/70"
+                                    ? "bg-[#0E1E38] text-white shadow-lg shadow-[#0E1E38]/20 scale-[1.01]"
+                                    : "text-[#0E1E38]/70 hover:text-[#0E1E38] hover:bg-blue-50/70"
                             )}
                         >
                             <div className={cn(
                                 "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-colors",
-                                isActive ? "bg-white/20 text-white" : "bg-[#78B8F5]/20 text-[#142B50]"
+                                isActive ? "bg-white/20 text-white" : "bg-[#78B8F5]/20 text-[#0E1E38]"
                             )}>
                                 <TabIcon className="w-4 h-4" />
                             </div>
                             <div className="flex flex-col min-w-0">
-                                <span className="text-xs font-black tracking-tight truncate">{tab.label}</span>
+                                <span className="text-xs font-normal tracking-tight truncate">{tab.label}</span>
                                 <span className={cn(
                                     "text-[10px] font-semibold truncate",
                                     isActive ? "text-white/70" : "text-slate-400"
@@ -492,15 +492,15 @@ function SettingsContent() {
                         className="space-y-8"
                     >
                         {/* Profil Fotoğrafı */}
-                        <div className="bg-white/80 backdrop-blur-xl border border-slate-200/80 rounded-3xl p-6 md:p-8 shadow-xl shadow-[#142B50]/5">
+                        <div className="bg-white/80 backdrop-blur-xl border border-slate-200/80 rounded-3xl p-6 md:p-8 shadow-xl shadow-[#0E1E38]/5">
                             <div className="flex flex-col sm:flex-row items-center gap-6">
                                 <div className="relative group shrink-0">
-                                    <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#142B50] to-blue-600 p-1 shadow-xl shadow-[#142B50]/20">
+                                    <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#0E1E38] to-blue-600 p-1 shadow-xl shadow-[#0E1E38]/20">
                                         <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden border-2 border-white">
                                             {avatarUrl ? (
                                                 <img src={avatarUrl} alt="Profil" className="w-full h-full object-cover" />
                                             ) : (
-                                                <div className="text-2xl font-black text-[#142B50]">
+                                                <div className="text-2xl font-normal text-[#0E1E38]">
                                                     {profileData.firstName ? profileData.firstName.slice(0, 1).toUpperCase() : 'F'}
                                                     {profileData.lastName ? profileData.lastName.slice(0, 1).toUpperCase() : 'A'}
                                                 </div>
@@ -509,7 +509,7 @@ function SettingsContent() {
                                     </div>
                                     <button
                                         onClick={handleUploadClick}
-                                        className="absolute bottom-0 right-0 w-8 h-8 bg-[#142B50] text-white rounded-full flex items-center justify-center border-2 border-white shadow-md hover:bg-blue-700 transition-colors"
+                                        className="absolute bottom-0 right-0 w-8 h-8 bg-[#0E1E38] text-white rounded-full flex items-center justify-center border-2 border-white shadow-md hover:bg-blue-700 transition-colors"
                                         title="Fotoğraf Yükle"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
@@ -518,7 +518,7 @@ function SettingsContent() {
                                     </button>
                                 </div>
                                 <div className="text-center sm:text-left space-y-2">
-                                    <h4 className="text-base font-black text-[#142B50]">Profil Fotoğrafı</h4>
+                                    <h4 className="text-base font-normal text-[#0E1E38]">Profil Fotoğrafı</h4>
                                     <p className="text-xs text-slate-500 font-medium">Kişisel markanızı ve panel kimliğinizi yansıtın.</p>
                                     <div className="flex items-center justify-center sm:justify-start gap-2 pt-1">
                                         <input
@@ -530,7 +530,7 @@ function SettingsContent() {
                                         />
                                         <button
                                             onClick={handleUploadClick}
-                                            className="px-4 py-2 rounded-xl bg-[#142B50] hover:bg-[#102240] text-white text-xs font-bold transition-all shadow-sm shadow-[#142B50]/20 active:scale-95"
+                                            className="px-4 py-2 rounded-xl bg-[#0E1E38] hover:bg-[#102240] text-white text-xs font-bold transition-all shadow-sm shadow-[#0E1E38]/20 active:scale-95"
                                         >
                                             Yeni Yükle
                                         </button>
@@ -709,7 +709,7 @@ function SettingsContent() {
                             <LoadingButton
                                 onClick={handleSaveProfile}
                                 isLoading={isSaving}
-                                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#142B50] hover:bg-[#102240] text-white font-bold rounded-2xl text-sm shadow-lg shadow-[#142B50]/25 transition-all active:scale-95"
+                                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#0E1E38] hover:bg-[#102240] text-white font-bold rounded-2xl text-sm shadow-lg shadow-[#0E1E38]/25 transition-all active:scale-95"
                             >
                                 {!isSaving && <Save className="w-4 h-4" />}
                                 <span>Değişiklikleri Kaydet</span>
@@ -728,19 +728,19 @@ function SettingsContent() {
                         className="space-y-8"
                     >
                         {/* Bildirim Merkezi Kısayol Banner */}
-                        <div className="bg-gradient-to-r from-[#142B50] to-blue-800 text-white rounded-3xl p-6 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div className="bg-gradient-to-r from-[#0E1E38] to-blue-800 text-white rounded-3xl p-6 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                             <div className="space-y-1">
-                                <span className="text-[10px] font-black text-blue-200 uppercase tracking-widest bg-white/10 px-2.5 py-0.5 rounded-lg border border-white/15">
+                                <span className="text-[10px] font-normal text-blue-200 uppercase tracking-widest bg-white/10 px-2.5 py-0.5 rounded-lg border border-white/15">
                                     Canlı Web Push & Gösterge Takibi
                                 </span>
-                                <h3 className="text-lg font-black text-white">Bildirim Merkezi ve Gösterge Takip Yönetimi</h3>
+                                <h3 className="text-lg font-normal text-white">Bildirim Merkezi ve Gösterge Takip Yönetimi</h3>
                                 <p className="text-xs text-blue-100 font-medium">
                                     Ekonomik göstergeleri takip edin, anlık cihaz bildirimlerinizi özelleştirin ve canlı alarmlarınızı yönetin.
                                 </p>
                             </div>
                             <Link
                                 href="/dashboard/notifications"
-                                className="px-5 py-2.5 rounded-2xl bg-white text-[#142B50] font-black text-xs shadow-md hover:bg-blue-50 transition-all shrink-0 inline-flex items-center gap-1.5"
+                                className="px-5 py-2.5 rounded-2xl bg-white text-[#0E1E38] font-normal text-xs shadow-md hover:bg-blue-50 transition-all shrink-0 inline-flex items-center gap-1.5"
                             >
                                 Bildirim Merkezi'ne Git <ArrowRight className="w-4 h-4" />
                             </Link>
@@ -755,7 +755,7 @@ function SettingsContent() {
                             <div className="space-y-4 divide-y divide-slate-100">
                                 <div className="flex items-center justify-between pt-2">
                                     <div className="space-y-1 pr-4">
-                                        <div className="text-sm font-bold text-[#142B50]">Haftalık Yapay Zeka Bülteni</div>
+                                        <div className="text-sm font-bold text-[#0E1E38]">Haftalık Yapay Zeka Bülteni</div>
                                         <p className="text-xs text-slate-500 font-medium">
                                             Portföyünüze ve BIST trendlerine özel hazırlanan haftalık piyasa değerlendirme raporu.
                                         </p>
@@ -775,7 +775,7 @@ function SettingsContent() {
 
                                 <div className="flex items-center justify-between pt-4">
                                     <div className="space-y-1 pr-4">
-                                        <div className="text-sm font-bold text-[#142B50]">Güvenlik & Giriş Uyarıları</div>
+                                        <div className="text-sm font-bold text-[#0E1E38]">Güvenlik & Giriş Uyarıları</div>
                                         <p className="text-xs text-slate-500 font-medium">
                                             Hesabınıza farklı bir cihaz veya konumdan giriş yapıldığında güvenlik e-postası alın.
                                         </p>
@@ -797,7 +797,7 @@ function SettingsContent() {
                             <div className="space-y-4 divide-y divide-slate-100">
                                 <div className="flex items-center justify-between pt-2">
                                     <div className="space-y-1 pr-4">
-                                        <div className="text-sm font-bold text-[#142B50]">Temettü Ödeme Hatırlatıcıları</div>
+                                        <div className="text-sm font-bold text-[#0E1E38]">Temettü Ödeme Hatırlatıcıları</div>
                                         <p className="text-xs text-slate-500 font-medium">
                                             Portföyünüzdeki şirketlerin temettü hak kullanım gününden 1 gün önce bilgilendirme.
                                         </p>
@@ -810,7 +810,7 @@ function SettingsContent() {
 
                                 <div className="flex items-center justify-between pt-4">
                                     <div className="space-y-1 pr-4">
-                                        <div className="text-sm font-bold text-[#142B50]">Bilanço & Finansal Sonuç Alarmları</div>
+                                        <div className="text-sm font-bold text-[#0E1E38]">Bilanço & Finansal Sonuç Alarmları</div>
                                         <p className="text-xs text-slate-500 font-medium">
                                             Takip listenizdeki hisselerin çeyreklik bilanço açıklanma tarihleri açıklandığında bildirim.
                                         </p>
@@ -823,7 +823,7 @@ function SettingsContent() {
 
                                 <div className="flex items-center justify-between pt-4">
                                     <div className="space-y-1 pr-4">
-                                        <div className="text-sm font-bold text-[#142B50]">Fiyat & Eşik Alarmları</div>
+                                        <div className="text-sm font-bold text-[#0E1E38]">Fiyat & Eşik Alarmları</div>
                                         <p className="text-xs text-slate-500 font-medium">
                                             Takip ettiğiniz hisseler belirlediğiniz hedef fiyata ulaştığında anlık alarm.
                                         </p>
@@ -836,7 +836,7 @@ function SettingsContent() {
 
                                 <div className="flex items-center justify-between pt-4">
                                     <div className="space-y-1 pr-4">
-                                        <div className="text-sm font-bold text-[#142B50]">Günlük Portföy Kapanış Özeti</div>
+                                        <div className="text-sm font-bold text-[#0E1E38]">Günlük Portföy Kapanış Özeti</div>
                                         <p className="text-xs text-slate-500 font-medium">
                                             BIST seans kapanışında (18:15) günlük kâr/zarar performans bildirimi.
                                         </p>
@@ -853,7 +853,7 @@ function SettingsContent() {
                         <div className="flex justify-end pt-2">
                             <button
                                 onClick={handleSaveNotifications}
-                                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#142B50] hover:bg-[#102240] text-white font-bold rounded-2xl text-sm shadow-lg shadow-[#142B50]/25 transition-all active:scale-95"
+                                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#0E1E38] hover:bg-[#102240] text-white font-bold rounded-2xl text-sm shadow-lg shadow-[#0E1E38]/25 transition-all active:scale-95"
                             >
                                 <Save className="w-4 h-4" />
                                 <span>Tercihleri Kaydet</span>
@@ -908,7 +908,7 @@ function SettingsContent() {
                                     <LoadingButton
                                         onClick={handleUpdateSecurity}
                                         isLoading={isUpdatingSecurity}
-                                        className="inline-flex items-center gap-2 px-6 py-3 bg-[#142B50] hover:bg-[#102240] text-white font-bold rounded-2xl text-xs shadow-md shadow-[#142B50]/20 transition-all active:scale-95"
+                                        className="inline-flex items-center gap-2 px-6 py-3 bg-[#0E1E38] hover:bg-[#102240] text-white font-bold rounded-2xl text-xs shadow-md shadow-[#0E1E38]/20 transition-all active:scale-95"
                                     >
                                         {!isUpdatingSecurity && <Save className="w-4 h-4" />}
                                         <span>Şifreyi Güncelle</span>
@@ -927,11 +927,11 @@ function SettingsContent() {
                                 <div className="flex items-center gap-3">
                                     <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
                                     <div>
-                                        <div className="text-xs font-bold text-[#142B50]">Bu Tarayıcı (Aktif Oturum)</div>
+                                        <div className="text-xs font-bold text-[#0E1E38]">Bu Tarayıcı (Aktif Oturum)</div>
                                         <div className="text-[11px] text-slate-400 font-medium">Son etkinlik: Az önce • Supabase Auth v2</div>
                                     </div>
                                 </div>
-                                <span className="text-[10px] font-black text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">
+                                <span className="text-[10px] font-normal text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">
                                     Güvenli
                                 </span>
                             </div>
@@ -959,10 +959,10 @@ function SettingsContent() {
                         >
                             <div className="flex items-center justify-between p-5 border-b border-slate-100 bg-white">
                                 <div className="flex items-center gap-2.5">
-                                    <div className="w-8 h-8 rounded-xl bg-blue-50 text-[#142B50] flex items-center justify-center font-bold">
+                                    <div className="w-8 h-8 rounded-xl bg-blue-50 text-[#0E1E38] flex items-center justify-center font-bold">
                                         <Mail className="w-4 h-4" />
                                     </div>
-                                    <h3 className="text-base font-black text-[#142B50]">E-posta Bülteni Önizlemesi</h3>
+                                    <h3 className="text-base font-normal text-[#0E1E38]">E-posta Bülteni Önizlemesi</h3>
                                 </div>
                                 <button 
                                     onClick={() => setPreviewModalOpen(false)} 
@@ -989,7 +989,7 @@ function SettingsContent() {
 export default function SettingsPage() {
     return (
         <Suspense fallback={
-            <div className="flex items-center justify-center p-12 text-[#142B50] font-bold text-sm">
+            <div className="flex items-center justify-center p-12 text-[#0E1E38] font-bold text-sm">
                 <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#78B8F5] mr-3"></div>
                 Ayarlar yükleniyor...
             </div>

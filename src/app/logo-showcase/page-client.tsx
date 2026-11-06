@@ -146,11 +146,11 @@ export default function LogoShowcase() {
             svg: (
                 <svg viewBox="0 -10 320 120" className="w-full h-auto max-h-32" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g transform="translate(10, 10)">
-                        <path d="M10 10V70H30V40H60V10H10Z" fill="currentColor" className="text-slate-900" />
+                        <path d="M10 10V70H30V40H60V10H10Z" fill="currentColor" className="text-[#0E1E38]" />
                         <path d="M75 70L55 30L35 70H75Z" fill="white" />
                         <path d="M75 70L55 30L35 70" stroke="currentColor" strokeWidth="5" className="text-blue-500" strokeLinejoin="miter" />
                     </g>
-                    <text x="100" y="65" fontFamily="ui-sans-serif, system-ui, -apple-system, sans-serif" fontWeight="800" fontSize="55" letterSpacing="-3" fill="currentColor" className="text-slate-900">FinAi</text>
+                    <text x="100" y="65" fontFamily="ui-sans-serif, system-ui, -apple-system, sans-serif" fontWeight="800" fontSize="55" letterSpacing="-3" fill="currentColor" className="text-[#0E1E38]">FinAi</text>
                 </svg>
             )
         },
@@ -161,8 +161,8 @@ export default function LogoShowcase() {
             svg: (
                 <svg viewBox="0 -10 320 120" className="w-full h-auto max-h-32" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g transform="translate(10, 10)">
-                        <circle cx="40" cy="40" r="25" fill="none" stroke="currentColor" strokeWidth="6" className="text-slate-900" />
-                        <path d="M40 15 V 65 M 15 40 H 40" stroke="currentColor" strokeWidth="6" strokeLinecap="round" className="text-slate-900" />
+                        <circle cx="40" cy="40" r="25" fill="none" stroke="currentColor" strokeWidth="6" className="text-[#0E1E38]" />
+                        <path d="M40 15 V 65 M 15 40 H 40" stroke="currentColor" strokeWidth="6" strokeLinecap="round" className="text-[#0E1E38]" />
                         <path d="M40 40 L 75 15" stroke="currentColor" strokeWidth="6" strokeLinecap="round" className="text-blue-500 cursor-pointer hover:stroke-cyan-400" />
                         <circle cx="75" cy="15" r="5" fill="currentColor" className="text-blue-600" />
                     </g>
@@ -173,10 +173,10 @@ export default function LogoShowcase() {
     ];
 
     return (
-        <div className="min-h-screen bg-slate-50 text-slate-900 p-8">
+        <div className="min-h-screen bg-slate-50 text-[#0E1E38] p-8">
             <div className="max-w-7xl mx-auto space-y-12">
                 <header className="text-center space-y-4">
-                    <h1 className="text-4xl md:text-5xl font-black tracking-tight text-slate-900">
+                    <h1 className="text-4xl md:text-5xl font-normal tracking-tight text-[#0E1E38]">
                         FinAi Minimalist Logo Koleksiyonu
                     </h1>
                     <p className="text-lg text-slate-600 max-w-2xl mx-auto">
@@ -199,7 +199,7 @@ export default function LogoShowcase() {
                             
                             {/* Explanation Area */}
                             <div className="p-6 bg-slate-50 border-t border-slate-100 group-hover:bg-blue-50/50 transition-colors">
-                                <h3 className="font-bold text-lg text-slate-900 mb-2">{logo.name}</h3>
+                                <h3 className="font-bold text-lg text-[#0E1E38] mb-2">{logo.name}</h3>
                                 <p className="text-sm text-slate-600 leading-relaxed">
                                     {logo.desc}
                                 </p>

@@ -5,7 +5,7 @@ import { FinAiLogo } from "@/components/ui/logo";
 
 export default function Footer() {
     return (
-        <footer className="bg-[#142B50] mt-auto text-white">
+        <footer className="bg-[#0E1E38] mt-auto text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div className="space-y-4">
@@ -63,7 +63,7 @@ export default function Footer() {
             </div>
 
             {/* Alt Telif Yazısı (İnce Çizgisiz, Bütünleşik Mavi Arka Plan) */}
-            <div className="py-6 px-4 text-center text-xs text-white/60 font-bold uppercase tracking-widest bg-[#142B50]">
+            <div className="py-6 px-4 text-center text-xs text-white/60 font-bold uppercase tracking-widest bg-[#0E1E38]">
                 © {new Date().getFullYear()} FinAi. Tüm hakları saklıdır.
             </div>
         </footer>

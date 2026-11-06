@@ -164,7 +164,7 @@ export function DashboardAnalysisCards() {
                         {/* Card Body */}
                         <div className="p-6 flex flex-col gap-6 flex-1 bg-white">
                             <div>
-                                <h4 className="font-bold text-slate-900 text-lg mb-2">{item.analysis.title}</h4>
+                                <h4 className="font-bold text-[#0E1E38] text-lg mb-2">{item.analysis.title}</h4>
                                 <p className="text-slate-600 text-sm leading-relaxed">
                                     {item.analysis.summary}
                                 </p>

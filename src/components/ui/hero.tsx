@@ -97,9 +97,9 @@ export default function ShaderShowcase() {
           whileHover={{ scale: 1.05 }}
         >
           <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.3)]">
-            <TrendingUp className="w-6 h-6 text-black" />
+            <TrendingUp className="w-6 h-6 text-[#0E1E38]" />
           </div>
-          <span className="text-2xl font-black tracking-tighter text-white">FinAi</span>
+          <span className="text-2xl font-normal tracking-tighter text-white">FinAi</span>
         </motion.div>
 
         {/* Navigation */}
@@ -113,11 +113,11 @@ export default function ShaderShowcase() {
 
         {/* Login Button Group */}
         <div id="gooey-btn" className="relative flex items-center group" style={{ filter: "url(#gooey-filter)" }}>
-          <Link href="/login" className="px-8 py-2.5 rounded-full bg-white text-black font-black text-sm transition-all duration-300 hover:bg-zinc-200 cursor-pointer h-10 flex items-center z-10">
+          <Link href="/login" className="px-8 py-2.5 rounded-full bg-white text-[#0E1E38] font-normal text-sm transition-all duration-300 hover:bg-zinc-200 cursor-pointer h-10 flex items-center z-10">
             Giriş Yap
           </Link>
           <div className="absolute right-0 w-8 h-8 rounded-full bg-white flex items-center justify-center -translate-x-4 opacity-0 group-hover:opacity-100 group-hover:-translate-x-12 transition-all duration-500 z-0">
-             <ArrowRight className="w-4 h-4 text-black" />
+             <ArrowRight className="w-4 h-4 text-[#0E1E38]" />
           </div>
         </div>
       </header>
@@ -131,13 +131,13 @@ export default function ShaderShowcase() {
             transition={{ duration: 0.6 }}
           >
             <Zap className="w-4 h-4 text-cyan-400 mr-2 fill-cyan-400" />
-            <span className="text-white text-xs font-black tracking-[0.2em] uppercase">
+            <span className="text-white text-xs font-normal tracking-[0.2em] uppercase">
               Yapay Zeka Destekli Yatırım Çağı
             </span>
           </motion.div>
 
           <motion.h1
-            className="text-7xl md:text-8xl lg:text-[140px] font-black text-white mb-8 leading-[0.85] tracking-tighter"
+            className="text-7xl md:text-8xl lg:text-[140px] font-normal text-white mb-8 leading-[0.85] tracking-tighter"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -168,13 +168,13 @@ export default function ShaderShowcase() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <Link href="/login?tab=register" className="group relative px-12 py-5 bg-white text-black font-black text-lg rounded-2xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(255,255,255,0.2)]">
+            <Link href="/login?tab=register" className="group relative px-12 py-5 bg-white text-[#0E1E38] font-normal text-lg rounded-2xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_0_40px_rgba(255,255,255,0.2)]">
                <span className="relative z-10 flex items-center gap-3">
                    Şimdi Başla
                    <Activity className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                </span>
             </Link>
-            <button className="hidden md:block px-10 py-5 bg-white/5 backdrop-blur-xl text-white font-black text-lg rounded-2xl border border-white/10 hover:bg-white/10 transition-all">
+            <button className="hidden md:block px-10 py-5 bg-white/5 backdrop-blur-xl text-white font-normal text-lg rounded-2xl border border-white/10 hover:bg-white/10 transition-all">
                 Nasıl Çalışır?
             </button>
           </motion.div>
@@ -215,7 +215,7 @@ export default function ShaderShowcase() {
             <defs>
               <path id="circle-path" d="M 50, 50 m -40, 0 a 40,40 0 1,1 80,0 a 40,40 0 1,1 -80,0" />
             </defs>
-            <text className="text-[7px] fill-white/40 font-black uppercase tracking-[0.2em]">
+            <text className="text-[7px] fill-white/40 font-normal uppercase tracking-[0.2em]">
               <textPath href="#circle-path" startOffset="0%">
                 Real-Time Data • AI Analysis • Portfolio Optimization • Market Intelligence • Smart Investing •
               </textPath>

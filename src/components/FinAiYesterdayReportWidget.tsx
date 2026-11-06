@@ -94,9 +94,9 @@ export function FinAiYesterdayReportWidget() {
     return (
         <div className="bg-white rounded-3xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 min-h-[250px] h-full flex flex-col justify-between group">
             {/* 1. Üst Başlık */}
-            <div className="flex items-center justify-between pb-2 border-b border-[#1F7A63]/20">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
                 <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-lg bg-[#1F7A63]/20 border border-[#1F7A63]/40 flex items-center justify-center text-[#0E1E38] shrink-0">
+                    <div className="w-6 h-6 rounded-lg bg-[#0E1E38]/5 border border-[#0E1E38]/10 flex items-center justify-center text-[#0E1E38] shrink-0">
                         <Sparkles className="w-3.5 h-3.5 text-[#0E1E38]" />
                     </div>
                     <h3 className="text-xs sm:text-[13px] zodiak-subtitle font-[325] text-[#0E1E38] tracking-tight">
@@ -104,7 +104,7 @@ export function FinAiYesterdayReportWidget() {
                     </h3>
                 </div>
 
-                <span className="text-[10px] zodiak-subtitle font-[325] text-white bg-[#1F7A63] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
+                <span className="text-[10px] zodiak-subtitle font-[325] text-white bg-[#0E1E38] font-normal px-2.5 py-0.5 rounded-full shadow-xs">
                     Canlı Analiz
                 </span>
             </div>
@@ -132,16 +132,16 @@ export function FinAiYesterdayReportWidget() {
             </div>
 
             {/* 3. Alt Aksiyon Linki */}
-            <div className="pt-2 border-t border-[#1F7A63]/20 flex items-center justify-between">
+            <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
                 <Link
                     href="/dashboard/portfolio"
-                    className="text-xs zodiak-subtitle font-[325] text-[#0E1E38] hover:text-[#1F7A63] transition-colors inline-flex items-center gap-1.5 group/link"
+                    className="text-xs zodiak-subtitle font-[325] text-[#0E1E38] hover:text-[#0E1E38]/80 transition-colors inline-flex items-center gap-1.5 group/link"
                 >
                     <span>Detaylı portföy analizi</span>
                     <ArrowRight className="w-3.5 h-3.5 transform group-hover/link:translate-x-1 transition-transform" />
                 </Link>
 
-                <span className="text-[10px] font-numbers font-[500] px-2 py-0.5 rounded-md text-white bg-[#1F7A63]/25 border border-[#1F7A63]/40">
+                <span className="text-[10px] font-numbers font-normal px-2 py-0.5 rounded-md text-[#0E1E38] bg-[#0E1E38]/5 border border-[#0E1E38]/10">
                     {isPositive ? '+' : ''}%{displayDiffPercent.toFixed(1)}
                 </span>
             </div>

@@ -27,7 +27,7 @@ export function NotFound() {
         <div className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-black">
             <Empty>
                 <EmptyHeader>
-                    <EmptyTitle className="font-extrabold text-9xl bg-clip-text text-transparent bg-gradient-to-b from-white to-white/20">
+                    <EmptyTitle className="font-normal text-9xl bg-clip-text text-transparent bg-gradient-to-b from-white to-white/20">
                         404
                     </EmptyTitle>
                 </EmptyHeader>

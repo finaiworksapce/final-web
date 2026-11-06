@@ -10,13 +10,13 @@ export function CleanPricing() {
             {/* Plan 1: Başlangıç (Free) */}
             <div className="flex flex-col h-full bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow">
                 <div className="mb-4">
-                    <h3 className="text-xl font-bold text-slate-900">Başlangıç</h3>
+                    <h3 className="text-xl font-bold text-[#0E1E38]">Başlangıç</h3>
                     <p className="text-sm text-slate-500 mt-2">Platformu keşfetmek için başlayın.</p>
                 </div>
                 <div className="mb-6">
-                    <span className="text-4xl font-bold text-slate-900">Ücretsiz</span>
+                    <span className="text-4xl font-bold text-[#0E1E38]">Ücretsiz</span>
                 </div>
-                <button className="w-full py-2 px-4 rounded-full border-2 border-slate-900 text-slate-900 font-medium hover:bg-slate-50 transition-colors mb-8">
+                <button className="w-full py-2 px-4 rounded-full border-2 border-slate-900 text-[#0E1E38] font-medium hover:bg-slate-50 transition-colors mb-8">
                     Hemen Başla
                 </button>
 
@@ -34,11 +34,11 @@ export function CleanPricing() {
                     POPÜLER
                 </div>
                 <div className="mb-4">
-                    <h3 className="text-xl font-bold text-slate-900">Standart</h3>
+                    <h3 className="text-xl font-bold text-[#0E1E38]">Standart</h3>
                     <p className="text-sm text-slate-500 mt-2">Portföyünüzü tam kapasiteyle yönetin.</p>
                 </div>
                 <div className="mb-6">
-                    <span className="text-4xl font-bold text-slate-900">₺100</span>
+                    <span className="text-4xl font-bold text-[#0E1E38]">₺100</span>
                     <span className="text-slate-500">/ay</span>
                 </div>
                 <button className="w-full py-2 px-4 rounded-full bg-blue-600 text-white font-medium hover:bg-blue-700 transition-colors mb-8 shadow-lg shadow-blue-600/20">

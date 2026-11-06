@@ -124,15 +124,15 @@ export default function PortfolioTransactionsPage() {
     const getTypeBadge = (type: TransactionRow["transaction_type"]) => {
         switch (type) {
             case "BUY":
-                return <span className="px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-700 font-extrabold text-xs border border-emerald-200/60 inline-flex items-center gap-1"><TrendingUp className="w-3.5 h-3.5" /> AL (BUY)</span>;
+                return <span className="px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-700 font-normal text-xs border border-emerald-200/60 inline-flex items-center gap-1"><TrendingUp className="w-3.5 h-3.5" /> AL (BUY)</span>;
             case "SELL":
-                return <span className="px-2.5 py-1 rounded-xl bg-rose-50 text-rose-700 font-extrabold text-xs border border-rose-200/60 inline-flex items-center gap-1"><TrendingDown className="w-3.5 h-3.5" /> SAT (SELL)</span>;
+                return <span className="px-2.5 py-1 rounded-xl bg-rose-50 text-rose-700 font-normal text-xs border border-rose-200/60 inline-flex items-center gap-1"><TrendingDown className="w-3.5 h-3.5" /> SAT (SELL)</span>;
             case "CASH_DEPOSIT":
-                return <span className="px-2.5 py-1 rounded-xl bg-blue-50 text-blue-700 font-extrabold text-xs border border-blue-200/60 inline-flex items-center gap-1"><Coins className="w-3.5 h-3.5 text-blue-600" /> Nakit Yatırma</span>;
+                return <span className="px-2.5 py-1 rounded-xl bg-blue-50 text-blue-700 font-normal text-xs border border-blue-200/60 inline-flex items-center gap-1"><Coins className="w-3.5 h-3.5 text-blue-600" /> Nakit Yatırma</span>;
             case "CASH_WITHDRAW":
-                return <span className="px-2.5 py-1 rounded-xl bg-amber-50 text-amber-700 font-extrabold text-xs border border-amber-200/60 inline-flex items-center gap-1"><Coins className="w-3.5 h-3.5 text-amber-600" /> Nakit Çekme</span>;
+                return <span className="px-2.5 py-1 rounded-xl bg-amber-50 text-amber-700 font-normal text-xs border border-amber-200/60 inline-flex items-center gap-1"><Coins className="w-3.5 h-3.5 text-amber-600" /> Nakit Çekme</span>;
             case "OPENING_BALANCE":
-                return <span className="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-700 font-extrabold text-xs border border-slate-200 inline-flex items-center gap-1">Varlık Tanımlama</span>;
+                return <span className="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-700 font-normal text-xs border border-slate-200 inline-flex items-center gap-1">Varlık Tanımlama</span>;
             default:
                 return <span className="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs">{type}</span>;
         }
@@ -143,10 +143,10 @@ export default function PortfolioTransactionsPage() {
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
                 <div>
-                    <Link href="/dashboard/portfolio" className="inline-flex items-center gap-2 text-xs font-bold text-[#142B50] hover:underline mb-2">
+                    <Link href="/dashboard/portfolio" className="inline-flex items-center gap-2 text-xs font-bold text-[#0E1E38] hover:underline mb-2">
                         <ArrowLeft className="w-4 h-4" /> Portföyüme Geri Dön
                     </Link>
-                    <h1 className="text-2xl md:text-3xl font-black text-[#142B50] tracking-tight flex items-center gap-3">
+                    <h1 className="text-2xl md:text-3xl font-normal text-[#0E1E38] tracking-tight flex items-center gap-3">
                         <FileSpreadsheet className="w-7 h-7 text-blue-600" />
                         Finansal İşlem Geçmişi
                     </h1>
@@ -157,7 +157,7 @@ export default function PortfolioTransactionsPage() {
                 <button
                     onClick={fetchTransactions}
                     disabled={loading}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-[#142B50] font-bold rounded-2xl text-xs transition-all active:scale-95 border border-slate-200 shadow-sm"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-[#0E1E38] font-bold rounded-2xl text-xs transition-all active:scale-95 border border-slate-200 shadow-sm"
                 >
                     <RefreshCw className={cn("w-4 h-4", loading && "animate-spin")} />
                     Yenile
@@ -169,7 +169,7 @@ export default function PortfolioTransactionsPage() {
                 <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
                     {/* Type Filter Buttons */}
                     <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="text-xs font-black text-[#142B50] uppercase tracking-wider mr-2 flex items-center gap-1">
+                        <span className="text-xs font-normal text-[#0E1E38] uppercase tracking-wider mr-2 flex items-center gap-1">
                             <Filter className="w-3.5 h-3.5" /> Filtre:
                         </span>
                         {[
@@ -183,9 +183,9 @@ export default function PortfolioTransactionsPage() {
                                 key={tab.id}
                                 onClick={() => setFilterType(tab.id)}
                                 className={cn(
-                                    "px-3.5 py-1.5 rounded-xl font-extrabold text-xs transition-all border",
+                                    "px-3.5 py-1.5 rounded-xl font-normal text-xs transition-all border",
                                     filterType === tab.id
-                                        ? "bg-[#142B50] text-white border-[#78B8F5] shadow-sm"
+                                        ? "bg-[#0E1E38] text-white border-[#78B8F5] shadow-sm"
                                         : "bg-slate-50 text-slate-600 hover:bg-slate-100 border-slate-200"
                                 )}
                             >
@@ -201,7 +201,7 @@ export default function PortfolioTransactionsPage() {
                             placeholder="Sembol veya tür ara..."
                             value={searchQuery}
                             onChange={e => setSearchQuery(e.target.value)}
-                            className="w-full bg-slate-50 border border-slate-200 text-[#142B50] font-bold placeholder:text-slate-400 rounded-xl px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#78B8F5]/20"
+                            className="w-full bg-slate-50 border border-slate-200 text-[#0E1E38] font-bold placeholder:text-slate-400 rounded-xl px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-[#78B8F5]/20"
                         />
                         <Search className="w-3.5 h-3.5 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2" />
                     </div>
@@ -209,21 +209,21 @@ export default function PortfolioTransactionsPage() {
 
                 {/* Date Filter */}
                 <div className="flex items-center gap-3 pt-2 border-t border-slate-100 text-xs font-bold text-slate-500 flex-wrap">
-                    <span className="flex items-center gap-1 text-[#142B50]">
+                    <span className="flex items-center gap-1 text-[#0E1E38]">
                         <Calendar className="w-3.5 h-3.5" /> Tarih Aralığı:
                     </span>
                     <input
                         type="date"
                         value={startDate}
                         onChange={e => setStartDate(e.target.value)}
-                        className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-[#142B50] focus:outline-none"
+                        className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-[#0E1E38] focus:outline-none"
                     />
                     <span>-</span>
                     <input
                         type="date"
                         value={endDate}
                         onChange={e => setEndDate(e.target.value)}
-                        className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-[#142B50] focus:outline-none"
+                        className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs text-[#0E1E38] focus:outline-none"
                     />
                     {(startDate || endDate) && (
                         <button
@@ -241,7 +241,7 @@ export default function PortfolioTransactionsPage() {
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
-                            <tr className="border-b border-slate-100 bg-slate-50/70 text-[11px] font-extrabold text-[#142B50]/70 uppercase tracking-wider">
+                            <tr className="border-b border-slate-100 bg-slate-50/70 text-[11px] font-normal text-[#0E1E38]/70 uppercase tracking-wider">
                                 <th className="py-4 px-6">Tarih</th>
                                 <th className="py-4 px-4">İşlem Türü</th>
                                 <th className="py-4 px-4">Varlık</th>
@@ -274,7 +274,7 @@ export default function PortfolioTransactionsPage() {
                                         <td className="py-4 px-4">
                                             {getTypeBadge(tx.transaction_type)}
                                         </td>
-                                        <td className="py-4 px-4 font-black text-[#142B50]">
+                                        <td className="py-4 px-4 font-normal text-[#0E1E38]">
                                             {tx.symbol}
                                         </td>
                                         <td className="py-4 px-4 font-bold text-slate-700">
@@ -283,13 +283,13 @@ export default function PortfolioTransactionsPage() {
                                         <td className="py-4 px-4 font-semibold text-slate-600">
                                             {tx.unit_price > 0 ? formatCurrency(tx.unit_price) : "-"}
                                         </td>
-                                        <td className="py-4 px-4 font-black text-[#142B50]">
+                                        <td className="py-4 px-4 font-normal text-[#0E1E38]">
                                             {formatCurrency(tx.net_amount)}
                                         </td>
                                         <td className="py-4 px-4 font-semibold text-slate-500">
                                             {tx.commission_fee > 0 ? formatCurrency(tx.commission_fee) : "0,00 ₺"}
                                         </td>
-                                        <td className="py-4 px-6 text-right font-black">
+                                        <td className="py-4 px-6 text-right font-normal">
                                             {tx.realized_pnl !== null ? (
                                                 <span className={cn(tx.realized_pnl >= 0 ? "text-emerald-700" : "text-rose-600")}>
                                                     {tx.realized_pnl >= 0 ? "+" : ""}{formatCurrency(tx.realized_pnl)}

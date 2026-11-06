@@ -53,7 +53,7 @@ export default function PublicNewsIndexPage() {
   };
 
   return (
-    <main className="mx-auto min-h-screen max-w-5xl px-5 py-12 text-slate-900 sm:px-8">
+    <main className="mx-auto min-h-screen max-w-5xl px-5 py-12 text-[#0E1E38] sm:px-8">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, '\\u003c') }}

@@ -24,7 +24,7 @@ export function RelatedNewsWidget({ items, limit = 6, className = "" }: RelatedN
                     <div className="w-6 h-6 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
                         <Newspaper className="w-3.5 h-3.5" />
                     </div>
-                    <h3 className="text-xs sm:text-sm font-black text-[#142B50] tracking-tight">
+                    <h3 className="text-xs sm:text-sm font-normal text-[#0E1E38] tracking-tight">
                         İlgili Haberler
                     </h3>
                 </div>
@@ -52,10 +52,10 @@ export function RelatedNewsWidget({ items, limit = 6, className = "" }: RelatedN
                             />
                         </div>
                         <div className="flex-1 min-w-0">
-                            <span className="inline-block px-2 py-0.5 bg-blue-50 text-blue-700 text-[9px] font-black rounded-md uppercase tracking-wider mb-1">
+                            <span className="inline-block px-2 py-0.5 bg-blue-50 text-blue-700 text-[9px] font-normal rounded-md uppercase tracking-wider mb-1">
                                 {item.categoryLabel}
                             </span>
-                            <h4 className="text-xs font-black text-slate-900 group-hover:text-blue-700 transition-colors line-clamp-2 leading-snug">
+                            <h4 className="text-xs font-normal text-[#0E1E38] group-hover:text-blue-700 transition-colors line-clamp-2 leading-snug">
                                 {item.title}
                             </h4>
                             <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-bold mt-1">

@@ -15,13 +15,18 @@
   src: url('/fonts/Expose-Medium.woff2') format('woff2'),
        url('/fonts/Expose-Medium.woff') format('woff'),
        url('/fonts/Expose-Medium.ttf') format('truetype');
-  font-weight: 100 900;
+  font-weight: 500;
   font-display: swap;
   font-style: normal;
 }
 
 .font-numbers, .font-expose {
   font-family: 'Expose-Medium', 'Expose', sans-serif !important;
+  font-weight: 500 !important;
+  font-style: normal;
+  font-synthesis: none !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   font-feature-settings: 'tnum' on, 'lnum' on;
 }
 
@@ -70,9 +75,25 @@
   unicode-range: U+0030-0039, U+0025, U+20BA; /* Digits 0-9, %, ₺ */
 }
 
+@font-face {
+  font-family: 'Zodiak-Variable';
+  src: url('/fonts/Expose-Medium.woff2') format('woff2'),
+       url('/fonts/Expose-Medium.woff') format('woff'),
+       url('/fonts/Expose-Medium.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+  unicode-range: U+0030-0039, U+0025, U+20BA; /* Digits 0-9, %, ₺ */
+}
+
+*, *::before, *::after {
+  font-synthesis: none !important;
+}
+
 /* Zodiak Variable Typography Classes (User specification) */
 .font-zodiak {
   font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif !important;
+  font-synthesis: none !important;
 }
 
 .zodiak-title {
@@ -117,16 +138,16 @@ p, label, li, input, textarea {
 @theme {
   /* Luminous Silver & Navy Palette */
   --color-background: #eef2f7;
-  --color-foreground: #142B50;
+  --color-foreground: #0E1E38;
 
-  --color-primary: #142B50;
+  --color-primary: #0E1E38;
   --color-primary-foreground: #ffffff;
 
-  --color-secondary: #78B8F5;
-  --color-secondary-foreground: #142B50;
+  --color-secondary: #0E1E38;
+  --color-secondary-foreground: #ffffff;
 
-  --color-accent: #78B8F5;
-  --color-accent-foreground: #142B50;
+  --color-accent: #0E1E38;
+  --color-accent-foreground: #ffffff;
 
   --color-muted: #f1f5f9;
   --color-muted-foreground: #64748b;
@@ -134,8 +155,8 @@ p, label, li, input, textarea {
   --color-card: #0f172a;
   --color-card-foreground: #f8fafc;
 
-  --color-border: #78B8F5;
-  --color-input: #78B8F5;
+  --color-border: #E2E8F0;
+  --color-input: #E2E8F0;
 
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
@@ -215,7 +236,7 @@ p, label, li, input, textarea {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(to right, #142B50, #2E5894, #78B8F5);
+  background-image: linear-gradient(to right, #0E1E38, #2E5894, #78B8F5);
 }
 
 @utility premium-frost {
@@ -233,7 +254,7 @@ p, label, li, input, textarea {
 }
 
 @utility menu-frost {
-  background: linear-gradient(to right, #142B50 0%, #78B8F5 70%, #ffffff 100%);
+  background: linear-gradient(to right, #0E1E38 0%, #78B8F5 70%, #ffffff 100%);
   backdrop-filter: blur(50px);
 }
 
@@ -259,7 +280,7 @@ html, body {
 
 body {
   background: #FFFFFF;
-  color: #142B50;
+  color: #0E1E38;
   font-family: 'Zodiak', 'Zodiak-Variable', Georgia, serif;
   margin: 0;
   -webkit-font-smoothing: antialiased;

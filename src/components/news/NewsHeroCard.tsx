@@ -69,7 +69,7 @@ export function NewsHeroCard({ mainNews, subNews }: NewsHeroCardProps) {
                     className={`absolute inset-0 z-[1] transition-opacity duration-300 ${
                         hasValidBg 
                             ? "bg-gradient-to-r from-slate-950/95 via-slate-950/70 md:via-slate-950/60 to-transparent"
-                            : "bg-gradient-to-br from-[#142B50] via-[#000066] to-[#0a1e3d]"
+                            : "bg-gradient-to-br from-[#0E1E38] via-[#000066] to-[#0a1e3d]"
                     }`} 
                 />
 
@@ -80,7 +80,7 @@ export function NewsHeroCard({ mainNews, subNews }: NewsHeroCardProps) {
 
                 {/* 3. Üst Etiketler (Kategori Rozeti) */}
                 <div className="relative z-10 p-5 sm:p-7 md:p-8 flex items-center justify-between gap-3">
-                    <span className="px-3 py-1 bg-blue-900/85 hover:bg-blue-900 text-white text-[10px] sm:text-[11px] font-extrabold rounded-full uppercase tracking-wider backdrop-blur-md border border-white/20 shadow-xs">
+                    <span className="px-3 py-1 bg-blue-900/85 hover:bg-blue-900 text-white text-[10px] sm:text-[11px] font-normal rounded-full uppercase tracking-wider backdrop-blur-md border border-white/20 shadow-xs">
                         {mainNews.categoryLabel || "Küresel Piyasalar"}
                     </span>
                 </div>
@@ -88,7 +88,7 @@ export function NewsHeroCard({ mainNews, subNews }: NewsHeroCardProps) {
                 {/* 4. Başlık ve Kısa Özet (Sol %65 genişlik alanı ile sınırlı) */}
                 <div className="relative z-10 px-5 sm:px-7 md:px-8 my-auto max-w-xl space-y-2.5">
                     <Link href={`/dashboard/news/${mainNews.slug}`} className="block group/link">
-                        <h2 className="text-xl sm:text-2xl md:text-[28px] font-black leading-snug tracking-tight text-white group-hover/link:text-blue-200 transition-colors line-clamp-2 drop-shadow-md">
+                        <h2 className="text-xl sm:text-2xl md:text-[28px] font-normal leading-snug tracking-tight text-white group-hover/link:text-blue-200 transition-colors line-clamp-2 drop-shadow-md">
                             {mainNews.title}
                         </h2>
                     </Link>
@@ -117,7 +117,7 @@ export function NewsHeroCard({ mainNews, subNews }: NewsHeroCardProps) {
                 <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 mb-2 shrink-0">
                     <div className="flex items-center gap-2">
                         <Zap className="w-4 h-4 text-blue-600 fill-current" />
-                        <h3 className="text-sm sm:text-[15px] font-bold text-slate-900 tracking-tight">
+                        <h3 className="text-sm sm:text-[15px] font-bold text-[#0E1E38] tracking-tight">
                             Son Dakika Haberleri
                         </h3>
                     </div>
@@ -148,12 +148,12 @@ export function NewsHeroCard({ mainNews, subNews }: NewsHeroCardProps) {
                             {/* Metin Alanı */}
                             <div className="min-w-0 flex-1">
                                 <div className="flex items-center gap-1.5 mb-1">
-                                    <span className="text-[9px] font-extrabold text-blue-700 bg-blue-50 border border-blue-100 px-1.5 py-0.5 rounded uppercase tracking-wider">
+                                    <span className="text-[9px] font-normal text-blue-700 bg-blue-50 border border-blue-100 px-1.5 py-0.5 rounded uppercase tracking-wider">
                                         {item.categoryLabel || "Dünya"}
                                     </span>
                                 </div>
 
-                                <h4 className="text-xs sm:text-[13px] font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
+                                <h4 className="text-xs sm:text-[13px] font-bold text-[#0E1E38] group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
                                     {item.title}
                                 </h4>
 

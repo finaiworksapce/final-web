@@ -58,10 +58,10 @@ export default function EconomicImpactChainStepper({
         {/* Üst Başlık (Duraklatıldı vb. metinler kaldırıldı) */}
         <div className="flex items-center gap-2.5 pb-2.5 border-b border-slate-200">
           <div className="w-8 h-8 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center shrink-0">
-            <Layers className="w-4 h-4 text-[#142B50]" />
+            <Layers className="w-4 h-4 text-[#0E1E38]" />
           </div>
           <div className="min-w-0">
-            <h3 className="text-sm font-black text-[#142B50] tracking-tight truncate">
+            <h3 className="text-sm font-normal text-[#0E1E38] tracking-tight truncate">
               Etki Zinciri
             </h3>
             <p className="text-[10px] text-slate-500 font-bold truncate">
@@ -88,7 +88,7 @@ export default function EconomicImpactChainStepper({
                   <div
                     className={cn(
                       "absolute left-[13px] top-[26px] bottom-[-16px] w-[2px] transition-colors duration-500 z-0",
-                      isCompleted ? "bg-[#142B50]" : "bg-slate-200"
+                      isCompleted ? "bg-[#0E1E38]" : "bg-slate-200"
                     )}
                   />
                 )}
@@ -96,11 +96,11 @@ export default function EconomicImpactChainStepper({
                 {/* Basamak Noktası / İndikatör (Dairesel Numara Noktası) */}
                 <div
                   className={cn(
-                    "relative z-10 size-7 rounded-full flex items-center justify-center font-black text-[11px] shrink-0 transition-all duration-500",
+                    "relative z-10 size-7 rounded-full flex items-center justify-center font-normal text-[11px] shrink-0 transition-all duration-500",
                     isActive
-                      ? "bg-[#142B50] text-white ring-4 ring-blue-100 shadow-sm scale-110"
+                      ? "bg-[#0E1E38] text-white ring-4 ring-blue-100 shadow-sm scale-110"
                       : isCompleted
-                      ? "bg-blue-100 text-[#142B50]"
+                      ? "bg-blue-100 text-[#0E1E38]"
                       : "bg-slate-100 border border-slate-200/90 text-slate-400 group-hover:border-slate-300"
                   )}
                 >
@@ -124,7 +124,7 @@ export default function EconomicImpactChainStepper({
                   <div className="flex items-center gap-1.5 mb-0.5">
                     <span
                       className={cn(
-                        "text-[9px] font-black uppercase tracking-wider transition-colors",
+                        "text-[9px] font-normal uppercase tracking-wider transition-colors",
                         isActive ? "text-blue-600" : "text-slate-400"
                       )}
                     >
@@ -137,7 +137,7 @@ export default function EconomicImpactChainStepper({
                     className={cn(
                       "transition-all duration-500 leading-snug tracking-tight",
                       isActive
-                        ? "text-[13px] font-black text-[#142B50]"
+                        ? "text-[13px] font-normal text-[#0E1E38]"
                         : "text-xs font-bold text-slate-500"
                     )}
                   >

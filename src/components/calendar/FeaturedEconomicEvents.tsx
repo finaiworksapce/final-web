@@ -16,9 +16,9 @@ export default function FeaturedEconomicEvents({ events }: FeaturedEconomicEvent
     if (featuredEvents.length === 0) return null;
 
     return (
-        <div className="w-full bg-[#142B50] text-white border border-[#78B8F5] rounded-3xl p-5 shadow-lg space-y-3">
+        <div className="w-full bg-[#0E1E38] text-white border border-[#78B8F5] rounded-3xl p-5 shadow-lg space-y-3">
             <div className="flex items-center justify-between">
-                <h3 className="text-xs font-black uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                <h3 className="text-xs font-normal uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
                     <Flame className="w-4 h-4 text-amber-400 fill-amber-400" /> ÖNE ÇIKAN YÜKSEK ETKİLİ VERİLER
                 </h3>
                 <span className="text-[10px] font-bold text-blue-200">
@@ -45,7 +45,7 @@ export default function FeaturedEconomicEvents({ events }: FeaturedEconomicEvent
                                         <Clock className="w-3 h-3 text-blue-300" /> {item.time} TSİ
                                     </span>
                                 </div>
-                                <h4 className="text-sm font-black text-white leading-snug line-clamp-2">
+                                <h4 className="text-sm font-normal text-white leading-snug line-clamp-2">
                                     {item.event}
                                 </h4>
                             </div>
@@ -55,7 +55,7 @@ export default function FeaturedEconomicEvents({ events }: FeaturedEconomicEvent
                                     <span className="text-[10px] text-blue-200 font-bold block uppercase">
                                         {isReleased ? 'Gerçekleşen' : 'Piyasa Beklentisi'}
                                     </span>
-                                    <span className="text-sm font-black text-white">
+                                    <span className="text-sm font-normal text-white">
                                         {isReleased ? item.actual : (item.forecast || '-')}
                                     </span>
                                 </div>

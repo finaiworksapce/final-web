@@ -52,7 +52,7 @@ export default function FollowIndicatorButton({ indicatorName, compact = false }
                 } ${
                     followed
                         ? 'bg-emerald-50 text-emerald-700 border border-emerald-300 shadow-2xs hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200'
-                        : 'bg-white text-[#142B50] border border-slate-200 hover:bg-blue-50 hover:border-blue-300 shadow-xs'
+                        : 'bg-white text-[#0E1E38] border border-slate-200 hover:bg-blue-50 hover:border-blue-300 shadow-xs'
                 }`}
                 title={followed ? 'Takipten Çık' : 'Bu göstergeyi takip et ve bildirim al'}
             >
@@ -65,7 +65,7 @@ export default function FollowIndicatorButton({ indicatorName, compact = false }
                     </>
                 ) : (
                     <>
-                        <Bell className="w-3.5 h-3.5 text-[#142B50]" />
+                        <Bell className="w-3.5 h-3.5 text-[#0E1E38]" />
                         <span>Takip Et</span>
                     </>
                 )}
@@ -74,12 +74,12 @@ export default function FollowIndicatorButton({ indicatorName, compact = false }
             {/* Login Prompt Modal */}
             {showLoginModal && (
                 <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-6 z-50">
-                    <div className="bg-white text-[#142B50] p-6 rounded-3xl max-w-sm w-full border border-slate-200 shadow-2xl space-y-4 text-center">
-                        <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center mx-auto text-[#142B50]">
+                    <div className="bg-white text-[#0E1E38] p-6 rounded-3xl max-w-sm w-full border border-slate-200 shadow-2xl space-y-4 text-center">
+                        <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center mx-auto text-[#0E1E38]">
                             <Bell className="w-6 h-6" />
                         </div>
                         <div className="space-y-1">
-                            <h3 className="text-base font-black text-[#142B50]">Giriş Yapmanız Gerekiyor</h3>
+                            <h3 className="text-base font-normal text-[#0E1E38]">Giriş Yapmanız Gerekiyor</h3>
                             <p className="text-xs text-slate-500 font-medium leading-relaxed">
                                 Göstergeleri takip edebilmek ve açıklanma anında bildirim alabilmek için kullanıcı hesabınıza giriş yapmalısınız.
                             </p>
@@ -93,7 +93,7 @@ export default function FollowIndicatorButton({ indicatorName, compact = false }
                             </button>
                             <a
                                 href="/login"
-                                className="flex-1 py-2 rounded-xl bg-[#142B50] text-white font-black text-xs hover:bg-[#102240] transition-all text-center"
+                                className="flex-1 py-2 rounded-xl bg-[#0E1E38] text-white font-normal text-xs hover:bg-[#102240] transition-all text-center"
                             >
                                 Giriş Yap
                             </a>
@@ -105,13 +105,13 @@ export default function FollowIndicatorButton({ indicatorName, compact = false }
             {/* Permission Denied Info Banner */}
             {showDeniedInfo && (
                 <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-6 z-50">
-                    <div className="bg-white text-[#142B50] p-6 rounded-3xl max-w-md w-full border border-slate-200 shadow-2xl space-y-4">
+                    <div className="bg-white text-[#0E1E38] p-6 rounded-3xl max-w-md w-full border border-slate-200 shadow-2xl space-y-4">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600">
                                 <BellOff className="w-5 h-5" />
                             </div>
                             <div>
-                                <h3 className="text-sm font-black text-[#142B50]">Tarayıcı Bildirim İzni Engellenmiş</h3>
+                                <h3 className="text-sm font-normal text-[#0E1E38]">Tarayıcı Bildirim İzni Engellenmiş</h3>
                                 <p className="text-xs text-slate-500 font-medium">FinAi Bildirim Rehberi</p>
                             </div>
                         </div>
@@ -122,7 +122,7 @@ export default function FollowIndicatorButton({ indicatorName, compact = false }
                         </p>
                         <button
                             onClick={() => setShowDeniedInfo(false)}
-                            className="w-full py-2 rounded-xl bg-[#142B50] text-white font-black text-xs"
+                            className="w-full py-2 rounded-xl bg-[#0E1E38] text-white font-normal text-xs"
                         >
                             Anladım
                         </button>

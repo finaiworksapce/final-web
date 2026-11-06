@@ -19,7 +19,7 @@ export function FeaturedNewsWidget({ news }: FeaturedNewsWidgetProps) {
                         <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
                     </div>
                     <div>
-                        <h3 className="text-xs sm:text-[13px] font-bold text-slate-900 tracking-tight">
+                        <h3 className="text-xs sm:text-[13px] font-bold text-[#0E1E38] tracking-tight">
                             Öne Çıkanlar
                         </h3>
                     </div>

@@ -67,13 +67,13 @@ export function VerificationCard({
       <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_50%,rgba(20, 43, 80, 0.01)_50%)] bg-[length:100%_4px] pointer-events-none" />
       
       {/* Navy Line at the top */}
-      <div className="absolute top-0 left-0 w-full h-[2px] bg-[#142B50]" />
+      <div className="absolute top-0 left-0 w-full h-[2px] bg-[#0E1E38]" />
 
       {/* TOP: User Name & Verified Status */}
-      <div className="relative z-10 flex justify-between items-start text-[8px] font-black tracking-[0.1em] uppercase text-[#142B50]" style={{ transform: "translateZ(30px)" }}>
+      <div className="relative z-10 flex justify-between items-start text-[8px] font-normal tracking-[0.1em] uppercase text-[#0E1E38]" style={{ transform: "translateZ(30px)" }}>
         <span className="bg-[#78B8F5]/15 px-1.5 py-0.5 rounded-md truncate max-w-[100px]">{name}</span>
         <span className="flex items-center gap-1 opacity-60 shrink-0">
-          <div className="w-1 h-1 rounded-full bg-[#142B50] animate-pulse" />
+          <div className="w-1 h-1 rounded-full bg-[#0E1E38] animate-pulse" />
           {label}
         </span>
       </div>
@@ -81,18 +81,18 @@ export function VerificationCard({
       {/* MIDDLE: BALANCE (THE HEART) */}
       <div className="relative z-10 my-1" style={{ transform: "translateZ(50px)" }}>
         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-0.5 opacity-60">Toplam Bakiye</p>
-        <p className="text-xl font-black text-[#142B50] tracking-tight">{balance}</p>
+        <p className="text-xl font-normal text-[#0E1E38] tracking-tight">{balance}</p>
       </div>
 
       {/* BOTTOM: ID & Expiry */}
-      <div className="relative z-10 flex justify-between items-end text-[#142B50]" style={{ transform: "translateZ(20px)" }}>
+      <div className="relative z-10 flex justify-between items-end text-[#0E1E38]" style={{ transform: "translateZ(20px)" }}>
         <div className="flex flex-col">
           <span className="text-[6px] font-bold opacity-40 uppercase tracking-widest mb-0.5">Account ID</span>
-          <span className="text-[8px] font-black tracking-[0.15em]">{idNumber}</span>
+          <span className="text-[8px] font-normal tracking-[0.15em]">{idNumber}</span>
         </div>
         <div className="flex flex-col items-end">
           <span className="text-[6px] font-bold opacity-40 uppercase tracking-widest mb-0.5">Expires</span>
-          <span className="text-[8px] font-black">{validThru}</span>
+          <span className="text-[8px] font-normal">{validThru}</span>
         </div>
       </div>
 

@@ -18,7 +18,7 @@ export default function LegalLayout({
       <div className="relative z-10 max-w-4xl mx-auto px-6 py-12">
         <Link 
           href="/login?tab=register" 
-          className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors mb-8 group"
+          className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-[#0E1E38] transition-colors mb-8 group"
         >
           <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center bg-white group-hover:border-slate-900 transition-all">
             <ArrowLeft className="w-4 h-4" />
@@ -33,7 +33,7 @@ export default function LegalLayout({
                 <ShieldCheck className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-3xl font-black text-slate-900 tracking-tight">Yasal Metinler</h2>
+                <h2 className="text-3xl font-normal text-[#0E1E38] tracking-tight">Yasal Metinler</h2>
                 <p className="text-slate-500 font-medium tracking-wide text-sm mt-1 uppercase">FinAi Kullanıcı Bilgilendirme Merkezi</p>
               </div>
             </div>
@@ -54,7 +54,7 @@ export default function LegalLayout({
             </nav>
           </div>
 
-          <div className="p-8 sm:p-12 prose prose-slate max-w-none prose-headings:font-black prose-headings:tracking-tight prose-p:text-slate-600 prose-p:leading-relaxed prose-li:text-slate-600 prose-strong:text-slate-900">
+          <div className="p-8 sm:p-12 prose prose-slate max-w-none prose-headings:font-normal prose-headings:tracking-tight prose-p:text-slate-600 prose-p:leading-relaxed prose-li:text-slate-600 prose-strong:text-[#0E1E38]">
             {children}
           </div>
         </div>

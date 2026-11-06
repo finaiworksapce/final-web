@@ -280,7 +280,7 @@ function DashboardShell({
                             <div className="absolute -top-10 -right-10 w-28 h-28 bg-white/10 rounded-full blur-2xl pointer-events-none opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-opacity duration-250" />
                             <div className="absolute -bottom-10 -left-10 w-28 h-28 bg-blue-400/15 rounded-full blur-2xl pointer-events-none opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-opacity duration-250" />
 
-                            <Link href="/" className="flex items-center justify-start gap-3 w-full overflow-hidden group/logo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 md:group-hover:focus-visible:ring-white/40 rounded-xl relative z-10">
+                            <Link href="/" className="flex items-center justify-start gap-3 w-full overflow-hidden group/logo focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 md:group-hover:focus-visible:ring-white/40 rounded-xl relative z-10">
                                 <FinAiLogo showText={false} className="h-8 w-8 md:h-10 md:w-10 shrink-0 transition-opacity duration-200 motion-reduce:transition-none drop-shadow-sm" />
                                 <span className="text-lg md:text-xl zodiak-title tracking-tight text-white opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1.5 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 whitespace-nowrap hidden md:inline-block motion-reduce:transition-none">
                                     FinAi Workspace
@@ -297,7 +297,7 @@ function DashboardShell({
                                         <div key={idx} className="space-y-1">
                                             <div className={`flex items-center justify-between px-3 md:px-3.5 py-2.5 md:py-3 text-sm font-semibold rounded-xl md:rounded-2xl transition-[background-color,color,box-shadow] duration-180 ease-out overflow-hidden whitespace-nowrap h-11 md:h-12 relative group/nav motion-reduce:transition-none ${
                                                 isActive 
-                                                    ? 'text-white bg-[#1F7A63] shadow-[0_4px_14px_rgba(120, 184, 245, 0.35)] font-bold' 
+                                                    ? 'text-[#0E1E38] bg-white shadow-sm font-normal' 
                                                     : 'text-white/80 hover:bg-white/10 hover:text-white transition-colors'
                                             }`}>
                                                 {/* Direct Link to Portfolio/Calendar Page */}
@@ -330,7 +330,7 @@ function DashboardShell({
                                                     aria-controls={`submenu-${item.label.toLowerCase()}`}
                                                     aria-label={`${item.label} alt menüsünü ${item.isExpanded ? "kapat" : "aç"}`}
                                                     title={`${item.label} alt menüsünü ${item.isExpanded ? "kapat" : "aç"}`}
-                                                    className={`hidden md:group-hover:flex md:group-focus-within:flex transition-colors duration-150 p-1.5 rounded-xl items-center justify-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 ${
+                                                    className={`hidden md:group-hover:flex md:group-focus-within:flex transition-colors duration-150 p-1.5 rounded-xl items-center justify-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 ${
                                                         isActive 
                                                             ? 'hover:bg-white/20 text-white focus-visible:ring-white/60' 
                                                             : 'hover:bg-white/10 text-white/60 hover:text-white'
@@ -359,9 +359,9 @@ function DashboardShell({
                                                                 <Link
                                                                     key={sIdx}
                                                                     href={sub.href}
-                                                                    className={`flex items-center gap-2 px-3 py-1.5 text-[11px] font-semibold rounded-lg transition-colors duration-150 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 ${
+                                                                    className={`flex items-center gap-2 px-3 py-1.5 text-[11px] font-semibold rounded-lg transition-colors duration-150 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 ${
                                                                         sub.isSubActive 
-                                                                            ? 'bg-[#1F7A63] text-white shadow-sm font-bold' 
+                                                                            ? 'bg-white text-[#0E1E38] shadow-sm font-normal' 
                                                                             : 'text-white/80 hover:bg-white/10 hover:text-white'
                                                                     }`}
                                                                 >
@@ -378,9 +378,9 @@ function DashboardShell({
                                 }
 
                                 return (
-                                    <Link key={idx} href={item.href} className={`flex items-center justify-start px-3 md:px-4 py-2.5 md:py-3 text-sm font-semibold rounded-xl md:rounded-2xl transition-[background-color,color,box-shadow] duration-180 ease-out overflow-hidden whitespace-nowrap h-11 md:h-12 relative group/nav focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 motion-reduce:transition-none ${
+                                    <Link key={idx} href={item.href} className={`flex items-center justify-start px-3 md:px-4 py-2.5 md:py-3 text-sm font-semibold rounded-xl md:rounded-2xl transition-[background-color,color,box-shadow] duration-180 ease-out overflow-hidden whitespace-nowrap h-11 md:h-12 relative group/nav focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 motion-reduce:transition-none ${
                                         isActive 
-                                            ? 'text-white bg-[#1F7A63] shadow-[0_4px_14px_rgba(120, 184, 245, 0.35)] font-bold' 
+                                            ? 'text-[#0E1E38] bg-white shadow-sm font-normal' 
                                             : 'text-white/80 hover:bg-white/10 hover:text-white transition-colors'
                                     }`}>
                                         <item.icon className={`w-5 h-5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-white' : 'text-white/70'}`}
@@ -414,13 +414,13 @@ function DashboardShell({
                     {/* Main Content */}
                     <main className="flex-1 relative flex flex-col min-w-0 bg-transparent overflow-x-hidden">
                         {/* Header (Glassified & Safe-Area Aware) */}
-                        <header className={`h-12 md:h-16 border-b border-[#1F7A63]/30 flex items-center justify-between px-3 md:px-6 sticky top-0 ${isProfileOpen ? "z-[60]" : "z-40"} bg-white/90 backdrop-blur-xl flex-shrink-0 relative pt-[env(safe-area-inset-top,0px)] transition-none`}>
+                        <header className={`h-12 md:h-16 border-b border-slate-100 flex items-center justify-between px-3 md:px-6 sticky top-0 ${isProfileOpen ? "z-[60]" : "z-40"} bg-white/90 backdrop-blur-xl flex-shrink-0 relative pt-[env(safe-area-inset-top,0px)] transition-none`}>
                             <div className="flex items-center gap-2.5">
                                 {/* Hamburger Butonu (Dokunmatik Hedef >= 44x44px) */}
                                 <button
                                     ref={hamburgerRef}
                                     onClick={() => setIsMobileMenuOpen(true)}
-                                    className="md:hidden flex flex-col items-center justify-center gap-1.5 w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[#0E1E38] text-white shadow-sm active:scale-95 transition-[transform,background-color] duration-150 shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:active:scale-100"
+                                    className="md:hidden flex flex-col items-center justify-center gap-1.5 w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[#0E1E38] text-white shadow-sm active:scale-95 transition-[transform,background-color] duration-150 shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:active:scale-100"
                                     aria-label="Menüyü aç"
                                     aria-expanded={isMobileMenuOpen}
                                     aria-controls="mobile-nav-drawer"
@@ -444,7 +444,7 @@ function DashboardShell({
                                         aria-expanded={isProfileOpen}
                                         aria-controls="profile-dropdown-menu"
                                         aria-haspopup="true"
-                                        className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-[#1F7A63]/20 flex items-center justify-center text-[#0E1E38] zodiak-subtitle hover:bg-[#1F7A63]/40 border border-[#1F7A63]/50 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 focus-visible:ring-offset-2 overflow-hidden border border-[#0a192f]/5"
+                                        className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-100 flex items-center justify-center text-[#0E1E38] zodiak-subtitle hover:bg-slate-200 border border-slate-200 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 focus-visible:ring-offset-2 overflow-hidden border border-[#0a192f]/5"
                                     >
                                         {avatarUrl ? (
                                             <img src={avatarUrl} alt="Profil" className="w-full h-full object-cover" />
@@ -468,7 +468,7 @@ function DashboardShell({
                                                     href="/dashboard/settings" 
                                                     onClick={() => setIsProfileOpen(false)}
                                                     role="menuitem"
-                                                    className="w-full text-left px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 hover:text-[#0a192f] flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/30"
+                                                    className="w-full text-left px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 hover:text-[#0a192f] flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20"
                                                 >
                                                     <Settings className="w-4 h-4" />
                                                     Kullanıcı Ayarları
@@ -517,7 +517,7 @@ function DashboardShell({
                                         animate={{ x: 0 }}
                                         exit={{ x: "-100%" }}
                                         transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-                                        className="fixed inset-y-0 left-0 w-[min(320px,86vw)] h-[100dvh] max-h-[100dvh] bg-white text-slate-900 shadow-2xl z-[80] flex flex-col md:hidden border-r border-slate-200/80 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] relative overflow-hidden"
+                                        className="fixed inset-y-0 left-0 w-[min(320px,86vw)] h-[100dvh] max-h-[100dvh] bg-white text-[#0E1E38] shadow-2xl z-[80] flex flex-col md:hidden border-r border-slate-200/80 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)] relative overflow-hidden"
                                     >
                                         {/* Soldan Sağa #0b192c Efekti Overlay (Opak Beyaz Zemin Üzerinde) */}
                                         <div className="absolute inset-0 bg-gradient-to-r from-[#0b192c]/[0.05] via-[#0b192c]/[0.015] to-transparent pointer-events-none z-0" />
@@ -529,7 +529,7 @@ function DashboardShell({
 
                                             <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-2.5 relative z-10">
                                                 <FinAiLogo showText={false} className="h-7 w-7 shrink-0 brightness-110" />
-                                                <span className="text-base font-black text-white tracking-tight">FinAi Workspace</span>
+                                                <span className="text-base font-normal text-white tracking-tight">FinAi Workspace</span>
                                             </Link>
                                             <button
                                                 ref={closeButtonRef}
@@ -559,7 +559,7 @@ function DashboardShell({
                                                         <div key={idx} className="space-y-0.5">
                                                             <div className={`flex items-center justify-between px-3.5 py-2.5 text-sm font-semibold rounded-xl transition-[background-color,color,box-shadow] duration-180 ease-out motion-reduce:transition-none ${
                                                                 isActive 
-                                                                    ? 'text-white bg-[#1F7A63] shadow-[0_4px_14px_rgba(120, 184, 245, 0.35)] font-bold font-bold' 
+                                                                    ? 'text-[#0E1E38] bg-white shadow-sm font-normal' 
                                                                     : 'text-slate-700 hover:text-[#0E1E38] hover:bg-slate-100/80 font-medium'
                                                             }`}>
                                                                 <Link
@@ -568,7 +568,7 @@ function DashboardShell({
                                                                     className="flex items-center gap-3 flex-1 min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 rounded-lg"
                                                                 >
                                                                     <ItemIcon className={`w-4.5 h-4.5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-white' : 'text-slate-500'}`} />
-                                                                    <span className="text-xs uppercase font-extrabold tracking-wider truncate">{item.label}</span>
+                                                                    <span className="text-xs uppercase font-normal tracking-wider truncate">{item.label}</span>
                                                                 </Link>
                                                                 <button
                                                                     type="button"
@@ -580,7 +580,7 @@ function DashboardShell({
                                                                     aria-expanded={item.isExpanded}
                                                                     aria-controls={submenuId}
                                                                     aria-label={`${item.label} alt menüsünü ${item.isExpanded ? "kapat" : "aç"}`}
-                                                                    className={`w-9 h-9 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 ${
+                                                                    className={`w-9 h-9 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 ${
                                                                         isActive 
                                                                             ? 'hover:bg-white/20 text-white focus-visible:ring-white/60' 
                                                                             : 'hover:bg-slate-200 text-slate-400 hover:text-slate-700'
@@ -609,9 +609,9 @@ function DashboardShell({
                                                                                     key={sIdx}
                                                                                     href={sub.href}
                                                                                     onClick={() => setIsMobileMenuOpen(false)}
-                                                                                    className={`flex items-center gap-2.5 px-3 py-2 text-xs font-semibold rounded-lg transition-colors duration-150 min-h-[40px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 ${
+                                                                                    className={`flex items-center gap-2.5 px-3 py-2 text-xs font-semibold rounded-lg transition-colors duration-150 min-h-[40px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 ${
                                                                                         sub.isSubActive
-                                                                                            ? 'bg-[#1F7A63]/20 text-[#0E1E38] font-bold'
+                                                                                            ? 'bg-slate-100 text-[#0E1E38] font-normal'
                                                                                             : 'text-slate-600 hover:text-[#0E1E38] hover:bg-slate-50 font-medium'
                                                                                     }`}
                                                                                 >
@@ -632,14 +632,14 @@ function DashboardShell({
                                                         key={idx}
                                                         href={item.href}
                                                         onClick={() => setIsMobileMenuOpen(false)}
-                                                        className={`flex items-center gap-3 px-3.5 py-2.5 text-sm font-semibold rounded-xl transition-[background-color,color,box-shadow] duration-180 ease-out min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1F7A63]/40 motion-reduce:transition-none ${
+                                                        className={`flex items-center gap-3 px-3.5 py-2.5 text-sm font-semibold rounded-xl transition-[background-color,color,box-shadow] duration-180 ease-out min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 motion-reduce:transition-none ${
                                                             isActive
-                                                                ? 'text-white bg-[#1F7A63] shadow-[0_4px_14px_rgba(120, 184, 245, 0.35)] font-bold font-bold'
+                                                                ? 'text-[#0E1E38] bg-white shadow-sm font-normal'
                                                                 : 'text-slate-700 hover:text-[#0E1E38] hover:bg-slate-100/80 font-medium'
                                                         }`}
                                                     >
                                                         <ItemIcon className={`w-4.5 h-4.5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-white' : 'text-slate-500'}`} />
-                                                        <span className="text-xs uppercase font-extrabold tracking-wider truncate">{item.label}</span>
+                                                        <span className="text-xs uppercase font-normal tracking-wider truncate">{item.label}</span>
                                                     </Link>
                                                 );
                                             })}

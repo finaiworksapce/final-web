@@ -48,7 +48,7 @@ export function FinancialTicker() {
 
     if (loading && data.length === 0) {
         return (
-            <div className="w-full h-12 flex items-center justify-center space-x-4 bg-[#1F7A63]/10 border-b border-[#1F7A63]/30 backdrop-blur-sm">
+            <div className="w-full h-12 flex items-center justify-center space-x-4 bg-white border-b border-slate-100">
                 <Activity className="w-4 h-4 text-[#0E1E38] animate-pulse" />
                 <span className="text-xs zodiak-subtitle font-[325] text-[#0E1E38]/70">Piyasa verileri yükleniyor...</span>
             </div>
@@ -56,7 +56,7 @@ export function FinancialTicker() {
     }
 
     return (
-        <div className="w-full bg-[#1F7A63]/10 border-b border-[#1F7A63]/30 backdrop-blur-md relative h-10 md:h-12 flex items-center overflow-x-auto scrollbar-none">
+        <div className="w-full bg-white border-b border-slate-100 relative h-10 md:h-12 flex items-center overflow-x-auto scrollbar-none">
             <div className="flex items-center justify-start md:justify-evenly px-4 py-2 min-w-max md:w-full gap-6 md:gap-2">
                 {FIXED_SYMBOLS.map((sym, index) => {
                     const quote = data.find(q => 
@@ -79,12 +79,12 @@ export function FinancialTicker() {
 
                     return (
                         <div key={sym} className="flex items-center gap-2">
-                            {index > 0 && <div className="w-px h-4 bg-[#1F7A63]/40 -ml-1 hidden md:block" />}
+                            {index > 0 && <div className="w-px h-4 bg-slate-200 -ml-1 hidden md:block" />}
                             <span className="text-[10px] zodiak-subtitle font-[325] text-[#0E1E38]/70 whitespace-nowrap uppercase tracking-widest">{name}</span>
-                            <span className="text-xs md:text-sm font-numbers font-[500] text-[#0E1E38] whitespace-nowrap">
+                            <span className="text-xs md:text-sm font-numbers font-normal text-[#0E1E38] whitespace-nowrap">
                                 {price > 0 ? `₺${price.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'Canlı...'}
                             </span>
-                            <div className={`flex items-center text-[10px] md:text-xs font-numbers font-[500] whitespace-nowrap ${isPositive ? "text-emerald-700" : "text-rose-700"}`}>
+                            <div className={`flex items-center text-[10px] md:text-xs font-numbers font-normal whitespace-nowrap ${isPositive ? "text-emerald-700" : "text-rose-700"}`}>
                                 {isPositive ? <ArrowUp className="w-3 h-3 mr-0.5" /> : <ArrowDown className="w-3 h-3 mr-0.5" />}
                                 %{Math.abs(quote.regularMarketChangePercent || 0).toFixed(2)}
                             </div>

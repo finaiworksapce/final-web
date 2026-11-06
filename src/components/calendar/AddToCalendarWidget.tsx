@@ -82,8 +82,8 @@ export function EventCountdownTimer({ event }: { event: CatalogCalendarEvent }) 
     return (
         <div className="flex items-center text-xs font-bold text-slate-500">
             <span className="inline-flex items-center gap-1.5 text-slate-500 font-bold">
-                <Clock className="w-4 h-4 text-[#142B50]" /> Açıklanmasına:{" "}
-                <span className="text-[#142B50] font-bold">
+                <Clock className="w-4 h-4 text-[#0E1E38]" /> Açıklanmasına:{" "}
+                <span className="text-[#0E1E38] font-bold">
                     {(countdown.days ?? 0) > 0 && `${countdown.days}g `}
                     {String(countdown.hours ?? 0).padStart(2, "0")}s :{" "}
                     {String(countdown.minutes ?? 0).padStart(2, "0")}d :{" "}
@@ -173,9 +173,9 @@ export function AddToCalendarButton({ event }: { event: CatalogCalendarEvent }) 
         <div className="relative inline-block">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-white border border-slate-200 hover:border-[#78B8F5] text-[#142B50] font-bold text-xs shadow-xs hover:bg-slate-50 transition-all cursor-pointer"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-white border border-slate-200 hover:border-[#78B8F5] text-[#0E1E38] font-bold text-xs shadow-xs hover:bg-slate-50 transition-all cursor-pointer"
             >
-                <Calendar className="w-3.5 h-3.5 text-[#142B50]" />
+                <Calendar className="w-3.5 h-3.5 text-[#0E1E38]" />
                 <span>Takvime Ekle</span>
                 <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`} />
             </button>
@@ -189,7 +189,7 @@ export function AddToCalendarButton({ event }: { event: CatalogCalendarEvent }) 
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={() => setIsOpen(false)}
-                            className="flex items-center justify-between w-full px-3 py-2 text-xs font-bold text-slate-700 hover:text-[#142B50] hover:bg-blue-50 rounded-xl transition-colors"
+                            className="flex items-center justify-between w-full px-3 py-2 text-xs font-bold text-slate-700 hover:text-[#0E1E38] hover:bg-blue-50 rounded-xl transition-colors"
                         >
                             <span className="flex items-center gap-2">
                                 <span className="w-2 h-2 rounded-full bg-blue-600" />
@@ -200,7 +200,7 @@ export function AddToCalendarButton({ event }: { event: CatalogCalendarEvent }) 
 
                         <button
                             onClick={handleDownloadICS}
-                            className="flex items-center justify-between w-full px-3 py-2 text-xs font-bold text-slate-700 hover:text-[#142B50] hover:bg-blue-50 rounded-xl transition-colors cursor-pointer text-left"
+                            className="flex items-center justify-between w-full px-3 py-2 text-xs font-bold text-slate-700 hover:text-[#0E1E38] hover:bg-blue-50 rounded-xl transition-colors cursor-pointer text-left"
                         >
                             <span className="flex items-center gap-2">
                                 <span className="w-2 h-2 rounded-full bg-slate-800" />

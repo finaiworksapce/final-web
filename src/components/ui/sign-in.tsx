@@ -40,7 +40,7 @@ const TypingText = ({ text }: { text: string }) => {
   
     return (
       <motion.div
-        className="flex overflow-hidden text-3xl md:text-5xl tracking-tighter text-[#142B50] zodiak-title"
+        className="flex overflow-hidden text-3xl md:text-5xl tracking-tighter text-[#0E1E38] zodiak-title"
         variants={container}
         initial="hidden"
         animate="visible"
@@ -102,12 +102,12 @@ const GlassInputWrapper = ({ children, className }: { children: React.ReactNode,
 
 const FeatureCard = ({ feature, delay }: { feature: FeatureItem, delay: string }) => (
   <div className={`animate-testimonial ${delay} flex items-start gap-3 rounded-[20px] bg-white shadow-[0_10px_30px_rgba(20, 43, 80, 0.08)] border border-slate-100 p-4 w-full h-full`}>
-    <div className="flex-shrink-0 w-10 h-10 rounded-[14px] bg-[#78B8F5]/15 border border-[#78B8F5]/10 flex items-center justify-center text-[#142B50]">
+    <div className="flex-shrink-0 w-10 h-10 rounded-[14px] bg-[#78B8F5]/15 border border-[#78B8F5]/10 flex items-center justify-center text-[#0E1E38]">
       {feature.icon}
     </div>
     <div className="text-left flex-1 min-w-0 pr-1">
-      <p className="zodiak-subtitle text-[#142B50] text-[14px] leading-tight mb-1 truncate">{feature.title}</p>
-      <p className="text-[#142B50]/80 zodiak-desc text-[12px] leading-snug line-clamp-3">{feature.description}</p>
+      <p className="zodiak-subtitle text-[#0E1E38] text-[14px] leading-tight mb-1 truncate">{feature.title}</p>
+      <p className="text-[#0E1E38]/80 zodiak-desc text-[12px] leading-snug line-clamp-3">{feature.description}</p>
     </div>
   </div>
 );
@@ -276,7 +276,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                     <input name="email" type="email" required placeholder="ornek@mail.com" className="w-full bg-transparent text-sm p-4 rounded-2xl focus:outline-none zodiak-desc" />
                   </GlassInputWrapper>
                 </div>
-                <button type="submit" disabled={isLoading} className="animate-element animate-delay-300 w-full rounded-2xl bg-[#142B50] py-4 zodiak-subtitle text-white hover:bg-[#102240] text-base transition-all shadow-xl shadow-[#142B50]/25 hover:shadow-2xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 cursor-pointer">
+                <button type="submit" disabled={isLoading} className="animate-element animate-delay-300 w-full rounded-2xl bg-[#0E1E38] py-4 zodiak-subtitle text-white hover:bg-[#102240] text-base transition-all shadow-xl shadow-[#0E1E38]/25 hover:shadow-2xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 cursor-pointer">
                   {isLoading ? "Gönderiliyor..." : "Sıfırlama Bağlantısı Gönder"}
                 </button>
                 <div className="animate-element animate-delay-400 text-center pt-2">
@@ -291,7 +291,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                     <input name="otpCode" type="text" maxLength={8} required placeholder="" className="w-full bg-transparent text-center text-3xl font-bold tracking-[0.3em] p-4 rounded-2xl focus:outline-none" />
                   </GlassInputWrapper>
                 </div>
-                <button type="submit" disabled={isLoading || isOtpSuccess} className="animate-element animate-delay-300 w-full rounded-2xl bg-[#142B50] py-4 zodiak-subtitle text-white hover:bg-[#102240] text-base transition-all shadow-xl shadow-[#142B50]/25 hover:shadow-2xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 cursor-pointer">
+                <button type="submit" disabled={isLoading || isOtpSuccess} className="animate-element animate-delay-300 w-full rounded-2xl bg-[#0E1E38] py-4 zodiak-subtitle text-white hover:bg-[#102240] text-base transition-all shadow-xl shadow-[#0E1E38]/25 hover:shadow-2xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 cursor-pointer">
                   {isLoading ? "Doğrulanıyor..." : "Hesabı Onayla"}
                 </button>
                 <div className="animate-element animate-delay-400 text-center text-base pt-2">
@@ -299,11 +299,11 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                     type="button" 
                     onClick={onResendOtp}
                     disabled={isLoading || resendTimer > 0}
-                    className="text-[#142B50] zodiak-subtitle hover:text-[#78B8F5] hover:underline disabled:text-muted-foreground disabled:no-underline transition-all duration-300 flex items-center justify-center gap-2 mx-auto"
+                    className="text-[#0E1E38] zodiak-subtitle hover:text-[#78B8F5] hover:underline disabled:text-muted-foreground disabled:no-underline transition-all duration-300 flex items-center justify-center gap-2 mx-auto"
                   >
                     <span>Kodu Tekrar Gönder</span>
                     {resendTimer > 0 && (
-                      <span className="px-2 py-0.5 bg-[#78B8F5]/20 text-[#142B50] rounded-md text-xs border border-[#78B8F5]/40 animate-pulse">
+                      <span className="px-2 py-0.5 bg-[#78B8F5]/20 text-[#0E1E38] rounded-md text-xs border border-[#78B8F5]/40 animate-pulse">
                         {resendTimer} sn
                       </span>
                     )}
@@ -409,11 +409,11 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                         name="kvkk" 
                         checked={termsAccepted}
                         onChange={(e) => setTermsAccepted(e.target.checked)}
-                        className="custom-checkbox w-4 h-4 rounded border-slate-300 text-[#142B50] focus:ring-[#78B8F5] transition-all" 
+                        className="custom-checkbox w-4 h-4 rounded border-slate-300 text-[#0E1E38] focus:ring-[#78B8F5] transition-all" 
                       />
                     </div>
                     <span className="text-[11px] leading-tight text-muted-foreground select-none zodiak-desc">
-                      <button type="button" onClick={() => openLegal('terms')} className="zodiak-subtitle text-[#142B50] hover:underline">Kullanım Koşulları</button> ve <button type="button" onClick={() => openLegal('kvkk')} className="zodiak-subtitle text-[#142B50] hover:underline">KVKK Aydınlatma Metnini</button> okudum, kabul ediyorum.
+                      <button type="button" onClick={() => openLegal('terms')} className="zodiak-subtitle text-[#0E1E38] hover:underline">Kullanım Koşulları</button> ve <button type="button" onClick={() => openLegal('kvkk')} className="zodiak-subtitle text-[#0E1E38] hover:underline">KVKK Aydınlatma Metnini</button> okudum, kabul ediyorum.
                     </span>
                   </label>
                 </div>
@@ -422,14 +422,14 @@ export const SignInPage: React.FC<SignInPageProps> = ({
               {isLoginMode && (
                 <div className="animate-element animate-delay-500 flex items-center justify-between text-sm">
                   <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" name="rememberMe" className="custom-checkbox w-4 h-4 rounded border-gray-300 text-[#142B50] focus:ring-[#78B8F5]" />
+                    <input type="checkbox" name="rememberMe" className="custom-checkbox w-4 h-4 rounded border-gray-300 text-[#0E1E38] focus:ring-[#78B8F5]" />
                     <span className="text-foreground/90 zodiak-desc text-sm">Beni hatırla</span>
                   </label>
-                  <a href="#" onClick={(e) => { e.preventDefault(); onResetPassword?.(); }} className="hover:underline zodiak-subtitle text-[#142B50] hover:text-[#78B8F5] transition-colors text-sm">Şifremi unuttum</a>
+                  <a href="#" onClick={(e) => { e.preventDefault(); onResetPassword?.(); }} className="hover:underline zodiak-subtitle text-[#0E1E38] hover:text-[#78B8F5] transition-colors text-sm">Şifremi unuttum</a>
                 </div>
               )}
 
-              <button type="submit" disabled={isLoading} className={`animate-element ${isLoginMode ? "animate-delay-600" : "animate-delay-700"} w-full rounded-2xl bg-[#142B50] py-4 zodiak-subtitle text-white hover:bg-[#102240] text-base transition-all shadow-xl shadow-[#142B50]/25 hover:shadow-2xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 cursor-pointer`}>
+              <button type="submit" disabled={isLoading} className={`animate-element ${isLoginMode ? "animate-delay-600" : "animate-delay-700"} w-full rounded-2xl bg-[#0E1E38] py-4 zodiak-subtitle text-white hover:bg-[#102240] text-base transition-all shadow-xl shadow-[#0E1E38]/25 hover:shadow-2xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 cursor-pointer`}>
                 {isLoading ? "İşlem Yapılıyor..." : (isLoginMode ? "Giriş Yap" : "Hesap Oluştur")}
               </button>
             </form>
@@ -438,7 +438,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
             {!isVerifyingOtp && !isForgotPasswordMode && (
               <p className="animate-element animate-delay-900 text-center text-sm text-muted-foreground pt-4 zodiak-desc">
                 {isLoginMode ? "Yeni nesil yatırıma katılmak ister misin? " : "Zaten bir hesabın var mı? "}
-                <a href="#" onClick={(e) => { e.preventDefault(); onToggleMode?.(); }} className="text-[#142B50] zodiak-subtitle hover:text-[#78B8F5] hover:underline transition-colors ml-1">
+                <a href="#" onClick={(e) => { e.preventDefault(); onToggleMode?.(); }} className="text-[#0E1E38] zodiak-subtitle hover:text-[#78B8F5] hover:underline transition-colors ml-1">
                    {isLoginMode ? "Hesap Oluştur" : "Giriş Yap"}
                 </a>
               </p>
@@ -505,7 +505,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                 initial={{ scale: 0.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: "spring", damping: 15 }}
-                className="w-20 h-20 bg-[#142B50] rounded-3xl mx-auto flex items-center justify-center shadow-xl shadow-[#142B50]/30 border border-[#78B8F5]/30 mb-8"
+                className="w-20 h-20 bg-[#0E1E38] rounded-3xl mx-auto flex items-center justify-center shadow-xl shadow-[#0E1E38]/30 border border-[#78B8F5]/30 mb-8"
               >
                 <motion.div
                   initial={{ pathLength: 0 }}

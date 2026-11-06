@@ -120,7 +120,7 @@ export function GlobalSearch({
   return (
     <div ref={containerRef} className={cn("relative w-full", className)}>
       <div className="relative flex items-center">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#142B50]/50 pointer-events-none" />
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0E1E38]/50 pointer-events-none" />
         <input
           ref={inputRef}
           type="text"
@@ -137,7 +137,7 @@ export function GlobalSearch({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           aria-label="Varlık ve Şirket Arama"
-          className="w-full bg-slate-50/90 border border-slate-200/80 rounded-2xl py-2 pl-10 pr-10 text-xs font-bold text-[#142B50] placeholder:text-[#142B50]/40 focus:outline-none focus:ring-2 focus:ring-[#78B8F5]/20 focus:bg-white transition-all shadow-xs"
+          className="w-full bg-slate-50/90 border border-slate-200/80 rounded-2xl py-2 pl-10 pr-10 text-xs font-bold text-[#0E1E38] placeholder:text-[#0E1E38]/40 focus:outline-none focus:ring-2 focus:ring-[#78B8F5]/20 focus:bg-white transition-all shadow-xs"
         />
         {loading ? (
           <Loader2 className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-600 animate-spin" aria-label="Aranıyor..." />
@@ -151,7 +151,7 @@ export function GlobalSearch({
               inputRef.current?.focus();
             }}
             aria-label="Aramayı Temizle"
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#142B50] p-1 rounded-full hover:bg-slate-100 transition-colors"
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#0E1E38] p-1 rounded-full hover:bg-slate-100 transition-colors"
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -174,7 +174,7 @@ export function GlobalSearch({
             </div>
           ) : (
             <div className="p-1.5 space-y-1">
-              <div className="px-3 py-1.5 text-[9px] font-black uppercase tracking-wider text-slate-400 border-b border-slate-100 flex items-center justify-between">
+              <div className="px-3 py-1.5 text-[9px] font-normal uppercase tracking-wider text-slate-400 border-b border-slate-100 flex items-center justify-between">
                 <span>Eşleşen Varlıklar</span>
                 <span aria-live="polite">{results.length} Sonuç</span>
               </div>
@@ -193,7 +193,7 @@ export function GlobalSearch({
                     className={cn(
                       "w-full text-left px-3 py-2.5 rounded-xl transition-all flex items-center justify-between group",
                       isSelected
-                        ? "bg-[#142B50] text-white shadow-sm"
+                        ? "bg-[#0E1E38] text-white shadow-sm"
                         : "hover:bg-blue-50/70 text-slate-800"
                     )}
                   >
@@ -203,8 +203,8 @@ export function GlobalSearch({
                         <div className="flex items-center gap-2">
                           <span
                             className={cn(
-                              "font-black text-xs tracking-tight",
-                              isSelected ? "text-white" : "text-[#142B50]"
+                              "font-normal text-xs tracking-tight",
+                              isSelected ? "text-white" : "text-[#0E1E38]"
                             )}
                           >
                             {cleanSym}

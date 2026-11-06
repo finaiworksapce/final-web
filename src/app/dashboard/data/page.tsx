@@ -623,7 +623,7 @@ function formatVolumeDisplay(num: number): string {
 // SEKTÖR HEATMAP DİNAMİK RENK YOĞUNLUĞU HESAPLAYICI (BELİRGİN AÇIK SEVİYELER)
 function getSectorHeatmapStyle(annualReturn: number, isSelected: boolean) {
   if (isSelected) {
-    return "bg-[#142B50] text-white border-[#78B8F5] shadow-md ring-2 ring-[#78B8F5]/30 font-black";
+    return "bg-[#0E1E38] text-white border-[#78B8F5] shadow-md ring-2 ring-[#78B8F5]/30 font-normal";
   }
 
   if (annualReturn >= 90) {
@@ -657,13 +657,13 @@ function getSectorReturnBadgeStyle(annualReturn: number, isSelected: boolean) {
     return "bg-white/20 text-white border-white/30";
   }
   if (annualReturn >= 90) {
-    return "bg-emerald-700 text-white border-emerald-800 font-black shadow-2xs";
+    return "bg-emerald-700 text-white border-emerald-800 font-normal shadow-2xs";
   } else if (annualReturn >= 60) {
-    return "bg-emerald-600 text-white border-emerald-700 font-black shadow-2xs";
+    return "bg-emerald-600 text-white border-emerald-700 font-normal shadow-2xs";
   } else if (annualReturn >= 40) {
-    return "bg-emerald-500 text-white border-emerald-600 font-extrabold shadow-2xs";
+    return "bg-emerald-500 text-white border-emerald-600 font-normal shadow-2xs";
   } else if (annualReturn >= 25) {
-    return "bg-emerald-100 text-emerald-900 border-emerald-300 font-extrabold";
+    return "bg-emerald-100 text-emerald-900 border-emerald-300 font-normal";
   } else if (annualReturn >= 15) {
     return "bg-emerald-50 text-emerald-800 border-emerald-200 font-bold";
   } else if (annualReturn > 0) {
@@ -674,8 +674,8 @@ function getSectorReturnBadgeStyle(annualReturn: number, isSelected: boolean) {
 
 // GÜNÜN ENLERİ & TABLO YAZI RENGİ HESAPLAYICI (KUTUSUZ - SADE YAZI)
 function getChangeBadgeStyle(change: number) {
-  if (change > 0) return "text-emerald-600 font-black";
-  if (change < 0) return "text-rose-600 font-black";
+  if (change > 0) return "text-emerald-600 font-normal";
+  if (change < 0) return "text-rose-600 font-normal";
   return "text-slate-500 font-bold";
 }
 
@@ -942,11 +942,11 @@ export default function AssetsPage() {
                 <div className="bg-white border border-slate-200/90 rounded-[28px] p-5 shadow-xs space-y-4 flex flex-col justify-between">
                     <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                         <div className="flex items-center gap-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-[#142B50] flex items-center justify-center text-white shadow-xs shrink-0">
+                            <div className="w-9 h-9 rounded-xl bg-[#0E1E38] flex items-center justify-center text-white shadow-xs shrink-0">
                                 <BarChart3 className="w-4 h-4 text-sky-300" />
                             </div>
                             <div>
-                                <h2 className="text-base font-black text-slate-900 tracking-tight leading-tight">
+                                <h2 className="text-base font-normal text-[#0E1E38] tracking-tight leading-tight">
                                     Sektörler Yıllık Getirileri (2025 BIST)
                                 </h2>
                                 <p className="text-[10px] font-bold text-slate-400">
@@ -957,7 +957,7 @@ export default function AssetsPage() {
                         {selectedSector && (
                             <button
                                 onClick={() => { setSelectedSector(null); setCurrentPage(1); }}
-                                className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[10px] font-black flex items-center gap-1 transition-all"
+                                className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[10px] font-normal flex items-center gap-1 transition-all"
                             >
                                 <X className="w-3 h-3 text-rose-500" />
                                 Temizle
@@ -982,17 +982,17 @@ export default function AssetsPage() {
                                     )}
                                 >
                                     <div className="flex items-center justify-between w-full mb-1.5">
-                                        <span className="text-[9px] font-black opacity-60 uppercase tracking-wider">#{idx + 1}</span>
+                                        <span className="text-[9px] font-normal opacity-60 uppercase tracking-wider">#{idx + 1}</span>
                                         <span className={cn("text-xs px-1.5 py-0.5 rounded-md border", badgeStyle)}>
                                             +{sector.annualReturn}%
                                         </span>
                                     </div>
                                     <div>
-                                        <h3 className="text-xs font-black leading-snug truncate" title={sector.name}>
+                                        <h3 className="text-xs font-normal leading-snug truncate" title={sector.name}>
                                             {sector.name}
                                         </h3>
                                         <p className="text-[9px] font-bold opacity-75 mt-0.5">
-                                            Lider: <span className="font-extrabold">{sector.leader}</span>
+                                            Lider: <span className="font-normal">{sector.leader}</span>
                                         </p>
                                     </div>
                                 </button>
@@ -1011,7 +1011,7 @@ export default function AssetsPage() {
                                 <Trophy className="w-4 h-4 text-amber-100" />
                             </div>
                             <div>
-                                <h2 className="text-base font-black text-slate-900 tracking-tight leading-tight">Günün Enleri</h2>
+                                <h2 className="text-base font-normal text-[#0E1E38] tracking-tight leading-tight">Günün Enleri</h2>
                                 <p className="text-[10px] font-bold text-slate-400">Canlı BIST Piyasasının Öne Çıkanları</p>
                             </div>
                         </div>
@@ -1021,10 +1021,10 @@ export default function AssetsPage() {
                             <button
                                 onClick={() => setActiveTopTab('gainers')}
                                 className={cn(
-                                    "px-2.5 py-1 rounded-lg text-[10px] font-black transition-all flex items-center gap-1",
+                                    "px-2.5 py-1 rounded-lg text-[10px] font-normal transition-all flex items-center gap-1",
                                     activeTopTab === 'gainers' 
                                         ? "bg-emerald-600 text-white shadow-xs" 
-                                        : "text-slate-600 hover:text-slate-900"
+                                        : "text-slate-600 hover:text-[#0E1E38]"
                                 )}
                             >
                                 <TrendingUp className="w-3 h-3" />
@@ -1033,10 +1033,10 @@ export default function AssetsPage() {
                             <button
                                 onClick={() => setActiveTopTab('losers')}
                                 className={cn(
-                                    "px-2.5 py-1 rounded-lg text-[10px] font-black transition-all flex items-center gap-1",
+                                    "px-2.5 py-1 rounded-lg text-[10px] font-normal transition-all flex items-center gap-1",
                                     activeTopTab === 'losers' 
                                         ? "bg-rose-600 text-white shadow-xs" 
-                                        : "text-slate-600 hover:text-slate-900"
+                                        : "text-slate-600 hover:text-[#0E1E38]"
                                 )}
                             >
                                 <TrendingDown className="w-3 h-3" />
@@ -1045,10 +1045,10 @@ export default function AssetsPage() {
                             <button
                                 onClick={() => setActiveTopTab('volume')}
                                 className={cn(
-                                    "px-2.5 py-1 rounded-lg text-[10px] font-black transition-all flex items-center gap-1",
+                                    "px-2.5 py-1 rounded-lg text-[10px] font-normal transition-all flex items-center gap-1",
                                     activeTopTab === 'volume' 
-                                        ? "bg-[#142B50] text-white shadow-xs" 
-                                        : "text-slate-600 hover:text-slate-900"
+                                        ? "bg-[#0E1E38] text-white shadow-xs" 
+                                        : "text-slate-600 hover:text-[#0E1E38]"
                                 )}
                             >
                                 <Flame className="w-3 h-3 text-amber-300" />
@@ -1070,11 +1070,11 @@ export default function AssetsPage() {
                                     className="flex items-center justify-between p-2 px-3 bg-slate-50/70 border border-slate-200/80 rounded-xl hover:bg-blue-50/60 hover:border-blue-300 transition-all text-xs group cursor-pointer"
                                 >
                                     <div className="flex items-center gap-2.5 min-w-0">
-                                        <span className="text-[10px] font-black text-slate-400 w-4 text-center">#{idx + 1}</span>
+                                        <span className="text-[10px] font-normal text-slate-400 w-4 text-center">#{idx + 1}</span>
                                         <StockLogo symbol={item.symbol} className="w-8 h-8 ring-1 ring-slate-200/60 shadow-xs" />
                                         <div className="min-w-0">
                                             <div className="flex items-center gap-1.5">
-                                                <span className="font-black text-slate-900 text-xs leading-tight group-hover:text-[#142B50] transition-colors">
+                                                <span className="font-normal text-[#0E1E38] text-xs leading-tight group-hover:text-[#0E1E38] transition-colors">
                                                     {item.symbol}
                                                 </span>
                                                 <span className="text-[9px] font-bold text-[#ba68c8]">
@@ -1091,14 +1091,14 @@ export default function AssetsPage() {
                                     </div>
 
                                     <div className="flex items-center gap-3 shrink-0 text-right">
-                                        <span className="font-black text-slate-900 text-xs">₺{item.price.toFixed(2)}</span>
+                                        <span className="font-normal text-[#0E1E38] text-xs">₺{item.price.toFixed(2)}</span>
                                         {activeTopTab === 'volume' ? (
-                                            <span className="font-black text-[#142B50] text-xs">
+                                            <span className="font-normal text-[#0E1E38] text-xs">
                                                 {item.volume}
                                             </span>
                                         ) : (
                                             <span className={cn(
-                                                "text-xs font-black text-right",
+                                                "text-xs font-normal text-right",
                                                 getChangeBadgeStyle(item.change)
                                             )}>
                                                 {item.change > 0 ? `+${item.change}%` : `${item.change}%`}

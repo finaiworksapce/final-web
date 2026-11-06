@@ -26,7 +26,7 @@ export function FinAiReportCard({ report, fallbackSummary, className = "" }: Fin
                     <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100/90 flex items-center justify-center text-blue-600 shrink-0 shadow-2xs">
                         <Sparkles className="w-4 h-4 text-blue-600" />
                     </div>
-                    <h3 className="text-base font-black text-[#142B50] tracking-tight">
+                    <h3 className="text-base font-normal text-[#0E1E38] tracking-tight">
                         Özet
                     </h3>
                 </div>
@@ -40,7 +40,7 @@ export function FinAiReportCard({ report, fallbackSummary, className = "" }: Fin
             <div className="space-y-5">
                 {/* 1. Kısa Özet */}
                 <div className="space-y-2">
-                    <div className="flex items-center gap-2.5 text-[13px] sm:text-sm font-bold text-slate-900">
+                    <div className="flex items-center gap-2.5 text-[13px] sm:text-sm font-bold text-[#0E1E38]">
                         <FileText className="w-4 h-4 text-blue-600 shrink-0" />
                         <span>Kısa Özet</span>
                     </div>
@@ -52,7 +52,7 @@ export function FinAiReportCard({ report, fallbackSummary, className = "" }: Fin
                 {/* 2. Neden Önemli? (Varsa) */}
                 {whyImportant && (
                     <div className="space-y-2 pt-1">
-                        <div className="flex items-center gap-2.5 text-[13px] sm:text-sm font-bold text-slate-900">
+                        <div className="flex items-center gap-2.5 text-[13px] sm:text-sm font-bold text-[#0E1E38]">
                             <ThumbsUp className="w-4 h-4 text-blue-600 shrink-0" />
                             <span>Neden Önemli?</span>
                         </div>
@@ -65,7 +65,7 @@ export function FinAiReportCard({ report, fallbackSummary, className = "" }: Fin
                 {/* 3. Neleri Etkileyebilir? (Varsa) */}
                 {possibleImpacts && (
                     <div className="space-y-2 pt-1">
-                        <div className="flex items-center gap-2.5 text-[13px] sm:text-sm font-bold text-slate-900">
+                        <div className="flex items-center gap-2.5 text-[13px] sm:text-sm font-bold text-[#0E1E38]">
                             <GitFork className="w-4 h-4 text-blue-600 shrink-0" />
                             <span>Neleri Etkileyebilir?</span>
                         </div>
@@ -83,7 +83,7 @@ export function FinAiReportCard({ report, fallbackSummary, className = "" }: Fin
                 {/* 4. Nelere Dikkat Edilmeli? (Varsa) */}
                 {watchPoints && (
                     <div className="space-y-2 pt-1">
-                        <div className="flex items-center gap-2.5 text-[13px] sm:text-sm font-bold text-slate-900">
+                        <div className="flex items-center gap-2.5 text-[13px] sm:text-sm font-bold text-[#0E1E38]">
                             <Eye className="w-4 h-4 text-blue-600 shrink-0" />
                             <span>Nelere Dikkat Edilmeli?</span>
                         </div>

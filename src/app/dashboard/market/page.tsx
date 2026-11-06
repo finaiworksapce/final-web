@@ -118,7 +118,7 @@ export default function MarketPage() {
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 relative">
                             {/* VS Icon */}
                             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 hidden lg:flex w-16 h-16 rounded-full bg-white border-8 border-[#F8FAFC] items-center justify-center shadow-xl">
-                                <ArrowLeftRight className="w-6 h-6 text-[#142B50]" />
+                                <ArrowLeftRight className="w-6 h-6 text-[#0E1E38]" />
                             </div>
 
                             {/* LEFT: FUNDS */}
@@ -131,13 +131,13 @@ export default function MarketPage() {
                                     <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center">
                                         <Landmark className="w-8 h-8 text-blue-600" />
                                     </div>
-                                    <h2 className="text-3xl font-black text-slate-900 tracking-tight italic uppercase">Yatırım Fonları</h2>
+                                    <h2 className="text-3xl font-normal text-[#0E1E38] tracking-tight italic uppercase">Yatırım Fonları</h2>
                                 </div>
                                 <p className="text-slate-500 leading-relaxed font-medium">Profesyonel portföy yöneticileri tarafından yönetilen, binlerce kişinin birikimiyle oluşan dev havuzlar.</p>
                                 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="bg-emerald-50 p-6 rounded-3xl border border-emerald-100">
-                                        <h4 className="text-emerald-900 font-black text-xs uppercase tracking-widest mb-3 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /> Avantajlar</h4>
+                                        <h4 className="text-emerald-900 font-normal text-xs uppercase tracking-widest mb-3 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /> Avantajlar</h4>
                                         <ul className="text-emerald-800 text-sm space-y-2 font-bold opacity-80">
                                             <li>• Profesyonel Yönetim</li>
                                             <li>• Risk Dağılımı (Çeşitlilik)</li>
@@ -145,7 +145,7 @@ export default function MarketPage() {
                                         </ul>
                                     </div>
                                     <div className="bg-red-50 p-6 rounded-3xl border border-red-100">
-                                        <h4 className="text-red-900 font-black text-xs uppercase tracking-widest mb-3 flex items-center gap-2"><X className="w-4 h-4" /> Dezavantajlar</h4>
+                                        <h4 className="text-red-900 font-normal text-xs uppercase tracking-widest mb-3 flex items-center gap-2"><X className="w-4 h-4" /> Dezavantajlar</h4>
                                         <ul className="text-red-800 text-sm space-y-2 font-bold opacity-80">
                                             <li>• Yönetim Ücretleri</li>
                                             <li>• Kontrol Yöneticidedir</li>
@@ -155,7 +155,7 @@ export default function MarketPage() {
                                 </div>
                                 <button 
                                     onClick={() => { setPath('FUND'); setTestStarted(true); }}
-                                    className="w-full py-5 bg-blue-600 text-white rounded-[24px] font-black uppercase tracking-widest text-sm hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 flex items-center justify-center gap-3"
+                                    className="w-full py-5 bg-blue-600 text-white rounded-[24px] font-normal uppercase tracking-widest text-sm hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 flex items-center justify-center gap-3"
                                 >
                                     Sadece Fonlardan Devam Et <ArrowRight className="w-5 h-5" />
                                 </button>
@@ -164,20 +164,20 @@ export default function MarketPage() {
                             {/* RIGHT: STOCKS */}
                             <motion.div 
                                 whileHover={{ scale: 1.01 }}
-                                className="bg-[#142B50] rounded-[40px] p-8 md:p-12 shadow-2xl space-y-8 relative overflow-hidden group text-white"
+                                className="bg-[#0E1E38] rounded-[40px] p-8 md:p-12 shadow-2xl space-y-8 relative overflow-hidden group text-white"
                             >
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
                                 <div className="flex items-center gap-4">
                                     <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center border border-white/20">
                                         <Building2 className="w-8 h-8 text-white" />
                                     </div>
-                                    <h2 className="text-3xl font-black tracking-tight italic uppercase">Hisse Senetleri</h2>
+                                    <h2 className="text-3xl font-normal tracking-tight italic uppercase">Hisse Senetleri</h2>
                                 </div>
                                 <p className="text-blue-100/70 leading-relaxed font-medium">Şirketlere doğrudan ortak olarak, büyüme ve temettü potansiyeline doğrudan sahip olma gücü.</p>
                                 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div className="bg-white/10 p-6 rounded-3xl border border-white/10">
-                                        <h4 className="text-emerald-300 font-black text-xs uppercase tracking-widest mb-3 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /> Avantajlar</h4>
+                                        <h4 className="text-emerald-300 font-normal text-xs uppercase tracking-widest mb-3 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" /> Avantajlar</h4>
                                         <ul className="text-emerald-50 text-sm space-y-2 font-bold opacity-80">
                                             <li>• Tam Kontrol</li>
                                             <li>• Temettü Geliri</li>
@@ -185,7 +185,7 @@ export default function MarketPage() {
                                         </ul>
                                     </div>
                                     <div className="bg-white/10 p-6 rounded-3xl border border-white/10">
-                                        <h4 className="text-red-300 font-black text-xs uppercase tracking-widest mb-3 flex items-center gap-2"><X className="w-4 h-4" /> Dezavantajlar</h4>
+                                        <h4 className="text-red-300 font-normal text-xs uppercase tracking-widest mb-3 flex items-center gap-2"><X className="w-4 h-4" /> Dezavantajlar</h4>
                                         <ul className="text-red-50 text-sm space-y-2 font-bold opacity-80">
                                             <li>• Yüksek Volatilite</li>
                                             <li>• Sürekli Takip Gerektirir</li>
@@ -195,7 +195,7 @@ export default function MarketPage() {
                                 </div>
                                 <button 
                                     onClick={() => { setPath('STOCK'); setTestStarted(true); }}
-                                    className="w-full py-5 bg-white text-[#142B50] rounded-[24px] font-black uppercase tracking-widest text-sm hover:bg-blue-50 transition-all shadow-xl flex items-center justify-center gap-3"
+                                    className="w-full py-5 bg-white text-[#0E1E38] rounded-[24px] font-normal uppercase tracking-widest text-sm hover:bg-blue-50 transition-all shadow-xl flex items-center justify-center gap-3"
                                 >
                                     Sadece Hisselerden Devam Et <ArrowRight className="w-5 h-5" />
                                 </button>
@@ -206,7 +206,7 @@ export default function MarketPage() {
                         <div className="flex flex-col items-center gap-6">
                             <button 
                                 onClick={() => { setPath('MIXED'); setTestStarted(true); }}
-                                className="px-12 py-6 bg-slate-900 text-white rounded-[32px] font-black uppercase tracking-[0.2em] text-sm hover:scale-105 transition-all shadow-2xl flex items-center gap-4 border border-white/20"
+                                className="px-12 py-6 bg-slate-900 text-white rounded-[32px] font-normal uppercase tracking-[0.2em] text-sm hover:scale-105 transition-all shadow-2xl flex items-center gap-4 border border-white/20"
                             >
                                 <LayoutGrid className="w-6 h-6" /> Her İkisini De İçeren Karma Portföy Kur
                             </button>
@@ -217,16 +217,16 @@ export default function MarketPage() {
 
                         {/* Comparison Table */}
                         <div className="max-w-4xl mx-auto bg-white rounded-[40px] border border-slate-100 p-8 md:p-12 shadow-sm overflow-hidden">
-                            <h3 className="text-xl font-black text-slate-900 mb-8 uppercase italic flex items-center gap-3">
-                                <Scale className="w-6 h-6 text-[#142B50]" /> Profesyonel Karşılaştırma
+                            <h3 className="text-xl font-normal text-[#0E1E38] mb-8 uppercase italic flex items-center gap-3">
+                                <Scale className="w-6 h-6 text-[#0E1E38]" /> Profesyonel Karşılaştırma
                             </h3>
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left">
                                     <thead>
                                         <tr className="border-b border-slate-50">
-                                            <th className="py-4 text-xs font-black uppercase tracking-widest text-slate-400">Kriter</th>
-                                            <th className="py-4 text-xs font-black uppercase tracking-widest text-blue-600">Yatırım Fonu</th>
-                                            <th className="py-4 text-xs font-black uppercase tracking-widest text-[#142B50]">Hisse Senedi</th>
+                                            <th className="py-4 text-xs font-normal uppercase tracking-widest text-slate-400">Kriter</th>
+                                            <th className="py-4 text-xs font-normal uppercase tracking-widest text-blue-600">Yatırım Fonu</th>
+                                            <th className="py-4 text-xs font-normal uppercase tracking-widest text-[#0E1E38]">Hisse Senedi</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-50">
@@ -238,7 +238,7 @@ export default function MarketPage() {
                                             ["Çeşitlendirme", "Tek fonla yüzlerce varlık", "Yatırımcı kendi kurmalı"]
                                         ].map(([crit, fund, stock], i) => (
                                             <tr key={i} className="hover:bg-slate-50/50 transition-colors">
-                                                <td className="py-5 font-black text-slate-900 text-sm">{crit}</td>
+                                                <td className="py-5 font-normal text-[#0E1E38] text-sm">{crit}</td>
                                                 <td className="py-5 text-slate-600 text-sm font-medium">{fund}</td>
                                                 <td className="py-5 text-slate-600 text-sm font-medium">{stock}</td>
                                             </tr>
@@ -258,13 +258,13 @@ export default function MarketPage() {
                         {/* Question View */}
                         <div className="bg-white rounded-[40px] p-10 border border-slate-100 shadow-2xl space-y-8">
                             <div className="flex items-center justify-between">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-blue-500 bg-blue-50 px-4 py-1.5 rounded-full">
+                                <span className="text-[10px] font-normal uppercase tracking-widest text-blue-500 bg-blue-50 px-4 py-1.5 rounded-full">
                                     Adım {currentQuestion + 1} / {questions.length}
                                 </span>
-                                <button onClick={() => setTestStarted(false)} className="text-slate-400 hover:text-slate-900 transition-colors text-xs font-bold uppercase tracking-widest">Geri Dön</button>
+                                <button onClick={() => setTestStarted(false)} className="text-slate-400 hover:text-[#0E1E38] transition-colors text-xs font-bold uppercase tracking-widest">Geri Dön</button>
                             </div>
                             
-                            <h2 className="text-3xl font-black text-slate-900 leading-tight">{questions[currentQuestion].question}</h2>
+                            <h2 className="text-3xl font-normal text-[#0E1E38] leading-tight">{questions[currentQuestion].question}</h2>
                             
                             <div className="space-y-4">
                                 {questions[currentQuestion].options.map((opt, i) => (
@@ -274,7 +274,7 @@ export default function MarketPage() {
                                         className="w-full text-left p-6 rounded-[28px] bg-slate-50 border border-slate-100 hover:border-blue-300 hover:bg-white hover:shadow-xl transition-all group flex items-center justify-between"
                                     >
                                         <div>
-                                            <div className="font-black text-slate-900 group-hover:text-blue-600 transition-colors">{opt.label}</div>
+                                            <div className="font-normal text-[#0E1E38] group-hover:text-blue-600 transition-colors">{opt.label}</div>
                                             <div className="text-xs text-slate-400 font-medium mt-1">{opt.desc}</div>
                                         </div>
                                         <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-blue-600 transition-all" />
@@ -291,11 +291,11 @@ export default function MarketPage() {
                         className="max-w-4xl mx-auto text-center space-y-8"
                     >
                         <Trophy className="w-20 h-20 text-emerald-500 mx-auto" />
-                        <h2 className="text-4xl font-black text-slate-900 uppercase italic">Profiliniz Hazır</h2>
+                        <h2 className="text-4xl font-normal text-[#0E1E38] uppercase italic">Profiliniz Hazır</h2>
                         <p className="text-slate-500 font-medium">Seçtiğiniz <strong>{path === 'FUND' ? 'FON' : path === 'STOCK' ? 'HİSSE' : 'KARMA'}</strong> yoluna göre size en uygun portföyü hazırladık.</p>
                         <button 
                             onClick={() => window.location.reload()}
-                            className="px-12 py-5 bg-blue-600 text-white rounded-full font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl"
+                            className="px-12 py-5 bg-blue-600 text-white rounded-full font-normal uppercase tracking-widest hover:scale-105 transition-all shadow-xl"
                         >
                             Sonuçları Gör ve Uygula
                         </button>

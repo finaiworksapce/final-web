@@ -48,7 +48,7 @@ export function FeatureSteps({
   return (
     <div className={cn("py-12 md:py-16 bg-white w-full", className)}>
       <div className="max-w-full lg:max-w-[1536px] mx-auto w-full px-6 md:px-12 lg:px-16">
-        <h2 className="text-3xl md:text-5xl lg:text-5xl zodiak-title mb-12 lg:mb-16 text-center text-[#142B50] tracking-tight">
+        <h2 className="text-3xl md:text-5xl lg:text-5xl zodiak-title mb-12 lg:mb-16 text-center text-[#0E1E38] tracking-tight">
           {title}
         </h2>
 
@@ -68,7 +68,7 @@ export function FeatureSteps({
                     <h3
                       className={cn(
                         "text-xl md:text-2xl zodiak-subtitle transition-all duration-300 pointer-events-none",
-                        isActive ? "text-[#142B50] translate-x-1" : "text-[#142B50]/40 hover:text-[#142B50]/70"
+                        isActive ? "text-[#0E1E38] translate-x-1" : "text-[#0E1E38]/40 hover:text-[#0E1E38]/70"
                       )}
                     >
                       {feature.title}
@@ -78,7 +78,7 @@ export function FeatureSteps({
                       transition={{ duration: 0.2 }}
                       className={cn(
                         "pointer-events-none transition-colors",
-                        isActive ? "text-[#142B50]" : "text-[#142B50]/30"
+                        isActive ? "text-[#0E1E38]" : "text-[#0E1E38]/30"
                       )}
                     >
                       <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -94,7 +94,7 @@ export function FeatureSteps({
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                         className="overflow-hidden"
                       >
-                        <p className="mt-3 text-base text-[#142B50]/70 zodiak-desc leading-relaxed pointer-events-none">
+                        <p className="mt-3 text-base text-[#0E1E38]/70 zodiak-desc leading-relaxed pointer-events-none">
                           {feature.content}
                         </p>
                       </motion.div>

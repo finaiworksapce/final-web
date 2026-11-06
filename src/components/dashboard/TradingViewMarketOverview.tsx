@@ -49,7 +49,7 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
             lineType: 0,
             chartType: "area",
             fontColor: "#64748B",
-            widgetFontColor: "#0B1F3A",
+            widgetFontColor: "#0E1E38",
             gridLineColor: "rgba(226, 232, 240, 0.45)",
             volumeUpColor: "rgba(16, 185, 129, 0.18)",
             volumeDownColor: "rgba(239, 68, 68, 0.16)",
@@ -66,7 +66,7 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
             chartOnly: false,
             scalePosition: "right",
             scaleMode: "Normal",
-            fontFamily: "-apple-system, BlinkMacSystemFont, Inter, Segoe UI, Roboto, Ubuntu, sans-serif",
+            fontFamily: "Zodiak, Georgia, serif",
             valuesTracking: "1",
             changeMode: "price-and-percent",
             symbols: [

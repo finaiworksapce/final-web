@@ -129,7 +129,7 @@ export const DataStatusBadge: React.FC<DataStatusBadgeProps> = ({
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black border uppercase tracking-wider',
+        'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-normal border uppercase tracking-wider',
         config.bg,
         className
       )}

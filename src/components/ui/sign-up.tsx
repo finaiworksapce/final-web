@@ -29,7 +29,7 @@ const PremiumInput = ({ label, type, placeholder, value, onChange, colSpan = 1, 
                     value={value}
                     onChange={onChange}
                     className={cn(
-                        "w-full bg-white/80 border border-slate-200 rounded-xl px-4 py-3.5 text-[15px] font-medium text-slate-900 placeholder:text-slate-400 outline-none transition-all duration-300",
+                        "w-full bg-white/80 border border-slate-200 rounded-xl px-4 py-3.5 text-[15px] font-medium text-[#0E1E38] placeholder:text-slate-400 outline-none transition-all duration-300",
                         "focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-sm",
                         showToggle ? "pr-12" : ""
                     )}
@@ -228,7 +228,7 @@ export const AuthComponent = ({ brandName = "FinAi", className, onAuthSuccess }:
                             exit={{ opacity: 0, scale: 0.95, filter: "blur(4px)" }}
                             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                         >
-                            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mt-2 mb-2 tracking-tight">
+                            <h1 className="text-2xl sm:text-3xl font-normal text-[#0E1E38] mt-2 mb-2 tracking-tight">
                                 {isLoginMode ? "Tekrar Hoş Geldin" : "Ayrıcalığa Katıl"}
                             </h1>
                             <p className="text-slate-500 font-medium text-[15px]">
@@ -353,7 +353,7 @@ export const AuthComponent = ({ brandName = "FinAi", className, onAuthSuccess }:
                         {/* Toggle Mode */}
                         <p className="text-center text-[13px] font-semibold text-slate-500 mt-4">
                             {isLoginMode ? "Henüz hesabınız yok mu?" : "Zaten hesabınız var mı?"}{" "}
-                            <button type="button" onClick={toggleAuthMode} className="text-slate-900 font-bold hover:underline underline-offset-4 decoration-2">
+                            <button type="button" onClick={toggleAuthMode} className="text-[#0E1E38] font-bold hover:underline underline-offset-4 decoration-2">
                                 {isLoginMode ? "Hemen Kaydol" : "Giriş Yap"}
                             </button>
                         </p>

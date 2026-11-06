@@ -29,7 +29,7 @@ export function DeleteAccountSection({ onDelete }: DeleteAccountSectionProps) {
         <div className="relative overflow-hidden rounded-3xl border border-rose-200 bg-rose-50/40 p-6 md:p-8 transition-all hover:border-rose-300 group">
             <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 z-10">
                 <div className="space-y-1">
-                    <h3 className="text-base font-black text-rose-700 flex items-center gap-2">
+                    <h3 className="text-base font-normal text-rose-700 flex items-center gap-2">
                         <Trash2 className="w-4 h-4 text-rose-600" />
                         Hesabı Kalıcı Olarak Sil
                     </h3>
@@ -56,7 +56,7 @@ export function DeleteAccountSection({ onDelete }: DeleteAccountSectionProps) {
                             <div className="p-3 rounded-2xl bg-rose-100 border border-rose-200 text-rose-600">
                                 <AlertTriangle className="h-6 w-6" />
                             </div>
-                            <h4 className="text-base font-black text-[#142B50]">Hesabınızı Silmek Üzeresiniz</h4>
+                            <h4 className="text-base font-normal text-[#0E1E38]">Hesabınızı Silmek Üzeresiniz</h4>
                         </div>
 
                         <p className="text-xs text-slate-600 font-medium">
@@ -77,7 +77,7 @@ export function DeleteAccountSection({ onDelete }: DeleteAccountSectionProps) {
                         <div className="flex gap-3 justify-center pt-2">
                             <button
                                 onClick={() => setShowConfirm(false)}
-                                className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition-colors"
+                                className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:text-[#0E1E38] bg-slate-100 hover:bg-slate-200 transition-colors"
                             >
                                 Vazgeç
                             </button>

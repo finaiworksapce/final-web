@@ -144,16 +144,16 @@ export function GundemMarketAgendaWidget({ news }: GundemMarketAgendaWidgetProps
             {/* Header */}
             <div className="flex items-center justify-between mb-3 border-b border-slate-100 pb-2.5">
                 <div className="flex items-center gap-1.5 sm:gap-2">
-                    <div className="w-6 h-6 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-[#142B50]">
-                        <Newspaper className="w-3.5 h-3.5 text-[#142B50]" />
+                    <div className="w-6 h-6 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-[#0E1E38]">
+                        <Newspaper className="w-3.5 h-3.5 text-[#0E1E38]" />
                     </div>
-                    <h3 className="text-[11px] sm:text-xs font-black text-[#142B50] uppercase tracking-wider">
+                    <h3 className="text-[11px] sm:text-xs font-normal text-[#0E1E38] uppercase tracking-wider">
                         Piyasa Gündemi
                     </h3>
                 </div>
                 <Link 
                     href="/dashboard/news" 
-                    className="inline-flex items-center gap-1 text-[10px] font-black text-[#142B50] hover:text-blue-600 transition-colors uppercase tracking-wider"
+                    className="inline-flex items-center gap-1 text-[10px] font-normal text-[#0E1E38] hover:text-blue-600 transition-colors uppercase tracking-wider"
                 >
                     TÜMÜ <ArrowRight className="w-3 h-3" />
                 </Link>
@@ -169,7 +169,7 @@ export function GundemMarketAgendaWidget({ news }: GundemMarketAgendaWidgetProps
                             className="group block p-2.5 rounded-2xl bg-slate-50/80 border border-slate-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all shadow-2xs"
                         >
                             <div className="flex items-center justify-between gap-2 mb-1">
-                                <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-amber-600 bg-amber-50 border border-amber-200/60 px-1.5 py-0.5 rounded-md">
+                                <span className="inline-flex items-center gap-1 text-[9px] font-normal uppercase tracking-wider text-amber-600 bg-amber-50 border border-amber-200/60 px-1.5 py-0.5 rounded-md">
                                     <Sparkles className="w-2.5 h-2.5 text-amber-500" /> Öne Çıkan
                                 </span>
                                 <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400">
@@ -178,7 +178,7 @@ export function GundemMarketAgendaWidget({ news }: GundemMarketAgendaWidgetProps
                                 </div>
                             </div>
 
-                            <h4 className="text-xs sm:text-[13px] font-black text-[#142B50] leading-snug group-hover:text-blue-600 transition-colors line-clamp-2 mb-1">
+                            <h4 className="text-xs sm:text-[13px] font-normal text-[#0E1E38] leading-snug group-hover:text-blue-600 transition-colors line-clamp-2 mb-1">
                                 {featuredNews.title}
                             </h4>
 
@@ -188,7 +188,7 @@ export function GundemMarketAgendaWidget({ news }: GundemMarketAgendaWidgetProps
 
                             {whyItMattersText && (
                                 <div className="mt-1.5 p-2 rounded-xl bg-white border border-blue-100/80 text-[10px] leading-relaxed text-slate-600 font-medium shadow-2xs">
-                                    <span className="font-black text-[#142B50] block mb-0.5">Neden önemli?</span>
+                                    <span className="font-normal text-[#0E1E38] block mb-0.5">Neden önemli?</span>
                                     {whyItMattersText}
                                 </div>
                             )}
@@ -207,7 +207,7 @@ export function GundemMarketAgendaWidget({ news }: GundemMarketAgendaWidgetProps
                                     {formatTime(item.pubDate)}
                                 </span>
                                 <div className="min-w-0 flex-1">
-                                    <h5 className="text-[11px] font-bold text-slate-700 leading-snug group-hover:text-[#142B50] transition-colors line-clamp-1">
+                                    <h5 className="text-[11px] font-bold text-slate-700 leading-snug group-hover:text-[#0E1E38] transition-colors line-clamp-1">
                                         {item.title}
                                     </h5>
                                     <span className="text-[9px] font-semibold text-slate-400 block pt-0.5">
@@ -222,7 +222,7 @@ export function GundemMarketAgendaWidget({ news }: GundemMarketAgendaWidgetProps
                     <div className="pt-1.5 border-t border-slate-100 flex justify-end">
                         <Link
                             href="/dashboard/news"
-                            className="inline-flex items-center gap-1 text-[10px] font-black text-slate-400 hover:text-[#142B50] transition-colors uppercase tracking-wider"
+                            className="inline-flex items-center gap-1 text-[10px] font-normal text-slate-400 hover:text-[#0E1E38] transition-colors uppercase tracking-wider"
                         >
                             Daha fazla gelişme <ArrowRight className="w-3 h-3" />
                         </Link>

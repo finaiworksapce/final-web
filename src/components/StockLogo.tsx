@@ -71,13 +71,13 @@ export function StockLogo({
   return (
     <div
       className={cn(
-        "rounded-full shrink-0 aspect-square flex items-center justify-center font-black text-white bg-gradient-to-br from-[#142B50] to-blue-600 shadow-xs select-none",
+        "rounded-full shrink-0 aspect-square flex items-center justify-center font-normal text-white bg-gradient-to-br from-[#0E1E38] to-blue-600 shadow-xs select-none",
         className
       )}
       title={clean}
     >
       {showFallbackText ? (
-        <span className="text-[10px] font-black uppercase tracking-tight">
+        <span className="text-[10px] font-normal uppercase tracking-tight">
           {clean.slice(0, 2) || "•"}
         </span>
       ) : null}

@@ -347,7 +347,7 @@ export default function LogoShowcase() {
                         <p className="text-xs text-slate-400 uppercase tracking-widest font-semibold text-center">SELECTED</p>
                         <p className="text-white font-bold">{logos.find(l => l.id === selected)?.name}</p>
                     </div>
-                    <button className="bg-white text-black px-6 py-2 rounded-full font-bold hover:bg-cyan-50 transition-colors shadow-lg">
+                    <button className="bg-white text-[#0E1E38] px-6 py-2 rounded-full font-bold hover:bg-cyan-50 transition-colors shadow-lg">
                         Confirm
                     </button>
                 </div>

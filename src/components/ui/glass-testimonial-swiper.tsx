@@ -122,7 +122,7 @@ export const TestimonialStack = ({ testimonials, visibleBehind = 2 }: Testimonia
                                         )}
                                     </div>
                                     <div>
-                                        <h3 className="text-slate-900 font-bold text-lg">{testimonial.name}</h3>
+                                        <h3 className="text-[#0E1E38] font-bold text-lg">{testimonial.name}</h3>
                                         <p className="text-sm text-slate-500 mt-1">{testimonial.role}</p>
                                     </div>
                                 </div>

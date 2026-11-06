@@ -41,13 +41,13 @@ export const AnimatedTabs = ({
             onClick={() => setActiveTab(tab.id)}
             className={cn(
               "relative px-4 py-2 text-xs sm:text-sm font-bold rounded-xl transition-colors cursor-pointer select-none",
-              activeTab === tab.id ? "text-white" : "text-slate-600 hover:text-slate-900"
+              activeTab === tab.id ? "text-white" : "text-slate-600 hover:text-[#0E1E38]"
             )}
           >
             {activeTab === tab.id && (
               <motion.div
                 layoutId="active-tab"
-                className={cn("absolute inset-0 bg-[#142B50] rounded-xl shadow-sm", activeTabClassName)}
+                className={cn("absolute inset-0 bg-[#0E1E38] rounded-xl shadow-sm", activeTabClassName)}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
               />
             )}

@@ -175,7 +175,7 @@ export default function AccountPage() {
                         <button
                             type="submit"
                             disabled={updating}
-                            className="flex items-center gap-2 bg-white text-black px-6 py-2.5 rounded-lg font-medium hover:bg-slate-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex items-center gap-2 bg-white text-[#0E1E38] px-6 py-2.5 rounded-lg font-medium hover:bg-slate-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {updating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                             {updating ? "Güncelleniyor..." : "Değişiklikleri Kaydet"}

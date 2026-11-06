@@ -180,8 +180,8 @@ export default function FinancialRatioHistoryChart({
       {/* Category Tabs */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/70 pb-3">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-4 h-4 text-[#142B50]" />
-          <h4 className="text-xs font-black text-[#142B50] uppercase tracking-wider">
+          <TrendingUp className="w-4 h-4 text-[#0E1E38]" />
+          <h4 className="text-xs font-normal text-[#0E1E38] uppercase tracking-wider">
             {symbol} Tarihsel Finansal Trend Analizi
           </h4>
         </div>
@@ -198,9 +198,9 @@ export default function FinancialRatioHistoryChart({
                   setSelectedMetricKey(categoryConfigs[catKey].metrics[0]);
                 }}
                 className={cn(
-                  "px-3 py-1 text-[11px] font-black rounded-xl transition-all border whitespace-nowrap",
+                  "px-3 py-1 text-[11px] font-normal rounded-xl transition-all border whitespace-nowrap",
                   isCatActive
-                    ? "bg-[#142B50] text-white border-[#78B8F5] shadow-sm"
+                    ? "bg-[#0E1E38] text-white border-[#78B8F5] shadow-sm"
                     : "bg-white text-slate-600 border-slate-200 hover:bg-slate-100"
                 )}
               >
@@ -222,7 +222,7 @@ export default function FinancialRatioHistoryChart({
                 key={metricKey}
                 onClick={() => setSelectedMetricKey(metricKey)}
                 className={cn(
-                  "px-2.5 py-1 text-[10px] font-black rounded-lg transition-all border whitespace-nowrap",
+                  "px-2.5 py-1 text-[10px] font-normal rounded-lg transition-all border whitespace-nowrap",
                   isActive
                     ? "bg-blue-900 text-white border-blue-900 shadow-sm"
                     : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
@@ -238,7 +238,7 @@ export default function FinancialRatioHistoryChart({
         {currentEdu && (
           <button
             onClick={() => setShowTooltip(!showTooltip)}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 text-[#142B50] hover:bg-blue-100 text-[10px] font-black border border-blue-200 transition-all shrink-0"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 text-[#0E1E38] hover:bg-blue-100 text-[10px] font-normal border border-blue-200 transition-all shrink-0"
           >
             <HelpCircle className="w-3.5 h-3.5" />
             {showTooltip ? 'Bilgiyi Gizle' : 'Rasyo Rehberi'}
@@ -250,7 +250,7 @@ export default function FinancialRatioHistoryChart({
       {showTooltip && currentEdu && (
         <div className="bg-blue-950 text-white p-4 rounded-2xl space-y-2.5 text-xs shadow-lg border border-blue-800 animate-in fade-in duration-200">
           <div className="flex items-center justify-between border-b border-blue-800 pb-2">
-            <span className="font-black text-blue-200 uppercase tracking-wider flex items-center gap-1.5 text-[11px]">
+            <span className="font-normal text-blue-200 uppercase tracking-wider flex items-center gap-1.5 text-[11px]">
               <Info className="w-4 h-4 text-sky-400" />
               {currentEdu.name} Rehberi
             </span>
@@ -289,8 +289,8 @@ export default function FinancialRatioHistoryChart({
                 pt.isSectorDisabled ? "border-slate-200 bg-slate-50/50" : "border-slate-200/90"
               )}
             >
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                <Calendar className="w-3 h-3 text-[#142B50]" />
+              <span className="text-[10px] font-normal text-slate-400 uppercase tracking-wider flex items-center gap-1">
+                <Calendar className="w-3 h-3 text-[#0E1E38]" />
                 {pt.periodLabel}
               </span>
 
@@ -302,7 +302,7 @@ export default function FinancialRatioHistoryChart({
                     className={cn(
                       "w-full rounded-lg transition-all duration-500",
                       val >= 0
-                        ? "bg-gradient-to-t from-[#142B50] to-sky-500 shadow-sm"
+                        ? "bg-gradient-to-t from-[#0E1E38] to-sky-500 shadow-sm"
                         : "bg-gradient-to-t from-rose-600 to-rose-400 shadow-sm"
                     )}
                   />
@@ -317,9 +317,9 @@ export default function FinancialRatioHistoryChart({
               <div className="text-right">
                 <span
                   className={cn(
-                    "text-xs font-black tracking-tight block truncate",
+                    "text-xs font-normal tracking-tight block truncate",
                     val != null
-                      ? (val >= 0 ? "text-[#142B50]" : "text-rose-600")
+                      ? (val >= 0 ? "text-[#0E1E38]" : "text-rose-600")
                       : "text-slate-400 text-[10px]"
                   )}
                   title={pt.reason || pt.formattedText}

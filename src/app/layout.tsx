@@ -71,7 +71,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
-      <body className="antialiased font-zodiak text-slate-900 bg-background selection:bg-brand-primary/20 selection:text-brand-primary min-h-screen">
+      <body className="antialiased font-zodiak text-[#0E1E38] bg-background selection:bg-brand-primary/20 selection:text-brand-primary min-h-screen">
         <UserProvider>
           <ToastProvider>
             <NetworkStatusProvider>

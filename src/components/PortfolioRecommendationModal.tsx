@@ -94,14 +94,14 @@ export function PortfolioRecommendationModal({ data, userName, investmentAmount 
           className="bg-white/95 backdrop-blur-md p-2.5 border border-slate-100 rounded-xl shadow-2xl min-w-[140px] pointer-events-none transition-transform duration-100"
           style={{ transform: `translate(${shiftX}px, ${shiftY}px)` }}
         >
-          <p className="font-black text-slate-800 text-[11px] mb-1.5 leading-tight">{pData.asset}</p>
+          <p className="font-normal text-slate-800 text-[11px] mb-1.5 leading-tight">{pData.asset}</p>
           <div className="flex items-center justify-between mb-1.5">
               <span className="text-[10px] font-bold text-slate-400">Oran:</span>
-              <span className="text-[11px] font-black" style={{ color: pData.color }}>%{pData.percentage}</span>
+              <span className="text-[11px] font-normal" style={{ color: pData.color }}>%{pData.percentage}</span>
           </div>
           <div className="flex items-center justify-between pt-1.5 border-t border-slate-100">
               <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Aktarım:</span>
-              <span className="text-[11px] font-black text-[#142B50]">{allocatedAmount}</span>
+              <span className="text-[11px] font-normal text-[#0E1E38]">{allocatedAmount}</span>
           </div>
         </div>
       );
@@ -116,11 +116,11 @@ export function PortfolioRecommendationModal({ data, userName, investmentAmount 
         {/* Header - Küçültüldü */}
         <div className="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50/50">
             <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#142B50] to-blue-600 flex items-center justify-center shadow-md shadow-[#142B50]/20">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0E1E38] to-blue-600 flex items-center justify-center shadow-md shadow-[#0E1E38]/20">
                     <Sparkles className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                    <h2 className="text-sm md:text-base font-black text-[#142B50] tracking-tight">
+                    <h2 className="text-sm md:text-base font-normal text-[#0E1E38] tracking-tight">
                         {displayName}, Özel Portföyün
                     </h2>
                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
@@ -140,11 +140,11 @@ export function PortfolioRecommendationModal({ data, userName, investmentAmount 
                 {/* SOL SÜTUN */}
                 <div className="flex flex-col gap-5 h-full">
                     {/* AI Analiz Kutusu */}
-                    <div className="bg-[#142B50]/[0.02] border border-[#78B8F5]/10 rounded-2xl p-4 relative">
-                        <div className="absolute -top-2.5 -left-2.5 w-6 h-6 rounded-full bg-[#142B50] flex items-center justify-center border-[3px] border-white shadow-md">
+                    <div className="bg-[#0E1E38]/[0.02] border border-[#78B8F5]/10 rounded-2xl p-4 relative">
+                        <div className="absolute -top-2.5 -left-2.5 w-6 h-6 rounded-full bg-[#0E1E38] flex items-center justify-center border-[3px] border-white shadow-md">
                             <Brain className="w-3 h-3 text-white" />
                         </div>
-                        <h3 className="text-[9px] font-black text-[#142B50]/50 uppercase tracking-widest mb-2">Yapay Zeka Analizi</h3>
+                        <h3 className="text-[9px] font-normal text-[#0E1E38]/50 uppercase tracking-widest mb-2">Yapay Zeka Analizi</h3>
                         <p className="text-[11px] font-medium text-slate-700 leading-relaxed italic">
                             "{data.aiAnalysis}"
                         </p>
@@ -152,7 +152,7 @@ export function PortfolioRecommendationModal({ data, userName, investmentAmount 
 
                     {/* Dağılım Listesi */}
                     <div className="flex-1 flex flex-col">
-                        <h3 className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                        <h3 className="text-[9px] font-normal text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-1.5">
                             <TrendingUp className="w-3 h-3" /> Dağılım ve Kişisel Uyum
                         </h3>
                         <div className="flex flex-col gap-2 flex-1 justify-between">
@@ -165,16 +165,16 @@ export function PortfolioRecommendationModal({ data, userName, investmentAmount 
                                         <div className="w-1.5 h-8 rounded-full shrink-0 shadow-sm" style={{ backgroundColor: item.color }} />
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center justify-between mb-0.5">
-                                                <span className="text-xs font-black text-slate-800 pr-2">{item.asset}</span>
-                                                <span className="text-sm font-black" style={{ color: item.color }}>%{item.percentage}</span>
+                                                <span className="text-xs font-normal text-slate-800 pr-2">{item.asset}</span>
+                                                <span className="text-sm font-normal" style={{ color: item.color }}>%{item.percentage}</span>
                                             </div>
-                                            <div className="text-[9px] font-bold text-slate-400">Aylık: <span className="text-[#142B50]">{allocatedAmount}</span></div>
+                                            <div className="text-[9px] font-bold text-slate-400">Aylık: <span className="text-[#0E1E38]">{allocatedAmount}</span></div>
                                         </div>
                                     </div>
                                     <div className="bg-white rounded-lg p-2 border border-[#78B8F5]/5 flex items-start gap-1.5">
-                                        <Info className="w-3 h-3 text-[#142B50]/60 shrink-0 mt-0.5" />
+                                        <Info className="w-3 h-3 text-[#0E1E38]/60 shrink-0 mt-0.5" />
                                         <p className="text-[9px] text-slate-600 font-medium leading-tight">
-                                            <span className="font-bold text-[#142B50]">Neden Önerdik:</span> {item.description}
+                                            <span className="font-bold text-[#0E1E38]">Neden Önerdik:</span> {item.description}
                                         </p>
                                     </div>
                                 </div>
@@ -210,19 +210,19 @@ export function PortfolioRecommendationModal({ data, userName, investmentAmount 
                             </PieChart>
                         </ResponsiveContainer>
                         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                            <div className="text-xl font-black text-[#142B50]">%100</div>
+                            <div className="text-xl font-normal text-[#0E1E38]">%100</div>
                             <span className="text-[8px] font-bold text-slate-400 tracking-widest uppercase">Toplam</span>
                         </div>
                     </div>
 
                     {/* Potansiyel (Simülasyon) Modülü */}
                     {simulations && (
-                    <div className="bg-gradient-to-br from-[#142B50] to-blue-700 rounded-2xl p-4 shadow-lg shadow-[#142B50]/20 text-white relative overflow-hidden">
+                    <div className="bg-gradient-to-br from-[#0E1E38] to-blue-700 rounded-2xl p-4 shadow-lg shadow-[#0E1E38]/20 text-white relative overflow-hidden">
                         <div className="absolute -right-5 -top-5 w-24 h-24 bg-white/10 rounded-full blur-xl" />
                         <div className="relative z-10">
                             <div className="flex items-center justify-between mb-4">
                                 <div>
-                                    <h3 className="text-[9px] font-black text-blue-200 uppercase tracking-widest mb-1 flex items-center gap-1.5">
+                                    <h3 className="text-[9px] font-normal text-blue-200 uppercase tracking-widest mb-1 flex items-center gap-1.5">
                                         <LineChart className="w-3 h-3" /> Gerçekçi Büyüme Projeksiyonu
                                     </h3>
                                     <p className="text-[9px] text-blue-100/70 font-medium">Sermayenizin sektör bazlı büyüme tahminleri (Bileşik):</p>
@@ -234,9 +234,9 @@ export function PortfolioRecommendationModal({ data, userName, investmentAmount 
                                     <div key={idx} className="bg-white/10 backdrop-blur-md rounded-xl p-2.5 border border-white/10">
                                         <div className="flex items-center justify-between mb-1">
                                             <span className="text-[8px] font-bold text-blue-200 uppercase tracking-widest">{sim.label}</span>
-                                            <span className="text-[8px] font-black text-emerald-300 bg-emerald-400/20 px-1.5 py-0.5 rounded text-center">{sim.growth}</span>
+                                            <span className="text-[8px] font-normal text-emerald-300 bg-emerald-400/20 px-1.5 py-0.5 rounded text-center">{sim.growth}</span>
                                         </div>
-                                        <div className="text-sm font-black tracking-tight">{sim.value}</div>
+                                        <div className="text-sm font-normal tracking-tight">{sim.value}</div>
                                     </div>
                                 ))}
                             </div>
@@ -246,7 +246,7 @@ export function PortfolioRecommendationModal({ data, userName, investmentAmount 
 
                     {/* Dağılımın Stratejik Avantajları */}
                     <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4">
-                        <h3 className="text-[9px] font-black text-slate-800 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                        <h3 className="text-[9px] font-normal text-slate-800 uppercase tracking-widest mb-2 flex items-center gap-1.5">
                             <Sparkles className="w-3 h-3 text-emerald-500" /> Dağılımın Avantajları
                         </h3>
                         <ul className="text-[10px] text-slate-600 font-medium space-y-1.5 pl-1">

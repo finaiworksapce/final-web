@@ -75,7 +75,7 @@ export default function ErrorBlock({
 
       {/* Status Code / Error Identifier */}
       <div className="relative select-none">
-        <p className="font-mono text-6xl font-black tracking-tighter text-foreground sm:text-7xl md:text-8xl drop-shadow-sm">
+        <p className="font-mono text-6xl font-normal tracking-tighter text-foreground sm:text-7xl md:text-8xl drop-shadow-sm">
           {code}
         </p>
         <div

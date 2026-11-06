@@ -204,7 +204,7 @@ const StepperIndicator = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "relative flex size-6 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-500 data-[state=active]:bg-[#142B50] data-[state=completed]:bg-emerald-600 data-[state=active]:text-white data-[state=completed]:text-white shadow-xs",
+        "relative flex size-6 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-bold text-slate-500 data-[state=active]:bg-[#0E1E38] data-[state=completed]:bg-emerald-600 data-[state=active]:text-white data-[state=completed]:text-white shadow-xs",
         className,
       )}
       data-state={state}
@@ -243,7 +243,7 @@ const StepperTitle = React.forwardRef<
   HTMLHeadingElement,
   React.HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => (
-  <h3 ref={ref} className={cn("text-xs font-black", className)} {...props} />
+  <h3 ref={ref} className={cn("text-xs font-normal", className)} {...props} />
 ));
 StepperTitle.displayName = "StepperTitle";
 

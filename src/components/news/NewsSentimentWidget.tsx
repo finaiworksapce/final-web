@@ -28,11 +28,11 @@ export function NewsSentimentWidget({ distribution }: NewsSentimentWidgetProps) 
         <div className="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-xl bg-[#142B50] text-white flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-xl bg-[#0E1E38] text-white flex items-center justify-center">
                         <BrainCircuit className="w-4 h-4" />
                     </div>
                     <div>
-                        <h3 className="text-xs font-black text-[#142B50] uppercase tracking-wider">
+                        <h3 className="text-xs font-normal text-[#0E1E38] uppercase tracking-wider">
                             Piyasa AI Duyarlılık Endeksi
                         </h3>
                         <p className="text-[10px] font-bold text-slate-400">
@@ -41,7 +41,7 @@ export function NewsSentimentWidget({ distribution }: NewsSentimentWidgetProps) 
                     </div>
                 </div>
 
-                <span className={`px-2.5 py-1 rounded-full text-[10px] font-black border ${dominantColor}`}>
+                <span className={`px-2.5 py-1 rounded-full text-[10px] font-normal border ${dominantColor}`}>
                     {dominantSentiment}
                 </span>
             </div>
@@ -66,7 +66,7 @@ export function NewsSentimentWidget({ distribution }: NewsSentimentWidgetProps) 
                     />
                 </div>
 
-                <div className="flex items-center justify-between text-[11px] font-black pt-1">
+                <div className="flex items-center justify-between text-[11px] font-normal pt-1">
                     <span className="text-emerald-600 flex items-center gap-1">
                         <TrendingUp className="w-3.5 h-3.5" /> %{bullish} Boğa
                     </span>

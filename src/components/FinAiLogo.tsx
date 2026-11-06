@@ -19,7 +19,7 @@ export const FinAiLogo = ({ className, size = "md" }: FinAiLogoProps) => {
     return (
         <div className={cn("relative flex items-center justify-center shrink-0 group", className)} title="FinAi - Zeki Yatırım Asistanı" style={{ width: targetSize, height: targetSize }}>
             <Image
-                src="/logo.png"
+                src="/logo.svg"
                 alt="FinAi Zeki Yatırım Asistanı"
                 width={targetSize}
                 height={targetSize}
