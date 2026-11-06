@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Sparkles, TrendingUp, Zap, ArrowRight, Check } from "lucide-react";
+import { Sparkles, TrendingUp, Zap, ArrowRight, Check, LucideIcon } from "lucide-react";
 import { FinancialLiteracyLevel } from "@/config/onboarding-questions";
 
 interface LiteracyStepProps {
@@ -15,7 +15,7 @@ const LEVELS: {
   title: string;
   badge: string;
   badgeColor: string;
-  icon: React.ElementType;
+  icon: LucideIcon;
   description: string;
   features: string[];
 }[] = [
