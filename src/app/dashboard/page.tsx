@@ -73,7 +73,7 @@ export default function DashboardPage() {
         <div className="flex flex-col min-h-[calc(100vh-3.5rem)] bg-gradient-to-b from-[#F5F7FA] via-[#F5F7FA] to-[#D6E4FF]/25 text-[#040989] w-full mx-auto relative overflow-x-hidden font-clash">
             <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[#D6E4FF]/30 blur-[120px] pointer-events-none" />
 
-            <div className="w-full max-w-[1600px] mx-auto px-2.5 py-3 sm:px-6 md:px-10 lg:py-6 flex flex-col justify-between gap-4 sm:gap-6 relative z-10 flex-1 min-h-[calc(100vh-3.5rem)] pb-6 md:pb-10">
+            <div className="w-full max-w-[2500px] mx-auto px-2 min-[360px]:px-3 sm:px-6 md:px-8 xl:px-10 py-2 min-[360px]:py-3 lg:py-6 flex flex-col justify-between gap-3.5 sm:gap-5 xl:gap-6 relative z-10 flex-1 min-h-[calc(100vh-3.5rem)] pb-6 md:pb-10">
                 <AnimatePresence>
                     {!isDev && !isDataLoaded && (
                         <motion.div
@@ -104,10 +104,6 @@ export default function DashboardPage() {
                     </div>
 
                     <div className="flex items-center gap-2.5 self-start sm:self-center">
-                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border-0 text-[#040989] text-xs clash-subtitle font-[325] shadow-xs">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                            <span>Son veri: <span className="font-numbers">{new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}</span></span>
-                        </div>
                         <Link 
                             href="/dashboard/portfolio" 
                             className="px-3.5 py-1.5 rounded-xl bg-[#004BFA] hover:bg-[#004BFA]/90 text-white font-normal text-xs clash-subtitle font-[325] shadow-xs transition-all flex items-center gap-1.5"
@@ -118,23 +114,23 @@ export default function DashboardPage() {
                     </div>
                 </div>
 
-                {/* DESKTOP LAYOUT (≥1024px) */}
-                <div className="hidden lg:flex flex-col gap-6 w-full relative z-10">
-                    {/* 1. ÜST BÖLÜM: TOPLAM VARLIK (%50), VARLIK DAĞILIMI (%20), FİNANSAL RAPOR (%30) */}
-                    <div className="grid grid-cols-1 lg:grid-cols-[5fr_2fr_3fr] gap-4 xl:gap-5 items-stretch w-full">
-                        <div className="flex flex-col min-w-0">
+                {/* UNIFIED RESPONSIVE LAYOUT (250px to 2500px) */}
+                <div className="flex flex-col gap-3.5 sm:gap-5 xl:gap-6 w-full relative z-10">
+                    {/* 1. ÜST BÖLÜM: TOPLAM VARLIK (%42), VARLIK DAĞILIMI (%25), FİNANSAL RAPOR (%33) */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4 xl:gap-5 items-stretch w-full">
+                        <div className="flex flex-col min-w-0 lg:col-span-12 xl:col-span-5 2xl:col-span-5">
                             <DashboardSummaryCards />
                         </div>
-                        <div className="flex flex-col min-w-0">
+                        <div className="flex flex-col min-w-0 lg:col-span-6 xl:col-span-3 2xl:col-span-3">
                             <DynamicAssetAllocationContainer />
                         </div>
-                        <div className="flex flex-col min-w-0">
+                        <div className="flex flex-col min-w-0 lg:col-span-6 xl:col-span-4 2xl:col-span-4">
                             <FinAiYesterdayReportWidget />
                         </div>
                     </div>
 
                     {/* 2. İKİNCİ BÖLÜM: PİYASA GENEL GÖRÜNÜMÜ (%50) & GÜNLÜK AJANDA (%50) */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 xl:gap-5 items-stretch w-full">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5 sm:gap-4 xl:gap-5 items-stretch w-full">
                         <div className="flex flex-col min-w-0">
                             <MarketOverviewWidget />
                         </div>
@@ -144,44 +140,6 @@ export default function DashboardPage() {
                     </div>
 
                     {/* 3. ÜÇÜNCÜ BÖLÜM: SON HABERLER (%100) */}
-                    <div className="w-full">
-                        <LatestNewsWidget news={news} />
-                    </div>
-                </div>
-
-                {/* TABLET & MOBILE LAYOUT (<1024px) */}
-                <div className="flex lg:hidden flex-col gap-3.5 sm:gap-4 w-full relative z-10">
-                    {/* 1. TOPLAM VARLIK */}
-                    <div className="w-full">
-                        <DashboardSummaryCards layout="stacked" />
-                    </div>
-
-                    {/* 2. VARLIK DAĞILIMI */}
-                    <div className="w-full">
-                        <DynamicAssetAllocationContainer />
-                    </div>
-
-                    {/* 3. FİNANSAL RAPOR */}
-                    <div className="w-full">
-                        <FinAiYesterdayReportWidget />
-                    </div>
-
-                    {/* 4. PİYASA GENEL GÖRÜNÜMÜ */}
-                    <div className="w-full">
-                        <MarketOverviewWidget />
-                    </div>
-
-                    {/* 5. GÜNLÜK AJANDA */}
-                    <div className="w-full">
-                        <DailyAgendaWidget />
-                    </div>
-
-                    {/* 6. MEVCUT PİYASA ÖZETİ */}
-                    <div className="w-full rounded-2xl overflow-hidden border border-slate-100 shadow-2xs">
-                        <FinancialTicker />
-                    </div>
-
-                    {/* 7. SON HABERLER */}
                     <div className="w-full">
                         <LatestNewsWidget news={news} />
                     </div>

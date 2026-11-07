@@ -22,7 +22,7 @@ export function LatestNewsWidget({ news }: LatestNewsWidgetProps) {
     const newsList = Array.isArray(news) ? news.slice(0, 5) : [];
 
     return (
-        <div className="bg-white rounded-3xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between h-full">
+        <div className="bg-white rounded-2xl min-[360px]:rounded-3xl p-3 min-[360px]:p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between h-full">
             {/* 1. Başlık Alanı */}
             <div className="flex items-center justify-between pb-3 border-b border-[#D6E4FF]/50 shrink-0 mb-3">
                 <div className="flex items-center gap-2">
@@ -46,7 +46,7 @@ export function LatestNewsWidget({ news }: LatestNewsWidgetProps) {
 
             {/* 2. Haber Listesi: 5 Kolonlu Kartlar */}
             {newsList.length > 0 ? (
-                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 divide-y sm:divide-y-0 sm:divide-x divide-[#D6E4FF]/40 gap-2 sm:gap-0">
+                <div className="flex-1 grid grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 divide-y sm:divide-y-0 sm:divide-x divide-[#D6E4FF]/40 gap-2 sm:gap-0">
                     {newsList.map((item, idx) => {
                         const href = item.slug
                             ? `/dashboard/news/${item.slug}`
@@ -63,11 +63,11 @@ export function LatestNewsWidget({ news }: LatestNewsWidgetProps) {
                                 <NewsThumbnail 
                                     imageUrl={item.imageUrl} 
                                     title={item.title} 
-                                    className="w-[70px] h-[70px] sm:w-[76px] sm:h-[76px] xl:w-[82px] xl:h-[82px] rounded-xl border border-[#D6E4FF]/50 shadow-xs"
+                                    className="w-[56px] h-[56px] min-[360px]:w-[70px] min-[360px]:h-[70px] sm:w-[76px] sm:h-[76px] xl:w-[82px] xl:h-[82px] rounded-xl border border-[#D6E4FF]/50 shadow-xs"
                                 />
 
                                 {/* Sağ Bilgi Alanı */}
-                                <div className="min-w-0 flex-1 flex flex-col justify-between h-[70px] sm:h-[76px] xl:h-[82px]">
+                                <div className="min-w-0 flex-1 flex flex-col justify-between min-h-[56px] min-[360px]:h-[70px] sm:h-[76px] xl:h-[82px]">
                                     <span className="text-[11px] sm:text-xs font-numbers text-[#040989]/70">
                                         {formatClockTime(item.pubDate)}
                                     </span>

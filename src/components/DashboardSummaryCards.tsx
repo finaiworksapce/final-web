@@ -77,8 +77,8 @@ export function DashboardSummaryCards({ layout = "grid", compact = false }: { la
     return (
         <div className={`bg-gradient-to-br from-[#02041A] via-[#040989] to-[#02041A] text-white shadow-xl shadow-[#0E1E38]/20 relative overflow-hidden flex flex-col justify-between h-full group ${
             compact 
-                ? 'rounded-2xl p-3.5 sm:p-4 min-h-0' 
-                : 'rounded-3xl p-4 sm:p-5 min-h-[250px]'
+                ? 'rounded-2xl p-3 sm:p-4 min-h-0' 
+                : 'rounded-2xl min-[360px]:rounded-3xl p-3 min-[360px]:p-4 sm:p-5 min-h-[220px] min-[360px]:min-h-[250px]'
         }`}>
             {/* Ambient Background Gradient Circles */}
             <div className="absolute -top-12 -right-12 w-48 h-48 bg-[#004BFA]/15 rounded-full blur-3xl pointer-events-none" />
@@ -107,13 +107,13 @@ export function DashboardSummaryCards({ layout = "grid", compact = false }: { la
 
             <div className="relative z-10 flex flex-col justify-between h-full">
                 {/* 1. Üst Başlık */}
-                <div className={`flex items-center justify-between gap-2 border-b border-white/10 ${compact ? 'pb-1.5' : 'pb-2.5'}`}>
+                <div className={`flex items-center justify-between gap-1.5 flex-wrap border-b border-white/10 ${compact ? 'pb-1.5' : 'pb-2.5'}`}>
                     <div className="flex items-center gap-2">
                         <div className={`rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white shadow-xs shrink-0 ${compact ? 'w-6 h-6' : 'w-7 h-7'}`}>
                             <Wallet className={`${compact ? 'w-3 h-3' : 'w-3.5 h-3.5'} text-white`} />
                         </div>
                         <div className="flex items-center gap-1.5">
-                            <h3 className={`clash-subtitle font-[325] text-[#F5F7FA] tracking-tight ${compact ? 'text-xs' : 'text-xs sm:text-[13px]'}`}>
+                            <h3 className={`clash-subtitle font-[325] text-[#F5F7FA] tracking-tight ${compact ? 'text-[11px] min-[360px]:text-xs' : 'text-[11px] min-[360px]:text-xs sm:text-[13px]'}`}>
                                 Toplam Varlık Değeri
                             </h3>
                             {/* Bakiye Gizle / Göster */}
@@ -133,7 +133,7 @@ export function DashboardSummaryCards({ layout = "grid", compact = false }: { la
                     </div>
 
                     {/* Sağ Üst Canlı Portföy Rozeti (%35/#0E1E38 & White Accent) */}
-                    <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#004BFA] text-[#F5F7FA] font-medium shadow-sm shadow-[#004BFA]/30 clash-subtitle font-[325] shadow-xs ${compact ? 'text-[9px]' : 'text-[11px]'}`}>
+                    <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#004BFA] text-[#F5F7FA] font-medium shadow-sm shadow-[#004BFA]/30 clash-subtitle font-[325] shadow-xs ${compact ? 'text-[9px]' : 'text-[9px] min-[360px]:text-[10px] sm:text-[11px]'}`}>
                         <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                         <span>Canlı Portföy</span>
                     </div>
@@ -142,7 +142,7 @@ export function DashboardSummaryCards({ layout = "grid", compact = false }: { la
                 {/* 2. Büyük Rakam ve Değişim Rozeti (Orta Bölüm) */}
                 <div className={compact ? "py-1.5 my-auto" : "my-auto py-2"}>
                     <h2 className={`font-numbers font-normal text-white tracking-tight truncate leading-none ${
-                        compact ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl lg:text-[42px]'
+                        compact ? 'text-xl min-[360px]:text-2xl sm:text-3xl' : 'text-[22px] min-[320px]:text-[26px] min-[380px]:text-3xl sm:text-4xl lg:text-[40px] 2xl:text-[44px]'
                     }`}>
                         {isBalanceHidden ? "₺ ••••••••" : formatCurrency(totalValue)}
                     </h2>
@@ -162,21 +162,21 @@ export function DashboardSummaryCards({ layout = "grid", compact = false }: { la
                 </div>
 
                 {/* 3. Alt Bilgi Şeridi */}
-                <div className={`grid grid-cols-3 gap-2 border-t border-white/15 text-left ${compact ? 'pt-1.5' : 'pt-2.5'}`}>
+                <div className={`grid grid-cols-3 gap-1 min-[340px]:gap-2 border-t border-white/15 text-left ${compact ? 'pt-1.5' : 'pt-2.5'}`}>
                     <div>
-                        <span className={`clash-desc font-[225] text-[#D6E4FF]/80 block ${compact ? 'text-[10px]' : 'text-[11px]'}`}>
-                            Toplam Yatırım
+                        <span className={`clash-desc font-[225] text-[#D6E4FF]/80 block ${compact ? 'text-[9px]' : 'text-[9px] min-[360px]:text-[10px] sm:text-[11px]'}`}>
+                            <span className="hidden min-[340px]:inline">Toplam </span>Yatırım
                         </span>
-                        <span className={`font-numbers font-normal text-white block truncate ${compact ? 'text-xs mt-0.5' : 'text-xs sm:text-[13px] mt-0.5'}`}>
+                        <span className={`font-numbers font-normal text-white block truncate ${compact ? 'text-[10px] min-[360px]:text-xs mt-0.5' : 'text-[10px] min-[340px]:text-xs sm:text-[13px] 2xl:text-sm mt-0.5'}`}>
                             {isBalanceHidden ? "₺ ••••••" : formatCurrency(totalCost)}
                         </span>
                     </div>
 
                     <div>
-                        <span className={`clash-desc font-[225] text-[#D6E4FF]/80 block ${compact ? 'text-[10px]' : 'text-[11px]'}`}>
-                            Toplam Kar / Zarar
+                        <span className={`clash-desc font-[225] text-[#D6E4FF]/80 block ${compact ? 'text-[9px]' : 'text-[9px] min-[360px]:text-[10px] sm:text-[11px]'}`}>
+                            <span className="hidden min-[340px]:inline">Toplam </span>Kar / Zarar
                         </span>
-                        <span className={`clash-title font-normal text-white block truncate ${compact ? 'text-xs mt-0.5' : 'text-xs sm:text-[13px] mt-0.5'}`}>
+                        <span className={`clash-title font-normal text-white block truncate ${compact ? 'text-[10px] min-[360px]:text-xs mt-0.5' : 'text-[10px] min-[340px]:text-xs sm:text-[13px] 2xl:text-sm mt-0.5'}`}>
                             {isBalanceHidden
                                 ? (isPositive ? "+₺ •••" : "-₺ •••")
                                 : `${isPositive ? "+" : ""}${formatCurrency(totalProfit)}`}
@@ -184,10 +184,10 @@ export function DashboardSummaryCards({ layout = "grid", compact = false }: { la
                     </div>
 
                     <div>
-                        <span className={`clash-desc font-[225] text-[#D6E4FF]/80 block ${compact ? 'text-[10px]' : 'text-[11px]'}`}>
-                            Portföy Pozisyonu
+                        <span className={`clash-desc font-[225] text-[#D6E4FF]/80 block ${compact ? 'text-[9px]' : 'text-[9px] min-[360px]:text-[10px] sm:text-[11px]'}`}>
+                            <span className="hidden min-[340px]:inline">Portföy </span>Pozisyon
                         </span>
-                        <span className={`clash-title font-normal text-white block truncate ${compact ? 'text-xs mt-0.5' : 'text-xs sm:text-[13px] mt-0.5'}`}>
+                        <span className={`clash-title font-normal text-white block truncate ${compact ? 'text-[10px] min-[360px]:text-xs mt-0.5' : 'text-[10px] min-[340px]:text-xs sm:text-[13px] 2xl:text-sm mt-0.5'}`}>
                             {effectiveAssets.length} Aktif Varlık
                         </span>
                     </div>

@@ -51,14 +51,9 @@ export const metadata: Metadata = {
   },
 };
 
-import { Inter, Outfit, Space_Grotesk } from "next/font/google";
 import { UserProvider } from "@/components/providers/UserProvider";
 import { ToastProvider } from "@/components/providers/ToastProvider";
 import { NetworkStatusProvider } from "@/components/providers/NetworkStatusProvider";
-
-const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"], variable: '--font-inter' });
-const outfit = Outfit({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"], variable: '--font-outfit' });
-const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: '--font-space-grotesk' });
 
 export default function RootLayout({
   children,
@@ -66,7 +61,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="tr" className={`${inter.variable} ${outfit.variable} ${spaceGrotesk.variable}`}>
+    <html lang="tr">
       <head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />

@@ -182,11 +182,17 @@ export default function HomeClient() {
                   className="clash-title text-[65px] sm:text-[90px] md:text-[120px] lg:text-[135px] leading-[1.0] tracking-tight text-[#0E1E38] py-2 sm:py-4 relative flex justify-center items-center w-full mx-auto"
                 >
                   <span className="relative inline-block z-10">
-                    <span className="text-[#0E1E38] px-2 clash-title">
+                    <span className="text-[#040989] px-2 clash-title">
                       FinAi
                     </span>
-                    <svg className="absolute w-full h-2 sm:h-3 -bottom-1 left-0 text-[#78B8F5] opacity-100" viewBox="0 0 100 10" preserveAspectRatio="none">
-                      <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="6" fill="transparent" />
+                    <svg className="absolute w-full h-2 sm:h-3.5 -bottom-1 left-0 overflow-visible" viewBox="0 0 100 10" preserveAspectRatio="none">
+                      <defs>
+                        <linearGradient id="finaiUnderlineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stopColor="#004BFA" />
+                          <stop offset="100%" stopColor="#5B80FF" />
+                        </linearGradient>
+                      </defs>
+                      <path d="M0 5 Q 50 10 100 5" stroke="url(#finaiUnderlineGrad)" strokeWidth="6" strokeLinecap="round" fill="transparent" />
                     </svg>
                   </span>
                 </motion.h1>

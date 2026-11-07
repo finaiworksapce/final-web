@@ -92,7 +92,7 @@ export function FinAiYesterdayReportWidget() {
     const isPositive = displayDiffValue >= 0;
 
     return (
-        <div className="bg-white rounded-3xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 min-h-[250px] h-full flex flex-col justify-between group">
+        <div className="bg-white rounded-2xl min-[360px]:rounded-3xl p-3 min-[360px]:p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 min-h-[250px] h-full flex flex-col justify-between group">
             {/* 1. Üst Başlık */}
             <div className="flex items-center justify-between pb-2 border-b border-[#D6E4FF]/50">
                 <div className="flex items-center gap-2">
@@ -118,13 +118,13 @@ export function FinAiYesterdayReportWidget() {
                     </div>
                 ) : (
                     <div className="space-y-1.5">
-                        <h4 className="text-sm sm:text-[15px] clash-subtitle font-[325] text-[#040989] tracking-tight leading-snug">
+                        <h4 className="text-xs min-[360px]:text-sm sm:text-[15px] clash-subtitle font-[325] text-[#040989] tracking-tight leading-snug">
                             {isPositive
                                 ? "Portföy Gelişim ve Büyüme Değerlendirmesi"
                                 : "Piyasa Dinamikleri ve Portföy Dengesi"}
                         </h4>
 
-                        <p className="text-xs clash-desc font-[225] text-[#040989]/80 leading-relaxed line-clamp-4">
+                        <p className="text-[11px] min-[360px]:text-xs clash-desc font-[225] text-[#040989]/80 leading-relaxed line-clamp-3 min-[360px]:line-clamp-4 xl:line-clamp-5">
                             {narrativeToDisplay}
                         </p>
                     </div>
@@ -134,7 +134,7 @@ export function FinAiYesterdayReportWidget() {
             {/* 3. Alt Aksiyon Linki */}
             <div className="pt-2 border-t border-[#D6E4FF]/50 flex items-center justify-between">
                 <Link
-                    href="/dashboard/portfolio"
+                    href="/dashboard/report"
                     className="text-xs clash-subtitle font-[325] text-[#040989] hover:text-[#040989]/80 transition-colors inline-flex items-center gap-1.5 group/link"
                 >
                     <span>Detaylı portföy analizi</span>

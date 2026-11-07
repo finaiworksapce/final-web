@@ -3102,7 +3102,7 @@ export default function PortfolioPage() {
                 }
             }}
             
-            className="p-4 md:p-10 space-y-6 md:space-y-8 min-h-full bg-white text-slate-800 rounded-[2rem] md:rounded-[2.5rem] shadow-xl shadow-[#0E1E38]/5 pb-20 md:pb-24 relative isolate m-1 md:m-2 xl:m-4 border border-slate-100 max-w-full"
+            className="p-2 min-[360px]:p-3 sm:p-5 md:p-8 xl:p-10 space-y-4 sm:space-y-6 md:space-y-8 min-h-full bg-white text-slate-800 rounded-2xl min-[360px]:rounded-[2rem] md:rounded-[2.5rem] shadow-xl shadow-[#0E1E38]/5 pb-16 sm:pb-20 md:pb-24 relative isolate m-0 min-[360px]:m-1 md:m-2 xl:m-4 border border-slate-100 max-w-full"
         >
             
 
@@ -3174,9 +3174,9 @@ export default function PortfolioPage() {
                         <div className="absolute -top-16 -right-16 w-48 h-48 bg-emerald-100/35 rounded-full blur-3xl pointer-events-none" />
                         <div className="absolute -bottom-16 -left-16 w-36 h-36 bg-emerald-50/50 rounded-full blur-2xl pointer-events-none" />
 
-                        <div className="grid grid-cols-3 divide-x divide-emerald-100/70 h-full items-center relative z-10">
+                        <div className="grid grid-cols-1 min-[500px]:grid-cols-3 divide-y min-[500px]:divide-y-0 min-[500px]:divide-x divide-emerald-100/70 gap-2 min-[500px]:gap-0 h-full items-center relative z-10">
                             {/* 1. Sütun: Günlük K/Z */}
-                            <div className="px-2 sm:px-3 flex flex-col justify-center">
+                            <div className="p-2 min-[500px]:px-2.5 sm:px-3 flex flex-col justify-center">
                                 <div className="flex items-center gap-2 mb-1.5">
                                     <div className="w-7 h-7 rounded-xl bg-blue-50 border border-blue-100/60 text-blue-600 flex items-center justify-center shrink-0 shadow-sm">
                                         <TrendingUp className="w-3.5 h-3.5 text-blue-600" />

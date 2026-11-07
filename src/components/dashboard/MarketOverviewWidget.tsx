@@ -5,7 +5,7 @@ import TradingViewMarketOverview from "@/components/dashboard/TradingViewMarketO
 
 export function MarketOverviewWidget() {
     return (
-        <div className="bg-white rounded-3xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 h-[395px] flex flex-col justify-between group overflow-hidden">
+        <div className="bg-white rounded-2xl min-[360px]:rounded-3xl p-3 min-[360px]:p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 h-[380px] min-[360px]:h-[395px] xl:h-[420px] 2xl:h-[450px] flex flex-col justify-between group overflow-hidden">
             {/* 1. Üst Başlık */}
             <div className="flex items-center justify-between pb-2 border-b border-[#D6E4FF]/50 shrink-0">
                 <div className="flex items-center gap-2">

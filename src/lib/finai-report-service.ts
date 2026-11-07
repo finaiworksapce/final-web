@@ -71,7 +71,7 @@ export async function generateFinAiReport(
     }
 
     if (assets.length === 0) {
-        assets = await PortfolioService.getAssets();
+        try { assets = await PortfolioService.getAssets(); } catch { assets = []; }
     }
 
     // Eğer oturum yoksa veya veritabanı boşsa tüm aktif varlıkları çek

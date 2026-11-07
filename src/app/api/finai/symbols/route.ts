@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { apiSuccess } from '@/lib/api/finai-api-response';
 import { sectorMapping } from '@/data/sectorMapping';

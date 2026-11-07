@@ -79,19 +79,18 @@ function SidebarMarketWidgetsComponent() {
     }, []);
 
     return (
-        <div className="py-3 px-3 md:px-4 border-y border-white/10 bg-gradient-to-b from-[#02041A] to-[#040989]/90 text-white select-none relative overflow-hidden">
-            {/* Ambient Glow */}
-            <div className="absolute -top-10 -right-10 w-28 h-28 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-            <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-blue-400/10 rounded-full blur-xl pointer-events-none" />
+        <div className="mx-2 md:mx-3 p-3 rounded-2xl bg-[#F5F7FA] border border-[#D6E4FF] text-[#040989] shadow-md select-none relative overflow-hidden">
+            {/* Ambient subtle light-blue glow */}
+            <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#D6E4FF]/40 rounded-full blur-xl pointer-events-none" />
 
             {/* Başlık & Canlı Rozeti */}
-            <div className="flex items-center justify-between px-1 mb-2 relative z-10">
-                <span className="text-[10px] font-normal tracking-widest uppercase text-blue-200/80">
+            <div className="flex items-center justify-between px-1 mb-2 relative z-10 border-b border-[#D6E4FF]/60 pb-1.5">
+                <span className="text-[10px] clash-subtitle font-[325] tracking-widest uppercase text-[#040989]/80">
                     PİYASA
                 </span>
                 <div className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-[9px] font-bold text-blue-200/70 tracking-tight">Canlı</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-[9px] font-bold text-[#004BFA] tracking-tight">Canlı</span>
                 </div>
             </div>
 
@@ -105,24 +104,24 @@ function SidebarMarketWidgetsComponent() {
                     return (
                         <div
                             key={item.id}
-                            className="flex items-center justify-between px-1 py-1.5 transition-colors duration-150"
+                            className="flex items-center justify-between px-1.5 py-1 rounded-lg hover:bg-[#D6E4FF]/30 transition-colors duration-150"
                         >
                             {/* Sol: İkon & Varlık Adı */}
                             <div className="flex items-center gap-2 min-w-0">
-                                <Icon className="w-3.5 h-3.5 text-blue-200/70 shrink-0" />
-                                <span className="text-[11px] font-bold text-white/90 truncate tracking-tight">
+                                <Icon className="w-3.5 h-3.5 text-[#004BFA] shrink-0" />
+                                <span className="text-[11px] clash-subtitle font-[325] text-[#040989] truncate tracking-tight">
                                     {item.label}
                                 </span>
                             </div>
 
                             {/* Sağ: Değer & Yüzde Değişimi */}
-                            <div className="flex items-center gap-2 shrink-0">
-                                <span className="text-[11px] font-normal text-white tabular-nums">
+                            <div className="flex items-center gap-1.5 shrink-0">
+                                <span className="text-[11px] font-numbers font-medium text-[#040989] tabular-nums">
                                     {formatPrice(item.price, decimals)}{item.currencySuffix}
                                 </span>
                                 <span
-                                    className={`text-[10px] font-bold tabular-nums flex items-center ${
-                                        isPositive ? "text-emerald-400" : "text-rose-400"
+                                    className={`text-[10px] font-numbers font-medium tabular-nums flex items-center px-1 py-0.5 rounded ${
+                                        isPositive ? "text-emerald-700 bg-emerald-50" : "text-rose-700 bg-rose-50"
                                     }`}
                                 >
                                     {isPositive ? "+" : ""}

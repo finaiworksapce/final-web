@@ -20,7 +20,7 @@ export function SamplePortfolioWidget() {
   let cumulativeOffset = 0;
 
   return (
-    <div className="bg-[linear-gradient(180deg,#ffffff_0%,#ffffff_55%,#f5f8ff_100%)] border border-blue-200/80 hover:border-blue-300 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-xs hover:shadow-sm transition-all duration-300 min-h-[250px] h-full flex flex-col justify-between group relative overflow-hidden">
+    <div className="bg-[linear-gradient(180deg,#ffffff_0%,#ffffff_55%,#f5f8ff_100%)] border border-blue-200/80 hover:border-blue-300 rounded-2xl min-[360px]:rounded-3xl p-3 min-[360px]:p-4 sm:p-5 shadow-xs hover:shadow-sm transition-all duration-300 min-h-[250px] h-full flex flex-col justify-between group relative overflow-hidden">
       {/* Sağ üst hafif parıltı efekti */}
       <div className="absolute -top-12 -right-12 w-32 h-32 bg-blue-400/10 rounded-full blur-2xl pointer-events-none" />
 
@@ -49,9 +49,9 @@ export function SamplePortfolioWidget() {
       </div>
 
       {/* 2. Donut Grafik & Dağılım Listesi */}
-      <div className="flex items-center gap-3.5 my-auto py-2 relative z-10">
+      <div className="flex items-center gap-2 min-[360px]:gap-3.5 my-auto py-1.5 min-[360px]:py-2 relative z-10">
         {/* Donut Grafik */}
-        <div className="relative w-28 h-28 sm:w-30 sm:h-30 xl:w-32 xl:h-32 shrink-0 flex items-center justify-center">
+        <div className="relative w-20 h-20 min-[380px]:w-24 min-[380px]:h-24 sm:w-26 sm:h-26 xl:w-28 xl:h-28 shrink-0 flex items-center justify-center">
           <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90 filter drop-shadow-2xs">
             {strategy.distribution.map((item, idx) => {
               const strokeLength = (item.percentage / 100) * CIRCUMFERENCE;
@@ -82,7 +82,7 @@ export function SamplePortfolioWidget() {
 
           {/* Donut İçi Bilgi */}
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none px-1">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-blue-600 leading-tight">
+            <span className="text-[8px] min-[380px]:text-[9px] font-bold uppercase tracking-wider text-blue-600 leading-tight">
               Hedef Model
             </span>
             <span className="text-xs sm:text-[13px] font-black text-slate-900 tracking-tight mt-0.5">
@@ -107,7 +107,7 @@ export function SamplePortfolioWidget() {
               >
                 <div className="flex items-center gap-1.5 min-w-0">
                   <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
-                  <span className="text-[11px] sm:text-xs font-semibold text-slate-700 truncate max-w-[90px] sm:max-w-[115px]">
+                  <span className="text-[11px] sm:text-xs font-semibold text-slate-700 truncate flex-1 min-w-0">
                     {item.name}
                   </span>
                 </div>
@@ -129,7 +129,7 @@ export function SamplePortfolioWidget() {
 
         <Link
           href="/dashboard/portfolio?openAdd=true"
-          className="shrink-0 px-2.5 py-1 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] transition-all flex items-center gap-1 shadow-xs hover:shadow active:scale-95"
+          className="shrink-0 px-2 min-[340px]:px-2.5 py-1 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-[10px] min-[340px]:text-[11px] transition-all flex items-center gap-1 shadow-xs hover:shadow active:scale-95 whitespace-nowrap"
         >
           <PlusCircle className="w-3 h-3" />
           <span>Varlık Ekle</span>

@@ -263,14 +263,14 @@ function DashboardShell({
     return (
         <div className="min-h-screen flex relative selection:bg-blue-500/30 font-sans bg-white overflow-x-hidden">
             {/* MAIN WRAPPER (EDGE-TO-EDGE DASHBOARD) */}
-            <div className="relative z-10 w-full flex mx-auto max-w-[1920px] overflow-x-hidden min-h-screen">
+            <div className="relative z-10 w-full flex mx-auto max-w-[2560px] overflow-x-hidden min-h-screen">
                 <div className="flex-1 flex bg-transparent min-w-0">
                     
                     {/* Desktop Sidebar Layout Placeholder: fixed w-24 (96px) footprint so main content never shifts */}
                     <div className="hidden md:block w-24 shrink-0 pointer-events-none" aria-hidden="true" />
 
                     {/* Fixed Viewport Sidebar: anchored to viewport (top-0 left-0 h-[100dvh]) so scrolling the page never moves the sidebar */}
-                    <aside className="hidden md:flex fixed top-0 left-0 2xl:left-[max(0px,calc((100vw-1920px)/2))] h-[100dvh] w-24 hover:w-80 focus-within:w-80 z-50 border-r border-[#0E1E38]/30 bg-gradient-to-b from-[#02041A] via-[#040989] to-[#02041A] shadow-xl md:shadow-2xl flex-col transition-[width,box-shadow] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group overflow-hidden pointer-events-auto">
+                    <aside className="hidden md:flex fixed top-0 left-0 h-[100dvh] w-24 hover:w-80 focus-within:w-80 z-50 border-r border-[#0E1E38]/30 bg-gradient-to-b from-[#02041A] via-[#040989] to-[#02041A] shadow-xl md:shadow-2xl flex-col transition-[width,box-shadow] duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group overflow-hidden pointer-events-auto">
                         {/* Soldan Sağa #0b192c Arka Plan Efekti Overlay (Opak Beyaz Zemin Üzerinde) */}
                         <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none z-0" />
 
@@ -311,9 +311,9 @@ function DashboardShell({
                                                     }}
                                                     className="flex items-center justify-start flex-1 min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 rounded-lg"
                                                 >
-                                                    <item.icon className={`w-5 h-5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-white' : 'text-white/70'}`}
+                                                    <item.icon className={`w-5 h-5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-[#040989]' : 'text-white/80'}`}
                                                 />
-                                                <span className="opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 ml-2 md:ml-3 uppercase tracking-tight md:tracking-wider text-[10px] md:text-[11px] truncate clash-subtitle hidden md:inline-block motion-reduce:transition-none  ${isActive ? 'text-white' : 'text-[#040989]'}">
+                                                <span className="opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 ml-2 md:ml-3 uppercase tracking-tight md:tracking-wider text-[10px] md:text-[11px] truncate clash-subtitle hidden md:inline-block motion-reduce:transition-none  ${isActive ? 'text-[#040989]' : 'text-white'}">
                                                         {item.label}
                                                     </span>
                                                 </Link>
@@ -332,7 +332,7 @@ function DashboardShell({
                                                     title={`${item.label} alt menüsünü ${item.isExpanded ? "kapat" : "aç"}`}
                                                     className={`hidden md:group-hover:flex md:group-focus-within:flex transition-colors duration-150 p-1.5 rounded-xl items-center justify-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 ${
                                                         isActive 
-                                                            ? 'hover:bg-white/20 text-white focus-visible:ring-white/60' 
+                                                            ? 'hover:bg-slate-100 text-[#040989] focus-visible:ring-[#040989]/40' 
                                                             : 'hover:bg-white/10 text-white/60 hover:text-white'
                                                     }`}
                                                 >
@@ -383,9 +383,9 @@ function DashboardShell({
                                             ? 'text-[#040989] bg-white shadow-sm font-normal' 
                                             : 'text-white/80 hover:bg-white/10 hover:text-white transition-colors'
                                     }`}>
-                                        <item.icon className={`w-5 h-5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-white' : 'text-white/70'}`}
+                                        <item.icon className={`w-5 h-5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-[#040989]' : 'text-white/80'}`}
                                                 />
-                                                <span className="opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 ml-2 md:ml-3 uppercase tracking-tight md:tracking-wider text-[10px] md:text-[11px] truncate clash-subtitle hidden md:inline-block motion-reduce:transition-none  ${isActive ? 'text-white' : 'text-[#040989]'}">
+                                                <span className="opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-[opacity,transform] duration-200 ease-out transform -translate-x-1 md:group-hover:translate-x-0 md:group-focus-within:translate-x-0 ml-2 md:ml-3 uppercase tracking-tight md:tracking-wider text-[10px] md:text-[11px] truncate clash-subtitle hidden md:inline-block motion-reduce:transition-none  ${isActive ? 'text-[#040989]' : 'text-white'}">
                                             {item.label}
                                         </span>
                                     </Link>
@@ -414,13 +414,13 @@ function DashboardShell({
                     {/* Main Content */}
                     <main className="flex-1 relative flex flex-col min-w-0 bg-transparent overflow-x-hidden">
                         {/* Header (Glassified & Safe-Area Aware) */}
-                        <header className={`h-12 md:h-16 border-b border-[#D6E4FF]/50 flex items-center justify-between px-3 md:px-6 sticky top-0 ${isProfileOpen ? "z-[60]" : "z-40"} bg-white/90 backdrop-blur-xl flex-shrink-0 relative pt-[env(safe-area-inset-top,0px)] transition-none`}>
+                        <header className={`h-12 md:h-16 border-b border-[#D6E4FF]/50 flex items-center justify-between px-2 min-[360px]:px-3 md:px-6 sticky top-0 ${isProfileOpen ? "z-[60]" : "z-40"} bg-white/90 backdrop-blur-xl flex-shrink-0 relative pt-[env(safe-area-inset-top,0px)] transition-none`}>
                             <div className="flex items-center gap-2.5">
                                 {/* Hamburger Butonu (Dokunmatik Hedef >= 44x44px) */}
                                 <button
                                     ref={hamburgerRef}
                                     onClick={() => setIsMobileMenuOpen(true)}
-                                    className="md:hidden flex flex-col items-center justify-center gap-1.5 w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-[#02041A] text-white shadow-sm active:scale-95 transition-[transform,background-color] duration-150 shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:active:scale-100"
+                                    className="md:hidden flex flex-col items-center justify-center gap-1.5 w-10 h-10 min-[360px]:w-11 min-[360px]:h-11 min-w-[40px] min-[360px]:min-w-[44px] min-h-[40px] min-[360px]:min-h-[44px] rounded-xl bg-[#02041A] text-white shadow-sm active:scale-95 transition-[transform,background-color] duration-150 shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:active:scale-100"
                                     aria-label="Menüyü aç"
                                     aria-expanded={isMobileMenuOpen}
                                     aria-controls="mobile-nav-drawer"
@@ -429,7 +429,7 @@ function DashboardShell({
                                     <span className="w-5 h-0.5 bg-white rounded-full block" />
                                     <span className="w-5 h-0.5 bg-white rounded-full block" />
                                 </button>
-                                <h1 className="text-[10px] md:text-[11px] clash-subtitle text-[#040989] tracking-[0.2em] uppercase opacity-80 select-none">FinAi Workspace</h1>
+                                <h1 className="text-[9px] min-[360px]:text-[10px] md:text-[11px] clash-subtitle text-[#040989] tracking-[0.1em] min-[360px]:tracking-[0.2em] uppercase opacity-80 select-none truncate">FinAi Workspace</h1>
                             </div>
                             
                             <div className="flex items-center space-x-2 md:space-x-4">
@@ -567,7 +567,7 @@ function DashboardShell({
                                                                     onClick={() => setIsMobileMenuOpen(false)}
                                                                     className="flex items-center gap-3 flex-1 min-w-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 rounded-lg"
                                                                 >
-                                                                    <ItemIcon className={`w-4.5 h-4.5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-white' : 'text-slate-500'}`} />
+                                                                    <ItemIcon className={`w-4.5 h-4.5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-[#040989]' : 'text-slate-500'}`} />
                                                                     <span className="text-xs uppercase font-normal tracking-wider truncate">{item.label}</span>
                                                                 </Link>
                                                                 <button
@@ -638,7 +638,7 @@ function DashboardShell({
                                                                 : 'text-slate-700 hover:text-[#040989] hover:bg-slate-100/80 font-medium'
                                                         }`}
                                                     >
-                                                        <ItemIcon className={`w-4.5 h-4.5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-white' : 'text-slate-500'}`} />
+                                                        <ItemIcon className={`w-4.5 h-4.5 flex-shrink-0 transition-colors duration-150 ${isActive ? 'text-[#040989]' : 'text-slate-500'}`} />
                                                         <span className="text-xs uppercase font-normal tracking-wider truncate">{item.label}</span>
                                                     </Link>
                                                 );

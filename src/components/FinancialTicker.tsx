@@ -56,8 +56,8 @@ export function FinancialTicker() {
     }
 
     return (
-        <div className="w-full bg-white border-b border-[#D6E4FF]/50 relative h-10 md:h-12 flex items-center overflow-x-auto scrollbar-none">
-            <div className="flex items-center justify-start md:justify-evenly px-4 py-2 min-w-max md:w-full gap-6 md:gap-2">
+        <div className="w-full bg-white border-b border-[#D6E4FF]/50 relative h-9 min-[360px]:h-10 md:h-12 flex items-center overflow-x-auto scrollbar-none touch-pan-x overscroll-x-contain">
+            <div className="flex items-center justify-start md:justify-evenly px-2.5 min-[360px]:px-4 py-1.5 min-[360px]:py-2 min-w-max md:w-full gap-3 min-[360px]:gap-4 md:gap-1.5 min-[360px]:gap-2">
                 {FIXED_SYMBOLS.map((sym, index) => {
                     const quote = data.find(q => 
                         q.symbol.toUpperCase() === sym.toUpperCase() || 

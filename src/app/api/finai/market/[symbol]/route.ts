@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest } from 'next/server';
 import { normalizeSymbol } from '@/lib/api/finai-symbol';
 import { apiSuccess, apiError } from '@/lib/api/finai-api-response';

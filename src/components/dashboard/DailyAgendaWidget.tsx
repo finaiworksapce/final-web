@@ -263,7 +263,7 @@ export function DailyAgendaWidget() {
     };
 
     return (
-        <div className="bg-white rounded-3xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between h-[395px] group relative overflow-hidden">
+        <div className="bg-white rounded-2xl min-[360px]:rounded-3xl p-3 min-[360px]:p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between h-[380px] min-[360px]:h-[395px] xl:h-[420px] 2xl:h-[450px] group relative overflow-hidden">
             {/* 1. Üst Başlık & Kategori Filtreleri */}
             <div className="relative z-10 shrink-0">
                 {/* Başlık Satırı */}
@@ -292,14 +292,14 @@ export function DailyAgendaWidget() {
                 </div>
 
                 {/* Kategori Filtre Sekmeleri */}
-                <div className="flex items-center gap-1.5 overflow-x-auto py-2.5 custom-scrollbar">
+                <div className="flex items-center gap-1 min-[360px]:gap-1.5 overflow-x-auto py-2 min-[360px]:py-2.5 custom-scrollbar">
                     {CATEGORY_TABS.map((tab) => {
                         const isActive = activeCategory === tab.id;
                         return (
                             <button
                                 key={tab.id}
                                 onClick={() => setActiveCategory(tab.id)}
-                                className={`px-3 py-1 text-xs clash-subtitle font-[325] rounded-lg transition-all shrink-0 ${
+                                className={`px-2 min-[360px]:px-3 py-1 text-[11px] min-[360px]:text-xs clash-subtitle font-[325] rounded-lg transition-all shrink-0 ${
                                     isActive
                                         ? "bg-[#004BFA] text-white shadow-xs"
                                         : "bg-[#D6E4FF]/30 text-[#040989]/75 hover:bg-slate-200/80"

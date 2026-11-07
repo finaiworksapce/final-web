@@ -6,7 +6,7 @@ import { useUser } from "@/components/providers/UserProvider";
 import Link from "next/link";
 
 // 60-30-10 Uyumlu Dağılım Paleti
-const DISTRIBUTION_COLORS = ["#040989", "#004BFA", "#5B80FF", "#2E5894", "#78B8F5"];
+const DISTRIBUTION_COLORS = ["#040989", "#004BFA", "#5B80FF", "#02041A", "#8AA8FF"];
 
 const TYPE_NAMES: Record<string, string> = {
     STOCK: "Hisse",
@@ -131,7 +131,7 @@ export function TopAssetDistributionCard() {
 
     const hasData = distributionItems.length > 0 && totalValue > 0;
 
-    const RADIUS = 30;
+    const RADIUS = 34;
     const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
     let cumulativeOffset = 0;
 
@@ -159,7 +159,7 @@ export function TopAssetDistributionCard() {
     };
 
     return (
-        <div className="bg-white rounded-3xl p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 min-h-[250px] h-full flex flex-col justify-between group">
+        <div className="bg-white rounded-2xl min-[360px]:rounded-3xl p-3 min-[360px]:p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 min-h-[250px] h-full flex flex-col justify-between group">
             {/* 1. Üst Başlık */}
             <div className="flex items-center justify-between pb-2 border-b border-[#D6E4FF]/50">
                 <div className="flex items-center gap-2">
@@ -182,9 +182,9 @@ export function TopAssetDistributionCard() {
 
             {/* 2. Orta İçerik: Donut Grafik + Liste */}
             {hasData ? (
-                <div className="flex items-center gap-3.5 my-auto py-2">
+                <div className="flex items-center gap-2 min-[360px]:gap-3.5 my-auto py-1.5 min-[360px]:py-2">
                     {/* Donut Grafik */}
-                    <div className="relative w-20 h-20 sm:w-22 sm:h-22 shrink-0 flex items-center justify-center">
+                    <div className="relative w-24 h-24 min-[360px]:w-28 min-[360px]:h-28 sm:w-32 sm:h-32 shrink-0 flex items-center justify-center">
                         <svg
                             viewBox="0 0 100 100"
                             className="w-full h-full transform -rotate-90 filter drop-shadow-xs cursor-pointer"
@@ -207,7 +207,7 @@ export function TopAssetDistributionCard() {
                                         r={RADIUS}
                                         fill="none"
                                         stroke={item.color}
-                                        strokeWidth={isHovered ? 13 : 10.5}
+                                        strokeWidth={isHovered ? 11 : 9}
                                         strokeDasharray={strokeDasharray}
                                         strokeDashoffset={strokeDashoffset}
                                         pointerEvents="none"
@@ -219,10 +219,10 @@ export function TopAssetDistributionCard() {
 
                         {/* Donut İçi Toplam */}
                         <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none px-1">
-                            <span className="text-[9px] clash-desc font-[225] text-[#040989]/70 leading-tight">
+                            <span className="text-[10px] clash-desc font-[225] text-[#040989]/70 leading-tight">
                                 Toplam
                             </span>
-                            <span className="text-[11px] sm:text-xs clash-title font-normal text-[#040989] tracking-tight mt-0.5 truncate max-w-[65px]">
+                            <span className="text-xs sm:text-[13px] font-numbers font-medium text-[#040989] tracking-tight mt-0.5 truncate max-w-[80px]">
                                 {formatCurrency(totalValue)}
                             </span>
                         </div>

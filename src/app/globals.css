@@ -60,6 +60,12 @@
   font-style: normal;
 }
 
+:root {
+  --font-inter: 'Zodiak', serif;
+  --font-outfit: 'Zodiak', serif;
+  --font-space-grotesk: 'Zodiak', serif;
+}
+
 *, *::before, *::after {
   font-synthesis: none !important;
 }
@@ -248,4 +254,22 @@ body {
 
 .finai-card-glow {
   box-shadow: 0 4px 24px -2px rgba(4, 9, 137, 0.06), 0 2px 8px -2px rgba(0, 75, 250, 0.04);
+}
+
+/* Universal Responsive Bounds (250px to 2500px) */
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  min-width: 250px;
+}
+
+/* Prevent unwanted media overflow */
+img, svg, video, canvas, audio, iframe, embed, object {
+  max-width: 100%;
 }
