@@ -1,6 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
-import { Instagram } from "lucide-react";
+import { Instagram, Twitter, Mail } from "lucide-react";
 import { FinAiLogo } from "@/components/ui/logo";
 
 export default function Footer() {
@@ -36,18 +35,56 @@ export default function Footer() {
                     </div>
 
                     <div>
-                        <h3 className="font-bold mb-4 text-white">Takip Et</h3>
-                        <div className="flex space-x-4">
+                        <h3 className="font-bold mb-4 text-white">İletişim & Takip</h3>
+                        <div className="flex items-center space-x-3">
+                            {/* Instagram */}
                             <Link 
-                                href="https://www.instagram.com/finai.net.tr/" 
+                                href="https://www.instagram.com/finaiworkspace/" 
                                 target="_blank" 
                                 rel="noopener noreferrer" 
                                 className="transition-all hover:scale-110"
+                                aria-label="Instagram"
                             >
                                 <div className="p-2 rounded-xl bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white shadow-md shadow-[#ee2a7b]/20">
                                     <Instagram className="w-5 h-5" />
                                 </div>
                             </Link>
+
+                            {/* Twitter (X) */}
+                            <Link 
+                                href="https://x.com/ResmiFinAi" 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="transition-all hover:scale-110"
+                                aria-label="Twitter (X)"
+                            >
+                                <div className="p-2 rounded-xl bg-[#1DA1F2] text-white shadow-md shadow-[#1DA1F2]/20">
+                                    <Twitter className="w-5 h-5 fill-current" />
+                                </div>
+                            </Link>
+
+                            {/* Mail Butonu */}
+                            <a 
+                                href="mailto:finairesmi@gmail.com" 
+                                className="transition-all hover:scale-110"
+                                aria-label="E-posta"
+                                title="finairesmi@gmail.com"
+                            >
+                                <div className="p-2 rounded-xl bg-white/10 hover:bg-[#004BFA] text-white shadow-md transition-colors">
+                                    <Mail className="w-5 h-5" />
+                                </div>
+                            </a>
+                        </div>
+
+                        {/* Ekstra Mail Adresi */}
+                        <div className="mt-4 pt-4 border-t border-white/10">
+                            <a 
+                                href="mailto:finairesmi@gmail.com"
+                                className="inline-flex items-center gap-2 text-xs sm:text-sm text-white/80 hover:text-white transition-colors group"
+                            >
+                                <Mail className="w-4 h-4 text-[#78B8F5] group-hover:text-white transition-colors flex-shrink-0" />
+                                <span className="font-mono break-all">finairesmi@gmail.com</span>
+                            </a>
                         </div>
                     </div>
                 </div>
