@@ -17,25 +17,14 @@ export default function AboutPage() {
             BÖLÜM 1: TAM GENİŞLİK MANİFESTO & GİRİŞ (EDGE-TO-EDGE HERO)
             ========================================================================= */}
         <section className="w-full px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-44 mb-24 sm:mb-32">
-          {/* Üst İnce Kategori Başlığı */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex items-center gap-3 mb-8 sm:mb-12"
-          >
-            <span className="w-2 h-2 rounded-full bg-[#004BFA]" />
-            <span className="text-xs sm:text-sm font-semibold tracking-widest uppercase text-slate-500">
-              Hakkımızda & Çıkış Hikayemiz
-            </span>
-          </motion.div>
 
-          {/* Ana Dev Başlık — Zodiak Tipografisi */}
+
+          {/* Ana Başlık — Rafine Zodiak Tipografisi */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] font-normal tracking-tight text-[#0E1E38] leading-[1.08] max-w-6xl mb-12 sm:mb-16"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] xl:text-[44px] font-normal tracking-tight text-[#0E1E38] leading-[1.2] max-w-5xl mb-10 sm:mb-12"
           >
             Yatırım dünyasında karmaşaya son. <br className="hidden sm:inline" />
             <span className="text-slate-500">
@@ -144,7 +133,7 @@ export default function AboutPage() {
                   Salih KAVAKCI
                 </h2>
                 <p className="text-sm text-slate-500 font-medium">
-                  FinAi Kurucusu · Denizli, Türkiye
+                  Founder & CEO
                 </p>
                 <div className="pt-4">
                   <a
