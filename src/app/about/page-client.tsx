@@ -1,350 +1,317 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-import {
-  Brain,
-  TrendingUp,
-  ShieldCheck,
-  Target,
-  Sparkles,
-  Award,
-  ArrowRight,
-  BookOpen,
-  LineChart,
-  Lightbulb,
-  CheckCircle2
-} from "lucide-react";
-import { FinAiLogo } from "@/components/ui/logo";
+import { ArrowUpRight, ArrowRight } from "lucide-react";
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white text-[#0E1E38] font-sans flex flex-col selection:bg-blue-100 selection:text-[#0E1E38]">
-      {/* Navbar */}
+      {/* Üst Navigasyon */}
       <Navbar />
 
-      <main className="flex-grow pt-28 pb-20">
-        {/* HERO SECTION */}
-        <section className="relative overflow-hidden pt-12 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-          {/* Background Glows */}
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-blue-100/50 via-indigo-50/40 to-transparent blur-[100px] pointer-events-none -z-10" />
-
-          <div className="text-center max-w-3xl mx-auto space-y-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-[#78B8F5]/10 text-xs font-bold text-[#0E1E38] uppercase tracking-wider"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-[#0E1E38]" />
-              Hakkımızda & Vizyonumuz
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-3xl sm:text-5xl lg:text-6xl font-normal text-[#0E1E38] tracking-tight leading-[1.15]"
-            >
-              Yatırımda Karmaşaya Son, <br />
-              <span className="text-[#0E1E38]">Bilinçli Geleceğe Güçlü Adım.</span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-base sm:text-xl text-slate-600 font-medium leading-relaxed"
-            >
-              FinAi; finansal okuryazarlık seviyesi ne olursa olsun her bireyin kendi adına güvenle, 
-              rasyonel verilere dayanarak sağlam adımlar atabilmesi ve yatırımlarını yapay zeka ile 
-              şeffafça yönetebilmesi için kuruldu.
-            </motion.p>
-          </div>
-        </section>
-
-        {/* KURUCUNUN NOTU & BİZ KİMİZ */}
-        <section className="px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto mb-24">
+      <main className="flex-grow pt-32 sm:pt-40 pb-28">
+        {/* =========================================================================
+            BÖLÜM 1: TAM GENİŞLİK MANİFESTO & GİRİŞ (EDGE-TO-EDGE HERO)
+            ========================================================================= */}
+        <section className="w-full px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-44 mb-24 sm:mb-32">
+          {/* Üst İnce Kategori Başlığı */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50/40 border-2 border-slate-200/80 rounded-3xl p-8 sm:p-12 shadow-xl overflow-hidden"
+            className="flex items-center gap-3 mb-8 sm:mb-12"
           >
-            <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
-
-            <div className="flex flex-col md:flex-row items-start gap-8 relative z-10">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-[#0E1E38] text-white flex items-center justify-center font-normal text-2xl sm:text-3xl shadow-lg shadow-[#0E1E38]/20 shrink-0">
-                SK
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/70 pb-4">
-                  <div>
-                    <h2 className="text-2xl font-normal text-[#0E1E38]">Salih KAVAKCI</h2>
-                    <p className="text-xs sm:text-sm font-bold text-slate-500 uppercase tracking-widest mt-0.5">FinAi Kurucusu</p>
-                  </div>
-                  <span className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 bg-white rounded-full border border-slate-200 text-[#0E1E38] shadow-sm self-start sm:self-auto">
-                    <Award className="w-3.5 h-3.5 text-[#0E1E38]" /> Kurucu Mesajı
-                  </span>
-                </div>
-
-                <div className="space-y-4 text-slate-700 font-medium leading-relaxed text-base sm:text-lg">
-                  <p>
-                    "Yatırım dünyasına ilk adımını atan bir bireyin karşılaştığı en büyük engel bilginin azlığı değil; 
-                    anlaşılmaz finansal jargonlar, karmaşık grafikler ve kulaktan dolma yönlendirmelerin yarattığı güvensizlik hissidir."
-                  </p>
-                  <p>
-                    "FinAi’yi kurarken temel amacımız; finansal okuryazarlık seviyesi hiç olmayan veya yeni başlayan birinin dahi, 
-                    <strong> 'Ben neye yatırım yapıyorum?', 'Bu hisse veya fon neden yükseliyor/düşüyor?', 'Alacağım kararın arkasında hangi somut veri var?'</strong> 
-                    sorularına saniyeler içinde net, Türkçe ve doğrusal cümlelerle yanıt bulabilmesini sağlamaktı."
-                  </p>
-                  <p>
-                    "FinAi sadece bir portföy takip aracı değil; yapay zeka desteğiyle veriyi anlaşılır kılan, karmaşık piyasa dinamiklerini 
-                    yatırımcının lehine çeviren ve ülkemizin finansal okuryazarlık bilincini zirveye taşımayı hedefleyen güvenilir bir yol arkadaşıdır."
-                  </p>
-                </div>
-              </div>
-            </div>
+            <span className="w-2 h-2 rounded-full bg-[#004BFA]" />
+            <span className="text-xs sm:text-sm font-semibold tracking-widest uppercase text-slate-500">
+              Hakkımızda & Çıkış Hikayemiz
+            </span>
           </motion.div>
-        </section>
 
-        {/* MİSYON & VİZYON GRID */}
-        <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mb-24">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* MİSYONUMUZ */}
+          {/* Ana Dev Başlık — Zodiak Tipografisi */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] font-normal tracking-tight text-[#0E1E38] leading-[1.08] max-w-6xl mb-12 sm:mb-16"
+          >
+            Yatırım dünyasında karmaşaya son. <br className="hidden sm:inline" />
+            <span className="text-slate-500">
+              Her birey için rasyonel, şeffaf ve anlaşılır bir finansal gelecek.
+            </span>
+          </motion.h1>
+
+          {/* İki Kolonlu Geniş Anlatı ve Metrikler */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-16 pt-8 border-t border-slate-200/80">
+            {/* Sol Kolon: Manifestonun Özü */}
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="bg-white border-2 border-slate-200/80 rounded-3xl p-8 sm:p-10 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="lg:col-span-7 space-y-6 text-lg sm:text-xl md:text-2xl text-slate-700 font-normal leading-relaxed"
             >
-              <div>
-                <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#0E1E38] mb-6 shadow-sm">
-                  <Target className="w-7 h-7" />
-                </div>
-                <h3 className="text-2xl font-normal text-[#0E1E38] mb-4 tracking-tight">Misyonumuz</h3>
-                <p className="text-slate-600 font-medium leading-relaxed text-base">
-                  Yatırım dünyasına yeni giren veya girmek isteyen herkesin, finansal okuryazarlık düzeyi ne olursa olsun kendi adına 
-                  sağlam, bilinçli ve rasyonel adımlar atmasını sağlamak. Yatırımcının neye yatırım yaptığını, varlıklarının değerini neyin 
-                  etkilediğini şeffafça anlatarak, yatırım yaparken finansal okuryazarlığını da organik olarak geliştirmesine rehberlik etmek.
-                </p>
-              </div>
-
-              <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col gap-3">
-                <div className="flex items-center gap-3 text-sm font-bold text-slate-800">
-                  <CheckCircle2 className="w-4 h-4 text-[#0E1E38] shrink-0" />
-                  <span>Finansal okuryazar olmasanız bile yatırıma güvenle başlama imkanı</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm font-bold text-slate-800">
-                  <CheckCircle2 className="w-4 h-4 text-[#0E1E38] shrink-0" />
-                  <span>Her adımda neyin neden yapıldığını açıklayan yapay zeka</span>
-                </div>
-              </div>
+              <p>
+                FinAi; finansal okuryazarlık seviyesi ne olursa olsun her bireyin kendi yatırımlarını
+                kulaktan dolma tüyolar veya anlamsız jargonlar yerine, rasyonel veriler ve anlaşılır analizlerle
+                yönetebilmesi için kuruldu.
+              </p>
+              <p className="text-base sm:text-lg text-slate-500 leading-relaxed font-normal">
+                Borsa İstanbul (BIST) hisselerinden TEFAS fonlarına kadar tüm piyasayı tek bir akıllı ekranda topluyor;
+                şirketlerin bilançolarını, çarpanlarını ve risk faktörlerini herkesin anlayabileceği sade bir Türkçe ile
+                yatırımcının kararlarına rehber kılıyoruz.
+              </p>
             </motion.div>
 
-            {/* VİZYONUMUZ */}
+            {/* Sağ Kolon: Minimalist Veri Göstergeleri (Çerçevesiz, Saf Tipografi) */}
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="bg-gradient-to-br from-[#0E1E38] to-[#1e3a8a] text-white rounded-3xl p-8 sm:p-10 shadow-xl flex flex-col justify-between"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
+              className="lg:col-span-5 grid grid-cols-2 gap-8 sm:gap-10 lg:pl-10 lg:border-l lg:border-slate-200/80"
             >
-              <div>
-                <div className="w-14 h-14 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-white mb-6 shadow-sm">
-                  <TrendingUp className="w-7 h-7" />
-                </div>
-                <h3 className="text-2xl font-normal text-white mb-4 tracking-tight">Vizyonumuz</h3>
-                <p className="text-white/90 font-medium leading-relaxed text-base">
-                  FinAi platformunu Türkiye’de tasarruf ve yatırım yapan milyonlarca insana ulaştırmak; 
-                  yapay zeka destekli akıllı piyasa analizini herkes için standart hale getirerek, 
-                  ülkemizin finansal okuryazarlık seviyesini zirveye taşımak.
+              <div className="space-y-1">
+                <span className="text-3xl sm:text-4xl lg:text-5xl font-normal text-[#0E1E38] block tracking-tight">
+                  %100
+                </span>
+                <span className="text-xs sm:text-sm text-slate-500 font-medium block">
+                  Veri Odaklı ve Tarafsız
+                </span>
+                <p className="text-[11px] sm:text-xs text-slate-400 leading-snug pt-1">
+                  Spekülasyondan uzak, doğrulanmış BIST & TEFAS piyasa matematiği.
                 </p>
               </div>
 
-              <div className="mt-8 pt-6 border-t border-white/10 flex flex-col gap-3">
-                <div className="flex items-center gap-3 text-sm font-bold text-white">
-                  <CheckCircle2 className="w-4 h-4 text-blue-300 shrink-0" />
-                  <span>Milyonlarca yatırımcıya ulaşan finansal bilinç ve yetkinlik hareketi</span>
-                </div>
-                <div className="flex items-center gap-3 text-sm font-bold text-white">
-                  <CheckCircle2 className="w-4 h-4 text-blue-300 shrink-0" />
-                  <span>Yapay zeka gücüyle herkes için rasyonel ve erişilebilir piyasa analitiği</span>
-                </div>
+              <div className="space-y-1">
+                <span className="text-3xl sm:text-4xl lg:text-5xl font-normal text-[#0E1E38] block tracking-tight">
+                  Tek
+                </span>
+                <span className="text-xs sm:text-sm text-slate-500 font-medium block">
+                  Bütünleşik Ekran
+                </span>
+                <p className="text-[11px] sm:text-xs text-slate-400 leading-snug pt-1">
+                  Hisseler, fonlar, temettüler ve ajanda tek bir akıllı panoda.
+                </p>
+              </div>
+
+              <div className="space-y-1">
+                <span className="text-3xl sm:text-4xl lg:text-5xl font-normal text-[#0E1E38] block tracking-tight">
+                  0
+                </span>
+                <span className="text-xs sm:text-sm text-slate-500 font-medium block">
+                  Karmaşık Jargon
+                </span>
+                <p className="text-[11px] sm:text-xs text-slate-400 leading-snug pt-1">
+                  Yapay zekanın ürettiği anlaşılır, yalın ve eğitici finans dili.
+                </p>
+              </div>
+
+              <div className="space-y-1">
+                <span className="text-3xl sm:text-4xl lg:text-5xl font-normal text-[#0E1E38] block tracking-tight">
+                  24/7
+                </span>
+                <span className="text-xs sm:text-sm text-slate-500 font-medium block">
+                  Kesintisiz İçgörü
+                </span>
+                <p className="text-[11px] sm:text-xs text-slate-400 leading-snug pt-1">
+                  Portföyün dinamik takibi ve anlık yapay zeka asistanı desteği.
+                </p>
               </div>
             </motion.div>
           </div>
         </section>
 
-        {/* TEMEL DEĞERLERİMİZ VE İLKELERİMİZ */}
-        <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto mb-24">
-          <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-            <h2 className="text-3xl sm:text-4xl font-normal text-[#0E1E38] tracking-tight">
-              Temel Değerlerimiz ve İlkelerimiz
-            </h2>
-            <p className="text-slate-600 font-medium text-base sm:text-lg">
-              FinAi olarak attığımız her adımda ve geliştirdiğimiz her algoritmada değişmez 4 temel ilkeye bağlı kalıyoruz.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Değer 1 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-              className="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 hover:bg-white hover:shadow-lg transition-all duration-300"
-            >
-              <div className="w-12 h-12 rounded-xl bg-blue-100/70 text-[#0E1E38] flex items-center justify-center mb-4">
-                <LineChart className="w-6 h-6" />
-              </div>
-              <h4 className="text-lg font-bold text-[#0E1E38] mb-2">Veriye Dayalı Rasyonellik</h4>
-              <p className="text-sm text-slate-600 font-medium leading-relaxed">
-                Duygusal ve kulaktan dolma kararlar yerine, tamamen matematiksel korelasyonlara ve doğrulanmış piyasa verilerine dayanıyoruz.
-              </p>
-            </motion.div>
-
-            {/* Değer 2 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.2 }}
-              className="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 hover:bg-white hover:shadow-lg transition-all duration-300"
-            >
-              <div className="w-12 h-12 rounded-xl bg-blue-100/70 text-[#0E1E38] flex items-center justify-center mb-4">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <h4 className="text-lg font-bold text-[#0E1E38] mb-2">Yapay Zeka ve Şeffaflık</h4>
-              <p className="text-sm text-slate-600 font-medium leading-relaxed">
-                Yapay zekanın sunduğu tüm analizlerde neyin nereden geldiğini açık ve net cümlelerle açıklayarak paylaşıyoruz.
-              </p>
-            </motion.div>
-
-            {/* Değer 3 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.3 }}
-              className="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 hover:bg-white hover:shadow-lg transition-all duration-300"
-            >
-              <div className="w-12 h-12 rounded-xl bg-blue-100/70 text-[#0E1E38] flex items-center justify-center mb-4">
-                <Lightbulb className="w-6 h-6" />
-              </div>
-              <h4 className="text-lg font-bold text-[#0E1E38] mb-2">Veriyi Lehe Çevirme</h4>
-              <p className="text-sm text-slate-600 font-medium leading-relaxed">
-                Piyasadaki karmaşık veri yığınlarını sadeleştirerek yatırımcının kendi stratejisi adına birer avantaja dönüştürmesini sağlıyoruz.
-              </p>
-            </motion.div>
-
-            {/* Değer 4 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.4 }}
-              className="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 hover:bg-white hover:shadow-lg transition-all duration-300"
-            >
-              <div className="w-12 h-12 rounded-xl bg-blue-100/70 text-[#0E1E38] flex items-center justify-center mb-4">
-                <BookOpen className="w-6 h-6" />
-              </div>
-              <h4 className="text-lg font-bold text-[#0E1E38] mb-2">Finansal Okuryazarlık</h4>
-              <p className="text-sm text-slate-600 font-medium leading-relaxed">
-                Kullanıcının platformu kullandıkça piyasayı daha iyi okuyan, bilinçli ve bağımsız bir yatırımcı haline gelmesini destekliyoruz.
-              </p>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* NEYİ DEĞİŞTİRİYORUZ (GELENEKSEL VS FINAI) */}
-        <section className="px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto mb-24">
-          <div className="bg-slate-900 text-white rounded-3xl p-8 sm:p-12 shadow-2xl relative overflow-hidden">
-            <div className="relative z-10 space-y-8">
-              <div className="text-center max-w-xl mx-auto space-y-2">
-                <h3 className="text-2xl sm:text-3xl font-normal tracking-tight">FinAi ile Neyi Değiştiriyoruz?</h3>
-                <p className="text-slate-400 text-sm sm:text-base font-medium">
-                  Geleneksel karmaşık süreçleri yapay zeka ile modern ve anlaşılır bir deneyime dönüştürüyoruz.
+        {/* =========================================================================
+            BÖLÜM 2: KURUCUNUN NOTU — EDİTORYAL & İNSAN ODAKLI (SALİH KAVAKCI)
+            Kutu/çerçeve yok; geniş, saf tipografik bir anlatım mektubu.
+            ========================================================================= */}
+        <section className="w-full px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-44 mb-24 sm:mb-32">
+          <div className="pt-16 sm:pt-20 border-t border-slate-200/80">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-16 items-start">
+              {/* Sol: Kurucu Kimliği */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="lg:col-span-4 space-y-3"
+              >
+                <span className="text-xs font-semibold tracking-widest uppercase text-slate-400 block">
+                  Kurucu Perspektifi
+                </span>
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-normal text-[#0E1E38] tracking-tight">
+                  Salih KAVAKCI
+                </h2>
+                <p className="text-sm text-slate-500 font-medium">
+                  FinAi Kurucusu · Denizli, Türkiye
                 </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
-                {/* Geleneksel */}
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 space-y-4">
-                  <span className="text-xs font-bold text-red-400 uppercase tracking-wider block">Eski / Geleneksel Yaklaşım</span>
-                  <ul className="space-y-3 text-sm text-slate-300 font-medium">
-                    <li className="flex items-start gap-2.5">
-                      <span className="text-red-400 font-bold">✕</span>
-                      <span>Kulaktan dolma tüyolarla plansız ve duygusal kararlar.</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="text-red-400 font-bold">✕</span>
-                      <span>Karmaşık Excel tabloları ve dağınık aracı kurum ekranları.</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="text-red-400 font-bold">✕</span>
-                      <span>Hangi hissenin ne iş yaptığını ve riskini tam bilmeden yatırım yapma.</span>
-                    </li>
-                  </ul>
+                <div className="pt-4">
+                  <a
+                    href="mailto:finairesmi@gmail.com"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#004BFA] hover:underline"
+                  >
+                    <span>finairesmi@gmail.com</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </a>
                 </div>
+              </motion.div>
 
-                {/* FinAi */}
-                <div className="bg-blue-600/20 border border-blue-400/30 rounded-2xl p-6 space-y-4">
-                  <span className="text-xs font-bold text-blue-300 uppercase tracking-wider block">FinAi ile Yeni Dönem</span>
-                  <ul className="space-y-3 text-sm text-white font-medium">
-                    <li className="flex items-start gap-2.5">
-                      <span className="text-blue-400 font-bold">✓</span>
-                      <span>Yapay zeka destekli, veriye dayalı rasyonel ve şeffaf içgörüler.</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="text-blue-400 font-bold">✓</span>
-                      <span>BIST ve TEFAS portföyünü tek bir akıllı ekranda anlık kontrol etme.</span>
-                    </li>
-                    <li className="flex items-start gap-2.5">
-                      <span className="text-blue-400 font-bold">✓</span>
-                      <span>Yatırım yaptıkça finansal okuryazarlığı geliştiren eğitici rehberlik.</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+              {/* Sağ: Mektup / Samimi Anlatı */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.15 }}
+                className="lg:col-span-8 space-y-6 text-base sm:text-lg md:text-xl text-slate-700 font-normal leading-relaxed"
+              >
+                <p className="text-xl sm:text-2xl md:text-3xl text-[#0E1E38] font-normal leading-snug">
+                  "FinAi; bir gecede tasarlanmış jenerik bir teknoloji projesi değil.
+                  Tasarruf eden, emeğini korumak isteyen insanların piyasada hissettiği
+                  derin yalnızlığa ve bilgi kirliliğine verilmiş bilinçli bir yanıttır."
+                </p>
+
+                <p>
+                  Ülkemizde her gün yüz binlerce insan alın terini enflasyona karşı korumak ve çocuklarının geleceğine
+                  sağlam bir birikim bırakmak umuduyla finansal piyasalara adım atıyor. Ancak karşılaştıkları ilk manzara;
+                  anlaşılması güç aracı kurum ekranları, ezbere finansal terimler ve nereye savrulduğu belli olmayan
+                  sosyal medya dedikoduları oluyor.
+                </p>
+
+                <p>
+                  FinAi’yi hayata geçirirken tek bir temel soru sorduk:{" "}
+                  <strong className="font-medium text-[#0E1E38]">
+                    'Her seviyeden yatırımcı, elindeki varlığın gerçekte ne olduğunu, arkasındaki şirketin ne ürettiğini
+                    ve piyasa dalgalanmalarının somut nedenlerini kendi dilinde nasıl öğrenebilir?'
+                  </strong>
+                </p>
+
+                <p>
+                  Yapay zekayı parıltılı bir pazarlama süsü olarak değil; bilançoları sadeleştiren,
+                  rasyoları anlamlı kılan ve kullanıcının finansal okuryazarlığını her gün bir adım ileriye taşıyan
+                  tarafsız bir karar destek ortağı olarak tasarladık. Amacımız kimseye ne alıp satacağını söylemek değil;
+                  herkesin kendi kararlarını güvenle ve bilinçle alabileceği berrak bir zemin sunmaktır.
+                </p>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        {/* CTA (EYLEME ÇAĞRI) */}
-        <section className="px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto text-center space-y-6">
-          <h2 className="text-3xl sm:text-4xl font-normal text-[#0E1E38] tracking-tight">
-            Finansal Geleceğinizi Bilinçle Yönetmeye Hazır Mısınız?
-          </h2>
-          <p className="text-slate-600 font-medium text-base sm:text-lg max-w-2xl mx-auto">
-            FinAi’ye hemen ücretsiz katılın; yatırımlarınızı yapay zeka gücüyle takip edin, finansal kararlarınızı sağlam temellere oturtun.
-          </p>
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/login?tab=register"
-              className="w-full sm:w-auto px-8 py-4 bg-[#0E1E38] hover:bg-black text-white font-bold rounded-full shadow-xl shadow-[#0E1E38]/20 transition-all flex items-center justify-center gap-2 text-base tracking-wide"
-            >
-              Hemen Ücretsiz Başla
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link
-              href="/"
-              className="w-full sm:w-auto px-8 py-4 bg-slate-100 hover:bg-slate-200 text-[#0E1E38] font-bold rounded-full border border-slate-200 transition-all text-base tracking-wide"
-            >
-              Özellikleri İncele
-            </Link>
+        {/* =========================================================================
+            BÖLÜM 3: 3 TEMEL İLKE — ÇERÇEVESİZ, GENİŞ 3 SÜTUN
+            ========================================================================= */}
+        <section className="w-full px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-44 mb-24 sm:mb-32">
+          <div className="pt-16 sm:pt-20 border-t border-slate-200/80">
+            {/* Bölüm Başlığı */}
+            <div className="max-w-3xl mb-12 sm:mb-16">
+              <span className="text-xs font-semibold tracking-widest uppercase text-slate-400 block mb-3">
+                Nasıl Çalışıyoruz?
+              </span>
+              <h2 className="text-2xl sm:text-4xl md:text-5xl font-normal text-[#0E1E38] tracking-tight leading-tight">
+                Geliştirdiğimiz her algoritmada bağlı kaldığımız üç değişmez ilke.
+              </h2>
+            </div>
+
+            {/* 3 Geniş Sütun — Kutu/Border Yok */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 sm:gap-14 lg:gap-20">
+              {/* İlke 1 */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="space-y-4"
+              >
+                <span className="text-xs font-mono font-bold tracking-widest text-[#004BFA] block">
+                  01 / VERİYE DAYALI RASYONELLİK
+                </span>
+                <h3 className="text-xl sm:text-2xl font-normal text-[#0E1E38] tracking-tight">
+                  Spekülasyon Değil, Matematik
+                </h3>
+                <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed">
+                  Duygusal yönlendirmeler ve fısıltı gazetesi yerine; net şirket bilançolarına, nakit akışlarına,
+                  fiyat/kazanç oranlarına ve teyitli makroekonomik verilere dayanıyoruz.
+                </p>
+              </motion.div>
+
+              {/* İlke 2 */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="space-y-4"
+              >
+                <span className="text-xs font-mono font-bold tracking-widest text-[#004BFA] block">
+                  02 / ORGANİK OKURYAZARLIK
+                </span>
+                <h3 className="text-xl sm:text-2xl font-normal text-[#0E1E38] tracking-tight">
+                  Kullandıkça Büyüyen Bilinç
+                </h3>
+                <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed">
+                  Platform sadece portföy büyüklüğünüzü göstermez. Bir hissenin neden değer kazandığını, bir fonun
+                  nasıl dağıldığını ve piyasa döngülerini açıklayarak sizi piyasada yetkinleştirir.
+                </p>
+              </motion.div>
+
+              {/* İlke 3 */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="space-y-4"
+              >
+                <span className="text-xs font-mono font-bold tracking-widest text-[#004BFA] block">
+                  03 / BAĞIMSIZLIK & ŞEFFAFLIK
+                </span>
+                <h3 className="text-xl sm:text-2xl font-normal text-[#0E1E38] tracking-tight">
+                  Kendi Geleceğinizin Sahibi Olun
+                </h3>
+                <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed">
+                  Kullanıcıyı hiçbir kuruma veya üçüncü şahsa bağımlı kılmadan; kendi birikimini özgürce, şeffafça
+                  ve tam denetimle yönetebileceği bağımsız bir teknolojik zemin sunuyoruz.
+                </p>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            BÖLÜM 4: GENİŞ VE MİNİMALİST KAPANIŞ / EYLEME ÇAĞRI
+            Kutu/kart yok; ekran boyunca uzanan ferah bir satır.
+            ========================================================================= */}
+        <section className="w-full px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-44">
+          <div className="pt-16 sm:pt-20 border-t border-slate-200/80 flex flex-col lg:flex-row lg:items-end justify-between gap-8">
+            <div className="max-w-2xl space-y-4">
+              <span className="text-xs font-semibold tracking-widest uppercase text-slate-400 block">
+                Yolculuğa Katılın
+              </span>
+              <h2 className="text-2xl sm:text-4xl md:text-5xl font-normal text-[#0E1E38] tracking-tight leading-tight">
+                Finansal geleceğinizi rasyonel verilerle yönetmeye bugün başlayın.
+              </h2>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 shrink-0">
+              <Link
+                href="/login?tab=register"
+                className="px-8 py-4 bg-[#0E1E38] hover:bg-black text-white text-sm font-semibold rounded-full transition-all flex items-center justify-center gap-2 active:scale-98 shadow-sm"
+              >
+                <span>Hemen Ücretsiz Başlayın</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/"
+                className="px-8 py-4 bg-transparent hover:bg-slate-50 text-[#0E1E38] text-sm font-semibold rounded-full border border-slate-300 transition-colors flex items-center justify-center"
+              >
+                <span>Ana Sayfaya Dön</span>
+              </Link>
+            </div>
           </div>
         </section>
       </main>
 
-      {/* Footer */}
+      {/* Alt Bilgi */}
       <Footer />
     </div>
   );
