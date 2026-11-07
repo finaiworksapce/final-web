@@ -235,13 +235,8 @@ export default function HomeClient() {
         {/* 
             FEATURES SECTION
         */}
-        <section id="features" className="flex flex-col justify-center bg-white overflow-hidden w-full relative z-20">
-             <FeatureSteps 
-                features={features} 
-                title="Özellikler" 
-                autoPlayInterval={5000} 
-                imageHeight="h-[300px] md:h-[450px]" 
-              />
+        <section id="features" className="w-full bg-white relative z-20">
+             <FeatureSteps title="Özellikler" />
         </section>
 
         <FAQAccordionSection />

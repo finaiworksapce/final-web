@@ -1,132 +1,271 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import Image from "next/image"
-import { ChevronDown } from "lucide-react"
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export interface Feature {
-  step: string
-  title?: string
-  content: string
-  image: string
+  step: string;
+  title: string;
+  subtitle?: string;
+  content: string;
+  image: string;
+  highlights?: string[];
+  badge?: string;
 }
 
 interface FeatureStepsProps {
-  features: Feature[]
-  className?: string
-  title?: string
-  autoPlayInterval?: number
-  imageHeight?: string
+  features?: Feature[];
+  className?: string;
+  title?: string;
+  autoPlayInterval?: number;
 }
 
-export function FeatureSteps({
-  features,
-  className,
-  title = "Nasıl Çalışır?",
-}: FeatureStepsProps) {
-  const [openIndex, setOpenIndex] = useState<number | null>(0)
-  const [activeImageIndex, setActiveImageIndex] = useState<number>(0)
-
-  const handleToggle = (index: number) => {
-    if (openIndex === index) {
-      setOpenIndex(null)
-    } else {
-      setOpenIndex(index)
-      setActiveImageIndex(index)
-    }
+const DEFAULT_FEATURES: Feature[] = [
+  {
+    step: "01",
+    badge: "Canlı Piyasa & Portföy",
+    title: "Anlık Portföy ve Varlık Takibi",
+    subtitle: "Tüm yatırımlarınızı tek bir rasyonel ekranda toplayın.",
+    content: "Borsa İstanbul hisselerinden TEFAS fonlarına kadar elinizdeki tüm varlıkları tek ekranda canlı fiyatlarla takip edin. Saniyelik güncellemeler ve net kar/zarar analizleriyle portföyünüzün kontrolünü hiçbir an elden bırakmayın.",
+    highlights: [
+      "BIST ve TEFAS fonlarıyla tam senkronizasyon",
+      "Saniyelik fiyat ve getiri değişim bildirimleri",
+      "Gerçek zamanlı sektörel varlık dağılımı"
+    ],
+    image: "/images/portfolio_tracking_white.jpg"
+  },
+  {
+    step: "02",
+    badge: "Piyasa İstihbaratı",
+    title: "Anlık Haber ve Gündem Takibi",
+    subtitle: "Piyasadaki kritik gelişmeleri süzülmüş içgörülerle yakalayın.",
+    content: "Yatırımlarınızı doğrudan etkileyebilecek flaş KAP bildirimlerini, bilanço açıklamalarını ve piyasa haberlerini binlerce kaynak arasından anında ayıklayıp anlaşılır bir dille önünüze getirir.",
+    highlights: [
+      "KAP bildirimleri ve bilanço açıklamaları",
+      "Gereksiz bilgi kirliliğinden arındırılmış sıcak gündem",
+      "Hisselerinize özel anlık haber filtreleme"
+    ],
+    image: "/images/news_tracking_white.jpg"
+  },
+  {
+    step: "03",
+    badge: "Risk & Stres Testi",
+    title: "Olası Senaryo Simülasyonları",
+    subtitle: "Piyasa dalgalanmalarına karşı önceden hazırlıklı olun.",
+    content: "'Döviz yükselirse veya faizler inerse portföyüm nasıl tepki verir?' sorusunun yanıtını matematiksel modellerle test edin. Ekstrem piyasa şartlarında varlıklarınızın dayanıklılığını ölçerek stratejinizi güvenceye alın.",
+    highlights: [
+      "Faiz, kur ve enflasyon şok testleri",
+      "Sektörel kriz ve düşüş simülasyonları",
+      "Portföy dayanıklılık skoru"
+    ],
+    image: "/images/scenario_analysis_white.jpg"
+  },
+  {
+    step: "04",
+    badge: "Portföy Analitiği",
+    title: "Varlıklar Arası Korelasyon Analizi",
+    subtitle: "Yatırımlarınızın birbirini nasıl etkilediğini görün.",
+    content: "Aynı yöne hareket eden veya birbirini dengeleyen varlıkları keşfedin. Portföyünüzün aşırı riskli tek bir sektöre sıkışmasını engelleyerek gerçek bir risk dağılımı oluşturmanıza rehberlik eder.",
+    highlights: [
+      "Matematiksel korelasyon matrisi",
+      "Aşırı sektörel yoğunlaşma uyarıları",
+      "Dengeleyici varlık önerileri"
+    ],
+    image: "/images/correlation_analysis_white.jpg"
+  },
+  {
+    step: "05",
+    badge: "Kişiselleştirme",
+    title: "Yatırımcı Karakteri ve Profil Testi",
+    subtitle: "Finansal hedefinize ve vadenize en uygun dağılımı keşfedin.",
+    content: "Risk toleransınızı ve yatırım vadenizi belirleyen interaktif test ile sizin karakterinize en uygun model portföy yapısını saniyeler içinde ortaya koyun.",
+    highlights: [
+      "Kişiye özel risk toleransı ölçümü",
+      "Hedef odaklı model varlık sepeti",
+      "Seviyenize uyumlu yapay zeka dili"
+    ],
+    image: "/images/portfolio_test_white.jpg"
   }
+];
 
-  const currentImage = openIndex !== null ? openIndex : activeImageIndex
+export function FeatureSteps({
+  features = DEFAULT_FEATURES,
+  className,
+  title = "Özellikler",
+  autoPlayInterval = 7000
+}: FeatureStepsProps) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeFeature = features[activeIndex] || features[0];
+
+  // İsteğe bağlı otomatik döngü (kullanıcı fare ile üzerine gelmediğinde)
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isPaused || !autoPlayInterval) return;
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % features.length);
+    }, autoPlayInterval);
+    return () => clearInterval(interval);
+  }, [features.length, autoPlayInterval, isPaused]);
 
   return (
-    <div className={cn("py-12 md:py-16 bg-white w-full", className)}>
-      <div className="max-w-full lg:max-w-[1536px] mx-auto w-full px-6 md:px-12 lg:px-16">
-        <h2 className="text-3xl md:text-5xl lg:text-5xl clash-title mb-12 lg:mb-16 text-center text-[#0E1E38] tracking-tight">
-          {title}
-        </h2>
+    <div
+      className={cn("w-full bg-white text-[#0E1E38] py-20 sm:py-28 overflow-hidden", className)}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      {/* Kenarlara Kadar Uzanan Geniş Kapsayıcı */}
+      <div className="w-full px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-44">
+        {/* Üst Başlık Alanı */}
+        <div className="max-w-4xl mb-12 sm:mb-16">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="w-2 h-2 rounded-full bg-[#004BFA]" />
+            <span className="text-xs sm:text-sm font-semibold tracking-widest uppercase text-slate-500">
+              {title}
+            </span>
+          </div>
 
-        <div className="flex flex-col md:grid md:grid-cols-2 gap-10 md:gap-14 lg:gap-20 items-stretch">
-          
-          {/* Sol Kolon - Başlıklar (Accordion) */}
-          <div className="order-2 md:order-1 flex flex-col justify-center divide-y divide-slate-100">
-            {features.map((feature, index) => {
-              const isActive = index === openIndex
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-normal text-[#0E1E38] tracking-tight leading-tight">
+            Yatırımlarınızı profesyonelce yönetmeniz için geliştirilmiş bütünleşik araçlar.
+          </h2>
+        </div>
+
+        {/* İnteraktif Sekme Navigasyonu (Çerçevesiz, Yatay Akıcı Liste) */}
+        <div className="border-b border-slate-200/80 mb-12 sm:mb-16 overflow-x-auto scrollbar-none">
+          <div className="flex items-center gap-6 sm:gap-10 min-w-max pb-4">
+            {features.map((feature, idx) => {
+              const isActive = idx === activeIndex;
               return (
-                <div
-                  key={index}
-                  className="py-5 cursor-pointer first:pt-0 last:pb-0"
-                  onClick={() => handleToggle(index)}
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setActiveIndex(idx)}
+                  className="group relative flex items-center gap-2.5 pb-2 transition-all text-left"
                 >
-                  <div className="flex items-center justify-between">
-                    <h3
-                      className={cn(
-                        "text-xl md:text-2xl clash-subtitle transition-all duration-300 pointer-events-none",
-                        isActive ? "text-[#0E1E38] translate-x-1" : "text-[#0E1E38]/40 hover:text-[#0E1E38]/70"
-                      )}
-                    >
-                      {feature.title}
-                    </h3>
-                    <motion.div
-                      animate={{ rotate: isActive ? 180 : 0 }}
-                      transition={{ duration: 0.2 }}
-                      className={cn(
-                        "pointer-events-none transition-colors",
-                        isActive ? "text-[#0E1E38]" : "text-[#0E1E38]/30"
-                      )}
-                    >
-                      <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6" />
-                    </motion.div>
-                  </div>
-                  
-                  <AnimatePresence initial={false}>
-                    {isActive && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="overflow-hidden"
-                      >
-                        <p className="mt-3 text-base text-[#0E1E38]/70 clash-desc leading-relaxed pointer-events-none">
-                          {feature.content}
-                        </p>
-                      </motion.div>
+                  <span
+                    className={cn(
+                      "text-xs font-mono transition-colors",
+                      isActive ? "text-[#004BFA] font-bold" : "text-slate-400 group-hover:text-slate-600"
                     )}
-                  </AnimatePresence>
-                </div>
-              )
+                  >
+                    {feature.step || `0${idx + 1}`}
+                  </span>
+                  <span
+                    className={cn(
+                      "text-sm sm:text-base tracking-tight transition-all",
+                      isActive
+                        ? "text-[#0E1E38] font-semibold"
+                        : "text-slate-500 hover:text-slate-900 font-normal"
+                    )}
+                  >
+                    {feature.title}
+                  </span>
+
+                  {/* Aktif Sekme Gösterge Çizgisi */}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeFeatureTabIndicator"
+                      className="absolute -bottom-4 left-0 right-0 h-0.5 bg-[#004BFA]"
+                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                    />
+                  )}
+                </button>
+              );
             })}
           </div>
+        </div>
 
-          {/* Sağ Kolon - Resim */}
-          <div className="order-1 md:order-2 relative w-full min-h-[350px] md:min-h-full rounded-3xl overflow-hidden shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08)] border border-slate-100/80 bg-white">
-            <div className="absolute inset-0 bg-white flex items-center justify-center">
-              {features.map((feature, index) => (
-                <Image
-                  key={index}
-                  src={feature.image}
-                  alt={feature.title || feature.step}
-                  className={cn(
-                    "absolute inset-0 w-full h-full object-contain p-8 transition-opacity duration-300 bg-white",
-                    index === currentImage ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
-                  )}
-                  width={1000}
-                  height={1000}
-                  priority={index === 0}
-                />
-              ))}
-            </div>
+        {/* Vitrin İçeriği (İki Geniş Sütun — Çerçeve / Kutu Yok) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 sm:gap-16 items-center">
+          {/* Sol Kolon: Açıklama, Vurgular ve Aksiyon */}
+          <div className="lg:col-span-5 space-y-6">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeFeature.title}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -15 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className="space-y-6"
+              >
+                {activeFeature.badge && (
+                  <span className="text-xs font-mono font-bold tracking-widest text-[#004BFA] uppercase block">
+                    {activeFeature.badge}
+                  </span>
+                )}
+
+                <h3 className="text-2xl sm:text-3xl lg:text-4xl font-normal text-[#0E1E38] tracking-tight leading-tight">
+                  {activeFeature.title}
+                </h3>
+
+                {activeFeature.subtitle && (
+                  <p className="text-base sm:text-lg text-slate-700 font-medium leading-snug">
+                    {activeFeature.subtitle}
+                  </p>
+                )}
+
+                <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed">
+                  {activeFeature.content}
+                </p>
+
+                {/* Vurgu Maddeleri */}
+                {activeFeature.highlights && activeFeature.highlights.length > 0 && (
+                  <div className="pt-2 space-y-3 border-t border-slate-100">
+                    {activeFeature.highlights.map((item, hIdx) => (
+                      <div key={hIdx} className="flex items-start gap-3 text-sm text-slate-700 font-medium">
+                        <CheckCircle2 className="w-4 h-4 text-[#004BFA] shrink-0 mt-0.5" />
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="pt-4">
+                  <Link
+                    href="/login?tab=register"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-[#0E1E38] hover:text-[#004BFA] transition-colors group"
+                  >
+                    <span>Hemen Deneyin</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
+          {/* Sağ Kolon: Çerçevesiz, Geniş Ekran Arayüz Önizlemesi */}
+          <div className="lg:col-span-7 relative w-full">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeFeature.image}
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="relative w-full aspect-[16/10] sm:aspect-[16/9] lg:aspect-[16/10] rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-50 flex items-center justify-center"
+              >
+                <Image
+                  src={activeFeature.image}
+                  alt={activeFeature.title}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 60vw"
+                  className="object-contain p-2 sm:p-6 transition-all duration-500"
+                  priority
+                />
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
