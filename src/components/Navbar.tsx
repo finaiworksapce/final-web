@@ -12,6 +12,7 @@ import { TubelightNavbar } from "@/components/ui/tubelight-navbar";
 import { Home, Compass, Info, ShieldCheck, Users } from "lucide-react";
 import { Menu as LucideMenu, X } from "lucide-react";
 import { FinAiLogo } from "@/components/ui/logo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -61,6 +62,7 @@ export default function Navbar() {
 
                 {/* Sağ Taraf - Butonlar / Mobil Menü Butonu */}
                 <div className="flex items-center gap-2 lg:gap-3 relative z-50 shrink-0">
+                    <ThemeToggle />
                     {isAuthenticated ? (
                         <Link href="/dashboard" passHref legacyBehavior>
                             <motion.a

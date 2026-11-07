@@ -54,6 +54,7 @@ export const metadata: Metadata = {
 import { UserProvider } from "@/components/providers/UserProvider";
 import { ToastProvider } from "@/components/providers/ToastProvider";
 import { NetworkStatusProvider } from "@/components/providers/NetworkStatusProvider";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 
 export default function RootLayout({
   children,
@@ -61,19 +62,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="tr">
+    <html lang="tr" suppressHydrationWarning>
       <head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
       <body className="antialiased font-clash text-[#040989] bg-[#F5F7FA] selection:bg-[#004BFA]/20 selection:text-[#004BFA] min-h-screen">
-        <UserProvider>
-          <ToastProvider>
-            <NetworkStatusProvider>
-              {children}
-            </NetworkStatusProvider>
-          </ToastProvider>
-        </UserProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem={false}
+          disableTransitionOnChange={false}
+        >
+          <UserProvider>
+            <ToastProvider>
+              <NetworkStatusProvider>
+                {children}
+              </NetworkStatusProvider>
+            </ToastProvider>
+          </UserProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

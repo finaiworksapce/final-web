@@ -32,6 +32,7 @@ import { UserProvider, useUser } from "@/components/providers/UserProvider";
 import { AuthComponent } from "@/components/ui/sign-up";
 import { ToastProvider } from "@/components/providers/ToastProvider";
 import { FinAiLogo } from "@/components/ui/logo";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { GlobalSearch } from "@/components/GlobalSearch";
 
 function DashboardShell({
@@ -437,6 +438,8 @@ function DashboardShell({
                                     <GlobalSearch className="w-56 lg:w-80" />
                                 </div>
 
+                                <ThemeToggle />
+
                                 <div className="relative" ref={profileRef}>
                                     <button
                                         onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -645,8 +648,9 @@ function DashboardShell({
                                             })}
                                         </nav>
 
-                                        {/* Çıkış Yap */}
-                                        <div className="pt-3 border-t border-[#D6E4FF]/50 flex-shrink-0">
+                                        {/* Tema Değiştir & Çıkış Yap */}
+                                        <div className="pt-3 border-t border-[#D6E4FF]/50 flex-shrink-0 space-y-2">
+                                            <ThemeToggle showLabel className="w-full justify-start px-3.5 py-2.5 min-h-[44px]" />
                                             <button
                                                 onClick={() => {
                                                     setIsMobileMenuOpen(false);

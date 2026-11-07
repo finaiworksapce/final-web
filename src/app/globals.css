@@ -273,3 +273,141 @@ body {
 img, svg, video, canvas, audio, iframe, embed, object {
   max-width: 100%;
 }
+
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ==========================================================================
+   FINAI THEME SYSTEM (LIGHT & DARK MODES)
+   Official Palette: #02041A, #040989, #004BFA, #5B80FF, #D6E4FF, #F5F7FA
+   ========================================================================== */
+
+.dark body {
+  background-color: #02041A !important;
+  color: #F5F7FA !important;
+}
+
+.dark main {
+  background-color: #02041A !important;
+}
+
+.dark :where(h1, h2, h3, h4, h5, h6) {
+  color: #F5F7FA !important;
+}
+
+.dark :where(p, label, li) {
+  color: #D6E4FF !important;
+}
+
+/* Card surfaces: transform from #FFFFFF to #040989 in dark mode */
+.dark .bg-white {
+  background-color: #040989 !important;
+  border-color: rgba(91, 128, 255, 0.25) !important;
+  color: #F5F7FA !important;
+}
+
+.dark .bg-white\/90,
+.dark .bg-white\/95,
+.dark .bg-white\/80,
+.dark .bg-white\/70 {
+  background-color: rgba(2, 4, 26, 0.92) !important;
+  border-color: rgba(91, 128, 255, 0.25) !important;
+}
+
+.dark .bg-\[\#F5F7FA\] {
+  background-color: #02041A !important;
+  color: #F5F7FA !important;
+}
+
+.dark .bg-slate-50,
+.dark .bg-slate-100 {
+  background-color: rgba(2, 4, 26, 0.6) !important;
+  border-color: rgba(91, 128, 255, 0.2) !important;
+}
+
+/* Main text transform from Navy to Cold White */
+.dark .text-\[\#040989\] {
+  color: #F5F7FA !important;
+}
+
+.dark .text-\[\#040989\]\/80,
+.dark .text-\[\#040989\]\/75,
+.dark .text-\[\#040989\]\/70,
+.dark .text-\[\#040989\]\/60 {
+  color: #D6E4FF !important;
+}
+
+.dark .text-\[\#0E1E38\],
+.dark .text-\[\#0E1E38\]\/80 {
+  color: #F5F7FA !important;
+}
+
+.dark .text-slate-600,
+.dark .text-slate-700,
+.dark .text-slate-800,
+.dark .text-slate-900 {
+  color: #D6E4FF !important;
+}
+
+/* Borders in dark mode */
+.dark .border-\[\#D6E4FF\],
+.dark .border-\[\#D6E4FF\]\/50,
+.dark .border-\[\#D6E4FF\]\/60 {
+  border-color: rgba(91, 128, 255, 0.28) !important;
+}
+
+.dark .border-slate-200,
+.dark .border-slate-100 {
+  border-color: rgba(91, 128, 255, 0.2) !important;
+}
+
+/* Header in dark mode */
+.dark header {
+  background-color: rgba(2, 4, 26, 0.92) !important;
+  border-bottom-color: rgba(91, 128, 255, 0.25) !important;
+}
+
+/* Active navigation item in dark mode: electric blue highlight */
+.dark aside nav a.bg-white,
+.dark aside nav div.bg-white {
+  background-color: #004BFA !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 14px rgba(0, 75, 250, 0.35) !important;
+}
+
+.dark aside nav a.bg-white svg,
+.dark aside nav div.bg-white svg {
+  color: #FFFFFF !important;
+}
+
+.dark aside nav a.bg-white span,
+.dark aside nav div.bg-white span {
+  color: #FFFFFF !important;
+}
+
+/* Mobile drawer in dark mode */
+.dark #mobile-nav-drawer {
+  background-color: #02041A !important;
+  border-right-color: rgba(91, 128, 255, 0.25) !important;
+}
+
+/* Dropdown menus in dark mode */
+.dark #profile-dropdown-menu {
+  background-color: #040989 !important;
+  border-color: rgba(91, 128, 255, 0.3) !important;
+}
+
+.dark #profile-dropdown-menu p,
+.dark #profile-dropdown-menu a,
+.dark #profile-dropdown-menu button {
+  color: #F5F7FA !important;
+}
+
+/* Inputs in dark mode */
+.dark input:not([type="checkbox"]):not([type="radio"]),
+.dark textarea,
+.dark select {
+  background-color: rgba(2, 4, 26, 0.7) !important;
+  border-color: rgba(91, 128, 255, 0.3) !important;
+  color: #F5F7FA !important;
+}
