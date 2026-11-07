@@ -32,13 +32,6 @@ export default function HomeClient() {
   }, [isAuthenticated, router]);
 
   const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  });
-
-  const blobY1 = useTransform(scrollYProgress, [0, 1], [0, 300]);
-  const blobY2 = useTransform(scrollYProgress, [0, 1], [0, -200]);
 
   // Oturumu açık kullanıcılar için sayfa içeriğini göstermeden doğrudan dashboard'a aktar
   if (isAuthenticated === true) {
@@ -115,66 +108,33 @@ export default function HomeClient() {
     },
   ];
 
-  const features = [
-    { 
-      step: 'Adım 1', 
-      title: 'Anlık Portföy Takibi',
-      content: 'Borsa İstanbul hisselerinden TEFAS fonlarına kadar tüm yatırımlarınızı tek bir panoda toplayın. Fiyat değişimlerini saniyelik güncellemelerle takip edin ve portföyünüzün toplam değerini anlık olarak görüntüleyerek kontrolü hiçbir zaman elden bırakmayın.', 
-      image: '/images/portfolio_tracking_white.jpg' 
-    },
-    { 
-      step: 'Adım 2',
-      title: 'Anlık Haber Takibi',
-      content: 'Piyasadaki hareketliliği belirleyen flaş gelişmeleri kaçırmayın. Yapay zeka asistanımız binlerce kaynağı süzerek yatırımlarınızı doğrudan etkileyebilecek sıcak haberleri ilk sizin öğrenmenizi sağlar.',
-      image: '/images/news_tracking_white.jpg'
-    },
-    { 
-      step: 'Adım 3',
-      title: 'Olası Senaryo Analizleri',
-      content: '\'Ya piyasa düşerse?\' veya \'Ya döviz yükselirse?\' sorularına yanıt bulun. Piyasada yaşanabilecek ekstrem durumlarda portföyünüzün nasıl tepki vereceğini önceden test edin, stratejinizi güvenceye alın.',
-      image: '/images/scenario_analysis_white.jpg'
-    },
-    { 
-      step: 'Adım 4',
-      title: 'Portföye Özel Korelasyon Analizleri',
-      content: 'Varlıklarınız arasındaki gizli bağları keşfedin. Yapay zeka motorumuzla yatırımlarınızın birbirini nasıl etkilediğini analiz edin, riskinizi dengeleyerek portföyünüzün performansını optimize edin.',
-      image: '/images/correlation_analysis_white.jpg'
-    },
-    { 
-      step: 'Adım 5',
-      title: 'Kişiye Özel Portföy Yaratma Testi',
-      content: 'Yatırım karakterinizi ve risk toleransınızı netleştirin. Hedeflerinize en uygun varlık dağılımını, size özel olarak hazırlanan rehber test ile saniyeler içinde keşfedin ve bilinçli adımlar atın.',
-      image: '/images/portfolio_test_white.jpg'
-    },
-  ];
-
   return (
-    <div ref={containerRef} className="min-h-screen w-full bg-white text-slate-800 relative font-clash overflow-x-hidden">
+    <div ref={containerRef} className="min-h-screen w-full bg-white text-slate-800 relative font-clash overflow-x-hidden selection:bg-blue-100 selection:text-[#0E1E38]">
       
-      {/* 
-          FULL WHITE BACKGROUND (Clean)
-      */}
+      {/* FULL WHITE BACKGROUND */}
       <div className="fixed inset-0 pointer-events-none -z-10 bg-white" />
 
+      {/* Navigasyon */}
       <Navbar />
 
       <main className="flex-1 relative z-10 w-full overflow-hidden">
-        {/* 
+        {/* =========================================================================
             FIRST VIEWPORT (100vh) - Hero centered, Testimonials pinned at bottom edge
-        */}
+            ========================================================================= */}
         <div className="min-h-screen flex flex-col justify-between pt-20 sm:pt-24 pb-4 sm:pb-6 relative w-full overflow-hidden">
           
+          {/* Subtle Radial Glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] max-w-full h-[400px] bg-[#78B8F5]/15 blur-[130px] rounded-full pointer-events-none -z-0" />
+
           {/* HERO SECTION */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] max-w-full h-[400px] bg-[#78B8F5]/20 blur-[120px] rounded-full pointer-events-none -z-0" />
           <section
             id="hero"
             className="my-auto w-full flex flex-col justify-center relative py-4 sm:py-6"
           >
             <div className="max-w-6xl mx-auto w-full px-6 relative">
-              {/* Text Content */}
               <div className="text-center relative z-10 space-y-4 sm:space-y-6 max-w-4xl mx-auto">
                 
-                {/* Huge H1 with soft radial glow from navy to white - Geometric Outfit font matching image style */}
+                {/* Logo / Başlık */}
                 <motion.h1
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -197,7 +157,7 @@ export default function HomeClient() {
                   </span>
                 </motion.h1>
 
-                {/* Subtitle - Effective marketing sentence with clean typography matching Image 1 */}
+                {/* Subtitle */}
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -207,20 +167,20 @@ export default function HomeClient() {
                   Tüm Yatırımlarınızı Yapay Zeka Gücüyle Tek Ekrandan Yönetin, <b className="text-[#0E1E38] clash-title">Portföyünüzün Tam Kontrolünü</b> Elinize Alın.
                 </motion.p>
 
-                {/* CTAs */}
+                {/* Mobil CTAs */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.3 }}
                   className="flex md:hidden flex-row gap-3 justify-center items-center pt-4 sm:pt-6"
                 >
-                    <Link href="/login?tab=register" className="flex items-center justify-center gap-1.5 px-6 py-3 bg-[#0E1E38] hover:bg-[#102240] text-white clash-subtitle rounded-full shadow-lg transition-all text-sm tracking-wide">
-                        Ücretsiz Dene
-                        <ArrowRight className="w-4 h-4" />
-                    </Link>
-                    <Link href="/login" className="flex items-center justify-center px-6 py-3 bg-[#78B8F5]/15 hover:bg-[#78B8F5]/25 text-[#0E1E38] clash-subtitle rounded-full border-2 border-[#78B8F5] shadow-sm transition-all text-sm tracking-wide">
-                        Giriş Yap
-                    </Link>
+                  <Link href="/login?tab=register" className="flex items-center justify-center gap-1.5 px-6 py-3 bg-[#0E1E38] hover:bg-[#102240] text-white clash-subtitle rounded-full shadow-lg transition-all text-sm tracking-wide">
+                    Ücretsiz Dene
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  <Link href="/login" className="flex items-center justify-center px-6 py-3 bg-[#78B8F5]/15 hover:bg-[#78B8F5]/25 text-[#0E1E38] clash-subtitle rounded-full border-2 border-[#78B8F5] shadow-sm transition-all text-sm tracking-wide">
+                    Giriş Yap
+                  </Link>
                 </motion.div>
               </div>
             </div>
@@ -228,19 +188,57 @@ export default function HomeClient() {
 
           {/* TESTIMONIALS (Pinned at the bottom edge of 100vh screen fold) */}
           <section className="w-full bg-white pt-2 pb-2 sm:pb-4 relative z-20 overflow-hidden shrink-0 mt-auto">
-              <InfiniteMovingCards items={testimonialsData} direction="right" speed="slow" className="w-full max-w-none" />
+            <InfiniteMovingCards items={testimonialsData} direction="right" speed="slow" className="w-full max-w-none" />
           </section>
         </div>
 
-        {/* 
-            FEATURES SECTION
-        */}
+        {/* =========================================================================
+            BÖLÜM 2: ÖZELLİKLER & BENTO GRID
+            ========================================================================= */}
         <section id="features" className="w-full bg-white relative z-20">
-             <FeatureSteps title="Özellikler" />
+          <FeatureSteps title="Özellikler" />
         </section>
 
+        {/* =========================================================================
+            BÖLÜM 3: MERAK ETTİKLERİNİZ (FAQ) — ÇERÇEVESİZ & EDİTORYAL
+            ========================================================================= */}
         <FAQAccordionSection />
 
+        {/* =========================================================================
+            BÖLÜM 4: MINIMALIST VE GENİŞ CALL TO ACTION (EYLEME ÇAĞRI)
+            ========================================================================= */}
+        <section className="w-full bg-white py-16 sm:py-24 border-t border-slate-200/80 relative z-20">
+          <div className="w-full px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-44 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+            <div className="max-w-2xl space-y-2">
+              <span className="text-xs font-semibold tracking-widest uppercase text-slate-400 block">
+                Bilinçli Yatırıma Adım Atın
+              </span>
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-normal text-[#0E1E38] tracking-tight leading-snug">
+                Finansal geleceğinizi şansa değil, rasyonel verilere emanet edin.
+              </h2>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 shrink-0">
+              <Link
+                href="/login?tab=register"
+                className="px-8 py-4 bg-[#0E1E38] hover:bg-black text-white text-sm font-semibold rounded-full transition-all flex items-center justify-center gap-2 active:scale-98 shadow-sm"
+              >
+                <span>Hemen Ücretsiz Başlayın</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/about"
+                className="px-8 py-4 bg-transparent hover:bg-slate-50 text-[#0E1E38] text-sm font-semibold rounded-full border border-slate-300 transition-colors flex items-center justify-center"
+              >
+                <span>Vizyonumuzu İnceleyin</span>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            FOOTER
+            ========================================================================= */}
         <div className="w-full relative z-10 bg-white">
           <Footer />
         </div>
