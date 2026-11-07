@@ -18,6 +18,7 @@ import { motion } from "framer-motion";
 import { EnrichedNewsItem } from "@/app/api/news/route";
 import { ArticleResponseData } from "@/app/api/news/article/route";
 import { NewsThumbnail } from "@/components/news/NewsThumbnail";
+import { FinAiReportCard } from "@/components/news/FinAiReportCard";
 import { RelatedNewsWidget } from "@/components/news/RelatedNewsWidget";
 
 export default function NewsDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -313,6 +314,11 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
 
                         {/* SAĞ KOLON: Özet + İlgili Haberler (%35 Genişlik) */}
                         <div className="lg:col-span-4 space-y-5">
+                            {/* WIDGET 1: Özet */}
+                            <FinAiReportCard 
+                                report={article.report} 
+                                fallbackSummary={article.summary} 
+                            />
                             
 
 
