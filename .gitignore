@@ -47,3 +47,4 @@ scripts/.backfill_progress.json
 scratch/
 supabase/.temp/
 dist-ingest-test/
+scripts/responsive_screens/
