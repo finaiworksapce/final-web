@@ -9,24 +9,19 @@ import { Users, BarChart3, ShieldCheck, Zap } from "lucide-react";
 
 const platformFeatures: FeatureItem[] = [
   {
-    icon: <Users size={18} />,
-    title: "5,000+ Yatırımcı",
-    description: "FinAi topluluğuna katılarak akıllı yatırımlara adım atın.",
-  },
-  {
     icon: <BarChart3 size={18} />,
-    title: "Akıllı Analiz",
-    description: "Portföyünüzü yapay zeka destekli içgörülerle büyütün.",
+    title: "Canlı Portföy Takibi",
+    description: "BIST hisseleri ve TEFAS fonlarınızı saniyelik piyasa verileriyle tek ekranda konsolide edin.",
   },
   {
     icon: <ShieldCheck size={18} />,
-    title: "Güvenli Altyapı",
-    description: "Verileriniz üst düzey banka veritabanı standartlarında korunur.",
+    title: "Korelasyon & Risk Matrisi",
+    description: "Yatırımlarınızın birbirini nasıl etkilediğini matematiksel modellerle keşfedin.",
   },
   {
     icon: <Zap size={18} />,
-    title: "Anında Bildirim",
-    description: "Piyasa fırsatlarını yakalamak için gerçek zamanlı uyarılar alın.",
+    title: "Akıllı KAP & Bilanço Zekası",
+    description: "Portföyünüzü ilgilendiren şirket haberlerini ve temettü takvimini anında yakalayın.",
   },
 ];
 

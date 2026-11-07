@@ -101,43 +101,43 @@ export const InfiniteMovingCards = ({
             >
                 {items.map((item, idx) => (
                     <li
-                        className="w-[85vw] sm:w-[360px] md:w-[400px] max-w-full relative rounded-2xl border border-slate-100 bg-white shadow-lg hover:shadow-2xl transition-all duration-300 px-6 py-6 shrink-0"
+                        className="w-[85vw] sm:w-[360px] md:w-[400px] max-w-full relative rounded-2xl bg-[#F8FAFC] hover:bg-[#F1F5F9] transition-all duration-300 px-6 py-5 shrink-0"
                         key={`${item.name}-${idx}`}
                     >
                         <blockquote>
                             <div className="flex items-center gap-3 mb-3">
                                 <div
-                                    className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-base shadow-sm"
+                                    className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-2xs"
                                     style={{ background: item.avatarGradient }}
                                 >
                                     {item.initials}
                                 </div>
                                 <div>
-                                    <span className="block text-base font-bold text-[#0E1E38]">
+                                    <span className="block text-sm font-semibold text-[#0E1E38]">
                                         {item.name}
                                     </span>
-                                    <span className="block text-xs text-[#0E1E38]/60 font-medium">
+                                    <span className="block text-xs text-slate-500 font-normal">
                                         {item.role}
                                     </span>
                                 </div>
                             </div>
 
-                            <span className="relative z-20 text-sm leading-[1.6] text-[#0E1E38]/90 font-medium block mb-4">
+                            <span className="relative z-20 text-sm leading-[1.6] text-slate-700 font-normal block mb-4">
                                 "{item.quote}"
                             </span>
 
-                            <div className="flex items-center justify-between border-t border-slate-100 pt-3">
+                            <div className="flex items-center justify-between border-t border-slate-200/60 pt-3">
                                 <div className="flex gap-2">
                                     {item.tags.map((tag, tIdx) => (
                                         <span key={tIdx} className={cn(
-                                            "text-[10px] px-2 py-0.5 rounded-full font-bold border",
-                                            tag.type === 'featured' ? "bg-blue-50 text-[#0E1E38] border-[#78B8F5]/20" : "bg-white text-[#0E1E38]/60 border-slate-100"
+                                            "text-[10px] px-2.5 py-0.5 rounded-full font-semibold",
+                                            tag.type === 'featured' ? "bg-white text-[#004BFA] shadow-2xs" : "bg-white/80 text-slate-600"
                                         )}>
                                             {tag.text}
                                         </span>
                                     ))}
                                 </div>
-                                <div className="flex items-center gap-2 text-[10px] font-bold text-[#0E1E38]/30 uppercase tracking-widest">
+                                <div className="flex items-center gap-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
                                     {item.stats.map((stat, sIdx) => {
                                         const Icon = stat.icon;
                                         return (

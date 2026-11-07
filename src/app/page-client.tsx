@@ -121,7 +121,7 @@ export default function HomeClient() {
         {/* =========================================================================
             FIRST VIEWPORT (100vh) - Hero centered, Testimonials pinned at bottom edge
             ========================================================================= */}
-        <div className="min-h-screen flex flex-col justify-between pt-20 sm:pt-24 pb-4 sm:pb-6 relative w-full overflow-hidden">
+        <div className="min-h-screen flex flex-col justify-between pt-20 sm:pt-24 pb-6 sm:pb-8 relative w-full overflow-hidden">
           
           {/* Subtle Radial Glow */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] max-w-full h-[400px] bg-[#78B8F5]/15 blur-[130px] rounded-full pointer-events-none -z-0" />
@@ -134,27 +134,25 @@ export default function HomeClient() {
             <div className="max-w-6xl mx-auto w-full px-6 relative">
               <div className="text-center relative z-10 space-y-4 sm:space-y-6 max-w-4xl mx-auto">
                 
+                {/* Üst Rozet / Pill Badge */}
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-slate-100/90 text-xs font-semibold text-[#0E1E38] tracking-wide mb-2 sm:mb-4 shadow-2xs"
+                >
+                  <span className="w-2 h-2 rounded-full bg-[#004BFA] animate-pulse" />
+                  <span>BIST & TEFAS İçin Akıllı Portföy Zekası</span>
+                </motion.div>
+
                 {/* Logo / Başlık */}
                 <motion.h1
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 25 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-                  className="clash-title text-[65px] sm:text-[90px] md:text-[120px] lg:text-[135px] leading-[1.0] tracking-tight text-[#0E1E38] py-2 sm:py-4 relative flex justify-center items-center w-full mx-auto"
+                  className="text-6xl sm:text-8xl md:text-9xl lg:text-[120px] font-normal tracking-tight text-[#0E1E38] leading-[0.95] clash-title"
                 >
-                  <span className="relative inline-block z-10">
-                    <span className="text-[#040989] px-2 clash-title">
-                      FinAi
-                    </span>
-                    <svg className="absolute w-full h-2 sm:h-3.5 -bottom-1 left-0 overflow-visible" viewBox="0 0 100 10" preserveAspectRatio="none">
-                      <defs>
-                        <linearGradient id="finaiUnderlineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                          <stop offset="0%" stopColor="#004BFA" />
-                          <stop offset="100%" stopColor="#5B80FF" />
-                        </linearGradient>
-                      </defs>
-                      <path d="M0 5 Q 50 10 100 5" stroke="url(#finaiUnderlineGrad)" strokeWidth="6" strokeLinecap="round" fill="transparent" />
-                    </svg>
-                  </span>
+                  FinAi
                 </motion.h1>
 
                 {/* Subtitle */}
@@ -162,25 +160,46 @@ export default function HomeClient() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.2 }}
-                  className="clash-subtitle text-base sm:text-xl md:text-2xl text-[#0E1E38]/80 max-w-3xl mx-auto leading-relaxed mt-8 sm:mt-12 md:mt-14 px-4 sm:px-0 tracking-normal"
+                  className="text-base sm:text-xl md:text-2xl text-slate-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed mt-4 sm:mt-6 px-4 sm:px-0"
                 >
-                  Tüm Yatırımlarınızı Yapay Zeka Gücüyle Tek Ekrandan Yönetin, <b className="text-[#0E1E38] clash-title">Portföyünüzün Tam Kontrolünü</b> Elinize Alın.
+                  Tüm yatırımlarınızı yapay zeka gücüyle tek ekrandan yönetin,{" "}
+                  <span className="text-[#0E1E38] font-semibold">portföyünüzün tam kontrolünü</span> elinize alın.
                 </motion.p>
 
-                {/* Mobil CTAs */}
+                {/* Call-To-Action (Hem Masaüstü Hem Mobil) */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.7, delay: 0.3 }}
-                  className="flex md:hidden flex-row gap-3 justify-center items-center pt-4 sm:pt-6"
+                  className="flex flex-col sm:flex-row gap-3.5 justify-center items-center pt-6 sm:pt-8"
                 >
-                  <Link href="/login?tab=register" className="flex items-center justify-center gap-1.5 px-6 py-3 bg-[#0E1E38] hover:bg-[#102240] text-white clash-subtitle rounded-full shadow-lg transition-all text-sm tracking-wide">
-                    Ücretsiz Dene
-                    <ArrowRight className="w-4 h-4" />
+                  <Link
+                    href="/login?tab=register"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#0E1E38] hover:bg-black text-white text-sm font-semibold rounded-full shadow-lg shadow-[#0E1E38]/10 hover:shadow-xl transition-all duration-200 active:scale-98 group"
+                  >
+                    <span>Ücretsiz Hesap Oluştur</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                   </Link>
-                  <Link href="/login" className="flex items-center justify-center px-6 py-3 bg-[#78B8F5]/15 hover:bg-[#78B8F5]/25 text-[#0E1E38] clash-subtitle rounded-full border-2 border-[#78B8F5] shadow-sm transition-all text-sm tracking-wide">
-                    Giriş Yap
+                  <Link
+                    href="#features"
+                    className="w-full sm:w-auto inline-flex items-center justify-center px-7 py-4 bg-slate-100 hover:bg-slate-200 text-[#0E1E38] text-sm font-semibold rounded-full transition-all duration-200"
+                  >
+                    Nasıl Çalışır?
                   </Link>
+                </motion.div>
+
+                {/* Güven Rozetleri */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.7, delay: 0.4 }}
+                  className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs text-slate-400 font-medium pt-3"
+                >
+                  <span>✓ Kredi kartı gerekmez</span>
+                  <span className="hidden sm:inline">•</span>
+                  <span>✓ 1 dakikada ücretsiz kurulum</span>
+                  <span className="hidden sm:inline">•</span>
+                  <span>✓ Canlı BIST & TEFAS</span>
                 </motion.div>
               </div>
             </div>

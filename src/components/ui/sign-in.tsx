@@ -1,64 +1,56 @@
+"use client";
+
 import React, { useState } from 'react';
-import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft, BarChart3, ShieldCheck, Zap, ArrowRight, Check } from 'lucide-react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import Link from 'next/link';
 import { LegalModal } from '@/components/ui/legal-modal';
 
-// --- HELPER COMPONENTS (ICONS) ---
-
-const GoogleIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 48 48">
-        <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s12-5.373 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-2.641-.21-5.236-.611-7.743z" />
-        <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z" />
-        <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z" />
-        <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C42.022 35.026 44 30.038 44 24c0-2.641-.21-5.236-.611-7.743z" />
-    </svg>
-);
+// --- HELPER COMPONENTS ---
 
 const TypingText = ({ text }: { text: string }) => {
-    const characters = Array.from(text);
-    const container: Variants = {
-      hidden: { opacity: 0 },
-      visible: (i = 1) => ({
-        opacity: 1,
-        transition: { staggerChildren: 0.08, delayChildren: 0.1 * i },
-      }),
-    };
-  
-    const child: Variants = {
-      visible: {
-        opacity: 1,
-        y: 0,
-        transition: { type: "spring", damping: 12, stiffness: 200 },
-      },
-      hidden: {
-        opacity: 0,
-        y: 20,
-        transition: { type: "spring", damping: 12, stiffness: 200 },
-      },
-    };
-  
-    return (
-      <motion.div
-        className="flex overflow-hidden text-3xl md:text-5xl tracking-tighter text-[#0E1E38] clash-title"
-        variants={container}
-        initial="hidden"
-        animate="visible"
-      >
-        {characters.map((char, index) => (
-          <motion.span variants={child} key={index}>
-            {char === " " ? "\u00A0" : char}
-          </motion.span>
-        ))}
-        <motion.div
-          animate={{ opacity: [0, 1, 0] }}
-          transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
-          className="ml-1 w-1 h-8 md:h-12 bg-[#78B8F5] rounded-full"
-        />
-      </motion.div>
-    );
+  const characters = Array.from(text);
+  const container: Variants = {
+    hidden: { opacity: 0 },
+    visible: (i = 1) => ({
+      opacity: 1,
+      transition: { staggerChildren: 0.08, delayChildren: 0.1 * i },
+    }),
   };
 
+  const child: Variants = {
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", damping: 12, stiffness: 200 },
+    },
+    hidden: {
+      opacity: 0,
+      y: 20,
+      transition: { type: "spring", damping: 12, stiffness: 200 },
+    },
+  };
+
+  return (
+    <motion.div
+      className="flex overflow-hidden text-3xl md:text-5xl tracking-tight text-[#0E1E38] clash-title"
+      variants={container}
+      initial="hidden"
+      animate="visible"
+    >
+      {characters.map((char, index) => (
+        <motion.span variants={child} key={index}>
+          {char === " " ? "\u00A0" : char}
+        </motion.span>
+      ))}
+      <motion.div
+        animate={{ opacity: [0, 1, 0] }}
+        transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+        className="ml-1 w-1 h-8 md:h-12 bg-[#004BFA] rounded-full"
+      />
+    </motion.div>
+  );
+};
 
 // --- TYPE DEFINITIONS ---
 
@@ -94,30 +86,18 @@ interface SignInPageProps {
 
 // --- SUB-COMPONENTS ---
 
-const GlassInputWrapper = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-  <div className={`rounded-2xl border border-[#78B8F5]/30 bg-white backdrop-blur-sm transition-all duration-300 focus-within:border-[#78B8F5] focus-within:ring-2 focus-within:ring-[#78B8F5]/30 focus-within:bg-[#78B8F5]/5 ${className}`}>
+const CleanInputWrapper = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+  <div className={`rounded-xl border border-slate-200 bg-white transition-all duration-200 focus-within:border-[#004BFA] focus-within:ring-2 focus-within:ring-[#004BFA]/10 ${className}`}>
     {children}
-  </div>
-);
-
-const FeatureCard = ({ feature, delay }: { feature: FeatureItem, delay: string }) => (
-  <div className={`animate-testimonial ${delay} flex items-start gap-3 rounded-[20px] bg-white shadow-[0_10px_30px_rgba(20, 43, 80, 0.08)] border border-slate-100 p-4 w-full h-full`}>
-    <div className="flex-shrink-0 w-10 h-10 rounded-[14px] bg-[#78B8F5]/15 border border-[#78B8F5]/10 flex items-center justify-center text-[#0E1E38]">
-      {feature.icon}
-    </div>
-    <div className="text-left flex-1 min-w-0 pr-1">
-      <p className="clash-subtitle text-[#0E1E38] text-[14px] leading-tight mb-1 truncate">{feature.title}</p>
-      <p className="text-[#0E1E38]/80 clash-desc text-[12px] leading-snug line-clamp-3">{feature.description}</p>
-    </div>
   </div>
 );
 
 // --- MAIN COMPONENT ---
 
 export const SignInPage: React.FC<SignInPageProps> = ({
-  title = <span className="clash-title text-foreground tracking-tighter">FinAi'ye Hoş Geldiniz</span>,
-  description = "Hesabınıza giriş yapın ve yapay zeka destekli yatırım yolculuğunuza devam edin.",
-  heroImageSrc,
+  title,
+  description,
+  heroImageSrc = "/logo.png",
   features = [],
   onSignIn,
   onResetPassword,
@@ -156,7 +136,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
   };
 
   const strength = calculateStrength(passwordValue);
-  const strengthColor = strength <= 25 ? "bg-red-500" : strength <= 50 ? "bg-orange-500" : strength <= 75 ? "bg-yellow-500" : "bg-green-500";
+  const strengthColor = strength <= 25 ? "bg-rose-500" : strength <= 50 ? "bg-amber-500" : strength <= 75 ? "bg-emerald-500" : "bg-emerald-600";
   const strengthText = strength <= 25 ? "Zayıf" : strength <= 50 ? "Orta" : strength <= 75 ? "İyi" : "Güçlü";
 
   // AUTOMATED LEGAL FLOW LOGIC
@@ -173,62 +153,44 @@ export const SignInPage: React.FC<SignInPageProps> = ({
 
   const handleActionSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    // ÖNCELİK 1: Eğer e-posta kontrol ediliyorsa bekle
     if (isCheckingEmail) return;
-
-    // ÖNCELİK 2: Eğer e-posta hatası varsa (Zaten kayıtlı) MODALI ASLA AÇMA
     if (emailError) return;
     
-    // Sadece kayıt modunda ve checkbox işaretli değilse süreci başlat
     if (!isLoginMode && !termsAccepted) {
       setPendingSubmitEvent(e);
-      
-      // İlk olarak kullanım koşullarını aç (Otomatik akışı başlat)
       if (!hasApprovedTerms) {
         openLegal('terms', true);
         return;
       }
-      
-      // Eğer koşullar onaylı ama KVKK değilse oradan başla (Otomatik akışı başlat)
       if (!hasApprovedKVKK) {
         openLegal('kvkk', true);
         return;
       }
     }
 
-    // Giriş moduysa veya zaten onaylıysa direkt devam et
     onSignIn?.(e);
   };
 
   const handleLegalApprove = () => {
     if (legalTab === 'terms') {
       setHasApprovedTerms(true);
-      
-      // OTOMATİK AKIŞ: Koşullar bittiyse ve KVKK eksikse otomatik geç
       if (isAutoFlow && !hasApprovedKVKK) {
           setLegalTab('kvkk');
           return;
       }
     } else {
       setHasApprovedKVKK(true);
-      
-      // OTOMATİK AKIŞ: KVKK bittiyse ve Koşullar eksikse (nadir) geri dön
       if (isAutoFlow && !hasApprovedTerms) {
           setLegalTab('terms');
           return;
       }
     }
 
-    // Modal'ı kapat
     setIsLegalModalOpen(false);
 
-    // Her iki metin de onaylandığında çeki koy
     if ((legalTab === 'terms' ? true : hasApprovedTerms) && 
         (legalTab === 'kvkk' ? true : hasApprovedKVKK)) {
       setTermsAccepted(true);
-      
-      // EĞER OTOMATİK AKIŞTAYSAK: İşlemi devam ettir
       if (isAutoFlow && pendingSubmitEvent) {
           const event = pendingSubmitEvent;
           setTimeout(() => {
@@ -246,243 +208,409 @@ export const SignInPage: React.FC<SignInPageProps> = ({
   };
 
   return (
-    <div className="min-h-[100dvh] flex flex-col md:flex-row font-clash w-full bg-background overflow-hidden relative">
-      <Link href="/" className="absolute top-7 left-7 z-50 group flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-all duration-300">
-        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-        <span className="text-[10px] clash-subtitle uppercase tracking-[0.15em] opacity-0 group-hover:opacity-100 transition-opacity">Ana Sayfa</span>
-      </Link>
-      {/* Light Gradient effect for FinAi branding */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none md:hidden">
-          <div className="absolute top-[-10%] left-[-10%] w-[70vw] h-[70vw] rounded-full bg-[#78B8F5]/25 blur-[120px] mix-blend-multiply" />
-          <div className="absolute top-[20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-[#78B8F5]/15 blur-[130px] mix-blend-multiply" />
-      </div>
+    <div className="min-h-screen flex flex-col lg:flex-row font-clash w-full bg-white text-[#0E1E38] selection:bg-blue-100 selection:text-[#0E1E38]">
+      
+      {/* =========================================================================
+          SOL KOLON: GİRİŞ / KAYIT FORMU (TEMİZ, BEYAZ, BORDERLESS)
+          ========================================================================= */}
+      <section className="flex-1 flex flex-col justify-between p-6 sm:p-10 lg:p-14 xl:p-16 min-h-screen">
+        
+        {/* Üst Navigasyon / Geri Dön */}
+        <div>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-[#0E1E38] uppercase tracking-wider transition-colors group mb-8"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            <span>Ana Sayfaya Dön</span>
+          </Link>
+        </div>
 
-      {/* Left column: sign-in form */}
-      <section className="flex-1 flex items-center justify-center p-8 z-10 relative bg-background/80 backdrop-blur-xl md:bg-transparent md:backdrop-blur-none">
-        <div className="w-full max-w-md">
-          <div className="flex flex-col gap-6">
-            <h1 className="animate-element animate-delay-100 text-4xl md:text-5xl leading-tight clash-title">
-              {isForgotPasswordMode ? <span className="clash-title text-foreground tracking-tighter">Şifremi Unuttum</span> : isVerifyingOtp ? <span className="clash-title text-foreground tracking-tighter">E-postanızı Doğrulayın</span> : isLoginMode ? title : <span className="clash-title text-foreground tracking-tighter">Ayrıcalığa Katılın</span>}
-            </h1>
-            <p className="animate-element animate-delay-200 text-muted-foreground clash-desc text-base">
-              {isForgotPasswordMode ? "Yeni şifre oluşturmak için kayıtlı e-posta adresinizi girin." : isVerifyingOtp ? "E-posta adresinize gönderilen 8 haneli güvenlik kodunu girin." : isLoginMode ? description : "Yeni nesil yapay zeka asistanınla hemen tanış."}
-            </p>
+        {/* Merkez: Form Alanı */}
+        <div className="w-full max-w-md mx-auto my-auto py-6">
+          <div className="space-y-6">
+            
+            {/* Başlık ve Açıklama */}
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-normal text-[#0E1E38] tracking-tight clash-title">
+                {isForgotPasswordMode ? (
+                  "Şifremi Unuttum"
+                ) : isVerifyingOtp ? (
+                  "E-postanızı Doğrulayın"
+                ) : isLoginMode ? (
+                  title || "FinAi'ye Hoş Geldiniz"
+                ) : (
+                  "Hesabınızı Oluşturun"
+                )}
+              </h1>
+              
+              <p className="text-sm sm:text-base text-slate-500 font-normal leading-relaxed mt-2">
+                {isForgotPasswordMode
+                  ? "Yeni şifre oluşturmak için kayıtlı e-posta adresinizi girin."
+                  : isVerifyingOtp
+                  ? "E-posta adresinize gönderilen 8 haneli güvenlik kodunu girin."
+                  : isLoginMode
+                  ? (description || "Hesabınıza giriş yaparak BIST ve TEFAS portföyünüzü anlık takip edin.")
+                  : "1 dakikada ücretsiz üye olun, yatırımlarınızın tam kontrolünü elinize alın."}
+              </p>
+            </div>
 
+            {/* FORMLAR */}
             {isForgotPasswordMode ? (
-              <form key="forgot-password" className="space-y-5" onSubmit={onForgotPassword}>
-                <div className="animate-element animate-delay-200">
-                  <label className="text-sm clash-subtitle text-muted-foreground mb-1 block">Kayıtlı E-Posta Adresi</label>
-                  <GlassInputWrapper>
-                    <input name="email" type="email" required placeholder="ornek@mail.com" className="w-full bg-transparent text-sm p-4 rounded-2xl focus:outline-none clash-desc" />
-                  </GlassInputWrapper>
+              <form key="forgot-password" className="space-y-4" onSubmit={onForgotPassword}>
+                <div>
+                  <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5 block">
+                    Kayıtlı E-Posta Adresi
+                  </label>
+                  <CleanInputWrapper>
+                    <input
+                      name="email"
+                      type="email"
+                      required
+                      placeholder="ornek@mail.com"
+                      className="w-full bg-transparent text-sm p-3.5 sm:p-4 rounded-xl focus:outline-none text-[#0E1E38] placeholder:text-slate-400"
+                    />
+                  </CleanInputWrapper>
                 </div>
-                <button type="submit" disabled={isLoading} className="animate-element animate-delay-300 w-full rounded-2xl bg-[#0E1E38] py-4 clash-subtitle text-white hover:bg-[#102240] text-base transition-all shadow-xl shadow-[#0E1E38]/25 hover:shadow-2xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 cursor-pointer">
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full rounded-xl bg-[#0E1E38] hover:bg-[#004BFA] py-3.5 sm:py-4 text-white text-sm font-semibold transition-all duration-200 shadow-md shadow-[#0E1E38]/10 hover:shadow-lg disabled:opacity-50 cursor-pointer"
+                >
                   {isLoading ? "Gönderiliyor..." : "Sıfırlama Bağlantısı Gönder"}
                 </button>
-                <div className="animate-element animate-delay-400 text-center pt-2">
-                  <a href="#" onClick={(e) => { e.preventDefault(); onCancelForgotPassword?.(); }} className="text-sm clash-subtitle text-muted-foreground hover:text-foreground transition-colors">Geri Dön</a>
+
+                <div className="text-center pt-2">
+                  <button
+                    type="button"
+                    onClick={() => onCancelForgotPassword?.()}
+                    className="text-xs font-semibold text-slate-500 hover:text-[#0E1E38] transition-colors"
+                  >
+                    Geri Dön
+                  </button>
                 </div>
               </form>
             ) : isVerifyingOtp ? (
-              <form key="otp" className="space-y-5" onSubmit={onVerifyOtp}>
-                <div className="animate-element animate-delay-200">
-                  <label className="text-sm clash-subtitle text-muted-foreground mb-1 block">Doğrulama Kodu</label>
-                  <GlassInputWrapper>
-                    <input name="otpCode" type="text" maxLength={8} required placeholder="" className="w-full bg-transparent text-center text-3xl font-bold tracking-[0.3em] p-4 rounded-2xl focus:outline-none" />
-                  </GlassInputWrapper>
+              <form key="otp" className="space-y-4" onSubmit={onVerifyOtp}>
+                <div>
+                  <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5 block">
+                    Doğrulama Kodu
+                  </label>
+                  <CleanInputWrapper>
+                    <input
+                      name="otpCode"
+                      type="text"
+                      maxLength={8}
+                      required
+                      placeholder="••••••••"
+                      className="w-full bg-transparent text-center text-2xl font-bold tracking-[0.25em] p-3.5 sm:p-4 rounded-xl focus:outline-none text-[#0E1E38]"
+                    />
+                  </CleanInputWrapper>
                 </div>
-                <button type="submit" disabled={isLoading || isOtpSuccess} className="animate-element animate-delay-300 w-full rounded-2xl bg-[#0E1E38] py-4 clash-subtitle text-white hover:bg-[#102240] text-base transition-all shadow-xl shadow-[#0E1E38]/25 hover:shadow-2xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 cursor-pointer">
+
+                <button
+                  type="submit"
+                  disabled={isLoading || isOtpSuccess}
+                  className="w-full rounded-xl bg-[#0E1E38] hover:bg-[#004BFA] py-3.5 sm:py-4 text-white text-sm font-semibold transition-all duration-200 shadow-md shadow-[#0E1E38]/10 hover:shadow-lg disabled:opacity-50 cursor-pointer"
+                >
                   {isLoading ? "Doğrulanıyor..." : "Hesabı Onayla"}
                 </button>
-                <div className="animate-element animate-delay-400 text-center text-base pt-2">
+
+                <div className="text-center pt-2">
                   <button 
                     type="button" 
                     onClick={onResendOtp}
                     disabled={isLoading || resendTimer > 0}
-                    className="text-[#0E1E38] clash-subtitle hover:text-[#78B8F5] hover:underline disabled:text-muted-foreground disabled:no-underline transition-all duration-300 flex items-center justify-center gap-2 mx-auto"
+                    className="text-xs font-semibold text-[#004BFA] hover:underline disabled:text-slate-400 disabled:no-underline transition-colors inline-flex items-center gap-1.5"
                   >
                     <span>Kodu Tekrar Gönder</span>
                     {resendTimer > 0 && (
-                      <span className="px-2 py-0.5 bg-[#78B8F5]/20 text-[#0E1E38] rounded-md text-xs border border-[#78B8F5]/40 animate-pulse">
-                        {resendTimer} sn
+                      <span className="px-1.5 py-0.5 bg-blue-50 text-[#004BFA] rounded text-[10px] font-bold">
+                        {resendTimer}s
                       </span>
                     )}
                   </button>
                 </div>
               </form>
             ) : (
-            <form key={isLoginMode ? "login" : "register"} className="space-y-5" onSubmit={handleActionSubmit}>
-              {!isLoginMode && (
-                <div className="grid grid-cols-2 gap-4 animate-element animate-delay-200">
-                  <div>
-                    <label className="text-sm clash-subtitle text-muted-foreground mb-1 block">Ad</label>
-                    <GlassInputWrapper>
-                      <input name="firstName" type="text" required placeholder="Adınız" className="w-full bg-transparent text-sm p-4 rounded-2xl focus:outline-none clash-desc" />
-                    </GlassInputWrapper>
+              <form key={isLoginMode ? "login" : "register"} className="space-y-4" onSubmit={handleActionSubmit}>
+                
+                {/* Ad & Soyad (Sadece Kayıt Modu) */}
+                {!isLoginMode && (
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5 block">
+                        Ad
+                      </label>
+                      <CleanInputWrapper>
+                        <input
+                          name="firstName"
+                          type="text"
+                          required
+                          placeholder="Adınız"
+                          className="w-full bg-transparent text-sm p-3.5 sm:p-4 rounded-xl focus:outline-none text-[#0E1E38] placeholder:text-slate-400"
+                        />
+                      </CleanInputWrapper>
+                    </div>
+                    <div>
+                      <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5 block">
+                        Soyad
+                      </label>
+                      <CleanInputWrapper>
+                        <input
+                          name="lastName"
+                          type="text"
+                          required
+                          placeholder="Soyadınız"
+                          className="w-full bg-transparent text-sm p-3.5 sm:p-4 rounded-xl focus:outline-none text-[#0E1E38] placeholder:text-slate-400"
+                        />
+                      </CleanInputWrapper>
+                    </div>
                   </div>
-                  <div>
-                    <label className="text-sm clash-subtitle text-muted-foreground mb-1 block">Soyad</label>
-                    <GlassInputWrapper>
-                      <input name="lastName" type="text" required placeholder="Soyadınız" className="w-full bg-transparent text-sm p-4 rounded-2xl focus:outline-none clash-desc" />
-                    </GlassInputWrapper>
-                  </div>
-                </div>
-              )}
-
-              <div className={`animate-element ${isLoginMode ? "animate-delay-200" : "animate-delay-300"}`}>
-                <label className="text-sm clash-subtitle text-muted-foreground mb-1 block">E-Posta Adresi</label>
-                <GlassInputWrapper className={emailError && !isLoginMode ? "border-red-500/50 bg-red-500/5 shadow-[0_0_15px_rgba(239,68,68,0.1)]" : ""}>
-                  <input 
-                    name="email" 
-                    type="email" 
-                    required 
-                    placeholder="ornek@mail.com" 
-                    value={emailValue}
-                    onChange={(e) => onEmailChange?.(e.target.value)}
-                    className="w-full bg-transparent text-sm p-4 rounded-2xl focus:outline-none clash-desc" 
-                  />
-                </GlassInputWrapper>
-                {emailError && !isLoginMode && (
-                  <p className="text-[11px] text-red-500 font-bold mt-2 px-1 animate-pulse">
-                     ⚠️ {emailError}
-                  </p>
                 )}
-              </div>
 
-              <div className={`animate-element ${isLoginMode ? "animate-delay-300" : "animate-delay-400"}`}>
-                <label className="text-sm clash-subtitle text-muted-foreground mb-1 block">Şifre</label>
-                <GlassInputWrapper>
-                  <div className="relative">
+                {/* E-Posta */}
+                <div>
+                  <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5 block">
+                    E-Posta Adresi
+                  </label>
+                  <CleanInputWrapper className={emailError && !isLoginMode ? "border-rose-400 bg-rose-50/20" : ""}>
                     <input 
-                      name="password" 
-                      type={showPassword ? 'text' : 'password'} 
+                      name="email" 
+                      type="email" 
                       required 
-                      value={passwordValue}
-                      onChange={(e) => setPasswordValue(e.target.value)}
-                      placeholder="••••••••" 
-                      className="w-full bg-transparent text-sm p-4 pr-12 rounded-2xl focus:outline-none clash-desc" 
+                      placeholder="ornek@mail.com" 
+                      value={emailValue}
+                      onChange={(e) => onEmailChange?.(e.target.value)}
+                      className="w-full bg-transparent text-sm p-3.5 sm:p-4 rounded-xl focus:outline-none text-[#0E1E38] placeholder:text-slate-400" 
                     />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-3 flex items-center">
-                      {showPassword ? <EyeOff className="w-5 h-5 text-muted-foreground hover:text-foreground transition-colors" /> : <Eye className="w-5 h-5 text-muted-foreground hover:text-foreground transition-colors" />}
-                    </button>
-                  </div>
-                </GlassInputWrapper>
+                  </CleanInputWrapper>
+                  {emailError && !isLoginMode && (
+                    <p className="text-xs text-rose-600 font-medium mt-1.5">
+                      ⚠️ {emailError}
+                    </p>
+                  )}
+                </div>
 
-                {/* Şifre Güç Barı (Sadece Kayıt Modunda) */}
-                {!isLoginMode && passwordValue && (
-                   <div className="mt-2 space-y-1.5 px-1 animate-element">
-                      <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-wider">
-                        <span className="text-muted-foreground">Şifre Gücü</span>
-                        <span style={{ color: strength > 75 ? '#22c55e' : strength > 25 ? '#f59e0b' : '#ef4444' }}>{strengthText}</span>
+                {/* Şifre */}
+                <div>
+                  <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5 block">
+                    Şifre
+                  </label>
+                  <CleanInputWrapper>
+                    <div className="relative">
+                      <input 
+                        name="password" 
+                        type={showPassword ? 'text' : 'password'} 
+                        required 
+                        value={passwordValue}
+                        onChange={(e) => setPasswordValue(e.target.value)}
+                        placeholder="••••••••" 
+                        className="w-full bg-transparent text-sm p-3.5 sm:p-4 pr-11 rounded-xl focus:outline-none text-[#0E1E38] placeholder:text-slate-400" 
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </CleanInputWrapper>
+
+                  {/* Şifre Güç Göstergesi (Sadece Kayıt) */}
+                  {!isLoginMode && passwordValue && (
+                    <div className="mt-2 space-y-1">
+                      <div className="flex justify-between items-center text-[11px] font-medium">
+                        <span className="text-slate-400">Şifre Gücü</span>
+                        <span className={strength > 50 ? "text-emerald-600" : "text-amber-600"}>{strengthText}</span>
                       </div>
-                      <div className="h-1 w-full bg-slate-200 rounded-full overflow-hidden">
+                      <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
                         <motion.div 
                           initial={{ width: 0 }}
                           animate={{ width: `${strength}%` }}
                           className={`h-full ${strengthColor} transition-all duration-300`}
                         />
                       </div>
-                      <p className="text-[9px] text-muted-foreground leading-tight">
-                        En az 8 karakter, büyük harf, rakam ve sembol kullanın.
-                      </p>
-                   </div>
-                )}
-              </div>
-
-              {!isLoginMode && (
-                <div className="animate-element animate-delay-300">
-                  <label className="text-sm clash-subtitle text-muted-foreground mb-1 block">Şifre Tekrar</label>
-                  <GlassInputWrapper>
-                    <div className="relative">
-                      <input name="confirmPassword" type={showPassword ? 'text' : 'password'} required placeholder="••••••••" className="w-full bg-transparent text-sm p-4 pr-12 rounded-2xl focus:outline-none clash-desc" />
                     </div>
-                  </GlassInputWrapper>
+                  )}
                 </div>
-              )}
 
-              {!isLoginMode && (
-                <div className="animate-element animate-delay-400 px-1 pt-2">
-                  <label className="flex items-start gap-3 cursor-pointer group">
-                    <div className="relative flex items-center">
+                {/* Şifre Tekrar (Kayıt Modu) */}
+                {!isLoginMode && (
+                  <div>
+                    <label className="text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5 block">
+                      Şifre Tekrar
+                    </label>
+                    <CleanInputWrapper>
+                      <input
+                        name="confirmPassword"
+                        type={showPassword ? 'text' : 'password'}
+                        required
+                        placeholder="••••••••"
+                        className="w-full bg-transparent text-sm p-3.5 sm:p-4 rounded-xl focus:outline-none text-[#0E1E38] placeholder:text-slate-400"
+                      />
+                    </CleanInputWrapper>
+                  </div>
+                )}
+
+                {/* KVKK ve Kullanım Koşulları (Kayıt Modu) */}
+                {!isLoginMode && (
+                  <div className="pt-1">
+                    <label className="flex items-start gap-2.5 cursor-pointer group">
                       <input 
                         type="checkbox" 
                         name="kvkk" 
                         checked={termsAccepted}
                         onChange={(e) => setTermsAccepted(e.target.checked)}
-                        className="custom-checkbox w-4 h-4 rounded border-slate-300 text-[#0E1E38] focus:ring-[#78B8F5] transition-all" 
+                        className="mt-0.5 w-4 h-4 rounded border-slate-300 text-[#004BFA] focus:ring-[#004BFA]" 
                       />
-                    </div>
-                    <span className="text-[11px] leading-tight text-muted-foreground select-none clash-desc">
-                      <button type="button" onClick={() => openLegal('terms')} className="clash-subtitle text-[#0E1E38] hover:underline">Kullanım Koşulları</button> ve <button type="button" onClick={() => openLegal('kvkk')} className="clash-subtitle text-[#0E1E38] hover:underline">KVKK Aydınlatma Metnini</button> okudum, kabul ediyorum.
-                    </span>
-                  </label>
-                </div>
-              )}
+                      <span className="text-xs text-slate-600 leading-relaxed select-none">
+                        <button type="button" onClick={() => openLegal('terms')} className="text-[#0E1E38] font-semibold underline underline-offset-2 hover:text-[#004BFA]">Kullanım Koşulları</button> ve <button type="button" onClick={() => openLegal('kvkk')} className="text-[#0E1E38] font-semibold underline underline-offset-2 hover:text-[#004BFA]">KVKK Aydınlatma Metnini</button> okudum, kabul ediyorum.
+                      </span>
+                    </label>
+                  </div>
+                )}
 
-              {isLoginMode && (
-                <div className="animate-element animate-delay-500 flex items-center justify-between text-sm">
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" name="rememberMe" className="custom-checkbox w-4 h-4 rounded border-gray-300 text-[#0E1E38] focus:ring-[#78B8F5]" />
-                    <span className="text-foreground/90 clash-desc text-sm">Beni hatırla</span>
-                  </label>
-                  <a href="#" onClick={(e) => { e.preventDefault(); onResetPassword?.(); }} className="hover:underline clash-subtitle text-[#0E1E38] hover:text-[#78B8F5] transition-colors text-sm">Şifremi unuttum</a>
-                </div>
-              )}
+                {/* Beni Hatırla & Şifremi Unuttum (Giriş Modu) */}
+                {isLoginMode && (
+                  <div className="flex items-center justify-between text-xs pt-1">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="rememberMe"
+                        className="w-4 h-4 rounded border-slate-300 text-[#004BFA] focus:ring-[#004BFA]"
+                      />
+                      <span className="text-slate-600 font-medium">Beni hatırla</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.preventDefault(); onResetPassword?.(); }}
+                      className="text-[#004BFA] font-medium hover:underline"
+                    >
+                      Şifremi unuttum
+                    </button>
+                  </div>
+                )}
 
-              <button type="submit" disabled={isLoading} className={`animate-element ${isLoginMode ? "animate-delay-600" : "animate-delay-700"} w-full rounded-2xl bg-[#0E1E38] py-4 clash-subtitle text-white hover:bg-[#102240] text-base transition-all shadow-xl shadow-[#0E1E38]/25 hover:shadow-2xl hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50 cursor-pointer`}>
-                {isLoading ? "İşlem Yapılıyor..." : (isLoginMode ? "Giriş Yap" : "Hesap Oluştur")}
-              </button>
-            </form>
+                {/* Ana Buton */}
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full rounded-xl bg-[#0E1E38] hover:bg-[#004BFA] py-3.5 sm:py-4 text-white text-sm font-semibold transition-all duration-200 active:scale-[0.99] shadow-md shadow-[#0E1E38]/10 hover:shadow-lg disabled:opacity-50 cursor-pointer mt-2"
+                >
+                  {isLoading ? "İşlem Yapılıyor..." : (isLoginMode ? "Giriş Yap" : "Ücretsiz Hesap Oluştur")}
+                </button>
+              </form>
             )}
 
+            {/* Mod Değiştirici */}
             {!isVerifyingOtp && !isForgotPasswordMode && (
-              <p className="animate-element animate-delay-900 text-center text-sm text-muted-foreground pt-4 clash-desc">
-                {isLoginMode ? "Yeni nesil yatırıma katılmak ister misin? " : "Zaten bir hesabın var mı? "}
-                <a href="#" onClick={(e) => { e.preventDefault(); onToggleMode?.(); }} className="text-[#0E1E38] clash-subtitle hover:text-[#78B8F5] hover:underline transition-colors ml-1">
-                   {isLoginMode ? "Hesap Oluştur" : "Giriş Yap"}
-                </a>
-              </p>
+              <div className="pt-4 border-t border-slate-100 text-center text-xs sm:text-sm text-slate-500">
+                <span>{isLoginMode ? "Hesabınız yok mu?" : "Zaten bir hesabınız var mı?"}</span>
+                <button
+                  type="button"
+                  onClick={() => onToggleMode?.()}
+                  className="text-[#004BFA] font-semibold hover:underline ml-1.5"
+                >
+                  {isLoginMode ? "Ücretsiz Hesap Oluştur" : "Giriş Yap"}
+                </button>
+              </div>
             )}
+
           </div>
+        </div>
+
+        {/* Alt Bilgi */}
+        <div className="text-center text-[11px] text-slate-400">
+          © {new Date().getFullYear()} FinAi. Tüm hakları saklıdır.
         </div>
       </section>
 
-      {/* Right column: hero image + features */}
-      {heroImageSrc && (
-        <section className="hidden md:flex flex-1 relative p-6 bg-background items-stretch overflow-hidden">
-          <div className="w-full h-full flex flex-col gap-6 animate-slide-right animate-delay-300">
-            {/* Logo Area - Top 70% height (flex-[2.33]) */}
-            <div 
-               className={`flex-[2.33] rounded-[40px] shadow-[0_20px_60px_rgba(20, 43, 80, 0.06)] border border-slate-100 overflow-hidden flex items-center justify-center ${heroImageSrc.includes('logo') ? 'bg-white' : 'bg-cover bg-center'}`} 
-               style={!heroImageSrc.includes('logo') ? { backgroundImage: `url(${heroImageSrc})` } : {}}
-            >
-               {heroImageSrc.includes('logo') ? (
-                 <motion.img 
-                   initial={{ scale: 0.8, opacity: 0, y: -30 }}
-                   animate={{ scale: 1, opacity: 1, y: 0 }}
-                   transition={{ duration: 1, ease: "easeOut" }}
-                   src={heroImageSrc} 
-                   alt="FinAi Logo" 
-                   className="w-[45%] h-auto object-contain drop-shadow-[0_10px_35px_rgba(20, 43, 80, 0.15)]" 
-                 />
-               ) : (
-                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-               )}
+      {/* =========================================================================
+          SAĞ KOLON: DEEP NAVY MARKA VİTRİNİ & EDİTORYAL PANEL (ÇERÇEVESİZ, 0 AI SLOP)
+          ========================================================================= */}
+      <section className="hidden lg:flex flex-1 relative bg-[#0E1E38] text-white p-12 xl:p-16 flex-col justify-between overflow-hidden select-none">
+        
+        {/* Zarif Arka Plan Işıltısı */}
+        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-[#004BFA]/20 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute -bottom-32 -left-32 w-[400px] h-[400px] bg-[#78B8F5]/10 rounded-full blur-[140px] pointer-events-none" />
+
+        {/* Üst: 3D Logo ve Rozet */}
+        <div className="relative z-10 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <motion.img 
+              initial={{ scale: 0.85, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              src="/logo.png" 
+              alt="FinAi Logo" 
+              className="w-12 h-12 object-contain drop-shadow-[0_10px_25px_rgba(0,75,250,0.35)]" 
+            />
+            <span className="text-2xl font-bold tracking-tight text-white clash-title">FinAi</span>
+          </div>
+          <span className="px-3.5 py-1 rounded-full bg-white/10 text-white/90 text-xs font-semibold tracking-wider uppercase border border-white/10">
+            Karar Destek Ekosistemi
+          </span>
+        </div>
+
+        {/* Orta: Editoryal Manifesto ve Analitik Bloklar */}
+        <div className="relative z-10 my-auto py-10 space-y-8 max-w-xl">
+          <div className="space-y-4">
+            <h2 className="text-3xl xl:text-4xl font-normal text-white tracking-tight leading-snug clash-title">
+              "Piyasa gürültüsünü rasyonel verilere, yatırımlarınızı bilinçli kararlara dönüştürün."
+            </h2>
+            <p className="text-base text-white/70 font-normal leading-relaxed">
+              Borsa İstanbul ve TEFAS piyasalarında portföyünüzü saniyelik takip edin, 
+              matematiksel korelasyonlar ve yapay zeka analizleriyle kontrolü elinize alın.
+            </p>
+          </div>
+
+          {/* Somut Analitik Kabiliyetler (Çerçevesiz, Doğrudan Bilgi) */}
+          <div className="space-y-4 pt-6 border-t border-white/10">
+            <div className="flex items-start gap-3.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#004BFA] mt-2 shrink-0" />
+              <div>
+                <h4 className="text-sm font-semibold text-white">Canlı Portföy Konsolidasyonu</h4>
+                <p className="text-xs text-white/60 leading-relaxed mt-0.5">
+                  BIST 100 hisseleri ve TEFAS yatırım fonlarını tek ekranda saniyelik güncellenen fiyatlarla yönetin.
+                </p>
+              </div>
             </div>
 
-            {/* Features Area - Bottom 30% height (flex-1) */}
-            {features.length > 0 && (
-              <div className="flex-1 grid grid-cols-2 gap-4 px-2 w-full max-w-[750px] mx-auto content-center">
-                {features.map((feature, index) => (
-                    <div key={index} className="flex justify-center w-full">
-                       <FeatureCard feature={feature} delay={`animate-delay-${1000 + (index * 200)}`} />
-                    </div>
-                ))}
+            <div className="flex items-start gap-3.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#004BFA] mt-2 shrink-0" />
+              <div>
+                <h4 className="text-sm font-semibold text-white">Korelasyon & Risk Dağılımı</h4>
+                <p className="text-xs text-white/60 leading-relaxed mt-0.5">
+                  Varlıklarınız arasındaki matematiksel ilişkileri ve senaryo dayanıklılıklarını analiz edin.
+                </p>
               </div>
-            )}
+            </div>
+
+            <div className="flex items-start gap-3.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#004BFA] mt-2 shrink-0" />
+              <div>
+                <h4 className="text-sm font-semibold text-white">Akıllı KAP & Bilanço Bildirimleri</h4>
+                <p className="text-xs text-white/60 leading-relaxed mt-0.5">
+                  Yatırımlarınızı doğrudan etkileyebilecek şirket bildirimlerini ve temettü takvimini anında yakalayın.
+                </p>
+              </div>
+            </div>
           </div>
-        </section>
-      )}
+        </div>
+
+        {/* Alt: Yasal Uyarı Notu */}
+        <div className="relative z-10 pt-6 border-t border-white/10">
+          <p className="text-[11px] text-white/50 leading-relaxed">
+            ⚠️ 6362 sayılı Sermaye Piyasası Kanunu uyarınca yatırım danışmanlığı faaliyeti yürütülmemektedir. 
+            Sunulan veriler ve analizler kullanıcıları bilgilendirme amaçlıdır.
+          </p>
+        </div>
+      </section>
+
+      {/* Yasal Modal */}
       <LegalModal 
         isOpen={isLegalModalOpen} 
         onClose={() => setIsLegalModalOpen(false)} 
@@ -491,7 +619,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
         onReject={handleLegalReject}
       />
 
-      {/* SUCCESS OVERLAY WITH TYPING ANIMATION */}
+      {/* Başarı Animasyon Katmanı */}
       <AnimatePresence>
         {isOtpSuccess && (
           <motion.div
@@ -505,17 +633,9 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                 initial={{ scale: 0.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: "spring", damping: 15 }}
-                className="w-20 h-20 bg-[#0E1E38] rounded-3xl mx-auto flex items-center justify-center shadow-xl shadow-[#0E1E38]/30 border border-[#78B8F5]/30 mb-8"
+                className="w-20 h-20 bg-[#0E1E38] rounded-3xl mx-auto flex items-center justify-center shadow-xl shadow-[#0E1E38]/30 mb-8"
               >
-                <motion.div
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 1, delay: 0.2 }}
-                >
-                    <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                </motion.div>
+                <Check className="w-10 h-10 text-white" strokeWidth={3} />
               </motion.div>
               
               <TypingText text="FinAi'ye Hoş Geldiniz" />
