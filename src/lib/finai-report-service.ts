@@ -70,31 +70,45 @@ export async function generateFinAiReport(
         }
     }
 
+    // Kullanıcı oturum açmış ama portföyünde hiç varlık yoksa, temiz boş portföy raporu döndür
+    if (userId && assets.length === 0) {
+        return {
+            timeframe,
+            currentTotal: 0,
+            diffValue: 0,
+            diffPercent: 0,
+            twrPercent: 0,
+            isPositive: true,
+            narrativeText: "Portföyünüzde henüz kayıtlı aktif bir varlık bulunmuyor. Varlık ekledikten sonra FinAi piyasa korelasyonu ve performans raporunuz anlık olarak burada üretilecektir.",
+            generatedAt: new Date().toLocaleTimeString('tr-TR', { timeZone: 'Europe/Istanbul', hour: '2-digit', minute: '2-digit' }),
+            payload: {
+                timeframe,
+                startValue: 0,
+                endValue: 0,
+                diffTL: 0,
+                diffPct: 0,
+                twrPct: 0,
+                totalDeposits: 0,
+                totalWithdrawals: 0,
+                netCapitalFlow: 0,
+                periodCashChange: 0,
+                realizedProfitLoss: 0,
+                unrealizedProfitLoss: 0,
+                topPositiveAssets: [],
+                topNegativeAssets: [],
+                allAssetContributions: [],
+                newsAnalyses: [],
+                uncertainMovements: [],
+                userTransactionSummary: undefined
+            }
+        };
+    }
+
     if (assets.length === 0) {
         try { assets = await PortfolioService.getAssets(); } catch { assets = []; }
     }
 
-    // Eğer oturum yoksa veya veritabanı boşsa tüm aktif varlıkları çek
-    if (assets.length === 0) {
-        const { data: allDbAssets } = await supabaseAdmin
-            .from('user_portfolios')
-            .select('*')
-            .limit(50);
-
-        if (allDbAssets && allDbAssets.length > 0) {
-            assets = allDbAssets.map((item: any) => ({
-                id: item.id,
-                symbol: item.symbol,
-                type: item.asset_type as any,
-                quantity: Number(item.quantity),
-                avgCost: Number(item.avg_cost),
-                dateAdded: item.purchase_date,
-                userId: item.user_id
-            }));
-        }
-    }
-
-    // Varlık hala bulunamadıysa örnek demo portföy kullan (Kesintisiz Rapor Garantisi)
+    // Oturum yoksa veya demo modundaysa varsayılan demo portföyü kullan
     if (assets.length === 0) {
         assets = DEFAULT_DEMO_ASSETS;
     }
@@ -189,24 +203,39 @@ export async function generateFinAiReport(
     // Eğer snapshot'lar henüz birikmemişse veya hepsi maliyet tabanıysa, kullanıcının gerçek maliyet tabanını (totalCost) temel al.
     let startValue = totalCost > 0 ? totalCost : currentTotal;
 
+    // Sanity Guardrail: Snapshot değeri gerçek maliyet ve güncel değer ile uyumlu olmalıdır (absürt trilyonluk anomaliler elenir)
+    const isSane = (snapVal: number) => {
+        if (!snapVal || snapVal <= 0 || !isFinite(snapVal)) return false;
+        // Trilyonluk / devasa bozuk verileri kesinlikle reddet
+        if (snapVal > 100_000_000_000) return false;
+        if (totalCost > 0) {
+            // Maliyet tabanından 10 kat fazla veya 1/10'undan az ise bozuk snapshot say
+            return snapVal >= (totalCost * 0.1) && snapVal <= (totalCost * 10);
+        }
+        if (currentTotal > 0) {
+            return snapVal >= (currentTotal * 0.1) && snapVal <= (currentTotal * 10);
+        }
+        return true;
+    };
+
     if (history.length >= 2) {
         const firstSnap = Number(history[0]?.total_value || 0);
         const lastSnap = Number(history[history.length - 1]?.total_value || 0);
-        if (firstSnap > 0 && Math.abs(firstSnap - lastSnap) > 0.01) {
+        if (isSane(firstSnap) && Math.abs(firstSnap - lastSnap) > 0.01) {
             startValue = firstSnap;
         } else if (totalCost > 0) {
             startValue = totalCost;
         }
     } else if (history.length === 1) {
         const singleSnap = Number(history[0]?.total_value || 0);
-        if (singleSnap > 0 && Math.abs(singleSnap - currentTotal) > 0.01) {
+        if (isSane(singleSnap) && Math.abs(singleSnap - currentTotal) > 0.01) {
             startValue = singleSnap;
         } else if (totalCost > 0) {
             startValue = totalCost;
         }
     }
 
-    if (startValue <= 0) startValue = totalCost > 0 ? totalCost : currentTotal;
+    if (startValue <= 0 || !isFinite(startValue)) startValue = totalCost > 0 ? totalCost : currentTotal;
 
     const diffValue = currentTotal - startValue;
     const diffPercent = startValue > 0 ? (diffValue / startValue) * 100 : 0;

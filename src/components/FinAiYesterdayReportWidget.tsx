@@ -6,7 +6,7 @@ import { useUser } from "@/components/providers/UserProvider";
 import Link from "next/link";
 
 export function FinAiYesterdayReportWidget() {
-    const { user, myAssets = [], prices = {}, isDataLoaded } = useUser();
+    const { user, myAssets = [], prices = {}, isDataLoaded, isAuthenticated } = useUser();
     const [timeframe, setTimeframe] = useState<'weekly' | 'monthly' | 'all-time'>('weekly');
     const [report, setReport] = useState<any>(null);
     const [loading, setLoading] = useState(true);
@@ -25,8 +25,8 @@ export function FinAiYesterdayReportWidget() {
         'TI2': 0.298,
     }), []);
 
-    const effectiveAssets = myAssets && myAssets.length > 0 ? myAssets : sampleAssets;
-    const effectivePrices = prices && Object.keys(prices).length > 0 ? prices : samplePrices;
+    const effectiveAssets = isAuthenticated ? (myAssets || []) : (myAssets && myAssets.length > 0 ? myAssets : sampleAssets);
+    const effectivePrices = (prices && Object.keys(prices).length > 0) ? prices : (isAuthenticated ? {} : samplePrices);
 
     const fetchReport = async (tf: 'weekly' | 'monthly' | 'all-time') => {
         setLoading(true);
@@ -51,6 +51,10 @@ export function FinAiYesterdayReportWidget() {
     }, [user?.id, effectiveAssets.length, timeframe]);
 
     const clientFallbackNarrative = useMemo(() => {
+        if (!effectiveAssets || effectiveAssets.length === 0) {
+            return "Portföyünüzde henüz kayıtlı aktif bir varlık bulunmuyor. Varlık ekledikten sonra FinAi piyasa korelasyonu ve performans raporunuz anlık olarak burada üretilecektir.";
+        }
+
         let currentTotal = 0;
         let totalCost = 0;
         const assetGains: { name: string; gain: number }[] = [];
@@ -81,7 +85,7 @@ export function FinAiYesterdayReportWidget() {
         const startStr = totalCost.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         const endStr = currentTotal.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-        return `Son 7 günlük dönemde portföyünüzün toplam değeri ₺${startStr} seviyesinden ₺${endStr} seviyesine ${isPos ? 'yükseldi' : 'geriledi'}. Bu, ₺${absDiffStr} tutarında (${isPos ? '+' : '-'}%${absPctStr}) pozitif bir bakiye büyümesine karşılık geliyor. Süreçteki performansın en güçlü belirleyicisi ${topDriver} pozisyonunuz oldu.`;
+        return `Son 7 günlük dönemde portföyünüzün toplam değeri ₺${startStr} seviyesinden ₺${endStr} seviyesine ${isPos ? 'yükseldi' : 'geriledi'}. Bu, ₺${absDiffStr} tutarında (${isPos ? '+' : '-'}%${absPctStr}) bir bakiye değişimine karşılık geliyor. Süreçteki performansın en güçlü belirleyicisi ${topDriver} pozisyonunuz oldu.`;
     }, [effectiveAssets, effectivePrices, timeframe]);
 
     const isApiEmpty = !report || !report.narrativeText || report.narrativeText.includes("bulunmuyor");
@@ -100,7 +104,7 @@ export function FinAiYesterdayReportWidget() {
                         <Sparkles className="w-3.5 h-3.5 text-[#040989]" />
                     </div>
                     <h3 className="text-xs sm:text-[13px] clash-subtitle font-[325] text-[#040989] tracking-tight">
-                        FinAi Portföy Raporu
+                        FinAi Intelligence Raporu
                     </h3>
                 </div>
 

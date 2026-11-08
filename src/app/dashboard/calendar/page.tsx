@@ -1938,7 +1938,7 @@ function CalendarContent() {
                                                         </td>
                                                         <td className={`py-3.5 px-3.5 whitespace-nowrap ${cellBg}`}>
                                                             <span className={`text-xs font-bold ${isAnnounced ? 'text-white' : 'text-slate-700'}`}>
-                                                                2026/1Ç
+                                                                {item.period || '2026/3Ç'}
                                                             </span>
                                                         </td>
                                                         <td className={`py-3.5 px-3.5 whitespace-nowrap font-bold ${cellBg} ${isAnnounced ? 'text-white' : 'text-slate-700'}`}>

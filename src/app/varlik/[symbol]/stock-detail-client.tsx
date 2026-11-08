@@ -807,18 +807,18 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
             {/* ŞİRKET HEADER & BİST PROFİLİ (EKONOMİK TAKVİM TANIM WIDGETI TİPOGRAFİSİ & BEYAZ YAZI) */}
             <div className="bg-[#0E1E38] text-white rounded-3xl p-6 md:p-8 space-y-5 shadow-2xl border border-blue-900">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/20 pb-4">
-                <div className="flex items-center gap-4">
-                  <StockLogo symbol={symbol} className="w-12 h-12 sm:w-14 sm:h-14 ring-2 ring-white/30 shadow-lg" />
-                  <div>
+                <div className="flex items-center gap-4 min-w-0 flex-1">
+                  <StockLogo symbol={symbol} className="w-12 h-12 sm:w-14 sm:h-14 ring-2 ring-white/30 shadow-lg shrink-0" />
+                  <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <span className="text-2xl sm:text-3xl font-normal text-white tracking-tight">{symbol}</span>
                     </div>
-                    <h2 className="text-xs sm:text-[13px] font-normal text-white mt-1">{fullName}</h2>
+                    <h2 className="text-xs sm:text-[13px] font-normal text-white mt-1 line-clamp-1 truncate" title={fullName}>{fullName}</h2>
                   </div>
                 </div>
 
                 {/* CANLI FİYAT VE GÜNLÜK DEĞİŞİM (KUTUSUZ - SADECE YAZI VE RAKAMLAR) */}
-                <div className="text-right self-start sm:self-auto">
+                <div className="text-right shrink-0 self-start sm:self-auto">
                   <div className="text-2xl sm:text-3xl font-normal text-white tracking-tight">
                     {stockData?.currentPrice ? `${stockData.currentPrice.toFixed(2)} ₺` : (BIST_REAL_PRICES[symbol]?.current ? `${BIST_REAL_PRICES[symbol].current.toFixed(2)} ₺` : "--- ₺")}
                   </div>

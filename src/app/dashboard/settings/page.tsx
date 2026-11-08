@@ -407,13 +407,36 @@ function SettingsContent() {
 
     const handleDeleteAccount = async () => {
         try {
-            const { error } = await supabase.auth.signOut();
-            if (error) throw error;
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session?.access_token) {
+                throw new Error("Oturum süresi dolmuş veya oturum bulunamadı. Lütfen tekrar giriş yapıp deneyiniz.");
+            }
 
-            addToast('Hesabınız başarıyla silindi.', 'success');
-            window.location.href = '/';
+            const response = await fetch('/api/account/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.access_token}`
+                }
+            });
+
+            const result = await response.json().catch(() => ({}));
+
+            if (!response.ok || !result.success) {
+                throw new Error(result.error || 'Hesap kalıcı olarak silinirken bir hata oluştu.');
+            }
+
+            // Supabase auth yerel oturumunu temizle
+            await supabase.auth.signOut().catch(() => {});
+
+            addToast('Hesabınız ve tüm verileriniz kalıcı olarak başarıyla silindi.', 'success');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 600);
         } catch (error: any) {
-            addToast('Hata: ' + error.message, 'error');
+            console.error('[Settings] Hesap silme hatası:', error);
+            addToast('Hata: ' + (error?.message || error), 'error');
+            throw error;
         }
     };
 

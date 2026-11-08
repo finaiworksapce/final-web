@@ -331,6 +331,8 @@ export default function PortfolioPage() {
     useEffect(() => {
         if (focusQuery) {
             setFocusedWidget(focusQuery);
+        } else {
+            setFocusedWidget(null);
         }
     }, [focusQuery]);
     const [distributionView, setDistributionView] = useState<'donut' | 'heatmap' | 'sector'>('donut');
@@ -3132,7 +3134,7 @@ export default function PortfolioPage() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-6">
                 <div>
                     <h1 className="text-3xl md:text-4xl font-normal text-[#0E1E38] tracking-tight flex items-center gap-3 flex-wrap">
-                        Portföyüm
+                        Portföy Özeti & Tablosu
                         {focusedWidget && (
                             <motion.span 
                                 initial={{ opacity: 0, scale: 0.8 }}
@@ -3141,20 +3143,53 @@ export default function PortfolioPage() {
                                 className="text-xs font-normal bg-[#0E1E38] text-white px-3.5 py-1.5 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-[#0E1E38]/20"
                             >
                                 <Eye className="w-3.5 h-3.5 text-sky-400" />
-                                Odak Modu: {focusedWidgetName}
+                                Odak: {focusedWidgetName}
                             </motion.span>
                         )}
                     </h1>
                 </div>
 
                 <div className="flex items-center gap-3">
+                    {/* Odak Modu On/Off Butonu */}
+                    <div className="flex items-center gap-1 bg-slate-100/90 p-1 rounded-2xl border border-slate-200/80 shadow-2xs">
+                        <span className="text-xs font-bold text-[#0E1E38] px-2 flex items-center gap-1.5">
+                            <Layers className="w-3.5 h-3.5 text-blue-600" />
+                            Odak Modu:
+                        </span>
+                        <button
+                            type="button"
+                            onClick={() => setFocusedWidget(null)}
+                            className={cn(
+                                "px-3 py-1.5 rounded-xl text-xs font-bold transition-all",
+                                !focusedWidget 
+                                    ? "bg-white text-[#0E1E38] shadow-xs" 
+                                    : "text-slate-500 hover:text-slate-800"
+                            )}
+                        >
+                            Kapalı
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setFocusedWidget(focusedWidget || 'table')}
+                            className={cn(
+                                "px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1",
+                                focusedWidget 
+                                    ? "bg-[#0E1E38] text-white shadow-xs" 
+                                    : "text-slate-500 hover:text-slate-800"
+                            )}
+                        >
+                            Açık
+                        </button>
+                    </div>
+
                     {focusedWidget && (
                         <button
                             onClick={() => setFocusedWidget(null)}
-                            className="inline-flex items-center gap-2 px-4 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-2xl border border-rose-200/60 text-xs transition-all active:scale-95 shadow-sm"
+                            className="inline-flex items-center gap-1.5 px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl border border-rose-200/60 text-xs transition-all active:scale-95 shadow-sm"
+                            title="Tam Görünüme Dön"
                         >
-                            <X className="w-4 h-4" />
-                            Odak Modundan Çık
+                            <X className="w-3.5 h-3.5" />
+                            <span className="hidden sm:inline">Kapat</span>
                         </button>
                     )}
                 </div>

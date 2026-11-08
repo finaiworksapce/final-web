@@ -219,12 +219,9 @@ function DashboardShell({
         },
         { 
             icon: PieChart, 
-            label: "Portföyüm", 
+            label: "Portföy Özeti & Tablosu", 
             href: "/dashboard/portfolio",
-            isActive: pathname.startsWith("/dashboard/portfolio"),
-            subItems: portfolioSubItems,
-            isExpanded: isPortfolioExpanded,
-            toggleExpand: () => setIsPortfolioExpanded(prev => !prev)
+            isActive: pathname.startsWith("/dashboard/portfolio")
         },
         { 
             icon: LayoutGrid, 

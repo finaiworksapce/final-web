@@ -179,7 +179,7 @@ export default function FinAiReportViewPage() {
                                 <Sparkles className="w-4 h-4 text-emerald-600" />
                             </div>
                             <h1 className="text-sm sm:text-base font-bold text-[#0E1E38] tracking-tight">
-                                FinAi Finansal Rapor
+                                FinAi Intelligence Raporu
                             </h1>
                         </div>
                     </div>

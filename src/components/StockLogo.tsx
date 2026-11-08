@@ -8,6 +8,7 @@ const stockLogosMap: Record<string, { dosya: string }> = stockLogosData as any;
 
 export interface StockLogoProps {
   symbol: string;
+  logoId?: string | null;
   className?: string;
   alt?: string;
   showFallbackText?: boolean;
@@ -33,6 +34,7 @@ export function getStockLogoUrl(rawSymbol: string): string | null {
 
 export function StockLogo({
   symbol,
+  logoId,
   className = "w-10 h-10",
   alt,
   showFallbackText = true
@@ -44,14 +46,16 @@ export function StockLogo({
     .replace(/^BIST:/, "")
     .trim();
 
-  const logoUrl = getStockLogoUrl(clean);
+  const localLogo = getStockLogoUrl(clean);
+  const tvLogo = logoId ? `https://s3-symbol-logo.tradingview.com/${logoId}.svg` : null;
+  const logoUrl = localLogo || tvLogo;
 
   // When exact logo file exists and hasn't errored
   if (logoUrl && !hasError) {
     return (
       <div
         className={cn(
-          "rounded-full overflow-hidden shrink-0 aspect-square flex items-center justify-center bg-white shadow-xs select-none",
+          "rounded-full overflow-hidden shrink-0 aspect-square flex items-center justify-center bg-white shadow-xs select-none p-0.5",
           className
         )}
       >
@@ -61,7 +65,7 @@ export function StockLogo({
           loading="lazy"
           decoding="async"
           onError={() => setHasError(true)}
-          className="w-full h-full object-cover rounded-full"
+          className="w-full h-full object-contain rounded-full"
         />
       </div>
     );

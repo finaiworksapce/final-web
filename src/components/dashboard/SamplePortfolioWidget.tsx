@@ -100,19 +100,19 @@ export function SamplePortfolioWidget() {
                 key={idx}
                 onMouseEnter={() => setHoveredIndex(idx)}
                 onMouseLeave={() => setHoveredIndex(null)}
-                className={`flex items-center justify-between gap-1 py-0.5 px-1.5 rounded-lg transition-colors cursor-pointer ${
+                className={`flex items-center justify-between gap-1.5 py-0.5 px-1.5 rounded-lg transition-colors cursor-pointer ${
                   isHovered ? "bg-blue-50/70" : ""
                 }`}
                 title={item.description}
               >
-                <div className="flex items-center gap-1.5 min-w-0">
-                  <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
-                  <span className="text-[11px] sm:text-xs font-semibold text-slate-700 truncate flex-1 min-w-0">
+                <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                  <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
+                  <span className="text-[11px] sm:text-xs font-semibold text-slate-700 truncate block leading-tight">
                     {item.name}
                   </span>
                 </div>
 
-                <span className="text-[11px] sm:text-xs font-bold text-slate-900 tabular-nums shrink-0">
+                <span className="text-[11px] sm:text-xs font-bold text-slate-900 tabular-nums shrink-0 ml-1.5">
                   %{item.percentage}
                 </span>
               </div>
@@ -123,15 +123,15 @@ export function SamplePortfolioWidget() {
 
       {/* 3. Alt Çağrı (CTA) Butonu */}
       <div className="pt-2 border-t border-slate-100 relative z-10 flex items-center justify-between gap-2">
-        <span className="text-[10px] text-slate-500 font-medium truncate">
+        <span className="text-[10px] text-slate-500 font-medium truncate min-w-0 flex-1">
           İlk varlığınızı ekleyin, dağılım aktifleşsin
         </span>
 
         <Link
           href="/dashboard/portfolio?openAdd=true"
-          className="shrink-0 px-2 min-[340px]:px-2.5 py-1 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-[10px] min-[340px]:text-[11px] transition-all flex items-center gap-1 shadow-xs hover:shadow active:scale-95 whitespace-nowrap"
+          className="shrink-0 px-2 min-[340px]:px-2.5 py-1 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-[10px] min-[340px]:text-[11px] transition-all flex items-center gap-1 shadow-xs hover:shadow active:scale-95 whitespace-nowrap ml-1"
         >
-          <PlusCircle className="w-3 h-3" />
+          <PlusCircle className="w-3 h-3 shrink-0" />
           <span>Varlık Ekle</span>
         </Link>
       </div>

@@ -908,7 +908,7 @@ export default function AssetsPage() {
         return filteredStocks.slice(start, start + itemsPerPage);
     }, [filteredStocks, currentPage, itemsPerPage]);
 
-    // Sektör Tıklama & Tabloya Kaydırma
+    // Sektör Tıklama & Tabloya Akıcı Kaydırma
     const handleSectorClick = (sectorName: string) => {
         if (selectedSector === sectorName) {
             setSelectedSector(null);
@@ -916,9 +916,11 @@ export default function AssetsPage() {
             setSelectedSector(sectorName);
         }
         setCurrentPage(1);
-        setTimeout(() => {
-            stockSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 100);
+        requestAnimationFrame(() => {
+            setTimeout(() => {
+                stockSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 60);
+        });
     };
 
     // Tablo Sıralama
@@ -946,8 +948,8 @@ export default function AssetsPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ layout: { duration: 0.52, type: "spring", bounce: 0.14 }, opacity: { duration: 0.32 }, y: { duration: 0.32 } }}
                     className={cn(
-                        "bg-white border border-slate-200/90 rounded-[28px] p-5 shadow-xs space-y-4 flex flex-col justify-between overflow-hidden",
-                        selectedSector && "lg:col-span-2 shadow-[0_22px_55px_-32px_rgba(7,27,66,0.46)]"
+                        "bg-white border border-slate-200/90 rounded-[28px] p-5 shadow-xs space-y-4 flex flex-col justify-between overflow-hidden transition-all duration-300",
+                        selectedSector && "shadow-[0_12px_32px_-16px_rgba(7,27,66,0.3)] ring-2 ring-[#0E1E38]/20"
                     )}
                 >
                     <div className="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -984,7 +986,7 @@ export default function AssetsPage() {
                                 </div>
                             ))}
                         </div>
-                        <div className={cn("relative grid grid-cols-6 gap-2 sm:gap-3 items-end pl-5", selectedSector ? "h-[294px] sm:h-[316px]" : "h-[248px] sm:h-[260px]")}>
+                        <div className="relative grid grid-cols-6 gap-2 sm:gap-3 items-end pl-5 h-[254px] sm:h-[268px]">
                         {ALL_SECTORS_DATA.slice(0, 6).map((sector, idx) => {
                             const isSelected = selectedSector === sector.name;
                             const chartHeight = Math.max(18, Math.min(100, (sector.annualReturn / 110) * 100));
@@ -1007,7 +1009,7 @@ export default function AssetsPage() {
                                     )}>
                                         +{sector.annualReturn}%
                                     </div>
-                                    <div className={cn("w-full flex items-end justify-center", selectedSector ? "h-[234px] sm:h-[256px]" : "h-[188px] sm:h-[200px]")}>
+                                    <div className="w-full flex items-end justify-center h-[194px] sm:h-[208px]">
                                         <motion.div
                                             initial={{ scaleY: 0, opacity: 0.35 }}
                                             animate={{ scaleY: 1, opacity: 1 }}

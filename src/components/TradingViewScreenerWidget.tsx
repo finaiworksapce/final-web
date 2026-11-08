@@ -454,8 +454,8 @@ function formatTechnicalRating(score: number | null): React.ReactNode {
   return <span className="text-slate-500 whitespace-nowrap">Nötr</span>;
 }
 
-function StockLogoAvatar({ symbol }: { symbol: string; logoId?: string | null }) {
-  return <StockLogo symbol={symbol} className="w-8 h-8 ring-1 ring-slate-200/60 shadow-xs" />;
+function StockLogoAvatar({ symbol, logoId }: { symbol: string; logoId?: string | null }) {
+  return <StockLogo symbol={symbol} logoId={logoId} className="w-8 h-8 ring-1 ring-slate-200/60 shadow-xs" />;
 }
 
 function getColumnsForTab(tab: ColumnTabId): ColumnDef[] {
@@ -1201,7 +1201,7 @@ function TradingViewScreenerWidget({
                             </span>
                           </div>
                           <span
-                            className="text-[11px] text-slate-500 truncate block max-w-[185px] leading-tight mt-0.5"
+                            className="text-[11px] text-slate-500 truncate block max-w-[140px] leading-tight mt-0.5"
                             title={item.name}
                           >
                             {item.name}

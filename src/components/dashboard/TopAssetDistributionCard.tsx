@@ -26,7 +26,7 @@ const formatCurrency = (val: number) => {
 };
 
 export function TopAssetDistributionCard() {
-    const { myAssets = [], prices = {}, isDataLoaded } = useUser();
+    const { myAssets = [], prices = {}, isDataLoaded, isAuthenticated } = useUser();
     const [hoveredSymbol, setHoveredSymbol] = useState<string | null>(null);
 
     const sampleAssets = useMemo(() => [
@@ -43,8 +43,8 @@ export function TopAssetDistributionCard() {
         'TI2': 0.298,
     }), []);
 
-    const effectiveAssets = myAssets && myAssets.length > 0 ? myAssets : sampleAssets;
-    const effectivePrices = prices && Object.keys(prices).length > 0 ? prices : samplePrices;
+    const effectiveAssets = isAuthenticated ? (myAssets || []) : (myAssets && myAssets.length > 0 ? myAssets : sampleAssets);
+    const effectivePrices = (prices && Object.keys(prices).length > 0) ? prices : (isAuthenticated ? {} : samplePrices);
 
     // Portföy dağılımı ve yüzde hesabı
     const { distributionItems, totalValue, activeCount } = useMemo(() => {

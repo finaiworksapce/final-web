@@ -14,7 +14,7 @@ const formatCurrency = (val: number) => {
 };
 
 export function DashboardSummaryCards({ layout = "grid", compact = false }: { layout?: "grid" | "stacked"; compact?: boolean }) {
-    const { myAssets = [], prices = {}, isDataLoaded } = useUser();
+    const { myAssets = [], prices = {}, isDataLoaded, isAuthenticated } = useUser();
     const [isBalanceHidden, setIsBalanceHidden] = useState(false);
 
     const sampleAssets = useMemo(() => [
@@ -31,8 +31,9 @@ export function DashboardSummaryCards({ layout = "grid", compact = false }: { la
         'TI2': 0.298,
     }), []);
 
-    const effectiveAssets = myAssets && myAssets.length > 0 ? myAssets : sampleAssets;
-    const effectivePrices = prices && Object.keys(prices).length > 0 ? prices : samplePrices;
+    // Oturum açmış kullanıcının henüz varlığı yoksa 0 TL gösterilir (sampleAssets atanmaz)
+    const effectiveAssets = isAuthenticated ? (myAssets || []) : (myAssets && myAssets.length > 0 ? myAssets : sampleAssets);
+    const effectivePrices = (prices && Object.keys(prices).length > 0) ? prices : (isAuthenticated ? {} : samplePrices);
 
     // Portföyüm sayfasıyla %100 aynı hesaplama mantığı
     const { totalValue, totalCost, totalProfit, profitRatio } = useMemo(() => {
