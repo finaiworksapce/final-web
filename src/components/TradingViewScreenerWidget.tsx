@@ -61,6 +61,7 @@ export interface TradingViewScreenerWidgetProps {
   className?: string;
   externalSector?: string | null;
   onSectorChange?: (sector: string | null) => void;
+  onDataLoaded?: (stocks: BistScreenerStockItem[]) => void;
 }
 
 type SortKey = keyof BistScreenerStockItem;
@@ -600,7 +601,8 @@ function TradingViewScreenerWidget({
   height = 720,
   className = "",
   externalSector,
-  onSectorChange
+  onSectorChange,
+  onDataLoaded
 }: TradingViewScreenerWidgetProps) {
   const router = useRouter();
 
@@ -667,6 +669,11 @@ function TradingViewScreenerWidget({
     setFilterSector(mapped);
   }, [externalSector]);
 
+  const onDataLoadedRef = useRef(onDataLoaded);
+  useEffect(() => {
+    onDataLoadedRef.current = onDataLoaded;
+  }, [onDataLoaded]);
+
   const loadScreenerData = useCallback(async (isSilent: boolean = false) => {
     if (!isSilent) setLoading(true);
     setError(null);
@@ -676,6 +683,7 @@ function TradingViewScreenerWidget({
       const json = await res.json();
       if (json.success && Array.isArray(json.data)) {
         setStocks(json.data);
+        onDataLoadedRef.current?.(json.data);
       } else {
         throw new Error(json.error || "Tarayıcı verisi yüklenemedi");
       }

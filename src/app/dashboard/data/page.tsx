@@ -31,6 +31,7 @@ import { motion } from "framer-motion";
 import { STOCK_SECTORS } from "@/lib/constants/assets-mapping";
 import TradingViewScreenerWidget from "@/components/TradingViewScreenerWidget";
 import StockLogo from "@/components/StockLogo";
+import { BistScreenerStockItem } from "@/app/api/bist/screener/route";
 
 // BIST Şirket Tam Adları Kataloğu
 const STOCK_NAMES: Record<string, string> = {
@@ -692,6 +693,7 @@ export default function AssetsPage() {
 
     // CANLI BİST FİYATLARI VE OTOMATİK YENİLEME (30s Server Cache / 60s Client Polling)
     const [livePrices, setLivePrices] = useState<Record<string, { price: number; change: number; volume: string; pe: number }>>({});
+    const [screenerStocks, setScreenerStocks] = useState<BistScreenerStockItem[]>([]);
     const [bist100Quote, setBist100Quote] = useState<{ price: number; changePercent: number } | null>(null);
     const [lastUpdatedTime, setLastUpdatedTime] = useState<string>("");
     const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
@@ -726,6 +728,15 @@ export default function AssetsPage() {
                             changePercent: q.regularMarketChangePercent || 0
                         });
                     }
+                }
+            }
+
+            // 3. Canlı BIST Screener Verisi (Günün Enleri ve alt tarayıcı senkronizasyonu)
+            const resScreener = await fetch("/api/bist/screener");
+            if (resScreener.ok) {
+                const sJson = await resScreener.json();
+                if (sJson && sJson.success && Array.isArray(sJson.data)) {
+                    setScreenerStocks(sJson.data);
                 }
             }
         } catch (e) {
@@ -808,18 +819,63 @@ export default function AssetsPage() {
         return result;
     }, [livePrices]);
 
-    // GÜNÜN ENLERİ (TEK CANLI STATE'TEN TÜRETİLMİŞ SEKMELİ DİZİLER)
+    // GÜNÜN ENLERİ (DOĞRUDAN AŞAĞIDAKİ BIST TARAYICI VERİSİNDEN DERLENMİŞ 100% TUTARLI LİSTE)
+    const validScreenerItems = useMemo(() => {
+        return screenerStocks.filter(s => s && typeof s.price === "number" && !isNaN(s.price) && s.price > 0);
+    }, [screenerStocks]);
+
     const topGainers = useMemo(() => {
+        if (validScreenerItems.length > 0) {
+            return [...validScreenerItems]
+                .filter(s => typeof s.changePercent === "number" && !isNaN(s.changePercent))
+                .sort((a, b) => (b.changePercent ?? 0) - (a.changePercent ?? 0))
+                .slice(0, 5)
+                .map(s => ({
+                    symbol: s.symbol,
+                    name: s.name || STOCK_NAMES[s.symbol] || s.symbol,
+                    price: s.price ?? 0,
+                    change: s.changePercent ?? 0,
+                    sector: s.sector || "BIST",
+                    volume: formatVolumeDisplay(s.valueTraded || s.volume || 0)
+                }));
+        }
         return [...allStocksList].sort((a, b) => b.change - a.change).slice(0, 5);
-    }, [allStocksList]);
+    }, [validScreenerItems, allStocksList]);
 
     const topLosers = useMemo(() => {
+        if (validScreenerItems.length > 0) {
+            return [...validScreenerItems]
+                .filter(s => typeof s.changePercent === "number" && !isNaN(s.changePercent))
+                .sort((a, b) => (a.changePercent ?? 0) - (b.changePercent ?? 0))
+                .slice(0, 5)
+                .map(s => ({
+                    symbol: s.symbol,
+                    name: s.name || STOCK_NAMES[s.symbol] || s.symbol,
+                    price: s.price ?? 0,
+                    change: s.changePercent ?? 0,
+                    sector: s.sector || "BIST",
+                    volume: formatVolumeDisplay(s.valueTraded || s.volume || 0)
+                }));
+        }
         return [...allStocksList].sort((a, b) => a.change - b.change).slice(0, 5);
-    }, [allStocksList]);
+    }, [validScreenerItems, allStocksList]);
 
     const topVolumeStocks = useMemo(() => {
+        if (validScreenerItems.length > 0) {
+            return [...validScreenerItems]
+                .sort((a, b) => (b.valueTraded || b.volume || 0) - (a.valueTraded || a.volume || 0))
+                .slice(0, 5)
+                .map(s => ({
+                    symbol: s.symbol,
+                    name: s.name || STOCK_NAMES[s.symbol] || s.symbol,
+                    price: s.price ?? 0,
+                    change: s.changePercent ?? 0,
+                    sector: s.sector || "BIST",
+                    volume: formatVolumeDisplay(s.valueTraded || s.volume || 0)
+                }));
+        }
         return [...allStocksList].sort((a, b) => b.rawVolumeNum - a.rawVolumeNum).slice(0, 5);
-    }, [allStocksList]);
+    }, [validScreenerItems, allStocksList]);
 
     // PİYASA NABZI HESAPLAMALARI (DETERMİNİSTİK ANLIK HESAPLAMA - HARDCODE 0)
     const marketStats = useMemo(() => {
@@ -908,7 +964,7 @@ export default function AssetsPage() {
         return filteredStocks.slice(start, start + itemsPerPage);
     }, [filteredStocks, currentPage, itemsPerPage]);
 
-    // Sektör Tıklama & Tabloya Akıcı Kaydırma
+    // Sektör Tıklama & Tabloya Kaydırma
     const handleSectorClick = (sectorName: string) => {
         if (selectedSector === sectorName) {
             setSelectedSector(null);
@@ -916,11 +972,9 @@ export default function AssetsPage() {
             setSelectedSector(sectorName);
         }
         setCurrentPage(1);
-        requestAnimationFrame(() => {
-            setTimeout(() => {
-                stockSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 60);
-        });
+        setTimeout(() => {
+            stockSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
     };
 
     // Tablo Sıralama
@@ -939,18 +993,11 @@ export default function AssetsPage() {
             {/* ========================================================================= */}
             {/* 1. BÖLÜM: ÜST YARI — SEKTÖRLER YILLIK GETİRİLERİ (HEATMAP) & GÜNÜN ENLERİ */}
             {/* ========================================================================= */}
-            <motion.div layout className="grid grid-cols-1 lg:grid-cols-2 gap-5 w-full items-stretch">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 w-full items-stretch">
                 
                 {/* SOL WIDGET: SEKTÖRLER YILLIK GETİRİLERİ */}
-                <motion.div
-                    layout
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ layout: { duration: 0.52, type: "spring", bounce: 0.14 }, opacity: { duration: 0.32 }, y: { duration: 0.32 } }}
-                    className={cn(
-                        "bg-white border border-slate-200/90 rounded-[28px] p-5 shadow-xs space-y-4 flex flex-col justify-between overflow-hidden transition-all duration-300",
-                        selectedSector && "shadow-[0_12px_32px_-16px_rgba(7,27,66,0.3)] ring-2 ring-[#0E1E38]/20"
-                    )}
+                <div
+                    className="bg-white border border-slate-200/90 rounded-[28px] p-5 shadow-xs flex flex-col justify-between h-[390px] overflow-hidden"
                 >
                     <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                         <div className="flex items-center gap-2.5">
@@ -958,10 +1005,17 @@ export default function AssetsPage() {
                                 <BarChart3 className="w-4 h-4 text-white" />
                             </div>
                             <div>
-                                <h2 className="text-base font-normal text-[#0E1E38] tracking-tight leading-tight">
-                                    Sektörler Yıllık Getirileri (2025 BIST)
-                                </h2>
-                                <p className="text-[10px] font-bold text-slate-400">
+                                <div className="flex items-center gap-2">
+                                    <h2 className="text-base font-medium text-[#0E1E38] tracking-tight leading-tight">
+                                        Sektörler Yıllık Getirileri (2025 BIST)
+                                    </h2>
+                                    {selectedSector && (
+                                        <span className="text-[10px] bg-blue-50 text-blue-700 border border-blue-200/70 font-semibold px-2 py-0.5 rounded-full">
+                                            Seçili: {selectedSector}
+                                        </span>
+                                    )}
+                                </div>
+                                <p className="text-[10px] text-slate-400 font-medium mt-0.5">
                                     Getiriye göre sıralı • Filtrelemek için sütuna tıklayın
                                 </p>
                             </div>
@@ -969,7 +1023,7 @@ export default function AssetsPage() {
                         {selectedSector && (
                             <button
                                 onClick={() => { setSelectedSector(null); setCurrentPage(1); }}
-                                className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[10px] font-normal flex items-center gap-1 transition-all"
+                                className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[10px] font-medium flex items-center gap-1 transition-all"
                             >
                                 <X className="w-3 h-3 text-rose-500" />
                                 Temizle
@@ -977,19 +1031,19 @@ export default function AssetsPage() {
                         )}
                     </div>
 
-                    {/* GETİRİ SÜTUN GRAFİĞİ */}
-                    <div className="relative flex-1 pt-4">
-                        <div className="absolute inset-x-0 top-4 bottom-9 flex flex-col justify-between pointer-events-none" aria-hidden="true">
+                    {/* GETİRİ SÜTUN GRAFİĞİ (PROFESYONEL VE DERİN DEGRADELİ) */}
+                    <div className="relative flex-1 pt-3">
+                        <div className="absolute inset-x-0 top-3 bottom-12 flex flex-col justify-between pointer-events-none" aria-hidden="true">
                             {[100, 75, 50, 25, 0].map((value) => (
                                 <div key={value} className="border-t border-dashed border-slate-100 relative">
                                     <span className="absolute -top-2.5 -left-0.5 text-[8px] font-semibold text-slate-300 bg-white pr-1">%{value}</span>
                                 </div>
                             ))}
                         </div>
-                        <div className="relative grid grid-cols-6 gap-2 sm:gap-3 items-end pl-5 h-[254px] sm:h-[268px]">
+                        <div className="relative grid grid-cols-6 gap-2 sm:gap-3 items-end pl-5 h-[260px]">
                         {ALL_SECTORS_DATA.slice(0, 6).map((sector, idx) => {
                             const isSelected = selectedSector === sector.name;
-                            const chartHeight = Math.max(18, Math.min(100, (sector.annualReturn / 110) * 100));
+                            const chartHeight = Math.max(16, Math.min(100, (sector.annualReturn / 110) * 100));
                             const isTopPerformer = idx < 3;
 
                             return (
@@ -999,82 +1053,77 @@ export default function AssetsPage() {
                                     aria-pressed={isSelected}
                                     title={`${sector.name}: +${sector.annualReturn}% — Lider: ${sector.leader}`}
                                     className={cn(
-                                        "group h-full min-w-0 flex flex-col justify-end items-center rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38] focus-visible:ring-offset-2",
-                                        isSelected && "bg-sky-50/70"
+                                        "group h-full min-w-0 flex flex-col justify-end items-center rounded-xl outline-none transition-all duration-200",
+                                        isSelected && "bg-blue-50/50"
                                     )}
                                 >
                                     <div className={cn(
-                                        "mb-2 inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-bold tabular-nums transition-all duration-300",
-                                        isSelected ? "bg-[#071B42] text-white shadow-sm" : "bg-slate-100 text-[#173C78] group-hover:bg-[#0E1E38] group-hover:text-white"
+                                        "mb-2 inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-bold tabular-nums transition-all duration-200 whitespace-nowrap",
+                                        isSelected
+                                            ? "bg-[#071B42] text-white shadow-sm ring-1 ring-blue-500"
+                                            : "bg-slate-50 text-[#0E1E38] border border-slate-200/80 group-hover:bg-[#0E1E38] group-hover:text-white"
                                     )}>
                                         +{sector.annualReturn}%
                                     </div>
-                                    <div className="w-full flex items-end justify-center h-[194px] sm:h-[208px]">
-                                        <motion.div
-                                            initial={{ scaleY: 0, opacity: 0.35 }}
-                                            animate={{ scaleY: 1, opacity: 1 }}
-                                            transition={{ duration: 0.72, delay: idx * 0.07, ease: [0.22, 1, 0.36, 1] }}
-                                            className={cn(
-                                                "w-full max-w-[64px] min-w-[20px] rounded-t-xl transition-all duration-500 ease-out origin-bottom relative overflow-hidden",
-                                                isSelected
-                                                    ? "bg-gradient-to-t from-[#061633] via-[#0E2B5D] to-white shadow-lg shadow-[#0E1E38]/25"
-                                                    : isTopPerformer
-                                                        ? "bg-gradient-to-t from-[#071B42] via-[#17427F] to-white group-hover:from-[#030C20] group-hover:via-[#0E326B] group-hover:shadow-[0_12px_24px_-12px_rgba(7,27,66,0.65)]"
-                                                        : "bg-gradient-to-t from-[#173C78] via-[#4975AF] to-white group-hover:from-[#071B42] group-hover:via-[#17427F] group-hover:shadow-[0_12px_24px_-12px_rgba(7,27,66,0.55)]"
-                                            )}
-                                            style={{ height: `${chartHeight}%`, transformOrigin: "bottom" }}
-                                        >
-                                            <div className="absolute inset-x-0 top-0 h-px bg-[#EAF2FF]" />
+                                    <div className="w-full flex items-end justify-center h-[185px]">
+                                        <div className="w-full max-w-[48px] min-w-[20px] h-full bg-slate-100/50 rounded-t-xl relative flex items-end justify-center overflow-hidden">
                                             <motion.div
-                                                aria-hidden="true"
-                                                className="absolute inset-0 bg-gradient-to-b from-white/35 via-transparent to-transparent"
-                                                animate={{ y: ["-100%", "120%"] }}
-                                                transition={{ duration: 2.8, delay: idx * 0.16, repeat: Infinity, repeatDelay: 2.4, ease: "easeInOut" }}
-                                            />
-                                        </motion.div>
+                                                initial={{ height: 0 }}
+                                                animate={{ height: `${chartHeight}%` }}
+                                                transition={{ duration: 0.72, delay: idx * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                                                className={cn(
+                                                    "w-full rounded-t-xl transition-all duration-300 relative overflow-hidden",
+                                                    isSelected
+                                                        ? "bg-gradient-to-t from-[#020617] via-[#0E2B5D] to-[#2563EB] ring-2 ring-blue-500 shadow-md shadow-blue-900/30"
+                                                        : isTopPerformer
+                                                            ? "bg-gradient-to-t from-[#071B42] via-[#0E2B5D] to-[#1D4ED8] group-hover:from-[#030C20] group-hover:to-[#2563EB]"
+                                                            : "bg-gradient-to-t from-[#0E1E38] via-[#1E3A8A] to-[#3B82F6] group-hover:from-[#071B42] group-hover:to-[#2563EB]"
+                                                )}
+                                            >
+                                                <div className="absolute inset-x-0 top-0 h-[2px] bg-sky-200/90 shadow-xs" />
+                                            </motion.div>
+                                        </div>
                                     </div>
-                                    <div className="w-full pt-2.5 px-0.5 text-center">
-                                        <p className="text-[9px] sm:text-[10px] font-bold text-[#0E1E38] leading-tight line-clamp-2 min-h-[24px]">
+                                    <div className="w-full pt-2 px-0.5 text-center">
+                                        <p className={cn(
+                                            "text-[10px] font-medium leading-tight line-clamp-2 min-h-[24px] transition-colors",
+                                            isSelected ? "text-blue-700 font-bold" : "text-[#0E1E38]"
+                                        )}>
                                             {sector.name}
                                         </p>
-                                        <p className="text-[8px] sm:text-[9px] text-slate-400 mt-0.5 truncate">{sector.leader}</p>
+                                        <p className="text-[9px] text-slate-400 mt-0.5 truncate font-medium">{sector.leader}</p>
                                     </div>
                                 </button>
                             );
                         })}
                         </div>
                     </div>
-                </motion.div>
+                </div>
 
-                {/* SAĞ WIDGET: GÜNÜN ENLERİ (SEKMELİ & KONTROLLÜ RENK YOĞUNLUĞU) */}
-                <motion.div
-                    layout
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ layout: { duration: 0.52, type: "spring", bounce: 0.14 }, opacity: { duration: 0.32, delay: 0.08 }, y: { duration: 0.32, delay: 0.08 } }}
-                    className="bg-white border border-slate-200/90 rounded-[28px] p-5 shadow-xs space-y-3.5 flex flex-col justify-between"
+                {/* SAĞ WIDGET: GÜNÜN ENLERİ (PREMIUM FİNANSAL TERMİNAL TASARIMI) */}
+                <div
+                    className="bg-white border border-slate-200/90 rounded-[28px] p-5 shadow-xs flex flex-col justify-between h-[390px] overflow-hidden"
                 >
-                    
                     {/* BAŞLIK VE SEKMELER */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-100 pb-3">
                         <div className="flex items-center gap-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-amber-500 flex items-center justify-center text-white shadow-xs shrink-0">
-                                <Trophy className="w-4 h-4 text-amber-100" />
+                            <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-600 shadow-xs shrink-0">
+                                <Trophy className="w-4 h-4 text-amber-500" />
                             </div>
                             <div>
-                                <h2 className="text-base font-normal text-[#0E1E38] tracking-tight leading-tight">Günün Enleri</h2>
-                                <p className="text-[10px] font-bold text-slate-400">Canlı BIST Piyasasının Öne Çıkanları</p>
+                                <h2 className="text-base font-medium text-[#0E1E38] tracking-tight leading-tight">Günün Enleri</h2>
+                                <p className="text-[10px] text-slate-400 font-medium">Canlı BIST Piyasasının Öne Çıkanları</p>
                             </div>
                         </div>
 
                         {/* SEKMELER */}
-                        <div className="flex items-center bg-slate-100/80 p-1 rounded-xl gap-1 self-start sm:self-auto border border-slate-200/60">
+                        <div className="flex items-center bg-slate-100/90 p-1 rounded-xl gap-1 self-start sm:self-auto border border-slate-200/60">
                             <button
                                 onClick={() => setActiveTopTab('gainers')}
                                 className={cn(
-                                    "px-2.5 py-1 rounded-lg text-[10px] font-normal transition-all flex items-center gap-1",
+                                    "px-2.5 py-1 rounded-lg text-[10px] font-medium transition-all flex items-center gap-1.5",
                                     activeTopTab === 'gainers' 
-                                        ? "bg-emerald-600 text-white shadow-xs" 
+                                        ? "bg-emerald-600 text-white shadow-xs font-semibold" 
                                         : "text-slate-600 hover:text-[#0E1E38]"
                                 )}
                             >
@@ -1084,9 +1133,9 @@ export default function AssetsPage() {
                             <button
                                 onClick={() => setActiveTopTab('losers')}
                                 className={cn(
-                                    "px-2.5 py-1 rounded-lg text-[10px] font-normal transition-all flex items-center gap-1",
+                                    "px-2.5 py-1 rounded-lg text-[10px] font-medium transition-all flex items-center gap-1.5",
                                     activeTopTab === 'losers' 
-                                        ? "bg-rose-600 text-white shadow-xs" 
+                                        ? "bg-rose-600 text-white shadow-xs font-semibold" 
                                         : "text-slate-600 hover:text-[#0E1E38]"
                                 )}
                             >
@@ -1096,72 +1145,95 @@ export default function AssetsPage() {
                             <button
                                 onClick={() => setActiveTopTab('volume')}
                                 className={cn(
-                                    "px-2.5 py-1 rounded-lg text-[10px] font-normal transition-all flex items-center gap-1",
+                                    "px-2.5 py-1 rounded-lg text-[10px] font-medium transition-all flex items-center gap-1.5",
                                     activeTopTab === 'volume' 
-                                        ? "bg-[#0E1E38] text-white shadow-xs" 
+                                        ? "bg-[#0E1E38] text-white shadow-xs font-semibold" 
                                         : "text-slate-600 hover:text-[#0E1E38]"
                                 )}
                             >
-                                <Flame className="w-3 h-3 text-amber-300" />
+                                <Flame className="w-3 h-3 text-amber-400" />
                                 Hacim
                             </button>
                         </div>
                     </div>
 
-                    {/* İÇERİK LİSTESİ (KONTROLLÜ PERFORMANS YOĞUNLUĞU) */}
-                    <div className="space-y-1.5 flex-1 flex flex-col justify-around">
+                    {/* İÇERİK LİSTESİ (SADE, ESTETİK VE TAM TUTARLI) */}
+                    <div className="space-y-1.5 flex-1 flex flex-col justify-between py-1">
                         {(() => {
                             const list = activeTopTab === 'gainers' ? topGainers : activeTopTab === 'losers' ? topLosers : topVolumeStocks;
-                            return list.map((item, idx) => (
-                                <a 
-                                    key={item.symbol} 
-                                    href={`/dashboard/varlik/${item.symbol}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center justify-between p-2 px-3 bg-slate-50/70 border border-slate-200/80 rounded-xl hover:bg-blue-50/60 hover:border-blue-300 transition-all text-xs group cursor-pointer"
-                                >
-                                    <div className="flex items-center gap-2.5 min-w-0">
-                                        <span className="text-[10px] font-normal text-slate-400 w-4 text-center">#{idx + 1}</span>
-                                        <StockLogo symbol={item.symbol} className="w-8 h-8 ring-1 ring-slate-200/60 shadow-xs" />
-                                        <div className="min-w-0">
-                                            <div className="flex items-center gap-1.5">
-                                                <span className="font-normal text-[#0E1E38] text-xs leading-tight group-hover:text-[#0E1E38] transition-colors">
-                                                    {item.symbol}
-                                                </span>
-                                                <span className="text-[9px] font-bold text-[#ba68c8]">
-                                                    GS
-                                                </span>
-                                                <span className="text-[9px] font-bold text-slate-400 bg-white px-1.5 py-0.2 rounded border border-slate-200/60 truncate max-w-[100px]">
-                                                    {item.sector}
+                            return list.map((item, idx) => {
+                                const isPos = item.change > 0;
+                                const isNeg = item.change < 0;
+                                return (
+                                    <a 
+                                        key={item.symbol} 
+                                        href={`/dashboard/varlik/${item.symbol}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center justify-between px-3 py-1.5 bg-slate-50/60 border border-slate-200/60 rounded-xl hover:bg-blue-50/50 hover:border-blue-200 transition-all text-xs group cursor-pointer"
+                                    >
+                                        <div className="flex items-center gap-2.5 min-w-0 flex-1 mr-2">
+                                            <span className={cn(
+                                                "text-[10px] font-bold w-4 text-center shrink-0",
+                                                idx === 0 ? "text-amber-500" : idx === 1 ? "text-slate-500" : idx === 2 ? "text-amber-700" : "text-slate-400"
+                                            )}>
+                                                #{idx + 1}
+                                            </span>
+                                            <StockLogo symbol={item.symbol} className="w-7 h-7 rounded-full ring-1 ring-slate-200/80 shadow-2xs shrink-0" />
+                                            <div className="min-w-0 flex-1">
+                                                <div className="flex items-center gap-1.5">
+                                                    <span className="font-semibold text-[#0E1E38] text-xs leading-tight group-hover:text-blue-600 transition-colors">
+                                                        {item.symbol}
+                                                    </span>
+                                                    <span className="text-[10px] text-slate-400 truncate max-w-[120px] hidden sm:inline font-normal">
+                                                        • {item.sector}
+                                                    </span>
+                                                </div>
+                                                <span className="text-[10px] text-slate-500 block truncate max-w-[160px] sm:max-w-[210px] mt-0.5 font-normal leading-tight">
+                                                    {item.name}
                                                 </span>
                                             </div>
-                                            <span className="text-[9px] font-bold text-slate-400 block truncate max-w-[170px] mt-0.5">
-                                                {item.name}
-                                            </span>
                                         </div>
-                                    </div>
 
-                                    <div className="flex items-center gap-3 shrink-0 text-right">
-                                        <span className="font-normal text-[#0E1E38] text-xs">₺{item.price.toFixed(2)}</span>
-                                        {activeTopTab === 'volume' ? (
-                                            <span className="font-normal text-[#0E1E38] text-xs">
-                                                {item.volume}
-                                            </span>
-                                        ) : (
-                                            <span className={cn(
-                                                "text-xs font-normal text-right",
-                                                getChangeBadgeStyle(item.change)
-                                            )}>
-                                                {item.change > 0 ? `+${item.change}%` : `${item.change}%`}
-                                            </span>
-                                        )}
-                                    </div>
-                                </a>
-                            ));
+                                        <div className="flex items-center gap-2.5 shrink-0 text-right">
+                                            <div className="flex flex-col items-end">
+                                                <span className="font-semibold text-[#0E1E38] text-xs tabular-nums">
+                                                    ₺{item.price.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                </span>
+                                                {activeTopTab === 'volume' && (
+                                                    <span className={cn(
+                                                        "text-[9px] font-semibold tabular-nums mt-0.5",
+                                                        isPos ? "text-emerald-600" : isNeg ? "text-rose-600" : "text-slate-400"
+                                                    )}>
+                                                        {isPos ? `+${item.change.toFixed(2)}%` : `${item.change.toFixed(2)}%`}
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            {activeTopTab === 'volume' ? (
+                                                <div className="px-2 py-0.5 bg-slate-100 border border-slate-200/80 rounded-md text-[10px] font-semibold text-[#0E1E38] tabular-nums whitespace-nowrap">
+                                                    {item.volume}
+                                                </div>
+                                            ) : (
+                                                <div className={cn(
+                                                    "px-2 py-0.5 rounded-md text-[10px] font-semibold tabular-nums whitespace-nowrap border",
+                                                    isPos 
+                                                        ? "bg-emerald-50 text-emerald-700 border-emerald-200/70"
+                                                        : isNeg
+                                                            ? "bg-rose-50 text-rose-700 border-rose-200/70"
+                                                            : "bg-slate-100 text-slate-600 border-slate-200"
+                                                )}>
+                                                    {isPos ? `+${item.change.toFixed(2)}%` : `${item.change.toFixed(2)}%`}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </a>
+                                );
+                            });
                         })()}
                     </div>
-                </motion.div>
-            </motion.div>
+                </div>
+            </div>
 
 
             {/* ========================================================================= */}
@@ -1185,6 +1257,7 @@ export default function AssetsPage() {
                     className="rounded-2xl"
                     externalSector={selectedSector}
                     onSectorChange={setSelectedSector}
+                    onDataLoaded={setScreenerStocks}
                 />
             </motion.div>
         </div>
