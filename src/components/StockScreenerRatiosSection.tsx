@@ -311,7 +311,7 @@ export default function StockScreenerRatiosSection({
                               ? "text-emerald-700"
                               : item.value < 0
                                 ? "text-rose-600"
-                                : "text-[#0E1E38]";
+                                : "text-[#0E1E38] dark:text-[#F5F7FA]";
                         } else if (item.value < 0 && item.key !== "netDebtToEBITDA") {
                           valueColorClass = "text-rose-600";
                         } else {
@@ -322,18 +322,18 @@ export default function StockScreenerRatiosSection({
                       return (
                         <div
                           key={item.key}
-                          className="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-xs hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between"
+                          className="bg-white dark:bg-[#040989] border border-slate-200 dark:border-[#5B80FF]/30 rounded-2xl p-4 space-y-3 shadow-xs hover:shadow-md hover:border-blue-300 dark:hover:border-[#5B80FF] transition-all flex flex-col justify-between"
                         >
                           <div className="space-y-2">
                             <div className="flex items-start justify-between gap-2">
-                              <span className="text-xs font-normal text-slate-800 leading-tight">
+                              <span className="text-xs font-normal text-slate-800 dark:text-[#F5F7FA] leading-tight">
                                 {item.name}
                               </span>
                               {onSelectTooltip && (
                                 <button
                                   type="button"
                                   onClick={() => onSelectTooltip(item)}
-                                  className="p-1 rounded-lg bg-blue-50 text-[#0E1E38] hover:bg-blue-100 transition-colors shrink-0"
+                                  className="p-1 rounded-lg bg-blue-50 dark:bg-[#004BFA]/30 text-[#0E1E38] dark:text-[#F5F7FA] hover:bg-blue-100 dark:hover:bg-[#004BFA]/50 transition-colors shrink-0"
                                   title="FinAI Eğitici Not & Metodoloji"
                                 >
                                   <HelpCircle className="w-3.5 h-3.5" />
@@ -367,12 +367,12 @@ export default function StockScreenerRatiosSection({
                             </div>
                           </div>
 
-                          <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2 text-[10px] text-slate-400 font-bold">
+                          <div className="pt-2 border-t border-slate-100 dark:border-[#5B80FF]/20 flex items-center justify-between gap-2 text-[10px] text-slate-400 dark:text-[#D6E4FF]/70 font-bold">
                             <span className="truncate" title={item.methodology}>
                               {item.methodology}
                             </span>
                             {item.periodLabel && (
-                              <span className="text-[#0E1E38] bg-blue-50 px-1.5 py-0.5 rounded font-normal shrink-0">
+                              <span className="text-[#0E1E38] dark:text-[#F5F7FA] bg-blue-50 dark:bg-[#004BFA]/30 px-1.5 py-0.5 rounded font-normal shrink-0">
                                 {item.periodLabel}
                               </span>
                             )}

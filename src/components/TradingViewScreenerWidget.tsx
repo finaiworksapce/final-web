@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useRef, useState, memo } from "react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -598,12 +599,15 @@ function getColumnsForTab(tab: ColumnTabId): ColumnDef[] {
 function TradingViewScreenerWidget({
   columns: initialColumnsProp = "overview",
   screen: initialScreenProp = "volume_leaders",
+  theme: themeProp,
   height = 720,
   className = "",
   externalSector,
   onSectorChange,
   onDataLoaded
 }: TradingViewScreenerWidgetProps) {
+  const { resolvedTheme } = useTheme();
+  const isDark = themeProp ? themeProp === "dark" : resolvedTheme === "dark";
   const router = useRouter();
 
   const resolvedInitialColumns: ColumnTabId = COLUMN_TABS.some((c) => c.id === initialColumnsProp)
@@ -884,13 +888,13 @@ function TradingViewScreenerWidget({
   const numericHeight = typeof height === "number" ? height : 720;
 
   return (
-    <div className={cn("w-full bg-white flex flex-col border border-slate-200/80 rounded-xl relative", className)}>
+    <div className={cn("w-full bg-white dark:bg-[#040989] flex flex-col border border-slate-200/80 dark:border-[#5B80FF]/30 rounded-xl relative", className)}>
       {/* ===================================================================== */}
       {/* TEK SATIR ORİJİNAL TARAYICI ÜST ÇUBUĞU + HİSSE ARAMA MOTORU           */}
       {/* ===================================================================== */}
       <div
         ref={toolbarRef}
-        className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 px-3 py-2 bg-white border-b border-slate-200 rounded-t-xl relative z-30"
+        className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 px-3 py-2 bg-white dark:bg-[#040989] border-b border-slate-200 dark:border-[#5B80FF]/30 rounded-t-xl relative z-30"
       >
         {/* SOL KONTROLLER: SÜTUN GÖRÜNÜMÜ (Genel Bakış ▾) + SÜTUN AYARLARI ([...]) */}
         <div className="flex items-center gap-1 shrink-0">
@@ -902,8 +906,8 @@ function TradingViewScreenerWidget({
               className={cn(
                 "h-8 px-2.5 rounded-md text-xs font-medium flex items-center gap-1.5 border transition-colors",
                 openPopover === "fieldSets"
-                  ? "bg-slate-100 border-slate-300 text-[#131722]"
-                  : "bg-white border-slate-200/90 text-[#131722] hover:bg-slate-50"
+                  ? "bg-slate-100 dark:bg-[#02041A] border-slate-300 dark:border-[#5B80FF]/40 text-[#131722] dark:text-[#F5F7FA]"
+                  : "bg-white dark:bg-[#040989] border-slate-200/90 dark:border-[#5B80FF]/30 text-[#131722] dark:text-[#F5F7FA] hover:bg-slate-50 dark:hover:bg-[#004BFA]/20"
               )}
               title="Sütun görünümü seçin"
             >
@@ -912,7 +916,7 @@ function TradingViewScreenerWidget({
             </button>
 
             {openPopover === "fieldSets" && (
-              <div className="absolute left-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-1 z-50">
+              <div className="absolute left-0 top-full mt-1 w-48 bg-white dark:bg-[#040989] rounded-lg shadow-lg border border-slate-200 dark:border-[#5B80FF]/30 py-1 z-50">
                 {COLUMN_TABS.map((tab) => {
                   const selected = tab.id === activeColumnsTab;
                   return (
@@ -944,8 +948,8 @@ function TradingViewScreenerWidget({
               className={cn(
                 "h-8 w-8 rounded-md flex items-center justify-center border transition-colors",
                 openPopover === "columnPicker"
-                  ? "bg-slate-100 border-slate-300 text-[#131722]"
-                  : "bg-white border-slate-200/90 text-slate-600 hover:bg-slate-50 hover:text-[#131722]"
+                  ? "bg-slate-100 dark:bg-[#02041A] border-slate-300 dark:border-[#5B80FF]/40 text-[#131722] dark:text-[#F5F7FA]"
+                  : "bg-white dark:bg-[#040989] border-slate-200/90 dark:border-[#5B80FF]/30 text-slate-600 dark:text-[#D6E4FF] hover:bg-slate-50 dark:hover:bg-[#004BFA]/20 hover:text-[#131722] dark:hover:text-[#F5F7FA]"
               )}
               title="Sütun ayarları"
             >
@@ -953,7 +957,7 @@ function TradingViewScreenerWidget({
             </button>
 
             {openPopover === "columnPicker" && (
-              <div className="absolute left-0 top-full mt-1 w-56 bg-white rounded-lg shadow-lg border border-slate-200 py-1.5 z-50 max-h-80 overflow-y-auto">
+              <div className="absolute left-0 top-full mt-1 w-56 bg-white dark:bg-[#040989] rounded-lg shadow-lg border border-slate-200 dark:border-[#5B80FF]/30 py-1.5 z-50 max-h-80 overflow-y-auto">
                 <div className="px-3 py-1 flex items-center justify-between border-b border-slate-100 mb-1">
                   <span className="text-[11px] font-semibold text-slate-500">Görünür Sütunlar</span>
                   {Object.keys(hiddenColumns).length > 0 && (
@@ -1075,7 +1079,7 @@ function TradingViewScreenerWidget({
               "h-8 px-2.5 rounded-md text-xs font-medium flex items-center gap-1.5 border transition-colors",
               appliedFilterCount > 0
                 ? "bg-[#2962ff]/10 border-[#2962ff]/40 text-[#2962ff]"
-                : "bg-white border-slate-200/90 text-[#131722] hover:bg-slate-50"
+                : "bg-white dark:bg-[#040989] border-slate-200/90 dark:border-[#5B80FF]/30 text-[#131722] dark:text-[#F5F7FA] hover:bg-slate-50 dark:hover:bg-[#004BFA]/20"
             )}
             title="Filtreleri düzenle"
           >
@@ -1131,17 +1135,17 @@ function TradingViewScreenerWidget({
           </button>
         </div>
       ) : (
-        <div className="w-full bg-white flex flex-col rounded-b-xl overflow-hidden min-h-[360px]">
+        <div className="w-full bg-white dark:bg-[#040989] flex flex-col rounded-b-xl overflow-hidden min-h-[360px]">
           <div
             style={{ maxHeight: `${numericHeight - 48}px` }}
             className="overflow-x-auto overflow-y-auto"
           >
             <table className="w-full text-left border-collapse">
-              <thead className="sticky top-0 z-20 bg-white border-b border-slate-200 text-[11px] font-medium text-slate-500 select-none">
+              <thead className="sticky top-0 z-20 bg-white dark:bg-[#040989] border-b border-slate-200 dark:border-[#5B80FF]/30 text-[11px] font-medium text-slate-500 dark:text-slate-300 select-none">
                 <tr>
                   <th
                     onClick={() => handleColumnSort("symbol")}
-                    className="py-2.5 px-3.5 sticky left-0 z-30 bg-white hover:bg-slate-50 cursor-pointer transition-colors border-r border-slate-100 min-w-[215px]"
+                    className="py-2.5 px-3.5 sticky left-0 z-30 bg-white dark:bg-[#040989] hover:bg-slate-50 dark:hover:bg-[#004BFA]/20 cursor-pointer transition-colors border-r border-slate-100 dark:border-[#5B80FF]/25 min-w-[215px]"
                   >
                     <div className="flex items-center gap-1">
                       <span className="uppercase tracking-wide text-[11px] text-slate-500">
@@ -1191,9 +1195,9 @@ function TradingViewScreenerWidget({
                 {displayedStocks.map((item) => (
                   <tr
                     key={item.symbol}
-                    className="hover:bg-[#f0f3fa]/70 transition-colors group border-b border-slate-100 last:border-b-0"
+                    className="hover:bg-[#f0f3fa]/70 dark:hover:bg-[#004BFA]/15 transition-colors group border-b border-slate-100 dark:border-[#5B80FF]/20 last:border-b-0"
                   >
-                    <td className="py-2.5 px-3.5 sticky left-0 bg-white group-hover:bg-[#f4f6fb] transition-colors z-10 min-w-[215px] max-w-[260px] border-r border-slate-100/80">
+                    <td className="py-2.5 px-3.5 sticky left-0 bg-white dark:bg-[#040989] group-hover:bg-[#f4f6fb] dark:group-hover:bg-[#004BFA]/20 transition-colors z-10 min-w-[215px] max-w-[260px] border-r border-slate-100/80 dark:border-[#5B80FF]/20">
                       <Link
                         href={`/dashboard/varlik/${item.symbol}`}
                         className="flex items-center gap-3 min-w-0"
@@ -1222,7 +1226,7 @@ function TradingViewScreenerWidget({
                       <td
                         key={String(col.key)}
                         className={cn(
-                          "py-2 px-3 text-xs",
+                          "py-2 px-3 text-xs text-slate-800 dark:text-[#F5F7FA]",
                           col.align === "right" ? "text-right" : "text-left"
                         )}
                       >

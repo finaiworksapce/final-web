@@ -13,6 +13,7 @@ import {
   HistogramSeries
 } from "lightweight-charts";
 import { RefreshCw, BarChart2, Layers, Calendar, AlertCircle } from "lucide-react";
+import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 
 export interface ChartPoint {
@@ -86,6 +87,8 @@ export function TradingViewStockChart({
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartInstanceRef = useRef<IChartApi | null>(null);
 
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
   const [chartType, setChartType] = useState<"area" | "candle">("area");
   const [hoveredData, setHoveredData] = useState<{
     time: string;
@@ -144,7 +147,7 @@ export function TradingViewStockChart({
       height: 340,
       layout: {
         background: { type: ColorType.Solid, color: "transparent" },
-        textColor: "#64748B",
+        textColor: isDark ? "#D6E4FF" : "#64748B",
         fontSize: 11,
         fontFamily: "Inter, system-ui, -apple-system, sans-serif"
       },
@@ -244,7 +247,7 @@ export function TradingViewStockChart({
 
     // Add Volume Histogram Series
     const volumeSeries = chart.addSeries(HistogramSeries, {
-      color: "rgba(20, 43, 80, 0.15)",
+      color: isDark ? "rgba(91, 128, 255, 0.2)" : "rgba(20, 43, 80, 0.15)",
       priceFormat: { type: "volume" },
       priceScaleId: ""
     });
@@ -309,14 +312,14 @@ export function TradingViewStockChart({
         chartInstanceRef.current = null;
       }
     };
-  }, [validData, chartType, activeTimeframe, loading]);
+  }, [validData, chartType, activeTimeframe, loading, isDark]);
 
   const displayPrice = hoveredData?.close !== undefined ? hoveredData.close : (currentPrice || (validData.length > 0 ? validData[validData.length - 1].close : 0));
 
   return (
     <div className="w-full space-y-4">
       {/* GRAFİK ÜSTÜ KONTROL VE SEÇENEKLER BARI */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-[#5B80FF]/20">
         
         {/* SOL: PİYASA VE SON VERİ DURUMU */}
         <div className="flex items-center gap-2.5">
@@ -330,7 +333,7 @@ export function TradingViewStockChart({
             {marketStatusText}
           </span>
           {lastUpdated && (
-            <span className="text-[10px] font-bold text-slate-400">
+            <span className="text-[10px] font-bold text-slate-400 dark:text-[#D6E4FF]/60">
               Son Veri: {lastUpdated}
             </span>
           )}
@@ -340,12 +343,12 @@ export function TradingViewStockChart({
         <div className="flex items-center gap-3 self-end sm:self-auto flex-wrap">
           
           {/* Çizgi / Mum Grafik Seçeneği */}
-          <div className="flex items-center p-0.5 bg-slate-100 rounded-xl border border-slate-200 text-xs font-bold">
+          <div className="flex items-center p-0.5 bg-slate-100 dark:bg-[#02041A] rounded-xl border border-slate-200 dark:border-[#5B80FF]/30 text-xs font-bold">
             <button
               onClick={() => setChartType("area")}
               className={cn(
                 "px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 text-[11px]",
-                chartType === "area" ? "bg-white text-[#0E1E38] shadow-2xs font-normal" : "text-slate-500 hover:text-slate-800"
+                chartType === "area" ? "bg-white dark:bg-[#040989] text-[#0E1E38] dark:text-[#F5F7FA] shadow-2xs font-normal" : "text-slate-500 dark:text-[#D6E4FF]/70 hover:text-slate-800 dark:hover:text-[#F5F7FA]"
               )}
               title="Çizgi Grafik"
             >
@@ -356,7 +359,7 @@ export function TradingViewStockChart({
               onClick={() => setChartType("candle")}
               className={cn(
                 "px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 text-[11px]",
-                chartType === "candle" ? "bg-white text-[#0E1E38] shadow-2xs font-normal" : "text-slate-500 hover:text-slate-800"
+                chartType === "candle" ? "bg-white dark:bg-[#040989] text-[#0E1E38] dark:text-[#F5F7FA] shadow-2xs font-normal" : "text-slate-500 dark:text-[#D6E4FF]/70 hover:text-slate-800 dark:hover:text-[#F5F7FA]"
               )}
               title="Mum Grafik (OHLC)"
             >
@@ -387,14 +390,14 @@ export function TradingViewStockChart({
       </div>
 
       {/* İNTERAKTİF TOOLTIP / CROSSHAIR DEĞER EKRANI */}
-      <div className="min-h-[42px] bg-slate-50/80 border border-slate-200/80 rounded-2xl p-2.5 px-4 flex items-center justify-between gap-2 text-xs font-bold shadow-2xs">
+      <div className="min-h-[42px] bg-slate-50/80 dark:bg-[#040989]/50 border border-slate-200/80 dark:border-[#5B80FF]/30 rounded-2xl p-2.5 px-4 flex items-center justify-between gap-2 text-xs font-bold shadow-2xs text-slate-800 dark:text-[#F5F7FA]">
         {hoveredData ? (
           <div className="flex items-center gap-4 flex-wrap w-full justify-between">
             <span className="text-slate-500 font-normal text-[11px] flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-[#0E1E38]" />
+              <Calendar className="w-3.5 h-3.5 text-[#0E1E38] dark:text-[#5B80FF]" />
               {hoveredData.time}
             </span>
-            <div className="flex items-center gap-3 text-slate-800 text-[11px]">
+            <div className="flex items-center gap-3 text-slate-800 dark:text-[#F5F7FA] text-[11px]">
               {chartType === "candle" && (
                 <>
                   <span>A: <strong className="text-[#0E1E38]">{hoveredData.open?.toFixed(2)}</strong></span>
@@ -402,7 +405,7 @@ export function TradingViewStockChart({
                   <span>D: <strong className="text-rose-700">{hoveredData.low?.toFixed(2)}</strong></span>
                 </>
               )}
-              <span>Kapanış: <strong className="text-[#0E1E38] font-normal">{hoveredData.close?.toFixed(2)} {currency}</strong></span>
+              <span>Kapanış: <strong className="text-[#0E1E38] dark:text-[#F5F7FA] font-normal">{hoveredData.close?.toFixed(2)} {currency}</strong></span>
               {hoveredData.volume !== undefined && hoveredData.volume > 0 && (
                 <span className="text-slate-400">Hacim: <strong className="text-slate-600">{formatTurkishVolume(hoveredData.volume)}</strong></span>
               )}
@@ -423,9 +426,9 @@ export function TradingViewStockChart({
       </div>
 
       {/* ANAGRAM GRAFİK TUVAL ALANI */}
-      <div className="relative w-full h-[340px] bg-white rounded-2xl overflow-hidden">
+      <div className="relative w-full h-[340px] bg-white dark:bg-[#02041A] rounded-2xl overflow-hidden">
         {loading && (
-          <div className="absolute inset-0 bg-white/80 backdrop-blur-xs z-20 flex flex-col items-center justify-center gap-2">
+          <div className="absolute inset-0 bg-white/80 dark:bg-[#02041A]/80 backdrop-blur-xs z-20 flex flex-col items-center justify-center gap-2 text-[#0E1E38] dark:text-[#F5F7FA]">
             <RefreshCw className="w-6 h-6 text-[#0E1E38] animate-spin" />
             <span className="text-xs font-normal text-[#0E1E38]">BİST Canlı Grafik Verileri Yükleniyor...</span>
           </div>

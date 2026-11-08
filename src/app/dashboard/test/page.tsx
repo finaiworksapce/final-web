@@ -217,7 +217,7 @@ export default function RiskTestPage() {
 
   if (isCompleted && resultProfile) {
     return (
-        <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-slate-50 items-center justify-center p-6 relative overflow-hidden">
+        <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-slate-50 dark:bg-[#02041A] items-center justify-center p-6 relative overflow-hidden">
             <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-blue-100/50 blur-[120px] pointer-events-none" />
             
             <motion.div 

@@ -2553,7 +2553,7 @@ function CalendarContent() {
                                                 {isAnnounced ? (
                                                     <span className="text-xs font-normal text-white">2026/1Ç</span>
                                                 ) : (
-                                                    <span className="text-[9px] font-bold px-2 py-0.5 rounded-lg border text-blue-700 bg-white/80 border-blue-200/80">2026/1Ç</span>
+                                                    <span className="text-xs font-semibold text-blue-700">2026/1Ç</span>
                                                 )}
                                                 <button title="Hatırlat" className={`p-1 ${isAnnounced ? 'text-white hover:text-blue-200' : 'text-blue-400 hover:text-[#0E1E38]'}`}>
                                                     <Bell className="w-3.5 h-3.5" />
@@ -2624,7 +2624,7 @@ function CalendarContent() {
                                                         {item.netAmountFormatted || '6,00 TL'}
                                                     </span>
                                                 ) : (
-                                                    <span className="text-[10px] font-normal px-2 py-0.5 rounded-lg border text-emerald-800 bg-white/80 border-emerald-200/80">
+                                                    <span className="text-xs font-semibold text-emerald-800">
                                                         {item.netAmountFormatted || '6,00 TL'}
                                                     </span>
                                                 )}
@@ -2789,10 +2789,10 @@ function CalendarContent() {
                                                                 {item.impact === 'critical' || item.impact === 'high' || item.impact === 'Yüksek' || item.impact === 3 ? 'Yüksek' : 'Orta'}
                                                             </span>
                                                         ) : (
-                                                            <span className={`text-[9px] font-normal px-1.5 py-0.5 rounded border ${
+                                                            <span className={`text-[11px] font-semibold ${
                                                                 item.impact === 'critical' || item.impact === 'high' || item.impact === 'Yüksek' || item.impact === 'Kritik' || item.impact === 3
-                                                                    ? 'bg-rose-50 text-rose-700 border-rose-200'
-                                                                    : 'bg-blue-100/80 text-blue-800 border-blue-200'
+                                                                    ? 'text-rose-600'
+                                                                    : 'text-blue-600'
                                                             }`}>
                                                                 {item.impact === 'critical' || item.impact === 'high' || item.impact === 'Yüksek' || item.impact === 3 ? 'Yüksek' : 'Orta'}
                                                             </span>

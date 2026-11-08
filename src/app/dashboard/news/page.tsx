@@ -145,7 +145,7 @@ function NewsContent() {
             {/* 1. SAYFA ARKA PLANI: Referans görseldeki açık, ferah, gazete dokulu & küreli atmosfer */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
                 {/* Çok açık beyaz/buz mavisi taban */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9]/60 to-[#e2e8f0]/30" />
+                <div className="absolute inset-0 bg-gradient-to-b from-[#f8fafc] via-[#f1f5f9]/60 to-[#e2e8f0]/30 dark:from-[#02041A] dark:via-[#02041A] dark:to-[#040989]/30" />
 
                 {/* Sol Üst: Çok hafif gazete dokusu filigranı (FINANCIAL TIMES) */}
                 <div className="absolute -top-12 -left-8 w-[520px] h-[340px] opacity-[0.04] rotate-[-12deg] pointer-events-none font-serif text-[42px] leading-tight font-normal tracking-widest text-[#0E1E38] overflow-hidden">

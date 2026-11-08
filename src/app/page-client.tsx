@@ -182,42 +182,45 @@ export default function HomeClient() {
 
               </div>
 
-              {/* Sağ Kolon: Sayfanın Sağını Dolduran Gerçek Konsol Snapshot'ı (6 Kolon) */}
+              {/* Sağ Kolon: Dengeli ve Kenarları Kesilmeyen Gerçek Konsol Snapshot'ı (6 Kolon) */}
               <motion.div
                 initial={{ opacity: 0, x: 25 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.25, ease: "easeOut" }}
-                className="lg:col-span-6 relative w-full"
+                className="lg:col-span-6 relative w-full flex justify-center lg:justify-end"
               >
-                <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/90 shadow-2xl shadow-[#040989]/10 bg-white">
+                <div className="relative w-full max-w-xl xl:max-w-2xl rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/90 shadow-2xl shadow-[#040989]/10 bg-white">
                   
-                  {/* Tarayıcı Üst Çubuğu */}
-                  <div className="flex items-center justify-between px-4 sm:px-6 py-3 bg-[#F5F7FA] border-b border-slate-200">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full bg-rose-400/80" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
+                  {/* Minimal Tarayıcı Üst Çubuğu */}
+                  <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 bg-[#F5F7FA] border-b border-slate-200">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
                     </div>
-                    <div className="bg-white px-4 py-1 rounded-md text-[11px] font-mono text-slate-500 border border-slate-200/80 max-w-xs w-full text-center truncate hidden sm:block">
-                      https://finai.net.tr/dashboard
+                    <div className="bg-white px-3 py-0.5 rounded-md text-[10px] sm:text-[11px] font-mono text-slate-500 border border-slate-200/80 max-w-xs w-full text-center truncate">
+                      finai.net.tr/dashboard
                     </div>
                     <div className="text-right">
-                      <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
-                        Canlı Portföy
+                      <span className="text-[10px] font-medium text-slate-400">
+                        Canlı
                       </span>
                     </div>
                   </div>
 
-                  {/* Gerçek Web Uygulaması Workspace Snapshot'ı */}
-                  <div className="relative aspect-[16/10] w-full bg-slate-50">
-                    <Image
-                      src="/images/landing/dashboard_workspace.jpg"
-                      alt="FinAi Canlı Çalışma Alanı"
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      className="object-cover object-top"
-                      priority
-                    />
+                  {/* Gerçek Web Uygulaması Workspace Snapshot'ı (Kenarları Kesilmeden, 1024x560 Tam Çözünürlük) */}
+                  <div className="relative w-full bg-slate-100/50 p-1 sm:p-2">
+                    <div className="relative w-full aspect-[1024/560] overflow-hidden rounded-lg sm:rounded-xl border border-slate-200/60 shadow-2xs">
+                      <Image
+                        src="/images/landing/dashboard_workspace.jpg"
+                        alt="FinAi Canlı Çalışma Alanı"
+                        fill
+                        unoptimized
+                        priority
+                        className="object-contain"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                      />
+                    </div>
                   </div>
                 </div>
               </motion.div>

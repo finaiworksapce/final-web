@@ -232,7 +232,7 @@ export default function PortfolioAgendaPage() {
     );
 
     return (
-        <div className="p-4 md:p-8 space-y-6 min-h-screen bg-slate-50/50 font-sans max-w-5xl mx-auto">
+        <div className="p-4 md:p-8 space-y-6 min-h-screen bg-slate-50/50 dark:bg-[#02041A] font-sans max-w-5xl mx-auto">
             {/* ÜST GERİ DÖNÜŞ VE FİLTRE ÇUBUĞU */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <Link

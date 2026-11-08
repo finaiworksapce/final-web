@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, ArrowUpRight } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface FeatureItem {
@@ -16,6 +16,7 @@ interface FeatureItem {
   highlights: string[];
   image: string;
   url: string;
+  aspectRatio: string;
 }
 
 const FEATURES: FeatureItem[] = [
@@ -33,7 +34,8 @@ const FEATURES: FeatureItem[] = [
       "Günlük ajanda, sıcak piyasa gelişmeleri ve TradingView grafikleri"
     ],
     image: "/images/landing/dashboard_workspace.jpg",
-    url: "/dashboard/portfolio"
+    url: "/dashboard/portfolio",
+    aspectRatio: "aspect-[1024/560]"
   },
   {
     id: "sectors",
@@ -49,7 +51,8 @@ const FEATURES: FeatureItem[] = [
       "F/K, piyasa değeri, teknik dereceler ve hacimlerle zengin hisse tablosu"
     ],
     image: "/images/landing/market_sectors.jpg",
-    url: "/dashboard/data"
+    url: "/dashboard/data",
+    aspectRatio: "aspect-[1024/564]"
   },
   {
     id: "economic",
@@ -65,7 +68,8 @@ const FEATURES: FeatureItem[] = [
       "Neden-Sonuç Etki Zinciri: Alım gücünden hisse senetlerine doğrudan etki"
     ],
     image: "/images/landing/economic_tufe.jpg",
-    url: "/dashboard/calendar"
+    url: "/dashboard/calendar",
+    aspectRatio: "aspect-[1024/497]"
   },
   {
     id: "news",
@@ -81,7 +85,8 @@ const FEATURES: FeatureItem[] = [
       "İlgili şirketler, varlıklar ve sektörlerle anlık ilişkilendirme"
     ],
     image: "/images/landing/news_detail.jpg",
-    url: "/dashboard/news"
+    url: "/dashboard/news",
+    aspectRatio: "aspect-[1024/592]"
   }
 ];
 
@@ -90,14 +95,14 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
   const activeFeature = FEATURES[activeIndex];
 
   return (
-    <section id="features" className="w-full bg-white text-[#0E1E38] py-24 sm:py-32">
-      {/* Sayfanın Tüm Genişliğini Kullanan Kapsayıcı (Hakkımızda Sayfası Standartı) */}
+    <section id="features" className="w-full bg-white text-[#0E1E38] py-20 sm:py-28">
+      {/* Sayfanın Tüm Genişliğini Kullanan Kapsayıcı */}
       <div className="w-full px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-44">
         
         {/* =========================================================================
             BÖLÜM 1: TAM GENİŞLİK BAŞLIK VE EDİTORYAL GİRİŞ
             ========================================================================= */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-end pb-12 sm:pb-16 border-b border-slate-200/80 mb-12 sm:mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-end pb-10 sm:pb-14 border-b border-slate-200/80 mb-10 sm:mb-12">
           <div className="lg:col-span-8 space-y-3">
             <span className="text-xs font-semibold uppercase tracking-widest text-slate-400 block">
               Platform Mimarisi & Yetenekler
@@ -108,29 +113,29 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
           </div>
 
           <div className="lg:col-span-4">
-            <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed">
               BIST ve TEFAS piyasalarını karmaşık tablolardan çıkarıp, her biri özel bir amaca hizmet eden modern karar destek araçlarına dönüştürdük.
             </p>
           </div>
         </div>
 
         {/* =========================================================================
-            BÖLÜM 2: TAM GENİŞLİK SEKME MENÜSÜ (ROZETSİZ, TEMİZ, YATAY SCROLL YOK)
+            BÖLÜM 2: 4'LÜ DENGELİ SEKME MENÜSÜ (ROZETSİZ, SADE, YATAY SCROLL YOK)
             ========================================================================= */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-12 sm:mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-10 sm:mb-12">
           {FEATURES.map((item, idx) => {
             const isSelected = activeIndex === idx;
             return (
               <button
                 key={item.id}
                 onClick={() => setActiveIndex(idx)}
-                className={`p-5 rounded-2xl text-left transition-all duration-200 border cursor-pointer flex flex-col justify-between ${
+                className={`p-4 sm:p-5 rounded-2xl text-left transition-all duration-200 border cursor-pointer flex flex-col justify-between ${
                   isSelected
-                    ? "bg-[#02041A] text-white border-[#02041A] shadow-lg shadow-[#02041A]/10"
+                    ? "bg-[#02041A] text-white border-[#02041A] shadow-md shadow-[#02041A]/10"
                     : "bg-[#F5F7FA] text-slate-700 border-slate-200/70 hover:bg-slate-100 hover:border-slate-300"
                 }`}
               >
-                <div className="flex items-center justify-between w-full mb-3">
+                <div className="flex items-center justify-between w-full mb-2">
                   <span className={`text-xs font-mono font-bold tracking-widest ${isSelected ? "text-[#5B80FF]" : "text-slate-400"}`}>
                     {item.step}
                   </span>
@@ -139,8 +144,8 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
                   </span>
                 </div>
 
-                <div className="space-y-1">
-                  <h4 className={`text-sm sm:text-base font-semibold leading-snug ${isSelected ? "text-white" : "text-[#0E1E38]"}`}>
+                <div>
+                  <h4 className={`text-xs sm:text-sm font-semibold leading-snug ${isSelected ? "text-white" : "text-[#0E1E38]"}`}>
                     {item.title}
                   </h4>
                 </div>
@@ -150,51 +155,51 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
         </div>
 
         {/* =========================================================================
-            BÖLÜM 3: GENİŞ EKRAN VİTRİNİ (SOL: ANLATIM, SAĞ: GERÇEK WEBSİTESİ SNAPSHOT)
+            BÖLÜM 3: VİTRİN — SOLDA AÇIKLAMA, SAĞDA TAM VE KESİNTİSİZ GERÇEK SNAPSHOT
             ========================================================================= */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          {/* Sol Kolon: Editoryal Bilgi ve Vurgular (5 Kolon) */}
-          <div className="lg:col-span-5 space-y-6">
+          {/* Sol Kolon: Editoryal Bilgi ve Maddeler (5 Kolon) */}
+          <div className="lg:col-span-5 space-y-5">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeFeature.id}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
-                className="space-y-6"
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-4"
               >
                 <span className="text-xs font-mono font-bold text-[#004BFA] tracking-widest block">
                   {activeFeature.step} / {activeFeature.category}
                 </span>
 
-                <h3 className="text-2xl sm:text-3xl md:text-4xl font-normal text-[#0E1E38] tracking-tight leading-tight clash-title">
+                <h3 className="text-2xl sm:text-3xl font-normal text-[#0E1E38] tracking-tight leading-tight clash-title">
                   {activeFeature.title}
                 </h3>
 
-                <p className="text-base sm:text-lg text-slate-700 font-medium leading-snug">
+                <p className="text-sm sm:text-base text-slate-700 font-medium leading-snug">
                   {activeFeature.subtitle}
                 </p>
 
-                <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed">
                   {activeFeature.description}
                 </p>
 
                 {/* Vurgu Maddeleri */}
-                <div className="pt-4 space-y-3 border-t border-slate-200/80">
+                <div className="pt-3 space-y-2.5 border-t border-slate-200/80">
                   {activeFeature.highlights.map((h, i) => (
-                    <div key={i} className="flex items-start gap-3 text-xs sm:text-sm text-slate-700 font-medium">
+                    <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 font-medium">
                       <CheckCircle2 className="w-4 h-4 text-[#004BFA] shrink-0 mt-0.5" />
                       <span>{h}</span>
                     </div>
                   ))}
                 </div>
 
-                <div className="pt-4">
+                <div className="pt-3">
                   <Link
                     href="/login?tab=register"
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-[#0E1E38] hover:text-[#004BFA] transition-colors group cursor-pointer"
+                    className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#0E1E38] hover:text-[#004BFA] transition-colors group cursor-pointer"
                   >
                     <span>Bu özelliği kendi portföyünüzde deneyin</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -204,40 +209,43 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
             </AnimatePresence>
           </div>
 
-          {/* Sağ Kolon: Gerçek Ekran Görüntüsü (7 Kolon, Geniş ve Büyüleyici) */}
-          <div className="lg:col-span-7">
+          {/* Sağ Kolon: Dengeli Boyutlandırılmış, Kenarları Kesilmeyen Gerçek Snapshot (7 Kolon) */}
+          <div className="lg:col-span-7 flex justify-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeFeature.image}
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-                className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/90 shadow-2xl shadow-slate-200/60 bg-white"
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className="w-full max-w-2xl rounded-2xl overflow-hidden border border-slate-200/90 shadow-xl bg-white"
               >
                 {/* Minimal Tarayıcı Çubuğu */}
-                <div className="flex items-center justify-between px-4 sm:px-6 py-3 bg-[#F5F7FA] border-b border-slate-200">
+                <div className="flex items-center justify-between px-3 sm:px-4 py-2 bg-[#F5F7FA] border-b border-slate-200">
                   <div className="flex items-center gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                    <div className="w-2 h-2 rounded-full bg-slate-300" />
+                    <div className="w-2 h-2 rounded-full bg-slate-300" />
+                    <div className="w-2 h-2 rounded-full bg-slate-300" />
                   </div>
-                  <span className="text-[11px] font-mono text-slate-500 truncate max-w-xs">
+                  <span className="text-[10px] sm:text-[11px] font-mono text-slate-500 truncate max-w-xs">
                     finai.net.tr{activeFeature.url}
                   </span>
-                  <span className="text-[11px] font-medium text-slate-400">Canlı Sistem</span>
+                  <span className="text-[10px] font-medium text-slate-400">Canlı</span>
                 </div>
 
-                {/* Kullanıcının Yüklediği Birebir Gerçek Snapshot */}
-                <div className="relative aspect-[16/10] w-full bg-slate-50">
-                  <Image
-                    src={activeFeature.image}
-                    alt={activeFeature.title}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 60vw"
-                    className="object-cover object-top"
-                    priority
-                  />
+                {/* Fotoğrafın Tüm Kenarlarını Koruyan ve Yüksek Çözünürlüklü Gösteren Alan */}
+                <div className="relative w-full bg-slate-100/50 p-1 sm:p-2">
+                  <div className={`relative w-full ${activeFeature.aspectRatio} overflow-hidden rounded-lg border border-slate-200/60 shadow-2xs`}>
+                    <Image
+                      src={activeFeature.image}
+                      alt={activeFeature.title}
+                      fill
+                      unoptimized
+                      priority
+                      className="object-contain"
+                      sizes="(max-width: 1024px) 100vw, 55vw"
+                    />
+                  </div>
                 </div>
               </motion.div>
             </AnimatePresence>
@@ -246,53 +254,53 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
         </div>
 
         {/* =========================================================================
-            BÖLÜM 4: 4'LÜ TAM GENİŞLİK İÇGÖRÜ MATRİSİ (HAKKIMIZDA DÜZENİ)
+            BÖLÜM 4: 4'LÜ EDİTORYAL METRİK MATRİSİ (HAKKIMIZDA STANDARTI)
             ========================================================================= */}
-        <div className="mt-20 pt-16 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div className="space-y-1.5">
+        <div className="mt-16 pt-12 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div className="space-y-1">
             <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
               %100
             </span>
             <span className="text-xs sm:text-sm text-slate-500 font-medium block">
               Doğrulanmış Borsa Verisi
             </span>
-            <p className="text-xs text-slate-400 leading-relaxed pt-1">
+            <p className="text-xs text-slate-400 leading-relaxed pt-0.5">
               Borsa İstanbul ve TEFAS sistemlerinden filtrelenmiş resmi piyasa matematiği.
             </p>
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-1">
             <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
               Tek
             </span>
             <span className="text-xs sm:text-sm text-slate-500 font-medium block">
               Konsolide Konsol
             </span>
-            <p className="text-xs text-slate-400 leading-relaxed pt-1">
+            <p className="text-xs text-slate-400 leading-relaxed pt-0.5">
               Hisseler, yatırım fonları, makro takvim ve haberler tek bir akıllı ekranda.
             </p>
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-1">
             <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
               10 Sn
             </span>
             <span className="text-xs sm:text-sm text-slate-500 font-medium block">
               Hap Özetleme Hızı
             </span>
-            <p className="text-xs text-slate-400 leading-relaxed pt-1">
+            <p className="text-xs text-slate-400 leading-relaxed pt-0.5">
               Sayfalarca KAP bildirimini ve bilançoyu saniyeler içinde anlaşılır kılan yapay zekâ.
             </p>
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-1">
             <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
               24/7
             </span>
             <span className="text-xs sm:text-sm text-slate-500 font-medium block">
               Kesintisiz Analitik
             </span>
-            <p className="text-xs text-slate-400 leading-relaxed pt-1">
+            <p className="text-xs text-slate-400 leading-relaxed pt-0.5">
               Piyasa kapanışlarında bile portföyünüzün stres testleri ve korelasyon hesapları hazır.
             </p>
           </div>

@@ -424,7 +424,7 @@ export default function EconomicCalendarPage() {
     }, [startDate, endDate]);
 
     return (
-        <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-slate-50 text-[#0E1E38] w-full mx-auto relative overflow-hidden">
+        <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-slate-50 dark:bg-[#02041A] text-[#0E1E38] dark:text-[#F5F7FA] w-full mx-auto relative overflow-hidden">
             <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 py-6 md:px-10 lg:py-8 space-y-6 relative z-10 mb-20">
                 {/* Navigation Top Bar */}
                 <div className="flex items-center justify-between">

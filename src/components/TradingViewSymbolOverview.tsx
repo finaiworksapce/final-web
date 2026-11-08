@@ -14,6 +14,7 @@ import {
 } from "lightweight-charts";
 import { RefreshCw, TrendingUp, TrendingDown, Clock } from "lucide-react";
 import StockLogo from "@/components/StockLogo";
+import { useTheme } from "next-themes";
 
 export interface ChartPoint {
   timestamp: number;
@@ -64,6 +65,9 @@ export function TradingViewSymbolOverview({
   className = "",
   height = 500
 }: TradingViewSymbolOverviewProps) {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
+
   const cleanSymbol = symbol.toUpperCase().replace(".IS", "").trim();
 
   // Active Date Range / Timeframe
@@ -200,8 +204,8 @@ export function TradingViewSymbolOverview({
       width: container.clientWidth,
       height: chartHeight,
       layout: {
-        background: { type: ColorType.Solid, color: "#FFFFFF" },
-        textColor: "#64748B",
+        background: { type: ColorType.Solid, color: isDark ? "#040989" : "#FFFFFF" },
+        textColor: isDark ? "#D6E4FF" : "#64748B",
         fontSize: 10,
         fontFamily: "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
         attributionLogo: false
@@ -289,7 +293,7 @@ export function TradingViewSymbolOverview({
       lineWidth: 2,
       crosshairMarkerVisible: true,
       crosshairMarkerRadius: 4,
-      crosshairMarkerBorderColor: "#FFFFFF",
+      crosshairMarkerBorderColor: isDark ? "#02041A" : "#FFFFFF",
       crosshairMarkerBackgroundColor: lineColor
     });
 
@@ -472,29 +476,29 @@ export function TradingViewSymbolOverview({
         chartApiRef.current = null;
       }
     };
-  }, [validPoints, isUp, activeRangeConfig, stockData?.previousClose]);
+  }, [validPoints, isUp, activeRangeConfig, stockData?.previousClose, isDark]);
 
   return (
     <div 
-      className={`bg-white text-[#0E1E38] rounded-3xl p-5 sm:p-7 shadow-sm border border-slate-200/90 flex flex-col justify-between select-none ${className}`}
+      className={`bg-white dark:bg-[#040989] text-[#0E1E38] dark:text-[#F5F7FA] rounded-3xl p-5 sm:p-7 shadow-sm border border-slate-200/90 dark:border-[#5B80FF]/30 flex flex-col justify-between select-none ${className}`}
       style={{
         fontFamily: "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
         minHeight: typeof height === "number" ? `${height}px` : height
       }}
     >
       {/* HEADER: SEMBOL, ŞİRKET BİLGİSİ, CANLI FİYAT & DEĞİŞİM & DATE RANGES */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-[#5B80FF]/20 pb-4">
         
         {/* SOL: SEMBOL & FİYAT BİLGİSİ */}
         <div className="flex items-center gap-3.5">
           <StockLogo symbol={cleanSymbol} className="w-11 h-11 border border-slate-200/80 shadow-xs" />
           <div>
             <div className="flex items-baseline gap-2">
-              <span className="text-base font-bold text-[#0E1E38] tracking-tight">{cleanSymbol}</span>
+              <span className="text-base font-bold text-[#0E1E38] dark:text-[#F5F7FA] tracking-tight">{cleanSymbol}</span>
               <span className="text-[10px] font-bold text-[#ba68c8] bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200/60">
                 GS
               </span>
-              <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/60">
+              <span className="text-[10px] font-bold text-slate-500 dark:text-[#D6E4FF] bg-slate-100 dark:bg-[#02041A] px-2 py-0.5 rounded-md border border-slate-200/60 dark:border-[#5B80FF]/30">
                 BIST
               </span>
               {/* Piyasa Durumu */}
@@ -516,11 +520,11 @@ export function TradingViewSymbolOverview({
           
           {/* FİYAT & DEĞİŞİM (VALUES TRACKING) */}
           <div className="text-left sm:text-right">
-            <div className="text-2xl sm:text-3xl font-normal text-[#0E1E38] tracking-tight">
+            <div className="text-2xl sm:text-3xl font-normal text-[#0E1E38] dark:text-[#F5F7FA] tracking-tight">
               {displayPrice != null ? `${displayPrice.toFixed(2)} ₺` : "— ₺"}
             </div>
             <div className="flex items-center sm:justify-end gap-1.5 text-xs font-bold mt-0.5">
-              <span className={isPositive ? "text-[#0E1E38] flex items-center gap-0.5" : "text-rose-600 flex items-center gap-0.5"}>
+              <span className={isPositive ? "text-[#0E1E38] dark:text-[#5B80FF] flex items-center gap-0.5" : "text-rose-600 flex items-center gap-0.5"}>
                 {isPositive ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
                 {isPositive ? "+" : ""}{displayChange.toFixed(2)} ₺ ({isPositive ? "+" : ""}{displayChangePercent.toFixed(2)}%)
               </span>
@@ -534,7 +538,7 @@ export function TradingViewSymbolOverview({
           </div>
 
           {/* DATE RANGES PİLL BAR ("1d|1", "1m|30", "3m|60", "12m|1D", "60m|1W", "all|1M") */}
-          <div className="flex items-center gap-1 bg-slate-100/90 p-1 rounded-xl border border-slate-200/80 shadow-inner">
+          <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-[#02041A] p-1 rounded-xl border border-slate-200/80 dark:border-[#5B80FF]/30 shadow-inner">
             {DATE_RANGES.map((range) => {
               const isActive = activeRange === range.id;
               return (
@@ -563,14 +567,14 @@ export function TradingViewSymbolOverview({
         style={{ minHeight: `${chartHeight}px` }}
       >
         {loading && (
-          <div className="absolute inset-0 z-10 bg-white/80 backdrop-blur-[2px] flex items-center justify-center text-slate-600 text-xs font-medium gap-2">
+          <div className="absolute inset-0 z-10 bg-white/80 dark:bg-[#040989]/80 backdrop-blur-[2px] flex items-center justify-center text-slate-600 dark:text-[#D6E4FF] text-xs font-medium gap-2">
             <RefreshCw className="w-4 h-4 animate-spin text-[#0E1E38]" />
             Yahoo Finance verisi güncelleniyor...
           </div>
         )}
 
         {error && (
-          <div className="absolute inset-0 z-10 bg-white flex flex-col items-center justify-center text-center p-4 space-y-2">
+          <div className="absolute inset-0 z-10 bg-white dark:bg-[#040989] flex flex-col items-center justify-center text-center p-4 space-y-2">
             <p className="text-xs text-rose-500 font-bold">{error}</p>
             <button
               onClick={() => fetchData(activeRange)}

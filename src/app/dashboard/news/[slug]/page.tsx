@@ -147,7 +147,7 @@ export default function NewsDetailPage({ params }: { params: Promise<{ slug: str
     const relatedLimit = paragraphCount <= 2 ? 2 : paragraphCount <= 5 ? 4 : 5;
 
     return (
-        <div className="min-h-screen bg-slate-50/50 text-[#0E1E38] pb-24">
+        <div className="min-h-screen bg-slate-50/50 dark:bg-[#02041A] text-[#0E1E38] dark:text-[#F5F7FA] pb-24">
             {/* Top Bar with Return Link and Share */}
             <div className="bg-white/80 backdrop-blur-xl border-b border-slate-200/80 sticky top-16 z-30 px-4 sm:px-8 py-3">
                 <div className="max-w-[1600px] mx-auto flex items-center justify-between">

@@ -192,7 +192,7 @@ export default function NotificationsPage() {
     };
 
     return (
-        <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-slate-50 text-[#0E1E38] w-full mx-auto p-4 sm:p-6 md:p-8 max-w-5xl">
+        <div className="flex flex-col min-h-[calc(100vh-4rem)] bg-slate-50 dark:bg-[#02041A] text-[#0E1E38] dark:text-[#F5F7FA] w-full mx-auto p-4 sm:p-6 md:p-8 max-w-5xl">
             {/* Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
                 <div>

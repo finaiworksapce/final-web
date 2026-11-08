@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useRef } from "react";
+import { useTheme } from "next-themes";
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -682,6 +683,8 @@ function getChangeBadgeStyle(change: number) {
 }
 
 export default function AssetsPage() {
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === "dark";
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedSector, setSelectedSector] = useState<string | null>(null);
     const [quickFilter, setQuickFilter] = useState<QuickFilter>('all');
@@ -1202,8 +1205,8 @@ export default function AssetsPage() {
                                                 </span>
                                                 {activeTopTab === 'volume' && (
                                                     <span className={cn(
-                                                        "text-[9px] font-semibold tabular-nums mt-0.5",
-                                                        isPos ? "text-emerald-600" : isNeg ? "text-rose-600" : "text-slate-400"
+                                                        "text-[10px] font-semibold tabular-nums mt-0.5",
+                                                        isPos ? "text-emerald-700" : isNeg ? "text-rose-700" : "text-slate-400"
                                                     )}>
                                                         {isPos ? `+${item.change.toFixed(2)}%` : `${item.change.toFixed(2)}%`}
                                                     </span>
@@ -1211,20 +1214,20 @@ export default function AssetsPage() {
                                             </div>
 
                                             {activeTopTab === 'volume' ? (
-                                                <div className="px-2 py-0.5 bg-slate-100 border border-slate-200/80 rounded-md text-[10px] font-semibold text-[#0E1E38] tabular-nums whitespace-nowrap">
+                                                <span className="text-xs font-semibold text-[#0E1E38] tabular-nums whitespace-nowrap">
                                                     {item.volume}
-                                                </div>
+                                                </span>
                                             ) : (
-                                                <div className={cn(
-                                                    "px-2 py-0.5 rounded-md text-[10px] font-semibold tabular-nums whitespace-nowrap border",
+                                                <span className={cn(
+                                                    "text-xs font-semibold tabular-nums whitespace-nowrap",
                                                     isPos 
-                                                        ? "bg-emerald-50 text-emerald-700 border-emerald-200/70"
+                                                        ? "text-emerald-700"
                                                         : isNeg
-                                                            ? "bg-rose-50 text-rose-700 border-rose-200/70"
-                                                            : "bg-slate-100 text-slate-600 border-slate-200"
+                                                            ? "text-rose-700"
+                                                            : "text-slate-500"
                                                 )}>
                                                     {isPos ? `+${item.change.toFixed(2)}%` : `${item.change.toFixed(2)}%`}
-                                                </div>
+                                                </span>
                                             )}
                                         </div>
                                     </a>
@@ -1252,7 +1255,7 @@ export default function AssetsPage() {
                     screenerType="stock"
                     columns="overview"
                     screen="volume_leaders"
-                    theme="light"
+                    theme={isDark ? "dark" : "light"}
                     height={720}
                     className="rounded-2xl"
                     externalSector={selectedSector}

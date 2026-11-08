@@ -136,7 +136,7 @@ export default function EconomicEventDetailPage() {
 
     if (loading) {
         return (
-            <div className="flex flex-col min-h-screen bg-slate-50 items-center justify-center text-[#0E1E38]">
+            <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-[#02041A] items-center justify-center text-[#0E1E38] dark:text-[#F5F7FA]">
                 <div className="w-10 h-10 rounded-full border-4 border-[#78B8F5] border-t-transparent animate-spin mb-3" />
                 <span className="text-xs font-normal uppercase tracking-wider">Gösterge Analizi Yükleniyor...</span>
             </div>

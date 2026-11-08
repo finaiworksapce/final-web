@@ -139,7 +139,7 @@ export default function PortfolioTransactionsPage() {
     };
 
     return (
-        <div className="p-4 md:p-10 space-y-6 min-h-screen bg-slate-50/50 font-sans">
+        <div className="p-4 md:p-10 space-y-6 min-h-screen bg-slate-50/50 dark:bg-[#02041A] font-sans">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
                 <div>

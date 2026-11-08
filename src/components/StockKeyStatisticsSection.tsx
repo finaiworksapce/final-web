@@ -303,7 +303,7 @@ export default function StockKeyStatisticsSection({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        "relative bg-white text-[#0E1E38] rounded-3xl p-5 sm:p-7 shadow-sm border border-slate-200/90 flex flex-col justify-between select-none min-h-[460px] h-full",
+        "relative bg-white dark:bg-[#040989] text-[#0E1E38] dark:text-[#F5F7FA] rounded-3xl p-5 sm:p-7 shadow-sm border border-slate-200/90 dark:border-[#5B80FF]/30 flex flex-col justify-between select-none min-h-[460px] h-full",
         className
       )}
       style={{
@@ -315,7 +315,7 @@ export default function StockKeyStatisticsSection({
       {/* ========================================================================= */}
       <div
         className={cn(
-          "pointer-events-none absolute z-50 w-[245px] rounded-2xl shadow-xl border border-slate-200/90 bg-white/95 backdrop-blur-md p-3 transition-all ease-out",
+          "pointer-events-none absolute z-50 w-[245px] rounded-2xl shadow-xl border border-slate-200/90 dark:border-[#5B80FF]/40 bg-white/95 dark:bg-[#02041A]/95 dark:text-[#F5F7FA] backdrop-blur-md p-3 transition-all ease-out",
           isVisible && activeRanking ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
         )}
         style={{
@@ -327,13 +327,13 @@ export default function StockKeyStatisticsSection({
         {activeRanking && activeMetricDef && (
           <div className="space-y-2">
             {/* BAŞLIK & SEKTÖR ADI (ZARİF & ESTETİK) */}
-            <div className="flex items-start justify-between border-b border-slate-100 pb-2">
+            <div className="flex items-start justify-between border-b border-slate-100 dark:border-[#5B80FF]/20 pb-2">
               <div className="min-w-0 pr-2">
                 <div className="flex items-center gap-1 text-[9px] font-bold text-slate-400 uppercase tracking-wider">
-                  <Sparkles className="w-2.5 h-2.5 text-[#0E1E38]" />
+                  <Sparkles className="w-2.5 h-2.5 text-[#0E1E38] dark:text-[#5B80FF]" />
                   Sektör Kıyaslama
                 </div>
-                <h4 className="text-xs font-bold text-[#0E1E38] leading-tight mt-0.5 line-clamp-1">
+                <h4 className="text-xs font-bold text-[#0E1E38] dark:text-[#F5F7FA] leading-tight mt-0.5 line-clamp-1">
                   {activeMetricDef.fullName}
                 </h4>
               </div>
@@ -347,11 +347,11 @@ export default function StockKeyStatisticsSection({
             {/* SEÇİLİ HİSSE VS SEKTÖR ORTALAMASI (ZARİF 2 KUTU) */}
             <div className="grid grid-cols-2 gap-2">
               {/* Seçili Hisse */}
-              <div className="bg-slate-50/90 rounded-xl p-2 border border-slate-200/60 flex flex-col justify-between">
+              <div className="bg-slate-50/90 dark:bg-[#040989] rounded-xl p-2 border border-slate-200/60 dark:border-[#5B80FF]/30 flex flex-col justify-between">
                 <span className="text-[10px] font-semibold text-slate-500 truncate">
                   {symbol.replace('.IS', '')} (Seçili)
                 </span>
-                <div className="text-sm font-normal text-[#0E1E38] tracking-tight my-0.5">
+                <div className="text-sm font-normal text-[#0E1E38] dark:text-[#F5F7FA] tracking-tight my-0.5">
                   {activeRanking.formattedCurrentValue}
                 </div>
                 <span className="text-[9px] font-medium text-slate-500">
@@ -455,9 +455,9 @@ export default function StockKeyStatisticsSection({
       {/* ========================================================================= */}
       {/* PANEL BAŞLIĞI */}
       {/* ========================================================================= */}
-      <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-2">
+      <div className="flex items-center justify-between border-b border-slate-100 dark:border-[#5B80FF]/20 pb-4 mb-2">
         <div className="flex items-center gap-2">
-          <h3 className="text-base sm:text-lg font-bold text-[#0E1E38] tracking-tight">
+          <h3 className="text-base sm:text-lg font-bold text-[#0E1E38] dark:text-[#F5F7FA] tracking-tight">
             Önemli İstatistikler
           </h3>
           <span className="text-[10px] text-slate-400 font-normal hidden sm:inline">
@@ -514,7 +514,7 @@ export default function StockKeyStatisticsSection({
                   {/* Hover background highlight (Project-Showcase stili) */}
                   <div
                     className={cn(
-                      "absolute inset-0 -mx-2 px-2 bg-blue-50/70 rounded-xl transition-all duration-200 ease-out pointer-events-none",
+                      "absolute inset-0 -mx-2 px-2 bg-blue-50/70 dark:bg-[#004BFA]/20 rounded-xl transition-all duration-200 ease-out pointer-events-none",
                       isHovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
                     )}
                   />
