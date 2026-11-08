@@ -158,24 +158,6 @@ function DashboardShell({
 
     const portfolioSubItems = [
         { 
-            label: "Portföy Özeti & Tablosu", 
-            href: "/dashboard/portfolio", 
-            isSubActive: pathname === "/dashboard/portfolio" && (!currentFocus || currentFocus === "table"), 
-            icon: FileText 
-        },
-        { 
-            label: "Varlık Dağılımı", 
-            href: "/dashboard/portfolio?focus=distribution", 
-            isSubActive: pathname === "/dashboard/portfolio" && currentFocus === "distribution", 
-            icon: PieChart 
-        },
-        { 
-            label: "Fiyat & 52H Analizi", 
-            href: "/dashboard/portfolio?focus=extremes", 
-            isSubActive: pathname === "/dashboard/portfolio" && currentFocus === "extremes", 
-            icon: Activity 
-        },
-        { 
             label: "İşlem Geçmişi", 
             href: "/dashboard/portfolio/transactions", 
             isSubActive: pathname.startsWith("/dashboard/portfolio/transactions"), 
@@ -221,7 +203,10 @@ function DashboardShell({
             icon: PieChart, 
             label: "Portföy Özeti & Tablosu", 
             href: "/dashboard/portfolio",
-            isActive: pathname.startsWith("/dashboard/portfolio")
+            isActive: pathname.startsWith("/dashboard/portfolio"),
+            subItems: portfolioSubItems,
+            isExpanded: isPortfolioExpanded,
+            toggleExpand: () => setIsPortfolioExpanded(prev => !prev)
         },
         { 
             icon: LayoutGrid, 
@@ -325,7 +310,7 @@ function DashboardShell({
                                                         if (item.toggleExpand) item.toggleExpand();
                                                     }}
                                                     aria-expanded={item.isExpanded}
-                                                    aria-controls={`submenu-${item.label.toLowerCase()}`}
+                                                    aria-controls={item.label.includes("Portföy") ? "submenu-portfolio" : `submenu-${item.label.toLowerCase()}`}
                                                     aria-label={`${item.label} alt menüsünü ${item.isExpanded ? "kapat" : "aç"}`}
                                                     title={`${item.label} alt menüsünü ${item.isExpanded ? "kapat" : "aç"}`}
                                                     className={`hidden md:group-hover:flex md:group-focus-within:flex transition-colors duration-150 p-1.5 rounded-xl items-center justify-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 ${
@@ -342,7 +327,7 @@ function DashboardShell({
                                             <AnimatePresence initial={false}>
                                                 {item.isExpanded && (
                                                     <motion.div
-                                                        id={`submenu-${item.label.toLowerCase()}`}
+                                                        id={item.label.includes("Portföy") ? "submenu-portfolio" : `submenu-${item.label.toLowerCase()}`}
                                                         role="region"
                                                         aria-label={`${item.label} alt menüsü`}
                                                         initial={{ opacity: 0, height: 0 }}
@@ -554,7 +539,7 @@ function DashboardShell({
                                                 const ItemIcon = item.icon;
 
                                                 if (item.subItems) {
-                                                    const submenuId = item.label === "Portföyüm" ? "mobile-portfolio-submenu" : "mobile-calendar-submenu";
+                                                    const submenuId = item.label.includes("Portföy") ? "mobile-portfolio-submenu" : "mobile-calendar-submenu";
                                                     return (
                                                         <div key={idx} className="space-y-0.5">
                                                             <div className={`flex items-center justify-between px-3.5 py-2.5 text-sm font-semibold rounded-xl transition-[background-color,color,box-shadow] duration-180 ease-out motion-reduce:transition-none ${
