@@ -104,9 +104,6 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
             ========================================================================= */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-end pb-10 sm:pb-14 border-b border-slate-200/80 mb-10 sm:mb-12">
           <div className="lg:col-span-8 space-y-3">
-            <span className="text-xs font-semibold uppercase tracking-widest text-slate-400 block">
-              Platform Mimarisi & Yetenekler
-            </span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-[#0E1E38] tracking-tight leading-[1.15] clash-title">
               Yatırım kararlarınızı matematik ve şeffaf verilerle güçlendiren analitik bloklar.
             </h2>
@@ -120,38 +117,57 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
         </div>
 
         {/* =========================================================================
-            BÖLÜM 2: 4'LÜ DENGELİ SEKME MENÜSÜ (ROZETSİZ, SADE, YATAY SCROLL YOK)
+            BÖLÜM 2: EDİTORYAL MİNİMALİST SEKME NAVİGASYONU (KUTUSUZ, RAFİNE, ÇİZGİSEL İNDİKATÖR)
             ========================================================================= */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-10 sm:mb-12">
-          {FEATURES.map((item, idx) => {
-            const isSelected = activeIndex === idx;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveIndex(idx)}
-                className={`p-4 sm:p-5 rounded-2xl text-left transition-all duration-200 border cursor-pointer flex flex-col justify-between ${
-                  isSelected
-                    ? "bg-[#02041A] text-white border-[#02041A] shadow-md shadow-[#02041A]/10"
-                    : "bg-[#F5F7FA] text-slate-700 border-slate-200/70 hover:bg-slate-100 hover:border-slate-300"
-                }`}
-              >
-                <div className="flex items-center justify-between w-full mb-2">
-                  <span className={`text-xs font-mono font-bold tracking-widest ${isSelected ? "text-[#5B80FF]" : "text-slate-400"}`}>
-                    {item.step}
-                  </span>
-                  <span className={`text-[10px] font-semibold tracking-wider uppercase ${isSelected ? "text-slate-300" : "text-slate-500"}`}>
-                    {item.category}
-                  </span>
-                </div>
+        <div className="border-t border-slate-200/80 mb-10 sm:mb-14">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
+            {FEATURES.map((item, idx) => {
+              const isSelected = activeIndex === idx;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveIndex(idx)}
+                  className="group relative pt-4 pb-2 text-left transition-all duration-200 cursor-pointer focus:outline-none"
+                >
+                  {/* Aktif İndikatör Çizgisi */}
+                  <div
+                    className={`absolute top-0 left-0 right-0 h-[2px] transition-all duration-300 ${
+                      isSelected
+                        ? "bg-[#004BFA] shadow-[0_1px_8px_rgba(0,75,250,0.4)]"
+                        : "bg-transparent group-hover:bg-slate-300"
+                    }`}
+                  />
 
-                <div>
-                  <h4 className={`text-xs sm:text-sm font-semibold leading-snug ${isSelected ? "text-white" : "text-[#0E1E38]"}`}>
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span
+                      className={`text-xs font-mono font-bold tracking-wider transition-colors ${
+                        isSelected ? "text-[#004BFA]" : "text-slate-400 group-hover:text-slate-600"
+                      }`}
+                    >
+                      {item.step}
+                    </span>
+                    <span
+                      className={`text-[10px] font-medium uppercase tracking-wider transition-colors ${
+                        isSelected ? "text-slate-700" : "text-slate-400 group-hover:text-slate-600"
+                      }`}
+                    >
+                      {item.category}
+                    </span>
+                  </div>
+
+                  <h4
+                    className={`text-sm sm:text-base font-normal tracking-tight transition-colors line-clamp-1 ${
+                      isSelected
+                        ? "text-[#0E1E38] font-semibold"
+                        : "text-slate-500 group-hover:text-[#0E1E38]"
+                    }`}
+                  >
                     {item.title}
                   </h4>
-                </div>
-              </button>
-            );
-          })}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* =========================================================================
@@ -170,10 +186,6 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
                 transition={{ duration: 0.3 }}
                 className="space-y-4"
               >
-                <span className="text-xs font-mono font-bold text-[#004BFA] tracking-widest block">
-                  {activeFeature.step} / {activeFeature.category}
-                </span>
-
                 <h3 className="text-2xl sm:text-3xl font-normal text-[#0E1E38] tracking-tight leading-tight clash-title">
                   {activeFeature.title}
                 </h3>
@@ -220,17 +232,13 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
                 transition={{ duration: 0.35, ease: "easeOut" }}
                 className="w-full max-w-2xl rounded-2xl overflow-hidden border border-slate-200/90 shadow-xl bg-white"
               >
-                {/* Minimal Tarayıcı Çubuğu */}
-                <div className="flex items-center justify-between px-3 sm:px-4 py-2 bg-[#F5F7FA] border-b border-slate-200">
+                {/* Minimal Pencere Çubuğu */}
+                <div className="flex items-center px-4 py-2.5 bg-[#F5F7FA] border-b border-slate-200">
                   <div className="flex items-center gap-1.5">
                     <div className="w-2 h-2 rounded-full bg-slate-300" />
                     <div className="w-2 h-2 rounded-full bg-slate-300" />
                     <div className="w-2 h-2 rounded-full bg-slate-300" />
                   </div>
-                  <span className="text-[10px] sm:text-[11px] font-mono text-slate-500 truncate max-w-xs">
-                    finai.net.tr{activeFeature.url}
-                  </span>
-                  <span className="text-[10px] font-medium text-slate-400">Canlı</span>
                 </div>
 
                 {/* Fotoğrafın Tüm Kenarlarını Koruyan ve Yüksek Çözünürlüklü Gösteren Alan */}

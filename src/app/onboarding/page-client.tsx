@@ -173,8 +173,8 @@ export default function OnboardingPageClient() {
 
   return (
     <div className="w-screen h-screen h-[100dvh] bg-[#F5F7FA] text-[#040989] flex flex-col justify-between overflow-hidden select-none">
-      {/* ÜST KOMUTA ÇUBUĞU (Header Bar - Sağ üstteki 123 ve rozetler kaldırıldı) */}
-      <header className="h-16 sm:h-20 border-b border-slate-200/80 bg-white/90 backdrop-blur-md px-5 sm:px-8 lg:px-10 flex items-center justify-between shrink-0 z-30">
+      {/* ÜST KOMUTA ÇUBUĞU (Header Bar - Ortalı & Uzatılmış İlerleme Çubuğu) */}
+      <header className="h-16 sm:h-20 border-b border-slate-200/80 bg-white/90 backdrop-blur-md px-5 sm:px-8 lg:px-10 flex items-center justify-between shrink-0 z-30 relative">
         {/* Sol: Logo */}
         <div className="flex items-center gap-3">
           <FinAiLogo className="h-7 sm:h-9 w-auto" />
@@ -184,9 +184,9 @@ export default function OnboardingPageClient() {
           </span>
         </div>
 
-        {/* Orta: Adım Rozeti & İnce İlerleme İzi */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 sm:gap-2 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-xs font-mono font-semibold text-slate-700">
+        {/* ORTALANMIŞ VE UZATILMIŞ İLERLEME ÇUBUĞU (Masaüstü & Tablet) */}
+        <div className="hidden sm:flex absolute left-1/2 -translate-x-1/2 items-center gap-3.5">
+          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 border border-slate-200/80 text-xs font-mono font-semibold text-slate-700 shadow-2xs">
             <span className="text-[#004BFA] font-bold">
               0{Math.min(currentStepIndex + 1, totalQuestions + 1)}
             </span>
@@ -194,16 +194,31 @@ export default function OnboardingPageClient() {
             <span className="text-slate-500">0{totalQuestions + 1}</span>
           </div>
 
-          <div className="w-20 sm:w-36 h-1.5 bg-slate-200 rounded-full overflow-hidden hidden sm:block">
+          <div className="w-52 sm:w-64 md:w-80 lg:w-96 h-2 bg-slate-200/90 rounded-full overflow-hidden shadow-inner">
             <div
-              className="h-full bg-[#004BFA] rounded-full transition-all duration-300 ease-out"
+              className="h-full bg-gradient-to-r from-[#004BFA] to-[#5B80FF] rounded-full transition-all duration-500 ease-out"
               style={{ width: `${progressRatio}%` }}
             />
           </div>
         </div>
 
-        {/* Sağ: Sadece Mobilde Canlı Model Açma Butonu */}
+        {/* Sağ: Sadece Mobilde Görünüm */}
         <div className="flex items-center">
+          {/* Mobilde ilerleme */}
+          <div className="sm:hidden flex items-center gap-2 mr-2">
+            <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 text-[11px] font-mono font-semibold text-slate-700">
+              <span className="text-[#004BFA] font-bold">0{Math.min(currentStepIndex + 1, totalQuestions + 1)}</span>
+              <span>/</span>
+              <span>0{totalQuestions + 1}</span>
+            </div>
+            <div className="w-16 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-[#004BFA] rounded-full transition-all duration-300"
+                style={{ width: `${progressRatio}%` }}
+              />
+            </div>
+          </div>
+
           <button
             type="button"
             onClick={() => setIsMobileTelemetryOpen(true)}

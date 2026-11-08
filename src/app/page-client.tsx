@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 import { FeatureSteps } from "@/components/ui/feature-section";
 import { FAQAccordionSection } from "@/components/ui/accordion-feature-section";
 import { motion } from "framer-motion";
-import { ArrowRight, ChevronRight, Check } from "lucide-react";
+import { ArrowRight, ChevronRight } from "lucide-react";
 import { useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/components/providers/UserProvider";
@@ -81,10 +81,6 @@ export default function HomeClient() {
                   transition={{ duration: 0.6 }}
                   className="space-y-4"
                 >
-                  <span className="text-xs sm:text-sm font-semibold tracking-widest uppercase text-[#004BFA] block">
-                    BIST & TEFAS İçin Rasyonel Portföy Zekası
-                  </span>
-
                   <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-[68px] font-normal tracking-tight text-[#0E1E38] leading-[1.08] clash-title">
                     Finansal Geleceğinizi{" "}
                     <span className="text-[#004BFA]">Rasyonel Zekayla</span> Yönetin.
@@ -123,26 +119,6 @@ export default function HomeClient() {
                     <span>Özellikleri İncele</span>
                     <ChevronRight className="w-4 h-4 text-slate-400" />
                   </Link>
-                </motion.div>
-
-                {/* Güven Notu */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.6, delay: 0.35 }}
-                  className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-slate-500 font-medium pt-1"
-                >
-                  <span className="flex items-center gap-1.5">
-                    <Check className="w-3.5 h-3.5 text-emerald-600" /> Kredi kartı gerekmez
-                  </span>
-                  <span className="text-slate-300">•</span>
-                  <span className="flex items-center gap-1.5">
-                    <Check className="w-3.5 h-3.5 text-emerald-600" /> 1 dakikada kurulum
-                  </span>
-                  <span className="text-slate-300">•</span>
-                  <span className="flex items-center gap-1.5">
-                    <Check className="w-3.5 h-3.5 text-emerald-600" /> Canlı BIST & TEFAS
-                  </span>
                 </motion.div>
 
                 {/* 3'lü Minimalist İstatistik Çubuğu (Hakkımızda Standartı) */}
@@ -191,20 +167,12 @@ export default function HomeClient() {
               >
                 <div className="relative w-full max-w-xl xl:max-w-2xl rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/90 shadow-2xl shadow-[#040989]/10 bg-white">
                   
-                  {/* Minimal Tarayıcı Üst Çubuğu */}
-                  <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 bg-[#F5F7FA] border-b border-slate-200">
+                  {/* Minimal Pencere Üst Çubuğu */}
+                  <div className="flex items-center px-4 py-2.5 bg-[#F5F7FA] border-b border-slate-200">
                     <div className="flex items-center gap-1.5">
                       <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
                       <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
                       <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
-                    </div>
-                    <div className="bg-white px-3 py-0.5 rounded-md text-[10px] sm:text-[11px] font-mono text-slate-500 border border-slate-200/80 max-w-xs w-full text-center truncate">
-                      finai.net.tr/dashboard
-                    </div>
-                    <div className="text-right">
-                      <span className="text-[10px] font-medium text-slate-400">
-                        Canlı
-                      </span>
                     </div>
                   </div>
 
