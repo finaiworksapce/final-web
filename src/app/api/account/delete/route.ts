@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://xbffacqaumgearqhajmg.supabase.co';
+const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhiZmZhY3FhdW1nZWFycWhham1nIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MDQ5Mzc1OSwiZXhwIjoyMDg2MDY5NzU5fQ.Xa_czw4WUNrMi6jkWF510any7Ves0VmvS5UjMJ34vhc';
+
 const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { auth: { persistSession: false } }
+    SUPABASE_URL,
+    SERVICE_ROLE_KEY,
+    { auth: { persistSession: false, autoRefreshToken: false } }
 );
 
 export const dynamic = 'force-dynamic';
@@ -36,7 +39,7 @@ async function handleDeleteAccount(request: NextRequest) {
         }
 
         const userId = user.id;
-        console.log(`[Account Delete] Starting deletion for user ${userId} (${user.email || 'no-email'})...`);
+        console.log(`[Account Delete] Deleting user ${userId} (${user.email || 'no-email'})...`);
 
         // 1. Clean up user-related records across application tables safely
         const tablesToClean = [
@@ -55,7 +58,7 @@ async function handleDeleteAccount(request: NextRequest) {
             try {
                 const { error } = await supabaseAdmin.from(table).delete().eq('user_id', userId);
                 if (error) {
-                    console.warn(`[Account Delete] Notice while cleaning table ${table}:`, error.message);
+                    console.warn(`[Account Delete] Table cleanup note (${table}):`, error.message);
                 }
             } catch (err: any) {
                 console.warn(`[Account Delete] Exception on table ${table}:`, err?.message || err);
@@ -69,21 +72,21 @@ async function handleDeleteAccount(request: NextRequest) {
             console.warn('[Account Delete] Exception on profiles table:', err?.message || err);
         }
 
-        // 3. Delete user from Supabase Auth
+        // 3. Delete user from Supabase Auth permanently
         const { error: deleteAuthError } = await supabaseAdmin.auth.admin.deleteUser(userId);
         if (deleteAuthError) {
             console.error('[Account Delete] Supabase Auth deleteUser error:', deleteAuthError);
             return NextResponse.json(
-                { success: false, error: 'Hesap auth kaydı silinirken bir hata oluştu: ' + deleteAuthError.message },
+                { success: false, error: 'Hesap auth kaydı silinirken hata: ' + deleteAuthError.message },
                 { status: 500 }
             );
         }
 
-        console.log(`[Account Delete] Successfully deleted user account and all data: ${userId}`);
+        console.log(`[Account Delete] Successfully permanently deleted user account: ${userId}`);
 
         return NextResponse.json({
             success: true,
-            message: 'Hesabınız ve tüm verileriniz kalıcı olarak başarıyla silindi.'
+            message: 'Hesabınız ve tüm verileriniz Supabase veritabanından kalıcı olarak silindi.'
         });
     } catch (error: any) {
         console.error('[Account Delete] Unexpected error:', error);

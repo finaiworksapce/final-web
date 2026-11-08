@@ -407,12 +407,20 @@ function SettingsContent() {
 
     const handleDeleteAccount = async () => {
         try {
-            const { data: { session } } = await supabase.auth.getSession();
+            // 1. Aktif oturumu ve access token'ı al
+            let session = (await supabase.auth.getSession()).data.session;
             if (!session?.access_token) {
-                throw new Error("Oturum süresi dolmuş veya oturum bulunamadı. Lütfen tekrar giriş yapıp deneyiniz.");
+                const refreshed = await supabase.auth.refreshSession();
+                session = refreshed.data.session;
             }
 
-            const response = await fetch('/api/account/delete', {
+            if (!session?.access_token) {
+                addToast('Aktif oturum bulunamadı. Lütfen tekrar giriş yapınız.', 'error');
+                throw new Error('Aktif oturum bulunamadı.');
+            }
+
+            // 2. Sunucu API üzerinden hesabı ve veritabanındaki tüm ilişkili kayıtları sil
+            const res = await fetch('/api/account/delete', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -420,22 +428,37 @@ function SettingsContent() {
                 }
             });
 
-            const result = await response.json().catch(() => ({}));
+            const data = await res.json().catch(() => null);
 
-            if (!response.ok || !result.success) {
-                throw new Error(result.error || 'Hesap kalıcı olarak silinirken bir hata oluştu.');
+            if (!res.ok || !data?.success) {
+                const errorMsg = data?.error || 'Hesap silinirken bir hata oluştu.';
+                addToast(errorMsg, 'error');
+                throw new Error(errorMsg);
             }
 
-            // Supabase auth yerel oturumunu temizle
+            // 3. Yerel depolama ve önbelleği tamamen temizle
+            try {
+                localStorage.removeItem('user_avatar_url');
+                localStorage.removeItem('final_portfolio_prices_cache');
+                localStorage.removeItem('final_portfolio_extremes_cache');
+                sessionStorage.clear();
+            } catch (storageErr) {
+                console.warn('Storage cleanup notice:', storageErr);
+            }
+
+            // 4. İstemci oturumunu sonlandır
             await supabase.auth.signOut().catch(() => {});
 
-            addToast('Hesabınız ve tüm verileriniz kalıcı olarak başarıyla silindi.', 'success');
+            addToast('Hesabınız ve tüm verileriniz Supabase\'den kalıcı olarak silindi.', 'success');
+
+            // 5. Ana sayfaya yönlendir
             setTimeout(() => {
                 window.location.href = '/';
-            }, 600);
+            }, 800);
+
         } catch (error: any) {
-            console.error('[Settings] Hesap silme hatası:', error);
-            addToast('Hata: ' + (error?.message || error), 'error');
+            console.error('Delete account error:', error);
+
             throw error;
         }
     };
@@ -738,6 +761,9 @@ function SettingsContent() {
                                 <span>Değişiklikleri Kaydet</span>
                             </LoadingButton>
                         </div>
+
+                        {/* Hesap Silme Bölümü */}
+                        <DeleteAccountSection onDelete={handleDeleteAccount} />
                     </motion.div>
                 )}
 
