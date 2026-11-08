@@ -23,7 +23,7 @@ export default function HomeClient() {
     }
   }, [isAuthenticated, router]);
 
-  // Oturumu açık kullanıcılar için sayfa içeriğini göstermeden doğrudan dashboard'a aktar
+  // Oturumu açık kullanıcılar için doğrudan dashboard'a aktar
   if (isAuthenticated === true) {
     return (
       <div className="min-h-screen w-full bg-white flex items-center justify-center">
@@ -49,7 +49,7 @@ export default function HomeClient() {
       ref={containerRef}
       className="min-h-screen w-full bg-white text-slate-800 relative font-clash overflow-x-hidden selection:bg-blue-100 selection:text-[#0E1E38]"
     >
-      {/* Arka Plan */}
+      {/* Sayfa Zemini */}
       <div className="fixed inset-0 pointer-events-none -z-10 bg-white" />
 
       {/* Navigasyon */}
@@ -58,126 +58,176 @@ export default function HomeClient() {
       <main className="flex-1 relative z-10 w-full overflow-hidden">
         
         {/* =========================================================================
-            BÖLÜM 1: ANA SAYFA HERO BÖLÜMÜ (ROZETSİZ, SADE, GERÇEK SNAPSHOT İLE)
+            BÖLÜM 1: TAM GENİŞLİK HERO (HAKKIMIZDA DÜZENİ — SAYFANIN HER YANINA HÂKİM)
             ========================================================================= */}
         <section
           id="hero"
-          className="relative pt-32 sm:pt-40 pb-16 sm:pb-24 w-full"
+          className="relative pt-32 sm:pt-40 lg:pt-44 pb-20 sm:pb-28 w-full border-b border-slate-200/80"
         >
-          <div className="max-w-6xl mx-auto w-full px-6 relative z-10">
-            
-            {/* Metin ve Başlık Alanı */}
-            <div className="text-center space-y-6 max-w-4xl mx-auto">
+          {/* Gradyan Renk Paleti PDF'ine Uygun Arka Plan Işık Efekti */}
+          <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-[#004BFA]/10 via-[#5B80FF]/10 to-transparent blur-[140px] rounded-full pointer-events-none -z-0" />
+          <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#D6E4FF]/40 blur-[130px] rounded-full pointer-events-none -z-0" />
+
+          {/* Sayfanın Tüm Genişliğini Kullanan Kapsayıcı */}
+          <div className="w-full px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-44 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
               
-              {/* Ana Başlık (Rozetsiz, saf editoryal tipografi) */}
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="text-4xl sm:text-6xl md:text-7xl lg:text-[76px] font-normal tracking-tight text-[#0E1E38] leading-[1.06] clash-title"
-              >
-                Finansal Geleceğinizi{" "}
-                <span className="text-[#004BFA]">Rasyonel Zekayla</span> Yönetin.
-              </motion.h1>
+              {/* Sol Kolon: Başlık, Anlatı, CTA ve Temel Metrikler (6 Kolon) */}
+              <div className="lg:col-span-6 space-y-6 sm:space-y-8">
+                
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="space-y-4"
+                >
+                  <span className="text-xs sm:text-sm font-semibold tracking-widest uppercase text-[#004BFA] block">
+                    BIST & TEFAS İçin Rasyonel Portföy Zekası
+                  </span>
 
-              {/* Alt Açıklama */}
-              <motion.p
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.15 }}
-                className="text-base sm:text-xl md:text-2xl text-slate-600 font-normal max-w-2xl sm:max-w-3xl mx-auto leading-relaxed"
-              >
-                BIST hisselerinizi ve TEFAS fonlarınızı tek bir dinamik ekranda toplayın.{" "}
-                <span className="text-[#0E1E38] font-semibold">Stres testleri, korelasyon analizleri</span> ve anlık piyasa istihbaratıyla portföyünüzün kontrolünü elinize alın.
-              </motion.p>
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-[68px] font-normal tracking-tight text-[#0E1E38] leading-[1.08] clash-title">
+                    Finansal Geleceğinizi{" "}
+                    <span className="text-[#004BFA]">Rasyonel Zekayla</span> Yönetin.
+                  </h1>
+                </motion.div>
 
-              {/* Eyleme Çağrı Butonları */}
+                <motion.p
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.15 }}
+                  className="text-base sm:text-lg md:text-xl text-slate-600 font-normal leading-relaxed"
+                >
+                  BIST hisselerinizi ve TEFAS fonlarınızı tek bir dinamik ekranda toplayın.{" "}
+                  <span className="text-[#0E1E38] font-semibold">Stres testleri, korelasyon analizleri</span> ve anlık piyasa istihbaratıyla portföyünüzün kontrolünü elinize alın.
+                </motion.p>
+
+                {/* Eyleme Çağrı Butonları */}
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.25 }}
+                  className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center pt-2"
+                >
+                  <Link
+                    href="/login?tab=register"
+                    className="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-gradient-to-r from-[#02041A] via-[#040989] to-[#004BFA] hover:opacity-95 text-white text-sm font-semibold rounded-full shadow-lg shadow-[#040989]/20 transition-all duration-200 active:scale-98 group cursor-pointer"
+                  >
+                    <span>Ücretsiz Hesap Oluştur</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+
+                  <Link
+                    href="#features"
+                    className="inline-flex items-center justify-center gap-2 px-7 py-4 bg-[#F5F7FA] hover:bg-slate-200 text-[#0E1E38] text-sm font-semibold rounded-full border border-slate-200/80 transition-all duration-200 cursor-pointer"
+                  >
+                    <span>Özellikleri İncele</span>
+                    <ChevronRight className="w-4 h-4 text-slate-400" />
+                  </Link>
+                </motion.div>
+
+                {/* Güven Notu */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 0.35 }}
+                  className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-slate-500 font-medium pt-1"
+                >
+                  <span className="flex items-center gap-1.5">
+                    <Check className="w-3.5 h-3.5 text-emerald-600" /> Kredi kartı gerekmez
+                  </span>
+                  <span className="text-slate-300">•</span>
+                  <span className="flex items-center gap-1.5">
+                    <Check className="w-3.5 h-3.5 text-emerald-600" /> 1 dakikada kurulum
+                  </span>
+                  <span className="text-slate-300">•</span>
+                  <span className="flex items-center gap-1.5">
+                    <Check className="w-3.5 h-3.5 text-emerald-600" /> Canlı BIST & TEFAS
+                  </span>
+                </motion.div>
+
+                {/* 3'lü Minimalist İstatistik Çubuğu (Hakkımızda Standartı) */}
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="grid grid-cols-3 gap-6 pt-6 border-t border-slate-200/80"
+                >
+                  <div className="space-y-0.5">
+                    <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
+                      %100
+                    </span>
+                    <span className="text-xs text-slate-500 font-medium block">
+                      Veri Odaklı ve Tarafsız
+                    </span>
+                  </div>
+
+                  <div className="space-y-0.5">
+                    <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
+                      Tek
+                    </span>
+                    <span className="text-xs text-slate-500 font-medium block">
+                      Bütünleşik Ekran
+                    </span>
+                  </div>
+
+                  <div className="space-y-0.5">
+                    <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
+                      0
+                    </span>
+                    <span className="text-xs text-slate-500 font-medium block">
+                      Karmaşık Jargon
+                    </span>
+                  </div>
+                </motion.div>
+
+              </div>
+
+              {/* Sağ Kolon: Sayfanın Sağını Dolduran Gerçek Konsol Snapshot'ı (6 Kolon) */}
               <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.25 }}
-                className="flex flex-col sm:flex-row gap-3.5 justify-center items-center pt-2 sm:pt-4"
+                initial={{ opacity: 0, x: 25 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.25, ease: "easeOut" }}
+                className="lg:col-span-6 relative w-full"
               >
-                <Link
-                  href="/login?tab=register"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-[#0E1E38] hover:bg-black text-white text-sm font-semibold rounded-full shadow-lg shadow-[#0E1E38]/15 hover:shadow-xl transition-all duration-200 active:scale-98 group cursor-pointer"
-                >
-                  <span>Ücretsiz Hesap Oluştur</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                <div className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/90 shadow-2xl shadow-[#040989]/10 bg-white">
+                  
+                  {/* Tarayıcı Üst Çubuğu */}
+                  <div className="flex items-center justify-between px-4 sm:px-6 py-3 bg-[#F5F7FA] border-b border-slate-200">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2.5 h-2.5 rounded-full bg-rose-400/80" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
+                    </div>
+                    <div className="bg-white px-4 py-1 rounded-md text-[11px] font-mono text-slate-500 border border-slate-200/80 max-w-xs w-full text-center truncate hidden sm:block">
+                      https://finai.net.tr/dashboard
+                    </div>
+                    <div className="text-right">
+                      <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+                        Canlı Portföy
+                      </span>
+                    </div>
+                  </div>
 
-                <Link
-                  href="#features"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 bg-slate-100 hover:bg-slate-200 text-[#0E1E38] text-sm font-semibold rounded-full transition-all duration-200 cursor-pointer"
-                >
-                  <span>Özellikleri İncele</span>
-                  <ChevronRight className="w-4 h-4 text-slate-400" />
-                </Link>
+                  {/* Gerçek Web Uygulaması Workspace Snapshot'ı */}
+                  <div className="relative aspect-[16/10] w-full bg-slate-50">
+                    <Image
+                      src="/images/landing/dashboard_workspace.jpg"
+                      alt="FinAi Canlı Çalışma Alanı"
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-cover object-top"
+                      priority
+                    />
+                  </div>
+                </div>
               </motion.div>
 
-              {/* Güven ve Kolaylık Belirteçleri (Rozetsiz, sade metin) */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.35 }}
-                className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs text-slate-500 font-medium pt-2"
-              >
-                <span className="flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 text-emerald-600" /> Kredi kartı gerekmez
-                </span>
-                <span className="hidden sm:inline text-slate-300">•</span>
-                <span className="flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 text-emerald-600" /> 1 dakikada ücretsiz kurulum
-                </span>
-                <span className="hidden sm:inline text-slate-300">•</span>
-                <span className="flex items-center gap-1.5">
-                  <Check className="w-3.5 h-3.5 text-emerald-600" /> Canlı BIST ve TEFAS
-                </span>
-              </motion.div>
             </div>
-
-            {/* =========================================================================
-                GERÇEK UYGULAMA EKRAN GÖRÜNTÜSÜ (BROWSER MOCKUP - GERÇEK SNAPSHOT)
-                ========================================================================= */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-              className="mt-12 sm:mt-16 w-full rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/90 shadow-2xl shadow-slate-300/40 bg-white"
-            >
-              {/* Tarayıcı Üst Çubuğu */}
-              <div className="flex items-center justify-between px-4 sm:px-6 py-3 bg-slate-100/90 border-b border-slate-200">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-slate-300" />
-                  <div className="w-3 h-3 rounded-full bg-slate-300" />
-                  <div className="w-3 h-3 rounded-full bg-slate-300" />
-                </div>
-                <div className="bg-white px-4 py-1 rounded-md text-[11px] font-mono text-slate-500 border border-slate-200/80 max-w-sm w-full text-center truncate hidden sm:block">
-                  https://finai.net.tr/dashboard/portfolio
-                </div>
-                <div className="w-12 text-right">
-                  <span className="text-[11px] font-medium text-slate-400">Canlı</span>
-                </div>
-              </div>
-
-              {/* Gerçek Web Sitesi Portföy Snapshot'ı */}
-              <div className="relative aspect-[16/9] w-full bg-slate-50">
-                <Image
-                  src="/images/portfolio_tracking_white.jpg"
-                  alt="FinAi Canlı Portföy Takip Ekranı"
-                  fill
-                  sizes="(max-width: 1280px) 100vw, 1200px"
-                  className="object-cover object-top"
-                  priority
-                />
-              </div>
-            </motion.div>
-
           </div>
         </section>
 
         {/* =========================================================================
-            BÖLÜM 2: ÖZELLİKLER (GERÇEK SNAPSHOT'LAR VE EDİTORYAL DÜZEN)
+            BÖLÜM 2: ÖZELLİKLER (TAM GENİŞLİK, 4 GERÇEK SNAPSHOT İLE)
             ========================================================================= */}
         <FeatureSteps title="Özellikler" />
 
@@ -189,7 +239,7 @@ export default function HomeClient() {
         {/* =========================================================================
             BÖLÜM 4: EYLEME ÇAĞRI (CALL TO ACTION)
             ========================================================================= */}
-        <section className="w-full bg-white py-16 sm:py-24 border-t border-slate-200/80 relative z-20">
+        <section className="w-full bg-white py-20 sm:py-28 border-t border-slate-200/80 relative z-20">
           <div className="w-full px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-44 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
             <div className="max-w-2xl space-y-2">
               <span className="text-xs font-semibold tracking-widest uppercase text-slate-400 block">
@@ -203,7 +253,7 @@ export default function HomeClient() {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 shrink-0">
               <Link
                 href="/login?tab=register"
-                className="px-8 py-4 bg-[#0E1E38] hover:bg-black text-white text-sm font-semibold rounded-full transition-all flex items-center justify-center gap-2 active:scale-98 shadow-sm cursor-pointer"
+                className="px-8 py-4 bg-gradient-to-r from-[#02041A] via-[#040989] to-[#004BFA] hover:opacity-95 text-white text-sm font-semibold rounded-full shadow-lg shadow-[#040989]/20 transition-all flex items-center justify-center gap-2 active:scale-98 cursor-pointer"
               >
                 <span>Hemen Ücretsiz Başlayın</span>
                 <ArrowRight className="w-4 h-4" />
