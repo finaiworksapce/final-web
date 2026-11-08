@@ -1,6 +1,6 @@
 // src/config/onboarding-questions.ts
 // FinAi Onboarding Soru, Model ve Canlı Telemetri Konfigürasyonu
-// Yüksek standartlı finansal mimari, BIST & TEFAS piyasalarına özel kalibrasyon
+// Sade, profesyonel finansal mimari
 
 export type FinancialLiteracyLevel = 'beginner' | 'intermediate' | 'advanced';
 
@@ -26,9 +26,8 @@ export interface StrategyProfile {
 export interface RepresentativeInstrument {
   symbol: string;
   name: string;
-  category: 'BIST 30' | 'Büyüme Hissesi' | 'TEFAS Fonu' | 'Kıymetli Maden' | 'Likit & PPF';
+  category: 'Hisse' | 'Yatırım Fonu' | 'Kıymetli Maden' | 'Likit & PPF';
   allocationWeight: number;
-  tag: string;
   reason: string;
 }
 
@@ -58,8 +57,6 @@ export interface WizardQuestionOption {
   keyNumber: number;
   title: string;
   description: string;
-  impactLabel: string;
-  badge?: string;
   deltaWeights: {
     stock: number;
     fund: number;
@@ -77,40 +74,34 @@ export interface WizardQuestion {
   options: WizardQuestionOption[];
 }
 
-// 4 Aşamalı Derinlikli Finansal Soru Seti (AI Slop içermeyen BIST & TEFAS soruları)
+// 4 Aşamalı Sade ve Profesyonel Soru Seti (Rozetsiz, saf estetik)
 export const WIZARD_QUESTIONS: WizardQuestion[] = [
   {
     id: 'literacy_level',
     stepNumber: 1,
-    category: 'Piyasa Deneyimi & Finansal Okuryazarlık',
-    title: 'Finansal piyasalar ve yatırım araçlarındaki tecrübenizi nasıl tanımlarsınız?',
-    contextExplanation: 'FinAi; teknik göstergeleri, çarpan analizlerini (F/K, PD/DD, FD/FAVÖK) ve arayüz derinliğini bu seviyeye göre optimize eder.',
+    category: 'Piyasa Deneyimi',
+    title: 'Finansal piyasalardaki yatırım deneyiminizi nasıl tanımlarsınız?',
+    contextExplanation: 'FinAi analiz derinliğini ve terminolojisini seviyenize göre optimize eder.',
     options: [
       {
         id: 'beginner',
         keyNumber: 1,
-        title: 'Temel Düzey (Yeni Yatırımcı)',
-        description: 'BIST ve fon piyasalarında yeni adımlar atıyorum. Karmaşık finansal terimlerden uzak, koruma ve sade fon rehberliği arıyorum.',
-        impactLabel: 'Öncelik: Sermaye Koruma & Likit Rezerv',
-        badge: 'Sade Arayüz',
+        title: 'Başlangıç Seviyesi',
+        description: 'Finansal piyasalarla yeni tanışıyorum. Sade, anlaşılır ve güvenli bir portföy takibi arıyorum.',
         deltaWeights: { stock: 15, fund: 25, gold: 30, cash: 30 }
       },
       {
         id: 'intermediate',
         keyNumber: 2,
-        title: 'Aktif Yatırımcı (Orta Seviye)',
-        description: 'Borsa İstanbul hisselerinde veya TEFAS fonlarında düzenli işlem yapıyorum. Sektörel rasyolar, temettü verimi ve dengeli büyüme odaklıyım.',
-        impactLabel: 'Öncelik: BIST 30 & Tematik Fon Kombinasyonu',
-        badge: 'Dengeli Model',
+        title: 'Aktif Yatırımcı',
+        description: 'Hisse ve fon alım-satım deneyimim var. Portföyümü daha profesyonel metriklerle takip etmek istiyorum.',
         deltaWeights: { stock: 40, fund: 30, gold: 18, cash: 12 }
       },
       {
         id: 'advanced',
         keyNumber: 3,
-        title: 'İleri Düzey (Analitik & Profesyonel)',
-        description: 'Bilanço kalemlerine, çarpan iskontolarına ve makro piyasa korelasyonlarına hakimim. Dinamik hisse rotasyonu ve endeks üzeri getiri (alfa) arıyorum.',
-        impactLabel: 'Öncelik: Yüksek BIST Büyüme & Alfa Arayışı',
-        badge: 'Profesyonel Terminal',
+        title: 'İleri Düzey',
+        description: 'Finansal tablolara, çarpanlara ve makro dinamiklere hakimim; derinlemesine analitik veriler arıyorum.',
         deltaWeights: { stock: 55, fund: 25, gold: 10, cash: 10 }
       }
     ]
@@ -118,35 +109,29 @@ export const WIZARD_QUESTIONS: WizardQuestion[] = [
   {
     id: 'investment_horizon',
     stepNumber: 2,
-    category: 'Zaman Ufku & Likidite İhtiyacı',
-    title: 'Yatırımlarınızı hangi zaman ufkunda değerlendirmeyi planlıyorsunuz?',
-    contextExplanation: 'Vade yapınız; portföyünüzün piyasa düzeltmelerine dayanma gücünü ve önerilen hisse senedi taşıma süresini belirler.',
+    category: 'Zaman Ufku',
+    title: 'Yatırımlarınızı hangi zaman ufkunda tutmayı planlıyorsunuz?',
+    contextExplanation: 'Vade tercihiniz, portföyünüzün piyasa dalgalanmalarına karşı dayanım eşiğini belirler.',
     options: [
       {
         id: 'short',
         keyNumber: 1,
         title: 'Kısa Vade (1 - 6 Ay)',
-        description: 'Yakın zamanda nakde dönüş ihtiyacı doğabilir. Ani fiyat salınımlarından kaçınmak ve ana paranın değerini muhafaza etmek şart.',
-        impactLabel: 'Likit & Para Piyasası Fonu Ağırlığı Arttırılır',
-        badge: 'Yüksek Likidite',
+        description: 'Esneklik ve likidite önceliğim. Kısa sürede nakde dönebilmek istiyorum.',
         deltaWeights: { stock: 10, fund: 20, gold: 25, cash: 45 }
       },
       {
         id: 'medium',
         keyNumber: 2,
         title: 'Orta Vade (6 Ay - 2 Yıl)',
-        description: 'Belirli bir hedef için (araç, konut peşinatı vb.) birikim yapıyorum. Kısa vadeli dalgalanmaları tolere edebilir, dönemsel kâr realizasyonu yapabilirim.',
-        impactLabel: 'BIST 30 & Çeyreklik Yeniden Dengeleme Modeli',
-        badge: 'Hedef Odaklı',
+        description: 'Dönemsel piyasa dalgalanmalarını tolere edebilir, belirli hedefler doğrultusunda büyüme hedeflerim.',
         deltaWeights: { stock: 35, fund: 35, gold: 18, cash: 12 }
       },
       {
         id: 'long',
         keyNumber: 3,
         title: 'Uzun Vade (2+ Yıl)',
-        description: 'Finansal özgürlük ve geleceğim için bileşik getiriden faydalanmak, kâr paylarını (temettüleri) yeniden yatırıma dönüştürmek istiyorum.',
-        impactLabel: 'Maksimum Bileşik Getiri & Temettü İntibakı',
-        badge: 'Bileşik Büyüme',
+        description: 'Bileşik getirinin gücünden faydalanarak uzun soluklu bir sermaye inşası planlıyorum.',
         deltaWeights: { stock: 55, fund: 25, gold: 12, cash: 8 }
       }
     ]
@@ -154,35 +139,29 @@ export const WIZARD_QUESTIONS: WizardQuestion[] = [
   {
     id: 'volatility_reaction',
     stepNumber: 3,
-    category: 'Risk Toleransı & Düşüş Psikolojisi',
-    title: 'Genel bir piyasa düzeltmesinde portföyünüz %15 gerilese yaklaşımınız ne olur?',
-    contextExplanation: 'Risk toleransı, piyasa fırtınalarında sakin kalmanızı sağlayan psikolojik emniyet sübabınızdır.',
+    category: 'Risk Yaklaşımı',
+    title: 'Genel bir piyasa düşüşünde portföyünüz gerilerse yaklaşımınız ne olur?',
+    contextExplanation: 'Dalgalanmalara karşı duruşunuz, huzurlu bir yatırım deneyiminin temelidir.',
     options: [
       {
         id: 'conservative',
         keyNumber: 1,
-        title: 'Sermayemi Korur, Savunmaya Geçerim',
-        description: 'Portföyümün kısa vadede dahi negatifte kalması huzurumu kaçırır. Nakit, likit fon ve altın gibi güvenli limanlara sığınmayı yeğlerim.',
-        impactLabel: 'Düşük Volatilite Toleransı · Defansif Dağılım',
-        badge: 'Savunmacı',
+        title: 'Pozisyonlarımı Korurum',
+        description: 'Sermayemi korumak önceliğimdir; dalgalanmanın az olduğu güvenli varlıkları tercih ederim.',
         deltaWeights: { stock: 15, fund: 20, gold: 35, cash: 30 }
       },
       {
         id: 'balanced',
         keyNumber: 2,
         title: 'Piyasanın Toparlanmasını Beklerim',
-        description: 'Geri çekilmelerin hisse senedi piyasasının olağan döngüsü olduğunu bilirim. Vademi bozmadan stratejime sadık kalırım.',
-        impactLabel: 'Orta Volatilite Toleransı · Döngüsel Disiplin',
-        badge: 'Dengeli Sabır',
+        description: 'Dalgalanmaların piyasanın olağan bir parçası olduğunu bilir, planıma sadık kalırım.',
         deltaWeights: { stock: 38, fund: 32, gold: 18, cash: 12 }
       },
       {
         id: 'aggressive',
         keyNumber: 3,
-        title: 'Fırsat Görür, Kademeli Alım Yaparım',
-        description: 'Düşüşleri kaliteli şirketleri indirimli fiyattan toplama fırsatı olarak görür, nakit rezervimle ortalama maliyetimi düşürürüm.',
-        impactLabel: 'Yüksek Risk Toleransı · Fırsat Likiditesi',
-        badge: 'Maliyet İndirimi',
+        title: 'Kademeli Ek Alım Yaparım',
+        description: 'Fiyat geri çekilmelerini iskontolu alım fırsatı olarak değerlendirip maliyetimi dengelerim.',
         deltaWeights: { stock: 52, fund: 28, gold: 10, cash: 10 }
       }
     ]
@@ -190,35 +169,29 @@ export const WIZARD_QUESTIONS: WizardQuestion[] = [
   {
     id: 'strategic_goal',
     stepNumber: 4,
-    category: 'Portföy Misyonu & Yatırım Hedefi',
-    title: 'FinAi portföyünüzün öncelikli finansal misyonu hangisidir?',
-    contextExplanation: 'Portföyünüzün ağırlık merkezi ve hisse filtreleme algoritmaları bu misyona göre filtrelenir.',
+    category: 'Yatırım Hedefi',
+    title: 'Portföyünüzün öncelikli finansal hedefi hangisidir?',
+    contextExplanation: 'FinAi algoritması varlık önerilerini bu ana eksen etrafında şekillendirir.',
     options: [
       {
         id: 'inflation_shield',
         keyNumber: 1,
-        title: 'Enflasyona Karşı Alım Gücünü Korumak',
-        description: 'Önceliğim reel kayıp yaşamamak; birikimlerimi TÜFE üzerinde tutarak değer erimesini engellemek.',
-        impactLabel: 'Reel Değer Kalkanı · Düşük Beta',
-        badge: 'Reel Koruma',
+        title: 'Alım Gücünü Korumak',
+        description: 'Birikimlerimin reel değerini korumak ve enflasyon karşısında değer kaybını önlemek.',
         deltaWeights: { stock: 20, fund: 30, gold: 30, cash: 20 }
       },
       {
         id: 'dividend_yield',
         keyNumber: 2,
-        title: 'Düzenli Pasif Gelir (Temettü Akışı)',
-        description: 'Köklü, düzenli kâr payı dağıtan ihracatçı sanayi şirketlerine ortak olarak sürdürülebilir nakit akışı sağlamak.',
-        impactLabel: 'BIST 30 Temettü Liderleri & Yüksek Nakit Akışı',
-        badge: 'Temettü Büyümesi',
+        title: 'Düzenli Nakit Akışı',
+        description: 'Düzenli kâr payı dağıtan köklü şirketlerle sürdürülebilir bir pasif getiri oluşturmak.',
         deltaWeights: { stock: 45, fund: 25, gold: 20, cash: 10 }
       },
       {
         id: 'growth_alpha',
         keyNumber: 3,
-        title: 'Maksimum Sermaye Büyümesi (Alfa Arayışı)',
-        description: 'Yüksek büyüme potansiyeline ve teknoloji/sanayi üstünlüğüne sahip şirketlerle endeksin üzerinde getiri elde etmek.',
-        impactLabel: 'Yüksek Çarpan İskontosu & Büyüme Hisseleri',
-        badge: 'Maksimum Büyüme',
+        title: 'Sermaye Büyümesi',
+        description: 'Yüksek büyüme ve ciro artışı potansiyeline sahip şirketlerle piyasa üzeri getiri hedeflemek.',
         deltaWeights: { stock: 55, fund: 30, gold: 5, cash: 10 }
       }
     ]
@@ -289,68 +262,68 @@ export function calculateDynamicStrategy(answers: Record<string, string>): Dynam
   if (stock >= 50) {
     return {
       id: 'advanced_alpha',
-      codeName: 'MODEL: ALPHA_EQUITY_CORE_V2',
-      title: 'Dinamik Büyüme & Alfa Portföyü',
-      tagline: 'Endeks üzeri getiri hedefleyen dinamik BIST sanayi ve büyüme modeli.',
+      codeName: 'DYNAMIC_ALPHA',
+      title: 'Büyüme & Alfa Portföyü',
+      tagline: 'Endeks üzeri getiri hedefleyen dinamik sanayi ve büyüme modeli.',
       expectedRisk: 'Yüksek',
-      expectedReturnRange: '%65 - %90+ Yıllık Hedef',
-      volatilityBand: '±%22.4 Volatilite',
-      maxDrawdownTolerance: '-%24.0 Maksimum Düşüş',
-      rebalanceCycle: 'Aylık Taktiksel İnceleme',
-      sharpeRatioEst: '1.42 (Yüksek Risk/Getiri)',
-      analystSummary: 'Portföyünüzün odağı; ihracat gücü ve kapasite artışıyla kâr marjını büyüten BIST şirketleri ile küresel tematik fonlar üzerine kurulmuştur. Piyasa düzeltmeleri maliyet avantajına dönüştürülür.',
+      expectedReturnRange: '%65 - %90',
+      volatilityBand: '±%22',
+      maxDrawdownTolerance: '-%24',
+      rebalanceCycle: 'Aylık Gözden Geçirme',
+      sharpeRatioEst: '1.42',
+      analystSummary: 'Büyüme potansiyeli yüksek şirketler ve teknoloji fonları üzerine kurgulanmıştır.',
       distribution: { stock, fund, gold, cash },
       instruments: [
-        { symbol: 'ASELS', name: 'Aselsan Savunma Sanayii', category: 'Büyüme Hissesi', allocationWeight: 18, tag: 'Bakiye Sipariş 12 Milyar $', reason: 'Güçlü döviz bazlı nakit akışı ve AR-GE liderliği.' },
-        { symbol: 'THYAO', name: 'Türk Hava Yolları', category: 'BIST 30', allocationWeight: 16, tag: 'F/K 4.8 Cazip İskonto', reason: 'Küresel pazar payı ve düşük F/K çarpanı.' },
-        { symbol: 'TUPRS', name: 'Tüpraş Rafinerileri', category: 'BIST 30', allocationWeight: 14, tag: 'Temettü Verimi %9.4', reason: 'Yüksek rafineri marjı ve düzenli nakit temettü.' },
-        { symbol: 'BUY', name: 'İş Portföy Yabancı Teknoloji', category: 'TEFAS Fonu', allocationWeight: fund, tag: 'Yapay Zeka & Yarı İletken', reason: 'Küresel teknoloji devleriyle coğrafi çeşitlendirme.' },
-        { symbol: 'GLDTR', name: 'İstanbul Altın BYF', category: 'Kıymetli Maden', allocationWeight: gold, tag: 'Ons & Döviz Koruma', reason: 'Jeopolitik risk dengesi ve portföy sigortası.' },
-        { symbol: 'PPF', name: 'Para Piyasası Likit Fon', category: 'Likit & PPF', allocationWeight: cash, tag: 'Fırsat Havuzu (T+0)', reason: 'Düşüşlerde anında alım yapabilmek için taktiksel rezerv.' },
+        { symbol: 'ASELS', name: 'Aselsan', category: 'Hisse', allocationWeight: 18, reason: 'AR-GE ve döviz bazlı nakit akışı' },
+        { symbol: 'THYAO', name: 'Türk Hava Yolları', category: 'Hisse', allocationWeight: 16, reason: 'Küresel pazar payı ve düşük F/K' },
+        { symbol: 'TUPRS', name: 'Tüpraş', category: 'Hisse', allocationWeight: 14, reason: 'Güçlü kârlılık ve temettü verimi' },
+        { symbol: 'BUY', name: 'Teknoloji Fonu', category: 'Yatırım Fonu', allocationWeight: fund, reason: 'Küresel teknoloji çeşitlendirmesi' },
+        { symbol: 'GLDTR', name: 'Altın BYF', category: 'Kıymetli Maden', allocationWeight: gold, reason: 'Portföy dengeleyici güvence' },
+        { symbol: 'PPF', name: 'Likit Fon', category: 'Likit & PPF', allocationWeight: cash, reason: 'Taktiksel alım rezervi' },
       ]
     };
   } else if (stock >= 30) {
     return {
       id: 'intermediate_balanced',
-      codeName: 'MODEL: OPTIMAL_GROWTH_BALANCED_V1',
-      title: 'BIST 30 & Temettü Odaklı Dengeli Portföy',
-      tagline: 'Piyasa üzeri getiri ile koruma refleksini harmanlayan dengeli omurga.',
+      codeName: 'OPTIMAL_BALANCED',
+      title: 'Dengeli Büyüme Portföyü',
+      tagline: 'Piyasa getirisi ile sermaye korumasını birleştiren dengeli model.',
       expectedRisk: 'Dengeli',
-      expectedReturnRange: '%48 - %70 Yıllık Hedef',
-      volatilityBand: '±%14.8 Volatilite',
-      maxDrawdownTolerance: '-%15.0 Maksimum Düşüş',
-      rebalanceCycle: 'Çeyreklik (3 Aylık) Dengeleme',
-      sharpeRatioEst: '1.68 (Optimum Sharpe Oranı)',
-      analystSummary: 'BIST 30 mavi çip şirketleri ve köklü TEFAS fonları portföyün çekirdeğini oluşturur. Altın ve nakit rezervi, piyasa türbülanslarında portföyü dengeler ve getiri istikrarı sağlar.',
+      expectedReturnRange: '%48 - %70',
+      volatilityBand: '±%14',
+      maxDrawdownTolerance: '-%15',
+      rebalanceCycle: 'Çeyreklik Dengeleme',
+      sharpeRatioEst: '1.68',
+      analystSummary: 'Köklü sanayi liderleri, yatırım fonları ve altın dengesiyle istikrarlı getiri hedefler.',
       distribution: { stock, fund, gold, cash },
       instruments: [
-        { symbol: 'KCHOL', name: 'Koç Holding Sanayi', category: 'BIST 30', allocationWeight: 15, tag: 'Net Aktif İskontosu %32', reason: 'Çok sektörlü çeşitlendirme ve kurumsal temettü.' },
-        { symbol: 'FROTO', name: 'Ford Otomotiv Sanayi', category: 'BIST 30', allocationWeight: 13, tag: 'İhracat Şampiyonu', reason: 'Elektrikli araç yatırımı ve güçlü ihracat geliri.' },
-        { symbol: 'TI2', name: 'İş Portföy BIST 30 Fonu', category: 'TEFAS Fonu', allocationWeight: Math.round(fund * 0.55), tag: 'Geniş Tabanlı Endeks', reason: 'Profesyonel portföy yöneticisiyle endeks takibi.' },
-        { symbol: 'TTE', name: 'İş Portföy BIST Teknoloji', category: 'TEFAS Fonu', allocationWeight: Math.round(fund * 0.45), tag: 'BIST Teknoloji Ağırlık', reason: 'Yazılım ve bilişim sektörünün büyüme potansiyeli.' },
-        { symbol: 'ZGOLD', name: 'Ziraat Portföy Altın BYF', category: 'Kıymetli Maden', allocationWeight: gold, tag: 'Fiziki Altın Karşılığı', reason: 'Enflasyona karşı birikim değerini koruma.' },
-        { symbol: 'PPF', name: 'Likit Para Piyasası Fonu', category: 'Likit & PPF', allocationWeight: cash, tag: 'Günlük Bileşik Getiri', reason: 'Sıfır risk ile günlük faiz ve likidite güvencesi.' },
+        { symbol: 'KCHOL', name: 'Koç Holding', category: 'Hisse', allocationWeight: 15, reason: 'Çok sektörlü kurumsal yapı' },
+        { symbol: 'FROTO', name: 'Ford Otosan', category: 'Hisse', allocationWeight: 13, reason: 'Güçlü ihracat ve kârlılık' },
+        { symbol: 'TI2', name: 'BIST 30 Fonu', category: 'Yatırım Fonu', allocationWeight: Math.round(fund * 0.55), reason: 'Geniş tabanlı endeks takibi' },
+        { symbol: 'TTE', name: 'Teknoloji Fonu', category: 'Yatırım Fonu', allocationWeight: Math.round(fund * 0.45), reason: 'Sektörel büyüme potansiyeli' },
+        { symbol: 'ZGOLD', name: 'Altın Fonu', category: 'Kıymetli Maden', allocationWeight: gold, reason: 'Değer koruma ve sigorta' },
+        { symbol: 'PPF', name: 'Likit Fon', category: 'Likit & PPF', allocationWeight: cash, reason: 'Risksiz günlük likidite' },
       ]
     };
   } else {
     return {
       id: 'beginner_capital_shield',
-      codeName: 'MODEL: CAPITAL_SHIELD_DEFENSIVE_V1',
-      title: 'Enflasyon Kalkanı & Sermaye Koruma Portföyü',
-      tagline: 'Sıfıra yakın volatilite ve düzenli reel değer koruma modeli.',
+      codeName: 'CAPITAL_SHIELD',
+      title: 'Sermaye Koruma Portföyü',
+      tagline: 'Düşük volatilite ve düzenli alım gücü koruma modeli.',
       expectedRisk: 'Düşük',
-      expectedReturnRange: '%38 - %52 Yıllık Hedef',
-      volatilityBand: '±%7.5 Düşük Volatilite',
-      maxDrawdownTolerance: '-%7.0 Maksimum Düşüş',
-      rebalanceCycle: '6 Aylık Periyodik Gözden Geçirme',
-      sharpeRatioEst: '1.92 (Düşük Risk, Yüksek Güvenlik)',
-      analystSummary: 'Birikimlerinizin satın alma gücünü korumayı hedefler. Sermaye riski minimumda tutulur; likit fonlar ve fiziki altın kalkanı portföyün ana eksenini meydana getirir.',
+      expectedReturnRange: '%38 - %52',
+      volatilityBand: '±%7',
+      maxDrawdownTolerance: '-%7',
+      rebalanceCycle: '6 Aylık İnceleme',
+      sharpeRatioEst: '1.92',
+      analystSummary: 'Likit enstrümanlar ve değerli madenler ağırlıklı olup piyasa dalgalanmalarına karşı korur.',
       distribution: { stock, fund, gold, cash },
       instruments: [
-        { symbol: 'PPF', name: 'Para Piyasası Likit Fon', category: 'Likit & PPF', allocationWeight: cash, tag: 'Günlük Risksiz Getiri', reason: 'Piyasa dalgalanmalarından sıfır etkilenme.' },
-        { symbol: 'ZGOLD', name: 'Ziraat Altın Fonu', category: 'Kıymetli Maden', allocationWeight: gold, tag: 'Enflasyon Kalkanı', reason: 'Döviz ve altın bazında kalıcı alım gücü garantisi.' },
-        { symbol: 'TI2', name: 'İş Portföy Hisse Fonu', category: 'TEFAS Fonu', allocationWeight: fund, tag: 'Seçici BIST 30 Fonu', reason: 'Risk almadan profesyonel hisse dağılımına ortak olma.' },
-        { symbol: 'BIMAS', name: 'BİM Birleşik Mağazalar', category: 'BIST 30', allocationWeight: stock, tag: 'Defansif Perakende', reason: 'Krizlere ve enflasyona dayanıklı perakende nakit akışı.' }
+        { symbol: 'PPF', name: 'Likit Para Piyasası', category: 'Likit & PPF', allocationWeight: cash, reason: 'Günlük risksiz getiri' },
+        { symbol: 'ZGOLD', name: 'Altın Fonu', category: 'Kıymetli Maden', allocationWeight: gold, reason: 'Enflasyona karşı koruma' },
+        { symbol: 'TI2', name: 'BIST 30 Fonu', category: 'Yatırım Fonu', allocationWeight: fund, reason: 'Geniş piyasa katılımı' },
+        { symbol: 'BIMAS', name: 'BİM Mağazalar', category: 'Hisse', allocationWeight: stock, reason: 'Defansif perakende nakit akışı' }
       ]
     };
   }
@@ -402,49 +375,48 @@ export const STRATEGY_PROFILES: Record<string, StrategyProfile> = {
   },
   advanced_alpha: {
     id: 'advanced_alpha',
-    title: 'Dinamik Büyüme & Alfa Portföyü',
+    title: 'Büyüme & Alfa Portföyü',
     badge: 'Aktif Yönetim',
-    description: 'Endeks üzeri getiri hedefleyen dinamik BIST sanayi ve büyüme modeli.',
+    description: 'Endeks üzeri getiri hedefleyen dinamik sanayi ve büyüme modeli.',
     expectedRisk: 'Yüksek',
-    expectedReturn: '%65 - %90+ Yıllık Hedef',
+    expectedReturn: '%65 - %90',
     distribution: [
-      { name: 'BIST Büyüme Hisseleri', percentage: 55, color: '#2563EB', type: 'STOCK', description: 'ASELS, THYAO, TUPRS ve sanayi liderleri' },
-      { name: 'TEFAS Fonları', percentage: 25, color: '#8B5CF6', type: 'FUND', description: 'Küresel teknoloji ve tematik fonlar' },
-      { name: 'Altın & Emtia', percentage: 10, color: '#F59E0B', type: 'GOLD', description: 'Ons ve jeopolitik koruma' },
-      { name: 'Fırsat Likiditesi', percentage: 10, color: '#94A3B8', type: 'CASH', description: 'Taktiksel nakit rezervi' },
+      { name: 'BIST Hisseleri', percentage: 55, color: '#004BFA', type: 'STOCK', description: 'Sanayi ve büyüme hisseleri' },
+      { name: 'Yatırım Fonları', percentage: 25, color: '#5B80FF', type: 'FUND', description: 'Teknoloji ve tematik fonlar' },
+      { name: 'Kıymetli Madenler', percentage: 10, color: '#F59E0B', type: 'GOLD', description: 'Altın güvencesi' },
+      { name: 'Likit Rezerv', percentage: 10, color: '#D6E4FF', type: 'CASH', description: 'Nakit fırsat havuzu' },
     ]
   },
   intermediate_balanced: {
     id: 'intermediate_balanced',
-    title: 'BIST 30 & Temettü Odaklı Dengeli Portföy',
+    title: 'Dengeli Büyüme Portföyü',
     badge: 'Optimum Büyüme',
-    description: 'Piyasa üzeri getiri ile koruma refleksini harmanlayan dengeli omurga.',
+    description: 'Piyasa getirisi ile sermaye korumasını birleştiren dengeli model.',
     expectedRisk: 'Dengeli',
-    expectedReturn: '%48 - %70 Yıllık Hedef',
+    expectedReturn: '%48 - %70',
     distribution: [
-      { name: 'BIST 30 & Temettü', percentage: 40, color: '#2563EB', type: 'STOCK', description: 'KCHOL, FROTO ve temettü liderleri' },
-      { name: 'TEFAS Fonları', percentage: 30, color: '#8B5CF6', type: 'FUND', description: 'TI2 ve TTE fonları' },
-      { name: 'Kıymetli Madenler', percentage: 18, color: '#F59E0B', type: 'GOLD', description: 'ZGOLD ve fiziki altın' },
-      { name: 'Likit / PPF', percentage: 12, color: '#94A3B8', type: 'CASH', description: 'Günlük faiz ve likidite' },
+      { name: 'BIST Hisseleri', percentage: 40, color: '#004BFA', type: 'STOCK', description: 'Köklü sanayi liderleri' },
+      { name: 'Yatırım Fonları', percentage: 30, color: '#5B80FF', type: 'FUND', description: 'Geniş tabanlı fonlar' },
+      { name: 'Kıymetli Madenler', percentage: 18, color: '#F59E0B', type: 'GOLD', description: 'Altın fonu' },
+      { name: 'Likit Rezerv', percentage: 12, color: '#D6E4FF', type: 'CASH', description: 'Likit para piyasası' },
     ]
   },
   beginner_capital_shield: {
     id: 'beginner_capital_shield',
-    title: 'Enflasyon Kalkanı & Sermaye Koruma Portföyü',
+    title: 'Sermaye Koruma Portföyü',
     badge: 'Reel Koruma',
-    description: 'Sıfıra yakın volatilite ve düzenli reel değer koruma modeli.',
+    description: 'Düşük volatilite ve düzenli alım gücü koruma modeli.',
     expectedRisk: 'Düşük',
-    expectedReturn: '%38 - %52 Yıllık Hedef',
+    expectedReturn: '%38 - %52',
     distribution: [
-      { name: 'Likit & PPF', percentage: 35, color: '#94A3B8', type: 'CASH', description: 'Günlük faiz ve risksiz getiri' },
-      { name: 'Altın & Kıymetli Maden', percentage: 30, color: '#F59E0B', type: 'GOLD', description: 'Enflasyon kalkanı' },
-      { name: 'TEFAS Fonları', percentage: 20, color: '#8B5CF6', type: 'FUND', description: 'Profesyonel hisse ve karma fonlar' },
-      { name: 'BIST 30 Defansif', percentage: 15, color: '#2563EB', type: 'STOCK', description: 'BIMAS ve kriz dayanıklı şirketler' },
+      { name: 'Likit Rezerv', percentage: 35, color: '#D6E4FF', type: 'CASH', description: 'Likit para piyasası' },
+      { name: 'Kıymetli Madenler', percentage: 30, color: '#F59E0B', type: 'GOLD', description: 'Altın koruması' },
+      { name: 'Yatırım Fonları', percentage: 20, color: '#5B80FF', type: 'FUND', description: 'Geniş fon dağılımı' },
+      { name: 'Defansif Hisseler', percentage: 15, color: '#004BFA', type: 'STOCK', description: 'Defansif şirketler' },
     ]
   }
 };
 
-// ProfilingQuestionsStep için eski arayüz uyumluluğu
 export interface OnboardingQuestion {
   id: string;
   title: string;
