@@ -104,7 +104,7 @@ export default function MarketPage() {
     };
 
     return (
-        <div className="p-4 md:p-8 min-h-screen bg-[#F8FAFC]">
+        <div className="p-4 md:p-8 min-h-screen bg-[#F8FAFC] dark:bg-[#02041A]">
             <AnimatePresence mode="wait">
                 {!testStarted ? (
                     <motion.div 

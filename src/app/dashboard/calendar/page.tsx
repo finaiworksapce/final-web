@@ -1462,7 +1462,7 @@ function CalendarContent() {
     const formattedSelectedDayHeader = selectedDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', weekday: 'long' });
 
     return (
-        <div className="w-full min-h-screen bg-slate-50/50 p-3 sm:p-6 lg:p-8 space-y-6">
+        <div className="w-full min-h-screen bg-slate-50/50 dark:bg-[#02041A] p-3 sm:p-6 lg:p-8 space-y-6">
             
             {/* Header & Controls */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-5 sm:p-6 rounded-3xl border border-slate-100 shadow-sm">

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, memo } from 'react';
+import { useTheme } from 'next-themes';
 
 interface TradingViewWidgetProps {
     symbol?: string;
@@ -35,6 +36,8 @@ function mapSymbol(input: string): string {
 function TradingViewWidget({ symbol = "FOREKS:XU100", height = 400 }: TradingViewWidgetProps) {
     const container = useRef<HTMLDivElement>(null);
     const resolvedSymbol = mapSymbol(symbol);
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === "dark";
 
     useEffect(() => {
         if (!container.current) return;
@@ -53,7 +56,7 @@ function TradingViewWidget({ symbol = "FOREKS:XU100", height = 400 }: TradingVie
             symbol: resolvedSymbol,
             interval: "D",
             timezone: "Europe/Istanbul",
-            theme: "light",
+            theme: isDark ? "dark" : "light",
             style: "1",
             locale: "tr",
             enable_publishing: false,
@@ -64,11 +67,11 @@ function TradingViewWidget({ symbol = "FOREKS:XU100", height = 400 }: TradingVie
             support_host: "https://www.tradingview.com"
         });
         container.current.appendChild(script);
-    }, [resolvedSymbol]);
+    }, [resolvedSymbol, isDark]);
 
     return (
         <div
-            className="tradingview-widget-container w-full bg-white rounded-xl overflow-hidden border border-slate-100 shadow-sm"
+            className="tradingview-widget-container w-full bg-white dark:bg-[#040989] rounded-xl overflow-hidden border border-slate-100 dark:border-[#5B80FF]/30 shadow-sm"
             ref={container}
             style={{ height: typeof height === 'number' ? `${height}px` : height }}
         >

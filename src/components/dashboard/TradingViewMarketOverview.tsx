@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, memo } from "react";
+import { useTheme } from "next-themes";
 
 export interface TradingViewMarketOverviewProps {
     className?: string;
@@ -8,6 +9,8 @@ export interface TradingViewMarketOverviewProps {
 
 export function TradingViewMarketOverview({ className = "" }: TradingViewMarketOverviewProps) {
     const containerRef = useRef<HTMLDivElement>(null);
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === "dark";
 
     useEffect(() => {
         const container = containerRef.current;
@@ -55,19 +58,19 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
             lineWidth: 2,
             lineType: 0,
             chartType: "area",
-            fontColor: "#64748B",
-            widgetFontColor: "#040989",
-            gridLineColor: "rgba(214, 228, 255, 0.45)",
-            volumeUpColor: "rgba(0, 75, 250, 0.18)",
+            fontColor: isDark ? "#94A3B8" : "#64748B",
+            widgetFontColor: isDark ? "#F5F7FA" : "#040989",
+            gridLineColor: isDark ? "rgba(91, 128, 255, 0.15)" : "rgba(214, 228, 255, 0.45)",
+            volumeUpColor: isDark ? "rgba(0, 75, 250, 0.35)" : "rgba(0, 75, 250, 0.18)",
             volumeDownColor: "rgba(239, 68, 68, 0.16)",
-            backgroundColor: "#FFFFFF",
+            backgroundColor: isDark ? "#040989" : "#FFFFFF",
             upColor: "#004BFA",
             downColor: "#EF4444",
             borderUpColor: "#004BFA",
             borderDownColor: "#EF4444",
             wickUpColor: "#004BFA",
             wickDownColor: "#EF4444",
-            colorTheme: "light",
+            colorTheme: isDark ? "dark" : "light",
             isTransparent: true,
             locale: "tr",
             chartOnly: false,
@@ -110,7 +113,7 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
                 container.innerHTML = "";
             }
         };
-    }, []);
+    }, [isDark]);
 
     return (
         <div 

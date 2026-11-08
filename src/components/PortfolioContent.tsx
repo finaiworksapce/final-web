@@ -3204,7 +3204,7 @@ export default function PortfolioPage() {
 
                 {/* K/Z Kartları (İlk Fotoğraftaki Gibi Yatay 3 Sütunlu Panel) */}
                 <div className="lg:col-span-5">
-                    <div className="bg-[linear-gradient(180deg,#ffffff_0%,#ffffff_55%,#ecfdf5_100%)] border border-emerald-100/80 hover:border-emerald-200/80 rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 shadow-xs hover:shadow-sm transition-all duration-300 flex flex-col justify-center h-full min-h-0 relative overflow-hidden group">
+                    <div className="bg-white dark:bg-[#040989] border border-emerald-100/80 dark:border-[#5B80FF]/30 hover:border-emerald-200/80 rounded-2xl sm:rounded-3xl p-3.5 sm:p-4 shadow-xs hover:shadow-sm transition-all duration-300 flex flex-col justify-center h-full min-h-0 relative overflow-hidden group">
                         {/* Soft Yeşil Parıltı (Ajanda Stili Yeşil Varyantı) */}
                         <div className="absolute -top-16 -right-16 w-48 h-48 bg-emerald-100/35 rounded-full blur-3xl pointer-events-none" />
                         <div className="absolute -bottom-16 -left-16 w-36 h-36 bg-emerald-50/50 rounded-full blur-2xl pointer-events-none" />

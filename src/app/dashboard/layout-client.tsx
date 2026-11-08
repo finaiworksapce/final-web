@@ -244,7 +244,7 @@ function DashboardShell({
     ];
 
     return (
-        <div className="min-h-screen flex relative selection:bg-blue-500/30 font-sans bg-white overflow-x-hidden">
+        <div className="min-h-screen flex relative selection:bg-blue-500/30 font-sans bg-[#F5F7FA] dark:bg-[#02041A] overflow-x-hidden">
             {/* MAIN WRAPPER (EDGE-TO-EDGE DASHBOARD) */}
             <div className="relative z-10 w-full flex mx-auto max-w-[2560px] overflow-x-hidden min-h-screen">
                 <div className="flex-1 flex bg-transparent min-w-0">

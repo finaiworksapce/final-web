@@ -699,7 +699,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
   ];
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC] w-full overflow-x-clip relative">
+    <div className="flex min-h-screen bg-[#F8FAFC] dark:bg-[#02041A] w-full overflow-x-clip relative">
       
       {/* ========================================================================= */}
       {/* 1. SOL MENÜ: LACİVERT SOL PANEL (#00008B) - MODÜLER GEZİNTİ */}
@@ -766,7 +766,7 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
       {/* ========================================================================= */}
       {/* 2. ORTA VE SAĞ İÇERİK ALANI (CLEAN #F8FAFC) */}
       {/* ========================================================================= */}
-      <main className="flex-1 bg-[#F8FAFC] min-h-screen p-4 sm:p-6 md:p-8 space-y-6 text-[#0E1E38] max-w-full overflow-hidden">
+      <main className="flex-1 bg-[#F8FAFC] dark:bg-[#02041A] min-h-screen p-4 sm:p-6 md:p-8 space-y-6 text-[#0E1E38] dark:text-[#F5F7FA] max-w-full overflow-hidden">
         
         {/* MOBİL MODÜL GEZİNTİ PİLL BARI (YALNIZCA KÜÇÜK EKRANLARDA / md:hidden) */}
         <div className="md:hidden flex items-center gap-1.5 overflow-x-auto pb-3 border-b border-slate-200/80 scrollbar-none max-w-full">

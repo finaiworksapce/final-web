@@ -67,7 +67,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
-      <body className="antialiased font-clash text-[#040989] bg-[#F5F7FA] selection:bg-[#004BFA]/20 selection:text-[#004BFA] min-h-screen">
+      <body className="antialiased font-clash text-[#040989] dark:text-[#F5F7FA] bg-[#F5F7FA] dark:bg-[#02041A] selection:bg-[#004BFA]/20 selection:text-[#004BFA] min-h-screen">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

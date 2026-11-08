@@ -988,7 +988,7 @@ export default function AssetsPage() {
     };
 
     return (
-        <div className="p-3 sm:p-5 md:p-6 min-h-screen bg-[#F8FAFC] space-y-6 w-full max-w-full overflow-x-hidden">
+        <div className="p-3 sm:p-5 md:p-6 min-h-screen bg-[#F8FAFC] dark:bg-[#02041A] space-y-6 w-full max-w-full overflow-x-hidden">
             
             {/* ========================================================================= */}
             {/* 1. BÖLÜM: ÜST YARI — SEKTÖRLER YILLIK GETİRİLERİ (HEATMAP) & GÜNÜN ENLERİ */}

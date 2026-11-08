@@ -20,7 +20,7 @@ export function SamplePortfolioWidget() {
   let cumulativeOffset = 0;
 
   return (
-    <div className="bg-[linear-gradient(180deg,#ffffff_0%,#ffffff_55%,#f5f8ff_100%)] border border-blue-200/80 hover:border-blue-300 rounded-2xl min-[360px]:rounded-3xl p-3 min-[360px]:p-4 sm:p-5 shadow-xs hover:shadow-sm transition-all duration-300 min-h-[250px] h-full flex flex-col justify-between group relative overflow-hidden">
+    <div className="bg-white dark:bg-[#040989] border border-blue-200/80 dark:border-[#5B80FF]/30 hover:border-blue-300 rounded-2xl min-[360px]:rounded-3xl p-3 min-[360px]:p-4 sm:p-5 shadow-xs hover:shadow-sm transition-all duration-300 min-h-[250px] h-full flex flex-col justify-between group relative overflow-hidden">
       {/* Sağ üst hafif parıltı efekti */}
       <div className="absolute -top-12 -right-12 w-32 h-32 bg-blue-400/10 rounded-full blur-2xl pointer-events-none" />
 

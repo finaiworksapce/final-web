@@ -79,7 +79,7 @@ function SidebarMarketWidgetsComponent() {
     }, []);
 
     return (
-        <div className="mx-2 md:mx-3 p-3 rounded-2xl bg-[#F5F7FA] border border-[#D6E4FF] text-[#040989] shadow-md select-none relative overflow-hidden">
+        <div className="mx-2 md:mx-3 p-3 rounded-2xl bg-[#F5F7FA] dark:bg-[#02041A] border border-[#D6E4FF] dark:border-[#5B80FF]/30 text-[#040989] dark:text-[#F5F7FA] shadow-md select-none relative overflow-hidden">
             {/* Ambient subtle light-blue glow */}
             <div className="absolute -top-10 -right-10 w-24 h-24 bg-[#D6E4FF]/40 rounded-full blur-xl pointer-events-none" />
 

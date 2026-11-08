@@ -4,9 +4,11 @@ import { useMemo, useState } from "react";
 import { PieChart, ChevronRight, Layers } from "lucide-react";
 import { useUser } from "@/components/providers/UserProvider";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 
 // 60-30-10 Uyumlu Dağılım Paleti
-const DISTRIBUTION_COLORS = ["#040989", "#004BFA", "#5B80FF", "#02041A", "#8AA8FF"];
+const DISTRIBUTION_COLORS_LIGHT = ["#040989", "#004BFA", "#5B80FF", "#02041A", "#8AA8FF"];
+const DISTRIBUTION_COLORS_DARK = ["#5B80FF", "#004BFA", "#38BDF8", "#818CF8", "#A5B4FC"];
 
 const TYPE_NAMES: Record<string, string> = {
     STOCK: "Hisse",
@@ -27,6 +29,9 @@ const formatCurrency = (val: number) => {
 
 export function TopAssetDistributionCard() {
     const { myAssets = [], prices = {}, isDataLoaded, isAuthenticated } = useUser();
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === "dark";
+    const DISTRIBUTION_COLORS = isDark ? DISTRIBUTION_COLORS_DARK : DISTRIBUTION_COLORS_LIGHT;
     const [hoveredSymbol, setHoveredSymbol] = useState<string | null>(null);
 
     const sampleAssets = useMemo(() => [

@@ -309,37 +309,94 @@ img, svg, video, canvas, audio, iframe, embed, object {
 .dark .bg-white\/90,
 .dark .bg-white\/95,
 .dark .bg-white\/80,
-.dark .bg-white\/70 {
-  background-color: rgba(2, 4, 26, 0.92) !important;
+.dark .bg-white\/70,
+.dark .bg-white\/60 {
+  background-color: rgba(4, 9, 137, 0.92) !important;
   border-color: rgba(91, 128, 255, 0.25) !important;
 }
 
+/* Base Page Backgrounds in Dark Mode (covers all silver/slate-white pages) */
 .dark .bg-\[\#F5F7FA\] {
   background-color: #02041A !important;
   color: #F5F7FA !important;
 }
 
-.dark .bg-slate-50,
-.dark .bg-slate-100 {
-  background-color: rgba(2, 4, 26, 0.6) !important;
-  border-color: rgba(91, 128, 255, 0.2) !important;
+.dark [class*="bg-[#F8FAFC]"],
+.dark [class*="bg-[#F5F7FA]"] {
+  background-color: #02041A !important;
+  color: #F5F7FA !important;
 }
 
-/* Main text transform from Navy to Cold White */
-.dark .text-\[\#040989\] {
+/* Slate background variants including all opacity levels (/50, /60, /70, /80, /90) */
+.dark .bg-slate-50,
+.dark .bg-slate-100,
+.dark [class*="bg-slate-50"],
+.dark [class*="bg-slate-100"] {
+  background-color: rgba(4, 9, 137, 0.28) !important;
+  border-color: rgba(91, 128, 255, 0.22) !important;
+  color: #F5F7FA !important;
+}
+
+/* Hardcoded white gradient widgets transform to Dark Navy in Dark Mode */
+.dark [class*="bg-[linear-gradient(180deg,#ffffff"] {
+  background: #040989 !important;
+  border-color: rgba(91, 128, 255, 0.25) !important;
+  color: #F5F7FA !important;
+}
+
+/* Tinted Badges and Pills in Dark Mode */
+.dark [class*="bg-[#D6E4FF]"] {
+  background-color: rgba(91, 128, 255, 0.22) !important;
+  border-color: rgba(91, 128, 255, 0.35) !important;
+  color: #F5F7FA !important;
+}
+
+.dark [class*="bg-blue-50"] {
+  background-color: rgba(0, 75, 250, 0.2) !important;
+  border-color: rgba(91, 128, 255, 0.3) !important;
+  color: #D6E4FF !important;
+}
+
+.dark [class*="bg-emerald-50"] {
+  background-color: rgba(16, 185, 129, 0.2) !important;
+  border-color: rgba(16, 185, 129, 0.35) !important;
+  color: #6EE7B7 !important;
+}
+
+.dark [class*="bg-rose-50"] {
+  background-color: rgba(244, 63, 94, 0.2) !important;
+  border-color: rgba(244, 63, 94, 0.35) !important;
+  color: #FDA4AF !important;
+}
+
+.dark [class*="bg-purple-50"] {
+  background-color: rgba(168, 85, 247, 0.2) !important;
+  border-color: rgba(168, 85, 247, 0.35) !important;
+  color: #D8B4FE !important;
+}
+
+.dark [class*="bg-amber-50"] {
+  background-color: rgba(245, 158, 11, 0.2) !important;
+  border-color: rgba(245, 158, 11, 0.35) !important;
+  color: #FDE68A !important;
+}
+
+/* Main text transform from Navy & Slate to Cold White */
+.dark .text-\[\#040989\],
+.dark .text-\[\#0E1E38\],
+.dark .text-\[\#131722\],
+.dark .text-\[\#0a192f\] {
   color: #F5F7FA !important;
 }
 
 .dark .text-\[\#040989\]\/80,
 .dark .text-\[\#040989\]\/75,
 .dark .text-\[\#040989\]\/70,
-.dark .text-\[\#040989\]\/60 {
+.dark .text-\[\#040989\]\/60,
+.dark .text-\[\#0E1E38\]\/80,
+.dark .text-\[\#0E1E38\]\/70,
+.dark .text-\[\#0E1E38\]\/60 {
   color: #D6E4FF !important;
-}
-
-.dark .text-\[\#0E1E38\],
-.dark .text-\[\#0E1E38\]\/80 {
-  color: #F5F7FA !important;
 }
 
 .dark .text-slate-600,
@@ -349,15 +406,21 @@ img, svg, video, canvas, audio, iframe, embed, object {
   color: #D6E4FF !important;
 }
 
+.dark .text-slate-400,
+.dark .text-slate-500 {
+  color: #94A3B8 !important;
+}
+
 /* Borders in dark mode */
 .dark .border-\[\#D6E4FF\],
-.dark .border-\[\#D6E4FF\]\/50,
-.dark .border-\[\#D6E4FF\]\/60 {
+.dark [class*="border-[#D6E4FF]"] {
   border-color: rgba(91, 128, 255, 0.28) !important;
 }
 
 .dark .border-slate-200,
-.dark .border-slate-100 {
+.dark .border-slate-100,
+.dark [class*="border-slate-200"],
+.dark [class*="border-slate-100"] {
   border-color: rgba(91, 128, 255, 0.2) !important;
 }
 

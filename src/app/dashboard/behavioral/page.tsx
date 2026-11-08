@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 export default function BehavioralPage() {
     return (
-        <div className="p-4 md:p-8 space-y-8 bg-[#F8FAFC] min-h-screen">
+        <div className="p-4 md:p-8 space-y-8 bg-[#F8FAFC] dark:bg-[#02041A] min-h-screen">
             {/* Header Section */}
             <div className="max-w-4xl mx-auto space-y-4">
                 <div className="flex items-center gap-2 px-3 py-1 bg-[#78B8F5]/15 border border-[#78B8F5]/10 rounded-full w-fit">

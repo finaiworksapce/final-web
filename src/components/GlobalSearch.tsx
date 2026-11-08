@@ -137,7 +137,7 @@ export function GlobalSearch({
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           aria-label="Varlık ve Şirket Arama"
-          className="w-full bg-slate-50/90 border border-slate-200/80 rounded-2xl py-2 pl-10 pr-10 text-xs font-bold text-[#0E1E38] placeholder:text-[#0E1E38]/40 focus:outline-none focus:ring-2 focus:ring-[#78B8F5]/20 focus:bg-white transition-all shadow-xs"
+          className="w-full bg-slate-50/90 dark:bg-[#02041A]/70 border border-slate-200/80 dark:border-[#5B80FF]/30 rounded-2xl py-2 pl-10 pr-10 text-xs font-bold text-[#0E1E38] dark:text-[#F5F7FA] placeholder:text-[#0E1E38]/40 dark:placeholder:text-[#D6E4FF]/40 focus:outline-none focus:ring-2 focus:ring-[#78B8F5]/20 focus:bg-white dark:focus:bg-[#040989] transition-all shadow-xs"
         />
         {loading ? (
           <Loader2 className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-600 animate-spin" aria-label="Aranıyor..." />

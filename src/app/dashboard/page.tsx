@@ -70,8 +70,8 @@ export default function DashboardPage() {
     }
 
     return (
-        <div className="flex flex-col min-h-[calc(100vh-3.5rem)] bg-gradient-to-b from-[#F5F7FA] via-[#F5F7FA] to-[#D6E4FF]/25 text-[#040989] w-full mx-auto relative overflow-x-hidden font-clash">
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[#D6E4FF]/30 blur-[120px] pointer-events-none" />
+        <div className="flex flex-col min-h-[calc(100vh-3.5rem)] bg-gradient-to-b from-[#F5F7FA] via-[#F5F7FA] to-[#D6E4FF]/25 dark:from-[#02041A] dark:via-[#02041A] dark:to-[#040989]/30 text-[#040989] dark:text-[#F5F7FA] w-full mx-auto relative overflow-x-hidden font-clash">
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[#D6E4FF]/30 dark:bg-[#004BFA]/10 blur-[120px] pointer-events-none" />
 
             <div className="w-full max-w-[2500px] mx-auto px-2 min-[360px]:px-3 sm:px-6 md:px-8 xl:px-10 py-2 min-[360px]:py-3 lg:py-6 flex flex-col justify-between gap-3.5 sm:gap-5 xl:gap-6 relative z-10 flex-1 min-h-[calc(100vh-3.5rem)] pb-6 md:pb-10">
                 <AnimatePresence>
@@ -97,7 +97,7 @@ export default function DashboardPage() {
                 {/* Header Welcome Area (Zodiak Hierarchy 500/325/225 + 60-30-10) */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 relative z-10 mb-2">
                     <div>
-                        <h1 className="text-2xl sm:text-3xl lg:text-4xl clash-title font-[500] text-[#040989] flex items-center gap-2 tracking-tight">
+                        <h1 className="text-2xl sm:text-3xl lg:text-4xl clash-title font-[500] text-[#040989] dark:text-[#F5F7FA] flex items-center gap-2 tracking-tight">
                             Hoş Geldiniz, {userName || userEmail?.split('@')[0] || "Salih KAVAKCI"}
                             <motion.span animate={{ rotate: [0, 14, -8, 14, -4, 10, 0, 0] }} transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 1 }}>👋</motion.span>
                         </h1>
