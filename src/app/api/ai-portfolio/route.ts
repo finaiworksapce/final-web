@@ -13,46 +13,45 @@ export async function POST(req: Request) {
     const q6 = answers[6]?.score || 2; // Kriz Reaksiyonu (1:Kaçış, 2:Bekle, 3:Alım)
     const q7 = answers[7]?.score || 2; // Psikoloji
     const q9 = answers[9]?.score || 2; // Management Style
-    const isIslamic = answers[8]?.text?.includes("Evet") || false;
+    const isIslamic = answers[8]?.text?.includes("Faiz Hassasiyetim Var") || answers[8]?.text?.includes("Evet") || false;
     const initialCapital = Number(answers[10]?.text || 0);
 
     const totalScore = q1 + q2 + q3 + q4 + q5 + q6 + q7;
     const userSeed = totalScore + initialCapital;
 
     // Asset Pool with Historical Yearly Returns (Estimated for TRY)
-    // Bu veriler son 5-10 yıllık BIST ve TEFAS ortalamaları baz alınarak simüle edilmiştir.
+    // Fonlar kaldırıldı; Likit yerine sadece Kira Sertifikası Fonu / Katılım Fonu yer alır.
+    // Hisseler doğrudan sektörler bazında temsil edilir.
     let assets = {
-        "Para Piyasası Şemsiye Fonu": { weight: 0, color: "#94A3B8", return: 42, desc: "Sıfır riskle, anlık dalgalanmalardan tamamen uzak, stressiz nakit park alanı." },
-        "Borçlanma Araçları Şemsiye Fonu": { weight: 0, color: "#64748B", return: 45, desc: "Kısa ve orta vadede sermayeyi koruyan, risksiz sabit getiri enstrümanı." },
-        "Eurobond": { weight: 0, color: "#3B82F6", return: 52, desc: "Kur şoklarına karşı kalkan olan döviz bazlı kupon geliri." },
-        "Kıymetli Madenler Şemsiye Fonu": { weight: 0, color: "#EAB308", return: 55, desc: "Altın ve gümüş ağırlıklı, küresel krizlere karşı portföyün sigortası." },
-        "Hisse Senedi Şemsiye Fonu": { weight: 0, color: "#10B981", return: 72, desc: "Profesyonel yöneticiler tarafından seçilen en iyi hisselerden oluşan sepet." },
-        "Değişken Şemsiye Fonu": { weight: 0, color: "#F59E0B", return: 68, desc: "Piyasa koşullarına göre varlık dağılımını dinamik değiştiren esnek fonlar." },
-        "Karma Şemsiye Fonu": { weight: 0, color: "#F97316", return: 62, desc: "Hisse ve tahvil dengesini profesyonelce koruyan hibrit yatırım aracı." },
-        "Fon Sepeti Şemsiye Fonu": { weight: 0, color: "#8B5CF6", return: 65, desc: "Farklı fonları bir araya getirerek riski dağıtan otonom yönetim paketi." },
-        "Serbest Şemsiye Fonu": { weight: 0, color: "#EF4444", return: 85, desc: "Nitelikli yatırımcılar için esnek ve yüksek getiri odaklı stratejiler." },
-        "Katılım Şemsiye Fonu": { weight: 0, color: "#0F172A", return: 58, desc: "İslami finans prensiplerine tam uyumlu, faizsiz yatırım araçları." },
+        // Kira Sertifikası Fonları (Likit yerine sadece burada fon ibaresi var)
+        "Kira Sertifikası Fonu": { weight: 0, color: "#3B82F6", return: 45, desc: "Sermayeyi koruyan, risksiz kupon getirisi ve acil nakit esnekliği sağlayan fon." },
+        "Kira Sertifikası Katılım Fonu": { weight: 0, color: "#059669", return: 45, desc: "Faizsiz finans ve katılım ilkelerine tam uyumlu, sukuk ve kira getirisi sağlayan katılım fonu." },
 
-        "Bankacılık Hisseleri": { weight: 0, color: "#00008B", return: 48, desc: "Ekonominin bel kemiği, güçlü nakit akışı ve temettü potansiyeli." },
-        "Holding Hisseleri": { weight: 0, color: "#1D4ED8", return: 52, desc: "Tek hisseyle onlarca sektöre yayılan doğal çeşitlendirme." },
-        "Bilişim ve Yazılım Hisseleri": { weight: 0, color: "#8B5CF6", return: 88, desc: "Dijital devrimin merkezindeki, kâr marjı çok yüksek şirketler." },
-        "Enerji Teknolojileri ve Üretim": { weight: 0, color: "#10B981", return: 75, desc: "Geleceğin yenilenebilir gücünü üreten stratejik motorlar." },
-        "Savunma Hisseleri": { weight: 0, color: "#EF4444", return: 82, desc: "Devlet garantili ve inovatif yüksek teknoloji savunma sanayi." },
-        "Otomotiv ve Yan Sanayi": { weight: 0, color: "#F59E0B", return: 65, desc: "İhracat rekorları kıran, döviz gelirli köklü sanayi çarkları." },
-        "Ana Metal ve İmalat Hisseleri": { weight: 0, color: "#6B7280", return: 58, desc: "Ekonomik toparlanmalara en agresif tepkiyi veren hammadde devleri." },
-        "Gıda ve İçecek / Perakende": { weight: 0, color: "#059669", return: 54, desc: "Kriz dinlemeyen, enflasyonu anında fiyatlara yansıtan defansif güç." },
-        "İlaç ve Sağlık": { weight: 0, color: "#14B8A6", return: 50, desc: "Talebi hiçbir ekonomik dalgalanmada düşmeyen kalıcı değer." },
-        "Gayrimenkul Yatırım Ortaklıkları": { weight: 0, color: "#8B5CF6", return: 45, desc: "Fiziki gayrimenkul projelerine ortaklık ve güçlü kira verimi." },
-        "Taş, Toprak, Çimento Hisseleri": { weight: 0, color: "#9CA3AF", return: 55, desc: "Büyük altyapı projelerinden beslenen temel yapı blokları." },
-        "Ulaştırma Hisseleri": { weight: 0, color: "#0EA5E9", return: 68, desc: "Küresel ticareti ve turizmi birbirine bağlayan devasa havacılık ağı." },
-        "Girişim Sermayesi Yat. Ort.": { weight: 0, color: "#C084FC", return: 95, desc: "Startuplara melek yatırımcı olarak girip x10 potansiyel arama." },
+        // Kıymetli Madenler
+        "Kıymetli Madenler (Altın/Gümüş)": { weight: 0, color: "#EAB308", return: 55, desc: "Altın ve gümüş ağırlıklı, küresel krizlere ve kur şoklarına karşı portföyün sigortası." },
+        "Kıymetli Madenler (Altın Sertifikası)": { weight: 0, color: "#EAB308", return: 55, desc: "Darphane fiziki altın sertifikası ile faizsiz finans uyumlu değer koruma." },
 
-        "Katılım Bankacılığı Hisseleri": { weight: 0, color: "#00008B", return: 48, desc: "Faizsiz prensiplerle büyüyen güçlü katılım bankaları." },
-        "Faizsiz Bilişim ve Yazılım Hisseleri": { weight: 0, color: "#8B5CF6", return: 85, desc: "İslami hassasiyetlere tam uyumlu teknoloji yatırımları." },
-        "Faizsiz Enerji ve Sanayi": { weight: 0, color: "#10B981", return: 72, desc: "Katılım şartlarını sağlayan büyük fabrikalar ve enerji tesisleri." },
-        "Faizsiz Gıda ve Perakende": { weight: 0, color: "#059669", return: 54, desc: "Kriz dinlemeyen helal üretim ve perakende zincirleri." },
-        "Katılım Gayrimenkul Fonları": { weight: 0, color: "#8B5CF6", return: 45, desc: "Tamamen kira ve proje gelirine dayalı fiziki varlık ortaklığı." },
-        "Faizsiz Girişim Sermayesi": { weight: 0, color: "#C084FC", return: 90, desc: "Startuplara İslami melek yatırımcı kurallarıyla destek olan fonlar." }
+        // Sektör Hisseleri (Genel / Konvansiyonel)
+        "Bilişim ve Yazılım Hisseleri": { weight: 0, color: "#8B5CF6", return: 88, desc: "Dijital devrimin merkezindeki, yüksek marjlı ve ölçeklenebilir teknoloji şirketleri." },
+        "Enerji ve Altyapı Hisseleri": { weight: 0, color: "#10B981", return: 75, desc: "Yenilenebilir enerji, şebeke ve enerji depolama alanında stratejik üreticiler." },
+        "Savunma ve İleri Teknoloji Hisseleri": { weight: 0, color: "#EF4444", return: 82, desc: "Devlet garantili, döviz getirili ve inovatif yüksek teknoloji savunma sanayii." },
+        "Sanayi ve İmalat Hisseleri": { weight: 0, color: "#2563EB", return: 62, desc: "Güçlü fabrika altyapısı ve küresel ihracat yapan köklü sanayi çarkları." },
+        "Otomotiv ve Yan Sanayi Hisseleri": { weight: 0, color: "#F59E0B", return: 65, desc: "İhracat rekorları kıran, döviz bazlı nakit akışına sahip otomotiv devleri." },
+        "Gıda ve Perakende Hisseleri": { weight: 0, color: "#059669", return: 54, desc: "Kriz dinlemeyen, enflasyonu anında fiyatlara yansıtan defansif güçlü nakit akışı." },
+        "Holding ve İştirak Hisseleri": { weight: 0, color: "#1D4ED8", return: 52, desc: "Tek şirketle onlarca farklı sektöre yayılan doğal risk dağılımı." },
+        "Ulaştırma ve Havacılık Hisseleri": { weight: 0, color: "#0EA5E9", return: 68, desc: "Küresel ticareti ve turizmi birbirine bağlayan devasa yolcu ve kargo ağı." },
+        "İlaç ve Sağlık Hisseleri": { weight: 0, color: "#14B8A6", return: 50, desc: "Talebi hiçbir ekonomik dalgalanmada düşmeyen kalıcı ve defansif değer." },
+        "Bankacılık ve Finans Hisseleri": { weight: 0, color: "#00008B", return: 48, desc: "Ekonominin bel kemiği, güçlü likidite ve temettü potansiyeli." },
+
+        // Sektör Hisseleri (Katılım / Faiz Hassasiyeti Olanlar)
+        "Katılım Bilişim ve Yazılım Hisseleri": { weight: 0, color: "#8B5CF6", return: 85, desc: "BIST Katılım kriterlerine tam uyumlu, helal teknoloji ve yazılım yatırımları." },
+        "Katılım Enerji ve Üretim Hisseleri": { weight: 0, color: "#10B981", return: 72, desc: "Faizsiz finans prensiplerini sağlayan büyük yenilenebilir enerji tesisleri." },
+        "Katılım Savunma ve İleri Sanayi": { weight: 0, color: "#EF4444", return: 82, desc: "Katılım endeksine dahil yüksek katma değerli savunma ve teknoloji devleri." },
+        "Katılım Sanayi ve İmalat Hisseleri": { weight: 0, color: "#2563EB", return: 60, desc: "Helal üretim yapan, faizsiz kurallara uygun büyük ihracat fabrikaları." },
+        "Katılım Gıda ve Perakende Hisseleri": { weight: 0, color: "#059669", return: 54, desc: "Kriz dinlemeyen, helal sertifikalı gıda ve perakende zincirleri." },
+        "Katılım Otomotiv ve Yan Sanayi": { weight: 0, color: "#F59E0B", return: 65, desc: "Katılım şartlarına uygun döviz gelirli sanayi ve otomotiv üreticileri." },
+        "Katılım Ulaştırma ve Lojistik Hisseleri": { weight: 0, color: "#0EA5E9", return: 68, desc: "Katılım endeksinde yer alan küresel havacılık ve lojistik şirketleri." },
+        "Katılım Bankacılığı Hisseleri": { weight: 0, color: "#00008B", return: 48, desc: "Kâr-zarar ortaklığı prensipleriyle çalışan güçlü katılım finans kurumları." }
     };
 
     const addW = (asset: string, w: number) => {
@@ -61,59 +60,148 @@ export async function POST(req: Request) {
 
     // --- WEIGHTING LOGIC ---
     if (q1 === 1) { // Kısa Vade
-        if (!isIslamic) { addW("Para Piyasası Şemsiye Fonu", 50); addW("Borçlanma Araçları Şemsiye Fonu", 40); }
-        else { addW("Katılım Şemsiye Fonu", 70); addW("Kıymetli Madenler Şemsiye Fonu", 30); }
+        if (!isIslamic) {
+            addW("Kira Sertifikası Fonu", 50);
+            addW("Kıymetli Madenler (Altın/Gümüş)", 30);
+            addW("Gıda ve Perakende Hisseleri", 20);
+        } else {
+            addW("Kira Sertifikası Katılım Fonu", 55);
+            addW("Kıymetli Madenler (Altın Sertifikası)", 30);
+            addW("Katılım Gıda ve Perakende Hisseleri", 15);
+        }
     } else if (q1 === 2) { // Orta Vade
-        if (!isIslamic) { addW("Borçlanma Araçları Şemsiye Fonu", 20); addW("Eurobond", 20); addW("Holding Hisseleri", 15); addW("Otomotiv ve Yan Sanayi", 15); }
-        else { addW("Katılım Şemsiye Fonu", 30); addW("Katılım Bankacılığı Hisseleri", 15); addW("Faizsiz Enerji ve Sanayi", 15); }
+        if (!isIslamic) {
+            addW("Sanayi ve İmalat Hisseleri", 25);
+            addW("Holding ve İştirak Hisseleri", 20);
+            addW("Kira Sertifikası Fonu", 20);
+            addW("Kıymetli Madenler (Altın/Gümüş)", 20);
+            addW("Otomotiv ve Yan Sanayi Hisseleri", 15);
+        } else {
+            addW("Katılım Sanayi ve İmalat Hisseleri", 25);
+            addW("Kira Sertifikası Katılım Fonu", 25);
+            addW("Kıymetli Madenler (Altın Sertifikası)", 20);
+            addW("Katılım Bankacılığı Hisseleri", 15);
+            addW("Katılım Enerji ve Üretim Hisseleri", 15);
+        }
     } else { // Uzun Vade
-        if (!isIslamic) { addW("Hisse Senedi Şemsiye Fonu", 30); addW("Bilişim ve Yazılım Hisseleri", 20); addW("Savunma Hisseleri", 20); }
-        else { addW("Katılım Şemsiye Fonu", 30); addW("Faizsiz Bilişim ve Yazılım Hisseleri", 30); addW("Faizsiz Enerji ve Sanayi", 20); }
+        if (!isIslamic) {
+            addW("Bilişim ve Yazılım Hisseleri", 30);
+            addW("Savunma ve İleri Teknoloji Hisseleri", 25);
+            addW("Enerji ve Altyapı Hisseleri", 25);
+            addW("Sanayi ve İmalat Hisseleri", 20);
+        } else {
+            addW("Katılım Bilişim ve Yazılım Hisseleri", 35);
+            addW("Katılım Savunma ve İleri Sanayi", 25);
+            addW("Katılım Enerji ve Üretim Hisseleri", 25);
+            addW("Katılım Sanayi ve İmalat Hisseleri", 15);
+        }
     }
 
-    if (q2 === 1) { // Max %5
-        if (!isIslamic) { addW("Para Piyasası Şemsiye Fonu", 40); addW("Kıymetli Madenler Şemsiye Fonu", 30); }
-        else { addW("Katılım Şemsiye Fonu", 50); }
-    } else if (q2 === 3) { // Yüksek Tolerans
-        if (!isIslamic) { addW("Serbest Şemsiye Fonu", 30); addW("Bilişim ve Yazılım Hisseleri", 25); }
-        else { addW("Faizsiz Bilişim ve Yazılım Hisseleri", 30); addW("Faizsiz Girişim Sermayesi", 20); }
+    if (q2 === 1) { // Max %5 - %10 Risk Toleransı
+        if (!isIslamic) {
+            addW("Kira Sertifikası Fonu", 40);
+            addW("Kıymetli Madenler (Altın/Gümüş)", 30);
+            addW("Gıda ve Perakende Hisseleri", 20);
+        } else {
+            addW("Kira Sertifikası Katılım Fonu", 45);
+            addW("Kıymetli Madenler (Altın Sertifikası)", 35);
+            addW("Katılım Gıda ve Perakende Hisseleri", 20);
+        }
+    } else if (q2 === 3) { // Yüksek Risk Toleransı
+        if (!isIslamic) {
+            addW("Bilişim ve Yazılım Hisseleri", 35);
+            addW("Enerji ve Altyapı Hisseleri", 25);
+            addW("Savunma ve İleri Teknoloji Hisseleri", 25);
+        } else {
+            addW("Katılım Bilişim ve Yazılım Hisseleri", 35);
+            addW("Katılım Enerji ve Üretim Hisseleri", 25);
+            addW("Katılım Savunma ve İleri Sanayi", 25);
+        }
     }
 
-    if (q3 === 1) { // Temettü
-        if (!isIslamic) { addW("Bankacılık Hisseleri", 30); addW("Gayrimenkul Yatırım Ortaklıkları", 20); }
-        else { addW("Katılım Gayrimenkul Fonları", 30); addW("Katılım Bankacılığı Hisseleri", 20); }
+    if (q3 === 1) { // Temettü / Düzenli Gelir
+        if (!isIslamic) {
+            addW("Bankacılık ve Finans Hisseleri", 30);
+            addW("Sanayi ve İmalat Hisseleri", 25);
+            addW("Holding ve İştirak Hisseleri", 20);
+        } else {
+            addW("Katılım Bankacılığı Hisseleri", 30);
+            addW("Katılım Sanayi ve İmalat Hisseleri", 25);
+            addW("Katılım Gıda ve Perakende Hisseleri", 20);
+        }
     }
 
     if (q4 === 1) { // Defansif
-        if (!isIslamic) { addW("Gıda ve İçecek / Perakende", 40); addW("İlaç ve Sağlık", 30); }
-        else { addW("Faizsiz Gıda ve Perakende", 60); }
+        if (!isIslamic) {
+            addW("Gıda ve Perakende Hisseleri", 40);
+            addW("İlaç ve Sağlık Hisseleri", 30);
+        } else {
+            addW("Katılım Gıda ve Perakende Hisseleri", 60);
+        }
     } else if (q4 === 2) { // İhracat
-        if (!isIslamic) { addW("Otomotiv ve Yan Sanayi", 40); addW("Ulaştırma Hisseleri", 30); }
-        else { addW("Faizsiz Enerji ve Sanayi", 50); }
-    } else if (q4 === 3) { // Tekel
-        if (!isIslamic) { addW("Savunma Hisseleri", 40); addW("Enerji Teknolojileri ve Üretim", 30); }
-        else { addW("Faizsiz Enerji ve Sanayi", 50); }
+        if (!isIslamic) {
+            addW("Otomotiv ve Yan Sanayi Hisseleri", 40);
+            addW("Ulaştırma ve Havacılık Hisseleri", 30);
+        } else {
+            addW("Katılım Otomotiv ve Yan Sanayi", 40);
+            addW("Katılım Ulaştırma ve Lojistik Hisseleri", 30);
+        }
+    } else if (q4 === 3) { // Tekel / Stratejik
+        if (!isIslamic) {
+            addW("Savunma ve İleri Teknoloji Hisseleri", 40);
+            addW("Enerji ve Altyapı Hisseleri", 30);
+        } else {
+            addW("Katılım Savunma ve İleri Sanayi", 40);
+            addW("Katılım Enerji ve Üretim Hisseleri", 30);
+        }
     }
 
-    if (q5 === 1) { // Value
-        if (!isIslamic) { addW("Bankacılık Hisseleri", 40); addW("Holding Hisseleri", 30); }
-        else { addW("Katılım Bankacılığı Hisseleri", 50); }
+    if (q5 === 1) { // Value / İskontolu
+        if (!isIslamic) {
+            addW("Holding ve İştirak Hisseleri", 40);
+            addW("Bankacılık ve Finans Hisseleri", 30);
+        } else {
+            addW("Katılım Bankacılığı Hisseleri", 40);
+            addW("Katılım Sanayi ve İmalat Hisseleri", 30);
+        }
     } else if (q5 === 2) { // Reel Varlık
-        if (!isIslamic) { addW("Gayrimenkul Yatırım Ortaklıkları", 30); addW("Taş, Toprak, Çimento Hisseleri", 20); }
-        else { addW("Katılım Gayrimenkul Fonları", 50); }
-    } else if (q5 === 3) { // Growth
-        if (!isIslamic) { addW("Bilişim ve Yazılım Hisseleri", 40); addW("Girişim Sermayesi Yat. Ort.", 30); }
-        else { addW("Faizsiz Bilişim ve Yazılım Hisseleri", 50); }
+        if (!isIslamic) {
+            addW("Sanayi ve İmalat Hisseleri", 40);
+            addW("Enerji ve Altyapı Hisseleri", 30);
+        } else {
+            addW("Katılım Sanayi ve İmalat Hisseleri", 40);
+            addW("Katılım Enerji ve Üretim Hisseleri", 30);
+        }
+    } else if (q5 === 3) { // Growth / Büyüme
+        if (!isIslamic) {
+            addW("Bilişim ve Yazılım Hisseleri", 45);
+            addW("Enerji ve Altyapı Hisseleri", 30);
+        } else {
+            addW("Katılım Bilişim ve Yazılım Hisseleri", 45);
+            addW("Katılım Enerji ve Üretim Hisseleri", 30);
+        }
     }
 
     if (q6 === 3) { // Buy dip
-        if (!isIslamic) { addW("Bilişim ve Yazılım Hisseleri", 20); addW("Ulaştırma Hisseleri", 20); }
-        else { addW("Faizsiz Bilişim ve Yazılım Hisseleri", 30); }
+        if (!isIslamic) {
+            addW("Bilişim ve Yazılım Hisseleri", 25);
+            addW("Ulaştırma ve Havacılık Hisseleri", 20);
+        } else {
+            addW("Katılım Bilişim ve Yazılım Hisseleri", 25);
+            addW("Katılım Ulaştırma ve Lojistik Hisseleri", 20);
+        }
     }
 
     if (q9 === 1) { // Otonom
-        if (!isIslamic) { addW("Değişken Şemsiye Fonu", 50); addW("Fon Sepeti Şemsiye Fonu", 40); addW("Karma Şemsiye Fonu", 30); }
-        else { addW("Katılım Şemsiye Fonu", 80); }
+        if (!isIslamic) {
+            addW("Holding ve İştirak Hisseleri", 35);
+            addW("Sanayi ve İmalat Hisseleri", 35);
+            addW("Kira Sertifikası Fonu", 30);
+        } else {
+            addW("Katılım Sanayi ve İmalat Hisseleri", 35);
+            addW("Katılım Enerji ve Üretim Hisseleri", 35);
+            addW("Kira Sertifikası Katılım Fonu", 30);
+        }
     }
 
     // 3. Normalization

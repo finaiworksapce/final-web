@@ -3,22 +3,42 @@
 // Dashboard v1.3.1 - Refined Top Section Faithful to Design Reference
 import { AuthComponent } from "@/components/ui/sign-up";
 import { TrendingUp, Activity, Newspaper, Loader2, ArrowRight } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUser } from "@/components/providers/UserProvider";
 
 import { DashboardSummaryCards } from "@/components/DashboardSummaryCards";
 import { DynamicAssetAllocationContainer } from "@/components/dashboard/DynamicAssetAllocationContainer";
 import { FinAiYesterdayReportWidget } from "@/components/FinAiYesterdayReportWidget";
+import { SamplePortfolioWidget } from "@/components/dashboard/SamplePortfolioWidget";
+import { FinAiAkademiWidget } from "@/components/dashboard/FinAiAkademiWidget";
 import { MarketOverviewWidget } from "@/components/dashboard/MarketOverviewWidget";
 import { DailyAgendaWidget } from "@/components/dashboard/DailyAgendaWidget";
 import { LatestNewsWidget } from "@/components/dashboard/LatestNewsWidget";
 import { FinancialTicker } from "@/components/FinancialTicker";
 import Link from "next/link";
+
 export default function DashboardPage() {
     const isDev = process.env.NODE_ENV === 'development';
-    const { user, email: userEmail, userName, isAuthenticated, authState, isDataLoaded, globalNews } = useUser();
+    const { user, email: userEmail, userName, isAuthenticated, authState, isDataLoaded, globalNews, myAssets = [], prices = {} } = useUser();
     const [news, setNews] = useState<any[]>([]);
+
+    // Kullanıcının hiç aktif varlığı yok ise sadece Örnek Portföy ve FinAi Akademi widgetları gösterilir
+    const hasActiveAssets = useMemo(() => {
+        if (!myAssets || myAssets.length === 0) return false;
+
+        return myAssets.some((asset: any) => {
+            const qty = Number(asset.quantity) || 0;
+            if (qty <= 0) return false;
+            const rawSymbol = asset.symbol ? asset.symbol.toUpperCase().trim() : "";
+            const cleanSymbol = rawSymbol.replace(/\.IS$/, "");
+            const isCash = asset.type === "CASH" || cleanSymbol === "NAKİT" || cleanSymbol === "TRY_CASH";
+            const currentPrice = isCash
+                ? asset.avgCost || 1
+                : prices[rawSymbol] ?? prices[cleanSymbol] ?? prices[`${cleanSymbol}.IS`] ?? asset.avgCost ?? 0;
+            return currentPrice * qty > 0;
+        });
+    }, [myAssets, prices]);
 
     useEffect(() => {
         if (globalNews && globalNews.length > 0 && news.length === 0) {
@@ -116,18 +136,29 @@ export default function DashboardPage() {
 
                 {/* UNIFIED RESPONSIVE LAYOUT (250px to 2500px) */}
                 <div className="flex flex-col gap-3.5 sm:gap-5 xl:gap-6 w-full relative z-10">
-                    {/* 1. ÜST BÖLÜM: TOPLAM VARLIK (%42), VARLIK DAĞILIMI (%25), FİNANSAL RAPOR (%33) */}
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4 xl:gap-5 items-stretch w-full">
-                        <div className="flex flex-col min-w-0 lg:col-span-12 xl:col-span-5 2xl:col-span-5">
-                            <DashboardSummaryCards />
+                    {/* 1. ÜST BÖLÜM: KULLANICININ HİÇBİR VARLIĞI YOKSA SADECE ÖRNEK PORTFÖY VE FİNAİ AKADEMİ */}
+                    {!hasActiveAssets ? (
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5 sm:gap-4 xl:gap-5 items-stretch w-full">
+                            <div className="flex flex-col min-w-0">
+                                <SamplePortfolioWidget />
+                            </div>
+                            <div className="flex flex-col min-w-0">
+                                <FinAiAkademiWidget />
+                            </div>
                         </div>
-                        <div className="flex flex-col min-w-0 lg:col-span-6 xl:col-span-3 2xl:col-span-3">
-                            <DynamicAssetAllocationContainer />
+                    ) : (
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4 xl:gap-5 items-stretch w-full">
+                            <div className="flex flex-col min-w-0 lg:col-span-12 xl:col-span-5 2xl:col-span-5">
+                                <DashboardSummaryCards />
+                            </div>
+                            <div className="flex flex-col min-w-0 lg:col-span-6 xl:col-span-3 2xl:col-span-3">
+                                <DynamicAssetAllocationContainer />
+                            </div>
+                            <div className="flex flex-col min-w-0 lg:col-span-6 xl:col-span-4 2xl:col-span-4">
+                                <FinAiYesterdayReportWidget />
+                            </div>
                         </div>
-                        <div className="flex flex-col min-w-0 lg:col-span-6 xl:col-span-4 2xl:col-span-4">
-                            <FinAiYesterdayReportWidget />
-                        </div>
-                    </div>
+                    )}
 
                     {/* 2. İKİNCİ BÖLÜM: PİYASA GENEL GÖRÜNÜMÜ (%50) & GÜNLÜK AJANDA (%50) */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5 sm:gap-4 xl:gap-5 items-stretch w-full">

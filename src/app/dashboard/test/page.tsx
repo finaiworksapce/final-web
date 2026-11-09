@@ -89,12 +89,12 @@ const QUESTIONS = [
   },
   {
     id: 8,
-    category: "Etik ve Katılım Finans Prensipleri",
-    question: "Yatırım kararlarınızda İslami finans kurallarına (faizsiz enstrümanlar) uyum hassasiyetiniz var mı?",
+    category: "Faiz & Katılım Hassasiyeti",
+    question: "Yatırımlarınızda faiz hassasiyetiniz (katılım finans ilkeleri) bulunuyor mu?",
     type: "choice",
     options: [
-      { text: "Evet, Kesinlikle. Sadece faizsiz ve katılım esaslarına (Kira sertifikası, Katılım hisseleri) %100 uyumlu portföy oluşturulmalı.", score: 1 },
-      { text: "Hayır, böyle bir kısıtlamam yok. Portföyümü maksimize edecek tüm küresel ve yerel finansal araçlar değerlendirilebilir.", score: 2 }
+      { text: "Faiz Hassasiyetim Var (Katılım Esaslı) - Sadece faizsiz ve katılım esaslarına (Kira sertifikası katılım fonu, Katılım hisseleri) %100 uyumlu portföy oluşturulsun.", score: 1 },
+      { text: "Faiz Hassasiyetim Yok (Genel Piyasa) - BIST genel hisseleri ve tüm finansal araçlar portföyümde değerlendirilebilir.", score: 2 }
     ]
   },
   {
@@ -196,7 +196,7 @@ export default function RiskTestPage() {
                     riskProfile: profile.title,
                     riskScore: totalScore,
                     investmentAmount: answers[10]?.text || "Belirtilmedi",
-                    isIslamicFinance: answers[8]?.text?.includes("Evet") || false,
+                    isIslamicFinance: answers[8]?.text?.includes("Faiz Hassasiyetim Var") || answers[8]?.text?.includes("Evet") || false,
                     aiPortfolio: aiData,
                     hasCompletedTest: true
                 }

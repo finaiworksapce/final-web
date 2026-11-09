@@ -20,7 +20,9 @@ import {
     X,
     History,
     Globe,
-    Building2
+    Building2,
+    Sparkles,
+    GraduationCap
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FinancialTicker } from "@/components/FinancialTicker";
@@ -198,6 +200,24 @@ function DashboardShell({
             label: "Ana Sayfa", 
             href: "/dashboard",
             isActive: pathname === "/dashboard"
+        },
+        { 
+            icon: Sparkles, 
+            label: "Örnek Portföy", 
+            href: "/dashboard/sample-portfolio",
+            isActive: pathname.startsWith("/dashboard/sample-portfolio") || pathname.startsWith("/dashboard/ornek-portfoy")
+        },
+        { 
+            icon: GraduationCap, 
+            label: "FinAi Akademi", 
+            href: "/dashboard/akademi",
+            isActive: pathname.startsWith("/dashboard/akademi") || pathname.startsWith("/dashboard/academy")
+        },
+        { 
+            icon: FileText, 
+            label: "FinAi Raporu", 
+            href: "/dashboard/report",
+            isActive: pathname.startsWith("/dashboard/report")
         },
         { 
             icon: PieChart, 

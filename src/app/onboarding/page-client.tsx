@@ -27,7 +27,8 @@ export default function OnboardingPageClient() {
     literacy_level: "intermediate",
     investment_horizon: "medium",
     volatility_reaction: "balanced",
-    strategic_goal: "dividend_yield"
+    strategic_goal: "dividend_yield",
+    interest_sensitivity: "conventional"
   });
 
   // Ekran Durumları

@@ -23,15 +23,15 @@ const FEATURES: FeatureItem[] = [
   {
     id: "workspace",
     step: "01",
-    category: "PORTFÖY & KONSOL",
-    title: "Bütünleşik Portföy & Canlı Konsol",
-    subtitle: "Borsa İstanbul'daki tüm hisseleriniz ve maliyetleriniz tek dinamik ekranda.",
+    category: "PORTFÖYÜM",
+    title: "Şirketlerinizi Kolayca Takip Edin",
+    subtitle: "Hiçbir finans terimi bilmeden hisselerinizi ve kârınızı görün.",
     description:
-      "Borsa İstanbul'daki pay senetlerinizi tek bir akıllı ekranda birleştirin. Toplam portföy değerinizi, hisse bazlı maliyetlerinizi, anlık kâr/zarar dengenizi ve sektörel ağırlıklarınızı canlı olarak takip edin.",
+      "Hisselerinizi ekleyin; maliyetinizi, kârınızı ve şirketlerinizin durumunu sokaktaki bir ortak gibi sade bir dille izleyin.",
     highlights: [
-      "Canlı BIST seans fiyatları ve anlık portföy değerlemesi",
-      "Hisse bazında maliyet, kâr/zarar ve sektörel ağırlık dağılımı",
-      "Günlük şirket ajandası, yaklaşan bilançolar ve TradingView grafikleri"
+      "Canlı BIST seans fiyatları ve anlık kâr/zarar",
+      "Hangi sektörde ne kadar ortaklığınız olduğunu gösteren sade grafik",
+      "Şirketlerinizi tek bakışta anlayacağınız temiz özet"
     ],
     image: "/images/landing/dashboard_workspace.jpg",
     url: "/dashboard/portfolio",
@@ -40,15 +40,15 @@ const FEATURES: FeatureItem[] = [
   {
     id: "sectors",
     step: "02",
-    category: "PİYASA & SEKTÖRLER",
-    title: "Sektörel Getiriler & Detaylı Piyasa Tablosu",
-    subtitle: "Borsa İstanbul sektörlerinin performansını ve hisse çarpanlarını inceleyin.",
+    category: "PİYASA & ŞİRKETLER",
+    title: "Sektörleri ve Şirketleri Keşfedin",
+    subtitle: "Teknoloji, enerji, sanayi: Kim ne kadar büyüyor?",
     description:
-      "Teknoloji, savunma, enerji ve sanayi gibi sektörlerin yıllık getirilerini karşılaştırın. Günün en çok kazandıran, kaybeden ve hacim lideri hisselerini derinlemesine filtreleyin.",
+      "Borsadaki yüzlerce şirketi karmaşık tablolar olmadan inceleyin; en çok kazandıranları ve hacim liderlerini kolayca karşılaştırın.",
     highlights: [
-      "Sektör bazlı yıllık getiri oranları ve sektörel ağırlıklar",
-      "Günün Enleri: Kazandıranlar, kaybedenler ve hacim liderleri",
-      "F/K, piyasa değeri, teknik dereceler ve hacimlerle zengin hisse tablosu"
+      "Sektörlerin yıllık performansı ve lider hisseler",
+      "Günün en hareketli şirketleri ve yükselenler",
+      "Şirket büyüklükleri ve değerlemeleri"
     ],
     image: "/images/landing/market_sectors.jpg",
     url: "/dashboard/data",
@@ -57,15 +57,15 @@ const FEATURES: FeatureItem[] = [
   {
     id: "economic",
     step: "03",
-    category: "MAKRO ANALİZ",
-    title: "Ekonomik Takvim & Makro Etki Zinciri",
-    subtitle: "Enflasyon, faiz ve büyüme verilerinin piyasaya yansımasını adım adım izleyin.",
+    category: "GÜNLÜK HAYAT & EKONOMİ",
+    title: "Ekonomi Haberlerini Kolayca Anlayın",
+    subtitle: "Enflasyon ve faiz cebinizi ve hissenizi nasıl etkiliyor?",
     description:
-      "TÜFE, ÜFE ve politika faizi kararlarını geçmiş veri grafikleriyle inceleyin. FinAi Intelligence motoru, açıklanan verinin hanehalkından borsaya kadar uzanan zincirleme etkisini anlaşılır bir Türkçe ile açıklar.",
+      "TÜFE ve Merkez Bankası kararlarını market alışverişi basitliğinde anlatıyoruz. Açıklanan verilerin bütçenize ve hisselere etkisini adım adım görün.",
     highlights: [
-      "Aylık TÜFE, faiz ve makro göstergelerin geçmiş dönem grafikleri",
-      "FinAi Intelligence: Verinin vatandaş ve piyasa için sade anlatımı",
-      "Neden-Sonuç Etki Zinciri: Alım gücünden hisse senetlerine doğrudan etki"
+      "Enflasyon ve faizin anlaşılır, günlük hayat hikâyesi",
+      "Cebinizden şirket kârlarına uzanan sade etki zinciri",
+      "Geçmiş dönem grafikleriyle kolay karşılaştırma"
     ],
     image: "/images/landing/economic_tufe.jpg",
     url: "/dashboard/calendar",
@@ -74,15 +74,15 @@ const FEATURES: FeatureItem[] = [
   {
     id: "news",
     step: "04",
-    category: "YAPAY ZEKÂ İSTİHBARAT",
-    title: "Yapay Zekâ Destekli Haber & KAP Analizi",
-    subtitle: "Gürültüden arındırılmış, hap özetler ve rasyonel piyasa içgörüleri.",
+    category: "KAP & HABERLER",
+    title: "KAP Bildirimleri Artık Sıkıcı Değil",
+    subtitle: "Yüzlerce sayfa yerine 10 saniyelik hap özetler.",
     description:
-      "Piyasa bültenlerini ve şirket açıklamalarını binlerce sayfa okumak yerine yapay zekâ süzgecinden geçmiş hap özetlerle yakalayın. 'Kısa Özet', 'Neden Önemli?' ve 'Neleri Etkileyebilir?' başlıklarıyla kararlarınızı hızlandırın.",
+      "Şirketlerin resmi duyurularını FinAi yapay zekâsı anlaşılır Türkçeye çevirir: 'Bu haber neden önemli?' ve 'Hisseye ne yapar?' sorularına anında yanıt verir.",
     highlights: [
-      "KAP ve piyasa haberlerinin 10 saniyelik odaklanmış hap özetleri",
-      "'Neden Önemli?' ve 'Neleri Etkileyebilir?' etki dökümleri",
-      "İlgili şirketler, varlıklar ve sektörlerle anlık ilişkilendirme"
+      "Resmi KAP bildirimlerinin 3 maddelik hap özeti",
+      "Gürültüden uzak, doğrudan sonuca odaklı analiz",
+      "Haberin şirkete ve hisseye olası etkisi"
     ],
     image: "/images/landing/news_detail.jpg",
     url: "/dashboard/news",
@@ -102,16 +102,16 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
         {/* =========================================================================
             BÖLÜM 1: TAM GENİŞLİK BAŞLIK VE EDİTORYAL GİRİŞ
             ========================================================================= */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-end pb-10 sm:pb-14 border-b border-slate-200/80 mb-10 sm:mb-12">
-          <div className="lg:col-span-8 space-y-3">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-end pb-8 sm:pb-10 border-b border-slate-200/80 mb-8 sm:mb-10">
+          <div className="lg:col-span-8 space-y-2">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-[#0E1E38] tracking-tight leading-[1.15] clash-title">
-              Borsa İstanbul'da bilinçli kararlar almanızı sağlayan analitik araçlar.
+              Şirketleri ve piyasayı öğrenmek hiç bu kadar kolay olmamıştı.
             </h2>
           </div>
 
           <div className="lg:col-span-4">
             <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed">
-              Piyasa takibini dağınık aracı kurum ekranlarından ve spekülatif gruplardan kurtarıp, hisselerinize ve şirket bilançolarına odaklanan modern bir karar destek ekosistemi kurduk.
+              Korkutucu finans tabloları yerine, her seviyeden yatırımcının anlayabileceği günlük hayat örnekleriyle hazırlanmış 4 temel güç.
             </p>
           </div>
         </div>
@@ -264,28 +264,28 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
         {/* =========================================================================
             BÖLÜM 4: 4'LÜ EDİTORYAL METRİK MATRİSİ (HAKKIMIZDA STANDARTI)
             ========================================================================= */}
-        <div className="mt-16 pt-12 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        <div className="mt-14 pt-10 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           <div className="space-y-1">
             <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
               %100
             </span>
             <span className="text-xs sm:text-sm text-slate-500 font-medium block">
-              Doğrulanmış Borsa Verisi
+              Günlük Hayat Dili
             </span>
             <p className="text-xs text-slate-400 leading-relaxed pt-0.5">
-              Borsa İstanbul seans verileri ve resmî KAP bildirimleriyle doğrulanmış piyasa matematiği.
+              Hiçbir terim bilmeden şirket bilançolarını kolayca kavrayın.
             </p>
           </div>
 
           <div className="space-y-1">
             <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
-              Tek
+              0 Jargon
             </span>
             <span className="text-xs sm:text-sm text-slate-500 font-medium block">
-              Konsolide Konsol
+              Sade & Eğlenceli
             </span>
             <p className="text-xs text-slate-400 leading-relaxed pt-0.5">
-              Hisseleriniz, maliyetleriniz, makro takvim ve KAP analizleri tek bir akıllı ekranda.
+              Korkutucu formüller yok; sokaktaki dükkan basitliğinde örnekler var.
             </p>
           </div>
 
@@ -294,22 +294,22 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
               10 Sn
             </span>
             <span className="text-xs sm:text-sm text-slate-500 font-medium block">
-              Hap Özetleme Hızı
+              Hızlı KAP Özeti
             </span>
             <p className="text-xs text-slate-400 leading-relaxed pt-0.5">
-              Sayfalarca KAP bildirimini ve bilançoyu saniyeler içinde anlaşılır kılan yapay zekâ.
+              Yüzlerce sayfalık resmi duyuruları saniyeler içinde anlaşılır kılan yapay zekâ.
             </p>
           </div>
 
           <div className="space-y-1">
             <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
-              24/7
+              Canlı
             </span>
             <span className="text-xs sm:text-sm text-slate-500 font-medium block">
-              Kesintisiz Analitik
+              Borsa İstanbul
             </span>
             <p className="text-xs text-slate-400 leading-relaxed pt-0.5">
-              Piyasa kapanışlarında bile portföyünüzün stres testleri ve korelasyon hesapları hazır.
+              Doğrulanmış BIST seans verileriyle güvenilir okuryazarlık.
             </p>
           </div>
         </div>
