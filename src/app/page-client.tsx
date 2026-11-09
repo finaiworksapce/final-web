@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { FeatureSteps } from "@/components/ui/feature-section";
 import { FAQAccordionSection } from "@/components/ui/accordion-feature-section";
+import { HeroLiveTerminal } from "@/components/landing/HeroLiveTerminal";
 import { motion } from "framer-motion";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { useRef, useEffect } from "react";
@@ -81,9 +82,9 @@ export default function HomeClient() {
                   transition={{ duration: 0.6 }}
                   className="space-y-4"
                 >
-                  <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-[68px] font-normal tracking-tight text-[#0E1E38] leading-[1.08] clash-title">
-                    Finansal Geleceğinizi{" "}
-                    <span className="text-[#004BFA]">Rasyonel Zekayla</span> Yönetin.
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-[64px] font-normal tracking-tight text-[#0E1E38] leading-[1.1] clash-title">
+                    Borsa İstanbul portföyünüzü{" "}
+                    <span className="text-[#004BFA]">rasyonel verilerle</span> yönetin.
                   </h1>
                 </motion.div>
 
@@ -93,8 +94,8 @@ export default function HomeClient() {
                   transition={{ duration: 0.6, delay: 0.15 }}
                   className="text-base sm:text-lg md:text-xl text-slate-600 font-normal leading-relaxed"
                 >
-                  BIST hisselerinizi ve TEFAS fonlarınızı tek bir dinamik ekranda toplayın.{" "}
-                  <span className="text-[#0E1E38] font-semibold">Stres testleri, korelasyon analizleri</span> ve anlık piyasa istihbaratıyla portföyünüzün kontrolünü elinize alın.
+                  Hisselerinizin maliyetlerini, anlık kâr/zarar dengesini ve şirket çarpanlarını tek dinamik ekranda toplayın.{" "}
+                  Yüzlerce sayfalık karmaşık KAP bildirimlerini saniyeler içinde <span className="text-[#0E1E38] font-semibold">hap özetlere</span> dönüştürün; sosyal medya gürültüsüyle değil, doğrulanmış BIST matematiğiyle hareket edin.
                 </motion.p>
 
                 {/* Eyleme Çağrı Butonları */}
@@ -121,7 +122,7 @@ export default function HomeClient() {
                   </Link>
                 </motion.div>
 
-                {/* 3'lü Minimalist İstatistik Çubuğu (Hakkımızda Standartı) */}
+                {/* 3'lü Minimalist Değer Göstergesi */}
                 <motion.div
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -130,67 +131,42 @@ export default function HomeClient() {
                 >
                   <div className="space-y-0.5">
                     <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
+                      Canlı
+                    </span>
+                    <span className="text-xs text-slate-500 font-medium block">
+                      BIST Seans & Maliyet
+                    </span>
+                  </div>
+
+                  <div className="space-y-0.5">
+                    <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
+                      10 Sn
+                    </span>
+                    <span className="text-xs text-slate-500 font-medium block">
+                      KAP & Bilanço Özeti
+                    </span>
+                  </div>
+
+                  <div className="space-y-0.5">
+                    <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
                       %100
                     </span>
                     <span className="text-xs text-slate-500 font-medium block">
-                      Veri Odaklı ve Tarafsız
-                    </span>
-                  </div>
-
-                  <div className="space-y-0.5">
-                    <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
-                      Tek
-                    </span>
-                    <span className="text-xs text-slate-500 font-medium block">
-                      Bütünleşik Ekran
-                    </span>
-                  </div>
-
-                  <div className="space-y-0.5">
-                    <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
-                      0
-                    </span>
-                    <span className="text-xs text-slate-500 font-medium block">
-                      Karmaşık Jargon
+                      Doğrulanmış Resmî Veri
                     </span>
                   </div>
                 </motion.div>
 
               </div>
 
-              {/* Sağ Kolon: Dengeli ve Kenarları Kesilmeyen Gerçek Konsol Snapshot'ı (6 Kolon) */}
+              {/* Sağ Kolon: İnteraktif Canlı BIST Konsolu (Fotoğraf Yerine Anlamlı Canlı Gösterim) */}
               <motion.div
                 initial={{ opacity: 0, x: 25 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.25, ease: "easeOut" }}
                 className="lg:col-span-6 relative w-full flex justify-center lg:justify-end"
               >
-                <div className="relative w-full max-w-xl xl:max-w-2xl rounded-2xl sm:rounded-3xl overflow-hidden border border-slate-200/90 shadow-2xl shadow-[#040989]/10 bg-white">
-                  
-                  {/* Minimal Pencere Üst Çubuğu */}
-                  <div className="flex items-center px-4 py-2.5 bg-[#F5F7FA] border-b border-slate-200">
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-slate-300" />
-                    </div>
-                  </div>
-
-                  {/* Gerçek Web Uygulaması Workspace Snapshot'ı (Kenarları Kesilmeden, 1024x560 Tam Çözünürlük) */}
-                  <div className="relative w-full bg-slate-100/50 p-1 sm:p-2">
-                    <div className="relative w-full aspect-[1024/560] overflow-hidden rounded-lg sm:rounded-xl border border-slate-200/60 shadow-2xs">
-                      <Image
-                        src="/images/landing/dashboard_workspace.jpg"
-                        alt="FinAi Canlı Çalışma Alanı"
-                        fill
-                        unoptimized
-                        priority
-                        className="object-contain"
-                        sizes="(max-width: 1024px) 100vw, 50vw"
-                      />
-                    </div>
-                  </div>
-                </div>
+                <HeroLiveTerminal />
               </motion.div>
 
             </div>

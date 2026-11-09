@@ -11,7 +11,7 @@ const platformFeatures: FeatureItem[] = [
   {
     icon: <BarChart3 size={18} />,
     title: "Canlı Portföy Takibi",
-    description: "BIST hisseleri ve TEFAS fonlarınızı saniyelik piyasa verileriyle tek ekranda konsolide edin.",
+    description: "Borsa İstanbul hisselerinizi canlı piyasa verileri ve maliyet takibiyle tek ekranda konsolide edin.",
   },
   {
     icon: <ShieldCheck size={18} />,

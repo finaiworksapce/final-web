@@ -3,10 +3,10 @@ import HomeClient from './page-client';
 
 export const metadata: Metadata = {
   title: {
-    absolute: "FinAI | BIST ve TEFAS Portföy Takibi",
+    absolute: "FinAI | Borsa İstanbul (BIST) Portföy Takibi & Analiz",
   },
   description:
-    "BIST hisselerinizi ve TEFAS fonlarınızı tek ekranda takip edin. FinAI ile portföyünüzü piyasa haberleri ve yapay zekâ destekli analizlerle inceleyin.",
+    "Borsa İstanbul hisselerinizi canlı seans verileri, kâr/zarar ve maliyet analiziyle tek ekranda takip edin. FinAI ile KAP bildirimlerini yapay zekâ destekli analizlerle inceleyin.",
   alternates: {
     canonical: "https://www.finai.net.tr/",
   },
@@ -23,7 +23,7 @@ const jsonLd = {
       url: "https://www.finai.net.tr/",
       logo: "https://www.finai.net.tr/logo.png",
       description:
-        "BIST hisseleri ve TEFAS fonlarını takip etmek ve portföy analizlerini incelemek için finansal bilgi platformu.",
+        "Borsa İstanbul hisselerini takip etmek ve portföy analizlerini incelemek için rasyonel finansal bilgi platformu.",
       founder: {
         "@type": "Person",
         name: "Salih Kavakcı",

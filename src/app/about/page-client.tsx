@@ -47,7 +47,7 @@ export default function AboutPage() {
                 yönetebilmesi için kuruldu.
               </p>
               <p className="text-base sm:text-lg text-slate-500 leading-relaxed font-normal">
-                Borsa İstanbul (BIST) hisselerinden TEFAS fonlarına kadar tüm piyasayı tek bir akıllı ekranda topluyor;
+                Borsa İstanbul (BIST) hisse senetlerini, şirket çarpanlarını ve bilanço verilerini tek bir akıllı ekranda topluyor;
                 şirketlerin bilançolarını, çarpanlarını ve risk faktörlerini herkesin anlayabileceği sade bir Türkçe ile
                 yatırımcının kararlarına rehber kılıyoruz.
               </p>
@@ -68,7 +68,7 @@ export default function AboutPage() {
                   Veri Odaklı ve Tarafsız
                 </span>
                 <p className="text-[11px] sm:text-xs text-slate-400 leading-snug pt-1">
-                  Spekülasyondan uzak, doğrulanmış BIST & TEFAS piyasa matematiği.
+                  Spekülasyondan uzak, doğrulanmış Borsa İstanbul piyasa matematiği.
                 </p>
               </div>
 

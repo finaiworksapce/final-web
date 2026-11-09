@@ -25,13 +25,13 @@ const FEATURES: FeatureItem[] = [
     step: "01",
     category: "PORTFÖY & KONSOL",
     title: "Bütünleşik Portföy & Canlı Konsol",
-    subtitle: "Tüm BIST hisseleri ve TEFAS fonları tek dinamik çalışma alanında.",
+    subtitle: "Borsa İstanbul'daki tüm hisseleriniz ve maliyetleriniz tek dinamik ekranda.",
     description:
-      "Borsa İstanbul'daki pay senetlerinizi ve TEFAS fonlarınızı tek bir akıllı ekranda birleştirin. Toplam varlık değerinizi, günlük getirinizi, varlık dağılımınızı ve piyasa genel görünümünü anlık olarak takip edin.",
+      "Borsa İstanbul'daki pay senetlerinizi tek bir akıllı ekranda birleştirin. Toplam portföy değerinizi, hisse bazlı maliyetlerinizi, anlık kâr/zarar dengenizi ve sektörel ağırlıklarınızı canlı olarak takip edin.",
     highlights: [
-      "Canlı BIST 100 ve TEFAS fonlarıyla tam senkronizasyon",
-      "Varlık sınıflarına göre otomatik dağılım grafiği ve net kâr/zarar",
-      "Günlük ajanda, sıcak piyasa gelişmeleri ve TradingView grafikleri"
+      "Canlı BIST seans fiyatları ve anlık portföy değerlemesi",
+      "Hisse bazında maliyet, kâr/zarar ve sektörel ağırlık dağılımı",
+      "Günlük şirket ajandası, yaklaşan bilançolar ve TradingView grafikleri"
     ],
     image: "/images/landing/dashboard_workspace.jpg",
     url: "/dashboard/portfolio",
@@ -105,13 +105,13 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-end pb-10 sm:pb-14 border-b border-slate-200/80 mb-10 sm:mb-12">
           <div className="lg:col-span-8 space-y-3">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-normal text-[#0E1E38] tracking-tight leading-[1.15] clash-title">
-              Yatırım kararlarınızı matematik ve şeffaf verilerle güçlendiren analitik bloklar.
+              Borsa İstanbul'da bilinçli kararlar almanızı sağlayan analitik araçlar.
             </h2>
           </div>
 
           <div className="lg:col-span-4">
             <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed">
-              BIST ve TEFAS piyasalarını karmaşık tablolardan çıkarıp, her biri özel bir amaca hizmet eden modern karar destek araçlarına dönüştürdük.
+              Piyasa takibini dağınık aracı kurum ekranlarından ve spekülatif gruplardan kurtarıp, hisselerinize ve şirket bilançolarına odaklanan modern bir karar destek ekosistemi kurduk.
             </p>
           </div>
         </div>
@@ -273,7 +273,7 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
               Doğrulanmış Borsa Verisi
             </span>
             <p className="text-xs text-slate-400 leading-relaxed pt-0.5">
-              Borsa İstanbul ve TEFAS sistemlerinden filtrelenmiş resmi piyasa matematiği.
+              Borsa İstanbul seans verileri ve resmî KAP bildirimleriyle doğrulanmış piyasa matematiği.
             </p>
           </div>
 
@@ -285,7 +285,7 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
               Konsolide Konsol
             </span>
             <p className="text-xs text-slate-400 leading-relaxed pt-0.5">
-              Hisseler, yatırım fonları, makro takvim ve haberler tek bir akıllı ekranda.
+              Hisseleriniz, maliyetleriniz, makro takvim ve KAP analizleri tek bir akıllı ekranda.
             </p>
           </div>
 

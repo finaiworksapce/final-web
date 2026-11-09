@@ -4,7 +4,7 @@ import AboutPageClient from "./page-client";
 export const metadata: Metadata = {
   title: "Hakkımızda",
   description:
-    "FinAi’nin amacı, değerleri ve kurucusu Salih Kavakcı hakkında bilgi edinin. BIST ve TEFAS yatırımlarını anlaşılır, veri odaklı analizlerle takip edin.",
+    "FinAi’nin amacı, değerleri ve kurucusu Salih Kavakcı hakkında bilgi edinin. Borsa İstanbul (BIST) yatırımlarını anlaşılır, veri odaklı analizlerle takip edin.",
   alternates: {
     canonical: "https://www.finai.net.tr/about",
   },

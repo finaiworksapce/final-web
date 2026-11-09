@@ -12,7 +12,7 @@ export default function Footer() {
                             <FinAiLogo className="h-12 w-auto [&_span]:text-white" />
                         </div>
                         <p className="text-sm text-white/80 font-medium leading-relaxed">
-                            BIST ve TEFAS portföyünüzü AI destekli analizlerle
+                            Borsa İstanbul portföyünüzü yapay zekâ ve canlı verilerle
                             tek bir panoda yönetin.
                         </p>
                     </div>

@@ -21,13 +21,13 @@ const FAQ_ITEMS: FAQItem[] = [
     id: 1,
     question: "FinAi tam olarak ne işe yarar ve nasıl çalışır?",
     answer:
-      "FinAi; Borsa İstanbul (BIST) hisseleriniz ve TEFAS yatırım fonlarınızı tek bir dinamik ekranda toplar. Canlı piyasa fiyatlarıyla portföyünüzün toplam değerini, kar/zarar dengesini saniyelik günceller ve yapay zeka destekli analizlerle varlıklarınızın risk durumunu, korelasyonunu ve olası senaryolara karşı dayanıklılığını şeffafça önünüze getirir."
+      "FinAi, Borsa İstanbul (BIST) hisse senedi yatırımlarınızı tek bir akıllı ekranda toplar. Canlı seans fiyatlarıyla portföyünüzün toplam değerini, kâr/zarar dengesini ve hisse maliyetlerinizi anlık hesaplar. Bilanço çarpanları, temettü takvimi ve yapay zekâ destekli KAP analizleriyle yatırımlarınızı dedikodulardan uzak, tamamen matematiksel verilerle yönetmenizi sağlar."
   },
   {
     id: 2,
     question: "Hangi varlık türlerini ekleyip takip edebilirim?",
     answer:
-      "BIST 100 ve tüm BIST pay senetlerini, TEFAS'ta işlem gören yerli/yabancı tüm yatırım fonlarını, altın/kıymetli madenleri ve Türk Lirası nakit rezervinizi portföyünüze ekleyebilirsiniz. Tüm varlıklarınız tek bir varlık dağılımı modelinde konsolide edilir."
+      "FinAi şu aşamada doğrudan Borsa İstanbul (BIST) pay senetlerine odaklanmıştır. BIST 100, BIST 50 ve Borsa İstanbul'da işlem gören tüm şirket hisselerini portföyünüze ekleyebilir; canlı seans fiyatları, hisse bazlı maliyet, kâr/zarar ve sektörel ağırlık dağılımıyla eksiksiz takip edebilirsiniz."
   },
   {
     id: 3,

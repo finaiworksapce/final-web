@@ -250,7 +250,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                   : isVerifyingOtp
                   ? "E-posta adresinize gönderilen 8 haneli güvenlik kodunu girin."
                   : isLoginMode
-                  ? (description || "Hesabınıza giriş yaparak BIST ve TEFAS portföyünüzü anlık takip edin.")
+                  ? (description || "Hesabınıza giriş yaparak Borsa İstanbul portföyünüzü anlık takip edin.")
                   : "1 dakikada ücretsiz üye olun, yatırımlarınızın tam kontrolünü elinize alın."}
               </p>
             </div>
@@ -562,7 +562,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
               "Piyasa gürültüsünü rasyonel verilere, yatırımlarınızı bilinçli kararlara dönüştürün."
             </h2>
             <p className="text-base text-white/70 font-normal leading-relaxed">
-              Borsa İstanbul ve TEFAS piyasalarında portföyünüzü saniyelik takip edin, 
+              Borsa İstanbul piyasasında hisse portföyünüzü canlı seans verileriyle takip edin, 
               matematiksel korelasyonlar ve yapay zeka analizleriyle kontrolü elinize alın.
             </p>
           </div>
@@ -574,7 +574,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
               <div>
                 <h4 className="text-sm font-semibold text-white">Canlı Portföy Konsolidasyonu</h4>
                 <p className="text-xs text-white/60 leading-relaxed mt-0.5">
-                  BIST 100 hisseleri ve TEFAS yatırım fonlarını tek ekranda saniyelik güncellenen fiyatlarla yönetin.
+                  BIST 100 hisselerinizi ve şirket çarpanlarınızı tek ekranda güncel fiyatlarla yönetin.
                 </p>
               </div>
             </div>

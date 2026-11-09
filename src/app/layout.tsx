@@ -10,10 +10,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.finai.net.tr"),
   title: {
-    default: "FinAI | BIST ve TEFAS Portföy Takibi",
+    default: "FinAI | Borsa İstanbul (BIST) Portföy Takibi & Analiz",
     template: "%s | FinAI"
   },
-  description: "BIST hisselerinizi ve TEFAS fonlarınızı tek ekranda takip edin. FinAI ile portföyünüzü piyasa haberleri ve yapay zekâ destekli analizlerle inceleyin.",
+  description: "BIST hisselerinizi tek ekranda takip edin. FinAI ile portföyünüzü canlı seans verileri, kâr/zarar, maliyet analizi ve yapay zekâ destekli KAP bildirimleriyle inceleyin.",
   authors: [{ name: "Salih KAVAKCI", url: "https://www.finai.net.tr" }],
   creator: "Salih KAVAKCI",
   publisher: "FinAI",
@@ -30,8 +30,8 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "FinAI | BIST ve TEFAS Portföy Takibi",
-    description: "BIST hisselerinizi ve TEFAS fonlarınızı tek ekranda takip edin. Portföyünüzü haberler ve yapay zekâ destekli analizlerle inceleyin.",
+    title: "FinAI | Borsa İstanbul (BIST) Portföy Takibi & Analiz",
+    description: "BIST hisselerinizi tek ekranda takip edin. Portföyünüzü canlı seans verileri, maliyet analizi ve yapay zekâ destekli KAP bildirimleriyle inceleyin.",
     url: "https://www.finai.net.tr",
     images: [
       {
@@ -45,8 +45,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "FinAI | BIST ve TEFAS Portföy Takibi",
-    description: "BIST hisselerinizi ve TEFAS fonlarınızı tek ekranda takip edin. Portföyünüzü haberler ve yapay zekâ destekli analizlerle inceleyin.",
+    title: "FinAI | Borsa İstanbul (BIST) Portföy Takibi & Analiz",
+    description: "BIST hisselerinizi tek ekranda takip edin. Portföyünüzü canlı seans verileri, maliyet analizi ve yapay zekâ destekli KAP bildirimleriyle inceleyin.",
     images: ["/icon-512.png"],
   },
 };

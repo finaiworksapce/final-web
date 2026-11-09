@@ -8,11 +8,11 @@ import { cn } from "@/lib/utils";
 const faqs = [
     {
         question: "FinAi nedir?",
-        answer: "FinAi, BIST hisseleri ve TEFAS fonlarınızı tek bir panoda takip etmenizi sağlayan, AI destekli bir portföy yönetim platformudur.",
+        answer: "FinAi, Borsa İstanbul (BIST) hisselerinizi canlı seans verileri, kâr/zarar ve maliyet analiziyle tek ekranda takip etmenizi sağlayan rasyonel bir yatırım konsoludur.",
     },
     {
         question: "Hangi varlıkları takip edebilirim?",
-        answer: "BIST 100 hisselerini ve TEFAS yatırım fonlarını portföyünüze ekleyerek canlı fiyatlarla takip edebilirsiniz.",
+        answer: "BIST 100 ve tüm Borsa İstanbul hisselerini portföyünüze ekleyerek canlı seans fiyatları, maliyet takibi ve bilanço çarpanlarıyla takip edebilirsiniz.",
     },
     {
         question: "Mobil uyumlu mu?",
