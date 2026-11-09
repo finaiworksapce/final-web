@@ -6,7 +6,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { FeatureSteps } from "@/components/ui/feature-section";
 import { FAQAccordionSection } from "@/components/ui/accordion-feature-section";
-import { HeroDailyLifeTranslator } from "@/components/landing/HeroDailyLifeTranslator";
 import { motion } from "framer-motion";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { useRef, useEffect } from "react";
@@ -65,16 +64,16 @@ export default function HomeClient() {
           id="hero"
           className="relative pt-32 sm:pt-40 lg:pt-44 pb-20 sm:pb-28 w-full border-b border-slate-200/80"
         >
-          {/* Gradyan Renk Paleti PDF'ine Uygun Arka Plan Işık Efekti */}
+          {/* Gradyan Renk Paleti Arka Plan Işık Efekti */}
           <div className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-[#004BFA]/10 via-[#5B80FF]/10 to-transparent blur-[140px] rounded-full pointer-events-none -z-0" />
           <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-[#D6E4FF]/40 blur-[130px] rounded-full pointer-events-none -z-0" />
 
           {/* Sayfanın Tüm Genişliğini Kullanan Kapsayıcı */}
           <div className="w-full px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 2xl:px-44 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
               
-              {/* Sol Kolon: Başlık, Anlatı, CTA ve Temel Metrikler (6 Kolon) */}
-              <div className="lg:col-span-6 space-y-6 sm:space-y-8">
+              {/* Sol Kolon: Büyük Başlık, Açıklama ve CTA (7 Kolon) */}
+              <div className="lg:col-span-7 space-y-6 sm:space-y-8">
                 
                 <motion.div
                   initial={{ opacity: 0, y: 15 }}
@@ -82,7 +81,7 @@ export default function HomeClient() {
                   transition={{ duration: 0.6 }}
                   className="space-y-3"
                 >
-                  <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-[58px] font-normal tracking-tight text-[#0E1E38] leading-[1.12] clash-title">
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl xl:text-[66px] font-normal tracking-tight text-[#0E1E38] leading-[1.08] clash-title">
                     Hiçbir şey bilmeseniz bile,{" "}
                     <span className="text-[#004BFA]">şirketleri günlük hayatın diliyle</span> anlayın.
                   </h1>
@@ -92,9 +91,9 @@ export default function HomeClient() {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.15 }}
-                  className="text-base sm:text-lg md:text-xl text-slate-600 font-normal leading-relaxed max-w-xl"
+                  className="text-base sm:text-lg md:text-xl text-slate-600 font-normal leading-relaxed max-w-2xl"
                 >
-                  Korkutucu finans jargonu bitti. Borsa İstanbul şirketlerinin bilançolarını, kârlarını ve KAP haberlerini sokaktaki dükkan basitliğinde açıklıyoruz. Finansal okuryazarlığınızı kolay ve eğlenceli şekilde sıfırdan geliştirin.
+                  Korkutucu finans jargonu bitti. Borsa İstanbul şirketlerinin bilançolarını, kârlarını ve KAP haberlerini sokaktaki dükkan basitliğinde açıklıyoruz. Finansal okuryazarlığınızı sıfırdan, kolay ve eğlenceli şekilde geliştirin.
                 </motion.p>
 
                 {/* Eyleme Çağrı Butonları */}
@@ -102,11 +101,11 @@ export default function HomeClient() {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.25 }}
-                  className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center pt-1"
+                  className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center pt-2"
                 >
                   <Link
                     href="/login?tab=register"
-                    className="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-gradient-to-r from-[#02041A] via-[#040989] to-[#004BFA] hover:opacity-95 text-white text-sm font-semibold rounded-full shadow-lg shadow-[#040989]/20 transition-all duration-200 active:scale-98 group cursor-pointer"
+                    className="inline-flex items-center justify-center gap-2.5 px-8 py-4 bg-gradient-to-r from-[#02041A] via-[#040989] to-[#004BFA] hover:opacity-95 text-white text-sm sm:text-base font-semibold rounded-full shadow-lg shadow-[#040989]/20 transition-all duration-200 active:scale-98 group cursor-pointer"
                   >
                     <span>Ücretsiz Öğrenmeye Başla</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -114,58 +113,69 @@ export default function HomeClient() {
 
                   <Link
                     href="#features"
-                    className="inline-flex items-center justify-center gap-2 px-7 py-4 bg-[#F5F7FA] hover:bg-slate-200 text-[#0E1E38] text-sm font-semibold rounded-full border border-slate-200/80 transition-all duration-200 cursor-pointer"
+                    className="inline-flex items-center justify-center gap-2 px-7 py-4 bg-[#F5F7FA] hover:bg-slate-200 text-[#0E1E38] text-sm sm:text-base font-semibold rounded-full border border-slate-200/80 transition-all duration-200 cursor-pointer"
                   >
-                    <span>Nasıl Çalışır?</span>
+                    <span>Özellikleri İncele</span>
                     <ChevronRight className="w-4 h-4 text-slate-400" />
                   </Link>
                 </motion.div>
 
-                {/* 3'lü Minimalist Değer Göstergesi */}
-                <motion.div
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.4 }}
-                  className="grid grid-cols-3 gap-6 pt-6 border-t border-slate-200/80"
-                >
-                  <div className="space-y-0.5">
-                    <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
-                      0 Jargon
-                    </span>
-                    <span className="text-xs text-slate-500 font-medium block">
-                      Günlük Hayat Örnekleri
-                    </span>
-                  </div>
-
-                  <div className="space-y-0.5">
-                    <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
-                      Kolay
-                    </span>
-                    <span className="text-xs text-slate-500 font-medium block">
-                      Eğlenceli Okuryazarlık
-                    </span>
-                  </div>
-
-                  <div className="space-y-0.5">
-                    <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
-                      Canlı
-                    </span>
-                    <span className="text-xs text-slate-500 font-medium block">
-                      Gerçek Şirket Verisi
-                    </span>
-                  </div>
-                </motion.div>
-
               </div>
 
-              {/* Sağ Kolon: FinAi Günlük Hayat Çeviricisi */}
+              {/* Sağ Kolon: Saf Tipografi Metrik & Değer Matrisi (5 Kolon — Kutusuz, Rozetsiz, Sayfaya Hâkim) */}
               <motion.div
-                initial={{ opacity: 0, x: 25 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.25, ease: "easeOut" }}
-                className="lg:col-span-6 relative w-full flex justify-center lg:justify-end"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.25 }}
+                className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 sm:gap-10 lg:pl-10 lg:border-l lg:border-slate-200/80 pt-4 lg:pt-2"
               >
-                <HeroDailyLifeTranslator />
+                <div className="space-y-1">
+                  <span className="text-3xl sm:text-4xl lg:text-5xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
+                    0 Jargon
+                  </span>
+                  <span className="text-xs sm:text-sm text-slate-500 font-medium block">
+                    Günlük Hayat Dili
+                  </span>
+                  <p className="text-[11px] sm:text-xs text-slate-400 leading-snug pt-1">
+                    Bilanço ve kârları mahalle fırını basitliğinde, herkesin ilk bakışta anlayabileceği metaforlarla açıklıyoruz.
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <span className="text-3xl sm:text-4xl lg:text-5xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
+                    %100
+                  </span>
+                  <span className="text-xs sm:text-sm text-slate-500 font-medium block">
+                    Eğlenceli Okuryazarlık
+                  </span>
+                  <p className="text-[11px] sm:text-xs text-slate-400 leading-snug pt-1">
+                    Hiç finans geçmişiniz olmasa bile şirketlerin para kazanma mantığını sıfırdan ve keyifle kavrayın.
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <span className="text-3xl sm:text-4xl lg:text-5xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
+                    Canlı
+                  </span>
+                  <span className="text-xs sm:text-sm text-slate-500 font-medium block">
+                    Borsa İstanbul
+                  </span>
+                  <p className="text-[11px] sm:text-xs text-slate-400 leading-snug pt-1">
+                    Spekülasyon değil; doğrulanmış BIST seans verileri ve resmi şirket bilançolarıyla şeffaf piyasa takibi.
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <span className="text-3xl sm:text-4xl lg:text-5xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
+                    10 Sn
+                  </span>
+                  <span className="text-xs sm:text-sm text-slate-500 font-medium block">
+                    Hap KAP Özeti
+                  </span>
+                  <p className="text-[11px] sm:text-xs text-slate-400 leading-snug pt-1">
+                    Yüzlerce sayfalık resmi şirket duyurularını saniyeler içinde "Bu ne anlama gelir?" özetiyle sunan yapay zekâ.
+                  </p>
+                </div>
               </motion.div>
 
             </div>
