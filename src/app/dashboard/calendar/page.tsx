@@ -2540,8 +2540,8 @@ function CalendarContent() {
                                                 <div className={`px-2 py-1 rounded-xl text-center min-w-[44px] ${
                                                     isAnnounced ? 'bg-blue-700 text-white' : 'bg-blue-100/80 text-blue-800'
                                                 }`}>
-                                                    <span className="text-[9px] font-normal uppercase block leading-tight">{item.earningsDate?.split('.')[1] || 'MAY'}</span>
-                                                    <span className="text-xs font-normal block leading-tight">{item.earningsDate?.split('.')[0] || '20'}</span>
+                                                    <span className="text-[9px] font-normal uppercase block leading-tight">{item.earningsDate?.includes('.') ? ['OCA', 'ŞUB', 'MAR', 'NİS', 'MAY', 'HAZ', 'TEM', 'AĞU', 'EYL', 'EKİ', 'KAS', 'ARA'][parseInt(item.earningsDate.split('.')[1], 10) - 1] || 'KAS' : 'KAS'}</span>
+                                                    <span className="text-xs font-normal block leading-tight">{item.earningsDate?.split('.')[0] || '10'}</span>
                                                 </div>
                                                 <StockLogo symbol={item.symbol} className="w-8 h-8 shrink-0 ring-1 ring-white/30 shadow-xs" />
                                                 <div>
@@ -2551,9 +2551,9 @@ function CalendarContent() {
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 {isAnnounced ? (
-                                                    <span className="text-xs font-normal text-white">2026/1Ç</span>
+                                                    <span className="text-xs font-normal text-white">{item.period || '2026/3Ç'}</span>
                                                 ) : (
-                                                    <span className="text-xs font-semibold text-blue-700">2026/1Ç</span>
+                                                    <span className="text-xs font-semibold text-blue-700">{item.period || '2026/3Ç'}</span>
                                                 )}
                                                 <button title="Hatırlat" className={`p-1 ${isAnnounced ? 'text-white hover:text-blue-200' : 'text-blue-400 hover:text-[#0E1E38]'}`}>
                                                     <Bell className="w-3.5 h-3.5" />
@@ -2609,8 +2609,8 @@ function CalendarContent() {
                                                 <div className={`px-2 py-1 rounded-xl text-center min-w-[44px] ${
                                                     isPaid ? 'bg-emerald-700 text-white' : 'bg-emerald-100/80 text-emerald-800'
                                                 }`}>
-                                                    <span className="text-[9px] font-normal uppercase block leading-tight">{item.paymentDate?.split('.')[1] || 'MAY'}</span>
-                                                    <span className="text-xs font-normal block leading-tight">{item.paymentDate?.split('.')[0] || '19'}</span>
+                                                    <span className="text-[9px] font-normal uppercase block leading-tight">{item.paymentDate?.includes('.') ? ['OCA', 'ŞUB', 'MAR', 'NİS', 'MAY', 'HAZ', 'TEM', 'AĞU', 'EYL', 'EKİ', 'KAS', 'ARA'][parseInt(item.paymentDate.split('.')[1], 10) - 1] || 'KAS' : 'KAS'}</span>
+                                                    <span className="text-xs font-normal block leading-tight">{item.paymentDate?.split('.')[0] || '10'}</span>
                                                 </div>
                                                 <StockLogo symbol={item.symbol} className="w-8 h-8 shrink-0 ring-1 ring-white/30 shadow-xs" />
                                                 <div>
@@ -2621,11 +2621,11 @@ function CalendarContent() {
                                             <div className="flex items-center gap-2">
                                                 {isPaid ? (
                                                     <span className="text-xs font-normal text-white">
-                                                        {item.netAmountFormatted || '6,00 TL'}
+                                                        {item.netAmountFormatted || (item.netAmountPerShare ? `${Number(item.netAmountPerShare).toFixed(2)} ₺` : '-')}
                                                     </span>
                                                 ) : (
                                                     <span className="text-xs font-semibold text-emerald-800">
-                                                        {item.netAmountFormatted || '6,00 TL'}
+                                                        {item.netAmountFormatted || (item.netAmountPerShare ? `${Number(item.netAmountPerShare).toFixed(2)} ₺` : '-')}
                                                     </span>
                                                 )}
                                                 <button title="Hatırlat" className={`p-1 ${isPaid ? 'text-white hover:text-emerald-200' : 'text-emerald-500 hover:text-[#0E1E38]'}`}>

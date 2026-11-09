@@ -18,22 +18,26 @@ export function FullScreenLiveTelemetry({ telemetry }: FullScreenLiveTelemetryPr
   const CIRCUMFERENCE = 2 * Math.PI * RADIUS; // ~263.89
 
   const slices = useMemo(() => {
-    const rawSlices = [
-      { name: "Hisse Senetleri", shortName: "Hisse", value: distribution.stock, color: "#004BFA", glow: "rgba(0, 75, 250, 0.5)" },
-      { name: "Yatırım Fonları", shortName: "Fon", value: distribution.fund, color: "#5B80FF", glow: "rgba(91, 128, 255, 0.5)" },
-      { name: "Kıymetli Maden", shortName: "Altın", value: distribution.gold, color: "#F59E0B", glow: "rgba(245, 158, 11, 0.5)" },
-      { name: "Likit Rezerv", shortName: "Likit", value: distribution.cash, color: "#D6E4FF", glow: "rgba(214, 228, 255, 0.4)" },
-    ];
+    let sourceSlices = telemetry.slices;
+    if (!sourceSlices || sourceSlices.length === 0) {
+      const isIslamic = telemetry.isIslamic;
+      sourceSlices = [
+        { name: isIslamic ? "Katılım Sanayi Hisseleri" : "Sanayi & İhracat Hisseleri", shortName: "Sanayi", value: Math.round(distribution.stock * 0.55), color: "#004BFA", glow: "rgba(0, 75, 250, 0.5)" },
+        { name: isIslamic ? "Katılım Teknoloji Hisseleri" : "Teknoloji & Bilişim Hisseleri", shortName: "Teknoloji", value: distribution.stock - Math.round(distribution.stock * 0.55), color: "#8B5CF6", glow: "rgba(139, 92, 246, 0.5)" },
+        { name: isIslamic ? "Darphane Altın Sertifikası" : "Kıymetli Madenler (Altın)", shortName: "Altın", value: distribution.gold, color: "#F59E0B", glow: "rgba(245, 158, 11, 0.5)" },
+        { name: isIslamic ? "Kira Sertifikası Katılım Fonu" : "Kira Sertifikası Fonu", shortName: isIslamic ? "Katılım Fonu" : "Kira Fonu", value: distribution.cash, color: isIslamic ? "#059669" : "#60A5FA", glow: isIslamic ? "rgba(5, 150, 105, 0.5)" : "rgba(96, 165, 250, 0.5)" },
+      ];
+    }
 
     let currentOffset = 0;
-    return rawSlices.map((slice) => {
+    return sourceSlices.map((slice) => {
       const strokeLength = (slice.value / 100) * CIRCUMFERENCE;
       const dashArray = `${strokeLength} ${CIRCUMFERENCE - strokeLength}`;
       const dashOffset = -currentOffset;
       currentOffset += strokeLength;
       return { ...slice, dashArray, dashOffset };
     });
-  }, [distribution, CIRCUMFERENCE]);
+  }, [telemetry, distribution, CIRCUMFERENCE]);
 
   return (
     <aside className="w-full h-full bg-gradient-to-br from-[#02041A] via-[#04082C] to-[#010314] text-slate-100 flex flex-col justify-between p-8 sm:p-10 lg:p-12 border-l border-blue-950/60 relative overflow-hidden select-none">
@@ -177,7 +181,7 @@ export function FullScreenLiveTelemetry({ telemetry }: FullScreenLiveTelemetryPr
           </span>
 
           <div className="grid grid-cols-3 gap-3">
-            {instruments.slice(0, 3).map((item) => (
+            {(instruments || []).slice(0, 3).map((item) => (
               <div
                 key={item.symbol}
                 className="p-3.5 rounded-2xl bg-white/[0.025] border border-blue-900/35 hover:border-[#004BFA]/60 hover:bg-white/[0.04] transition-all group"
@@ -190,7 +194,7 @@ export function FullScreenLiveTelemetry({ telemetry }: FullScreenLiveTelemetryPr
                     %{item.allocationWeight}
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-300 truncate">{item.name}</p>
+                <p className="text-[11px] text-slate-300 truncate">{item.sector ? `${item.name} (${item.sector})` : item.name}</p>
               </div>
             ))}
           </div>

@@ -9,7 +9,7 @@ export interface CatalogCalendarEvent {
     forecast: string;
     previous: string;
     actual: string;
-    impact: 'medium' | 'high' | 'critical';
+    impact: 'low' | 'medium' | 'high' | 'critical';
     isToday?: boolean;
     isTomorrow?: boolean;
     weekOffset: number; // 0 = Bu Hafta, 1 = Gelecek Hafta, 2 = 3. Hafta
