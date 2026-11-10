@@ -33,7 +33,19 @@ const STOCK_NAMES: Record<string, string> = {
   "MIATK": "Mia Teknoloji A.Ş.",
   "PGSUS": "Pegasus Hava Taşımacılığı A.Ş.",
   "BIGEN": "Birleşim Grup Enerji Yatırımları A.Ş.",
-  "TKFEN": "Tekfen Holding A.Ş."
+  "TKFEN": "Tekfen Holding A.Ş.",
+  "ALTIN": "Gram Altın (24 Ayar Spot TL)",
+  "GA": "Gram Altın (24 Ayar Spot TL)",
+  "GRAM-ALTIN": "Gram Altın (24 Ayar Spot TL)",
+  "ALTIN.S1": "Darphane Altın Sertifikası (BIST)",
+  "GUMUS": "Gram Gümüş (Spot TL)",
+  "ONS": "Ons Altın (XAU/USD)",
+  "GLDTR": "QNB Finans Portföy Altın Borsa Yatırım Fonu",
+  "ZGOLD": "Ziraat Portföy Altın Katılım Borsa Yatırım Fonu",
+  "USDTRY": "Amerikan Doları / Türk Lirası (USD/TRY)",
+  "EURTRY": "Euro / Türk Lirası (EUR/TRY)",
+  "BTC": "Bitcoin (BTC/TRY)",
+  "ETH": "Ethereum (ETH/TRY)"
 };
 
 interface PageProps {

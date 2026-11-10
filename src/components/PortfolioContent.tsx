@@ -270,7 +270,15 @@ export default function PortfolioPage() {
         if (typeof window !== 'undefined') {
             try {
                 const cached = localStorage.getItem('final_portfolio_prices_cache');
-                if (cached) return JSON.parse(cached);
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (parsed && typeof parsed === 'object') {
+                        if (parsed['ALTIN'] === 3150) delete parsed['ALTIN'];
+                        if (parsed['GA'] === 3150) delete parsed['GA'];
+                        if (parsed['GRAM-ALTIN'] === 3150) delete parsed['GRAM-ALTIN'];
+                        return parsed;
+                    }
+                }
             } catch (e) {}
         }
         return {};

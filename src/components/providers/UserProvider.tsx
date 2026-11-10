@@ -95,7 +95,13 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         const cachedPrices = sessionStorage.getItem('finai_global_prices');
         if (cachedPrices) {
             try {
-                setPrices(JSON.parse(cachedPrices));
+                const parsed = JSON.parse(cachedPrices);
+                if (parsed && typeof parsed === 'object') {
+                    if (parsed['ALTIN'] === 3150) delete parsed['ALTIN'];
+                    if (parsed['GA'] === 3150) delete parsed['GA'];
+                    if (parsed['GRAM-ALTIN'] === 3150) delete parsed['GRAM-ALTIN'];
+                    setPrices(parsed);
+                }
             } catch {}
         }
 
