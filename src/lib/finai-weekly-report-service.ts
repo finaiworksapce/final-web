@@ -292,12 +292,42 @@ async function fetchRealWeeklyStartPrices(symbols: string[]): Promise<Record<str
 
         const promises = symbols.map(async (rawSym) => {
             const symUpper = rawSym.toUpperCase().trim();
+            const baseSym = symUpper.replace(/\.IS$/i, '');
             if (symUpper === 'NAKİT' || symUpper === 'TRY' || symUpper === 'TL' || symUpper === 'TRY_CASH') {
                 startPrices[symUpper] = 1;
                 return;
             }
 
-            const querySym = symUpper.endsWith('.IS') || symUpper.includes('=') ? symUpper : `${symUpper}.IS`;
+            // Gram Altın ve Gram Gümüş için gerçek 7 günlük (GC=F / SI=F * TRY=X / 31.1034768) başlangıç fiyatı
+            if (baseSym === 'ALTIN' || baseSym === 'GA' || baseSym === 'GRAM-ALTIN' || baseSym === 'GRAM_ALTIN' || baseSym === 'GUMUS' || baseSym === 'GRAM-GUMUS') {
+                try {
+                    const metalTicker = baseSym.includes('GUMUS') ? 'SI=F' : 'GC=F';
+                    const [metalChart, fxChart] = await Promise.all([
+                        yf.chart(metalTicker, { period1: past, interval: '1d' }),
+                        yf.chart('TRY=X', { period1: past, interval: '1d' })
+                    ]);
+                    const mQuotes = metalChart?.quotes || [];
+                    const fQuotes = fxChart?.quotes || [];
+                    if (mQuotes.length >= 1 && fQuotes.length >= 1) {
+                        const mStart = mQuotes[0].close || mQuotes[0].open || 0;
+                        const fStart = fQuotes[0].close || fQuotes[0].open || 0;
+                        if (mStart > 0 && fStart > 0) {
+                            const computedStart = (mStart * fStart) / 31.1034768;
+                            startPrices[symUpper] = computedStart;
+                            startPrices[baseSym] = computedStart;
+                            return;
+                        }
+                    }
+                } catch {
+                    // Fallback below
+                }
+            }
+
+            let querySym = symUpper.endsWith('.IS') || symUpper.includes('=') ? symUpper : `${symUpper}.IS`;
+            if (baseSym === 'USDTRY' || baseSym === 'USD' || baseSym === 'USDT') querySym = 'TRY=X';
+            else if (baseSym === 'EURTRY' || baseSym === 'EUR') querySym = 'EURTRY=X';
+            else if (baseSym === 'ONS' || baseSym === 'XAU' || baseSym === 'XAUUSD') querySym = 'GC=F';
+
             try {
                 const chartRes = await yf.chart(querySym, {
                     period1: past,
@@ -306,7 +336,7 @@ async function fetchRealWeeklyStartPrices(symbols: string[]): Promise<Record<str
                 const quotes = chartRes?.quotes || [];
                 if (quotes.length >= 2) {
                     startPrices[symUpper] = quotes[0].close || quotes[0].open || 0;
-                    startPrices[symUpper.replace(/\.IS$/, '')] = startPrices[symUpper];
+                    startPrices[baseSym] = startPrices[symUpper];
                 }
             } catch {
                 // Sessizce geç, fallback uygulanır

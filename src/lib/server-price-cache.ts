@@ -85,8 +85,11 @@ async function fetchLiveBatchPrices(symbols: string[]): Promise<Record<string, n
         console.error("Commodities fetch error in cache engine:", e);
     }
 
-    // Stocks & Yahoo Finance via authenticated yahoo-finance2 client
-    const stockSymbols = uniqueSymbols.filter(s => s !== 'NAKİT' && s !== 'TRY' && s !== 'TL');
+    // Stocks & Yahoo Finance via authenticated yahoo-finance2 client (Skip symbols already resolved by liveMap)
+    const stockSymbols = uniqueSymbols.filter(s => {
+        const base = s.replace(/\.IS$/i, '');
+        return s !== 'NAKİT' && s !== 'TRY' && s !== 'TL' && !prices[s] && !prices[base];
+    });
     if (stockSymbols.length > 0) {
         const formattedSymbols = stockSymbols.map(s => s.endsWith('.IS') || s.includes('=') ? s : `${s}.IS`);
         try {
