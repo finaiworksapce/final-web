@@ -42,10 +42,12 @@ export async function GET() {
             if (!symbol || symbol === '...' || symbol === '-') return;
 
             const rawDate = (item.t_tarih || '').trim();
-            const netAmount = parseFloat(item.t_net || '0');
-            const yieldVal = parseFloat(item.t_verim || '0');
+            const rawNetStr = String(item.t_temt_net ?? item.t_net ?? '0').replace(',', '.').trim();
+            const rawYieldStr = String(item.t_yuzde ?? item.t_verim ?? '0').replace(',', '.').trim();
+            const netAmount = parseFloat(rawNetStr) || 0;
+            const yieldVal = parseFloat(rawYieldStr) || 0;
 
-            // Tutar veya verimi 0 olan kayıtları filtrele
+            // Tutar ve verimi 0 olan boş şablon kayıtları filtrele
             if (netAmount <= 0 && yieldVal <= 0) return;
 
             const key = `${symbol}_${rawDate}_${netAmount}`;

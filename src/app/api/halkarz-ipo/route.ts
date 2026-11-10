@@ -42,6 +42,25 @@ const TURKISH_MONTHS: Record<string, number> = {
 
 // halkarz.com detay sayfalarındaki resmi Halka Arz Fiyatı verileri
 const HALKARZ_OFFICIAL_PRICES: Record<string, string> = {
+    'NETGL': '25,52',
+    'INTET': '53,60',
+    'BKRGY': '12,93',
+    'VEYAS': '136,00',
+    'KPEKS': '94,00',
+    'TKNKA': '85,40',
+    'CITAS': '73,70',
+    'QUICK': '76,60',
+    'KARCL': '35,00',
+    'MASFN': '45,68',
+    'ALBTN': '38,60',
+    'METEN': '20,00',
+    'SARAE': '70,00',
+    'SSAAT': '56,00',
+    'ISVEA': '20,90',
+    'EKIM': '30,26',
+    'GOLDA': '9,20',
+    'SOHOE': '15,00',
+    'ORZAX': '69,00',
     'GYHOL': '25,52',
     'FRMPL': '53,60',
     'MCARD': '12,93',
@@ -69,7 +88,7 @@ function parseTurkishDateRange(dateText: string): {
     timestamp: number;
 } {
     const clean = (dateText || '').trim();
-    if (!clean || clean.toLowerCase().includes('hazırlanıyor') || clean === '...') {
+    if (!clean || clean.toLowerCase().includes('hazırlanıyor') || clean.toLowerCase().includes('ertelendi') || clean === '...') {
         return { startDate: null, endDate: null, dates: [], timestamp: 0 };
     }
 
@@ -132,7 +151,7 @@ export async function GET() {
             const isTaslakList = $(ulEl).hasClass('taslak');
 
             $(ulEl).find('li article.index-list').each((__, artEl) => {
-                const symbolRaw = $(artEl).find('.bist-kod').first().text().trim();
+                const symbolRaw = $(artEl).find('.il-bist-kod, .bist-kod').first().text().trim();
                 const companyName = $(artEl).find('.il-halka-arz-sirket').first().text().trim();
                 const link = $(artEl).find('a').first().attr('href') || 'https://halkarz.com/';
                 const timeText = $(artEl).find('time').first().text().trim();
