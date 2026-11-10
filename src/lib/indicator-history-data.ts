@@ -18,15 +18,6 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
     "unit": "%",
     "points": [
       {
-        "date": "2026-03-03",
-        "label": "Mar 26",
-        "period": "Feb",
-        "actual": 2.96,
-        "forecast": 3,
-        "previous": 4.84,
-        "unit": "%"
-      },
-      {
         "date": "2026-04-03",
         "label": "Nis 26",
         "period": "Mar",
@@ -88,21 +79,21 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "forecast": 2.3,
         "previous": 1.84,
         "unit": "%"
+      },
+      {
+        "date": "2026-11-03",
+        "label": "Kas 26",
+        "period": "Oct. 2026",
+        "actual": 2.58,
+        "forecast": 2.4,
+        "previous": 1.84,
+        "unit": "%"
       }
     ]
   },
   "TR|Yıllık Enflasyon Oranı (TÜFE)": {
     "unit": "%",
     "points": [
-      {
-        "date": "2026-03-03",
-        "label": "Mar 26",
-        "period": "Feb",
-        "actual": 31.53,
-        "forecast": 31.55,
-        "previous": 30.65,
-        "unit": "%"
-      },
       {
         "date": "2026-04-03",
         "label": "Nis 26",
@@ -165,21 +156,21 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "forecast": 30.3,
         "previous": 31.51,
         "unit": "%"
+      },
+      {
+        "date": "2026-11-03",
+        "label": "Kas 26",
+        "period": "Oct. 2026",
+        "actual": 29.77,
+        "forecast": 29.56,
+        "previous": 29.73,
+        "unit": "%"
       }
     ]
   },
   "TR|Aylık Üretici Fiyat Endeksi (ÜFE)": {
     "unit": "%",
     "points": [
-      {
-        "date": "2026-03-03",
-        "label": "Mar 26",
-        "period": "Feb",
-        "actual": 2.96,
-        "forecast": 3,
-        "previous": 4.84,
-        "unit": "%"
-      },
       {
         "date": "2026-04-03",
         "label": "Nis 26",
@@ -240,6 +231,15 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "period": "Sep",
         "actual": 1.84,
         "forecast": 2.3,
+        "previous": 1.84,
+        "unit": "%"
+      },
+      {
+        "date": "2026-11-03",
+        "label": "Kas 26",
+        "period": "Oct. 2026",
+        "actual": 2.58,
+        "forecast": 2.4,
         "previous": 1.84,
         "unit": "%"
       }
@@ -326,15 +326,6 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
     "unit": "%",
     "points": [
       {
-        "date": "2026-03-10",
-        "label": "Mar 26",
-        "period": "Jan",
-        "actual": -1.8,
-        "forecast": null,
-        "previous": -2.1,
-        "unit": "%"
-      },
-      {
         "date": "2026-04-10",
         "label": "Nis 26",
         "period": "Feb",
@@ -395,6 +386,15 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "actual": -1.9,
         "forecast": null,
         "previous": -0.2,
+        "unit": "%"
+      },
+      {
+        "date": "2026-11-10",
+        "label": "Kas 26",
+        "period": "Sep. 2026",
+        "actual": 2.6,
+        "forecast": null,
+        "previous": -1.7,
         "unit": "%"
       }
     ]
@@ -480,15 +480,6 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
     "unit": "Milyar $",
     "points": [
       {
-        "date": "2026-03-03",
-        "label": "Mar 26",
-        "period": "Feb",
-        "actual": -9.2,
-        "forecast": null,
-        "previous": -8.4,
-        "unit": "$"
-      },
-      {
         "date": "2026-04-02",
         "label": "Nis 26",
         "period": "Mar",
@@ -549,6 +540,15 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "actual": -5.23,
         "forecast": null,
         "previous": -5.24,
+        "unit": "$"
+      },
+      {
+        "date": "2026-11-02",
+        "label": "Kas 26",
+        "period": "Oct. 2026",
+        "actual": -6.7,
+        "forecast": null,
+        "previous": -5.232,
         "unit": "$"
       }
     ]
@@ -865,15 +865,6 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
     "unit": "%",
     "points": [
       {
-        "date": "2026-03-06",
-        "label": "Mar 26",
-        "period": "Feb",
-        "actual": 4.4,
-        "forecast": 4.3,
-        "previous": 4.3,
-        "unit": "%"
-      },
-      {
         "date": "2026-04-03",
         "label": "Nis 26",
         "period": "Mar",
@@ -935,21 +926,21 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "forecast": 4.1,
         "previous": 4.1,
         "unit": "%"
+      },
+      {
+        "date": "2026-11-06",
+        "label": "Kas 26",
+        "period": "Oct. 2026",
+        "actual": 4.1,
+        "forecast": 4.2,
+        "previous": 4.2,
+        "unit": "%"
       }
     ]
   },
   "ABD|Tarım Dışı İstihdam Değişimi (NFP)": {
     "unit": "Bin",
     "points": [
-      {
-        "date": "2026-03-06",
-        "label": "Mar 26",
-        "period": "Feb",
-        "actual": -92,
-        "forecast": 59,
-        "previous": 126,
-        "unit": ""
-      },
       {
         "date": "2026-04-03",
         "label": "Nis 26",
@@ -1012,21 +1003,21 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "forecast": 90,
         "previous": 133,
         "unit": ""
+      },
+      {
+        "date": "2026-11-06",
+        "label": "Kas 26",
+        "period": "Oct. 2026",
+        "actual": 165,
+        "forecast": 65,
+        "previous": 60,
+        "unit": ""
       }
     ]
   },
   "ABD|Aylık Ortalama Saatlik Kazançlar": {
     "unit": "%",
     "points": [
-      {
-        "date": "2026-03-06",
-        "label": "Mar 26",
-        "period": "Feb",
-        "actual": 0.4,
-        "forecast": 0.3,
-        "previous": 0.4,
-        "unit": "%"
-      },
       {
         "date": "2026-04-03",
         "label": "Nis 26",
@@ -1089,21 +1080,21 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "forecast": 0.3,
         "previous": 0.3,
         "unit": "%"
+      },
+      {
+        "date": "2026-11-06",
+        "label": "Kas 26",
+        "period": "Oct. 2026",
+        "actual": 0.4,
+        "forecast": 0.3,
+        "previous": 0.3,
+        "unit": "%"
       }
     ]
   },
   "ABD|İşsizlik Haklarından Yararlanma Başvuruları": {
     "unit": "Bin",
     "points": [
-      {
-        "date": "2026-03-05",
-        "label": "Mar 26",
-        "period": "Feb/28",
-        "actual": 213,
-        "forecast": 215,
-        "previous": 213,
-        "unit": ""
-      },
       {
         "date": "2026-04-02",
         "label": "Nis 26",
@@ -1165,6 +1156,15 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "actual": 197,
         "forecast": 200,
         "previous": 198,
+        "unit": ""
+      },
+      {
+        "date": "2026-11-05",
+        "label": "Kas 26",
+        "period": "w/o Oct. 26, 2026",
+        "actual": 189,
+        "forecast": 196,
+        "previous": 195,
         "unit": ""
       }
     ]
@@ -1250,15 +1250,6 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
     "unit": "%",
     "points": [
       {
-        "date": "2026-03-18",
-        "label": "Mar 26",
-        "period": "Jan",
-        "actual": 0.1,
-        "forecast": 0.1,
-        "previous": -0.4,
-        "unit": "%"
-      },
-      {
         "date": "2026-04-10",
         "label": "Nis 26",
         "period": "Feb",
@@ -1320,21 +1311,21 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "forecast": 0.1,
         "previous": 0.8,
         "unit": "%"
+      },
+      {
+        "date": "2026-11-03",
+        "label": "Kas 26",
+        "period": "Sep. 2026",
+        "actual": 1.8,
+        "forecast": 1.2,
+        "previous": 0.3,
+        "unit": "%"
       }
     ]
   },
   "ABD|ISM İmalat PMI Endeksi": {
     "unit": "Puan",
     "points": [
-      {
-        "date": "2026-03-02",
-        "label": "Mar 26",
-        "period": "Feb",
-        "actual": 52.4,
-        "forecast": 51.8,
-        "previous": 52.6,
-        "unit": ""
-      },
       {
         "date": "2026-04-01",
         "label": "Nis 26",
@@ -1397,21 +1388,21 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "forecast": 55,
         "previous": 54.6,
         "unit": ""
+      },
+      {
+        "date": "2026-11-02",
+        "label": "Kas 26",
+        "period": "Oct. 2026",
+        "actual": 55.5,
+        "forecast": 54.5,
+        "previous": 54.5,
+        "unit": ""
       }
     ]
   },
   "ABD|ISM İmalat Dışı (Hizmet) PMI": {
     "unit": "Puan",
     "points": [
-      {
-        "date": "2026-03-04",
-        "label": "Mar 26",
-        "period": "Feb",
-        "actual": 56.1,
-        "forecast": 53.5,
-        "previous": 53.8,
-        "unit": ""
-      },
       {
         "date": "2026-04-06",
         "label": "Nis 26",
@@ -1473,6 +1464,15 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "actual": 54.9,
         "forecast": 55,
         "previous": 55.4,
+        "unit": ""
+      },
+      {
+        "date": "2026-11-04",
+        "label": "Kas 26",
+        "period": "Oct. 2026",
+        "actual": 54.5,
+        "forecast": 54.8,
+        "previous": 54.9,
         "unit": ""
       }
     ]
@@ -1635,15 +1635,6 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
     "unit": "Puan",
     "points": [
       {
-        "date": "2026-03-13",
-        "label": "Mar 26",
-        "period": "Mar",
-        "actual": 55.5,
-        "forecast": 55,
-        "previous": 56.6,
-        "unit": ""
-      },
-      {
         "date": "2026-04-10",
         "label": "Nis 26",
         "period": "Apr",
@@ -1704,6 +1695,15 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "actual": 46.3,
         "forecast": 47.6,
         "previous": 48.1,
+        "unit": ""
+      },
+      {
+        "date": "2026-11-06",
+        "label": "Kas 26",
+        "period": "Nov. 2026",
+        "actual": 51,
+        "forecast": 48,
+        "previous": 46.3,
         "unit": ""
       }
     ]
@@ -1789,15 +1789,6 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
     "unit": "Milyon Varis",
     "points": [
       {
-        "date": "2026-03-04",
-        "label": "Mar 26",
-        "period": "Feb/27",
-        "actual": 3.475,
-        "forecast": 2.3,
-        "previous": 15.989,
-        "unit": ""
-      },
-      {
         "date": "2026-04-01",
         "label": "Nis 26",
         "period": "Mar/27",
@@ -1858,6 +1849,15 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "actual": -3.186,
         "forecast": 1.7,
         "previous": 0.922,
+        "unit": ""
+      },
+      {
+        "date": "2026-11-04",
+        "label": "Kas 26",
+        "period": "w/o Oct. 26, 2026",
+        "actual": -0.865,
+        "forecast": 1.75,
+        "previous": -1.892,
         "unit": ""
       }
     ]
@@ -2512,9 +2512,18 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "date": "2026-09-17",
         "label": "Eyl 26",
         "period": "Eyl",
-        "actual": 5,
-        "forecast": 5,
+        "actual": 3.75,
+        "forecast": 3.75,
         "previous": 5,
+        "unit": "%"
+      },
+      {
+        "date": "2026-11-05",
+        "label": "Kas 26",
+        "period": "Kas",
+        "actual": 4,
+        "forecast": 4,
+        "previous": 3.75,
         "unit": "%"
       }
     ]

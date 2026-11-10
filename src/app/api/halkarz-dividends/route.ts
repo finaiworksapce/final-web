@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export interface HalkarzDividendItem {
     symbol: string;
     companyName: string;
@@ -19,7 +22,7 @@ export async function GET() {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Accept': 'application/json, text/plain, */*'
             },
-            next: { revalidate: 3600 } // Günlük / saatlik otomatik güncelleme (1 saat önbellek)
+            cache: 'no-store'
         });
 
         if (!response.ok) {
@@ -27,40 +30,40 @@ export async function GET() {
         }
 
         const rawData = await response.json();
-        
+
         if (!Array.isArray(rawData)) {
-            return NextResponse.json({ success: false, error: "Geçersiz veri alındı." }, { status: 500 });
+            return NextResponse.json({ success: false, error: "Geçersiz veri formatı alındı." }, { status: 500 });
         }
 
-        // Mükerrer/Tekrarlayan Aynı Şirket Kayıtlarını Tekilleştirme
         const uniqueItemsMap = new Map<string, HalkarzDividendItem>();
 
         rawData.forEach((item: any) => {
             const symbol = (item.t_bistkod || '').toUpperCase().trim();
-            if (!symbol) return;
+            if (!symbol || symbol === '...' || symbol === '-') return;
 
-            const rawNet = item.t_temt_net ? String(item.t_temt_net).replace(',', '.') : '0';
-            const netAmount = parseFloat(rawNet) || 0;
-            const yieldVal = parseFloat(item.t_yuzde) || 0;
-            const rawDate = item.t_tarih || '';
+            const rawDate = (item.t_tarih || '').trim();
+            const netAmount = parseFloat(item.t_net || '0');
+            const yieldVal = parseFloat(item.t_verim || '0');
 
-            // Şirket kodu ve tarihi aynı olan mükerrer kayıtları tekil anahtarla süzme
+            // Tutar veya verimi 0 olan kayıtları filtrele
+            if (netAmount <= 0 && yieldVal <= 0) return;
+
             const key = `${symbol}_${rawDate}_${netAmount}`;
 
             if (!uniqueItemsMap.has(key)) {
                 let timestamp = 0;
                 let parsedDateStr: string | null = null;
-                if (rawDate && rawDate.includes('.') && rawDate.trim() !== '...') {
+                if (rawDate && rawDate !== '...' && rawDate.includes('.')) {
                     const parts = rawDate.split('.');
                     if (parts.length === 3) {
                         const d = parseInt(parts[0], 10);
                         const m = parseInt(parts[1], 10);
                         const y = parseInt(parts[2], 10);
                         if (!isNaN(d) && !isNaN(m) && !isNaN(y) && d > 0 && d <= 31 && m > 0 && m <= 12 && y >= 2020) {
-                            const parsedDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+                            const parsedDate = new Date(`${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}T00:00:00.000Z`);
                             if (!isNaN(parsedDate.getTime())) {
                                 timestamp = parsedDate.getTime();
-                                parsedDateStr = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+                                parsedDateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
                             }
                         }
                     }
@@ -73,7 +76,7 @@ export async function GET() {
                     netAmountPerShare: netAmount,
                     netAmountFormatted: `${netAmount.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 4 })} ₺`,
                     yieldPercent: yieldVal,
-                    paymentDate: rawDate.trim() === '...' ? 'Açıklanmadı' : rawDate,
+                    paymentDate: rawDate === '...' || !rawDate ? 'Açıklanmadı' : rawDate,
                     parsedDate: parsedDateStr,
                     timestamp
                 });
@@ -82,14 +85,12 @@ export async function GET() {
 
         const items = Array.from(uniqueItemsMap.values());
 
-        // Tarihi olanları yakından uzağa sırala, tarihi açıklanmayanları en alta yerleştir
+        // Tarihi belli olanlar en yakın tarihten uzağa, tarihi açıklanmayanlar en altta
         items.sort((a, b) => {
-            const hasA = Boolean(a.parsedDate && a.timestamp > 0);
-            const hasB = Boolean(b.parsedDate && b.timestamp > 0);
-            if (hasA && !hasB) return -1;
-            if (!hasA && hasB) return 1;
-            if (!hasA && !hasB) return (a.symbol || '').localeCompare(b.symbol || '');
-            return a.timestamp - b.timestamp;
+            if (a.timestamp > 0 && b.timestamp === 0) return -1;
+            if (a.timestamp === 0 && b.timestamp > 0) return 1;
+            if (a.timestamp > 0 && b.timestamp > 0) return a.timestamp - b.timestamp;
+            return a.symbol.localeCompare(b.symbol);
         });
 
         return NextResponse.json({
@@ -101,7 +102,7 @@ export async function GET() {
         });
 
     } catch (error: any) {
-        console.error("HalkArz temettü API hatası:", error);
-        return NextResponse.json({ success: false, error: error.message || "Veri çekilemedi." }, { status: 500 });
+        console.error("HalkArz Temettü API hatası:", error);
+        return NextResponse.json({ success: false, error: error.message || "Temettü verisi çekilemedi." }, { status: 500 });
     }
 }

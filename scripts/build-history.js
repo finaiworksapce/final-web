@@ -17,7 +17,7 @@ function formatMonthLabel(iso) {
 
 function getPoints(ulke, olay, limit = 8, fillActualWithForecast = false) {
   const matches = allOlaylar
-    .filter(o => o.ulke === ulke && o.olay === olay && (o.aciklanan !== null || o.beklenen !== null))
+    .filter(o => o.ulke === ulke && o.olay === olay && (o.aciklanan !== null || (fillActualWithForecast && o.beklenen !== null && new Date(o.tarih) <= new Date())))
     .sort((a, b) => new Date(a.tarih) - new Date(b.tarih));
 
   const seenDates = new Set();
@@ -146,7 +146,8 @@ const db = {
       { date: '2026-05-07', label: 'May 26', period: 'May', actual: 5.25, forecast: 5.25, previous: 5.25, unit: '%' },
       { date: '2026-06-18', label: 'Haz 26', period: 'Haz', actual: 5.25, forecast: 5.25, previous: 5.25, unit: '%' },
       { date: '2026-08-06', label: 'Ağu 26', period: 'Ağu', actual: 5.00, forecast: 5.00, previous: 5.25, unit: '%' },
-      { date: '2026-09-17', label: 'Eyl 26', period: 'Eyl', actual: 5.00, forecast: 5.00, previous: 5.00, unit: '%' }
+      { date: '2026-09-17', label: 'Eyl 26', period: 'Eyl', actual: 3.75, forecast: 3.75, previous: 5.00, unit: '%' },
+      { date: '2026-11-05', label: 'Kas 26', period: 'Kas', actual: 4.00, forecast: 4.00, previous: 3.75, unit: '%' }
     ]
   }
 };

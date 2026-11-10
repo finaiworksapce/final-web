@@ -87,7 +87,7 @@ export default function EconomicEventDetailPage() {
                 const res = await fetch('/api/calendar?t=' + Date.now(), { cache: 'no-store' });
                 if (res.ok) {
                     const data = await res.json();
-                    const liveList: CatalogCalendarEvent[] = data.events || data.economicEvents || (Array.isArray(data) ? data : []);
+                    const liveList: CatalogCalendarEvent[] = data.data || data.events || data.economicEvents || (Array.isArray(data) ? data : []);
                     const resolved = resolveCalendarEvent(eventId, liveList);
                     if (resolved && isMounted) {
                         setEvent(resolved);

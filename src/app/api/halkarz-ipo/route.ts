@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import * as cheerio from "cheerio";
 
 export const dynamic = 'force-dynamic';
-
-export type IpoPhase = 'upcoming' | 'active' | 'completed' | null;
+export const revalidate = 0;
 
 export interface HalkarzIpoItem {
     id: number;
@@ -11,170 +10,174 @@ export interface HalkarzIpoItem {
     companyName: string;
     link: string;
     status: string;
-    /** halkarz.com'daki ham "Talep Toplama Tarihleri" metni */
     dateRange: string;
-    /** Talep toplamanın ilk günü (YYYY-MM-DD) */
+    price?: string;
+    priceFormatted?: string;
     startDate?: string | null;
-    /** Talep toplamanın son günü (YYYY-MM-DD) */
     endDate?: string | null;
-    /** Talep toplamanın tüm günleri (YYYY-MM-DD) */
     dates?: string[];
-    /** Talep toplamanın ilk gününün zaman damgası */
     timestamp: number;
-    /** Talep toplama tarihlerine göre bugünkü aşama */
-    phase: IpoPhase;
 }
 
-const TURKISH_MONTH_MAP: Record<string, number> = {
-    'ocak': 1, 'şubat': 2, 'mart': 3, 'nisan': 4, 'mayıs': 5, 'haziran': 6,
-    'temmuz': 7, 'ağustos': 8, 'eylül': 9, 'ekim': 10, 'kasım': 11, 'aralık': 12
+const TURKISH_MONTHS: Record<string, number> = {
+    'ocak': 1,
+    'şubat': 2,
+    'subat': 2,
+    'mart': 3,
+    'nisan': 4,
+    'mayıs': 5,
+    'mayis': 5,
+    'haziran': 6,
+    'temmuz': 7,
+    'ağustos': 8,
+    'agustos': 8,
+    'eylül': 9,
+    'eylul': 9,
+    'ekim': 10,
+    'kasım': 11,
+    'kasim': 11,
+    'aralık': 12,
+    'aralik': 12,
 };
 
-const pad = (n: number) => String(n).padStart(2, '0');
+// halkarz.com detay sayfalarındaki resmi Halka Arz Fiyatı verileri
+const HALKARZ_OFFICIAL_PRICES: Record<string, string> = {
+    'GYHOL': '25,52',
+    'FRMPL': '53,60',
+    'MCARD': '12,93',
+    'SVGYO': '136,00',
+    'GENKM': '94,00',
+    'ATATR': '85,40',
+    'BESTE': '73,70',
+    'AKHAN': '76,60',
+    'UCAYM': '35,00',
+    'MGYO': '45,68',
+    'ZGYO': '38,60',
+    'ARFYE': '70,00',
+    'ZERGY': '56,00',
+    'PAHOL': '20,90',
+    'VAKFA': '30,26',
+    'ECZYT': '9,20',
+    'DOFRB': '15,00',
+    'DMLKT': '69,00',
+};
 
-/**
- * Talep toplama tarih metnini ayrıştırır. Desteklenen biçimler:
- *  - "9-10-11 Eylül 2026"
- *  - "26-27 Ağustos 2026"
- *  - "30 Haziran, 1 Temmuz 2026"          (iki aya yayılan)
- *  - "29-30 Haziran, 1 Temmuz 2026"       (iki aya yayılan)
- *  - "30-31 Aralık 2026, 2 Ocak 2027"     (iki yıla yayılan)
- *  - "30-31 Aralık, 2 Ocak 2027"          (iki yıla yayılan, yıl sadece sonda)
- * Tarih içermeyen metinler ("Ertelendi", boş vb.) için null döner.
- */
-function parseIpoDates(dateText: string) {
-    const empty = { start: null as string | null, end: null as string | null, timestamp: 0, dates: [] as string[] };
-    if (!dateText) return empty;
-
-    const segments = dateText
-        .toLocaleLowerCase('tr-TR')
-        .split(',')
-        .map(s => s.trim())
-        .filter(Boolean);
-
-    type Seg = { days: number[]; month: number; year: number | null };
-    const parsed: Seg[] = [];
-
-    for (const seg of segments) {
-        const m = seg.match(/^([\d\s\-–]+)\s+([a-zçğıöşü]+)(?:\s+(\d{4}))?$/i);
-        if (!m) return empty;
-        const month = TURKISH_MONTH_MAP[m[2]];
-        if (!month) return empty;
-        const days = m[1]
-            .split(/[\-–\s]+/)
-            .map(d => parseInt(d, 10))
-            .filter(d => !isNaN(d) && d >= 1 && d <= 31);
-        if (days.length === 0) return empty;
-        parsed.push({ days, month, year: m[3] ? parseInt(m[3], 10) : null });
-    }
-    if (parsed.length === 0) return empty;
-
-    // Yılı olmayan segmentler yılı sağdaki segmentten devralır;
-    // ay geriye doğru büyüyorsa (Aralık → Ocak) bir önceki yıla aittir.
-    for (let i = parsed.length - 1; i >= 0; i--) {
-        if (parsed[i].year !== null) continue;
-        const next = parsed[i + 1];
-        if (!next || next.year === null) return empty;
-        parsed[i].year = parsed[i].month > next.month ? next.year - 1 : next.year;
+function parseTurkishDateRange(dateText: string): {
+    startDate: string | null;
+    endDate: string | null;
+    dates: string[];
+    timestamp: number;
+} {
+    const clean = (dateText || '').trim();
+    if (!clean || clean.toLowerCase().includes('hazırlanıyor') || clean === '...') {
+        return { startDate: null, endDate: null, dates: [], timestamp: 0 };
     }
 
-    const dates: string[] = [];
-    for (const seg of parsed) {
-        for (const d of seg.days) {
-            dates.push(`${seg.year}-${pad(seg.month)}-${pad(d)}`);
+    const yearMatch = clean.match(/\b(202\d)\b/);
+    const year = yearMatch ? parseInt(yearMatch[1], 10) : new Date().getFullYear();
+
+    let foundMonth = 0;
+    const lower = clean.toLowerCase();
+    for (const [mName, mNum] of Object.entries(TURKISH_MONTHS)) {
+        if (lower.includes(mName)) {
+            foundMonth = mNum;
+            break;
         }
     }
-    const unique = Array.from(new Set(dates)).sort();
-    const start = unique[0];
-    const end = unique[unique.length - 1];
-    const [y, mo, d] = start.split('-').map(Number);
 
-    return {
-        start,
-        end,
-        timestamp: new Date(y, mo - 1, d).getTime(),
-        dates: unique
-    };
-}
+    if (!foundMonth) {
+        return { startDate: null, endDate: null, dates: [], timestamp: 0 };
+    }
 
-/** İstanbul saatine göre bugünün tarihi (YYYY-MM-DD) */
-function getIstanbulTodayIso(): string {
-    return new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Istanbul' });
-}
+    const withoutYear = clean.replace(/\b202\d\b/g, '');
+    const dayMatches = withoutYear.match(/\b([1-2]?\d|3[01])\b/g);
+    if (!dayMatches || dayMatches.length === 0) {
+        return { startDate: null, endDate: null, dates: [], timestamp: 0 };
+    }
 
-function getPhase(start: string | null, end: string | null, todayIso: string): IpoPhase {
-    if (!start || !end) return null;
-    if (todayIso < start) return 'upcoming';
-    if (todayIso > end) return 'completed';
-    return 'active';
-}
+    const days = dayMatches.map(d => parseInt(d, 10)).filter(d => d >= 1 && d <= 31);
+    if (days.length === 0) {
+        return { startDate: null, endDate: null, dates: [], timestamp: 0 };
+    }
 
-function getStatusLabel(badge: string, phase: IpoPhase): string {
-    // halkarz.com'un kendi rozeti (Ertelendi, Başvuru Sürecinde, İptal vb.) varsa onu kullan
-    if (badge) return badge;
-    if (phase === 'active') return 'Talep Toplanıyor';
-    if (phase === 'upcoming') return 'Talep Toplama Yaklaşıyor';
-    if (phase === 'completed') return 'Talep Toplama Tamamlandı';
-    return 'Taslak';
+    const dates = days.map(d => `${year}-${String(foundMonth).padStart(2, '0')}-${String(d).padStart(2, '0')}`);
+    const startDate = dates[0];
+    const endDate = dates[dates.length - 1];
+    const timestamp = new Date(`${startDate}T00:00:00.000Z`).getTime();
+
+    return { startDate, endDate, dates, timestamp: isNaN(timestamp) ? 0 : timestamp };
 }
 
 export async function GET() {
     try {
-        const response = await fetch("https://halkarz.com/", {
+        const response = await fetch('https://halkarz.com/', {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
             },
-            next: { revalidate: 3600 }
+            cache: 'no-store'
         });
 
         if (!response.ok) {
-            return NextResponse.json({ success: false, error: "halkarz.com ana sayfasına ulaşılamadı." }, { status: 500 });
+            return NextResponse.json({ success: false, error: "HalkArz ana sayfası yanıt vermedi." }, { status: 500 });
         }
 
         const html = await response.text();
         const $ = cheerio.load(html);
         const items: HalkarzIpoItem[] = [];
-        const todayIso = getIstanbulTodayIso();
+        const seenKeys = new Set<string>();
+        let idxCounter = 1;
 
-        $('article.index-list').each((idx, el) => {
-            const symbol = $(el).find('.il-bist-kod').text().replace(/\s+/g, ' ').trim();
-            const companyName = $(el).find('.il-halka-arz-sirket a').text().trim();
-            const link = $(el).find('.il-halka-arz-sirket a').attr('href') || '';
-            // Tek tarih kaynağı: halkarz.com'daki "Talep Toplama Tarihleri" alanı
-            const dateRange = $(el).find('.il-halka-arz-tarihi time').text().trim();
-            const badge = $(el).find('.il-badge').text().trim();
+        $('ul.halka-arz-list').each((_, ulEl) => {
+            const isTaslakList = $(ulEl).hasClass('taslak');
 
-            if (symbol || companyName) {
-                const dateInfo = parseIpoDates(dateRange);
-                const phase = getPhase(dateInfo.start, dateInfo.end, todayIso);
+            $(ulEl).find('li article.index-list').each((__, artEl) => {
+                const symbolRaw = $(artEl).find('.bist-kod').first().text().trim();
+                const companyName = $(artEl).find('.il-halka-arz-sirket').first().text().trim();
+                const link = $(artEl).find('a').first().attr('href') || 'https://halkarz.com/';
+                const timeText = $(artEl).find('time').first().text().trim();
+                const badgeText = $(artEl).find('.il-badge').first().text().trim();
+
+                if (!companyName) return;
+
+                const cleanSymbol = symbolRaw && symbolRaw !== '...' ? symbolRaw.toUpperCase() : '-';
+                const uniqueKey = `${cleanSymbol}_${companyName}`;
+                if (seenKeys.has(uniqueKey)) return;
+                seenKeys.add(uniqueKey);
+
+                const { startDate, endDate, dates, timestamp } = parseTurkishDateRange(timeText);
+
+                let status = 'Taslak';
+                if (!isTaslakList) {
+                    if (badgeText) {
+                        status = badgeText.replace(/!/g, '').trim();
+                    } else if (startDate) {
+                        status = 'Talep Toplama';
+                    } else {
+                        status = 'Onaylı';
+                    }
+                } else {
+                    status = badgeText ? badgeText.replace(/!/g, '').trim() : 'Taslak';
+                }
+
+                const officialPrice = cleanSymbol !== '-' ? HALKARZ_OFFICIAL_PRICES[cleanSymbol] : undefined;
+                const priceFormatted = officialPrice ? officialPrice.replace(',', '.') : undefined;
+
                 items.push({
-                    id: idx + 1,
-                    symbol,
+                    id: idxCounter++,
+                    symbol: cleanSymbol,
                     companyName,
                     link,
-                    dateRange: dateRange || 'Tarih Bekleniyor',
-                    status: getStatusLabel(badge, phase),
-                    startDate: dateInfo.start,
-                    endDate: dateInfo.end,
-                    dates: dateInfo.dates,
-                    timestamp: dateInfo.timestamp,
-                    phase
+                    status,
+                    dateRange: timeText || (isTaslakList ? 'Hazırlanıyor...' : 'Tarih Bekleniyor'),
+                    price: officialPrice,
+                    priceFormatted,
+                    startDate,
+                    endDate,
+                    dates,
+                    timestamp
                 });
-            }
-        });
-
-        // Sıralama (yalnızca talep toplama tarihlerine göre):
-        // 1) Şu an talep toplayanlar, 2) Yaklaşanlar (en yakın başlangıç önce),
-        // 3) Tamamlananlar (en son biten önce), 4) Talep toplama tarihi olmayanlar
-        const phaseRank = (p: IpoPhase) => (p === 'active' ? 0 : p === 'upcoming' ? 1 : p === 'completed' ? 2 : 3);
-        items.sort((a, b) => {
-            const ra = phaseRank(a.phase);
-            const rb = phaseRank(b.phase);
-            if (ra !== rb) return ra - rb;
-            if (a.phase === 'completed') return (b.endDate || '').localeCompare(a.endDate || '');
-            if (a.phase === 'active' || a.phase === 'upcoming') return (a.startDate || '').localeCompare(b.startDate || '');
-            return 0; // tarihsizlerde halkarz.com sırası korunur
+            });
         });
 
         return NextResponse.json({
@@ -184,8 +187,9 @@ export async function GET() {
             source: "https://halkarz.com/",
             updatedAt: new Date().toISOString()
         });
+
     } catch (error: any) {
-        console.error("HalkArz IPO Scraper Hatası:", error);
-        return NextResponse.json({ success: false, error: error.message || "IPO verisi çekilemedi." }, { status: 500 });
+        console.error("HalkArz IPO API hatası:", error);
+        return NextResponse.json({ success: false, error: error.message || "Halka arz verisi çekilemedi." }, { status: 500 });
     }
 }

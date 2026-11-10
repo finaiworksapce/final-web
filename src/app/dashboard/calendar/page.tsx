@@ -1145,10 +1145,25 @@ function CalendarContent() {
         const now = new Date();
         if (ecoDateFilter !== 'all') {
             list = list.filter(item => {
-                if (ecoDateFilter === 'today') return item.isToday || false;
+                if (ecoDateFilter === 'today') return isEconomicDateMatch(item, now);
                 if (ecoDateFilter === 'tomorrow') {
                     const tom = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-                    return item.dateFormatted?.includes(tom.getDate().toString()) || false;
+                    return isEconomicDateMatch(item, tom);
+                }
+                if (ecoDateFilter === 'this-week') {
+                    const ts = getEconomicEventTimestamp(item);
+                    if (!ts) return false;
+                    const dayOfWeek = now.getDay();
+                    const diffMon = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+                    const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diffMon).getTime();
+                    const weekEnd = weekStart + (7 * 24 * 60 * 60 * 1000) - 1;
+                    return ts >= weekStart && ts <= weekEnd;
+                }
+                if (ecoDateFilter === 'this-month') {
+                    const ts = getEconomicEventTimestamp(item);
+                    if (!ts) return false;
+                    const d = new Date(ts);
+                    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
                 }
                 return true;
             });
