@@ -537,7 +537,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
         <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-[#004BFA]/20 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute -bottom-32 -left-32 w-[400px] h-[400px] bg-[#78B8F5]/10 rounded-full blur-[140px] pointer-events-none" />
 
-        {/* Üst: 3D Logo ve Rozet */}
+        {/* Üst: 3D Logo ve Marka */}
         <div className="relative z-10 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <motion.img 
@@ -550,9 +550,6 @@ export const SignInPage: React.FC<SignInPageProps> = ({
             />
             <span className="text-2xl font-bold tracking-tight text-white clash-title">FinAi</span>
           </div>
-          <span className="px-3.5 py-1 rounded-full bg-white/10 text-white/90 text-xs font-semibold tracking-wider uppercase border border-white/10">
-            Karar Destek Ekosistemi
-          </span>
         </div>
 
         {/* Orta: Editoryal Manifesto ve Analitik Bloklar */}
