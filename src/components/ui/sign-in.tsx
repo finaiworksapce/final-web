@@ -537,8 +537,8 @@ export const SignInPage: React.FC<SignInPageProps> = ({
         <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-[#004BFA]/20 rounded-full blur-[140px] pointer-events-none" />
         <div className="absolute -bottom-32 -left-32 w-[400px] h-[400px] bg-[#78B8F5]/10 rounded-full blur-[140px] pointer-events-none" />
 
-        {/* Üst: 3D Logo ve Marka */}
-        <div className="relative z-10 flex items-center justify-between">
+        {/* Üst: 3D Logo ve Marka (Sağa Hizalı) */}
+        <div className="relative z-10 flex items-center justify-end">
           <div className="flex items-center gap-3">
             <motion.img 
               initial={{ scale: 0.85, opacity: 0 }}
