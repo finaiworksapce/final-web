@@ -261,59 +261,6 @@ export function FeatureSteps({ title = "Özellikler" }: { title?: string }) {
 
         </div>
 
-        {/* =========================================================================
-            BÖLÜM 4: 4'LÜ EDİTORYAL METRİK MATRİSİ (HAKKIMIZDA STANDARTI)
-            ========================================================================= */}
-        <div className="mt-14 pt-10 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-          <div className="space-y-1">
-            <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
-              %100
-            </span>
-            <span className="text-xs sm:text-sm text-slate-500 font-medium block">
-              Günlük Hayat Dili
-            </span>
-            <p className="text-xs text-slate-400 leading-relaxed pt-0.5">
-              Hiçbir terim bilmeden şirket bilançolarını kolayca kavrayın.
-            </p>
-          </div>
-
-          <div className="space-y-1">
-            <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
-              0 Jargon
-            </span>
-            <span className="text-xs sm:text-sm text-slate-500 font-medium block">
-              Sade & Eğlenceli
-            </span>
-            <p className="text-xs text-slate-400 leading-relaxed pt-0.5">
-              Korkutucu formüller yok; sokaktaki dükkan basitliğinde örnekler var.
-            </p>
-          </div>
-
-          <div className="space-y-1">
-            <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
-              10 Sn
-            </span>
-            <span className="text-xs sm:text-sm text-slate-500 font-medium block">
-              Hızlı KAP Özeti
-            </span>
-            <p className="text-xs text-slate-400 leading-relaxed pt-0.5">
-              Yüzlerce sayfalık resmi duyuruları saniyeler içinde anlaşılır kılan yapay zekâ.
-            </p>
-          </div>
-
-          <div className="space-y-1">
-            <span className="text-2xl sm:text-3xl font-normal text-[#0E1E38] block tracking-tight font-numbers">
-              Canlı
-            </span>
-            <span className="text-xs sm:text-sm text-slate-500 font-medium block">
-              Borsa İstanbul
-            </span>
-            <p className="text-xs text-slate-400 leading-relaxed pt-0.5">
-              Doğrulanmış BIST seans verileriyle güvenilir okuryazarlık.
-            </p>
-          </div>
-        </div>
-
       </div>
     </section>
   );
