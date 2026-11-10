@@ -50,7 +50,12 @@ function DashboardShell({
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
-    const [isPortfolioExpanded, setIsPortfolioExpanded] = useState(() => pathname.startsWith("/dashboard/portfolio"));
+    const [isPortfolioExpanded, setIsPortfolioExpanded] = useState(() => 
+        pathname.startsWith("/dashboard/portfolio") || 
+        pathname.startsWith("/dashboard/report") || 
+        pathname.startsWith("/dashboard/sample-portfolio") || 
+        pathname.startsWith("/dashboard/ornek-portfoy")
+    );
     const [isCalendarExpanded, setIsCalendarExpanded] = useState(() => pathname.startsWith("/dashboard/calendar") || pathname.startsWith("/dashboard/economic-calendar"));
     const profileRef = useRef<HTMLDivElement>(null);
     const hamburgerRef = useRef<HTMLButtonElement>(null);
@@ -90,7 +95,12 @@ function DashboardShell({
 
     // Aktif sayfaya göre ilgili alt menüyü otomatik açık tut ve diğerlerini kapat
     useEffect(() => {
-        if (pathname.startsWith("/dashboard/portfolio")) {
+        if (
+            pathname.startsWith("/dashboard/portfolio") || 
+            pathname.startsWith("/dashboard/report") || 
+            pathname.startsWith("/dashboard/sample-portfolio") || 
+            pathname.startsWith("/dashboard/ornek-portfoy")
+        ) {
             setIsPortfolioExpanded(true);
             setIsCalendarExpanded(false);
         } else if (pathname.startsWith("/dashboard/calendar") || pathname.startsWith("/dashboard/economic-calendar")) {
@@ -160,6 +170,24 @@ function DashboardShell({
 
     const portfolioSubItems = [
         { 
+            label: "Portföy Tablosu", 
+            href: "/dashboard/portfolio", 
+            isSubActive: pathname === "/dashboard/portfolio", 
+            icon: PieChart 
+        },
+        { 
+            label: "Haftalık Özet", 
+            href: "/dashboard/report", 
+            isSubActive: pathname.startsWith("/dashboard/report"), 
+            icon: FileText 
+        },
+        { 
+            label: "Örnek Portföy", 
+            href: "/dashboard/sample-portfolio", 
+            isSubActive: pathname.startsWith("/dashboard/sample-portfolio") || pathname.startsWith("/dashboard/ornek-portfoy"), 
+            icon: Sparkles 
+        },
+        { 
             label: "İşlem Geçmişi", 
             href: "/dashboard/portfolio/transactions", 
             isSubActive: pathname.startsWith("/dashboard/portfolio/transactions"), 
@@ -202,31 +230,19 @@ function DashboardShell({
             isActive: pathname === "/dashboard"
         },
         { 
-            icon: Sparkles, 
-            label: "Örnek Portföy", 
-            href: "/dashboard/sample-portfolio",
-            isActive: pathname.startsWith("/dashboard/sample-portfolio") || pathname.startsWith("/dashboard/ornek-portfoy")
+            icon: PieChart, 
+            label: "Portföyüm", 
+            href: "/dashboard/portfolio",
+            isActive: pathname.startsWith("/dashboard/portfolio") || pathname.startsWith("/dashboard/report") || pathname.startsWith("/dashboard/sample-portfolio") || pathname.startsWith("/dashboard/ornek-portfoy"),
+            subItems: portfolioSubItems,
+            isExpanded: isPortfolioExpanded,
+            toggleExpand: () => setIsPortfolioExpanded(prev => !prev)
         },
         { 
             icon: GraduationCap, 
             label: "FinAi Akademi", 
             href: "/dashboard/akademi",
             isActive: pathname.startsWith("/dashboard/akademi") || pathname.startsWith("/dashboard/academy")
-        },
-        { 
-            icon: FileText, 
-            label: "Haftalık Özet Rapor", 
-            href: "/dashboard/report",
-            isActive: pathname.startsWith("/dashboard/report")
-        },
-        { 
-            icon: PieChart, 
-            label: "Portföy Özeti & Tablosu", 
-            href: "/dashboard/portfolio",
-            isActive: pathname.startsWith("/dashboard/portfolio"),
-            subItems: portfolioSubItems,
-            isExpanded: isPortfolioExpanded,
-            toggleExpand: () => setIsPortfolioExpanded(prev => !prev)
         },
         { 
             icon: LayoutGrid, 
