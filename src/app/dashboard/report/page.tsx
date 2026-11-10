@@ -735,7 +735,7 @@ export default function FinAiReportViewPage() {
                                             tickLine={false}
                                             axisLine={{ stroke: '#CBD5E1', strokeWidth: 1 }}
                                             tick={{ fill: '#64748B', fontSize: 10, fontFamily: 'monospace' }}
-                                            tickFormatter={(val) => `${val > 0 ? '+' : ''}${val}%`}
+                                            tickFormatter={(val: number) => `${val > 0 ? '+' : ''}${val}%`}
                                             domain={yAxisDomain}
                                             width={42}
                                         />
