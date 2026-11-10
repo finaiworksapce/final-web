@@ -49,16 +49,16 @@ export function FinAiAkademiWidget() {
               <GraduationCap className="w-3.5 h-3.5 text-white" />
             </div>
             <div className="flex items-center gap-1.5">
-              <h3 className="clash-subtitle font-[325] text-[#F5F7FA] tracking-tight text-[11px] min-[360px]:text-xs sm:text-[13px]">
+              <h3 className="clash-subtitle font-[325] text-white tracking-tight text-[11px] min-[360px]:text-xs sm:text-[13px]">
                 FinAi Akademi
               </h3>
             </div>
           </div>
 
           {/* Sağ Üst Canlı Rozet (Toplam Varlık Widget'ı Stili) */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#004BFA] text-[#F5F7FA] font-medium shadow-sm shadow-[#004BFA]/30 clash-subtitle font-[325] text-[9px] min-[360px]:text-[10px] sm:text-[11px]">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#004BFA] text-white font-medium shadow-sm shadow-[#004BFA]/30 clash-subtitle font-[325] text-[9px] min-[360px]:text-[10px] sm:text-[11px]">
             <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-            <span>Yakında</span>
+            <span className="text-white">Çok Yakında Sizlerle</span>
           </div>
         </div>
 
@@ -69,20 +69,20 @@ export function FinAiAkademiWidget() {
               FinAi Akademi
             </span>
           </div>
-          <p className="text-xs clash-desc font-[225] text-[#D6E4FF]/80 mt-1.5">
-            Yapay zekâ destekli finansal analiz ve portföy eğitimi
+          <p className="text-xs clash-desc font-[225] text-white mt-1.5">
+            Çok Yakında Sizlerle
           </p>
         </div>
 
         {/* 3. Alt Durum Çubuğu */}
-        <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs clash-subtitle font-[325] text-[#D6E4FF]/90">
+        <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs clash-subtitle font-[325] text-white">
           <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-            <span className="text-[11px] text-[#D6E4FF]/90">Geliştirme Aşamasında</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            <span className="text-[11px] text-white">Çok Yakında Sizlerle</span>
           </div>
-          <span className="text-[11px] text-white/90 font-medium flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
-            <span>Yakında</span>
-            <ArrowRight className="w-3 h-3" />
+          <span className="text-[11px] text-white font-medium flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+            <span>İncele</span>
+            <ArrowRight className="w-3 h-3 text-white" />
           </span>
         </div>
       </div>

@@ -215,7 +215,7 @@ function DashboardShell({
         },
         { 
             icon: FileText, 
-            label: "FinAi Raporu", 
+            label: "Haftalık Özet Rapor", 
             href: "/dashboard/report",
             isActive: pathname.startsWith("/dashboard/report")
         },

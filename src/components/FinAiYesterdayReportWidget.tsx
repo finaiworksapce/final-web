@@ -104,7 +104,7 @@ export function FinAiYesterdayReportWidget() {
                         <Sparkles className="w-3.5 h-3.5 text-[#040989]" />
                     </div>
                     <h3 className="text-xs sm:text-[13px] clash-subtitle font-[325] text-[#040989] tracking-tight">
-                        FinAi Intelligence Raporu
+                        Haftalık Özet Rapor
                     </h3>
                 </div>
 

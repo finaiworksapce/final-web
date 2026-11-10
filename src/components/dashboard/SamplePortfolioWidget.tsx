@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { Sparkles, ChevronRight } from "lucide-react";
 import { useUser } from "@/components/providers/UserProvider";
-import { STRATEGY_PROFILES } from "@/config/onboarding-questions";
+import { STRATEGY_PROFILES, calculateDynamicStrategy } from "@/config/onboarding-questions";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 
@@ -12,7 +12,7 @@ const DISTRIBUTION_COLORS_DARK = ["#5B80FF", "#004BFA", "#38BDF8", "#818CF8", "#
 
 export function SamplePortfolioWidget() {
   const router = useRouter();
-  const { recommendedStrategy, financialLiteracyLevel } = useUser();
+  const { recommendedStrategy, financialLiteracyLevel, userMetadata } = useUser();
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
   const DISTRIBUTION_COLORS = isDark ? DISTRIBUTION_COLORS_DARK : DISTRIBUTION_COLORS_LIGHT;
@@ -24,12 +24,24 @@ export function SamplePortfolioWidget() {
   const strategy = STRATEGY_PROFILES[strategyKey] || STRATEGY_PROFILES.intermediate;
 
   const distributionItems = useMemo(() => {
+    // Eğer kullanıcının özel wizard cevapları varsa telemetriden al
+    if (userMetadata?.onboarding_answers && Object.keys(userMetadata.onboarding_answers).length > 0) {
+      const telemetry = calculateDynamicStrategy(userMetadata.onboarding_answers);
+      if (telemetry.slices && telemetry.slices.length > 0) {
+        return telemetry.slices.map((slice, idx) => ({
+          name: slice.name,
+          percentage: slice.value,
+          color: DISTRIBUTION_COLORS[idx % DISTRIBUTION_COLORS.length]
+        }));
+      }
+    }
+
     return strategy.distribution.map((item, idx) => ({
       name: item.name,
       percentage: item.percentage,
       color: DISTRIBUTION_COLORS[idx % DISTRIBUTION_COLORS.length]
     }));
-  }, [strategy, DISTRIBUTION_COLORS]);
+  }, [strategy, userMetadata?.onboarding_answers, DISTRIBUTION_COLORS]);
 
   const RADIUS = 34;
   const CIRCUMFERENCE = 2 * Math.PI * RADIUS; // ~213.628

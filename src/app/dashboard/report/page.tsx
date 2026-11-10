@@ -250,7 +250,7 @@ export default function FinAiReportViewPage() {
                                 <Sparkles className="w-4 h-4" />
                             </div>
                             <span className="text-xs sm:text-sm clash-title font-[500] tracking-tight">
-                                FinAi Intelligence Raporu
+                                Haftalık Özet Rapor
                             </span>
                         </div>
                     </div>
