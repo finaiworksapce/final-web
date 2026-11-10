@@ -33,16 +33,16 @@ export async function GET(request: Request) {
     const rawSymbols = symbolsParam.split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
     const results: any[] = [];
 
-    // 0. Fetch Live Commodities & Crypto (ALTIN, BTC, ETH, USDTRY)
+    // 0. Fetch Live Commodities & Crypto (ALTIN, GRAM-ALTIN, ALTIN.S1, GUMUS, ONS, BTC, ETH, USDTRY, EURTRY, GLDTR, ZGOLD)
     let liveMap: Record<string, any> = {};
     try {
         liveMap = await fetchLiveCommoditiesAndCrypto();
         rawSymbols.forEach(sym => {
-            const baseSym = sym.replace('.IS', '');
-            if (liveMap[baseSym]) {
-                results.push(liveMap[baseSym]);
-            } else if (liveMap[sym]) {
-                results.push(liveMap[sym]);
+            const baseSym = sym.replace(/\.IS$/i, '');
+            if (liveMap[sym]) {
+                results.push({ ...liveMap[sym], symbol: sym });
+            } else if (liveMap[baseSym]) {
+                results.push({ ...liveMap[baseSym], symbol: baseSym });
             }
         });
     } catch (e) {
@@ -51,32 +51,32 @@ export async function GET(request: Request) {
 
     // Map of known TEFAS fund symbols for fast lookup
     const tefasCatalogMap = new Map(TEFAS_CATALOG.map(f => [f.symbol.toUpperCase(), f.name]));
-    const COMMODITY_SYMBOLS = new Set(['ALTIN', 'GUMUS', 'GA', 'BTC', 'ETH', 'BTC-TRY', 'ETH-TRY', 'BTC-USD', 'ETH-USD', 'BITCOIN', 'ETHEREUM', 'USDTRY', 'USDT', 'USD']);
 
     const fundSymbols: string[] = [];
     const stockSymbols: string[] = [];
 
     rawSymbols.forEach(s => {
-        const baseSymbol = s.replace('.IS', '');
-        if ((COMMODITY_SYMBOLS.has(baseSymbol) || COMMODITY_SYMBOLS.has(s)) && (liveMap[baseSymbol] || liveMap[s])) {
-            // Live commodity/crypto, already fetched from Binance/Truncgil
+        const baseSymbol = s.replace(/\.IS$/i, '');
+        if (liveMap[s] || liveMap[baseSymbol]) {
+            // Live commodity/crypto/currency/gold ETF already resolved
             return;
         }
         // If symbol is in TEFAS_CATALOG or looks like a 3-letter TEFAS fund code
-        if (tefasCatalogMap.has(baseSymbol) || tefasCatalogMap.has(s) || (s.length === 3 && !s.includes('.'))) {
+        if (tefasCatalogMap.has(baseSymbol) || tefasCatalogMap.has(s) || (baseSymbol.length === 3 && !s.includes('.'))) {
             fundSymbols.push(baseSymbol);
         } else {
-            stockSymbols.push(s);
+            stockSymbols.push(baseSymbol);
         }
     });
 
-    // 1. Fetch Stock Quotes from Yahoo Finance (Only for non-TEFAS assets)
+    // 1. Fetch Stock Quotes from Yahoo Finance (Only for non-TEFAS, non-commodity BIST stocks)
     const symbolsToFetch = new Set<string>();
     stockSymbols.forEach(s => {
-        if (!s.includes('.')) {
+        if (!s.includes('.') && !s.includes('=')) {
             symbolsToFetch.add(`${s}.IS`);
+        } else {
+            symbolsToFetch.add(s);
         }
-        symbolsToFetch.add(s);
     });
 
     if (symbolsToFetch.size > 0) {
