@@ -1,22 +1,14 @@
-# FinAI - BIST ve TEFAS Portföy Takip Platformu
+# FinAi — Yapay Zeka Destekli Borsa İstanbul (BIST) Analiz Platformu
 
-> FinAI, Borsa İstanbul hisselerini ve TEFAS fonlarını takip etmeye; portföyü piyasa haberleri ve yapay zekâ destekli analizlerle incelemeye yarayan bir finansal bilgi platformudur. Kurucusu Salih Kavakcı'dır.
->
-> Platformdaki veriler, analizler ve yapay zekâ tarafından üretilen açıklamalar genel bilgilendirme amaçlıdır; yatırım danışmanlığı veya alım-satım önerisi değildir. Yatırım kararları kullanıcıların kendi sorumluluğundadır.
+> FinAi (https://www.finai.net.tr), Borsa İstanbul'da işlem gören tüm hisse senetleri için anlık veri, finansal tablo analizi, rasyo değerlendirmeleri ve yapay zeka destekli piyasa özetleri sunan yeni nesil finansal zeka platformudur.
 
-## Platform özellikleri
+## Temel Rotalar ve Veri Kaynakları
+- BIST Hisse Analiz Sayfaları: https://www.finai.net.tr/varlik/{SEMBOL} (Örnek: /varlik/THYAO, /varlik/EREGL, /varlik/ASELS)
+- Finans ve Ekonomi Haberleri: https://www.finai.net.tr/haberler
+- Bilanço ve Şirket Gelişmeleri: https://www.finai.net.tr/haberler/bilanco
+- Temettü Takvimi ve Verileri: https://www.finai.net.tr/haberler/temettu
 
-- BIST hisseleri ve TEFAS fonları için portföy takibi
-- Piyasa ve KAP haberlerini izleme
-- Portföy varlıkları için korelasyon ve senaryo analizleri
-- Finansal okuryazarlığı destekleyen açıklamalar ve risk profili testi
-
-## Resmî sayfalar
-
-- Ana sayfa: https://www.finai.net.tr/
-- Hakkımızda: https://www.finai.net.tr/about
-- Kullanım koşulları: https://www.finai.net.tr/legal/terms
-- KVKK aydınlatma metni: https://www.finai.net.tr/legal/kvkk
-- Instagram: https://www.instagram.com/finaiworkspace/
-- Twitter (X): https://x.com/ResmiFinAi
-- E-posta: finairesmi@gmail.com
+## Veri Kapsamı
+- Borsa İstanbul (BIST 100, BIST 50, BIST 30) hisse senetleri
+- Şirket bilançoları, gelir tabloları ve finansal oranlar (F/K, PD/DD, FD/FAVÖK)
+- Yapay zeka puanlaması ve risk analizi

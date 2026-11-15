@@ -4,7 +4,18 @@ import { cache } from 'react';
 import StockDetailClient from './stock-detail-client';
 import halkarzAboutDb from '@/data/halkarz_about_db.json';
 import { FinAiArchiveReader } from '@/lib/api/finai-archive-reader';
-import { SEO_PUBLIC_STOCK_SYMBOL_SET } from '@/lib/seo-public-stock-symbols';
+import { SEO_PUBLIC_STOCK_SYMBOLS, SEO_PUBLIC_STOCK_SYMBOL_SET } from '@/lib/seo-public-stock-symbols';
+
+// 1 saatte bir arka planda statik HTML'i güncelle (ISR)
+export const revalidate = 3600;
+export const dynamicParams = true;
+
+// Build anında en aktif BIST hisselerini önceden statik olarak üret
+export async function generateStaticParams() {
+  return SEO_PUBLIC_STOCK_SYMBOLS.slice(0, 100).map((symbol) => ({
+    symbol,
+  }));
+}
 
 // BIST Şirket Adları Kataloğu
 const STOCK_NAMES: Record<string, string> = {
@@ -68,19 +79,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const isKnownStock = SEO_PUBLIC_STOCK_SYMBOL_SET.has(symbol) || Boolean(profile?.companyName && (profile.businessSummary || profile.sector));
   const fullName = profile?.companyName || STOCK_NAMES[symbol] || symbol;
 
-  const title = `${symbol} Hisse Senedi Fiyatı, Grafik ve Analiz`;
-  const socialTitle = `${title} | FinAI`;
+  const cleanCompanyName = fullName !== symbol
+    ? fullName.replace(/\s+(A\.Ş\.|A\.O\.|T\.A\.Ş\.|A\.S\.|Anonim Şirketi|Ortaklığı).*$/i, '').trim()
+    : '';
+  const title = cleanCompanyName
+    ? `${cleanCompanyName} (${symbol}) Hisse Fiyatı, Grafik ve Bilanço Analizi`
+    : `${symbol} Hisse Fiyatı, Grafik ve Bilanço Analizi`;
+  const socialTitle = `${title} | FinAi`;
   const subject = fullName === symbol ? `${symbol} hissesi` : `${fullName} (${symbol})`;
-  const description = `${subject} için hisse fiyatı, grafik ve finansal veriler; mevcutsa temettü ve KAP/haber akışı. Veri güncelliği kaynağa bağlıdır.`;
+  const description = `${subject} güncel hisse fiyatı, canlı grafik, bilanço ve rasyo analizleri (F/K, PD/DD), teknik göstergeler ve yapay zeka piyasa değerlendirmeleri FinAi'da.`;
 
   return {
-    title,
+    title: `${title} | FinAi`,
     description,
     openGraph: {
       title: socialTitle,
       description,
       url: `https://www.finai.net.tr/varlik/${symbol}`,
-      siteName: 'FinAI',
+      siteName: 'FinAi',
       locale: 'tr_TR',
       type: 'website',
       images: [
@@ -88,7 +104,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
           url: '/icon-512.png',
           width: 512,
           height: 512,
-          alt: 'FinAI logosu',
+          alt: `${subject} FinAi logosu`,
         },
       ],
     },
@@ -126,6 +142,30 @@ export default async function Page({ params }: PageProps) {
         ...(about ? { "description": about.slice(0, 300) } : {}),
         "url": `https://www.finai.net.tr/varlik/${symbol}`
       },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `https://www.finai.net.tr/varlik/${symbol}#breadcrumb`,
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Ana Sayfa",
+            "item": "https://www.finai.net.tr"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Varlıklar",
+            "item": "https://www.finai.net.tr/varlik"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": symbol,
+            "item": `https://www.finai.net.tr/varlik/${symbol}`
+          }
+        ]
+      }
     ]
   } : null;
 

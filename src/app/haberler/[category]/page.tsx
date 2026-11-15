@@ -156,7 +156,17 @@ export default async function PublicNewsCategoryPage({ params }: { params: Promi
               const date = formatDate(item.earningsDate || item.paymentDate || item.startDate || undefined) || item.dateRange;
               return <li key={`${item.symbol}-${item.earningsDate || item.paymentDate || item.startDate || index}`} className="py-5">
                 <p className="text-xs text-slate-500">{date || 'Tarih açıklanmadı'}{item.status ? ` · ${item.status}` : ''}</p>
-                <h3 className="mt-1 font-semibold leading-6">{item.link ? <a href={item.link} target="_blank" rel="noopener noreferrer" className="hover:text-blue-700">{title}</a> : title}</h3>
+                <div className="mt-1 flex flex-wrap items-center justify-between gap-2">
+                  <h3 className="font-semibold leading-6">{item.link ? <a href={item.link} target="_blank" rel="noopener noreferrer" className="hover:text-blue-700">{title}</a> : title}</h3>
+                  {item.symbol && (
+                    <Link
+                      href={`/varlik/${item.symbol}`}
+                      className="inline-flex items-center text-xs font-medium text-blue-600 hover:text-blue-800 hover:underline"
+                    >
+                      Hisse Analizi →
+                    </Link>
+                  )}
+                </div>
                 {item.netAmountFormatted && <p className="mt-1 text-sm text-slate-600">Hisse başına net temettü: {item.netAmountFormatted}{typeof item.yieldPercent === 'number' ? ` · Temettü verimi: %${item.yieldPercent}` : ''}</p>}
               </li>;
             })}
