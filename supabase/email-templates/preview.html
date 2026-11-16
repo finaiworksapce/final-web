@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinAi E-posta Şablonları Önizleme Paneli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #090d16;
+            --panel: #111827;
+            --panel-border: #1f2937;
+            --text: #f3f4f6;
+            --text-muted: #9ca3af;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --accent: #00008B;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Controls */
+        .sidebar {
+            width: 380px;
+            background-color: var(--panel);
+            border-right: 1px solid var(--panel-border);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--panel-border);
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-badge {
+            background-color: var(--primary);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        select, input {
+            background-color: var(--bg);
+            border: 1px solid var(--panel-border);
+            color: var(--text);
+            padding: 12px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+
+        .template-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .template-btn {
+            background: none;
+            border: 1px solid var(--panel-border);
+            color: var(--text-muted);
+            padding: 14px 16px;
+            border-radius: 12px;
+            text-align: left;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .template-btn:hover {
+            border-color: var(--primary);
+            color: var(--text);
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+
+        .template-btn.active {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        }
+
+        .template-btn .badge {
+            font-size: 11px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+
+        /* Preview Area */
+        .preview-area {
+            flex-grow: 1;
+            background-color: var(--bg);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .preview-header {
+            height: 70px;
+            border-bottom: 1px solid var(--panel-border);
+            background-color: var(--panel);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
+
+        .viewport-controls {
+            display: flex;
+            gap: 8px;
+            background-color: var(--bg);
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid var(--panel-border);
+        }
+
+        .viewport-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 6px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .viewport-btn.active {
+            background-color: var(--panel);
+            color: var(--text);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .preview-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            overflow-y: auto;
+            background-image: radial-gradient(var(--panel-border) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .preview-wrapper {
+            background-color: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            height: 100%;
+            max-height: 800px;
+            border: 4px solid var(--panel);
+        }
+
+        .preview-wrapper.desktop {
+            width: 650px;
+        }
+
+        .preview-wrapper.mobile {
+            width: 375px;
+            max-height: 680px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: #f4f7fa;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <span class="logo-text">FinAi Mailer</span>
+            <span class="logo-badge">V2.0</span>
+        </div>
+
+        <div>
+            <h3 class="section-title">Şablon Seçimi</h3>
+            <div class="template-list">
+                <button class="template-btn active" onclick="selectTemplate('invite-user', this)">
+                    <span>Invite User (Davet)</span>
+                    <span class="badge">Link</span>
+                </button>
+                <button class="template-btn" onclick="selectTemplate('confirm-signup', this)">
+                    <span>Confirm Sign Up (Onay)</span>
+                    <span class="badge">OTP</span>
+                </button>
+                <button class="template-btn" onclick="selectTemplate('magic-link', this)">
+                    <span>Magic Link (Giriş)</span>
+                    <span class="badge">Link</span>
+                </button>
+                <button class="template-btn" onclick="selectTemplate('change-email', this)">
+                    <span>Change Email (Güncelleme)</span>
+                    <span class="badge">Link</span>
+                </button>
+                <button class="template-btn" onclick="selectTemplate('reset-password', this)">
+                    <span>Reset Password (Şifre)</span>
+                    <span class="badge">Link</span>
+                </button>
+                <button class="template-btn" onclick="selectTemplate('reauthenticate', this)">
+                    <span>Reauthentication (Doğrulama)</span>
+                    <span class="badge">OTP</span>
+                </button>
+            </div>
+        </div>
+
+        <div>
+            <h3 class="section-title">Değişkenler (Variables)</h3>
+            <div class="form-group">
+                <label for="confirmationUrl">Confirmation URL ({{ .ConfirmationURL }})</label>
+                <input type="text" id="confirmationUrl" value="https://finai.net.tr/auth/callback?code=7a39d82fb2b87a02cf891" oninput="updatePreview()">
+            </div>
+            <div class="form-group">
+                <label for="otpToken">OTP Token ({{ .Token }})</label>
+                <input type="text" id="otpToken" value="983574" oninput="updatePreview()">
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Area -->
+    <div class="preview-area">
+        <div class="preview-header">
+            <h2 id="current-template-title" style="font-size: 16px; font-weight: 600;">Kullanıcı Daveti E-postası</h2>
+            <div class="viewport-controls">
+                <button class="viewport-btn active" onclick="setViewport('desktop', this)">Masaüstü (600px)</button>
+                <button class="viewport-btn" onclick="setViewport('mobile', this)">Mobil (375px)</button>
+            </div>
+        </div>
+        <div class="preview-container">
+            <div id="preview-wrapper" class="preview-wrapper desktop">
+                <iframe id="preview-frame"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const templates = {
+            'invite-user': `<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>FinAi'a Davet Edildiniz</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f7fa; font-family: 'Inter', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f7fa; padding: 40px 0;">
+        <tr>
+            <td align="center">
+                <!-- Main Container -->
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; border-radius: 24px; overflow: hidden; background-color: #ffffff; box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06); border: 1px solid #e2e8f0;">
+
+                    <!-- Hero / Header Gradient -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #00008B 0%, #0a192f 100%); padding: 50px 40px; text-align: center;">
+                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/logo.png" alt="FinAi" style="width: 130px; height: auto; display: block; margin: 0 auto 24px;" />
+                            <h1 style="color: #ffffff; font-size: 26px; font-weight: 800; margin: 0; letter-spacing: -0.5px; line-height: 1.2;">FinAi ile Akıllı Yatırım Dünyasına Davet Edildiniz!</h1>
+                            <p style="color: #bfdbfe; font-size: 15px; margin: 12px 0 0; font-weight: 400; line-height: 1.5;">Yatırımda karmaşaya son veren, yapay zeka destekli yeni nesil yol arkadaşınız.</p>
+                        </td>
+                    </tr>
+
+                    <!-- Body Content -->
+                    <tr>
+                        <td style="padding: 48px 40px; text-align: left;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 28px;">
+                                <tr>
+                                    <td style="background: #e0e7ff; border-radius: 20px; padding: 6px 18px; text-align: center;">
+                                        <span style="color: #4f46e5; font-size: 13px; font-weight: 600; letter-spacing: 0.5px;">👋 Davetiniz Hazır</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="color: #334155; font-size: 15px; line-height: 1.8; margin: 0 0 20px;">
+                                Merhaba,<br><br>
+                                Yatırımlarınızı kulaktan dolma duyumlar ve karmaşık jargonların gölgesinden çıkarıp tamamen rasyonel kararlara dönüştürmeniz için kurumsal yöneticiniz veya ekip arkadaşınız tarafından **FinAi** platformuna davet edildiniz.
+                            </p>
+
+                            <!-- What is FinAi -->
+                            <div style="background-color: #f8fafc; border-left: 4px solid #00008B; padding: 20px; border-radius: 0 16px 16px 0; margin-bottom: 28px;">
+                                <h3 style="color: #0f172a; font-size: 15px; font-weight: 700; margin: 0 0 8px;">FinAi Nedir?</h3>
+                                <p style="color: #475569; font-size: 14px; line-height: 1.7; margin: 0;">
+                                    FinAi; finansal okuryazarlık seviyeniz ne olursa olsun, yatırımlarınızı yapay zeka gücüyle şeffaf, sade ve anlaşılır bir şekilde yönetebilmeniz için tasarlanmış yeni nesil bir portföy analiz asistanıdır.
+                                </p>
+                            </div>
+
+                            <!-- Traditional vs FinAi -->
+                            <h4 style="color: #0f172a; font-size: 15px; font-weight: 700; margin: 0 0 16px; text-transform: uppercase; letter-spacing: 0.5px;">Geleneksel Yaklaşımı Geride Bırakın:</h4>
+                            
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 28px;">
+                                <tr>
+                                    <td style="padding-bottom: 12px; vertical-align: top; width: 24px;">
+                                        <span style="color: #ef4444; font-size: 16px; font-weight: bold; line-height: 1;">✕</span>
+                                    </td>
+                                    <td style="padding-bottom: 12px; color: #475569; font-size: 14px; line-height: 1.6; padding-left: 8px;">
+                                        <strong>Eski Yöntem:</strong> Dağınık banka ve aracı kurum ekranlarında kaybolmak, karmaşık Excel tablolarıyla vakit kaybetmek ve hisselerin gerçek risklerini bilmeden plansız kararlar almak.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: top; width: 24px;">
+                                        <span style="color: #22c55e; font-size: 16px; font-weight: bold; line-height: 1;">✓</span>
+                                    </td>
+                                    <td style="color: #334155; font-size: 14px; line-height: 1.6; padding-left: 8px;">
+                                        <strong>FinAi ile Yeni Dönem:</strong> BIST (Hisse Senetleri) ve TEFAS (Yatırım Fonları) portföyünüzü tek bir akıllı ekranda anlık kontrol etmek, piyasa veri yığınlarını sizin lehinize çeviren rasyonel yorumlara saniyeler içinde ulaşmak.
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Advantages -->
+                            <h4 style="color: #0f172a; font-size: 15px; font-weight: 700; margin: 0 0 16px; text-transform: uppercase; letter-spacing: 0.5px;">FinAi Sizi Nasıl Destekler? (Avantajlarınız)</h4>
+                            
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 32px;">
+                                <tr>
+                                    <td style="padding-bottom: 16px; vertical-align: top; width: 24px; font-size: 16px;">💡</td>
+                                    <td style="padding-bottom: 16px; color: #334155; font-size: 14px; line-height: 1.6; padding-left: 8px;">
+                                        <strong>"Ben neye yatırım yapıyorum?" Sorusuna Net Yanıtlar:</strong> Varlıklarınızın değerini neyin etkilediğini size karmaşık grafikler yerine doğrusal, şeffaf ve Türkçe cümlelerle anlatır.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 16px; vertical-align: top; width: 24px; font-size: 16px;">🤖</td>
+                                    <td style="padding-bottom: 16px; color: #334155; font-size: 14px; line-height: 1.6; padding-left: 8px;">
+                                        <strong>Duygusal Değil, Veriye Dayalı Kararlar:</strong> Piyasa dalgalanmalarına kapılmadan, yapay zekanın sunduğu matematiksel korelasyon ve risk analizleriyle dengeli sepetler oluşturmanızı sağlar.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: top; width: 24px; font-size: 16px;">🛡️</td>
+                                    <td style="color: #334155; font-size: 14px; line-height: 1.6; padding-left: 8px;">
+                                        <strong>Güvenli Ortak Çalışma Alanı:</strong> Portföy ve analizlerinizi ekip üyelerinizle tam bir gizlilik ve güven içinde paylaşarak ortak yatırım stratejileri geliştirmenize imkan tanır.
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- CTA Button -->
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 32px; width: 100%;">
+                                <tr>
+                                    <td align="center">
+                                        <div style="background: linear-gradient(135deg, #00008B 0%, #1e3a8a 100%); border-radius: 14px; display: inline-block; box-shadow: 0 10px 24px rgba(0, 0, 139, 0.25);">
+                                            <a href="{{ .ConfirmationURL }}" target="_blank" style="display: inline-block; padding: 18px 48px; color: #ffffff; font-size: 16px; font-weight: 700; text-decoration: none; letter-spacing: 0.3px;">
+                                                Daveti Kabul Et ve Kurulumu Başlat →
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px;">
+                                <p style="color: #64748b; font-size: 13px; line-height: 1.6; margin: 0; text-align: left;">
+                                    🔒 Bu davet bağlantısı güvenlik kuralları gereği tek kullanımlıktır ve <strong>24 saat</strong> geçerlidir. Bağlantıya tıkladıktan sonra doğrudan güvenli kayıt tamamlama ekranına yönlendirileceksiniz.
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Divider -->
+                    <tr>
+                        <td style="padding: 0 40px;">
+                            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 0;">
+                        </td>
+                    </tr>
+
+                    <!-- Footer Section -->
+                    <tr>
+                        <td style="background-color: #0f172a; padding: 40px; text-align: center;">
+                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/logo.png" alt="FinAi" style="width: 80px; height: auto; display: inline-block; margin-bottom: 24px; opacity: 0.5;" />
+                            
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 20px;">
+                                <tr>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="https://finai.net.tr" target="_blank" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block;">🌐 Web Sitemiz</a>
+                                    </td>
+                                    <td style="color: #334155; vertical-align: middle;">•</td>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="https://www.instagram.com/finai.tr/" target="_blank" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block; line-height: 16px;">
+                                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/instagram.png" alt="Instagram" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px; opacity: 0.7; filter: brightness(0.9);" />Instagram
+                                        </a>
+                                    </td>
+                                    <td style="color: #334155; vertical-align: middle;">•</td>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="mailto:destek@finai.com.tr" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block;">📧 Destek Hattı</a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="color: #475569; font-size: 12px; margin: 0 0 8px; line-height: 1.6;">
+                                © 2026 FinAi Technologies Inc. Tüm hakları saklıdır.
+                            </p>
+                            <p style="color: #334155; font-size: 11px; margin: 0;">
+                                Bu e-posta otomatik olarak oluşturulmuştur, lütfen yanıtlamayınız.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>`,
+
+            'confirm-signup': `<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Ayrıcalığa Hoş Geldiniz</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f7fa; font-family: 'Inter', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f7fa; padding: 40px 0;">
+        <tr>
+            <td align="center">
+                <!-- Main Container -->
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; border-radius: 24px; overflow: hidden; background-color: #ffffff; box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06); border: 1px solid #e2e8f0;">
+
+                    <!-- Hero / Header Gradient -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #00008B 0%, #0a192f 100%); padding: 50px 40px; text-align: center;">
+                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/logo.png" alt="FinAi" style="width: 130px; height: auto; display: block; margin: 0 auto 24px;" />
+                            <h1 style="color: #ffffff; font-size: 28px; font-weight: 800; margin: 0; letter-spacing: -0.5px; line-height: 1.2;">Ayrıcalığa Hoş Geldiniz</h1>
+                            <p style="color: #bfdbfe; font-size: 16px; margin: 12px 0 0; font-weight: 400; line-height: 1.5;">Akıllı portföy asistanınızla tanışmaya son bir adım kaldı.</p>
+                        </td>
+                    </tr>
+
+                    <!-- Body Content -->
+                    <tr>
+                        <td style="padding: 48px 40px; text-align: center;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 24px;">
+                                <tr>
+                                    <td style="background: #e0e7ff; border-radius: 20px; padding: 6px 16px;">
+                                        <span style="color: #4f46e5; font-size: 13px; font-weight: 600; letter-spacing: 0.5px;">✨ Hesap Doğrulama</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="color: #334155; font-size: 16px; line-height: 1.8; margin: 0 0 32px; text-align: justify;">
+                                Merhaba,<br><br>
+                                FinAi dünyasına katılım talebiniz ve oluşturduğunuz üyelik başvurusu için teşekkür ederiz. Akıllı finansal asistanınızla tanışmaya ve yatırımlarınızı yapay zeka gücüyle yönetmeye başlamak için hesabınızın güvenliğini doğrulamamız gerekmektedir.<br><br>
+                                Kaydınızı tamamlamak ve e-posta adresinizin doğruluğunu onaylamak adına, sistem tarafından oluşturulan aşağıdaki 6 haneli tek kullanımlık güvenlik kodunu uygulamadaki ilgili alana giriniz. Bu güvenlik doğrulaması, hesabınızın üçüncü şahıslar tarafından erişilmesini önlemek amacıyla zorunludur.
+                            </p>
+
+                            <!-- OTP Box -->
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin: 0 auto 32px;">
+                                <tr>
+                                    <td align="center">
+                                        <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 18px; padding: 20px 0; max-width: 320px; margin: 0 auto; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+                                            <span style="font-family: monospace; font-size: 42px; font-weight: 800; color: #00008B; letter-spacing: 10px; display: inline-block; margin-left: 10px;">{{ .Token }}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; margin-top: 16px;">
+                                <p style="color: #64748b; font-size: 13px; line-height: 1.6; margin: 0; text-align: left;">
+                                    🔒 Bu onay kodu <strong>tek kullanımlıktır</strong> ve 24 saat geçerlidir. Hesabınızın güvenliğini korumak amacıyla lütfen bu doğrulama kodunu kimseyle paylaşmayınız.
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Divider -->
+                    <tr>
+                        <td style="padding: 0 40px;">
+                            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 0;">
+                        </td>
+                    </tr>
+
+                    <!-- Features Section -->
+                    <tr>
+                        <td style="padding: 40px; background-color: #f8fafc;">
+                            <h3 style="color: #0f172a; font-size: 14px; font-weight: 700; margin: 0 0 24px; text-align: center; text-transform: uppercase; letter-spacing: 1px;">Sizi Neler Bekliyor?</h3>
+                            
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td width="33%" align="center" style="padding: 0 10px;">
+                                        <div style="background: #ffffff; width: 52px; height: 52px; border-radius: 16px; display: inline-block; line-height: 52px; font-size: 24px; margin-bottom: 12px; box-shadow: 0 8px 16px rgba(15, 23, 42, 0.04); border: 1px solid #e2e8f0;">📊</div>
+                                        <p style="color: #0f172a; font-size: 13px; font-weight: 700; margin: 0 0 4px;">Canlı Takip</p>
+                                        <p style="color: #64748b; font-size: 11px; margin: 0; line-height: 1.4;">Portföyünüzü anlık izleyin</p>
+                                    </td>
+                                    <td width="33%" align="center" style="padding: 0 10px;">
+                                        <div style="background: #ffffff; width: 52px; height: 52px; border-radius: 16px; display: inline-block; line-height: 52px; font-size: 24px; margin-bottom: 12px; box-shadow: 0 8px 16px rgba(15, 23, 42, 0.04); border: 1px solid #e2e8f0;">🤖</div>
+                                        <p style="color: #0f172a; font-size: 13px; font-weight: 700; margin: 0 0 4px;">Yapay Zeka</p>
+                                        <p style="color: #64748b; font-size: 11px; margin: 0; line-height: 1.4;">Akıllı analiz asistanı</p>
+                                    </td>
+                                    <td width="33%" align="center" style="padding: 0 10px;">
+                                        <div style="background: #ffffff; width: 52px; height: 52px; border-radius: 16px; display: inline-block; line-height: 52px; font-size: 24px; margin-bottom: 12px; box-shadow: 0 8px 16px rgba(15, 23, 42, 0.04); border: 1px solid #e2e8f0;">💼</div>
+                                        <p style="color: #0f172a; font-size: 13px; font-weight: 700; margin: 0 0 4px;">Gelişmiş Rapor</p>
+                                        <p style="color: #64748b; font-size: 11px; margin: 0; line-height: 1.4;">Detaylı yatırım analizleri</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Footer Section -->
+                    <tr>
+                        <td style="background-color: #0f172a; padding: 40px; text-align: center;">
+                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/logo.png" alt="FinAi" style="width: 80px; height: auto; display: inline-block; margin-bottom: 24px; opacity: 0.5;" />
+                            
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 20px;">
+                                <tr>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="https://finai.net.tr" target="_blank" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block;">🌐 Web Sitemiz</a>
+                                    </td>
+                                    <td style="color: #334155; vertical-align: middle;">•</td>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="https://www.instagram.com/finai.tr/" target="_blank" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block; line-height: 16px;">
+                                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/instagram.png" alt="Instagram" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px; opacity: 0.7; filter: brightness(0.9);" />Instagram
+                                        </a>
+                                    </td>
+                                    <td style="color: #334155; vertical-align: middle;">•</td>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="mailto:destek@finai.com.tr" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block;">📧 Destek Hattı</a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="color: #475569; font-size: 12px; margin: 0 0 8px; line-height: 1.6;">
+                                © 2026 FinAi Technologies Inc. Tüm hakları saklıdır.
+                            </p>
+                            <p style="color: #334155; font-size: 11px; margin: 0;">
+                                Bu e-posta otomatik olarak oluşturulmuştur, lütfen yanıtlamayınız.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>`,
+
+            'magic-link': `<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Giriş Bağlantınız Hazır</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f7fa; font-family: 'Inter', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f7fa; padding: 40px 0;">
+        <tr>
+            <td align="center">
+                <!-- Main Container -->
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; border-radius: 24px; overflow: hidden; background-color: #ffffff; box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06); border: 1px solid #e2e8f0;">
+
+                    <!-- Hero / Header Gradient -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #00008B 0%, #0a192f 100%); padding: 50px 40px; text-align: center;">
+                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/logo.png" alt="FinAi" style="width: 130px; height: auto; display: block; margin: 0 auto 24px;" />
+                            <h1 style="color: #ffffff; font-size: 28px; font-weight: 800; margin: 0; letter-spacing: -0.5px; line-height: 1.2;">Giriş Bağlantınız Hazır</h1>
+                            <p style="color: #bfdbfe; font-size: 16px; margin: 12px 0 0; font-weight: 400; line-height: 1.5;">Şifrenizi girmeden hesabınıza anında erişin.</p>
+                        </td>
+                    </tr>
+
+                    <!-- Body Content -->
+                    <tr>
+                        <td style="padding: 48px 40px; text-align: center;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 24px;">
+                                <tr>
+                                    <td style="background: #ecfdf5; border-radius: 20px; padding: 6px 16px;">
+                                        <span style="color: #059669; font-size: 13px; font-weight: 600; letter-spacing: 0.5px;">🔗 Hızlı Giriş</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="color: #334155; font-size: 16px; line-height: 1.8; margin: 0 0 32px; text-align: justify;">
+                                Merhaba,<br><br>
+                                FinAi hesabınıza şifre kullanmadan, hızlı ve güvenli bir şekilde erişim sağlamak için bir giriş talebinde bulundunuz.<br><br>
+                                Güvenliğiniz için tek kullanımlık olarak üretilen bu erişim bağlantısı, şifre girme zahmetine gerek kalmadan doğrudan profilinize yönlenmenizi sağlar. Aşağıdaki bağlantıya tıklayarak oturumunuzu hemen açabilir ve finansal analizlerinizi kaldığınız yerden incelemeye devam edebilirsiniz.
+                            </p>
+
+                            <!-- CTA Button -->
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 32px;">
+                                <tr>
+                                    <td align="center" style="background: linear-gradient(135deg, #00008B 0%, #1e3a8a 100%); border-radius: 14px; box-shadow: 0 10px 24px rgba(0, 0, 139, 0.25);">
+                                        <a href="{{ .ConfirmationURL }}" target="_blank" style="display: inline-block; padding: 18px 48px; color: #ffffff; font-size: 16px; font-weight: 700; text-decoration: none; letter-spacing: 0.3px;">
+                                            Hesabıma Güvenli Giriş Yap →
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; margin-top: 16px;">
+                                <p style="color: #64748b; font-size: 13px; line-height: 1.6; margin: 0; text-align: left;">
+                                    🔒 Bu bağlantı <strong>tek kullanımlıktır</strong> ve 24 saat geçerlidir. Eğer bu hızlı giriş talebi sizin tarafınızdan gönderilmediyse, bu e-postayı güvenle göz ardı edebilirsiniz; hesabınız güvendedir.
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Divider -->
+                    <tr>
+                        <td style="padding: 0 40px;">
+                            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 0;">
+                        </td>
+                    </tr>
+
+                    <!-- Footer Section -->
+                    <tr>
+                        <td style="background-color: #0f172a; padding: 40px; text-align: center;">
+                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/logo.png" alt="FinAi" style="width: 80px; height: auto; display: inline-block; margin-bottom: 24px; opacity: 0.5;" />
+                            
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 20px;">
+                                <tr>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="https://finai.net.tr" target="_blank" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block;">🌐 Web Sitemiz</a>
+                                    </td>
+                                    <td style="color: #334155; vertical-align: middle;">•</td>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="https://www.instagram.com/finai.tr/" target="_blank" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block; line-height: 16px;">
+                                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/instagram.png" alt="Instagram" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px; opacity: 0.7; filter: brightness(0.9);" />Instagram
+                                        </a>
+                                    </td>
+                                    <td style="color: #334155; vertical-align: middle;">•</td>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="mailto:destek@finai.com.tr" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block;">📧 Destek Hattı</a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="color: #475569; font-size: 12px; margin: 0 0 8px; line-height: 1.6;">
+                                © 2026 FinAi Technologies Inc. Tüm hakları saklıdır.
+                            </p>
+                            <p style="color: #334155; font-size: 11px; margin: 0;">
+                                Bu e-posta otomatik olarak oluşturulmuştur, lütfen yanıtlamayınız.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>`,
+
+            'change-email': `<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>E-posta Adresinizi Doğrulayın</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f7fa; font-family: 'Inter', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f7fa; padding: 40px 0;">
+        <tr>
+            <td align="center">
+                <!-- Main Container -->
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; border-radius: 24px; overflow: hidden; background-color: #ffffff; box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06); border: 1px solid #e2e8f0;">
+
+                    <!-- Hero / Header Gradient -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #00008B 0%, #0a192f 100%); padding: 50px 40px; text-align: center;">
+                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/logo.png" alt="FinAi" style="width: 130px; height: auto; display: block; margin: 0 auto 24px;" />
+                            <h1 style="color: #ffffff; font-size: 28px; font-weight: 800; margin: 0; letter-spacing: -0.5px; line-height: 1.2;">E-posta Güncelleme</h1>
+                            <p style="color: #bfdbfe; font-size: 16px; margin: 12px 0 0; font-weight: 400; line-height: 1.5;">Hesap bilgilerinizi güncel tutarak güvende kalın.</p>
+                        </td>
+                    </tr>
+
+                    <!-- Body Content -->
+                    <tr>
+                        <td style="padding: 48px 40px; text-align: center;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 24px;">
+                                <tr>
+                                    <td style="background: #fffbeb; border-radius: 20px; padding: 6px 16px;">
+                                        <span style="color: #d97706; font-size: 13px; font-weight: 600; letter-spacing: 0.5px;">✉️ E-posta Değişikliği</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="color: #334155; font-size: 16px; line-height: 1.8; margin: 0 0 32px; text-align: justify;">
+                                Merhaba,<br><br>
+                                FinAi hesabınızın kayıtlı e-posta adresini güncellemek üzere bir talepte bulundunuz. Bu işlemin sizin tarafınızdan yapıldığından emin olmak ve hesap güvenliğinizi korumak amacıyla yeni e-posta adresinizin doğrulanması gerekmektedir.<br><br>
+                                E-posta değişiklik işleminizi onaylamak ve yeni adresinizi hesabınızla ilişkilendirmek için lütfen aşağıdaki doğrulama butonuna tıklayın. Bu işlem tamamlandıktan sonra, gelecekteki tüm bildirimler ve giriş işlemleri bu yeni adres üzerinden gerçekleştirilecektir.
+                            </p>
+
+                            <!-- CTA Button -->
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 32px;">
+                                <tr>
+                                    <td align="center" style="background: linear-gradient(135deg, #00008B 0%, #1e3a8a 100%); border-radius: 14px; box-shadow: 0 10px 24px rgba(0, 0, 139, 0.25);">
+                                        <a href="{{ .ConfirmationURL }}" target="_blank" style="display: inline-block; padding: 18px 48px; color: #ffffff; font-size: 16px; font-weight: 700; text-decoration: none; letter-spacing: 0.3px;">
+                                            Yeni E-postayı Doğrula →
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; margin-top: 16px;">
+                                <p style="color: #64748b; font-size: 13px; line-height: 1.6; margin: 0; text-align: left;">
+                                    🔒 Bu bağlantı güvenlik nedeniyle <strong>24 saat</strong> geçerlidir. Eğer bu talebi siz göndermediyseniz, hesabınız tamamen güvendedir ve hiçbir işlem yapmanıza gerek yoktur; e-posta adresiniz değişmeyecektir.
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Divider -->
+                    <tr>
+                        <td style="padding: 0 40px;">
+                            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 0;">
+                        </td>
+                    </tr>
+
+                    <!-- Footer Section -->
+                    <tr>
+                        <td style="background-color: #0f172a; padding: 40px; text-align: center;">
+                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/logo.png" alt="FinAi" style="width: 80px; height: auto; display: inline-block; margin-bottom: 24px; opacity: 0.5;" />
+                            
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 20px;">
+                                <tr>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="https://finai.net.tr" target="_blank" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block;">🌐 Web Sitemiz</a>
+                                    </td>
+                                    <td style="color: #334155; vertical-align: middle;">•</td>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="https://www.instagram.com/finai.tr/" target="_blank" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block; line-height: 16px;">
+                                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/instagram.png" alt="Instagram" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px; opacity: 0.7; filter: brightness(0.9);" />Instagram
+                                        </a>
+                                    </td>
+                                    <td style="color: #334155; vertical-align: middle;">•</td>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="mailto:destek@finai.com.tr" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block;">📧 Destek Hattı</a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="color: #475569; font-size: 12px; margin: 0 0 8px; line-height: 1.6;">
+                                © 2026 FinAi Technologies Inc. Tüm hakları saklıdır.
+                            </p>
+                            <p style="color: #334155; font-size: 11px; margin: 0;">
+                                Bu e-posta otomatik olarak oluşturulmuştur, lütfen yanıtlamayınız.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>`,
+
+            'reset-password': `<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Şifre Sıfırlama Talebi</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f7fa; font-family: 'Inter', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f7fa; padding: 40px 0;">
+        <tr>
+            <td align="center">
+                <!-- Main Container -->
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; border-radius: 24px; overflow: hidden; background-color: #ffffff; box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06); border: 1px solid #e2e8f0;">
+
+                    <!-- Hero / Header Gradient -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #00008B 0%, #0a192f 100%); padding: 50px 40px; text-align: center;">
+                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/logo.png" alt="FinAi" style="width: 130px; height: auto; display: block; margin: 0 auto 24px;" />
+                            <h1 style="color: #ffffff; font-size: 28px; font-weight: 800; margin: 0; letter-spacing: -0.5px; line-height: 1.2;">Şifre Sıfırlama Talebi</h1>
+                            <p style="color: #bfdbfe; font-size: 16px; margin: 12px 0 0; font-weight: 400; line-height: 1.5;">Hesabınıza yeniden ve güvenle erişim sağlayın.</p>
+                        </td>
+                    </tr>
+
+                    <!-- Body Content -->
+                    <tr>
+                        <td style="padding: 48px 40px; text-align: center;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 24px;">
+                                <tr>
+                                    <td style="background: #fee2e2; border-radius: 20px; padding: 6px 16px;">
+                                        <span style="color: #ef4444; font-size: 13px; font-weight: 600; letter-spacing: 0.5px;">🔒 Güvenlik İşlemi</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="color: #334155; font-size: 16px; line-height: 1.8; margin: 0 0 32px; text-align: justify;">
+                                Merhaba,<br><br>
+                                FinAi hesabınıza ait giriş şifresini sıfırlamak ve yeni bir şifre tanımlamak üzere bir talep aldık.<br><br>
+                                Hesap güvenliğinizi en üst düzeyde korumak amacıyla şifre güncelleme işlemleri yalnızca bu tek kullanımlık güvenli bağlantı üzerinden gerçekleştirilebilmektedir. Aşağıdaki bağlantıya tıklayarak şifre sıfırlama sayfasına gidebilir, yeni ve güçlü bir şifre belirleyerek hesabınıza güvenle yeniden erişim sağlayabilirsiniz.
+                            </p>
+
+                            <!-- CTA Button -->
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 32px;">
+                                <tr>
+                                    <td align="center" style="background: linear-gradient(135deg, #00008B 0%, #1e3a8a 100%); border-radius: 14px; box-shadow: 0 10px 24px rgba(0, 0, 139, 0.25);">
+                                        <a href="{{ .ConfirmationURL }}" target="_blank" style="display: inline-block; padding: 18px 48px; color: #ffffff; font-size: 16px; font-weight: 700; text-decoration: none; letter-spacing: 0.3px;">
+                                            Şifremi Sıfırla →
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; margin-top: 16px;">
+                                <p style="color: #64748b; font-size: 13px; line-height: 1.6; margin: 0; text-align: left;">
+                                    🔒 Bu bağlantı tek kullanımlıktır ve güvenlik kuralları gereği <strong>24 saat</strong> geçerlidir. Şifre sıfırlama talebinde siz bulunmadıysanız bu e-postayı dikkate almayınız; hesabınız tamamen güvendedir.
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Divider -->
+                    <tr>
+                        <td style="padding: 0 40px;">
+                            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 0;">
+                        </td>
+                    </tr>
+
+                    <!-- Footer Section -->
+                    <tr>
+                        <td style="background-color: #0f172a; padding: 40px; text-align: center;">
+                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/logo.png" alt="FinAi" style="width: 80px; height: auto; display: inline-block; margin-bottom: 24px; opacity: 0.5;" />
+                            
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 20px;">
+                                <tr>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="https://finai.net.tr" target="_blank" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block;">🌐 Web Sitemiz</a>
+                                    </td>
+                                    <td style="color: #334155; vertical-align: middle;">•</td>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="https://www.instagram.com/finai.tr/" target="_blank" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block; line-height: 16px;">
+                                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/instagram.png" alt="Instagram" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px; opacity: 0.7; filter: brightness(0.9);" />Instagram
+                                        </a>
+                                    </td>
+                                    <td style="color: #334155; vertical-align: middle;">•</td>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="mailto:destek@finai.com.tr" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block;">📧 Destek Hattı</a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="color: #475569; font-size: 12px; margin: 0 0 8px; line-height: 1.6;">
+                                © 2026 FinAi Technologies Inc. Tüm hakları saklıdır.
+                            </p>
+                            <p style="color: #334155; font-size: 11px; margin: 0;">
+                                Bu e-posta otomatik olarak oluşturulmuştur, lütfen yanıtlamayınız.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>`,
+
+            'reauthenticate': `<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Yeniden Kimlik Doğrulama</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f7fa; font-family: 'Inter', Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #f4f7fa; padding: 40px 0;">
+        <tr>
+            <td align="center">
+                <!-- Main Container -->
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; border-radius: 24px; overflow: hidden; background-color: #ffffff; box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06); border: 1px solid #e2e8f0;">
+
+                    <!-- Hero / Header Gradient -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #00008B 0%, #0a192f 100%); padding: 50px 40px; text-align: center;">
+                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/logo.png" alt="FinAi" style="width: 130px; height: auto; display: block; margin: 0 auto 24px;" />
+                            <h1 style="color: #ffffff; font-size: 28px; font-weight: 800; margin: 0; letter-spacing: -0.5px; line-height: 1.2;">Kimlik Doğrulama</h1>
+                            <p style="color: #bfdbfe; font-size: 16px; margin: 12px 0 0; font-weight: 400; line-height: 1.5;">Hassas işlemleriniz için güvenli onay.</p>
+                        </td>
+                    </tr>
+
+                    <!-- Body Content -->
+                    <tr>
+                        <td style="padding: 48px 40px; text-align: center;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 24px;">
+                                <tr>
+                                    <td style="background: #f5f3ff; border-radius: 20px; padding: 6px 16px;">
+                                        <span style="color: #7c3aed; font-size: 13px; font-weight: 600; letter-spacing: 0.5px;">🛡️ Güvenlik Doğrulaması</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="color: #334155; font-size: 16px; line-height: 1.8; margin: 0 0 32px; text-align: justify;">
+                                Merhaba,<br><br>
+                                FinAi hesabınız üzerinde hassas bir güvenlik işlemi (şifre güncelleme, e-posta değişikliği, entegrasyon ayarları veya hesap silme gibi) gerçekleştirilmek istenmektedir.<br><br>
+                                Bu işlemin sizin tarafınızdan onaylandığını doğrulamak amacıyla sistem tarafından üretilen tek kullanımlık güvenlik kodunu aşağıda bulabilirsiniz. Lütfen bu kodu uygulamada bekleyen doğrulama ekranına girerek işlemi tamamlayın.
+                            </p>
+
+                            <!-- OTP Box -->
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin: 0 auto 32px;">
+                                <tr>
+                                    <td align="center">
+                                        <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 18px; padding: 20px 0; max-width: 320px; margin: 0 auto; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+                                            <span style="font-family: monospace; font-size: 42px; font-weight: 800; color: #00008B; letter-spacing: 10px; display: inline-block; margin-left: 10px;">{{ .Token }}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; margin-top: 16px;">
+                                <p style="color: #64748b; font-size: 13px; line-height: 1.6; margin: 0; text-align: left;">
+                                    🔒 Bu onay kodu <strong>tek kullanımlıktır</strong> ve 15 dakika geçerlidir. Bu güvenlik doğrulama işlemi sizin bilginiz dışında yapıldıysa lütfen derhal hesap şifrenizi değiştirin ve sistem yöneticilerimizle iletişime geçin.
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Divider -->
+                    <tr>
+                        <td style="padding: 0 40px;">
+                            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 0;">
+                        </td>
+                    </tr>
+
+                    <!-- Footer Section -->
+                    <tr>
+                        <td style="background-color: #0f172a; padding: 40px; text-align: center;">
+                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/logo.png" alt="FinAi" style="width: 80px; height: auto; display: inline-block; margin-bottom: 24px; opacity: 0.5;" />
+                            
+                            <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0 auto 20px;">
+                                <tr>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="https://finai.net.tr" target="_blank" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block;">🌐 Web Sitemiz</a>
+                                    </td>
+                                    <td style="color: #334155; vertical-align: middle;">•</td>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="https://www.instagram.com/finai.tr/" target="_blank" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block; line-height: 16px;">
+                                            <img src="https://xbffacqaumgearqhajmg.supabase.co/storage/v1/object/public/logos/instagram.png" alt="Instagram" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px; opacity: 0.7; filter: brightness(0.9);" />Instagram
+                                        </a>
+                                    </td>
+                                    <td style="color: #334155; vertical-align: middle;">•</td>
+                                    <td style="padding: 0 12px; vertical-align: middle;">
+                                        <a href="mailto:destek@finai.com.tr" style="color: #94a3b8; font-size: 13px; text-decoration: none; font-weight: 500; display: inline-block;">📧 Destek Hattı</a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="color: #475569; font-size: 12px; margin: 0 0 8px; line-height: 1.6;">
+                                © 2026 FinAi Technologies Inc. Tüm hakları saklıdır.
+                            </p>
+                            <p style="color: #334155; font-size: 11px; margin: 0;">
+                                Bu e-posta otomatik olarak oluşturulmuştur, leakage lütfen yanıtlamayınız.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>`
+        };
+
+        let currentTemplate = 'invite-user';
+
+        function selectTemplate(templateId, element) {
+            currentTemplate = templateId;
+            
+            // Update active button styling
+            document.querySelectorAll('.template-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+
+            // Update title
+            const titleMap = {
+                'invite-user': 'Kullanıcı Daveti (Invite User)',
+                'confirm-signup': 'Kayıt Onayı (Confirm Sign Up)',
+                'magic-link': 'Şifresiz Giriş Bağlantısı (Magic Link)',
+                'change-email': 'E-posta Güncelleme (Change Email)',
+                'reset-password': 'Şifre Sıfırlama Talebi (Reset Password)',
+                'reauthenticate': 'Güvenli Yeniden Doğrulama (Reauthentication)'
+            };
+            document.getElementById('current-template-title').innerText = titleMap[templateId];
+
+            updatePreview();
+        }
+
+        function setViewport(size, element) {
+            const wrapper = document.getElementById('preview-wrapper');
+            document.querySelectorAll('.viewport-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+
+            if (size === 'desktop') {
+                wrapper.className = 'preview-wrapper desktop';
+            } else {
+                wrapper.className = 'preview-wrapper mobile';
+            }
+        }
+
+        function updatePreview() {
+            const confirmationUrl = document.getElementById('confirmationUrl').value;
+            const otpToken = document.getElementById('otpToken').value;
+            const iframe = document.getElementById('preview-frame');
+
+            let rawHtml = templates[currentTemplate];
+            
+            // Replace placeholders
+            let processedHtml = rawHtml
+                .replace(/\{\{\s*\.ConfirmationURL\s*\}\}/g, confirmationUrl)
+                .replace(/\{\{\s*\.Token\s*\}\}/g, otpToken);
+
+            // Render inside iframe
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            doc.open();
+            doc.write(processedHtml);
+            doc.close();
+        }
+
+        // Initialize preview on load
+        window.onload = function() {
+            updatePreview();
+        };
+    </script>
+</body>
+</html>

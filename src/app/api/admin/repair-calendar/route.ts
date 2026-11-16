@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { scrapeEconomicCalendar } from '@/lib/calendar-scraper';
 
@@ -13,7 +13,16 @@ const supabaseAdmin = createClient(
  * Saati ve günü geçmiş ancak veritabanında/katalogda sahte "Bekleniyor" olarak kalmış
  * tüm geçmiş haberleri canlı kaynaktan çekerek gerçek açıklanan rakamlarıyla günceller.
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
+    const authHeader = request.headers.get('authorization');
+    const cronSecret = process.env.CRON_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const isVercelCron = request.headers.get('x-vercel-cron') === '1';
+    const hasValidAuth = cronSecret && authHeader === `Bearer ${cronSecret}`;
+
+    if (!isVercelCron && !hasValidAuth) {
+        return NextResponse.json({ success: false, error: "Yetkisiz istek: Geçersiz veya eksik kimlik doğrulama." }, { status: 401 });
+    }
+
     try {
         // Canlı takvim verilerini çek
         const liveEvents = await scrapeEconomicCalendar();

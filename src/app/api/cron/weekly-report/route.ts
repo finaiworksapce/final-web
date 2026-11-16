@@ -1,7 +1,16 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { generateWeeklyReport, generateEmailHtml, Asset } from '@/lib/report-generator';
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+    const authHeader = req.headers.get('authorization');
+    const cronSecret = process.env.CRON_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const isVercelCron = req.headers.get('x-vercel-cron') === '1';
+    const hasValidAuth = cronSecret && authHeader === `Bearer ${cronSecret}`;
+
+    if (!isVercelCron && !hasValidAuth) {
+        return NextResponse.json({ success: false, error: "Yetkisiz istek: Geçersiz veya eksik kimlik doğrulama." }, { status: 401 });
+    }
+
     try {
         const body = await req.json().catch(() => ({}));
         

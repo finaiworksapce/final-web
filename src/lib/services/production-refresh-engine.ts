@@ -65,7 +65,7 @@ export class ProductionRefreshEngine {
   private checkpointFile: string;
 
   constructor(supabaseUrl?: string, supabaseKey?: string) {
-    const url = supabaseUrl || process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://xbffacqaumgearqhajmg.supabase.co';
+    const url = supabaseUrl || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
     const key = supabaseKey || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
     
     this.sb = createClient(url, key, {

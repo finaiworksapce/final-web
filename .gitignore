@@ -1,6 +1,8 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ==============================================================================
+# FinAI Web Platform - Git Ignore Rules
+# ==============================================================================
 
-# dependencies
+# Dependencies
 /node_modules
 /.pnp
 .pnp.*
@@ -10,41 +12,52 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
-
-# next.js
+# Next.js Build Output
 /.next/
 /out/
-
-# production
 /build
+Build/
 
-# misc
-.DS_Store
+# Environment Variables & Secrets
+.env*
+!.env.example
 *.pem
 
-# debug
+# Testing & Coverage
+/coverage
+
+# Logs & Dumps
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+*.dump.html
+output*.txt
+kap-text.txt
+debug-*.html
 
-# env files (can opt-in for committing if needed)
-.env*
+# Scraped Files & Downloads
+kap_downloads/
+dist-ingest-test/
 
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-.vercel
-scripts/.backfill_progress.json
-
+# Local Archives & Scratch
 .finai_archive/
 scratch/
 supabase/.temp/
-dist-ingest-test/
+scripts/.backfill_progress.json
 scripts/responsive_screens/
+
+# Local OS & Tools
+.DS_Store
+Thumbs.db
+*.bat
+*.ps1
+!setup-git.ps1
+
+# Vercel Cache
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
