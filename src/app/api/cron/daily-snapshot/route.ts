@@ -96,13 +96,14 @@ export async function GET(request: Request) {
         const authHeader = request.headers.get('authorization');
         const cronSecret = process.env.CRON_SECRET;
 
-        // Güvenlik doğrulaması
-        if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-            const { searchParams } = new URL(request.url);
-            const key = searchParams.get('key');
-            if (key !== cronSecret && process.env.NODE_ENV === 'production') {
-                return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-            }
+        // Güvenlik doğrulaması (Fail-Closed)
+        const isVercelCron = request.headers.get('x-vercel-cron') === '1';
+        const hasValidAuth = cronSecret && authHeader === `Bearer ${cronSecret}`;
+        const { searchParams } = new URL(request.url);
+        const hasValidKey = cronSecret && searchParams.get('key') === cronSecret;
+
+        if (!isVercelCron && !hasValidAuth && !hasValidKey) {
+            return NextResponse.json({ error: 'Unauthorized: Missing or invalid authorization token.' }, { status: 401 });
         }
 
         // Tüm aktif portföy sahibi kullanıcıları getir

@@ -215,7 +215,9 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
     const authHeader = req.headers.get('authorization');
     const cronSecret = process.env.CRON_SECRET;
-    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const isVercelCron = req.headers.get('x-vercel-cron') === '1';
+    const hasValidAuth = cronSecret && authHeader === `Bearer ${cronSecret}`;
+    if (!isVercelCron && !hasValidAuth) return NextResponse.json({ error: 'Unauthorized: Missing or invalid authorization token.' }, { status: 401 });
     return await POST(new Request(req.url, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sendEmail: true, isCron: true })

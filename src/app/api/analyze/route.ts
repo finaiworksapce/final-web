@@ -19,17 +19,22 @@ export async function POST(req: Request) {
     let assetName = "Varlık";
 
     try {
-        const body = await req.json();
-        assetName = body.assetName;
-        const assetContext = body.assetContext;
-
-        if (!assetName) {
-            return NextResponse.json({ error: "Asset name is required" }, { status: 400 });
+        const body = await req.json().catch(() => null);
+        if (!body || typeof body !== "object") {
+            return NextResponse.json({ error: "Geçersiz istek gövdesi." }, { status: 400 });
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+        const rawAssetName = body.assetName;
+        // Strict Validation: Only alphanumeric symbols, dot, dash, and underscore (1-20 chars)
+        if (!rawAssetName || typeof rawAssetName !== "string" || !/^[A-Za-z0-9._\s-]{1,20}$/.test(rawAssetName.trim())) {
+            return NextResponse.json({ error: "Geçersiz varlık veya sembol formatı." }, { status: 400 });
+        }
+        assetName = rawAssetName.trim();
 
-        let enhancedContext = assetContext;
+        // Limit assetContext length to prevent memory / prompt exhaustion
+        let enhancedContext = typeof body.assetContext === "string" ? body.assetContext.slice(0, 3000) : "";
+
+        const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
 
         // Auto-detect TEFAS Fund if code is 3 uppercase letters
         if (/^[A-Z]{3}$/.test(assetName)) {

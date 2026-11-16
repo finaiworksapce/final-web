@@ -28,20 +28,15 @@ async function handleDailySummary(request: NextRequest) {
     const isTestMode = searchParams.get('test') === 'true';
     const targetUserId = searchParams.get('user_id');
 
-    // 1. Strict Authorization Check
-    // If CRON_SECRET is configured:
-    // - In test mode (test=true), authorization MUST be Bearer ${CRON_SECRET}.
-    // - In normal cron execution, authorization must be Bearer ${CRON_SECRET} OR Vercel Cron header (x-vercel-cron: 1).
-    if (cronSecret) {
-        const hasValidSecret = authHeader === `Bearer ${cronSecret}`;
-        const isVercelCron = !isTestMode && request.headers.get('x-vercel-cron') === '1';
+    // 1. Strict Authorization Check (Fail-Closed)
+    const hasValidSecret = Boolean(cronSecret && authHeader === `Bearer ${cronSecret}`);
+    const isVercelCron = !isTestMode && request.headers.get('x-vercel-cron') === '1';
 
-        if (!hasValidSecret && !isVercelCron) {
-            return NextResponse.json({ 
-                success: false, 
-                error: 'Yetkisiz istek. Geçerli CRON_SECRET gereklidir.' 
-            }, { status: 401 });
-        }
+    if (!hasValidSecret && !isVercelCron) {
+        return NextResponse.json({ 
+            success: false, 
+            error: 'Yetkisiz istek. Geçerli CRON_SECRET gereklidir.' 
+        }, { status: 401 });
     }
 
     // 2. Strict Test Mode Validation

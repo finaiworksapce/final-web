@@ -18,14 +18,14 @@ export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;
 
-  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-    const isVercelCron = request.headers.get("x-vercel-cron") === "1";
-    if (!isVercelCron) {
-      return NextResponse.json(
-        { success: false, error: "Yetkisiz istek" },
-        { status: 401 }
-      );
-    }
+  const isVercelCron = request.headers.get("x-vercel-cron") === "1";
+  const hasValidAuth = cronSecret && authHeader === `Bearer ${cronSecret}`;
+
+  if (!isVercelCron && !hasValidAuth) {
+    return NextResponse.json(
+      { success: false, error: "Yetkisiz istek" },
+      { status: 401 }
+    );
   }
 
   // 2. Parse optional query parameters
