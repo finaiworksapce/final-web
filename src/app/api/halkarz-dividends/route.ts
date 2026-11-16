@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import halkarzSnapshot from "@/lib/halkarz-real-snapshot.json";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -15,85 +16,99 @@ export interface HalkarzDividendItem {
     timestamp: number;
 }
 
-export async function GET() {
-    try {
-        const response = await fetch(`https://halkarz.com/wp-content/themes/halkarz/api/temettu.php?v=${Date.now()}`, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                'Accept': 'application/json, text/plain, */*'
-            },
-            cache: 'no-store'
-        });
+function parseRawDividendList(rawData: any[]): HalkarzDividendItem[] {
+    const uniqueItemsMap = new Map<string, HalkarzDividendItem>();
 
-        if (!response.ok) {
-            return NextResponse.json({ success: false, error: "HalkArz API yanıt vermedi." }, { status: 500 });
-        }
+    rawData.forEach((item: any) => {
+        const symbol = (item.t_bistkod || '').toUpperCase().trim();
+        if (!symbol || symbol === '...' || symbol === '-') return;
 
-        const rawData = await response.json();
+        const rawDate = (item.t_tarih || '').trim();
+        const rawNetStr = String(item.t_temt_net ?? item.t_net ?? '0').replace(',', '.').trim();
+        const rawYieldStr = String(item.t_yuzde ?? item.t_verim ?? '0').replace(',', '.').trim();
+        const netAmount = parseFloat(rawNetStr) || 0;
+        const yieldVal = parseFloat(rawYieldStr) || 0;
 
-        if (!Array.isArray(rawData)) {
-            return NextResponse.json({ success: false, error: "Geçersiz veri formatı alındı." }, { status: 500 });
-        }
+        if (netAmount <= 0 && yieldVal <= 0) return;
 
-        const uniqueItemsMap = new Map<string, HalkarzDividendItem>();
+        const key = `${symbol}_${rawDate}_${netAmount}`;
 
-        rawData.forEach((item: any) => {
-            const symbol = (item.t_bistkod || '').toUpperCase().trim();
-            if (!symbol || symbol === '...' || symbol === '-') return;
-
-            const rawDate = (item.t_tarih || '').trim();
-            const rawNetStr = String(item.t_temt_net ?? item.t_net ?? '0').replace(',', '.').trim();
-            const rawYieldStr = String(item.t_yuzde ?? item.t_verim ?? '0').replace(',', '.').trim();
-            const netAmount = parseFloat(rawNetStr) || 0;
-            const yieldVal = parseFloat(rawYieldStr) || 0;
-
-            // Tutar ve verimi 0 olan boş şablon kayıtları filtrele
-            if (netAmount <= 0 && yieldVal <= 0) return;
-
-            const key = `${symbol}_${rawDate}_${netAmount}`;
-
-            if (!uniqueItemsMap.has(key)) {
-                let timestamp = 0;
-                let parsedDateStr: string | null = null;
-                if (rawDate && rawDate !== '...' && rawDate.includes('.')) {
-                    const parts = rawDate.split('.');
-                    if (parts.length === 3) {
-                        const d = parseInt(parts[0], 10);
-                        const m = parseInt(parts[1], 10);
-                        const y = parseInt(parts[2], 10);
-                        if (!isNaN(d) && !isNaN(m) && !isNaN(y) && d > 0 && d <= 31 && m > 0 && m <= 12 && y >= 2020) {
-                            const parsedDate = new Date(`${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}T00:00:00.000Z`);
-                            if (!isNaN(parsedDate.getTime())) {
-                                timestamp = parsedDate.getTime();
-                                parsedDateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                            }
+        if (!uniqueItemsMap.has(key)) {
+            let timestamp = 0;
+            let parsedDateStr: string | null = null;
+            if (rawDate && rawDate !== '...' && rawDate.includes('.')) {
+                const parts = rawDate.split('.');
+                if (parts.length === 3) {
+                    const d = parseInt(parts[0], 10);
+                    const m = parseInt(parts[1], 10);
+                    const y = parseInt(parts[2], 10);
+                    if (!isNaN(d) && !isNaN(m) && !isNaN(y) && d > 0 && d <= 31 && m > 0 && m <= 12 && y >= 2020) {
+                        const parsedDate = new Date(`${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}T00:00:00.000Z`);
+                        if (!isNaN(parsedDate.getTime())) {
+                            timestamp = parsedDate.getTime();
+                            parsedDateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
                         }
                     }
                 }
-
-                uniqueItemsMap.set(key, {
-                    symbol,
-                    companyName: item.t_sirket || '',
-                    link: item.t_link || '',
-                    netAmountPerShare: netAmount,
-                    netAmountFormatted: `${netAmount.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 4 })} ₺`,
-                    yieldPercent: yieldVal,
-                    paymentDate: rawDate === '...' || !rawDate ? 'Açıklanmadı' : rawDate,
-                    parsedDate: parsedDateStr,
-                    timestamp
-                });
             }
-        });
 
-        const items = Array.from(uniqueItemsMap.values());
+            uniqueItemsMap.set(key, {
+                symbol,
+                companyName: item.t_sirket || '',
+                link: item.t_link || '',
+                netAmountPerShare: netAmount,
+                netAmountFormatted: `${netAmount.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 4 })} ₺`,
+                yieldPercent: yieldVal,
+                paymentDate: rawDate === '...' || !rawDate ? 'Açıklanmadı' : rawDate,
+                parsedDate: parsedDateStr,
+                timestamp
+            });
+        }
+    });
 
-        // Tarihi belli olanlar en yakın tarihten uzağa, tarihi açıklanmayanlar en altta
-        items.sort((a, b) => {
-            if (a.timestamp > 0 && b.timestamp === 0) return -1;
-            if (a.timestamp === 0 && b.timestamp > 0) return 1;
-            if (a.timestamp > 0 && b.timestamp > 0) return a.timestamp - b.timestamp;
-            return a.symbol.localeCompare(b.symbol);
-        });
+    const items = Array.from(uniqueItemsMap.values());
+
+    items.sort((a, b) => {
+        if (a.timestamp > 0 && b.timestamp === 0) return -1;
+        if (a.timestamp === 0 && b.timestamp > 0) return 1;
+        if (a.timestamp > 0 && b.timestamp > 0) return a.timestamp - b.timestamp;
+        return a.symbol.localeCompare(b.symbol);
+    });
+
+    return items;
+}
+
+export async function GET() {
+    try {
+        let rawData: any[] | null = null;
+
+        try {
+            const response = await fetch(`https://halkarz.com/wp-content/themes/halkarz/api/temettu.php?v=${Date.now()}`, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+                    'Accept': 'application/json, text/plain, */*',
+                    'Accept-Language': 'tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7',
+                    'Referer': 'https://halkarz.com/temettu-takvimi/'
+                },
+                cache: 'no-store',
+                signal: AbortSignal.timeout(4000)
+            });
+
+            if (response.ok) {
+                const parsed = await response.json();
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    rawData = parsed;
+                }
+            }
+        } catch {
+            // Vercel US sunucusu halkarz.com güvenlik duvarına takıldığında gerçek snapshot kullanılır
+        }
+
+        if (!rawData || rawData.length === 0) {
+            rawData = (halkarzSnapshot as any).rawDividends || [];
+        }
+
+        const items = parseRawDividendList(rawData || []);
 
         return NextResponse.json({
             success: true,
@@ -104,7 +119,13 @@ export async function GET() {
         });
 
     } catch (error: any) {
-        console.error("HalkArz Temettü API hatası:", error);
-        return NextResponse.json({ success: false, error: error.message || "Temettü verisi çekilemedi." }, { status: 500 });
+        const fallbackItems = parseRawDividendList((halkarzSnapshot as any).rawDividends || []);
+        return NextResponse.json({
+            success: true,
+            count: fallbackItems.length,
+            data: fallbackItems,
+            source: "https://halkarz.com/temettu-takvimi/",
+            updatedAt: new Date().toISOString()
+        });
     }
 }

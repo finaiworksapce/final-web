@@ -246,7 +246,7 @@ export const ECONOMIC_CALENDAR_CATALOG: CatalogCalendarEvent[] = [
         event: "İşsizlik Haklarından Yararlanma Başvuruları",
         forecast: "196K",
         previous: "195K",
-        actual: "189K",
+        actual: "191K",
         impact: "high",
         weekOffset: 0
     },
@@ -319,8 +319,8 @@ export const ECONOMIC_CALENDAR_CATALOG: CatalogCalendarEvent[] = [
         flag: "🇹🇷",
         event: "Aylık Sanayi Üretim Endeksi",
         forecast: "%1,2",
-        previous: "-%1,0",
-        actual: "%2,1",
+        previous: "-%1,7",
+        actual: "%2,6",
         impact: "medium",
         weekOffset: 1
     },
@@ -334,7 +334,7 @@ export const ECONOMIC_CALENDAR_CATALOG: CatalogCalendarEvent[] = [
         event: "ABD Aylık Tüketici Fiyat Endeksi (TÜFE)",
         forecast: "%0,3",
         previous: "%0,6",
-        actual: "Bekleniyor",
+        actual: "%0,4",
         impact: "critical",
         weekOffset: 1
     },
@@ -348,7 +348,7 @@ export const ECONOMIC_CALENDAR_CATALOG: CatalogCalendarEvent[] = [
         event: "ABD Yıllık Enflasyon Oranı (TÜFE)",
         forecast: "%3,9",
         previous: "%3,7",
-        actual: "Bekleniyor",
+        actual: "%3,9",
         impact: "critical",
         weekOffset: 1
     },
@@ -363,8 +363,8 @@ export const ECONOMIC_CALENDAR_CATALOG: CatalogCalendarEvent[] = [
         flag: "🇺🇸",
         event: "İşsizlik Haklarından Yararlanma Başvuruları",
         forecast: "195K",
-        previous: "189K",
-        actual: "Bekleniyor",
+        previous: "191K",
+        actual: "200K",
         impact: "high",
         weekOffset: 1
     },
@@ -376,9 +376,9 @@ export const ECONOMIC_CALENDAR_CATALOG: CatalogCalendarEvent[] = [
         country: "ABD",
         flag: "🇺🇸",
         event: "Haftalık Ham Petrol Stokları",
-        forecast: "0,500 M",
+        forecast: "-1,483 M",
         previous: "-0,865 M",
-        actual: "Bekleniyor",
+        actual: "4,657 M",
         impact: "medium",
         weekOffset: 1
     },
@@ -394,7 +394,7 @@ export const ECONOMIC_CALENDAR_CATALOG: CatalogCalendarEvent[] = [
         event: "Euro Bölgesi Çeyreklik Büyüme (GSYH)",
         forecast: "%0,4",
         previous: "%0,4",
-        actual: "Bekleniyor",
+        actual: "%0,4",
         impact: "high",
         weekOffset: 1
     },
@@ -407,8 +407,8 @@ export const ECONOMIC_CALENDAR_CATALOG: CatalogCalendarEvent[] = [
         flag: "🇺🇸",
         event: "ABD Aylık Üretici Fiyat Endeksi (ÜFE)",
         forecast: "%0,4",
-        previous: "%1,3",
-        actual: "Bekleniyor",
+        previous: "%1,4",
+        actual: "%0,3",
         impact: "high",
         weekOffset: 1
     },
@@ -436,7 +436,7 @@ export const ECONOMIC_CALENDAR_CATALOG: CatalogCalendarEvent[] = [
         country: "ABD",
         flag: "🇺🇸",
         event: "ABD Aylık Perakende Satışlar",
-        forecast: "%0,0",
+        forecast: "%0,2",
         previous: "%0,8",
         actual: "Bekleniyor",
         impact: "high",
@@ -452,7 +452,7 @@ export const ECONOMIC_CALENDAR_CATALOG: CatalogCalendarEvent[] = [
         country: "ABD",
         flag: "🇺🇸",
         event: "ABD Yapı Ruhsatları",
-        forecast: "1,41 M",
+        forecast: "1,377 M",
         previous: "1,40 M",
         actual: "Bekleniyor",
         impact: "medium",
@@ -482,8 +482,8 @@ export const ECONOMIC_CALENDAR_CATALOG: CatalogCalendarEvent[] = [
         country: "ABD",
         flag: "🇺🇸",
         event: "İşsizlik Haklarından Yararlanma Başvuruları",
-        forecast: "195K",
-        previous: "189K",
+        forecast: "197K",
+        previous: "200K",
         actual: "Bekleniyor",
         impact: "high",
         weekOffset: 2
@@ -498,7 +498,7 @@ export const ECONOMIC_CALENDAR_CATALOG: CatalogCalendarEvent[] = [
         country: "EU",
         flag: "🇪🇺",
         event: "Euro Bölgesi Tüketici Güven Endeksi (Öncü)",
-        forecast: "-17,5",
+        forecast: "-17,9",
         previous: "-17,9",
         actual: "Bekleniyor",
         impact: "medium",
@@ -552,27 +552,19 @@ export const ECONOMIC_CALENDAR_CATALOG: CatalogCalendarEvent[] = [
     }
 ];
 
-/**
- * Haber açıklanma zamanı (Date objesi olarak)
- */
 export function getEventReleaseTimestamp(event: CatalogCalendarEvent): Date | null {
     if (event.releasedAt) return new Date(event.releasedAt);
 
     if (!event.dateFormatted || !event.time) return null;
 
-    // Parse DD.MM.YYYY and HH:mm
     const [day, month, year] = event.dateFormatted.split('.').map(Number);
     const [hour, minute] = event.time.split(':').map(Number);
 
     if (!day || !month || !year || isNaN(hour) || isNaN(minute)) return null;
 
-    // TSİ (UTC+3)
     return new Date(Date.UTC(year, month - 1, day, hour - 3, minute));
 }
 
-/**
- * Açıklanan verinin beklentiye kıyasla durumu
- */
 export function getActualVsForecastStatus(event: CatalogCalendarEvent): 'above' | 'below' | 'inline' | 'pending' {
     if (!event.actual || event.actual === 'Bekleniyor' || event.actual === 'Açıklanacak') {
         return 'pending';
@@ -594,9 +586,6 @@ export function getActualVsForecastStatus(event: CatalogCalendarEvent): 'above' 
     return 'inline';
 }
 
-/**
- * Veri açıklanalı henüz 30 dakika geçip geçmediğini kontrol eder
- */
 export function isEventWithin30Minutes(event: CatalogCalendarEvent): boolean {
     if (!event.actual || event.actual === 'Bekleniyor' || event.actual === 'Açıklanacak') {
         return false;
@@ -609,6 +598,5 @@ export function isEventWithin30Minutes(event: CatalogCalendarEvent): boolean {
     const diffMs = now.getTime() - releaseTime.getTime();
     const diffMinutes = diffMs / (1000 * 60);
 
-    // 0 ile 30 dakika arasında açıklanmışsa yanıp sönmeli!
     return diffMinutes >= 0 && diffMinutes <= 30;
 }

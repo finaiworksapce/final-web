@@ -6,7 +6,7 @@ interface TvIndicatorSpec {
     tvCountry: 'TR' | 'US' | 'EU' | 'GB';
     tvTitles: string[];
     formatType: 'percent' | 'k' | 'm' | 'b_usd' | 'plain';
-    occurrenceIndex?: number; // For weekly series within the month (0, 1, 2)
+    occurrenceIndex?: number;
 }
 
 const CATALOG_TO_TV_MAP: Record<string, TvIndicatorSpec> = {
@@ -77,14 +77,12 @@ function formatTvNumber(val: any, formatType: TvIndicatorSpec['formatType']): st
     return num.toLocaleString('tr-TR', { minimumFractionDigits: 1, maximumFractionDigits: 2 });
 }
 
-// Strictly verify if event date/time has passed in TSİ (Europe/Istanbul UTC+3)
 function isEventTimePassed(dateFormatted: string, time: string): boolean {
     try {
         const now = new Date();
         const [dayStr, monthStr, yearStr] = dateFormatted.split('.').map(Number);
         const [hourStr, minStr] = time.split(':').map(Number);
 
-        // TSİ (UTC+3) conversion to UTC timestamp
         const eventUtc = new Date(Date.UTC(yearStr, monthStr - 1, dayStr, hourStr - 3, minStr));
 
         return now.getTime() >= eventUtc.getTime();
@@ -95,9 +93,6 @@ function isEventTimePassed(dateFormatted: string, time: string): boolean {
 
 let realEventsMemoryCache: CatalogCalendarEvent[] = [];
 
-/**
- * Kataloğu mevcut gerçek tarihlerle ve saat kontrolüyle döndürür
- */
 export function getDynamicCalendarCatalog(): CatalogCalendarEvent[] {
     const todayFormatted = new Date().toLocaleDateString('tr-TR', {
         timeZone: 'Europe/Istanbul',
@@ -131,10 +126,6 @@ export function getDynamicCalendarCatalog(): CatalogCalendarEvent[] {
     });
 }
 
-/**
- * TradingView Ekonomik Takvim API'sinden (veri_botu kaynağı) 30 göstergenin
- * gerçek tarihlerini, saatlerini ve gerçek açıklanan/beklenti/önceki verilerini çeker.
- */
 export async function scrapeEconomicCalendar(): Promise<CatalogCalendarEvent[]> {
     const now = new Date();
     const todayFormatted = now.toLocaleDateString('tr-TR', {
@@ -155,7 +146,7 @@ export async function scrapeEconomicCalendar(): Promise<CatalogCalendarEvent[]> 
 
     try {
         const year = now.getUTCFullYear();
-        const month = now.getUTCMonth(); // 0-indexed
+        const month = now.getUTCMonth();
         const fromDate = new Date(Date.UTC(year, month, 1, 0, 0, 0));
         const toDate = new Date(Date.UTC(year, month + 2, 0, 23, 59, 59));
 
@@ -172,7 +163,8 @@ export async function scrapeEconomicCalendar(): Promise<CatalogCalendarEvent[]> 
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
                 'Accept': 'application/json'
             },
-            cache: 'no-store'
+            cache: 'no-store',
+            signal: AbortSignal.timeout(4500)
         });
 
         if (response.ok) {
@@ -181,6 +173,7 @@ export async function scrapeEconomicCalendar(): Promise<CatalogCalendarEvent[]> 
 
             if (tvEvents.length > 0) {
                 const currentMonthPrefix = `${year}-${String(month + 1).padStart(2, '0')}`;
+                const currentMonthTrSuffix = `.${String(month + 1).padStart(2, '0')}.${year}`;
 
                 const enriched = ECONOMIC_CALENDAR_CATALOG.map(catItem => {
                     const spec = CATALOG_TO_TV_MAP[catItem.id];
@@ -194,30 +187,21 @@ export async function scrapeEconomicCalendar(): Promise<CatalogCalendarEvent[]> 
                         };
                     }
 
-                    // Find matching events in TradingView feed
                     const matches = tvEvents
                         .filter(e => e.country === spec.tvCountry && spec.tvTitles.includes(e.title) && e.date)
                         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-                    if (matches.length === 0) {
-                        const hasTimePassed = isEventTimePassed(catItem.dateFormatted, catItem.time);
-                        return {
-                            ...catItem,
-                            isToday: catItem.dateFormatted === todayFormatted,
-                            isTomorrow: catItem.dateFormatted === tomorrowFormatted,
-                            actual: hasTimePassed ? catItem.actual : 'Bekleniyor'
-                        };
-                    }
-
-                    // Prefer events in the current month first, or next month if none in current month
                     const currentMonthMatches = matches.filter(m => String(m.date).startsWith(currentMonthPrefix));
                     let chosen: any = null;
 
                     if (spec.occurrenceIndex !== undefined) {
-                        const pool = currentMonthMatches.length > spec.occurrenceIndex ? currentMonthMatches : matches;
-                        chosen = pool[Math.min(spec.occurrenceIndex, pool.length - 1)];
-                    } else {
-                        chosen = currentMonthMatches.length > 0 ? currentMonthMatches[0] : matches[0];
+                        if (currentMonthMatches.length > spec.occurrenceIndex) {
+                            chosen = currentMonthMatches[spec.occurrenceIndex];
+                        }
+                    } else if (currentMonthMatches.length > 0) {
+                        chosen = currentMonthMatches[0];
+                    } else if (!catItem.dateFormatted.endsWith(currentMonthTrSuffix) && matches.length > 0) {
+                        chosen = matches[0];
                     }
 
                     if (!chosen) {
@@ -277,7 +261,6 @@ export async function scrapeEconomicCalendar(): Promise<CatalogCalendarEvent[]> 
                     };
                 });
 
-                // Kronolojik sıralama (En erken tarihten en geç tarihe)
                 enriched.sort((a, b) => {
                     const isoA = a.dateFormatted.split('.').reverse().join('-');
                     const isoB = b.dateFormatted.split('.').reverse().join('-');

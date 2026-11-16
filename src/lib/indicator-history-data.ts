@@ -634,15 +634,6 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
     "unit": "%",
     "points": [
       {
-        "date": "2026-03-11",
-        "label": "Mar 26",
-        "period": "Feb",
-        "actual": 0.3,
-        "forecast": 0.3,
-        "previous": 0.2,
-        "unit": "%"
-      },
-      {
         "date": "2026-04-10",
         "label": "Nis 26",
         "period": "Mar",
@@ -703,6 +694,15 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "actual": 0.6,
         "forecast": 0.6,
         "previous": 0.4,
+        "unit": "%"
+      },
+      {
+        "date": "2026-11-10",
+        "label": "Kas 26",
+        "period": "Oct. 2026",
+        "actual": 0.4,
+        "forecast": 0.3,
+        "previous": 0.6,
         "unit": "%"
       }
     ]
@@ -788,15 +788,6 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
     "unit": "%",
     "points": [
       {
-        "date": "2026-03-18",
-        "label": "Mar 26",
-        "period": "Feb",
-        "actual": 0.7,
-        "forecast": 0.3,
-        "previous": 0.5,
-        "unit": "%"
-      },
-      {
         "date": "2026-04-14",
         "label": "Nis 26",
         "period": "Mar",
@@ -857,6 +848,15 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "actual": 1.3,
         "forecast": 0.5,
         "previous": 0.5,
+        "unit": "%"
+      },
+      {
+        "date": "2026-11-13",
+        "label": "Kas 26",
+        "period": "Oct. 2026",
+        "actual": 0.3,
+        "forecast": 0.4,
+        "previous": 1.4,
         "unit": "%"
       }
     ]
@@ -1162,7 +1162,7 @@ export const INDICATOR_HISTORY_DATABASE: Record<string, IndicatorHistorySeries> 
         "date": "2026-11-05",
         "label": "Kas 26",
         "period": "w/o Oct. 26, 2026",
-        "actual": 189,
+        "actual": 191,
         "forecast": 196,
         "previous": 195,
         "unit": ""
