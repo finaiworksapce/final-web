@@ -1,14 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { 
     TrendingUp, 
     Compass, 
-    ShieldCheck, 
-    HelpCircle, 
     ArrowUpRight, 
-    ArrowDownRight, 
-    CheckCircle2
+    ArrowDownRight 
 } from "lucide-react";
 import { MonthlyReportData } from "@/lib/finai-monthly-report-service";
 import StockLogo from "@/components/StockLogo";
@@ -21,73 +18,13 @@ interface MonthlyLastMonthSummaryWidgetProps {
     onRefresh?: () => void;
 }
 
-// 5. Öneri: UI Bazında Mikro Finans Terim Tercümanı Sözlüğü
-const FINANCIAL_GLOSSARY: Record<string, { title: string; simpleExplanation: string }> = {
-    "TWR": {
-        title: "TWR (Zaman Ağırlıklı Getiri)",
-        simpleExplanation: "Hesabınıza dışarıdan eklediğiniz veya çektiğiniz parayı hesaba katmadan, sadece hisselerinizin kendi becerisiyle kazandığı gerçek kâr oranıdır."
-    },
-    "Katkı Payı": {
-        title: "Büyüme Katkı Payı",
-        simpleExplanation: "Bir hissenin cüzdanınızdaki büyüklüğü ile kârının çarpımıdır. Yani tüm portföyün büyümesine tek başına kaç puan güç kattığını gösterir."
-    },
-    "Sektör Ayrışması": {
-        title: "Sektörel Ayrışma",
-        simpleExplanation: "Bir şirketin, kendi sektöründeki rakiplerinden veya genel piyasadan çok daha hızlı yükselerek lig atlamasıdır."
-    },
-    "Sermaye Akışı": {
-        title: "Net Sermaye Akışı",
-        simpleExplanation: "Ay boyunca cüzdanınıza borsa dışından eklediğiniz veya cüzdandan çektiğiniz nakit para transferidir."
-    },
-    "BIST 100": {
-        title: "BIST 100 Endeksi",
-        simpleExplanation: "Borsa İstanbul'un en büyük 100 şirketinin ortalama nabzıdır; piyasanın o ay genel olarak nereye koştuğunu gösterir."
-    }
-};
-
 export default function MonthlyLastMonthSummaryWidget({
     report,
     loading
 }: MonthlyLastMonthSummaryWidgetProps) {
-    const [activeTermKey, setActiveTermKey] = useState<string | null>(null);
-
     const mentor = report?.mentorSummary;
     const summary = report?.summary;
     const period = report?.period;
-
-    const renderTermBadge = (termKey: string, displayText?: string) => {
-        const item = FINANCIAL_GLOSSARY[termKey];
-        if (!item) return <span>{displayText || termKey}</span>;
-
-        const isActive = activeTermKey === termKey;
-
-        return (
-            <span className="relative inline-block mx-0.5">
-                <button
-                    type="button"
-                    onClick={() => setActiveTermKey(isActive ? null : termKey)}
-                    onMouseEnter={() => setActiveTermKey(termKey)}
-                    onMouseLeave={() => setActiveTermKey(null)}
-                    className="inline-flex items-center gap-1 px-1.5 py-0.5 text-[11px] font-medium text-[#004BFA] dark:text-[#93C5FD] bg-[#004BFA]/5 dark:bg-white/5 hover:bg-[#004BFA]/10 dark:hover:bg-white/10 rounded-md border border-[#004BFA]/20 dark:border-white/15 transition-colors cursor-help align-baseline"
-                >
-                    <span>{displayText || termKey}</span>
-                    <HelpCircle className="w-2.5 h-2.5 opacity-60" />
-                </button>
-
-                {/* Editoryal Mikro Sözlük Baloncuğu */}
-                {isActive && (
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 sm:w-72 p-3 bg-[#02041A] text-white text-[11px] leading-relaxed rounded-xl shadow-2xl border border-white/15 z-50 pointer-events-none">
-                        <div className="font-medium text-[#93C5FD] pb-1 border-b border-white/10 mb-1.5 flex items-center justify-between">
-                            <span>{item.title}</span>
-                            <span className="text-[9px] uppercase tracking-wider text-white/50">Halk Diliyle</span>
-                        </div>
-                        <p className="text-white/85 font-normal">{item.simpleExplanation}</p>
-                        <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-[#02041A]"></div>
-                    </div>
-                )}
-            </span>
-        );
-    };
 
     if (loading) {
         return (
@@ -104,12 +41,23 @@ export default function MonthlyLastMonthSummaryWidget({
 
     if (!report || !mentor) return null;
 
-    const isNetPos = (summary?.monthlyNetProfitTL || 0) >= 0;
-    const activeSymbols = mentor.topContributors?.map(c => c.symbol) || [];
+    const netTL = summary?.monthlyNetProfitTL || 0;
+    const isNetPos = netTL >= 0;
+    const activeSymbols = (mentor.keyMovements || mentor.topContributors || []).map(c => c.symbol);
+
+    const movements = (mentor.keyMovements && mentor.keyMovements.length > 0)
+        ? mentor.keyMovements
+        : (mentor.topContributors || []).map(c => ({
+            symbol: c.symbol,
+            sector: c.sector,
+            returnTL: c.returnTL !== undefined ? c.returnTL : c.contributionTL,
+            isGain: c.isGain !== undefined ? c.isGain : (c.returnPct >= 0),
+            story: c.story
+        }));
 
     return (
         <article className="w-full h-full bg-white dark:bg-[#040989]/20 border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-xs overflow-hidden flex flex-col justify-between">
-            {/* 1. Editoryal Üst Başlık (Monokrom, temiz) */}
+            {/* 1. Editoryal Üst Başlık (Sade, Yüzdesiz, Saf TL) */}
             <div className="px-6 py-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between gap-3 bg-slate-50/60 dark:bg-white/5">
                 <div className="flex items-center gap-2.5">
                     <div className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-white/10 border border-blue-200/60 dark:border-white/10 flex items-center justify-center text-[#004BFA] dark:text-[#93C5FD]">
@@ -124,13 +72,13 @@ export default function MonthlyLastMonthSummaryWidget({
 
                 <div className="flex items-center gap-2 text-xs">
                     <span className="text-slate-400 dark:text-slate-500 text-[11px]">Net Değişim:</span>
-                    <span className={`font-semibold font-numbers ${isNetPos ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
-                        {isNetPos ? '+' : ''}%{summary?.monthlyNetProfitPct.toFixed(1)}
+                    <span className={`font-semibold font-numbers tabular-nums text-sm ${isNetPos ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                        {isNetPos ? '+' : '-'}{Math.abs(netTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 })} TL
                     </span>
                 </div>
             </div>
 
-            {/* 2. Ana Gövde (Editoryal Metin & Büyüme Analizi) */}
+            {/* 2. Ana Gövde (Editoryal Metin & TL Bazlı Analiz) */}
             <div className="p-6 space-y-5 flex-1">
                 
                 {/* Giriş Kanca Cümlesi */}
@@ -147,53 +95,87 @@ export default function MonthlyLastMonthSummaryWidget({
                     ))}
                 </div>
 
-                {/* 3. Büyümenin Lokomotifi Olan Hisseler */}
-                {mentor.topContributors && mentor.topContributors.length > 0 && (
-                    <div className="pt-4 border-t border-slate-100 dark:border-white/10 space-y-2.5">
-                        <div className="flex items-center justify-between text-xs">
-                            <span className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                                <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />
-                                <span>Büyümeye En Çok Güç Katan Hisseler ({renderTermBadge("Katkı Payı")})</span>
-                            </span>
-                            <span className="text-[10px] text-slate-400">Ağırlık × Getiri</span>
+                {/* 3. Ayın En Çok Kazandıran ve Kaybettiren Varlıkları & Sektörleri (Katkı Payı Yok, Sadece TL) */}
+                <div className="pt-4 border-t border-slate-100 dark:border-white/10 space-y-3">
+                    <div className="flex items-center justify-between text-xs">
+                        <span className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                            <TrendingUp className="w-3.5 h-3.5 text-[#004BFA]" />
+                            <span>Ayın En Çok Kazandıran ve Kaybettiren Varlıkları</span>
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-medium">Net TL Değişimi</span>
+                    </div>
+
+                    {/* Sektörel Liderler Özeti */}
+                    {(mentor.topGainingSector || mentor.topLosingSector) && (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+                            {mentor.topGainingSector && (
+                                <div className="p-2.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200/60 dark:border-emerald-800/30 flex items-center justify-between">
+                                    <span className="text-emerald-800 dark:text-emerald-300 font-medium truncate">
+                                        ▲ En Çok Kazandıran Sektör: <strong>{mentor.topGainingSector.sectorName}</strong>
+                                    </span>
+                                    <span className="font-numbers font-semibold text-emerald-600 dark:text-emerald-400 shrink-0 ml-2">
+                                        +{Math.abs(mentor.topGainingSector.gainTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 })} TL
+                                    </span>
+                                </div>
+                            )}
+                            {mentor.topLosingSector && (
+                                <div className="p-2.5 rounded-xl bg-rose-50/70 dark:bg-rose-950/20 border border-rose-200/60 dark:border-rose-800/30 flex items-center justify-between">
+                                    <span className="text-rose-800 dark:text-rose-300 font-medium truncate">
+                                        ▼ En Çok Kaybettiren Sektör: <strong>{mentor.topLosingSector.sectorName}</strong>
+                                    </span>
+                                    <span className="font-numbers font-semibold text-rose-600 dark:text-rose-400 shrink-0 ml-2">
+                                        -{Math.abs(mentor.topLosingSector.lossTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 })} TL
+                                    </span>
+                                </div>
+                            )}
                         </div>
+                    )}
 
-                        <div className="space-y-2">
-                            {mentor.topContributors.map((c, i) => (
-                                <div 
-                                    key={i} 
-                                    className="p-3 rounded-xl bg-slate-50/80 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 flex items-center justify-between gap-3 text-xs"
-                                >
-                                    <div className="flex items-center gap-2.5 min-w-0">
-                                        <StockLogo symbol={c.symbol} className="w-6 h-6 object-contain shrink-0" />
-                                        <div className="min-w-0">
-                                            <div className="font-semibold text-slate-900 dark:text-white leading-tight truncate">
-                                                {c.symbol} <span className="text-[10px] font-normal text-slate-400">• {c.sector}</span>
-                                            </div>
+                    {/* Varlık Bazlı Liste */}
+                    <div className="space-y-2">
+                        {movements.map((m, i) => (
+                            <div 
+                                key={i} 
+                                className="p-3 rounded-xl bg-slate-50/80 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 flex items-center justify-between gap-3 text-xs"
+                            >
+                                <div className="flex items-center gap-2.5 min-w-0">
+                                    <StockLogo symbol={m.symbol} className="w-6 h-6 object-contain shrink-0" />
+                                    <div className="min-w-0">
+                                        <div className="font-semibold text-slate-900 dark:text-white leading-tight truncate">
                                             <Link 
-                                                href={`/dashboard/news?q=${c.symbol}`}
-                                                className="text-[11px] text-[#004BFA] dark:text-[#93C5FD] hover:underline truncate mt-0.5 block transition-colors cursor-pointer"
-                                                title="İlgili haberi ve şirket gelişmelerini görüntüle"
+                                                href={`/dashboard/analysis?q=${m.symbol}`}
+                                                className="hover:underline text-[#004BFA] dark:text-[#93C5FD]"
+                                                title={`${m.symbol} Şirket Analiz Sayfası`}
                                             >
-                                                {c.story}
+                                                {m.symbol}
                                             </Link>
+                                            <span className="text-[10px] font-normal text-slate-400 ml-1.5">• {m.sector}</span>
                                         </div>
-                                    </div>
-
-                                    <div className="text-right shrink-0">
-                                        <div className="font-semibold font-numbers text-emerald-600 dark:text-emerald-400 flex items-center justify-end gap-0.5">
-                                            <ArrowUpRight className="w-3 h-3" />
-                                            +%{c.returnPct.toFixed(1)}
-                                        </div>
-                                        <div className="text-[10px] font-numbers text-slate-400">
-                                            Katkı: +%{c.contributionPct.toFixed(1)} Puan
-                                        </div>
+                                        <Link 
+                                            href={`/dashboard/news?q=${m.symbol}`}
+                                            className="text-[11px] text-slate-600 dark:text-slate-300 hover:text-[#004BFA] hover:underline truncate mt-0.5 block transition-colors cursor-pointer"
+                                            title="İlgili haberi ve şirket gelişmelerini görüntüle"
+                                        >
+                                            {m.story}
+                                        </Link>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
+
+                                <div className="text-right shrink-0">
+                                    <div className={`font-semibold font-numbers flex items-center justify-end gap-0.5 text-xs sm:text-[13px] ${
+                                        m.isGain ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
+                                    }`}>
+                                        {m.isGain ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                                        {m.isGain ? '+' : '-'}{Math.abs(m.returnTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 })} TL
+                                    </div>
+                                    <div className="text-[10px] font-numbers text-slate-400">
+                                        {m.isGain ? 'Net Kazanç' : 'Net Kayıp'}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
-                )}
+                </div>
 
             </div>
         </article>

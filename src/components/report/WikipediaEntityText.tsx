@@ -67,21 +67,34 @@ export default function WikipediaEntityText({
                     );
                 }
 
-                // Check bracketed calendar reference: e.g. [Ekim 2026 Ajandası (10 Gelişme)]
+
+                // Check bracketed calendar reference: e.g. [Ekim 2026 Ajandası] or [ekonomi:ID|Başlık]
                 if (token.startsWith('[') && token.endsWith(']')) {
                     const inner = token.slice(1, -1).trim();
+                    let targetUrl = "/dashboard/calendar";
+                    let displayText = inner;
+                    if (inner.startsWith("ekonomi:")) {
+                        const parts = inner.slice(8).split("|");
+                        displayText = parts[1] || parts[0];
+                        targetUrl = `/dashboard/calendar?event=${encodeURIComponent(displayText)}`;
+                    } else if (inner.startsWith("takvim:")) {
+                        const q = inner.slice(7);
+                        displayText = q;
+                        targetUrl = `/dashboard/calendar?event=${encodeURIComponent(q)}`;
+                    }
+
                     return (
                         <Link
                             key={index}
-                            href="/dashboard/calendar"
+                            href={targetUrl}
                             className={`inline-flex items-center font-semibold underline underline-offset-2 transition-colors cursor-pointer ${
                                 isDark
                                     ? "text-cyan-300 dark:text-cyan-300 hover:text-white decoration-cyan-400/50 hover:decoration-white"
                                     : "text-[#004BFA] dark:text-[#93C5FD] hover:text-blue-800 dark:hover:text-white decoration-[#004BFA]/40 hover:decoration-blue-800"
                             }`}
-                            title="FinAi Takvim sayfasına git"
+                            title="İlgili ekonomik habere / takvim sayfasına git"
                         >
-                            {inner}
+                            {displayText}
                         </Link>
                     );
                 }

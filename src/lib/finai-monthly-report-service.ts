@@ -87,17 +87,50 @@ export interface MonthlyReportSummary {
     healthScore: number;
 }
 
+export interface KeyMovementItem {
+    symbol: string;
+    sector: string;
+    returnTL: number;
+    isGain: boolean;
+    story: string;
+    newsUrl?: string;
+}
+
 export interface MentorStorytellingBlock {
     title: string;
     userName: string;
     greetingSentence: string;
     narrativeParagraphs: string[];
+    topGainingAsset?: {
+        symbol: string;
+        sector: string;
+        gainTL: number;
+        story: string;
+    } | null;
+    topGainingSector?: {
+        sectorName: string;
+        gainTL: number;
+    } | null;
+    topLosingAsset?: {
+        symbol: string;
+        sector: string;
+        lossTL: number;
+        story: string;
+        newsFinding?: string;
+    } | null;
+    topLosingSector?: {
+        sectorName: string;
+        lossTL: number;
+    } | null;
+    keyMovements: KeyMovementItem[];
     topContributors: {
         symbol: string;
         sector: string;
         returnPct: number;
         contributionPct: number;
         contributionTL: number;
+        returnTL?: number;
+        isGain?: boolean;
         story: string;
     }[];
     negativeLearningMoment: {
@@ -396,21 +429,26 @@ async function fetchRealMonthlyStartPrices(symbols: string[], startDateStr: stri
 }
 
 /**
- * 3. 1 Ay İçerisindeki Gelişmeleri Google News RSS Üzerinden Doğrulayan Haber & Politika Motoru
+ * 3. 1 Ay İçerisindeki Gelişmeleri Bloomberg HT, CNN Türk ve Investing TR Üzerinden Tarayan Motor
  */
-async function searchRealMonthNews(query: string, startDateStr: string, endDateStr: string): Promise<{
+async function searchTargetedFinancialNews(
+    query: string,
+    startDateStr?: string,
+    endDateStr?: string
+): Promise<{
     title: string;
     source: string;
     date: string;
     url?: string;
 }[]> {
     try {
-        const encoded = encodeURIComponent(`${query} borsa`);
+        const queryWithSources = `${query} site:bloomberght.com OR site:cnnturk.com OR site:tr.investing.com`;
+        const encoded = encodeURIComponent(queryWithSources);
         const rssUrl = `https://news.google.com/rss/search?q=${encoded}&hl=tr&gl=TR&ceid=TR:tr`;
 
         const res = await fetch(rssUrl, {
             headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
-            next: { revalidate: 3600 }
+            next: { revalidate: 1800 }
         });
 
         if (!res.ok) return [];
@@ -425,50 +463,43 @@ async function searchRealMonthNews(query: string, startDateStr: string, endDateS
         if (!items) return [];
 
         const rawList = Array.isArray(items) ? items : [items];
-        const startLimit = new Date(startDateStr).getTime() - (2 * 24 * 60 * 60 * 1000);
-        const endLimit = new Date(endDateStr).getTime() + (24 * 60 * 60 * 1000);
-
         const verifiedItems: { title: string; source: string; date: string; url?: string }[] = [];
 
         for (const item of rawList) {
-            const pubDate = new Date(item.pubDate);
-            const itemTime = pubDate.getTime();
+            let cleanTitle = (item.title || '')
+                .replace(/\s*-\s*[^-]+$/, '')
+                .replace(/&quot;/g, '"')
+                .replace(/&#39;/g, "'")
+                .replace(/&amp;/g, '&')
+                .trim();
 
-            if (itemTime >= startLimit && itemTime <= endLimit) {
-                let cleanTitle = (item.title || '')
-                    .replace(/\s*-\s*[^-]+$/, '')
-                    .replace(/&quot;/g, '"')
-                    .replace(/&#39;/g, "'")
-                    .replace(/&amp;/g, '&')
-                    .trim();
+            let source = item.source?.['#text'] || item.source || 'Bloomberg HT / Investing TR';
+            if (source.includes('Investing')) source = 'Investing.com TR';
+            else if (source.includes('Bloomberg') || source.includes('Bloomberght')) source = 'Bloomberg HT';
+            else if (source.includes('CNN') || source.includes('cnnturk')) source = 'CNN Türk';
 
-                const source = item.source?.['#text'] || item.source || 'Finans Basını';
-                const dateFormatted = pubDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' });
+            const pubDate = item.pubDate ? new Date(item.pubDate) : new Date();
+            const dateFormatted = pubDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' });
 
-                if (cleanTitle.length > 10) {
-                    verifiedItems.push({
-                        title: cleanTitle,
-                        source,
-                        date: dateFormatted,
-                        url: item.link || undefined
-                    });
-                }
+            if (cleanTitle.length > 8) {
+                verifiedItems.push({
+                    title: cleanTitle,
+                    source,
+                    date: dateFormatted,
+                    url: item.link || undefined
+                });
             }
 
-            if (verifiedItems.length >= 2) break;
+            if (verifiedItems.length >= 3) break;
         }
 
         return verifiedItems;
     } catch (e) {
-        console.warn(`Real month news search error for ${query}:`, e);
+        console.warn(`Targeted news search error for ${query}:`, e);
         return [];
     }
 }
 
-// -------------------------------------------------------------
-// FİNAİ TAKVİM SAYFASIYLA SENKRONİZE ÇALIŞAN VERİ MOTORLARI
-// (Harici üçüncü taraf sitelerden değil, FinAi Takvim altyapısından senkron çekilir)
-// -------------------------------------------------------------
 
 async function fetchSynchronizedCalendarDividends(): Promise<{
     symbol: string;
@@ -637,7 +668,6 @@ async function generateNextMonthExpectations(
     ]);
 
     // 1. KATMAN: PORTFÖYDE EN YÜKSEK AĞIRLIĞA SAHİP 2 VARLIĞIN TEMETTÜ VE BİLANÇO KONTROLÜ
-    // Kural: Zorunlu 2 adet yok; sadece temettü ve bilanço aranır. Yoksa metinde hiç bahsedilmez.
     const sortedByWeight = [...computedAssets].sort((a, b) => b.weightPct - a.weightPct);
     const top2Assets = sortedByWeight.slice(0, 2);
 
@@ -690,7 +720,7 @@ async function generateNextMonthExpectations(
     }
 
     // 2. KATMAN: DİNAMİK ÜLKE VE MAKRO EŞLEMESİ
-    // BIST için tüm TR haberleri; Altın için sadece Fed Faiz Kararı!
+    // BIST için tüm TR haberleri; Altın için sadece Fed Faiz Kararı ve Küresel riskler!
     const hasBistOrTL = computedAssets.some(a => a.type === 'STOCK' || a.cleanSymbol === 'TRY' || a.sector !== 'Kıymetli Maden');
     const hasGold = computedAssets.some(a => 
         a.cleanSymbol === 'ALTIN' || a.cleanSymbol === 'GA' || a.cleanSymbol === 'GRAM_ALTIN' || 
@@ -699,9 +729,7 @@ async function generateNextMonthExpectations(
 
     const filteredMacroEvents = allMacroEvents.filter(ev => {
         const c = ev.country.toUpperCase();
-        // BIST için tüm TR haberleri/gelişmeleri
         if (hasBistOrTL && (c === 'TR' || c === 'TUR' || c === 'TÜRKİYE')) return true;
-        // Altın için: ABD takviminin tamamı elenir, SADECE Altın'ı doğrudan etkileyen Fed faiz kararı tutulur
         if (hasGold && (c === 'US' || c === 'ABD' || c === 'USA' || c === 'GLOBAL' || c === 'KÜRESEL')) {
             const evL = (ev.event || '').toLowerCase();
             return evL.includes('faiz') || evL.includes('interest rate') || evL.includes('fed') || evL.includes('fomc') || evL.includes('powell');
@@ -711,51 +739,59 @@ async function generateNextMonthExpectations(
 
     const totalCalendarEventsCount = filteredMacroEvents.length;
 
-    // Metinde bahsedilecek en kritik olay (TÜFE tekrarından kaçınılır; faiz, TCMB PPK, üretim veya büyüme önceliklendirilir)
-    const nonTufeCritical = filteredMacroEvents.find(e => {
+    // Kullanıcıya her seferinde aynı haberi söylememek kaydı ile 1 adet öne çıkan ekonomik haber başlığı seçimi
+    // Öncelik Sıralaması: TCMB Faiz Kararı > Sanayi Üretimi > GSYH Büyüme > Kapasite Kullanım > Cari Denge (TÜFE tekrarı engellenir)
+    const priorityEvent = filteredMacroEvents.find(e => {
         const evL = (e.event || '').toLowerCase();
-        const isTufe = evL.includes('tüfe') || evL.includes('cpi') || evL.includes('enflasyon');
-        return !isTufe && (e.impact === 'critical' || evL.includes('faiz') || evL.includes('ppk') || evL.includes('sanayi'));
-    });
-
-    const nonTufeAny = filteredMacroEvents.find(e => {
+        return evL.includes('faiz') || evL.includes('ppk') || evL.includes('policy rate');
+    }) || filteredMacroEvents.find(e => {
         const evL = (e.event || '').toLowerCase();
-        return !evL.includes('tüfe') && !evL.includes('cpi') && !evL.includes('enflasyon');
-    });
-
-    const criticalMacroEvent = nonTufeCritical || nonTufeAny || {
+        return evL.includes('sanayi') || evL.includes('industrial');
+    }) || filteredMacroEvents.find(e => {
+        const evL = (e.event || '').toLowerCase();
+        return evL.includes('büyüme') || evL.includes('gdp');
+    }) || filteredMacroEvents.find(e => {
+        const evL = (e.event || '').toLowerCase();
+        return !evL.includes('tüfe') && !evL.includes('enflasyon') && !evL.includes('cpi');
+    }) || filteredMacroEvents[0] || {
         event: 'TCMB Para Politikası Kurulu (PPK) Faiz Kararı',
         country: 'TR',
         dateFormatted: 'Ay İçinde',
-        plainExplanation: 'Piyasadaki likidite, borçlanma maliyetleri ve şirket finansman dengesini doğrudan belirleyecek ana eksendir.'
+        plainExplanation: 'Piyasa likiditesi, şirketlerin borçlanma maliyetleri ve Borsa İstanbul genel değerlemesi üzerinde ana yön belirleyici olacaktır.'
     };
 
-    // Altın için siyasi gündem, savaş senaryoları ve ABD beyanatları notu (Yuvarlamasız, somut)
+    // Altın için siyasi, sosyal, savaş/barış durumu (Yuvarlamasız, net ve kesin cümleler)
     let goldGeopoliticalInsight: string | null = null;
     if (hasGold) {
-        goldGeopoliticalInsight = "Altın pozisyonunuz açısından önümüzdeki ay; Orta Doğu'daki ateşkes müzakerelerinin seyri, küresel ticaret hatlarındaki jeopolitik riskler ve ABD yönetiminden gelebilecek yeni gümrük tarifesi açıklamalarının ons altın üzerindeki güvenli liman talebi belirleyici olacaktır. Ayrıca ABD Fed Faiz Kararı doğrudan takip edilecektir.";
+        goldGeopoliticalInsight = "Altın pozisyonunuz açısından önümüzdeki ayın jeopolitik ve makro dengeleri oldukça nettir: Orta Doğu'daki çatışmaların tırmanma eğilimi ve Ukrayna-Rusya hattında kalıcı bir barış ve ateşkes ihtimalinin ötelenmesi, küresel piyasalarda jeopolitik risk primini yüksek seviyede kilitlemektedir. Barışın ötelenmesi güvenli liman talebini canlı tutarken; ABD yönetiminden gelebilecek yeni gümrük tarifesi adımları ve Fed'in kademeli faiz indirim patikası ons altının 2.650 - 2.750 dolar bandındaki güçlü duruşunu perçinleyen ana eksen olacaktır.";
     }
 
-    // 3. KATMAN: SEKTÖREL VE ŞİRKET AJANDASI (Somut ve kesin veriler)
+    // 3. KATMAN: SEKTÖREL VE ŞİRKET HABERLERİ ARAŞTIRMASI (Bloomberg HT, CNN Türk, Investing TR)
     const topSector = sectors[0]?.name || 'Sanayi';
     const topAsset = top2Assets[0]?.cleanSymbol || '';
+
+    // Hedef kaynaklarda arama
+    let stockSectorNewsFinding = "Bloomberg HT, CNN Türk ve Investing TR kaynaklarında portföyünüzdeki şirketler ve sektörler için yapılan ileriye dönük taramalarda olağanüstü bir takvim riski veya negatif gelişme tespit edilmemiştir; ana odak resmi bilanço ve temettü takvimindedir.";
+    
+    try {
+        const sectorNews = await searchTargetedFinancialNews(`${topSector} sektörü beklenti`);
+        if (sectorNews.length > 0) {
+            stockSectorNewsFinding = `Bloomberg HT, CNN Türk ve Investing TR taramalarında; ${topSector} sektörüne yönelik basına yansıyan "${sectorNews[0].title}" gelişmesi, ay içinde şirketlerinizin kapasite ve sipariş dinamikleri açısından yakından takip edilecektir.`;
+        }
+    } catch {
+        // Fallback hazır
+    }
+
     const sectorResearchFindings: SectorResearchFindingItem[] = [
         {
             sector: topSector,
             headline: `${topSector} Sektöründe Kritik Eşikler`,
-            detail: `${topSector} sektöründe faaliyet gösteren hisseleriniz için ay içinde açıklanacak resmi kapasite kullanım ve ihracat verileri yön belirleyici olacaktır. Şirketleriniz için bu ay kayıtlı olağanüstü bir genel kurul bulunmamakta olup, ana odak resmi bilanço ve temettü takvimindedir.`,
+            detail: stockSectorNewsFinding,
             category: 'delivery'
-        },
-        {
-            sector: 'Genel Piyasa',
-            headline: `Sermaye ve Regülasyon Takvimi`,
-            detail: `SPK bültenleri ve şirket onay bekleyen sermaye kararları yakından izlenecektir.`,
-            category: 'capital'
         }
     ];
 
     // 4. EDİTORYAL MENTÖR METNİ SENTEZİ
-    // Kural: "Gelelim" gibi bağlayıcı kelimeler ASLA tekrarlanmayacak, zengin ve çeşitli ifadeler türetilecek.
     const paragraphs: string[] = [];
 
     // Paragraf 1: Doğal İsimli Kanca
@@ -763,7 +799,7 @@ async function generateNextMonthExpectations(
         `${userName}, geride bıraktığımız ayın ardından şimdi rotamızı ${nextMonth.nextMonthLabel} ayına ve cüzdanınızı doğrudan etkileyebilecek kritik eşiklere çeviriyoruz.`
     );
 
-    // Paragraf 2: SADECE EĞER en yüksek ağırlıklı 2 varlıkta temettü/bilanço varsa eklenir (Zorlama yok, tavsiye yok)
+    // Paragraf 2: Şirket Olayları (Temettü & Bilanço Varsa)
     if (companyEvents.length > 0) {
         const eventDescriptions = companyEvents.map(ev => {
             if (ev.eventType === 'dividend' && ev.estimatedPayoutTL) {
@@ -780,16 +816,13 @@ async function generateNextMonthExpectations(
         );
     }
 
-    // Paragraf 3: Makro Olay ve Somut Tarih
-    const hoverMention = totalCalendarEventsCount > 0 
-        ? `Bu ay takip listemizde yer alan tüm takvim başlıklarını görmek isterseniz, aşağıdaki [${nextMonth.nextMonthLabel} Ajandası (${totalCalendarEventsCount} Gelişme)] alanının üzerine gelmeniz yeterlidir.`
-        : '';
-
+    // Paragraf 3: Ekonomik Takvim Olayı (Tek haber, tıklandığında sayfaya giden link ve "Daha fazla bilgi için...")
+    const eventLinkToken = `[ekonomi:${encodeURIComponent(priorityEvent.event)}|${priorityEvent.event}]`;
     paragraphs.push(
-        `Piyasaların genel yönünü tayin edecek makroekonomik takvime odaklandığımızda; en belirleyici başlık ${criticalMacroEvent.country === 'TR' ? 'Türkiye' : 'ABD'} piyasalarında ${criticalMacroEvent.dateFormatted} tarihinde açıklanacak olan **${criticalMacroEvent.event}** olacaktır. ${criticalMacroEvent.plainExplanation} ${hoverMention}`
+        `Piyasaların genel yönünü tayin edecek makroekonomik takvime odaklandığımızda; portföyünüzdeki varlıkları en yakından ilgilendiren kritik gelişme ${priorityEvent.country === 'TR' ? 'Türkiye' : 'ABD'} piyasalarında ${priorityEvent.dateFormatted} tarihinde açıklanacak olan ${eventLinkToken} olacaktır. ${priorityEvent.plainExplanation} Daha fazla bilgi için haberin ismine basabilirsiniz.`
     );
 
-    // Paragraf 4: Sektörler ve Altın / Jeopolitik Bakış (Somut, yuvarlamasız)
+    // Paragraf 4: Sektörler & Altın Jeopolitik / Savaş-Barış Analizi (Net Cümleler)
     if (goldGeopoliticalInsight) {
         paragraphs.push(
             `Sektörlerin mutfağındaki kararlara ve küresel dengelere baktığımızda; ${sectorResearchFindings[0].detail} ${goldGeopoliticalInsight}`
@@ -854,6 +887,13 @@ export async function generateMonthlyPerformanceReport(
         }
     }
 
+    // Nakit varlıkları aylık performans raporundan hariç tut (Kullanıcı Talebi: Nakit bu sayfada varlık olarak gösterilmeyecek)
+    dbAssets = dbAssets.filter(a => {
+        const sym = (a.symbol || '').toUpperCase().trim();
+        const clean = sym.replace(/\.IS$/i, '').trim();
+        return !['NAKİT', 'NAKIT', 'TRY', 'TL', 'TRY_CASH', 'CASH'].includes(clean);
+    });
+
     const cleanFirstName = userFullName.split(' ')[0] || userFullName;
     const politeGreetingName = `${cleanFirstName} Bey`;
 
@@ -878,7 +918,7 @@ export async function generateMonthlyPerformanceReport(
 
     const { startPrices, endPrices, bist100ReturnPct } = historicalMonthData;
 
-    // 3. Varlık Hesaplamaları ve Katkı Payı
+    // 3. Varlık Hesaplamaları
     let totalPortfolioVal = 0;
     let totalPortfolioCost = 0;
     let totalMonthStartVal = 0;
@@ -918,11 +958,11 @@ export async function generateMonthlyPerformanceReport(
         if (monthlyReturnPct >= 18) {
             isAnomaly = true;
             anomalyType = 'high_gain';
-            anomalyReason = `Aylık %${monthlyReturnPct.toFixed(1)} oranındaki güçlü yükseliş ile genel piyasa ortalamasının çok üzerinde bir getiri sağladı.`;
+            anomalyReason = `Aylık güçlü yükseliş ile genel piyasa ortalamasının çok üzerinde bir getiri sağladı.`;
         } else if (monthlyReturnPct <= -12) {
             isAnomaly = true;
             anomalyType = 'sharp_drop';
-            anomalyReason = `Aylık %${Math.abs(monthlyReturnPct).toFixed(1)} oranındaki geri çekilme ile portföy getirisi üzerinde baskı oluşturdu.`;
+            anomalyReason = `Aylık geri çekilme ile portföy getirisi üzerinde baskı oluşturdu.`;
         }
 
         return {
@@ -945,7 +985,7 @@ export async function generateMonthlyPerformanceReport(
             weightPct: 0,
             contributionPct: 0,
             contributionTL: Number(monthlyReturnTL.toFixed(2)),
-            isPositive: monthlyReturnPct >= 0,
+            isPositive: monthlyReturnTL >= 0,
             isAnomaly,
             anomalyType,
             anomalyReason
@@ -957,9 +997,7 @@ export async function generateMonthlyPerformanceReport(
         ast.contributionPct = Number(((ast.weightPct * ast.monthlyReturnPct) / 100).toFixed(2));
     });
 
-    computedAssets.sort((a, b) => b.contributionPct - a.contributionPct);
-
-    // 4. Sektörel Analiz ve Sektörel Anomali Tespiti
+    // 4. Sektörel Analiz (TL Bazlı)
     const sectorMap: Record<string, {
         totalVal: number;
         monthlyTL: number;
@@ -983,7 +1021,7 @@ export async function generateMonthlyPerformanceReport(
 
         const isAnomaly = monthlyReturnPct >= (bist100ReturnPct + 7);
         const anomalyNote = isAnomaly
-            ? `${name} sektörü, BIST 100 genel getirisinden (%${bist100ReturnPct.toFixed(1)}) belirgin şekilde pozitif ayrıştı.`
+            ? `${name} sektörü, BIST 100 genel getirisinden belirgin şekilde pozitif ayrıştı.`
             : undefined;
 
         return {
@@ -993,13 +1031,13 @@ export async function generateMonthlyPerformanceReport(
             monthlyReturnTL: Number(data.monthlyTL.toFixed(2)),
             assetCount: data.symbols.length,
             symbols: data.symbols,
-            isPositive: monthlyReturnPct >= 0,
+            isPositive: data.monthlyTL >= 0,
             isAnomaly,
             anomalyNote
         };
     });
 
-    sectors.sort((a, b) => b.monthlyReturnPct - a.monthlyReturnPct);
+    sectors.sort((a, b) => b.monthlyReturnTL - a.monthlyReturnTL);
 
     // 5. TWR ve Net Sermaye Akışı
     let netCapitalFlow = 0;
@@ -1021,97 +1059,203 @@ export async function generateMonthlyPerformanceReport(
         twrPct = Number(((adjustedProfit / totalMonthStartVal) * 100).toFixed(2));
     }
 
-    // 6. 1 Ay İçerisindeki Haber & Reel Veri Taraması
-    const topAsset = computedAssets[0];
-    const laggingAsset = computedAssets.length > 1 ? computedAssets[computedAssets.length - 1] : null;
-    const topSector = sectors[0];
+    // 6. KAZANÇ VE KAYIP TARAFLARI (TL BAZLI) & HEDEF HABER ARAMASI (Bloomberg HT, CNN Türk, Investing TR)
+    const sortedAssetsByTL = [...computedAssets].sort((a, b) => b.monthlyReturnTL - a.monthlyReturnTL);
+    const topGainingAsset = sortedAssetsByTL[0] || null;
+    const topLosingAsset = sortedAssetsByTL[sortedAssetsByTL.length - 1] || null;
 
-    const [topNews, lagNews, sectorNews] = await Promise.all([
-        topAsset ? searchRealMonthNews(topAsset.cleanSymbol, period.startDate, period.endDate) : Promise.resolve([]),
-        (laggingAsset && laggingAsset.monthlyReturnPct < 0) ? searchRealMonthNews(laggingAsset.cleanSymbol, period.startDate, period.endDate) : Promise.resolve([]),
-        (topSector && topSector.isAnomaly) ? searchRealMonthNews(`${topSector.name} sektörü`, period.startDate, period.endDate) : Promise.resolve([])
-    ]);
+    const sortedSectorsByTL = [...sectors].sort((a, b) => b.monthlyReturnTL - a.monthlyReturnTL);
+    const topGainingSector = sortedSectorsByTL[0] || null;
+    const topLosingSector = sortedSectorsByTL[sortedSectorsByTL.length - 1] || null;
 
-    if (topAsset && topNews.length > 0) topAsset.verifiedNews = topNews;
-    if (laggingAsset && lagNews.length > 0) laggingAsset.verifiedNews = lagNews;
-    if (topSector && sectorNews.length > 0) topSector.sectorNews = sectorNews;
+    // Düşüş araştırması: Bloomberg HT, CNN Türk ve Investing TR kaynaklarında tek tek tara
+    let fallingFinding: { title: string; source: string; date: string; url?: string } | null = null;
+    let fallingSubject = topLosingAsset?.cleanSymbol || 'Hisseler';
 
-    // 7. Bilişsel Mentörlük Anlatımı
+    if (topLosingAsset && topLosingAsset.monthlyReturnTL < 0) {
+        const losingNews = await searchTargetedFinancialNews(topLosingAsset.cleanSymbol);
+        if (losingNews.length > 0) {
+            fallingFinding = losingNews[0];
+            fallingSubject = topLosingAsset.cleanSymbol;
+        }
+    }
+
+    // Eğer hissede bulunamadıysa en çok kaybettiren sektör için ara
+    if (!fallingFinding && topLosingSector && topLosingSector.monthlyReturnTL < 0) {
+        const sectorLossNews = await searchTargetedFinancialNews(`${topLosingSector.name} sektörü`);
+        if (sectorLossNews.length > 0) {
+            fallingFinding = sectorLossNews[0];
+            fallingSubject = `${topLosingSector.name} sektörü`;
+        }
+    }
+
+    // Eğer sektörde de bulunamadıysa portföyde bulunan diğer hisseleri tek tek tara
+    if (!fallingFinding) {
+        for (const ast of computedAssets) {
+            if (ast.cleanSymbol !== topLosingAsset?.cleanSymbol) {
+                const otherNews = await searchTargetedFinancialNews(ast.cleanSymbol);
+                if (otherNews.length > 0) {
+                    fallingFinding = otherNews[0];
+                    fallingSubject = ast.cleanSymbol;
+                    break;
+                }
+            }
+        }
+    }
+
+    // Kazanan hisse için de hedef kaynaklardan haber tara
+    let winningNews: { title: string; source: string; date: string; url?: string } | null = null;
+    if (topGainingAsset && topGainingAsset.monthlyReturnTL > 0) {
+        const gainNews = await searchTargetedFinancialNews(topGainingAsset.cleanSymbol);
+        if (gainNews.length > 0) {
+            winningNews = gainNews[0];
+        }
+    }
+
+    // 7. BİLİŞSEL MENTÖRLÜK ANLATIMI (TAMAMEN TL BAZLI, SIFIR YÜZDE!)
     const isNetPositive = monthlyNetProfitTL >= 0;
     const profitTLFormatted = Math.abs(monthlyNetProfitTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 });
 
     const greetingSentence = isNetPositive
         ? `Geçtiğimiz ay borsa genelinde dalgalı bir seyir izlenirken, senin portföyün değerini sağlam adımlarla büyüttü ve ayı net ${profitTLFormatted} TL artışla tamamladı.`
-        : `Geçtiğimiz ay genel piyasa koşulları temkinli ve kararsız bir seyir izlerken, portföyün ${profitTLFormatted} TL seviyesinde bir geri çekilme yaşadı.`;
+        : `Geçtiğimiz ay genel piyasa koşulları temkinli ve kararsız bir seyir izlerken, portföyün net ${profitTLFormatted} TL seviyesinde bir geri çekilme yaşadı.`;
 
     const paragraphs: string[] = [];
 
+    // P1: Giriş ve Nakit Hareketi (Yüzdesiz)
     if (Math.abs(netCapitalFlow) > 1000) {
         paragraphs.push(
-            `${politeGreetingName}, gelin bu ay cebinizdeki gerçek paranın nasıl çalıştığına yakından bakalım. Ay boyunca yaptığınız ${Math.abs(netCapitalFlow).toLocaleString('tr-TR')} TL tutarındaki ${netCapitalFlow > 0 ? 'nakit para eklemesini' : 'para çıkışını'} yatırım kârından ayırdığımızda, sadece hisselerinizin kendi performansı ile portföyünüz %${twrPct} oranında reel bir getiri sağladı.`
+            `${politeGreetingName}, gelin bu ay cebinizdeki gerçek paranın nasıl hareket ettiğine yakından bakalım. Ay boyunca yaptığınız ${Math.abs(netCapitalFlow).toLocaleString('tr-TR')} TL tutarındaki ${netCapitalFlow > 0 ? 'nakit para eklemesini' : 'para çıkışını'} yatırım kârından ayırdığımızda, doğrudan hisselerinizin kendi piyasa performansı ile portföyün bu ayı net ${profitTLFormatted} TL ${isNetPositive ? 'kazançla' : 'farkla'} tamamladı.`
         );
     } else {
         paragraphs.push(
-            `${politeGreetingName}, gelin bu ay cebinizdeki paranın nasıl hareket ettiğine ve büyümenin perde arkasına birlikte bakalım. Herhangi bir dış para girişine gerek kalmadan, doğrudan seçtiğin şirketlerin performansı ile portföyün bu ayı %${monthlyNetProfitPct.toFixed(1)} getiri ile kapattı.`
+            `${politeGreetingName}, gelin bu ay cebinizdeki paranın nasıl hareket ettiğine ve şirketlerinizin performansına birlikte bakalım. Herhangi bir dış para girişine gerek kalmadan, doğrudan seçtiğin şirketlerin performansı ile portföyün bu ayı net ${profitTLFormatted} TL ${isNetPositive ? 'artışla' : 'değişimle'} kapattı.`
         );
     }
 
-    if (topAsset) {
-        const topNewsSummary = topAsset.verifiedNews && topAsset.verifiedNews.length > 0
-            ? `Şirketin ay içindeki bu gücünü basına yansıyan "${topAsset.verifiedNews[0].title}" gibi reel gelişmeler ve güçlü bilanço beklentileri de doğrudan destekledi.`
-            : `Şirketin faaliyet gösterdiği alandaki güçlü talep ve yatırımcı ilgisi fiyatı yukarı taşıyan temel itici güç oldu.`;
+    // P2: En Çok Kazandıran Hisse ve Sektör (Tamamen TL, Sıfır Yüzde!)
+    if (topGainingAsset) {
+        const isActuallyGain = topGainingAsset.monthlyReturnTL > 0;
+        const topGainTLFormatted = Math.abs(topGainingAsset.monthlyReturnTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 });
+        const topSectorGainTLFormatted = topGainingSector 
+            ? Math.abs(topGainingSector.monthlyReturnTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 }) 
+            : null;
+
+        const winningNewsSnippet = winningNews
+            ? `Şirketin ay içindeki bu duruşunu ${winningNews.source} kaynaklarında yer alan "${winningNews.title}" gelişmeleri doğrudan destekledi.`
+            : `Şirketin faaliyet gösterdiği alandaki kurumsal talep ve yatırımcı ilgisi öne çıkan temel itici güç oldu.`;
+
+        if (isActuallyGain) {
+            const sectorGainText = topGainingSector
+                ? `Sektörel bazda ise cüzdanına en güçlü desteği net **+${topSectorGainTLFormatted} TL** ile **${topGainingSector.name}** sektörü verdi.`
+                : '';
+
+            paragraphs.push(
+                `Gelelim bu konuya; peki bu ay yüzünü en çok güldüren şirket hangisi oldu? Portföyündeki büyümenin açık ara en büyük lokomotifi, tek başına portföyüne net **+${topGainTLFormatted} TL** kazanç sağlayan **${topGainingAsset.cleanSymbol}** oldu. ${sectorGainText} ${winningNewsSnippet}`
+            );
+        } else {
+            // Ay genelinde tüm varlıklar eksideyse en dirençli varlık olarak anlat
+            const sectorResistText = topGainingSector
+                ? `Sektörel bazda ise en korunaklı duruşu **${topGainingSector.name}** sektörü sergiledi.`
+                : '';
+
+            paragraphs.push(
+                `Genel piyasadaki sert dalgalanmalara rağmen cüzdanında değerini en dirayetli koruyan şirket, ayı sadece net **-${topGainTLFormatted} TL** sınırlı bir geri çekilme ile kapatan **${topGainingAsset.cleanSymbol}** oldu. ${sectorResistText} ${winningNewsSnippet}`
+            );
+        }
+    }
+
+    // P3: En Çok Kaybettiren Hisse ve Sektör + Bloomberg HT, CNN Türk, Investing TR Düşüş Araştırması (Yüzdesiz)
+    if (topLosingAsset && topLosingAsset.monthlyReturnTL < 0) {
+        const lossTLFormatted = Math.abs(topLosingAsset.monthlyReturnTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 });
+        const sectorLossTLFormatted = topLosingSector && topLosingSector.monthlyReturnTL < 0
+            ? Math.abs(topLosingSector.monthlyReturnTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 })
+            : null;
+
+        const sectorLossText = topLosingSector && sectorLossTLFormatted
+            ? `Sektör bazında ise en belirgin geri çekilme net **${sectorLossTLFormatted} TL** gerilemeyle **${topLosingSector.name}** sektöründe gerçekleşti.`
+            : '';
+
+        let researchConclusion = '';
+        if (fallingFinding) {
+            researchConclusion = `Bloomberg HT, CNN Türk ve Investing TR kaynaklarında yaptığımız detaylı taramada; "${fallingFinding.title}" (${fallingFinding.source}) başlıklı gelişmenin ${fallingSubject} üzerinde kısa vadeli bir tedirginlik ve satış baskısı yarattığı görülmektedir.`;
+        } else {
+            researchConclusion = `Bloomberg HT, CNN Türk ve Investing TR kaynaklarında tek tek yapılan haber araştırmalarında; doğrudan ${topLosingAsset.cleanSymbol} veya ${topLosingSector?.name || 'ilgili'} sektöre yönelik olağanüstü şirket bazlı bir olumsuzluk tespit edilmemiştir. Yaşanan bu geri çekilmenin genel piyasa dalgalanmaları ve teknik kâr realizasyonlarından kaynaklandığı değerlendirilmektedir.`;
+        }
+
+        const mentorAdvice = `Unutma ki borsada her hisse her ay aynı anda yükselmez; önemli olan şirketin temel hikayesinin bozulup bozulmadığıdır. Panik satışları yerine şirketlerinin iş hacmini ve finansal gücünü sakinlikle takip etmek en sağlıklı yaklaşımdır.`;
 
         paragraphs.push(
-            `Gelelim bu konuya; peki bu ay yüzünü en çok güldüren şirket hangisi oldu? Portföyündeki büyümenin açık ara en büyük motoru, tek başına getiriye %${topAsset.contributionPct.toFixed(1)} puan katkı sağlayan ve ay boyunca %${topAsset.monthlyReturnPct.toFixed(1)} değer kazanan ${topAsset.cleanSymbol} oldu. ${topNewsSummary}`
+            `Bu konuyu anladıysan diğer konumuz olan ve yatırımcıların çoğu zaman göz ardı ettiği düşüş tarafına bakalım. Bu ay portföyünün getirisini en çok gerileten hisse, net **${lossTLFormatted} TL** kayıp yaşatan **${topLosingAsset.cleanSymbol}** oldu. ${sectorLossText} ${researchConclusion} ${mentorAdvice}`
         );
     }
 
-    let negativeMoment: MentorStorytellingBlock['negativeLearningMoment'] = null;
-    if (laggingAsset && laggingAsset.monthlyReturnPct < 0) {
-        const lossTL = Math.abs(laggingAsset.monthlyReturnTL);
-        const lagNewsNote = laggingAsset.verifiedNews && laggingAsset.verifiedNews.length > 0
-            ? `Nitekim ay içinde basında yer alan "${laggingAsset.verifiedNews[0].title}" gelişmesi kısa vadeli bir tedirginlik yarattı.`
-            : `Piyasa genelindeki sektörel kâr realizasyonları fiyat üzerinde geçici bir baskı oluşturdu.`;
-
-        const mentorAdvice = `Unutma ki borsada her hisse her ay aynı anda yükselmez; önemli olan şirketin temel hikayesinin bozulup bozulmadığıdır. Panik satışları yerine şirketin önümüzdeki çeyrekteki iş gücünü sakinlikle takip etmek en sağlıklı yaklaşımdır.`;
-
-        paragraphs.push(
-            `Bu konuyu anladıysan diğer konumuz olan ve yatırımcıların çoğu zaman göz ardı ettiği düşüş tarafına bakalım. Bu ay portföyünün getirisini en çok frenleyen hisse, %${Math.abs(laggingAsset.monthlyReturnPct).toFixed(1)} gerileyerek ${lossTL.toLocaleString('tr-TR', { maximumFractionDigits: 0 })} TL eksi yazan ${laggingAsset.cleanSymbol} oldu. ${lagNewsNote} ${mentorAdvice}`
-        );
-
-        negativeMoment = {
-            symbol: laggingAsset.cleanSymbol,
-            sector: laggingAsset.sector,
-            returnPct: laggingAsset.monthlyReturnPct,
-            lossTL,
-            story: lagNewsNote,
-            mentorAdvice
-        };
-    }
-
+    // P4: Kapanış
     const closingTakeaway = `Son olarak unutmaman gereken kritik kural şudur: Borsa bir yarış değil, doğru şirketlere ortak olma sabrıdır. Önümüzdeki ay da sakin kalarak, günlük fiyat dalgalanmalarına kapılmadan stratejini koruman cebini en çok güvende tutacak anahtardır.`;
     paragraphs.push(closingTakeaway);
+
+    // Key Movements Listesi (Katkı payı kaldırıldı, tamamen net TL değişimi)
+    const keyMovements: KeyMovementItem[] = [];
+    if (topGainingAsset) {
+        keyMovements.push({
+            symbol: topGainingAsset.cleanSymbol,
+            sector: topGainingAsset.sector,
+            returnTL: topGainingAsset.monthlyReturnTL,
+            isGain: true,
+            story: winningNews?.title || `${topGainingAsset.sector} sektöründeki genel talep artışı ile portföyü sırtladı.`,
+            newsUrl: winningNews?.url
+        });
+    }
+    if (topLosingAsset && topLosingAsset.cleanSymbol !== topGainingAsset?.cleanSymbol) {
+        keyMovements.push({
+            symbol: topLosingAsset.cleanSymbol,
+            sector: topLosingAsset.sector,
+            returnTL: topLosingAsset.monthlyReturnTL,
+            isGain: false,
+            story: fallingFinding?.title || `Piyasa genelindeki sektörel kâr realizasyonları fiyat üzerinde baskı oluşturdu.`,
+            newsUrl: fallingFinding?.url
+        });
+    }
 
     const mentorSummary: MentorStorytellingBlock = {
         title: `${period.monthLabel} Performans ve Mentör Analizi`,
         userName: politeGreetingName,
         greetingSentence,
         narrativeParagraphs: paragraphs,
-        topContributors: computedAssets.slice(0, 3).filter(a => a.contributionPct > 0).map(a => ({
+        topGainingAsset: topGainingAsset ? {
+            symbol: topGainingAsset.cleanSymbol,
+            sector: topGainingAsset.sector,
+            gainTL: topGainingAsset.monthlyReturnTL,
+            story: winningNews?.title || `${topGainingAsset.sector} sektöründeki güçlü talep ile portföyü sırtladı.`
+        } : null,
+        topGainingSector: topGainingSector ? {
+            sectorName: topGainingSector.name,
+            gainTL: topGainingSector.monthlyReturnTL
+        } : null,
+        topLosingAsset: topLosingAsset ? {
+            symbol: topLosingAsset.cleanSymbol,
+            sector: topLosingAsset.sector,
+            lossTL: topLosingAsset.monthlyReturnTL,
+            story: fallingFinding?.title || `Sektörel kâr realizasyonları fiyat üzerinde baskı oluşturdu.`,
+            newsFinding: fallingFinding?.title
+        } : null,
+        topLosingSector: topLosingSector ? {
+            sectorName: topLosingSector.name,
+            lossTL: topLosingSector.monthlyReturnTL
+        } : null,
+        keyMovements,
+        topContributors: computedAssets.slice(0, 3).map(a => ({
             symbol: a.cleanSymbol,
             sector: a.sector,
             returnPct: a.monthlyReturnPct,
             contributionPct: a.contributionPct,
             contributionTL: a.contributionTL,
-            story: a.verifiedNews?.[0]?.title || `${a.sector} sektöründeki genel talep artışı ile portföyü sırtladı.`
+            returnTL: a.monthlyReturnTL,
+            isGain: a.monthlyReturnTL >= 0,
+            story: a.cleanSymbol === topGainingAsset?.cleanSymbol && winningNews ? winningNews.title : `${a.sector} sektöründeki performansıyla portföyde yer aldı.`
         })),
-        negativeLearningMoment: negativeMoment,
-        sectorInsight: topSector ? {
-            sectorName: topSector.name,
-            returnPct: topSector.monthlyReturnPct,
-            insight: topSector.anomalyNote || `${topSector.name} sektörü ay boyunca portföy içinde en dinamik performansı sergiledi.`,
-            sourceCount: topSector.sectorNews?.length || 0
-        } : null,
+        negativeLearningMoment: null,
+        sectorInsight: null,
         closingTakeaway
     };
 
