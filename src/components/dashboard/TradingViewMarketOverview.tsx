@@ -65,7 +65,7 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
             ]
         };
 
-        return `https://s.tradingview.com/embed-widget/symbol-overview/?locale=tr#${encodeURIComponent(
+        return `https://www.tradingview-widget.com/embed-widget/symbol-overview/?locale=tr#${encodeURIComponent(
             JSON.stringify(config)
         )}`;
     }, [isDark]);
