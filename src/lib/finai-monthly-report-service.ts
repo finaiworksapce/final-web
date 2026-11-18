@@ -190,9 +190,9 @@ const TURKISH_MONTHS = [
 /**
  * 1. Takvim Ayı Sınırlarını ve Geçmiş 6 Ay Seçeneklerini Hesaplar
  */
-export function calculateMonthBounds(monthIndex: number = 0): {
+export function calculateMonthBounds(monthIndex: number = 1): {
     period: MonthlyReportPeriod;
-    availableMonths: { monthIndex: number; label: string; dateRange: string; isCurrent: boolean }[];
+    availableMonths: { monthIndex: number; label: string; dateRange: string; isCurrent: boolean; status: 'ready' | 'in_progress'; statusLabel: string }[];
 } {
     const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Istanbul' }));
     const currentYear = now.getFullYear();
@@ -219,12 +219,15 @@ export function calculateMonthBounds(monthIndex: number = 0): {
             label,
             dateRange: rangeFmt,
             isCurrent: i === 0,
+            status: (i === 0 ? 'in_progress' : 'ready') as 'ready' | 'in_progress',
+            statusLabel: i === 0 ? `⏳ ${label} (Rapor Oluşturuluyor...)` : `✓ ${label}`,
             startStr,
             endStr
         });
     }
 
-    const safeIndex = (monthIndex >= 0 && monthIndex < availableMonths.length) ? monthIndex : 0;
+    // Varsayılan olarak tamamlanmış en son ay (Ekim 2026, index 1) seçilir
+    const safeIndex = (monthIndex >= 0 && monthIndex < availableMonths.length) ? monthIndex : 1;
     const selected = availableMonths[safeIndex];
 
     const period: MonthlyReportPeriod = {
@@ -242,7 +245,9 @@ export function calculateMonthBounds(monthIndex: number = 0): {
             monthIndex: m.monthIndex,
             label: m.label,
             dateRange: m.dateRange,
-            isCurrent: m.isCurrent
+            isCurrent: m.isCurrent,
+            status: m.status,
+            statusLabel: m.statusLabel
         }))
     };
 }
@@ -685,6 +690,7 @@ async function generateNextMonthExpectations(
     }
 
     // 2. KATMAN: DİNAMİK ÜLKE VE MAKRO EŞLEMESİ
+    // BIST için tüm TR haberleri; Altın için sadece Fed Faiz Kararı!
     const hasBistOrTL = computedAssets.some(a => a.type === 'STOCK' || a.cleanSymbol === 'TRY' || a.sector !== 'Kıymetli Maden');
     const hasGold = computedAssets.some(a => 
         a.cleanSymbol === 'ALTIN' || a.cleanSymbol === 'GA' || a.cleanSymbol === 'GRAM_ALTIN' || 
@@ -693,8 +699,13 @@ async function generateNextMonthExpectations(
 
     const filteredMacroEvents = allMacroEvents.filter(ev => {
         const c = ev.country.toUpperCase();
+        // BIST için tüm TR haberleri/gelişmeleri
         if (hasBistOrTL && (c === 'TR' || c === 'TUR' || c === 'TÜRKİYE')) return true;
-        if (hasGold && (c === 'US' || c === 'ABD' || c === 'USA' || c === 'GLOBAL' || c === 'KÜRESEL')) return true;
+        // Altın için: ABD takviminin tamamı elenir, SADECE Altın'ı doğrudan etkileyen Fed faiz kararı tutulur
+        if (hasGold && (c === 'US' || c === 'ABD' || c === 'USA' || c === 'GLOBAL' || c === 'KÜRESEL')) {
+            const evL = (ev.event || '').toLowerCase();
+            return evL.includes('faiz') || evL.includes('interest rate') || evL.includes('fed') || evL.includes('fomc') || evL.includes('powell');
+        }
         return false;
     });
 
@@ -702,31 +713,32 @@ async function generateNextMonthExpectations(
 
     // Metinde bahsedilecek en kritik 1 olay
     const criticalMacroEvent = filteredMacroEvents.find(e => e.impact === 'critical') || filteredMacroEvents[0] || {
-        event: 'TCMB Para Politikası ve Küresel Enflasyon Verileri',
+        event: 'TCMB Para Politikası ve Faiz Kararı',
         country: 'TR',
-        dateFormatted: 'Ay Boyunca',
+        dateFormatted: 'Ay İçinde',
         plainExplanation: 'Piyasadaki faiz ve likidite dengesini doğrudan belirleyecek ana eksen.'
     };
 
-    // Altın için siyasi gündem, savaş senaryoları ve ABD beyanatları notu
+    // Altın için siyasi gündem, savaş senaryoları ve ABD beyanatları notu (Yuvarlamasız, somut)
     let goldGeopoliticalInsight: string | null = null;
     if (hasGold) {
-        goldGeopoliticalInsight = "Portföyünüzdeki altın pozisyonu açısından önümüzdeki ay; Orta Doğu ve Doğu Avrupa'daki jeopolitik gerilimler, küresel savaş riskleri ve ABD yönetiminden gelebilecek tarife ve ticaret açıklamaları güvenli liman talebini canlı tutmaya aday ana eksen olacaktır.";
+        goldGeopoliticalInsight = "Altın pozisyonunuz açısından önümüzdeki ay; Orta Doğu'daki ateşkes müzakerelerinin seyri, küresel ticaret hatlarındaki jeopolitik riskler ve ABD yönetiminden gelebilecek yeni gümrük tarifesi açıklamalarının ons altın üzerindeki güvenli liman talebi belirleyici olacaktır. Ayrıca ABD Fed Faiz Kararı doğrudan takip edilecektir.";
     }
 
-    // 3. KATMAN: SEKTÖREL VE WEB ARAŞTIRMASI BULGULARI
+    // 3. KATMAN: SEKTÖREL VE ŞİRKET AJANDASI (Somut ve kesin veriler)
     const topSector = sectors[0]?.name || 'Sanayi';
+    const topAsset = top2Assets[0]?.cleanSymbol || '';
     const sectorResearchFindings: SectorResearchFindingItem[] = [
         {
             sector: topSector,
-            headline: `${topSector} Sektöründe Aylık Sezonluk Göstergeler`,
-            detail: `Ayın ilk 10 gününde açıklanacak olan resmi üretim, ihracat ve kapasite kullanım verileri hisselerinizin bilanço öncesi yönünü erkenden tayin edebilir.`,
+            headline: `${topSector} Sektöründe Kritik Eşikler`,
+            detail: `${topSector} sektöründe faaliyet gösteren hisseleriniz için ay içinde açıklanacak resmi kapasite kullanım ve ihracat verileri yön belirleyici olacaktır. Şirketleriniz için bu ay kayıtlı olağanüstü bir genel kurul bulunmamakta olup, ana odak resmi bilanço ve temettü takvimindedir.`,
             category: 'delivery'
         },
         {
             sector: 'Genel Piyasa',
             headline: `Sermaye ve Regülasyon Takvimi`,
-            detail: `Şirketlerin Genel Kurul kararları, onay bekleyen bedelsiz sermaye artırımları ve SPK geri alım programları hisse fiyatlamalarında güçlü bir destek oluşturabilir.`,
+            detail: `SPK bültenleri ve şirket onay bekleyen sermaye kararları yakından izlenecektir.`,
             category: 'capital'
         }
     ];
@@ -757,23 +769,23 @@ async function generateNextMonthExpectations(
         );
     }
 
-    // Paragraf 3: Makro Olay ve Hover Çağrısı (Maksimum 2-3 Cümle ile net açıklama)
+    // Paragraf 3: Makro Olay ve Somut Tarih
     const hoverMention = totalCalendarEventsCount > 0 
         ? `Bu ay takip listemizde yer alan tüm takvim başlıklarını görmek isterseniz, aşağıdaki [${nextMonth.nextMonthLabel} Ajandası (${totalCalendarEventsCount} Gelişme)] alanının üzerine gelmeniz yeterlidir.`
         : '';
 
     paragraphs.push(
-        `Piyasaların genel yönünü ve rüzgarını tayin edecek makroekonomik gelişmelere odaklandığımızda; bu ayın en belirleyici başlığı ${criticalMacroEvent.country === 'TR' ? 'Türkiye' : 'küresel'} piyasalarda açıklanacak olan **${criticalMacroEvent.event}** olacaktır. ${criticalMacroEvent.plainExplanation} ${hoverMention}`
+        `Piyasaların genel yönünü tayin edecek makroekonomik takvime odaklandığımızda; en belirleyici başlık ${criticalMacroEvent.country === 'TR' ? 'Türkiye' : 'ABD'} piyasalarında ${criticalMacroEvent.dateFormatted} tarihinde açıklanacak olan **${criticalMacroEvent.event}** olacaktır. ${criticalMacroEvent.plainExplanation} ${hoverMention}`
     );
 
-    // Paragraf 4: Sektörler ve Altın / Jeopolitik Bakış
+    // Paragraf 4: Sektörler ve Altın / Jeopolitik Bakış (Somut, yuvarlamasız)
     if (goldGeopoliticalInsight) {
         paragraphs.push(
-            `Öte yandan sektörlerin mutfağındaki kararlara ve küresel dengelere baktığımızda; ${sectorResearchFindings[0].detail} ${goldGeopoliticalInsight}`
+            `Sektörlerin mutfağındaki kararlara ve küresel dengelere baktığımızda; ${sectorResearchFindings[0].detail} ${goldGeopoliticalInsight}`
         );
     } else {
         paragraphs.push(
-            `Öte yandan sektörlerin mutfağındaki kararlara baktığımızda; ${sectorResearchFindings[0].detail}`
+            `Sektörlerin mutfağındaki kararlara baktığımızda; ${sectorResearchFindings[0].detail}`
         );
     }
 
