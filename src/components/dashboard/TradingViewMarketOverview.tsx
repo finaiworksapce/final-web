@@ -16,13 +16,10 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
         const container = containerRef.current;
         if (!container) return;
 
-        // Önceki içeriği temizle
         container.innerHTML = "";
 
         const widgetContainer = document.createElement("div");
-        widgetContainer.className = "tradingview-widget-container__widget";
-        widgetContainer.style.width = "100%";
-        widgetContainer.style.height = "100%";
+        widgetContainer.className = "tradingview-widget-container__widget h-full w-full";
         container.appendChild(widgetContainer);
 
         const copyrightContainer = document.createElement("div");
@@ -49,7 +46,7 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
             wickDownColor: "#f7525f",
             colorTheme: isDark ? "dark" : "light",
             isTransparent: false,
-            locale: "tr",
+            locale: "en",
             chartOnly: false,
             scalePosition: "right",
             scaleMode: "Normal",
@@ -59,7 +56,6 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
             symbols: [
                 ["FX_IDC:XAUTRYG|1D"],
                 ["FX_IDC:XAGTRYG|1D"],
-                ["BIST:XU100|1D"],
                 ["SKILLING:US100|1D"],
                 ["BITSTAMP:BTCUSD|1D"]
             ],
