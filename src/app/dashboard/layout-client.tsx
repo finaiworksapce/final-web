@@ -176,7 +176,7 @@ function DashboardShell({
             icon: PieChart 
         },
         { 
-            label: "Haftalık Özet", 
+            label: "Aylık Özet", 
             href: "/dashboard/report", 
             isSubActive: pathname.startsWith("/dashboard/report"), 
             icon: FileText 
