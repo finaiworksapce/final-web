@@ -711,12 +711,23 @@ async function generateNextMonthExpectations(
 
     const totalCalendarEventsCount = filteredMacroEvents.length;
 
-    // Metinde bahsedilecek en kritik 1 olay
-    const criticalMacroEvent = filteredMacroEvents.find(e => e.impact === 'critical') || filteredMacroEvents[0] || {
-        event: 'TCMB Para Politikası ve Faiz Kararı',
+    // Metinde bahsedilecek en kritik olay (TÜFE tekrarından kaçınılır; faiz, TCMB PPK, üretim veya büyüme önceliklendirilir)
+    const nonTufeCritical = filteredMacroEvents.find(e => {
+        const evL = (e.event || '').toLowerCase();
+        const isTufe = evL.includes('tüfe') || evL.includes('cpi') || evL.includes('enflasyon');
+        return !isTufe && (e.impact === 'critical' || evL.includes('faiz') || evL.includes('ppk') || evL.includes('sanayi'));
+    });
+
+    const nonTufeAny = filteredMacroEvents.find(e => {
+        const evL = (e.event || '').toLowerCase();
+        return !evL.includes('tüfe') && !evL.includes('cpi') && !evL.includes('enflasyon');
+    });
+
+    const criticalMacroEvent = nonTufeCritical || nonTufeAny || {
+        event: 'TCMB Para Politikası Kurulu (PPK) Faiz Kararı',
         country: 'TR',
         dateFormatted: 'Ay İçinde',
-        plainExplanation: 'Piyasadaki faiz ve likidite dengesini doğrudan belirleyecek ana eksen.'
+        plainExplanation: 'Piyasadaki likidite, borçlanma maliyetleri ve şirket finansman dengesini doğrudan belirleyecek ana eksendir.'
     };
 
     // Altın için siyasi gündem, savaş senaryoları ve ABD beyanatları notu (Yuvarlamasız, somut)

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { MonthlyReportData } from "@/lib/finai-monthly-report-service";
 import StockLogo from "@/components/StockLogo";
+import Link from "next/link";
 import WikipediaEntityText from "./WikipediaEntityText";
 
 interface MonthlyLastMonthSummaryWidgetProps {
@@ -67,7 +68,7 @@ export default function MonthlyLastMonthSummaryWidget({
                     onClick={() => setActiveTermKey(isActive ? null : termKey)}
                     onMouseEnter={() => setActiveTermKey(termKey)}
                     onMouseLeave={() => setActiveTermKey(null)}
-                    className="inline-flex items-center gap-1 px-1.5 py-0.5 text-[11px] font-medium text-[#004BFA] dark:text-[#93C5FD] bg-[#004BFA]/5 dark:bg-white/5 hover:bg-[#004BFA]/10 dark:hover:bg-white/10 rounded-md border border-[#004BFA]/20 dark:border-white/15 transition-colors cursor-help align-baseline"
+                    className="inline-flex items-center gap-1 px-1.5 py-0.5 text-[11px] font-medium text-[#93C5FD] bg-white/10 hover:bg-white/20 rounded-md border border-white/15 transition-colors cursor-help align-baseline"
                 >
                     <span>{displayText || termKey}</span>
                     <HelpCircle className="w-2.5 h-2.5 opacity-60" />
@@ -90,12 +91,12 @@ export default function MonthlyLastMonthSummaryWidget({
 
     if (loading) {
         return (
-            <div className="w-full h-full bg-white dark:bg-[#040989]/20 border border-slate-200/80 dark:border-white/10 rounded-2xl p-6 sm:p-7 animate-pulse flex flex-col justify-between">
+            <div className="w-full h-full bg-gradient-to-br from-[#02041A] via-[#040989] to-[#0A2682] border-t-2 border-t-[#004BFA] border-x border-b border-white/10 rounded-2xl p-6 sm:p-7 animate-pulse flex flex-col justify-between">
                 <div className="space-y-4">
-                    <div className="h-6 w-48 bg-slate-200 dark:bg-white/10 rounded"></div>
-                    <div className="h-4 w-full bg-slate-100 dark:bg-white/5 rounded"></div>
-                    <div className="h-4 w-5/6 bg-slate-100 dark:bg-white/5 rounded"></div>
-                    <div className="h-4 w-4/6 bg-slate-100 dark:bg-white/5 rounded"></div>
+                    <div className="h-6 w-48 bg-white/20 rounded"></div>
+                    <div className="h-4 w-full bg-white/10 rounded"></div>
+                    <div className="h-4 w-5/6 bg-white/10 rounded"></div>
+                    <div className="h-4 w-4/6 bg-white/10 rounded"></div>
                 </div>
             </div>
         );
@@ -107,23 +108,23 @@ export default function MonthlyLastMonthSummaryWidget({
     const activeSymbols = mentor.topContributors?.map(c => c.symbol) || [];
 
     return (
-        <article className="w-full h-full bg-gradient-to-b from-white via-white to-[#F0F5FF]/70 dark:from-[#040989]/30 dark:via-[#040989]/20 dark:to-[#02041A]/60 border-t-2 border-t-[#004BFA] border-x border-b border-slate-200/80 dark:border-white/10 rounded-2xl shadow-sm overflow-hidden flex flex-col justify-between">
-            {/* 1. Editoryal Üst Başlık (Monokrom, temiz) */}
-            <div className="px-6 py-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between gap-3 bg-slate-50/60 dark:bg-white/5">
+        <article className="w-full h-full bg-gradient-to-br from-[#02041A] via-[#040989] to-[#0A2682] text-white border-t-2 border-t-[#004BFA] border-x border-b border-white/10 rounded-2xl shadow-xl overflow-hidden flex flex-col justify-between">
+            {/* 1. Editoryal Üst Başlık (FinAi Lacivert/Mavi Tema) */}
+            <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between gap-3 bg-white/5">
                 <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-white/10 border border-blue-200/60 dark:border-white/10 flex items-center justify-center text-[#004BFA] dark:text-[#93C5FD]">
+                    <div className="w-7 h-7 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center text-[#93C5FD]">
                         <Compass className="w-4 h-4 text-current" />
                     </div>
                     <div>
-                        <h2 className="text-sm font-semibold text-slate-900 dark:text-white tracking-tight">
+                        <h2 className="text-sm font-semibold text-white tracking-tight">
                             {period?.monthLabel || "Geçen Ayın"} Anatomisi & Mentör Çıkarımları
                         </h2>
                     </div>
                 </div>
 
                 <div className="flex items-center gap-2 text-xs">
-                    <span className="text-slate-400 dark:text-slate-500 text-[11px]">Net Değişim:</span>
-                    <span className={`font-semibold font-numbers ${isNetPos ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                    <span className="text-[#D6E4FF]/70 text-[11px]">Net Değişim:</span>
+                    <span className={`font-semibold font-numbers ${isNetPos ? 'text-emerald-400' : 'text-rose-400'}`}>
                         {isNetPos ? '+' : ''}%{summary?.monthlyNetProfitPct.toFixed(1)}
                     </span>
                 </div>
@@ -133,12 +134,12 @@ export default function MonthlyLastMonthSummaryWidget({
             <div className="p-6 space-y-5 flex-1">
                 
                 {/* Giriş Kanca Cümlesi */}
-                <p className="text-xs sm:text-[13px] font-medium text-slate-800 dark:text-slate-200 leading-relaxed pb-3 border-b border-slate-100 dark:border-white/5">
+                <p className="text-xs sm:text-[13px] font-medium text-white leading-relaxed pb-3 border-b border-white/10">
                     <WikipediaEntityText text={mentor.greetingSentence} activeSymbols={activeSymbols} />
                 </p>
 
                 {/* Mentör Paragrafları (Wikipedia Tarzı Canlı Varlık/Haber Köprüleri) */}
-                <div className="space-y-3.5 text-xs sm:text-[13px] leading-relaxed text-slate-600 dark:text-slate-300">
+                <div className="space-y-3.5 text-xs sm:text-[13px] leading-relaxed text-[#D6E4FF]/90">
                     {mentor.narrativeParagraphs.map((para, idx) => (
                         <p key={idx} className="tracking-normal">
                             <WikipediaEntityText text={para} activeSymbols={activeSymbols} />
@@ -146,41 +147,45 @@ export default function MonthlyLastMonthSummaryWidget({
                     ))}
                 </div>
 
-                {/* 3. Büyümenin Lokomotifi Olan Hisseler (Matruşka olmayan, ferah şeritler) */}
+                {/* 3. Büyümenin Lokomotifi Olan Hisseler */}
                 {mentor.topContributors && mentor.topContributors.length > 0 && (
-                    <div className="pt-4 border-t border-slate-100 dark:border-white/10 space-y-2.5">
+                    <div className="pt-4 border-t border-white/10 space-y-2.5">
                         <div className="flex items-center justify-between text-xs">
-                            <span className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                                <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />
+                            <span className="font-semibold text-white flex items-center gap-1.5">
+                                <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
                                 <span>Büyümeye En Çok Güç Katan Hisseler ({renderTermBadge("Katkı Payı")})</span>
                             </span>
-                            <span className="text-[10px] text-slate-400">Ağırlık × Getiri</span>
+                            <span className="text-[10px] text-[#D6E4FF]/60">Ağırlık × Getiri</span>
                         </div>
 
                         <div className="space-y-2">
                             {mentor.topContributors.map((c, i) => (
                                 <div 
                                     key={i} 
-                                    className="p-3 rounded-xl bg-slate-50/80 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 flex items-center justify-between gap-3 text-xs"
+                                    className="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-between gap-3 text-xs transition-colors"
                                 >
                                     <div className="flex items-center gap-2.5 min-w-0">
                                         <StockLogo symbol={c.symbol} className="w-6 h-6 object-contain shrink-0" />
                                         <div className="min-w-0">
-                                            <div className="font-semibold text-slate-900 dark:text-white leading-tight truncate">
-                                                {c.symbol} <span className="text-[10px] font-normal text-slate-400">• {c.sector}</span>
+                                            <div className="font-semibold text-white leading-tight truncate">
+                                                {c.symbol} <span className="text-[10px] font-normal text-[#D6E4FF]/60">• {c.sector}</span>
                                             </div>
-                                            <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
+                                            <Link 
+                                                href={`/dashboard/news?q=${c.symbol}`}
+                                                className="text-[11px] text-[#D6E4FF]/80 hover:text-white hover:underline truncate mt-0.5 block transition-colors cursor-pointer"
+                                                title="İlgili haberi ve şirket gelişmelerini görüntüle"
+                                            >
                                                 {c.story}
-                                            </div>
+                                            </Link>
                                         </div>
                                     </div>
 
                                     <div className="text-right shrink-0">
-                                        <div className="font-semibold font-numbers text-emerald-600 dark:text-emerald-400 flex items-center justify-end gap-0.5">
+                                        <div className="font-semibold font-numbers text-emerald-400 flex items-center justify-end gap-0.5">
                                             <ArrowUpRight className="w-3 h-3" />
                                             +%{c.returnPct.toFixed(1)}
                                         </div>
-                                        <div className="text-[10px] font-numbers text-slate-400">
+                                        <div className="text-[10px] font-numbers text-[#D6E4FF]/60">
                                             Katkı: +%{c.contributionPct.toFixed(1)} Puan
                                         </div>
                                     </div>
@@ -190,42 +195,6 @@ export default function MonthlyLastMonthSummaryWidget({
                     </div>
                 )}
 
-                {/* 4. Öneri 2: Negatif Anomali ve Öğrenme Anı (Çizgisel Vurgulu Alan, Kutu İçi Kutu Yok) */}
-                {mentor.negativeLearningMoment && (
-                    <div className="pt-4 border-t border-slate-100 dark:border-white/10">
-                        <div className="border-l-2 border-amber-500/80 bg-amber-50/30 dark:bg-amber-950/20 p-3.5 rounded-r-xl space-y-1.5 text-xs">
-                            <div className="flex items-center justify-between">
-                                <span className="font-semibold text-amber-800 dark:text-amber-300 flex items-center gap-1.5">
-                                    <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
-                                    <span>Öğrenme ve Risk Yönetimi Anı: {mentor.negativeLearningMoment.symbol}</span>
-                                </span>
-                                <span className="font-semibold font-numbers text-rose-600 dark:text-rose-400 flex items-center gap-0.5">
-                                    <ArrowDownRight className="w-3 h-3" />
-                                    %{mentor.negativeLearningMoment.returnPct.toFixed(1)}
-                                </span>
-                            </div>
-
-                            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-[11px]">
-                                {mentor.negativeLearningMoment.story}
-                            </p>
-
-                            <div className="text-[11px] text-amber-900 dark:text-amber-200/90 font-medium pt-1 border-t border-amber-200/40 dark:border-amber-900/30">
-                                <span className="font-semibold text-amber-700 dark:text-amber-400">Mentörün Tavsiyesi: </span>
-                                {mentor.negativeLearningMoment.mentorAdvice}
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-            </div>
-
-            {/* 5. Alt Doğrulama Şeridi */}
-            <div className="px-6 py-3 border-t border-slate-100 dark:border-white/10 bg-slate-50/40 dark:bg-white/5 flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500">
-                <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3 h-3 text-[#004BFA]" />
-                    <span>Borsa İstanbul resmi kapanış verileri ile doğrulanmıştır.</span>
-                </div>
-                <span>TWR: %{summary?.twrPct.toFixed(1)}</span>
             </div>
         </article>
     );
