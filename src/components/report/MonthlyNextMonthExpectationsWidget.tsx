@@ -128,7 +128,7 @@ export default function MonthlyNextMonthExpectationsWidget({
                 <div className="space-y-3.5 text-xs sm:text-[13px] leading-relaxed text-[#D6E4FF]/90">
                     {data.narrativeParagraphs.map((para, idx) => (
                         <p key={idx} className="tracking-normal">
-                            <WikipediaEntityText text={para} activeSymbols={activeSymbols} />
+                            <WikipediaEntityText text={para} activeSymbols={activeSymbols} variant="dark" />
                         </p>
                     ))}
                 </div>

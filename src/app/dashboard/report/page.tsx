@@ -44,39 +44,39 @@ const formatCurrency = (val: number) => {
     }).format(val || 0);
 };
 
-// Recharts Custom Tooltip (FinAi Lacivert/Mavi Tema)
+// Recharts Custom Tooltip (Aylık Getiri ve Büyüme Katkı Payı ile zenginleştirilmiş)
 const CustomBarTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
         const data = payload[0].payload;
         const isPos = data.returnPct >= 0;
         return (
-            <div className="bg-[#02041A]/95 backdrop-blur-md border border-white/15 rounded-2xl p-3.5 shadow-2xl text-xs space-y-2 min-w-[220px] z-50 text-white">
-                <div className="flex items-center justify-between pb-1.5 border-b border-white/10">
-                    <span className="font-semibold text-white">
+            <div className="bg-white/95 dark:bg-[#02041A]/95 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-2xl p-3.5 shadow-xl text-xs space-y-2 min-w-[220px] z-50">
+                <div className="flex items-center justify-between pb-1.5 border-b border-slate-100 dark:border-white/10">
+                    <span className="font-semibold text-slate-900 dark:text-white">
                         {data.name}
                     </span>
                     {data.weightPct !== undefined && data.weightPct > 0 && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-[#004BFA]/30 border border-[#5B80FF]/40 text-[#D6E4FF]">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-[#004BFA]/10 text-[#004BFA] dark:text-[#93C5FD]">
                             %{data.weightPct.toFixed(1)} Pay
                         </span>
                     )}
                 </div>
 
                 <div className="flex items-center justify-between">
-                    <span className="text-[11px] text-[#D6E4FF]/70">
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400">
                         Aylık Getiri:
                     </span>
-                    <span className={`font-numbers font-semibold text-sm ${isPos ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    <span className={`font-numbers font-semibold text-sm ${isPos ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                         {isPos ? '+' : ''}%{data.returnPct.toFixed(2)}
                     </span>
                 </div>
 
                 {data.contributionPct !== undefined && (
                     <div className="flex items-center justify-between">
-                        <span className="text-[11px] text-[#D6E4FF]/70">
+                        <span className="text-[11px] text-slate-500 dark:text-slate-400">
                             Büyüme Katkı Payı:
                         </span>
-                        <span className={`font-numbers font-semibold ${data.contributionPct >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        <span className={`font-numbers font-semibold ${data.contributionPct >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                             {data.contributionPct >= 0 ? '+' : ''}%{data.contributionPct.toFixed(2)} Puan
                         </span>
                     </div>
@@ -84,17 +84,17 @@ const CustomBarTooltip = ({ active, payload }: any) => {
 
                 {data.returnTL !== undefined && data.returnTL !== 0 && (
                     <div className="flex items-center justify-between">
-                        <span className="text-[11px] text-[#D6E4FF]/70">
+                        <span className="text-[11px] text-slate-500 dark:text-slate-400">
                             Net Nominal Fark:
                         </span>
-                        <span className={`font-numbers font-semibold ${data.returnTL >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        <span className={`font-numbers font-semibold ${data.returnTL >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                             {data.returnTL >= 0 ? '+' : ''}{formatCurrency(data.returnTL)}
                         </span>
                     </div>
                 )}
 
                 {data.assetCount !== undefined && (
-                    <div className="flex items-center justify-between text-[10px] text-[#D6E4FF]/60 pt-1 border-t border-white/10">
+                    <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-100 dark:border-white/10">
                         <span>Pozisyon Sayısı:</span>
                         <span className="font-numbers font-medium">{data.assetCount} Varlık</span>
                     </div>
@@ -116,7 +116,7 @@ const renderCustomXAxisTick = ({ x, y, payload }: any) => {
                 y={0}
                 dy={12}
                 textAnchor="middle"
-                className="fill-[#D6E4FF]/80 text-[10px] sm:text-[11px] font-medium"
+                className="fill-slate-600 dark:fill-slate-400 text-[10px] sm:text-[11px] font-medium"
             >
                 {shortVal}
             </text>
@@ -236,26 +236,26 @@ export default function FinAiReportViewPage() {
     }, [chartData, bist100Return, showBenchmarkLine]);
 
     return (
-        <div className="w-full min-h-screen bg-gradient-to-b from-[#02041A] via-[#02041A] to-[#040989]/40 text-white p-3 sm:p-6 lg:p-8 space-y-6 relative overflow-x-hidden font-clash">
+        <div className="w-full min-h-screen bg-gradient-to-b from-[#F5F7FA] via-[#F5F7FA] to-[#D6E4FF]/30 dark:from-[#02041A] dark:via-[#02041A] dark:to-[#040989]/30 text-[#040989] dark:text-[#F5F7FA] p-3 sm:p-6 lg:p-8 space-y-6 relative overflow-x-hidden font-clash">
             
-            {/* AMBİANS ARKA PLAN RGB IŞIKLARI */}
-            <div className="absolute top-[-5%] left-[-5%] w-[45%] h-[45%] rounded-full bg-[#004BFA]/15 blur-[140px] pointer-events-none" />
-            <div className="absolute top-[40%] right-[-5%] w-[35%] h-[35%] rounded-full bg-[#040989]/30 blur-[120px] pointer-events-none" />
+            {/* AMBİANS ARKA PLAN RGB IŞIKLARI (Beyazlığı kıran lüks FinAi atmosferi) */}
+            <div className="absolute top-[-5%] left-[-5%] w-[45%] h-[45%] rounded-full bg-[#D6E4FF]/30 dark:bg-[#004BFA]/10 blur-[140px] pointer-events-none" />
+            <div className="absolute top-[40%] right-[-5%] w-[35%] h-[35%] rounded-full bg-[#5B80FF]/15 dark:bg-[#040989]/20 blur-[120px] pointer-events-none" />
 
             <div className="w-full mx-auto space-y-6 relative z-10">
 
                 {/* 1. TEK VE NET EDİTORYAL MASTHEAD BAŞLIK & AY SEÇİCİ */}
-                <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
+                <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80 dark:border-white/10">
                     <div className="flex items-center gap-3">
                         <Link
                             href="/dashboard/portfolio"
-                            className="p-2 rounded-xl bg-white/10 border border-white/20 text-[#93C5FD] hover:bg-white/20 transition-colors shadow-2xs cursor-pointer shrink-0"
+                            className="p-2 rounded-xl bg-white dark:bg-white/10 border border-slate-200/70 dark:border-white/20 text-[#004BFA] dark:text-[#93C5FD] hover:bg-slate-50 dark:hover:bg-white/20 transition-colors shadow-2xs cursor-pointer shrink-0"
                             title="Portföy Tablosuna Dön"
                         >
                             <ArrowLeft className="w-4 h-4" />
                         </Link>
                         <div>
-                            <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white tracking-tight">
+                            <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-slate-900 dark:text-white tracking-tight">
                                 {period?.monthLabel || "Ekim 2026"} Ayı Performans Raporu
                             </h1>
                         </div>
@@ -276,46 +276,46 @@ export default function FinAiReportViewPage() {
                                     }
                                     setSelectedMonthIndex(val);
                                 }}
-                                className="appearance-none pl-8 pr-8 py-2 rounded-xl bg-[#040989]/50 border border-white/20 text-xs font-medium text-white focus:outline-hidden focus:ring-2 focus:ring-[#004BFA]/50 shadow-2xs cursor-pointer"
+                                className="appearance-none pl-8 pr-8 py-2 rounded-xl bg-white dark:bg-[#040989]/30 border border-slate-200 dark:border-white/15 text-xs font-medium text-slate-800 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-[#004BFA]/40 shadow-2xs cursor-pointer"
                             >
                                 {availableMonths.length > 0 ? (
                                     availableMonths.map((m) => (
                                         <option 
                                             key={m.monthIndex} 
                                             value={m.monthIndex} 
-                                            className="bg-[#02041A] text-white"
+                                            className="bg-white dark:bg-[#02041A] text-slate-900 dark:text-white"
                                         >
                                             {m.monthIndex === 0 ? `⏳ ${m.label} (Rapor Oluşturuluyor...)` : `✓ ${m.label}`}
                                         </option>
                                     ))
                                 ) : (
                                     <>
-                                        <option value={1} className="bg-[#02041A] text-white">✓ Ekim 2026</option>
-                                        <option value={0} className="bg-[#02041A] text-white">⏳ Kasım 2026 (Rapor Oluşturuluyor...)</option>
-                                        <option value={2} className="bg-[#02041A] text-white">✓ Eylül 2026</option>
+                                        <option value={1}>✓ Ekim 2026</option>
+                                        <option value={0}>⏳ Kasım 2026 (Rapor Oluşturuluyor...)</option>
+                                        <option value={2}>✓ Eylül 2026</option>
                                     </>
                                 )}
                             </select>
-                            <Calendar className="w-3.5 h-3.5 text-[#93C5FD] absolute left-2.5 pointer-events-none" />
-                            <ChevronDown className="w-3.5 h-3.5 text-white/60 absolute right-2.5 pointer-events-none" />
+                            <Calendar className="w-3.5 h-3.5 text-[#004BFA] absolute left-2.5 pointer-events-none" />
+                            <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 pointer-events-none" />
                         </div>
 
                         <button
                             onClick={() => fetchReport(selectedMonthIndex)}
                             disabled={loading}
-                            className="px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white hover:bg-white/20 transition-colors text-xs font-medium flex items-center gap-1.5 shadow-2xs cursor-pointer"
+                            className="px-3.5 py-2 rounded-xl bg-white dark:bg-[#040989]/30 border border-slate-200 dark:border-white/15 text-slate-800 dark:text-white hover:bg-slate-50 dark:hover:bg-white/10 transition-colors text-xs font-medium flex items-center gap-1.5 shadow-2xs cursor-pointer"
                             title="Raporu Yenile"
                         >
-                            <RefreshCw className={`w-3.5 h-3.5 text-[#93C5FD] ${loading ? 'animate-spin' : ''}`} />
+                            <RefreshCw className={`w-3.5 h-3.5 text-[#004BFA] ${loading ? 'animate-spin' : ''}`} />
                             <span className="hidden sm:inline">Yenile</span>
                         </button>
 
                         <button
                             onClick={() => window.print()}
-                            className="px-3.5 py-2 rounded-xl bg-white/10 border border-white/20 text-white hover:bg-white/20 transition-colors text-xs font-medium flex items-center gap-1.5 shadow-2xs cursor-pointer"
+                            className="px-3.5 py-2 rounded-xl bg-white dark:bg-[#040989]/30 border border-slate-200 dark:border-white/15 text-slate-800 dark:text-white hover:bg-slate-50 dark:hover:bg-white/10 transition-colors text-xs font-medium flex items-center gap-1.5 shadow-2xs cursor-pointer"
                             title="PDF / Yazdır"
                         >
-                            <Printer className="w-3.5 h-3.5 text-[#93C5FD]" />
+                            <Printer className="w-3.5 h-3.5 text-[#004BFA]" />
                             <span className="hidden sm:inline">PDF / Yazdır</span>
                         </button>
                     </div>
@@ -323,12 +323,12 @@ export default function FinAiReportViewPage() {
 
                 {/* Kasım Ayı Bildirim Uyarısı (Seçilmeye çalışıldığında) */}
                 {showNotice && (
-                    <div className="p-3.5 bg-blue-950/80 border border-[#004BFA]/40 rounded-xl text-xs text-[#D6E4FF] flex items-center justify-between shadow-xs animate-in fade-in duration-200">
+                    <div className="p-3.5 bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 rounded-xl text-xs text-amber-900 dark:text-amber-200 flex items-center justify-between shadow-xs animate-in fade-in duration-200">
                         <div className="flex items-center gap-2">
                             <span className="text-base">⏳</span>
                             <span><strong>Kasım 2026</strong> ayı henüz tamamlanmadığı için canlı portföy verileri toplanmakta ve rapor oluşturulmaktadır. İncelenen resmi tamamlanmış dönem: <strong>{period?.monthLabel || "Ekim 2026"}</strong></span>
                         </div>
-                        <button onClick={() => setShowNotice(false)} className="text-[#93C5FD] hover:text-white font-bold ml-3 cursor-pointer">✕</button>
+                        <button onClick={() => setShowNotice(false)} className="text-amber-700 dark:text-amber-300 font-bold ml-3 cursor-pointer">✕</button>
                     </div>
                 )}
 
@@ -350,18 +350,18 @@ export default function FinAiReportViewPage() {
                 </div>
 
                 {/* 3. MERKEZİ ANALİZ: DİKEY SÜTUN GRAFİĞİ (OTOMATİK ÖLÇEKLENEN, FERAH YÜZEY) */}
-                <div className="w-full bg-gradient-to-br from-[#02041A] via-[#040989] to-[#0A2682] text-white border-t-2 border-t-[#004BFA] border-x border-b border-white/10 rounded-2xl p-5 sm:p-6 shadow-xl flex flex-col gap-4">
+                <div className="w-full bg-white dark:bg-[#040989]/20 border-t-2 border-t-[#004BFA] border-x border-b border-slate-200/80 dark:border-white/10 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col gap-4">
                     
                     {/* Grafik Üst Başlık ve Filtre Araç Çubuğu */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/10">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-white/10">
                         <div>
                             <div className="flex items-center gap-2">
-                                <BarChart3 className="w-5 h-5 text-[#93C5FD]" />
-                                <h3 className="text-base sm:text-lg font-semibold text-white tracking-tight">
+                                <BarChart3 className="w-5 h-5 text-[#004BFA]" />
+                                <h3 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white tracking-tight">
                                     Aylık Getiri ve Büyüme Katkı Sütun Grafiği
                                 </h3>
                             </div>
-                            <p className="text-xs text-[#D6E4FF]/70 mt-0.5">
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                                 X ekseninde sektörler / hisseler, Y ekseninde otomatik ölçeklenen yüzde getiri oranları sıfır referans tabanıyla sunulmaktadır.
                             </p>
                         </div>
@@ -369,19 +369,19 @@ export default function FinAiReportViewPage() {
                         {/* Görünüm Değiştirici & Sermaye Akışı Bilgisi */}
                         <div className="flex items-center gap-2 flex-wrap self-start sm:self-center">
                             {summary?.netCapitalFlow !== undefined && summary?.netCapitalFlow !== 0 && (
-                                <div className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-white/10 text-[#93C5FD] border border-white/15 flex items-center gap-1.5">
+                                <div className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-white/10 text-[#004BFA] dark:text-[#93C5FD] border border-[#004BFA]/20 dark:border-white/10 flex items-center gap-1.5">
                                     <Activity className="w-3 h-3" />
                                     <span>Sermaye Akışı: {formatCurrency(summary.netCapitalFlow)}</span>
                                 </div>
                             )}
 
-                            <div className="flex items-center bg-white/5 p-1 rounded-xl border border-white/15 text-xs">
+                            <div className="flex items-center bg-slate-50 dark:bg-white/5 p-1 rounded-xl border border-slate-200/70 dark:border-white/10 text-xs">
                                 <button
                                     onClick={() => setChartViewMode('sectors')}
                                     className={`px-3 py-1 rounded-lg transition-colors cursor-pointer font-medium ${
                                         chartViewMode === 'sectors'
                                             ? 'bg-[#004BFA] text-white shadow-xs'
-                                            : 'text-[#D6E4FF]/70 hover:text-white'
+                                            : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                                     }`}
                                 >
                                     Sektörler ({sectors.length})
@@ -391,7 +391,7 @@ export default function FinAiReportViewPage() {
                                     className={`px-3 py-1 rounded-lg transition-colors cursor-pointer font-medium ${
                                         chartViewMode === 'assets'
                                             ? 'bg-[#004BFA] text-white shadow-xs'
-                                            : 'text-[#D6E4FF]/70 hover:text-white'
+                                            : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
                                     }`}
                                 >
                                     Hisseler ({assets.length})
@@ -402,8 +402,8 @@ export default function FinAiReportViewPage() {
                                 onClick={() => setShowBenchmarkLine(!showBenchmarkLine)}
                                 className={`px-2.5 py-1 rounded-xl text-[11px] font-medium border transition-colors cursor-pointer ${
                                     showBenchmarkLine 
-                                        ? 'bg-blue-900/60 text-blue-200 border-[#004BFA]' 
-                                        : 'bg-white/10 text-[#D6E4FF]/70 border-white/15'
+                                        ? 'bg-blue-50 dark:bg-blue-900/30 text-[#004BFA] dark:text-blue-300 border-[#004BFA]/40' 
+                                        : 'bg-white dark:bg-white/5 text-slate-600 dark:text-slate-400 border-slate-200/70 dark:border-white/10'
                                 }`}
                                 title="BIST 100 Karşılaştırma Referansını Aç / Kapat"
                             >
@@ -417,23 +417,23 @@ export default function FinAiReportViewPage() {
                         <div className="flex items-center gap-4 text-[11px] font-medium">
                             <div className="flex items-center gap-1.5">
                                 <span className="w-3 h-3 rounded-md bg-emerald-500" />
-                                <span className="text-white">Pozitif Getiri</span>
+                                <span className="text-slate-700 dark:text-slate-300">Pozitif Getiri</span>
                             </div>
                             <div className="flex items-center gap-1.5">
                                 <span className="w-3 h-3 rounded-md bg-rose-500" />
-                                <span className="text-white">Negatif Getiri</span>
+                                <span className="text-slate-700 dark:text-slate-300">Negatif Getiri</span>
                             </div>
                             {showBenchmarkLine && (
                                 <div className="flex items-center gap-1.5">
-                                    <span className="w-4 h-0.5 border-b-2 border-dashed border-[#5B80FF]" />
-                                    <span className="text-[#93C5FD]">
+                                    <span className="w-4 h-0.5 border-b-2 border-dashed border-[#004BFA]" />
+                                    <span className="text-[#004BFA] dark:text-[#93C5FD]">
                                         BIST 100 (%{(bist100Return >= 0 ? '+' : '') + bist100Return.toFixed(2)})
                                     </span>
                                 </div>
                             )}
                         </div>
 
-                        <span className="text-[11px] text-[#D6E4FF]/60">
+                        <span className="text-[11px] text-slate-500 dark:text-slate-400">
                             Y-Ekseni: Otomatik Ölçeklenmiş % Getiri • X-Ekseni: {chartViewMode === 'sectors' ? 'Sektörel Kırılım' : 'Varlık Kırılımı'}
                         </span>
                     </div>
@@ -449,21 +449,22 @@ export default function FinAiReportViewPage() {
                                     <CartesianGrid 
                                         strokeDasharray="3 3" 
                                         vertical={false} 
-                                        stroke="rgba(255, 255, 255, 0.08)" 
+                                        stroke="currentColor" 
+                                        className="text-slate-200/70 dark:text-white/10" 
                                     />
                                     
                                     <XAxis
                                         dataKey="name"
                                         tickLine={false}
-                                        axisLine={{ stroke: 'rgba(255, 255, 255, 0.15)', strokeWidth: 1 }}
+                                        axisLine={{ stroke: '#CBD5E1', strokeWidth: 1 }}
                                         tick={renderCustomXAxisTick}
                                         interval={0}
                                     />
                                     
                                     <YAxis
                                         tickLine={false}
-                                        axisLine={{ stroke: 'rgba(255, 255, 255, 0.15)', strokeWidth: 1 }}
-                                        tick={{ fill: '#93C5FD', fontSize: 10, fontFamily: 'monospace' }}
+                                        axisLine={{ stroke: '#CBD5E1', strokeWidth: 1 }}
+                                        tick={{ fill: '#64748B', fontSize: 10, fontFamily: 'monospace' }}
                                         tickFormatter={(val: number) => `${val > 0 ? '+' : ''}${val}%`}
                                         domain={yAxisDomain}
                                         width={42}
@@ -471,14 +472,14 @@ export default function FinAiReportViewPage() {
 
                                     <ReferenceLine 
                                         y={0} 
-                                        stroke="rgba(255, 255, 255, 0.3)" 
+                                        stroke="#64748B" 
                                         strokeWidth={1.5} 
                                     />
 
                                     {showBenchmarkLine && bist100Return !== 0 && (
                                         <ReferenceLine
                                             y={bist100Return}
-                                            stroke="#5B80FF"
+                                            stroke="#004BFA"
                                             strokeDasharray="4 4"
                                             strokeWidth={1.5}
                                         />
@@ -486,7 +487,7 @@ export default function FinAiReportViewPage() {
 
                                     <Tooltip 
                                         content={<CustomBarTooltip />} 
-                                        cursor={{ fill: 'rgba(0, 75, 250, 0.15)' }} 
+                                        cursor={{ fill: 'rgba(0, 75, 250, 0.04)' }} 
                                     />
 
                                     <Bar
@@ -505,8 +506,8 @@ export default function FinAiReportViewPage() {
                                 </BarChart>
                             </ResponsiveContainer>
                         ) : (
-                            <div className="h-full flex flex-col items-center justify-center text-center text-xs text-[#D6E4FF]/70">
-                                <BarChart3 className="w-8 h-8 text-[#93C5FD]/60 mb-2 animate-bounce" />
+                            <div className="h-full flex flex-col items-center justify-center text-center text-xs text-slate-500 dark:text-slate-400">
+                                <BarChart3 className="w-8 h-8 text-[#004BFA]/40 mb-2 animate-bounce" />
                                 <span>Grafik verisi yükleniyor veya aktif varlık bulunamadı...</span>
                             </div>
                         )}
@@ -514,17 +515,17 @@ export default function FinAiReportViewPage() {
                 </div>
 
                 {/* 4. DETAYLI VARLIK PERFORMANSI VE BÜYÜME KATKI PAYI TABLOSU */}
-                <div className="w-full bg-gradient-to-br from-[#02041A] via-[#040989] to-[#0A2682] text-white border-t-2 border-t-[#004BFA] border-x border-b border-white/10 rounded-2xl p-5 sm:p-7 shadow-xl space-y-5">
+                <div className="w-full bg-white dark:bg-[#040989]/20 border-t-2 border-t-[#004BFA] border-x border-b border-slate-200/80 dark:border-white/10 rounded-2xl p-5 sm:p-7 shadow-sm space-y-5">
                     
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div>
                             <div className="flex items-center gap-2">
-                                <Layers className="w-5 h-5 text-[#93C5FD]" />
-                                <h3 className="text-base sm:text-lg font-semibold text-white tracking-tight">
+                                <Layers className="w-5 h-5 text-[#004BFA]" />
+                                <h3 className="text-base sm:text-lg font-semibold text-slate-900 dark:text-white tracking-tight">
                                     Varlık Performans ve Büyüme Katkı Payı Tablosu
                                 </h3>
                             </div>
-                            <p className="text-xs text-[#D6E4FF]/70 mt-0.5">
+                            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                                 Portföydeki her bir varlığın ay başı fiyatı, son fiyatı, aylık net getirisi ve toplam cüzdan büyümesine net katkı payı (Ağırlık × Getiri) aşağıda listelenmektedir.
                             </p>
                         </div>
@@ -534,43 +535,43 @@ export default function FinAiReportViewPage() {
                         <div className="overflow-x-auto w-full">
                             <table className="w-full text-left border-collapse text-xs">
                                 <thead>
-                                    <tr className="border-b border-white/10 text-[#D6E4FF]/80 font-medium text-[11px] bg-white/5">
+                                    <tr className="border-b border-slate-200/80 dark:border-white/10 text-slate-500 dark:text-slate-400 font-medium text-[11px] bg-slate-50/60 dark:bg-white/5">
                                         <th className="py-3 px-3">Varlık / Sektör</th>
                                         <th className="py-3 px-3">Adet & Maliyet</th>
                                         <th className="py-3 px-3">Ay Başı Fiyat</th>
                                         <th className="py-3 px-3">Son Fiyat</th>
                                         <th className="py-3 px-3">Toplam Değer</th>
-                                        <th className="py-3 px-3 bg-white/5">Aylık Getiri</th>
-                                        <th className="py-3 px-3 bg-white/10 font-semibold text-[#93C5FD]">Büyüme Katkı Payı</th>
+                                        <th className="py-3 px-3 bg-blue-50/50 dark:bg-white/5">Aylık Getiri</th>
+                                        <th className="py-3 px-3 bg-emerald-50/50 dark:bg-white/5 font-semibold text-[#004BFA] dark:text-[#93C5FD]">Büyüme Katkı Payı</th>
                                         <th className="py-3 px-3">Cüzdan Payı</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-white/5">
+                                <tbody className="divide-y divide-slate-100 dark:divide-white/5">
                                     {assets.map((asset) => {
                                         const isMonthPos = asset.monthlyReturnTL >= 0;
 
                                         return (
-                                             <tr key={asset.id || asset.symbol} className="hover:bg-white/5 transition-colors">
+                                             <tr key={asset.id || asset.symbol} className="hover:bg-slate-50/80 dark:hover:bg-white/5 transition-colors">
                                                 <td className="py-3.5 px-3">
                                                     <div className="flex items-center gap-2.5">
-                                                        <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center shrink-0">
+                                                        <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-white/10 flex items-center justify-center shrink-0">
                                                             <StockLogo symbol={asset.cleanSymbol} className="w-6 h-6 object-contain" />
                                                         </div>
                                                         <div>
-                                                            <div className="font-semibold text-white leading-tight flex items-center gap-1.5">
+                                                            <div className="font-semibold text-slate-900 dark:text-white leading-tight flex items-center gap-1.5">
                                                                 <Link 
                                                                     href={`/dashboard/analysis?q=${asset.cleanSymbol}`}
-                                                                    className="hover:underline text-[#93C5FD]"
+                                                                    className="hover:underline text-[#004BFA] dark:text-[#93C5FD]"
                                                                 >
                                                                     {asset.cleanSymbol}
                                                                 </Link>
                                                                 {asset.isAnomaly && (
-                                                                    <span className="text-[9px] px-1 py-0.2 rounded bg-amber-950 text-amber-300 border border-amber-500/30 font-normal">
+                                                                    <span className="text-[9px] px-1 py-0.2 rounded bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 font-normal">
                                                                         Anomali
                                                                     </span>
                                                                 )}
                                                             </div>
-                                                            <div className="text-[10px] text-[#D6E4FF]/60">
+                                                            <div className="text-[10px] text-slate-500 dark:text-slate-400">
                                                                 {asset.sector}
                                                             </div>
                                                         </div>
@@ -578,30 +579,30 @@ export default function FinAiReportViewPage() {
                                                 </td>
 
                                                 <td className="py-3.5 px-3">
-                                                    <div className="font-numbers font-medium text-white">
+                                                    <div className="font-numbers font-medium text-slate-900 dark:text-white">
                                                         {asset.quantity.toLocaleString('tr-TR')} Adet
                                                     </div>
-                                                    <div className="text-[10px] font-numbers text-[#D6E4FF]/60">
+                                                    <div className="text-[10px] font-numbers text-slate-500 dark:text-slate-400">
                                                         Ort: {formatCurrency(asset.avgCost)}
                                                     </div>
                                                 </td>
 
-                                                <td className="py-3.5 px-3 font-numbers font-medium text-white tabular-nums">
+                                                <td className="py-3.5 px-3 font-numbers font-medium text-slate-900 dark:text-white tabular-nums">
                                                     {formatCurrency(asset.startPrice)}
                                                 </td>
 
-                                                <td className="py-3.5 px-3 font-numbers font-medium text-white tabular-nums">
+                                                <td className="py-3.5 px-3 font-numbers font-medium text-slate-900 dark:text-white tabular-nums">
                                                     {formatCurrency(asset.currentPrice)}
                                                 </td>
 
-                                                <td className="py-3.5 px-3 font-numbers font-medium text-white tabular-nums">
+                                                <td className="py-3.5 px-3 font-numbers font-medium text-slate-900 dark:text-white tabular-nums">
                                                     {formatCurrency(asset.totalValue)}
                                                 </td>
 
                                                 {/* AYLIK NET GETİRİ */}
-                                                <td className="py-3.5 px-3 bg-white/5">
+                                                <td className="py-3.5 px-3 bg-blue-50/30 dark:bg-white/5">
                                                     <span className={`inline-flex items-center gap-1 font-numbers font-medium ${
-                                                        isMonthPos ? 'text-emerald-400' : 'text-rose-400'
+                                                        isMonthPos ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
                                                     }`}>
                                                         {isMonthPos ? '+' : ''}{formatCurrency(asset.monthlyReturnTL)}
                                                         <span className="text-[10px] font-normal ml-0.5">
@@ -611,9 +612,9 @@ export default function FinAiReportViewPage() {
                                                 </td>
 
                                                 {/* BÜYÜME KATKI PAYI */}
-                                                <td className="py-3.5 px-3 bg-white/10">
+                                                <td className="py-3.5 px-3 bg-emerald-50/30 dark:bg-white/5">
                                                     <span className={`inline-flex items-center gap-1 font-numbers font-medium ${
-                                                        asset.contributionPct >= 0 ? 'text-emerald-400' : 'text-rose-400'
+                                                        asset.contributionPct >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
                                                     }`}>
                                                         {asset.contributionPct >= 0 ? '+' : ''}%{asset.contributionPct.toFixed(2)} Puan
                                                     </span>
@@ -621,13 +622,13 @@ export default function FinAiReportViewPage() {
 
                                                 <td className="py-3.5 px-3">
                                                     <div className="flex items-center gap-2">
-                                                        <div className="w-14 h-2 bg-white/10 rounded-full overflow-hidden">
+                                                        <div className="w-14 h-2 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
                                                             <div 
                                                                 className="h-full bg-[#004BFA] rounded-full" 
                                                                 style={{ width: `${Math.min(100, asset.weightPct)}%` }}
                                                             />
                                                         </div>
-                                                        <span className="font-numbers font-medium text-[#D6E4FF] tabular-nums text-[11px]">
+                                                        <span className="font-numbers font-medium text-slate-700 dark:text-slate-300 tabular-nums text-[11px]">
                                                             %{asset.weightPct.toFixed(1)}
                                                         </span>
                                                     </div>
@@ -640,13 +641,13 @@ export default function FinAiReportViewPage() {
                         </div>
                     ) : (
                         <div className="py-12 flex flex-col items-center justify-center gap-3 text-center">
-                            <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-[#93C5FD]">
+                            <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-white/10 flex items-center justify-center text-[#004BFA] dark:text-[#93C5FD]">
                                 <Layers className="w-6 h-6" />
                             </div>
-                            <h4 className="text-sm sm:text-base font-semibold text-white">
+                            <h4 className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white">
                                 Portföyünüzde henüz aktif varlık bulunmuyor
                             </h4>
-                            <p className="text-xs text-[#D6E4FF]/70 max-w-md">
+                            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md">
                                 İlk varlığınızı eklediğiniz anda canlı piyasa fiyatları, sektörel kırılım dikey sütun grafiği ve aylık getiri raporunuz üretilecektir.
                             </p>
                             <div className="flex items-center gap-3 pt-2">
@@ -660,7 +661,7 @@ export default function FinAiReportViewPage() {
 
                                 <Link
                                     href="/dashboard/sample-portfolio"
-                                    className="px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white hover:bg-white/20 text-xs font-medium flex items-center gap-1.5 shadow-2xs transition-colors"
+                                    className="px-4 py-2 rounded-xl bg-white dark:bg-white/10 border border-slate-200 dark:border-white/20 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-white/20 text-xs font-medium flex items-center gap-1.5 shadow-2xs transition-colors"
                                 >
                                     <span>Örnek Portföyü İncele</span>
                                     <ArrowRight className="w-3.5 h-3.5" />

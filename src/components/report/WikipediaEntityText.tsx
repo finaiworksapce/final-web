@@ -7,6 +7,7 @@ interface WikipediaEntityTextProps {
     text: string;
     className?: string;
     activeSymbols?: string[];
+    variant?: 'light' | 'dark';
 }
 
 const KNOWN_TICKERS = new Set([
@@ -17,7 +18,12 @@ const KNOWN_TICKERS = new Set([
     'VAKBN', 'SOKM', 'AEFES', 'TABGD', 'REEDR', 'EUPWR', 'CWENE', 'ALFAS', 'MIATK'
 ]);
 
-export default function WikipediaEntityText({ text, className = "", activeSymbols = [] }: WikipediaEntityTextProps) {
+export default function WikipediaEntityText({ 
+    text, 
+    className = "", 
+    activeSymbols = [],
+    variant = 'light'
+}: WikipediaEntityTextProps) {
     if (!text) return null;
 
     const symbolSet = new Set([
@@ -25,7 +31,9 @@ export default function WikipediaEntityText({ text, className = "", activeSymbol
         ...activeSymbols.map(s => (s || '').toUpperCase().trim()).filter(Boolean)
     ]);
 
-// Tokenize text by markdown bold, quoted news headlines, bracketed calendar links, or ticker boundary
+    const isDark = variant === 'dark';
+
+    // Tokenize text by markdown bold, quoted news headlines, bracketed calendar links, or ticker boundary
     const tokens = text.split(/(\*\*[^*]+\*\*|"[^"]+"|[“"][^”"]+[”"]|\[[^\]]+\]|\b[A-Z]{3,6}\b)/g);
 
     return (
@@ -47,7 +55,11 @@ export default function WikipediaEntityText({ text, className = "", activeSymbol
                         <Link
                             key={index}
                             href={`/dashboard/news?q=${encodeURIComponent(newsQuery)}`}
-                            className="inline-flex items-center font-medium text-cyan-300 dark:text-cyan-300 hover:text-white underline decoration-cyan-400/50 hover:decoration-white underline-offset-2 transition-colors cursor-pointer"
+                            className={`inline-flex items-center font-medium underline underline-offset-2 transition-colors cursor-pointer ${
+                                isDark
+                                    ? "text-cyan-300 dark:text-cyan-300 hover:text-white decoration-cyan-400/50 hover:decoration-white"
+                                    : "text-[#004BFA] dark:text-[#93C5FD] hover:text-blue-800 dark:hover:text-white decoration-[#004BFA]/40 hover:decoration-blue-800"
+                            }`}
                             title={`"${cleanQuote}" haberini görüntüle`}
                         >
                             {token}
@@ -62,7 +74,11 @@ export default function WikipediaEntityText({ text, className = "", activeSymbol
                         <Link
                             key={index}
                             href="/dashboard/calendar"
-                            className="inline-flex items-center font-semibold text-cyan-300 dark:text-cyan-300 hover:text-white underline decoration-cyan-400/50 hover:decoration-white underline-offset-2 transition-colors cursor-pointer"
+                            className={`inline-flex items-center font-semibold underline underline-offset-2 transition-colors cursor-pointer ${
+                                isDark
+                                    ? "text-cyan-300 dark:text-cyan-300 hover:text-white decoration-cyan-400/50 hover:decoration-white"
+                                    : "text-[#004BFA] dark:text-[#93C5FD] hover:text-blue-800 dark:hover:text-white decoration-[#004BFA]/40 hover:decoration-blue-800"
+                            }`}
                             title="FinAi Takvim sayfasına git"
                         >
                             {inner}
@@ -79,14 +95,18 @@ export default function WikipediaEntityText({ text, className = "", activeSymbol
                             <Link
                                 key={index}
                                 href={`/dashboard/analysis?q=${innerUpper}`}
-                                className="inline-flex items-center font-semibold text-[#93C5FD] dark:text-[#93C5FD] underline decoration-[#93C5FD]/50 underline-offset-2 hover:text-white hover:decoration-white transition-all cursor-pointer"
+                                className={`inline-flex items-center font-semibold underline underline-offset-2 transition-all cursor-pointer ${
+                                    isDark
+                                        ? "text-[#93C5FD] dark:text-[#93C5FD] decoration-[#93C5FD]/50 hover:text-white hover:decoration-white"
+                                        : "text-[#004BFA] dark:text-[#93C5FD] decoration-[#004BFA]/50 hover:text-blue-800 dark:hover:text-white hover:decoration-[#004BFA]"
+                                }`}
                                 title={`${innerUpper} Şirket Analiz Sayfası`}
                             >
                                 {inner}
                             </Link>
                         );
                     }
-                    return <strong key={index} className="font-semibold text-white">{inner}</strong>;
+                    return <strong key={index} className={`font-semibold ${isDark ? 'text-white' : 'text-slate-900 dark:text-white'}`}>{inner}</strong>;
                 }
 
                 // Check ticker
@@ -96,7 +116,11 @@ export default function WikipediaEntityText({ text, className = "", activeSymbol
                         <Link
                             key={index}
                             href={`/dashboard/analysis?q=${upper}`}
-                            className="inline-flex items-center font-semibold text-[#93C5FD] dark:text-[#93C5FD] underline decoration-[#93C5FD]/50 underline-offset-2 hover:text-white hover:decoration-white transition-all cursor-pointer"
+                            className={`inline-flex items-center font-semibold underline underline-offset-2 transition-all cursor-pointer ${
+                                isDark
+                                    ? "text-[#93C5FD] dark:text-[#93C5FD] decoration-[#93C5FD]/50 hover:text-white hover:decoration-white"
+                                    : "text-[#004BFA] dark:text-[#93C5FD] decoration-[#004BFA]/50 hover:text-blue-800 dark:hover:text-white hover:decoration-[#004BFA]"
+                            }`}
                             title={`${upper} Şirket Analiz Sayfası`}
                         >
                             {token}
