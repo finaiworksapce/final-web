@@ -1,105 +1,108 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, memo } from "react";
+import React, { useEffect, useRef, memo } from "react";
 import { useTheme } from "next-themes";
-import { Loader2 } from "lucide-react";
 
 export interface TradingViewMarketOverviewProps {
     className?: string;
 }
 
 export function TradingViewMarketOverview({ className = "" }: TradingViewMarketOverviewProps) {
+    const containerRef = useRef<HTMLDivElement>(null);
     const { resolvedTheme } = useTheme();
-    const [mounted, setMounted] = useState(false);
-    const [loaded, setLoaded] = useState(false);
     const isDark = resolvedTheme === "dark";
 
     useEffect(() => {
-        setMounted(true);
-    }, []);
+        const container = containerRef.current;
+        if (!container) return;
 
-    const iframeSrc = useMemo(() => {
+        // Önceki içeriği temizle
+        container.innerHTML = "";
+
+        const widgetContainer = document.createElement("div");
+        widgetContainer.className = "tradingview-widget-container__widget";
+        widgetContainer.style.width = "100%";
+        widgetContainer.style.height = "100%";
+        container.appendChild(widgetContainer);
+
+        const copyrightContainer = document.createElement("div");
+        copyrightContainer.className = "tradingview-widget-copyright";
+        copyrightContainer.style.display = "none";
+        copyrightContainer.innerHTML = '<a href="https://www.tradingview.com/markets/" rel="noopener nofollow" target="_blank"><span class="blue-text">World markets</span></a><span class="trademark">&nbsp;by TradingView</span>';
+        container.appendChild(copyrightContainer);
+
         const config = {
-            symbols: [
-                ["XAUTRYG", "FX_IDC:XAUTRYG|1D"],
-                ["BTCTRY", "BINANCE:BTCTRY|1D"],
-                ["EURTRY", "FX_IDC:EURTRY|1D"],
-                ["USDTRY", "FX_IDC:USDTRY|1D"]
-            ],
-            chartOnly: false,
-            width: "100%",
-            height: "100%",
-            locale: "tr",
-            colorTheme: isDark ? "dark" : "light",
-            gridLineColor: isDark ? "rgba(91, 128, 255, 0.15)" : "rgba(214, 228, 255, 0.45)",
-            fontColor: isDark ? "#94A3B8" : "#64748B",
-            widgetFontColor: isDark ? "#F5F7FA" : "#040989",
-            upColor: "#004BFA",
-            downColor: "#EF4444",
-            borderUpColor: "#004BFA",
-            borderDownColor: "#EF4444",
-            wickUpColor: "#004BFA",
-            wickDownColor: "#EF4444",
-            showVolume: false,
-            hideDateRanges: false,
-            hideMarketStatus: false,
-            hideSymbolLogo: false,
-            scalePosition: "right",
-            scaleMode: "Normal",
-            fontFamily: "'Clash Grotesk', -apple-system, BlinkMacSystemFont, sans-serif",
-            fontSize: "10",
-            headerFontSize: "small",
-            noTimeScale: false,
-            valuesTracking: "1",
-            changeMode: "price-and-percent",
-            chartType: "area",
             lineWidth: 2,
             lineType: 0,
+            chartType: "area",
+            fontColor: isDark ? "rgb(106, 109, 120)" : "#64748B",
+            gridLineColor: isDark ? "rgba(242, 242, 242, 0.06)" : "rgba(226, 232, 240, 0.6)",
+            volumeUpColor: "rgba(34, 171, 148, 0.5)",
+            volumeDownColor: "rgba(247, 82, 95, 0.5)",
+            backgroundColor: isDark ? "#0F0F0F" : "#FFFFFF",
+            widgetFontColor: isDark ? "#DBDBDB" : "#0E1E38",
+            upColor: "#22ab94",
+            downColor: "#f7525f",
+            borderUpColor: "#22ab94",
+            borderDownColor: "#f7525f",
+            wickUpColor: "#22ab94",
+            wickDownColor: "#f7525f",
+            colorTheme: isDark ? "dark" : "light",
+            isTransparent: false,
+            locale: "tr",
+            chartOnly: false,
+            scalePosition: "right",
+            scaleMode: "Normal",
+            fontFamily: "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
+            valuesTracking: "1",
+            changeMode: "price-and-percent",
+            symbols: [
+                ["FX_IDC:XAUTRYG|1D"],
+                ["FX_IDC:XAGTRYG|1D"],
+                ["BIST:XU100|1D"],
+                ["SKILLING:US100|1D"],
+                ["BITSTAMP:BTCUSD|1D"]
+            ],
             dateRanges: [
-                "1w|15",
+                "1d|1",
                 "1m|30",
                 "3m|60",
                 "12m|1D",
                 "60m|1W",
                 "all|1M"
-            ]
+            ],
+            fontSize: "10",
+            headerFontSize: "medium",
+            autosize: true,
+            width: "100%",
+            height: "100%",
+            noTimeScale: false,
+            hideDateRanges: false,
+            hideMarketStatus: false,
+            hideSymbolLogo: false
         };
 
-        return `https://www.tradingview-widget.com/embed-widget/symbol-overview/?locale=tr#${encodeURIComponent(
-            JSON.stringify(config)
-        )}`;
+        const script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js";
+        script.async = true;
+        script.innerHTML = JSON.stringify(config);
+        container.appendChild(script);
+
+        return () => {
+            if (container) {
+                container.innerHTML = "";
+            }
+        };
     }, [isDark]);
 
-    if (!mounted) {
-        return (
-            <div className={`w-full h-full min-h-[300px] flex flex-col items-center justify-center gap-2 bg-slate-50/50 rounded-2xl ${className}`}>
-                <Loader2 className="w-5 h-5 animate-spin text-[#004BFA]" />
-                <span className="text-[11px] font-medium text-slate-500">
-                    Piyasa grafiği yükleniyor...
-                </span>
-            </div>
-        );
-    }
-
     return (
-        <div className={`w-full h-full relative overflow-hidden min-h-[300px] ${className}`}>
-            {!loaded && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-white/80 dark:bg-[#040989]/80 backdrop-blur-[2px] z-10 transition-opacity">
-                    <Loader2 className="w-5 h-5 animate-spin text-[#004BFA]" />
-                    <span className="text-[11px] font-medium text-slate-500 dark:text-slate-300">
-                        Piyasa grafiği yükleniyor...
-                    </span>
-                </div>
-            )}
-            <iframe
-                key={isDark ? "dark" : "light"}
-                title="Piyasa Genel Görünümü"
-                src={iframeSrc}
-                className="w-full h-full border-0 absolute inset-0 rounded-xl"
-                style={{ width: "100%", height: "100%", border: "none" }}
-                loading="eager"
-                onLoad={() => setLoaded(true)}
-            />
+        <div 
+            ref={containerRef}
+            className={`tradingview-widget-container w-full h-full relative overflow-hidden min-h-[310px] ${className}`}
+            style={{ width: "100%", height: "100%" }}
+        >
+            <div className="tradingview-widget-container__widget h-full w-full" />
         </div>
     );
 }
