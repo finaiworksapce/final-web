@@ -108,7 +108,7 @@ export default function MonthlyLastMonthSummaryWidget({
     const activeSymbols = mentor.topContributors?.map(c => c.symbol) || [];
 
     return (
-        <article className="w-full h-full bg-gradient-to-b from-white via-white to-[#F0F5FF]/70 dark:from-[#040989]/30 dark:via-[#040989]/20 dark:to-[#02041A]/60 border-t-2 border-t-[#004BFA] border-x border-b border-slate-200/80 dark:border-white/10 rounded-2xl shadow-sm overflow-hidden flex flex-col justify-between">
+        <article className="w-full h-full bg-white dark:bg-[#040989]/20 border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-xs overflow-hidden flex flex-col justify-between">
             {/* 1. Editoryal Üst Başlık (Monokrom, temiz) */}
             <div className="px-6 py-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between gap-3 bg-slate-50/60 dark:bg-white/5">
                 <div className="flex items-center gap-2.5">

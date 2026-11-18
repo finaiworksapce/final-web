@@ -30,7 +30,7 @@ export default function MonthlyNextMonthExpectationsWidget({
 
     if (loading) {
         return (
-            <div className="w-full h-full bg-gradient-to-br from-[#02041A] via-[#040989] to-[#0A2682] border-t-2 border-t-[#004BFA] border-x border-b border-white/10 rounded-2xl p-6 sm:p-7 animate-pulse flex flex-col justify-between">
+            <div className="w-full h-full bg-gradient-to-br from-[#02041A] via-[#040989] to-[#0A2682] border border-white/10 rounded-2xl p-6 sm:p-7 animate-pulse flex flex-col justify-between">
                 <div className="space-y-4">
                     <div className="h-6 w-48 bg-white/20 rounded"></div>
                     <div className="h-4 w-full bg-white/10 rounded"></div>
@@ -86,7 +86,7 @@ export default function MonthlyNextMonthExpectationsWidget({
     };
 
     return (
-        <article className="w-full h-full bg-gradient-to-br from-[#02041A] via-[#040989] to-[#0A2682] text-white border-t-2 border-t-[#004BFA] border-x border-b border-white/10 rounded-2xl shadow-xl overflow-hidden flex flex-col justify-between">
+        <article className="w-full h-full bg-gradient-to-br from-[#02041A] via-[#040989] to-[#0A2682] text-white border border-white/10 rounded-2xl shadow-xl overflow-hidden flex flex-col justify-between">
             {/* 1. Editoryal Üst Başlık (FinAi Lacivert/Mavi Tema) */}
             <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between gap-3 bg-white/5">
                 <div className="flex items-center gap-2.5">

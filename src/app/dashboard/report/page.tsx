@@ -350,7 +350,7 @@ export default function FinAiReportViewPage() {
                 </div>
 
                 {/* 3. MERKEZİ ANALİZ: DİKEY SÜTUN GRAFİĞİ (OTOMATİK ÖLÇEKLENEN, FERAH YÜZEY) */}
-                <div className="w-full bg-white dark:bg-[#040989]/20 border-t-2 border-t-[#004BFA] border-x border-b border-slate-200/80 dark:border-white/10 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col gap-4">
+                <div className="w-full bg-white dark:bg-[#040989]/20 border border-slate-200/80 dark:border-white/10 rounded-2xl p-5 sm:p-6 shadow-sm flex flex-col gap-4">
                     
                     {/* Grafik Üst Başlık ve Filtre Araç Çubuğu */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-white/10">
@@ -515,7 +515,7 @@ export default function FinAiReportViewPage() {
                 </div>
 
                 {/* 4. DETAYLI VARLIK PERFORMANSI VE BÜYÜME KATKI PAYI TABLOSU */}
-                <div className="w-full bg-white dark:bg-[#040989]/20 border-t-2 border-t-[#004BFA] border-x border-b border-slate-200/80 dark:border-white/10 rounded-2xl p-5 sm:p-7 shadow-sm space-y-5">
+                <div className="w-full bg-white dark:bg-[#040989]/20 border border-slate-200/80 dark:border-white/10 rounded-2xl p-5 sm:p-7 shadow-sm space-y-5">
                     
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div>
