@@ -85,6 +85,8 @@ export default function MonthlyNextMonthExpectationsWidget({
         setTimeout(() => setDownloadedNotice(false), 3000);
     };
 
+    const fullNarrativeText = (data.narrativeParagraphs || []).filter(Boolean).join(" ");
+
     return (
         <article className="w-full h-full bg-gradient-to-br from-[#02041A] via-[#040989] to-[#0A2682] text-white border border-white/10 rounded-2xl shadow-xl overflow-hidden flex flex-col justify-between">
             {/* 1. Editoryal Üst Başlık (FinAi Lacivert/Mavi Tema) */}
@@ -95,7 +97,7 @@ export default function MonthlyNextMonthExpectationsWidget({
                     </div>
                     <div>
                         <h2 className="text-sm font-semibold text-white tracking-tight">
-                            {data.title}
+                            Gelecek Ay İçin Beklentiler
                         </h2>
                     </div>
                 </div>
@@ -114,92 +116,18 @@ export default function MonthlyNextMonthExpectationsWidget({
                 )}
             </div>
 
-            {/* 2. Ana Gövde (Storytelling Narrative & Mentör Perspektifi) */}
-            <div className="p-6 space-y-5 flex-1">
-                {/* Tarih Aralığı Bilgisi */}
-                <div className="flex items-center justify-between text-xs pb-3 border-b border-white/10">
-                    <span className="text-[#D6E4FF]/70">Hedef Dönem Penceresi:</span>
-                    <span className="font-semibold text-white font-numbers">
-                        {data.targetDateRangeFormatted}
-                    </span>
+            {/* 2. Ana Gövde: Akıcı Tek Paragraf Anlatım */}
+            <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                <div className="text-xs sm:text-[13px] leading-relaxed text-[#D6E4FF]/90 tracking-normal space-y-3">
+                    <p className="leading-relaxed">
+                        <WikipediaEntityText text={fullNarrativeText} activeSymbols={activeSymbols} variant="dark" />
+                    </p>
                 </div>
 
-                {/* Editoryal Mentör Paragrafları (Wikipedia Canlı Varlık/Haber Köprüleri) */}
-                <div className="space-y-3.5 text-xs sm:text-[13px] leading-relaxed text-[#D6E4FF]/90">
-                    {data.narrativeParagraphs.map((para, idx) => (
-                        <p key={idx} className="tracking-normal">
-                            <WikipediaEntityText text={para} activeSymbols={activeSymbols} variant="dark" />
-                        </p>
-                    ))}
+                <div className="pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-[#D6E4FF]/60">
+                    <span>FinAi Stratejik Ajanda Motoru</span>
+                    <span className="font-medium text-[#93C5FD]">Detaylar için altı çizili başlıklara basabilirsiniz</span>
                 </div>
-
-                {/* 3. Portföyde En Yüksek Ağırlıklı 2 Varlığın Şirket Olayları (SADECE VARSA GÖRÜNÜR) */}
-                {companyEvents.length > 0 && (
-                    <div className="pt-4 border-t border-white/10 space-y-2.5">
-                        <div className="flex items-center justify-between text-xs">
-                            <span className="font-semibold text-white flex items-center gap-1.5">
-                                <Building2 className="w-3.5 h-3.5 text-[#93C5FD]" />
-                                <span>Yaklaşan Şirket Olayları (Temettü & Bilanço)</span>
-                            </span>
-                            <span className="text-[10px] text-[#D6E4FF]/60">İlk 2 Varlık</span>
-                        </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                            {companyEvents.map((ev, i) => (
-                                <div 
-                                    key={i} 
-                                    className="p-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex flex-col justify-between space-y-2 text-xs transition-colors"
-                                >
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
-                                            <StockLogo symbol={ev.symbol} className="w-6 h-6 object-contain shrink-0" />
-                                            <div>
-                                                <div className="font-semibold text-white leading-tight flex items-center gap-1.5">
-                                                    <Link 
-                                                        href={`/dashboard/analysis?q=${ev.symbol}`}
-                                                        className="hover:underline text-[#93C5FD]"
-                                                    >
-                                                        {ev.symbol}
-                                                    </Link>
-                                                    <span className={`text-[10px] px-1.5 py-0.2 rounded font-normal ${
-                                                        ev.eventType === 'dividend' 
-                                                            ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-500/30' 
-                                                            : 'bg-blue-950/60 text-blue-300 border border-blue-500/30'
-                                                    }`}>
-                                                        {ev.eventType === 'dividend' ? 'Temettü' : 'Bilanço'}
-                                                    </span>
-                                                </div>
-                                                <div className="text-[10px] text-[#D6E4FF]/60 truncate max-w-[130px]">{ev.companyName}</div>
-                                            </div>
-                                        </div>
-
-                                        <div className="text-right">
-                                            <div className="text-[11px] font-semibold text-white font-numbers">
-                                                {ev.dateFormatted}
-                                            </div>
-                                            <div className="text-[9px] text-[#D6E4FF]/60">Takvim Tarihi</div>
-                                        </div>
-                                    </div>
-
-                                    {/* Temettü Tahmini Nakit Bilgisi */}
-                                    {ev.eventType === 'dividend' && ev.estimatedPayoutTL !== undefined && (
-                                        <div className="text-[11px] text-emerald-300 bg-emerald-950/40 p-2 rounded-lg border border-emerald-500/30">
-                                            Hisse başı net: <strong>{ev.netAmountPerShare} ₺</strong> • Tahmini Nakit: <strong>{Math.round(ev.estimatedPayoutTL).toLocaleString('tr-TR')} ₺</strong>
-                                        </div>
-                                    )}
-
-                                    {/* Bilanço Dönem Bilgisi */}
-                                    {ev.eventType === 'earnings' && ev.periodLabel && (
-                                        <div className="text-[11px] text-[#D6E4FF] bg-white/5 p-2 rounded-lg border border-white/10">
-                                            Açıklanacak Finansal Dönem: <strong>{ev.periodLabel}</strong>
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
             </div>
 
             {/* 6. İNTERAKTİF MİKRO TAKVİM MODAL / POPOVER */}

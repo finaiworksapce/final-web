@@ -767,43 +767,19 @@ async function generateNextMonthExpectations(
     }
 
     // 3. KATMAN: SEKTÖREL VE ŞİRKET HABERLERİ ARAŞTIRMASI (Bloomberg HT, CNN Türk, Investing TR)
-    const topSector = sectors[0]?.name || 'Sanayi';
-    const topAsset = top2Assets[0]?.cleanSymbol || '';
-
-    // Hedef kaynaklarda arama
-    let stockSectorNewsFinding = "Bloomberg HT, CNN Türk ve Investing TR kaynaklarında portföyünüzdeki şirketler ve sektörler için yapılan ileriye dönük taramalarda olağanüstü bir takvim riski veya negatif gelişme tespit edilmemiştir; ana odak resmi bilanço ve temettü takvimindedir.";
-    
-    try {
-        const sectorNews = await searchTargetedFinancialNews(`${topSector} sektörü beklenti`);
-        if (sectorNews.length > 0) {
-            stockSectorNewsFinding = `Bloomberg HT, CNN Türk ve Investing TR taramalarında; ${topSector} sektörüne yönelik basına yansıyan "${sectorNews[0].title}" gelişmesi, ay içinde şirketlerinizin kapasite ve sipariş dinamikleri açısından yakından takip edilecektir.`;
-        }
-    } catch {
-        // Fallback hazır
-    }
-
-    const sectorResearchFindings: SectorResearchFindingItem[] = [
-        {
-            sector: topSector,
-            headline: `${topSector} Sektöründe Kritik Eşikler`,
-            detail: stockSectorNewsFinding,
-            category: 'delivery'
-        }
-    ];
-
-    // 4. EDİTORYAL MENTÖR METNİ SENTEZİ
+    // 4. EDİTORYAL MENTÖR METNİ SENTEZİ (FinAi Ekibi "Biz" Perspektifi)
     const paragraphs: string[] = [];
 
-    // Paragraf 1: Doğal İsimli Kanca
+    // Kanca: FinAi Ekibi Perspektifi
     paragraphs.push(
-        `${userName}, geride bıraktığımız ayın ardından şimdi rotamızı ${nextMonth.nextMonthLabel} ayına ve cüzdanınızı doğrudan etkileyebilecek kritik eşiklere çeviriyoruz.`
+        `${userName}, geride bıraktığımız ayın ardından FinAi ekibi olarak rotamızı ${nextMonth.nextMonthLabel} ayına ve portföyünüzün karşılaşacağı kritik gelişmelere çeviriyoruz.`
     );
 
-    // Paragraf 2: Şirket Olayları (Temettü & Bilanço Varsa)
+    // Şirket Olayları (Portföy Gündemi: Temettü ve Bilanço)
     if (companyEvents.length > 0) {
         const eventDescriptions = companyEvents.map(ev => {
             if (ev.eventType === 'dividend' && ev.estimatedPayoutTL) {
-                return `portföyünüzün lokomotifi olan **${ev.symbol}**, ${ev.dateFormatted} tarihinde temettü ödemesi gerçekleştirecek ve elinizdeki hisse adedi karşılığında tahmini net **${Math.round(ev.estimatedPayoutTL).toLocaleString('tr-TR')} TL** nakit cüzdanınıza yansıyacaktır`;
+                return `portföyünüzün lokomotifi olan **${ev.symbol}**, ${ev.dateFormatted} tarihinde hisse başına net ${ev.netAmountPerShare} TL temettü dağıtımı gerçekleştirecek ve elinizdeki hisse adedi karşılığında portföyünüze tahmini toplam net **${Math.round(ev.estimatedPayoutTL).toLocaleString('tr-TR')} TL** nakit girişi sağlayacaktır`;
             } else if (ev.eventType === 'dividend') {
                 return `**${ev.symbol}**, ${ev.dateFormatted} tarihinde hisse başına net ${ev.netAmountPerShare} TL temettü dağıtacaktır`;
             } else {
@@ -812,29 +788,24 @@ async function generateNextMonthExpectations(
         });
 
         paragraphs.push(
-            `Cüzdanınızda en yüksek ağırlığa sahip şirketlerin ajandasına baktığımızda; ${eventDescriptions.join('; ayrıca ')}.`
+            `Portföyünüzün şirket ajandasını incelediğimizde; ${eventDescriptions.join('; ayrıca ')}.`
         );
     }
 
-    // Paragraf 3: Ekonomik Takvim Olayı (Tek haber, tıklandığında sayfaya giden link ve "Daha fazla bilgi için...")
-    const eventLinkToken = `[ekonomi:${encodeURIComponent(priorityEvent.event)}|${priorityEvent.event}]`;
+    // Makroekonomik Takvim Olayı (Sayfa linki ile doğrudan entegre)
+    const calendarEventId = priorityEvent.id || 'tr_interest_rate';
+    const eventLinkToken = `[ekonomi:${calendarEventId}|${priorityEvent.event}]`;
     paragraphs.push(
-        `Piyasaların genel yönünü tayin edecek makroekonomik takvime odaklandığımızda; portföyünüzdeki varlıkları en yakından ilgilendiren kritik gelişme ${priorityEvent.country === 'TR' ? 'Türkiye' : 'ABD'} piyasalarında ${priorityEvent.dateFormatted} tarihinde açıklanacak olan ${eventLinkToken} olacaktır. ${priorityEvent.plainExplanation} Daha fazla bilgi için haberin ismine basabilirsiniz.`
+        `Piyasaların genel seyrini tayin edecek makroekonomik takvimde ise portföyünüz açısından öne çıkan en kritik gelişme, ${priorityEvent.country === 'TR' ? 'Türkiye' : 'küresel'} piyasalarda ${priorityEvent.dateFormatted} tarihinde açıklanacak olan ${eventLinkToken} olacaktır. ${priorityEvent.plainExplanation} Detaylı bilgi edinmek için haber başlığına tıklayabilirsiniz.`
     );
 
-    // Paragraf 4: Sektörler & Altın Jeopolitik / Savaş-Barış Analizi (Net Cümleler)
+    // Altın Jeopolitik / Küresel Denge Analizi (Varsa)
     if (goldGeopoliticalInsight) {
-        paragraphs.push(
-            `Sektörlerin mutfağındaki kararlara ve küresel dengelere baktığımızda; ${sectorResearchFindings[0].detail} ${goldGeopoliticalInsight}`
-        );
-    } else {
-        paragraphs.push(
-            `Sektörlerin mutfağındaki kararlara baktığımızda; ${sectorResearchFindings[0].detail}`
-        );
+        paragraphs.push(goldGeopoliticalInsight);
     }
 
-    // Paragraf 5: Kapanış
-    const closingTakeaway = `Son olarak önümüzdeki ay cebinizi en sağlam tutacak pusula; günlük gürültülü fiyat hareketlerine kapılmadan, şirketlerinizin bu somut takvim günlerini sakinlikle takip etmektir.`;
+    // Kapanış
+    const closingTakeaway = `Bizim tarafta önümüzdeki ay için sizlere en önemli tavsiyemiz; piyasadaki anlık gürültülü fiyat hareketlerine kapılmadan, şirketlerinizin bu somut takvim tarihlerini ve finansal gelişmelerini sükunetle takip etmenizdir.`;
     paragraphs.push(closingTakeaway);
 
     return {
@@ -844,7 +815,7 @@ async function generateNextMonthExpectations(
         narrativeParagraphs: paragraphs,
         companyEvents,
         macroEvents: filteredMacroEvents,
-        sectorResearchFindings,
+        sectorResearchFindings: [],
         goldGeopoliticalInsight,
         totalCalendarEventsCount,
         closingTakeaway
@@ -1117,19 +1088,19 @@ export async function generateMonthlyPerformanceReport(
     const profitTLFormatted = Math.abs(monthlyNetProfitTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 });
 
     const greetingSentence = isNetPositive
-        ? `Geçtiğimiz ay borsa genelinde dalgalı bir seyir izlenirken, senin portföyün değerini sağlam adımlarla büyüttü ve ayı net ${profitTLFormatted} TL artışla tamamladı.`
-        : `Geçtiğimiz ay genel piyasa koşulları temkinli ve kararsız bir seyir izlerken, portföyün net ${profitTLFormatted} TL seviyesinde bir geri çekilme yaşadı.`;
+        ? `Geçtiğimiz ay genel borsa koşulları dalgalı bir seyir izlerken, FinAi ekibi olarak incelemelerimizde portföyünüzün değerini koruyarak ayı net ${profitTLFormatted} TL artışla tamamladığını görmekteyiz.`
+        : `Geçtiğimiz ay genel piyasa koşulları temkinli ve dalgalı bir seyir izlerken, portföyünüz ayı net ${profitTLFormatted} TL seviyesinde bir geri çekilme ile kapattı.`;
 
     const paragraphs: string[] = [];
 
     // P1: Giriş ve Nakit Hareketi (Yüzdesiz)
     if (Math.abs(netCapitalFlow) > 1000) {
         paragraphs.push(
-            `${politeGreetingName}, gelin bu ay cebinizdeki gerçek paranın nasıl hareket ettiğine yakından bakalım. Ay boyunca yaptığınız ${Math.abs(netCapitalFlow).toLocaleString('tr-TR')} TL tutarındaki ${netCapitalFlow > 0 ? 'nakit para eklemesini' : 'para çıkışını'} yatırım kârından ayırdığımızda, doğrudan hisselerinizin kendi piyasa performansı ile portföyün bu ayı net ${profitTLFormatted} TL ${isNetPositive ? 'kazançla' : 'farkla'} tamamladı.`
+            `${politeGreetingName}, portföyünüzdeki gerçek nakit hareketlerini incelediğimizde; ay boyunca yaptığınız ${Math.abs(netCapitalFlow).toLocaleString('tr-TR')} TL tutarındaki ${netCapitalFlow > 0 ? 'nakit para eklemesini' : 'para çıkışını'} piyasa kârından ayırdığımızda, doğrudan hisselerinizin kendi piyasa performansı ile portföyünüzün bu ayı net ${profitTLFormatted} TL ${isNetPositive ? 'kazançla' : 'farkla'} tamamladığını belirledik.`
         );
     } else {
         paragraphs.push(
-            `${politeGreetingName}, gelin bu ay cebinizdeki paranın nasıl hareket ettiğine ve şirketlerinizin performansına birlikte bakalım. Herhangi bir dış para girişine gerek kalmadan, doğrudan seçtiğin şirketlerin performansı ile portföyün bu ayı net ${profitTLFormatted} TL ${isNetPositive ? 'artışla' : 'değişimle'} kapattı.`
+            `${politeGreetingName}, portföyünüzdeki nakit hareketlerini ve şirketlerinizin performansını incelediğimizde; herhangi bir dış para girişine gerek kalmadan, doğrudan seçtiğiniz şirketlerin performansı ile portföyünüzün bu ayı net ${profitTLFormatted} TL ${isNetPositive ? 'artışla' : 'değişimle'} tamamladığını görmekteyiz.`
         );
     }
 
@@ -1142,30 +1113,29 @@ export async function generateMonthlyPerformanceReport(
             : null;
 
         const winningNewsSnippet = winningNews
-            ? `Şirketin ay içindeki bu duruşunu ${winningNews.source} kaynaklarında yer alan "${winningNews.title}" gelişmeleri doğrudan destekledi.`
+            ? `Şirketin ay içindeki bu duruşunu kamuoyuna ve piyasaya yansıyan "${winningNews.title}" gelişmeleri doğrudan destekledi.`
             : `Şirketin faaliyet gösterdiği alandaki kurumsal talep ve yatırımcı ilgisi öne çıkan temel itici güç oldu.`;
 
         if (isActuallyGain) {
             const sectorGainText = topGainingSector
-                ? `Sektörel bazda ise cüzdanına en güçlü desteği net **+${topSectorGainTLFormatted} TL** ile **${topGainingSector.name}** sektörü verdi.`
+                ? `Sektörel bazda ise cüzdanınıza en güçlü desteği net **+${topSectorGainTLFormatted} TL** ile **${topGainingSector.name}** sektörü verdi.`
                 : '';
 
             paragraphs.push(
-                `Gelelim bu konuya; peki bu ay yüzünü en çok güldüren şirket hangisi oldu? Portföyündeki büyümenin açık ara en büyük lokomotifi, tek başına portföyüne net **+${topGainTLFormatted} TL** kazanç sağlayan **${topGainingAsset.cleanSymbol}** oldu. ${sectorGainText} ${winningNewsSnippet}`
+                `Portföyünüzdeki büyümenin lokomotifi, tek başına portföyünüze net **+${topGainTLFormatted} TL** kazanç sağlayan **${topGainingAsset.cleanSymbol}** oldu. ${sectorGainText} ${winningNewsSnippet}`
             );
         } else {
-            // Ay genelinde tüm varlıklar eksideyse en dirençli varlık olarak anlat
             const sectorResistText = topGainingSector
                 ? `Sektörel bazda ise en korunaklı duruşu **${topGainingSector.name}** sektörü sergiledi.`
                 : '';
 
             paragraphs.push(
-                `Genel piyasadaki sert dalgalanmalara rağmen cüzdanında değerini en dirayetli koruyan şirket, ayı sadece net **-${topGainTLFormatted} TL** sınırlı bir geri çekilme ile kapatan **${topGainingAsset.cleanSymbol}** oldu. ${sectorResistText} ${winningNewsSnippet}`
+                `Genel piyasadaki sert dalgalanmalara rağmen cüzdanınızda değerini en dirayetli koruyan şirket, ayı sadece net **-${topGainTLFormatted} TL** sınırlı bir geri çekilme ile kapatan **${topGainingAsset.cleanSymbol}** oldu. ${sectorResistText} ${winningNewsSnippet}`
             );
         }
     }
 
-    // P3: En Çok Kaybettiren Hisse ve Sektör + Bloomberg HT, CNN Türk, Investing TR Düşüş Araştırması (Yüzdesiz)
+    // P3: Düşüş Tarafı ve Katalizör İncelemesi (Kaynak adı verilmez, bulgu yoksa dürüstçe belirtilir)
     if (topLosingAsset && topLosingAsset.monthlyReturnTL < 0) {
         const lossTLFormatted = Math.abs(topLosingAsset.monthlyReturnTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 });
         const sectorLossTLFormatted = topLosingSector && topLosingSector.monthlyReturnTL < 0
@@ -1177,21 +1147,36 @@ export async function generateMonthlyPerformanceReport(
             : '';
 
         let researchConclusion = '';
-        if (fallingFinding) {
-            researchConclusion = `Bloomberg HT, CNN Türk ve Investing TR kaynaklarında yaptığımız detaylı taramada; "${fallingFinding.title}" (${fallingFinding.source}) başlıklı gelişmenin ${fallingSubject} üzerinde kısa vadeli bir tedirginlik ve satış baskısı yarattığı görülmektedir.`;
+        if (fallingFinding && fallingFinding.title) {
+            researchConclusion = `Yaptığımız araştırmalara dayanarak; "${fallingFinding.title}" başlıklı kurumsal ve operasyonel gelişmelerin ${fallingSubject} üzerinde kısa vadeli bir dalgalanma ve satış baskısı yarattığı görülmektedir.`;
         } else {
-            researchConclusion = `Bloomberg HT, CNN Türk ve Investing TR kaynaklarında tek tek yapılan haber araştırmalarında; doğrudan ${topLosingAsset.cleanSymbol} veya ${topLosingSector?.name || 'ilgili'} sektöre yönelik olağanüstü şirket bazlı bir olumsuzluk tespit edilmemiştir. Yaşanan bu geri çekilmenin genel piyasa dalgalanmaları ve teknik kâr realizasyonlarından kaynaklandığı değerlendirilmektedir.`;
+            researchConclusion = `Bizim tarafta sizlere doğrudan aktarabileceğimiz kesinleşmiş bir bulgu veya şirket bazlı somut bir neden tespit edilemediği için, dilerseniz bu varlık hakkında kendi araştırmanızı yaparak hareketin arka planı hakkında daha detaylı bilgi sahibi olabilirsiniz.`;
         }
 
-        const mentorAdvice = `Unutma ki borsada her hisse her ay aynı anda yükselmez; önemli olan şirketin temel hikayesinin bozulup bozulmadığıdır. Panik satışları yerine şirketlerinin iş hacmini ve finansal gücünü sakinlikle takip etmek en sağlıklı yaklaşımdır.`;
-
         paragraphs.push(
-            `Bu konuyu anladıysan diğer konumuz olan ve yatırımcıların çoğu zaman göz ardı ettiği düşüş tarafına bakalım. Bu ay portföyünün getirisini en çok gerileten hisse, net **${lossTLFormatted} TL** kayıp yaşatan **${topLosingAsset.cleanSymbol}** oldu. ${sectorLossText} ${researchConclusion} ${mentorAdvice}`
+            `Diğer taraftan portföy getirisini en çok gerileten hisse, net **-${lossTLFormatted} TL** kayıp yaşatan **${topLosingAsset.cleanSymbol}** oldu. ${sectorLossText} ${researchConclusion}`
         );
     }
 
-    // P4: Kapanış
-    const closingTakeaway = `Son olarak unutmaman gereken kritik kural şudur: Borsa bir yarış değil, doğru şirketlere ortak olma sabrıdır. Önümüzdeki ay da sakin kalarak, günlük fiyat dalgalanmalarına kapılmadan stratejini koruman cebini en çok güvende tutacak anahtardır.`;
+    // P4: Dinamik Çeşitlendirme Analizi (Şablon yok, duruma göre esnek analiz)
+    const positiveAssets = computedAssets.filter(a => a.monthlyReturnTL > 0);
+    const negativeAssets = computedAssets.filter(a => a.monthlyReturnTL < 0);
+    if (positiveAssets.length > 0 && negativeAssets.length > 0) {
+        paragraphs.push(
+            `Portföyünüzü çeşitlendirmeniz sayesinde, değer kaybeden hisselerin getiri üzerindeki negatif baskısı dengelenerek çok büyük bir dalgalanma olmadan bu ayı bu şekilde atlatmış bulunmaktayız.`
+        );
+    } else if (negativeAssets.length > 0 && positiveAssets.length === 0) {
+        paragraphs.push(
+            `Bu ay borsa genelinde yaşanan genele yaygın satış baskısı nedeniyle portföydeki tüm hisseler geri çekilme yaşamış olup, bu süreçte sektörel çeşitlendirmenin dahi piyasa baskısını tamamen sınırlayamadığı bir seyir izlenmiştir.`
+        );
+    } else if (computedAssets.length === 1) {
+        paragraphs.push(
+            `Portföyünüz tek bir varlıkta yoğunlaştığı için, şirketteki fiyat hareketleri doğrudan tüm portföy performansınızı belirlemiştir.`
+        );
+    }
+
+    // P5: Kapanış Tavsiyesi
+    const closingTakeaway = `FinAi ekibi olarak sizlere tavsiyemiz; kısa vadeli piyasa dalgalanmalarına kapılmadan, ortak olduğunuz şirketlerin temel iş hacmini ve finansal gücünü sükunetle takip etmenizdir.`;
     paragraphs.push(closingTakeaway);
 
     // Key Movements Listesi (Katkı payı kaldırıldı, tamamen net TL değişimi)

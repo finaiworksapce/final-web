@@ -569,7 +569,7 @@ export function TradingViewSymbolOverview({
         {loading && (
           <div className="absolute inset-0 z-10 bg-white/80 dark:bg-[#040989]/80 backdrop-blur-[2px] flex items-center justify-center text-slate-600 dark:text-[#D6E4FF] text-xs font-medium gap-2">
             <RefreshCw className="w-4 h-4 animate-spin text-[#0E1E38]" />
-            Yahoo Finance verisi güncelleniyor...
+            Piyasa verisi güncelleniyor...
           </div>
         )}
 

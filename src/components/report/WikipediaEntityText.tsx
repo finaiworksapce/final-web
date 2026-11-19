@@ -71,16 +71,21 @@ export default function WikipediaEntityText({
                 // Check bracketed calendar reference: e.g. [Ekim 2026 Ajandası] or [ekonomi:ID|Başlık]
                 if (token.startsWith('[') && token.endsWith(']')) {
                     const inner = token.slice(1, -1).trim();
-                    let targetUrl = "/dashboard/calendar";
+                    let targetUrl = "/dashboard/economic-calendar";
                     let displayText = inner;
                     if (inner.startsWith("ekonomi:")) {
                         const parts = inner.slice(8).split("|");
+                        const idOrQuery = parts[0];
                         displayText = parts[1] || parts[0];
-                        targetUrl = `/dashboard/calendar?event=${encodeURIComponent(displayText)}`;
+                        if (idOrQuery.startsWith("tr_") || idOrQuery.startsWith("us_")) {
+                            targetUrl = `/dashboard/economic-calendar/${idOrQuery}`;
+                        } else {
+                            targetUrl = `/dashboard/economic-calendar/${encodeURIComponent(idOrQuery)}`;
+                        }
                     } else if (inner.startsWith("takvim:")) {
                         const q = inner.slice(7);
                         displayText = q;
-                        targetUrl = `/dashboard/calendar?event=${encodeURIComponent(q)}`;
+                        targetUrl = `/dashboard/economic-calendar?event=${encodeURIComponent(q)}`;
                     }
 
                     return (
@@ -92,7 +97,7 @@ export default function WikipediaEntityText({
                                     ? "text-cyan-300 dark:text-cyan-300 hover:text-white decoration-cyan-400/50 hover:decoration-white"
                                     : "text-[#004BFA] dark:text-[#93C5FD] hover:text-blue-800 dark:hover:text-white decoration-[#004BFA]/40 hover:decoration-blue-800"
                             }`}
-                            title="İlgili ekonomik habere / takvim sayfasına git"
+                            title="İlgili ekonomik takvim sayfasına git"
                         >
                             {displayText}
                         </Link>
@@ -107,13 +112,13 @@ export default function WikipediaEntityText({
                         return (
                             <Link
                                 key={index}
-                                href={`/dashboard/analysis?q=${innerUpper}`}
+                                href={`/dashboard/varlik/${innerUpper}`}
                                 className={`inline-flex items-center font-semibold underline underline-offset-2 transition-all cursor-pointer ${
                                     isDark
                                         ? "text-[#93C5FD] dark:text-[#93C5FD] decoration-[#93C5FD]/50 hover:text-white hover:decoration-white"
                                         : "text-[#004BFA] dark:text-[#93C5FD] decoration-[#004BFA]/50 hover:text-blue-800 dark:hover:text-white hover:decoration-[#004BFA]"
                                 }`}
-                                title={`${innerUpper} Şirket Analiz Sayfası`}
+                                title={`${innerUpper} Varlık Sayfası`}
                             >
                                 {inner}
                             </Link>
@@ -128,13 +133,13 @@ export default function WikipediaEntityText({
                     return (
                         <Link
                             key={index}
-                            href={`/dashboard/analysis?q=${upper}`}
+                            href={`/dashboard/varlik/${upper}`}
                             className={`inline-flex items-center font-semibold underline underline-offset-2 transition-all cursor-pointer ${
                                 isDark
                                     ? "text-[#93C5FD] dark:text-[#93C5FD] decoration-[#93C5FD]/50 hover:text-white hover:decoration-white"
                                     : "text-[#004BFA] dark:text-[#93C5FD] decoration-[#004BFA]/50 hover:text-blue-800 dark:hover:text-white hover:decoration-[#004BFA]"
                             }`}
-                            title={`${upper} Şirket Analiz Sayfası`}
+                            title={`${upper} Varlık Sayfası`}
                         >
                             {token}
                         </Link>

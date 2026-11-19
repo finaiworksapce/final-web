@@ -65,7 +65,7 @@ export default function BehavioralPage() {
                     <div>
                         <h4 className="text-xl font-normal italic mb-2 tracking-tight">FinAi Bilgi Notu</h4>
                         <p className="text-blue-100 text-sm leading-relaxed font-medium">
-                            Bu test, "Behavioral Finance" (Davranışsal Finans) teorilerini temel alır. 
+                            Bu test, Davranışsal Finans teorilerini temel alır. 
                             Finansal başarının %20'si teknik bilgi, %80'si ise psikolojik dayanıklılıktır. 
                             Test sonunda size en uygun portföy modelini bu sonuçlara göre güncelleyeceğiz.
                         </p>
