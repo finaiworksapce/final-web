@@ -43,11 +43,18 @@ export function generateDynamicAnalysis(
         if (hhiScore < 0) hhiScore = 0;
         if (hhiScore > 5) hhiScore = 5;
 
+        // Varlık Tipi Koruması (En büyük varlık Fon veya Altın/Emtia ise yoğunlaşma cezası hafifletilir)
+        const topSector = getAssetSector(topAsset.symbol);
+        const isDefensiveTop = topSector === 'Yatırım Fonu' || topSector === 'Emtia';
+        if (isDefensiveTop && hhiScore < 3.5) {
+            hhiScore = Math.min(5, hhiScore + 1.2);
+        }
+
         let countScore = 0;
-        if (assetCount <= 2) countScore = 0;
-        else if (assetCount <= 4) countScore = 2;
-        else if (assetCount <= 12) countScore = 4;
-        else countScore = 3;
+        if (assetCount <= 2) countScore = 0.5;
+        else if (assetCount <= 4) countScore = 2.2;
+        else if (assetCount <= 12) countScore = 4.5;
+        else countScore = 3.5;
 
         let rawScore = hhiScore + countScore;
         if (rawScore < 1) rawScore = 1;
@@ -103,7 +110,6 @@ export function generateDynamicAnalysis(
         }
         
         let extraContext = "";
-        const topSector = getAssetSector(topAsset.symbol);
         const givesDividend = userDividends && userDividends.some(d => d.stock === topAsset.symbol);
         
         if (givesDividend) {
@@ -138,19 +144,33 @@ export function generateDynamicAnalysis(
         // --- 2. MOMENTUM & KÂRLILIK ANALİZİ ---
         let totalCost = 0;
         let totalCurrent = 0;
+        let gainersCount = 0;
+        let losersCount = 0;
+
         sorted.forEach(a => {
-            totalCost += a.avgCost * a.totalQuantity;
-            totalCurrent += (prices[a.symbol] || a.avgCost) * a.totalQuantity;
+            const cost = a.avgCost * a.totalQuantity;
+            const curr = (prices[a.symbol] || a.avgCost) * a.totalQuantity;
+            totalCost += cost;
+            totalCurrent += curr;
+            if (curr >= cost) gainersCount++;
+            else losersCount++;
         });
 
         const overallProfitPct = totalCost > 0 ? ((totalCurrent - totalCost) / totalCost) * 100 : 0;
-        
-        let score = 5;
-        if (overallProfitPct > 20) score = 9.5;
-        else if (overallProfitPct > 10) score = 8.0;
-        else if (overallProfitPct > 0) score = 6.5;
-        else if (overallProfitPct > -10) score = 4.0;
-        else score = 2.0;
+        const winRate = sorted.length > 0 ? (gainersCount / sorted.length) : 0.5;
+
+        // Dinamik Skorlama: Genel Kârlılık (%70) + Kazanma Oranı (%30)
+        let baseReturnScore = 5.0;
+        if (overallProfitPct >= 30) baseReturnScore = 10.0;
+        else if (overallProfitPct >= 0) baseReturnScore = 6.0 + (overallProfitPct / 30) * 4.0;
+        else if (overallProfitPct >= -25) baseReturnScore = 6.0 - (Math.abs(overallProfitPct) / 25) * 4.5;
+        else baseReturnScore = 1.0;
+
+        const winRateScore = winRate * 10;
+        let rawScore = (baseReturnScore * 0.7) + (winRateScore * 0.3);
+        if (rawScore < 1) rawScore = 1;
+        if (rawScore > 10) rawScore = 10;
+        const score = Math.round(rawScore * 10) / 10;
 
         let level: 'LOW'|'MEDIUM'|'HIGH' = 'LOW';
         if (score < 5) level = 'HIGH'; // High risk (losing money)
@@ -215,12 +235,11 @@ export function generateDynamicAnalysis(
     }
 
     if (viewMode === 'sector') {
-        // --- 3. SEKTÖR ANALİZİ (Hisse Adet Oranına Göre) ---
-        const totalCount = sorted.length;
+        // --- 3. SEKTÖR ANALİZİ (Gerçek TL Piyasa Değerine Göre) ---
         const sectorWeights: Record<string, number> = {};
 
         sorted.forEach(asset => {
-            const weight = (1 / totalCount) * 100;
+            const weight = totalValue > 0 ? (asset.marketVal / totalValue) * 100 : 0;
             const sector = getAssetSector(asset.symbol);
             sectorWeights[sector] = (sectorWeights[sector] || 0) + weight;
         });

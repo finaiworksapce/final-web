@@ -16,6 +16,7 @@ import { HalkarzDividendItem } from "@/app/api/halkarz-dividends/route";
 import { HalkarzEarningsItem } from "@/app/api/halkarz-earnings/route";
 import { generateDynamicAnalysis } from "@/utils/riskAnalyzer";
 import { sectorMapping, getAssetSector } from "@/data/sectorMapping";
+import PortfolioDistributionTutorial from "@/components/portfolio/distribution/PortfolioDistributionTutorial";
 
 // Şirket Amblem / Logo Bileşeni (Kendi Depomuzda Saklanan Yerel Resmi Şirket Amblemleri)
 function AssetLogo({ symbol, className = "w-10 h-10" }: { symbol: string; className?: string }) {
@@ -2407,32 +2408,12 @@ export default function PortfolioPage() {
                                                 </p>
                                             </div>
 
-                                            {/* Gelişmiş Eğitim Rehberi (Nasıl Okunur?) - Bağlamsal */}
-                                            <div className="border border-sky-100 bg-sky-50/50 rounded-2xl p-4">
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <Info className="w-4 h-4 text-sky-500" />
-                                                    <span className="text-xs font-bold text-sky-700">
-                                                        {distributionView === 'donut' ? "Pasta Grafiği Nasıl Okunur?" : distributionView === 'heatmap' ? "Isı Haritası Nasıl Okunur?" : "Sektör Dağılımı Nasıl Okunur?"}
-                                                    </span>
-                                                </div>
-                                                <div className="bg-white p-3 rounded-xl shadow-sm border border-sky-50">
-                                                    {distributionView === 'donut' && (
-                                                        <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
-                                                            Sepetinizdeki yumurtaların nerede olduğunu gösterir. Olası bir dalgalanmada en büyük dilime sahip (örneğin %35 ağırlığındaki) hissenizin düşüşü, tüm portföyünüzü ciddi şekilde sarsabilir. Bu yüzden devasa tek bir dilim yerine, dengeli boyutlarda dilimlere sahip olmak riski azaltır.
-                                                        </p>
-                                                    )}
-                                                    {distributionView === 'heatmap' && (
-                                                        <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
-                                                            Kutuların büyüklüğü paranın miktarını, renklerin koyuluğu ise kâr/zarar şiddetini temsil eder. Örneğin çok büyük ve koyu kırmızı bir kutu görüyorsanız, portföyünüzün ana damarlarından biri ciddi kan kaybediyor demektir. Koyu yeşil ise güçlü kârlılık anlamına gelir.
-                                                        </p>
-                                                    )}
-                                                    {distributionView === 'sector' && (
-                                                        <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
-                                                            Hisselerinizin hangi iş kollarında toplandığını gösterir. Örneğin portföyünüzdeki 10 hissenin 4 tanesi (%40'ı) ulaştırma sektöründeyse, bu oran sektör dilimlerinde temsil edilir.
-                                                        </p>
-                                                    )}
-                                                </div>
-                                            </div>
+                                            {/* FinAi Finansal Okuryazarlık ve Strateji Akademisi (BIST Vaka Analizi & İnteraktif Görsel Simülasyonlar) */}
+                                            <PortfolioDistributionTutorial
+                                                viewMode={distributionView}
+                                                sortedAssets={sortedAssets}
+                                                chartTotalValue={chartTotalValue}
+                                            />
                                         </>
                                     )}
 
