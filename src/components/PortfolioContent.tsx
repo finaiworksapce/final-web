@@ -256,7 +256,7 @@ const getAssetName = (symbol: string): string => {
 };
 
 export default function PortfolioPage() {
-    const { refreshDashboardData, isAuthenticated, user, myAssets } = useUser();
+    const { refreshDashboardData, isAuthenticated, user, myAssets, userName } = useUser();
     const [assets, setAssets] = useState<Asset[]>(() => (myAssets && myAssets.length > 0 ? myAssets : []));
     
     // UserProvider'dan gelen merkezi varlıkları boş state'e senkronize et
@@ -2393,26 +2393,13 @@ export default function PortfolioPage() {
                                     {/* SADECE ODAK MODUNDA GÖZÜKEN DETAYLAR */}
                                     {isFocused && (
                                         <>
-                                            {/* Risk ve Yoğunlaşma Skoru Paneli */}
-                                            <div className="bg-[#0E1E38] rounded-2xl p-4 shadow-lg shadow-[#0E1E38]/20 relative overflow-hidden">
-                                                <div className="flex items-center gap-2 mb-3">
-                                                    <Brain className="w-5 h-5 text-white" />
-                                                    <h4 className="text-[12px] font-normal text-white uppercase tracking-widest">{riskData.title}</h4>
-                                                    <div className="ml-auto flex items-center gap-1.5 bg-white/10 px-2 py-1 rounded-md border border-white/20 shadow-sm backdrop-blur-sm">
-                                                        <span className="text-[10px] font-medium text-white/80">{riskData.subtitle}:</span>
-                                                        <span className="text-xs font-normal text-white">{riskData.score}/10</span>
-                                                    </div>
-                                                </div>
-                                                <p className="text-xs text-white/90 leading-relaxed font-medium">
-                                                    {riskData.text}
-                                                </p>
-                                            </div>
-
-                                            {/* FinAi Finansal Okuryazarlık ve Strateji Akademisi (BIST Vaka Analizi & İnteraktif Görsel Simülasyonlar) */}
+                                            {/* FinAi Akademi (%50) & FinAi Raporu (%50) Yan Yana Simetrik Düzen */}
                                             <PortfolioDistributionTutorial
                                                 viewMode={distributionView}
                                                 sortedAssets={sortedAssets}
                                                 chartTotalValue={chartTotalValue}
+                                                riskData={riskData}
+                                                userName={userName}
                                             />
                                         </>
                                     )}
