@@ -74,16 +74,11 @@ export default function MonthlyLastMonthSummaryWidget({
             </div>
 
             {/* 2. Ana Gövde: Akıcı Tek Paragraf Anlatım */}
-            <div className="p-6 flex-1 flex flex-col justify-between">
-                <div className="text-xs sm:text-[13px] leading-relaxed text-slate-700 dark:text-slate-200 tracking-normal space-y-3">
+            <div className="p-6 flex-1 flex flex-col justify-center">
+                <div className="text-xs sm:text-[13px] leading-relaxed text-slate-700 dark:text-slate-200 tracking-normal">
                     <p className="leading-relaxed">
                         <WikipediaEntityText text={fullNarrativeText} activeSymbols={activeSymbols} variant="light" />
                     </p>
-                </div>
-
-                <div className="pt-4 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
-                    <span>FinAi Portföy & Mentör Motoru</span>
-                    <span className="font-medium text-[#004BFA] dark:text-[#93C5FD]">Varlık detayları için isimlere tıklayabilirsiniz</span>
                 </div>
             </div>
         </article>

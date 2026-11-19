@@ -6,6 +6,7 @@ import { XMLParser } from 'fast-xml-parser';
 import { createClient } from '@supabase/supabase-js';
 import { CalendarDbService } from './calendar-db-service';
 import { scrapeEconomicCalendar } from './calendar-scraper';
+import halkarzSnapshot from '@/lib/halkarz-real-snapshot.json';
 
 const supabaseAdmin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
@@ -509,23 +510,35 @@ async function fetchSynchronizedCalendarDividends(): Promise<{
     parsedDate: string | null;
 }[]> {
     try {
-        const response = await fetch(`https://halkarz.com/wp-content/themes/halkarz/api/temettu.php?v=${Date.now()}`, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                'Accept': 'application/json, text/plain, */*'
-            },
-            next: { revalidate: 3600 }
-        });
-        if (!response.ok) return [];
-        const rawData = await response.json();
-        if (!Array.isArray(rawData)) return [];
+        let rawData: any[] | null = null;
+        try {
+            const response = await fetch(`https://halkarz.com/wp-content/themes/halkarz/api/temettu.php?v=${Date.now()}`, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+                    'Accept': 'application/json, text/plain, */*'
+                },
+                signal: AbortSignal.timeout(3000)
+            });
+            if (response.ok) {
+                const parsed = await response.json();
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    rawData = parsed;
+                }
+            }
+        } catch {
+            // Ağ durumunda yerel snapshot devreye girer
+        }
 
-        return rawData.map((item: any) => {
-            const symbol = (item.t_bistkod || '').toUpperCase().trim();
-            const rawDate = (item.t_tarih || '').trim();
-            const netAmount = parseFloat(String(item.t_temt_net ?? item.t_net ?? '0').replace(',', '.')) || 0;
-            let parsedDateStr: string | null = null;
-            if (rawDate && rawDate.includes('.')) {
+        if (!rawData || rawData.length === 0) {
+            rawData = (halkarzSnapshot as any)?.rawDividends || [];
+        }
+
+        return (rawData || []).map((item: any) => {
+            const symbol = (item.t_bistkod || item.symbol || '').toUpperCase().trim();
+            const rawDate = (item.t_tarih || item.paymentDate || '').trim();
+            const netAmount = parseFloat(String(item.t_temt_net ?? item.t_net ?? item.netAmountPerShare ?? '0').replace(',', '.')) || 0;
+            let parsedDateStr: string | null = item.parsedDate || null;
+            if (!parsedDateStr && rawDate && rawDate.includes('.')) {
                 const parts = rawDate.split('.');
                 if (parts.length === 3) {
                     const d = parseInt(parts[0], 10);
@@ -538,12 +551,12 @@ async function fetchSynchronizedCalendarDividends(): Promise<{
             }
             return {
                 symbol,
-                companyName: item.t_sirket || symbol,
+                companyName: item.t_sirket || item.companyName || symbol,
                 netAmountPerShare: netAmount,
                 paymentDate: rawDate,
                 parsedDate: parsedDateStr
             };
-        }).filter(d => d.symbol && d.parsedDate);
+        }).filter((d: any) => d.symbol && d.parsedDate);
     } catch (e) {
         console.warn("fetchSynchronizedCalendarDividends error:", e);
         return [];
@@ -558,22 +571,34 @@ async function fetchSynchronizedCalendarEarnings(): Promise<{
     parsedDate: string | null;
 }[]> {
     try {
-        const response = await fetch(`https://halkarz.com/wp-content/themes/halkarz/api/bilanco.php?v=${Date.now()}`, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                'Accept': 'application/json, text/plain, */*'
-            },
-            next: { revalidate: 3600 }
-        });
-        if (!response.ok) return [];
-        const rawData = await response.json();
-        if (!Array.isArray(rawData)) return [];
+        let rawData: any[] | null = null;
+        try {
+            const response = await fetch(`https://halkarz.com/wp-content/themes/halkarz/api/bilanco.php?v=${Date.now()}`, {
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+                    'Accept': 'application/json, text/plain, */*'
+                },
+                signal: AbortSignal.timeout(3000)
+            });
+            if (response.ok) {
+                const parsed = await response.json();
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    rawData = parsed;
+                }
+            }
+        } catch {
+            // Ağ durumunda yerel snapshot
+        }
 
-        return rawData.map((item: any) => {
-            const symbol = (item.b_bistkod || '').toUpperCase().trim();
-            const rawDate = (item.b_tarih || '').trim();
-            let parsedDateStr: string | null = null;
-            if (rawDate && rawDate.includes('.')) {
+        if (!rawData || rawData.length === 0) {
+            rawData = (halkarzSnapshot as any)?.earnings || [];
+        }
+
+        return (rawData || []).map((item: any) => {
+            const symbol = (item.b_bistkod || item.symbol || '').toUpperCase().trim();
+            const rawDate = (item.b_tarih || item.earningsDate || '').trim();
+            let parsedDateStr: string | null = item.parsedDate || null;
+            if (!parsedDateStr && rawDate && rawDate.includes('.')) {
                 const parts = rawDate.split('.');
                 if (parts.length === 3) {
                     const d = parseInt(parts[0], 10);
@@ -586,12 +611,12 @@ async function fetchSynchronizedCalendarEarnings(): Promise<{
             }
             return {
                 symbol,
-                companyName: item.b_sirket || symbol,
+                companyName: item.b_sirket || item.companyName || symbol,
                 earningsDate: rawDate,
-                period: item.b_donem || '',
+                period: item.b_donem || item.period || '',
                 parsedDate: parsedDateStr
             };
-        }).filter(e => e.symbol && e.parsedDate);
+        }).filter((e: any) => e.symbol && e.parsedDate);
     } catch (e) {
         console.warn("fetchSynchronizedCalendarEarnings error:", e);
         return [];
@@ -667,13 +692,10 @@ async function generateNextMonthExpectations(
         fetchSynchronizedEconomicEvents(nextMonth.startDate, nextMonth.endDate)
     ]);
 
-    // 1. KATMAN: PORTFÖYDE EN YÜKSEK AĞIRLIĞA SAHİP 2 VARLIĞIN TEMETTÜ VE BİLANÇO KONTROLÜ
-    const sortedByWeight = [...computedAssets].sort((a, b) => b.weightPct - a.weightPct);
-    const top2Assets = sortedByWeight.slice(0, 2);
-
+    // 1. KATMAN: PORTFÖYDEKİ TÜM VARLIKLARIN TEMETTÜ VE BİLANÇO KONTROLÜ (Portföy Gündemi ile Tam Senkron)
     const companyEvents: CompanyEventItem[] = [];
 
-    for (const asset of top2Assets) {
+    for (const asset of computedAssets) {
         const clean = asset.cleanSymbol;
         
         // Temettü kontrolü (Hedef ay içerisinde mi?)
@@ -779,7 +801,7 @@ async function generateNextMonthExpectations(
     if (companyEvents.length > 0) {
         const eventDescriptions = companyEvents.map(ev => {
             if (ev.eventType === 'dividend' && ev.estimatedPayoutTL) {
-                return `portföyünüzün lokomotifi olan **${ev.symbol}**, ${ev.dateFormatted} tarihinde hisse başına net ${ev.netAmountPerShare} TL temettü dağıtımı gerçekleştirecek ve elinizdeki hisse adedi karşılığında portföyünüze tahmini toplam net **${Math.round(ev.estimatedPayoutTL).toLocaleString('tr-TR')} TL** nakit girişi sağlayacaktır`;
+                return `**${ev.symbol}**, ${ev.dateFormatted} tarihinde hisse başına net ${ev.netAmountPerShare} TL temettü dağıtımı gerçekleştirecek ve elinizdeki hisse adedi karşılığında portföyünüze tahmini toplam net **${Math.round(ev.estimatedPayoutTL).toLocaleString('tr-TR')} TL** nakit girişi sağlayacaktır`;
             } else if (ev.eventType === 'dividend') {
                 return `**${ev.symbol}**, ${ev.dateFormatted} tarihinde hisse başına net ${ev.netAmountPerShare} TL temettü dağıtacaktır`;
             } else {
@@ -790,13 +812,17 @@ async function generateNextMonthExpectations(
         paragraphs.push(
             `Portföyünüzün şirket ajandasını incelediğimizde; ${eventDescriptions.join('; ayrıca ')}.`
         );
+    } else {
+        paragraphs.push(
+            `Portföyünüzde yer alan şirketlerin resmi kurumsal takvimlerini ve KAP bildirimlerini taradığımızda; ${nextMonth.nextMonthLabel} ayı içerisinde kesinleşmiş bir temettü dağıtımı veya bilanço açıklaması bulunmamaktadır. Şirketleriniz tarafından yeni bir takvim duyurusu yapıldığında ajandanız anlık olarak güncellenecektir.`
+        );
     }
 
     // Makroekonomik Takvim Olayı (Sayfa linki ile doğrudan entegre)
     const calendarEventId = priorityEvent.id || 'tr_interest_rate';
     const eventLinkToken = `[ekonomi:${calendarEventId}|${priorityEvent.event}]`;
     paragraphs.push(
-        `Piyasaların genel seyrini tayin edecek makroekonomik takvimde ise portföyünüz açısından öne çıkan en kritik gelişme, ${priorityEvent.country === 'TR' ? 'Türkiye' : 'küresel'} piyasalarda ${priorityEvent.dateFormatted} tarihinde açıklanacak olan ${eventLinkToken} olacaktır. ${priorityEvent.plainExplanation} Detaylı bilgi edinmek için haber başlığına tıklayabilirsiniz.`
+        `Piyasaların genel seyrini tayin edecek makroekonomik takvimde ise portföyünüz açısından öne çıkan en kritik gelişme, ${priorityEvent.country === 'TR' ? 'Türkiye' : 'küresel'} piyasalarda ${priorityEvent.dateFormatted} tarihinde açıklanacak olan ${eventLinkToken} olacaktır. Bu gelişmeyi kısaca sizlere aktarmamız gerekirse; ${priorityEvent.plainExplanation}`
     );
 
     // Altın Jeopolitik / Küresel Denge Analizi (Varsa)
@@ -865,12 +891,28 @@ export async function generateMonthlyPerformanceReport(
         return !['NAKİT', 'NAKIT', 'TRY', 'TL', 'TRY_CASH', 'CASH'].includes(clean);
     });
 
+    // TARİH DUYARLILIĞI: Varlık bu ayın bitiş tarihinden sonra mı eklendi?
+    // Eğer varlığın purchase_date veya created_at tarihi period.endDate'den sonraysa,
+    // o varlık bu geçmiş ayda kullanıcı portföyünde henüz YOKTUR!
+    if (userId) {
+        dbAssets = dbAssets.filter(a => {
+            const rawDate = a.purchase_date || a.created_at;
+            if (!rawDate) return true;
+            const assetDateStr = typeof rawDate === 'string' 
+                ? rawDate.slice(0, 10) 
+                : new Date(rawDate).toISOString().slice(0, 10);
+            return assetDateStr <= period.endDate;
+        });
+    }
+
     const cleanFirstName = userFullName.split(' ')[0] || userFullName;
     const politeGreetingName = `${cleanFirstName} Bey`;
 
     const hasActiveAssets = dbAssets.length > 0;
 
-    if (!hasActiveAssets) {
+    // Yalnızca oturum açmamış demo ziyaretçileri için örnek hisseler verilir.
+    // Oturum açmış bir kullanıcının geçmiş bir ayda varlığı yoksa ASLA sahte hisse eklenmez!
+    if (!hasActiveAssets && !userId) {
         dbAssets = [
             { id: '1', symbol: 'THYAO.IS', quantity: 150, avg_cost: 295.0, asset_type: 'STOCK' },
             { id: '2', symbol: 'ASELS.IS', quantity: 300, avg_cost: 62.5, asset_type: 'STOCK' },
@@ -1010,6 +1052,50 @@ export async function generateMonthlyPerformanceReport(
 
     sectors.sort((a, b) => b.monthlyReturnTL - a.monthlyReturnTL);
 
+    // Varlık Bulunmayan Geçmiş Ay Kontrolü (Oturum açmış kullanıcının o tarihte varlığı yoksa erken dönüş)
+    if (computedAssets.length === 0) {
+        return {
+            period,
+            availableMonths,
+            hasActiveAssets: false,
+            summary: {
+                totalValue: 0,
+                totalCost: 0,
+                monthlyNetProfitTL: 0,
+                monthlyNetProfitPct: 0,
+                twrPct: 0,
+                netCapitalFlow: 0,
+                cumulativeNetProfitTL: 0,
+                cumulativeNetProfitPct: 0,
+                bist100MonthlyReturnPct: bist100ReturnPct,
+                relativeAlphaPct: 0,
+                activeAssetCount: 0,
+                healthScore: 80
+            },
+            assets: [],
+            sectors: [],
+            mentorSummary: {
+                title: `${period.monthLabel} Değerlendirmesi`,
+                userName: politeGreetingName,
+                greetingSentence: `${politeGreetingName}, seçtiğiniz ${period.monthLabel} döneminde portföyünüzde henüz kayıtlı bir varlık bulunmamaktadır.`,
+                narrativeParagraphs: [
+                    `Bu dönemde portföyünüzde herhangi bir hisse senedi veya kıymetli maden pozisyonu bulunmadığı için aylık getiri veya kâr/zarar hesaplanmamıştır. Portföyünüze ait ilk işlem geçmişini ve sermaye hareketlerinizi İşlem Geçmişi sayfasından takip edebilirsiniz.`
+                ],
+                topGainingAsset: null,
+                topGainingSector: null,
+                topLosingAsset: null,
+                topLosingSector: null,
+                keyMovements: [],
+                topContributors: [],
+                negativeLearningMoment: null,
+                sectorInsight: null,
+                closingTakeaway: `Gelecek dönem değerlendirmeleriniz için portföyünüze varlık eklemeye devam edebilirsiniz.`
+            },
+            nextMonthExpectations: await generateNextMonthExpectations(period, [], [], politeGreetingName),
+            generatedAt: new Date().toLocaleTimeString('tr-TR', { timeZone: 'Europe/Istanbul', hour: '2-digit', minute: '2-digit' })
+        };
+    }
+
     // 5. TWR ve Net Sermaye Akışı
     let netCapitalFlow = 0;
     if (transactions.length > 0) {
@@ -1039,7 +1125,7 @@ export async function generateMonthlyPerformanceReport(
     const topGainingSector = sortedSectorsByTL[0] || null;
     const topLosingSector = sortedSectorsByTL[sortedSectorsByTL.length - 1] || null;
 
-    // Düşüş araştırması: Bloomberg HT, CNN Türk ve Investing TR kaynaklarında tek tek tara
+    // Düşüş araştırması: Sadece düşen hisse veya kendi sektörü taranır (Asla başka hisseler karıştırılmaz!)
     let fallingFinding: { title: string; source: string; date: string; url?: string } | null = null;
     let fallingSubject = topLosingAsset?.cleanSymbol || 'Hisseler';
 
@@ -1051,26 +1137,12 @@ export async function generateMonthlyPerformanceReport(
         }
     }
 
-    // Eğer hissede bulunamadıysa en çok kaybettiren sektör için ara
+    // Eğer hissede doğrudan bulunamadıysa yalnızca en çok kaybettiren kendi sektörü için ara
     if (!fallingFinding && topLosingSector && topLosingSector.monthlyReturnTL < 0) {
         const sectorLossNews = await searchTargetedFinancialNews(`${topLosingSector.name} sektörü`);
         if (sectorLossNews.length > 0) {
             fallingFinding = sectorLossNews[0];
             fallingSubject = `${topLosingSector.name} sektörü`;
-        }
-    }
-
-    // Eğer sektörde de bulunamadıysa portföyde bulunan diğer hisseleri tek tek tara
-    if (!fallingFinding) {
-        for (const ast of computedAssets) {
-            if (ast.cleanSymbol !== topLosingAsset?.cleanSymbol) {
-                const otherNews = await searchTargetedFinancialNews(ast.cleanSymbol);
-                if (otherNews.length > 0) {
-                    fallingFinding = otherNews[0];
-                    fallingSubject = ast.cleanSymbol;
-                    break;
-                }
-            }
         }
     }
 
@@ -1113,7 +1185,7 @@ export async function generateMonthlyPerformanceReport(
             : null;
 
         const winningNewsSnippet = winningNews
-            ? `Şirketin ay içindeki bu duruşunu kamuoyuna ve piyasaya yansıyan "${winningNews.title}" gelişmeleri doğrudan destekledi.`
+            ? `Şirketin faaliyet gösterdiği alandaki güçlü kurumsal talep, ticari operasyonları ve yatırımcı ilgisi bu yükselişi doğrudan destekledi.`
             : `Şirketin faaliyet gösterdiği alandaki kurumsal talep ve yatırımcı ilgisi öne çıkan temel itici güç oldu.`;
 
         if (isActuallyGain) {
@@ -1135,7 +1207,7 @@ export async function generateMonthlyPerformanceReport(
         }
     }
 
-    // P3: Düşüş Tarafı ve Katalizör İncelemesi (Kaynak adı verilmez, bulgu yoksa dürüstçe belirtilir)
+    // P3: Düşüş Tarafı ve Katalizör İncelemesi (Kaynak adı verilmez, başlık tırnaklanmaz, konunun özü anlatılır)
     if (topLosingAsset && topLosingAsset.monthlyReturnTL < 0) {
         const lossTLFormatted = Math.abs(topLosingAsset.monthlyReturnTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 });
         const sectorLossTLFormatted = topLosingSector && topLosingSector.monthlyReturnTL < 0
@@ -1148,7 +1220,18 @@ export async function generateMonthlyPerformanceReport(
 
         let researchConclusion = '';
         if (fallingFinding && fallingFinding.title) {
-            researchConclusion = `Yaptığımız araştırmalara dayanarak; "${fallingFinding.title}" başlıklı kurumsal ve operasyonel gelişmelerin ${fallingSubject} üzerinde kısa vadeli bir dalgalanma ve satış baskısı yarattığı görülmektedir.`;
+            const titleLower = fallingFinding.title.toLowerCase();
+            if (titleLower.includes('spk') || titleLower.includes('suç duyurusu') || titleLower.includes('tedbir') || titleLower.includes('yasak') || titleLower.includes('ceza') || titleLower.includes('soruşturma')) {
+                researchConclusion = `Yaptığımız araştırmalara dayanarak; Sermaye Piyasası Kurulu (SPK) veya düzenleyici otoriteler tarafından yürütülen incelemeler neticesinde alınan idari tedbir ve işlem kısıtlaması kararlarının ${fallingSubject} payları üzerinde değer kaybına yol açtığı görülmektedir.`;
+            } else if (titleLower.includes('zarar') || titleLower.includes('bilanço') || titleLower.includes('kâr') || titleLower.includes('kar') || titleLower.includes('gelir') || titleLower.includes('ciro')) {
+                researchConclusion = `Yaptığımız araştırmalara dayanarak; şirketin açıkladığı son dönem finansal tablolarında operasyonel kâr marjları ve ciro büyümesinin piyasa beklentilerinin gerisinde kalmasının ${fallingSubject} fiyatlamasını baskıladığı görülmektedir.`;
+            } else if (titleLower.includes('faiz') || titleLower.includes('enflasyon') || titleLower.includes('tcmb') || titleLower.includes('fed') || titleLower.includes('maliyet')) {
+                researchConclusion = `Yaptığımız araştırmalara dayanarak; makroekonomik finansman maliyetleri ile sektör genelindeki girdi fiyatlarının ${fallingSubject} kârlılık dinamikleri üzerinde oluşturduğu baskının öne çıktığı görülmektedir.`;
+            } else if (titleLower.includes('ihracat') || titleLower.includes('sipariş') || titleLower.includes('üretim') || titleLower.includes('talep') || titleLower.includes('satış')) {
+                researchConclusion = `Yaptığımız araştırmalara dayanarak; şirketin faaliyet gösterdiği pazarlardaki sipariş ve talep koşullarında izlenen dönemsel yavaşlamanın ${fallingSubject} performansını sınırlandırdığı görülmektedir.`;
+            } else {
+                researchConclusion = `Yaptığımız araştırmalara dayanarak; ${fallingSubject} tarafındaki kurumsal gelişmeler, operasyonel dinamikler ve sektörel kâr realizasyonlarının varlık üzerinde değer kaybına neden olduğu görülmektedir.`;
+            }
         } else {
             researchConclusion = `Bizim tarafta sizlere doğrudan aktarabileceğimiz kesinleşmiş bir bulgu veya şirket bazlı somut bir neden tespit edilemediği için, dilerseniz bu varlık hakkında kendi araştırmanızı yaparak hareketin arka planı hakkında daha detaylı bilgi sahibi olabilirsiniz.`;
         }

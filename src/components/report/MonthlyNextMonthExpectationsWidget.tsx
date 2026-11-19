@@ -101,33 +101,29 @@ export default function MonthlyNextMonthExpectationsWidget({
                         </h2>
                     </div>
                 </div>
-
-                {/* Dinamik Takvim Olay Sayacı Butonu */}
-                {count > 0 && (
-                    <button
-                        type="button"
-                        onClick={() => setShowEventsModal(true)}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-[#93C5FD] bg-white/10 hover:bg-white/20 rounded-lg border border-white/15 transition-colors cursor-pointer"
-                        title="Tüm ekonomik takvim verilerini görüntüle"
-                    >
-                        <Calendar className="w-3.5 h-3.5 text-[#93C5FD]" />
-                        <span>{data.targetMonthLabel} Ajandası ({count} Olay)</span>
-                    </button>
-                )}
             </div>
 
             {/* 2. Ana Gövde: Akıcı Tek Paragraf Anlatım */}
             <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                <div className="text-xs sm:text-[13px] leading-relaxed text-[#D6E4FF]/90 tracking-normal space-y-3">
+                <div className="text-xs sm:text-[13px] leading-relaxed text-[#D6E4FF]/90 tracking-normal">
                     <p className="leading-relaxed">
                         <WikipediaEntityText text={fullNarrativeText} activeSymbols={activeSymbols} variant="dark" />
                     </p>
                 </div>
 
-                <div className="pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-[#D6E4FF]/60">
-                    <span>FinAi Stratejik Ajanda Motoru</span>
-                    <span className="font-medium text-[#93C5FD]">Detaylar için altı çizili başlıklara basabilirsiniz</span>
-                </div>
+                {count > 0 && (
+                    <div className="pt-3 border-t border-white/10 flex items-center justify-end">
+                        <button
+                            type="button"
+                            onClick={() => setShowEventsModal(true)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#93C5FD] bg-white/10 hover:bg-white/20 rounded-xl border border-white/15 transition-all cursor-pointer shadow-xs"
+                            title="Tüm ekonomik takvim verilerini görüntüle"
+                        >
+                            <Calendar className="w-3.5 h-3.5 text-[#93C5FD]" />
+                            <span>{data.targetMonthLabel} Ajandası ({count} Olay)</span>
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* 6. İNTERAKTİF MİKRO TAKVİM MODAL / POPOVER */}

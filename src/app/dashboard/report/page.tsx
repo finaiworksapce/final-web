@@ -44,59 +44,34 @@ const formatCurrency = (val: number) => {
     }).format(val || 0);
 };
 
-// Recharts Custom Tooltip (Aylık Getiri ve Büyüme Katkı Payı ile zenginleştirilmiş)
+// Recharts Custom Tooltip (Sadece Varlık Adı, Aylık Yüzde ve Net TL Getiri)
 const CustomBarTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
         const data = payload[0].payload;
         const isPos = data.returnPct >= 0;
         return (
-            <div className="bg-white/95 dark:bg-[#02041A]/95 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-2xl p-3.5 shadow-xl text-xs space-y-2 min-w-[220px] z-50">
-                <div className="flex items-center justify-between pb-1.5 border-b border-slate-100 dark:border-white/10">
-                    <span className="font-semibold text-slate-900 dark:text-white">
-                        {data.name}
-                    </span>
-                    {data.weightPct !== undefined && data.weightPct > 0 && (
-                        <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-[#004BFA]/10 text-[#004BFA] dark:text-[#93C5FD]">
-                            %{data.weightPct.toFixed(1)} Pay
-                        </span>
-                    )}
+            <div className="bg-white/95 dark:bg-[#02041A]/95 backdrop-blur-md border border-slate-200 dark:border-white/10 rounded-xl p-3 shadow-xl text-xs space-y-1.5 min-w-[170px] z-50">
+                <div className="font-semibold text-slate-900 dark:text-white pb-1 border-b border-slate-100 dark:border-white/10">
+                    {data.name}
                 </div>
 
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-4">
                     <span className="text-[11px] text-slate-500 dark:text-slate-400">
                         Aylık Getiri:
                     </span>
-                    <span className={`font-numbers font-semibold text-sm ${isPos ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                    <span className={`font-numbers font-semibold text-xs ${isPos ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                         {isPos ? '+' : ''}%{data.returnPct.toFixed(2)}
                     </span>
                 </div>
 
-                {data.contributionPct !== undefined && (
-                    <div className="flex items-center justify-between">
+                {data.returnTL !== undefined && (
+                    <div className="flex items-center justify-between gap-4">
                         <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                            Büyüme Katkı Payı:
+                            Net Getiri:
                         </span>
-                        <span className={`font-numbers font-semibold ${data.contributionPct >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
-                            {data.contributionPct >= 0 ? '+' : ''}%{data.contributionPct.toFixed(2)} Puan
-                        </span>
-                    </div>
-                )}
-
-                {data.returnTL !== undefined && data.returnTL !== 0 && (
-                    <div className="flex items-center justify-between">
-                        <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                            Net Nominal Fark:
-                        </span>
-                        <span className={`font-numbers font-semibold ${data.returnTL >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                        <span className={`font-numbers font-semibold text-xs ${data.returnTL >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                             {data.returnTL >= 0 ? '+' : ''}{formatCurrency(data.returnTL)}
                         </span>
-                    </div>
-                )}
-
-                {data.assetCount !== undefined && (
-                    <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-100 dark:border-white/10">
-                        <span>Pozisyon Sayısı:</span>
-                        <span className="font-numbers font-medium">{data.assetCount} Varlık</span>
                     </div>
                 )}
             </div>
@@ -392,7 +367,7 @@ export default function FinAiReportViewPage() {
                         </div>
 
                         {/* Lejant (Pozitif / Negatif) */}
-                        <div className="flex flex-wrap items-center justify-between text-xs gap-3">
+                        <div className="flex flex-wrap items-center justify-start text-xs gap-3">
                             <div className="flex items-center gap-4 text-[11px] font-medium">
                                 <div className="flex items-center gap-1.5">
                                     <span className="w-3 h-3 rounded-md bg-emerald-500" />
@@ -403,9 +378,6 @@ export default function FinAiReportViewPage() {
                                     <span className="text-slate-700 dark:text-slate-300">Negatif Getiri</span>
                                 </div>
                             </div>
-                            <span className="text-[11px] font-numbers font-medium text-slate-500 dark:text-slate-400">
-                                0% Referans Tabanı
-                            </span>
                         </div>
 
                         {/* DİKEY SÜTUN GRAFİK ALANI */}
@@ -473,12 +445,6 @@ export default function FinAiReportViewPage() {
                                 </div>
                             )}
                         </div>
-
-                        {/* Alt Bilgi */}
-                        <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-white/10">
-                            <span>Sütunların üzerine gelerek getiri ve portföy katkısını inceleyebilirsiniz.</span>
-                            <span className="font-numbers font-medium">0% Çizgisi = Başabaş</span>
-                        </div>
                     </div>
 
                     {/* SAĞ (%30 = 3 Kolon): VARLIK PERFORMANSI WİDGETI (Büyükten Küçüğe Sıralı, Sade) */}
@@ -500,6 +466,7 @@ export default function FinAiReportViewPage() {
                             {sortedAssets.length > 0 ? (
                                 sortedAssets.map((asset) => {
                                     const isPos = asset.monthlyReturnPct >= 0;
+                                    const cleanSector = (!asset.sector || asset.sector === 'Finance') ? 'Finans' : asset.sector;
                                     return (
                                         <Link
                                             key={asset.id || asset.symbol}
@@ -515,7 +482,7 @@ export default function FinAiReportViewPage() {
                                                         {asset.cleanSymbol}
                                                     </div>
                                                     <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
-                                                        {asset.sector}
+                                                        {cleanSector}
                                                     </div>
                                                 </div>
                                             </div>
@@ -540,12 +507,6 @@ export default function FinAiReportViewPage() {
                                     Portföyde varlık bulunmuyor.
                                 </div>
                             )}
-                        </div>
-
-                        {/* Alt Bilgi */}
-                        <div className="pt-2 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
-                            <span>Getiriye Göre Sıralı</span>
-                            <span className="font-medium text-[#004BFA] dark:text-[#93C5FD]">Detay için tıklayın</span>
                         </div>
                     </div>
                 </div>
