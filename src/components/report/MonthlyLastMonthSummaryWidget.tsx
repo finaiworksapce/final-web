@@ -50,7 +50,7 @@ export default function MonthlyLastMonthSummaryWidget({
         : [mentor.greetingSentence].filter(Boolean);
 
     return (
-        <article className="w-full h-full bg-white dark:bg-[#040989]/20 border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-xs overflow-hidden flex flex-col justify-between">
+        <article className="w-full h-full bg-white dark:bg-[#040989]/20 border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-xs overflow-hidden flex flex-col justify-start">
             {/* 1. Editoryal Üst Başlık */}
             <div className="px-6 py-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between gap-3 bg-slate-50/60 dark:bg-white/5">
                 <div className="flex items-center gap-2.5">
@@ -72,8 +72,8 @@ export default function MonthlyLastMonthSummaryWidget({
                 </div>
             </div>
 
-            {/* 2. Ana Gövde: İki Paragraf Anlatım */}
-            <div className="p-6 flex-1 flex flex-col justify-center">
+            {/* 2. Ana Gövde: İki Paragraf Anlatım (Yukarıdan aşağıya hizalı) */}
+            <div className="p-6 flex-1 flex flex-col justify-start">
                 <div className="text-xs sm:text-[13px] leading-relaxed text-slate-700 dark:text-slate-200 tracking-normal space-y-3.5">
                     {rawParagraphs.map((para, idx) => (
                         <p key={idx} className="leading-relaxed">

@@ -483,6 +483,19 @@ async function searchTargetedFinancialNews(
             const dateFormatted = pubDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' });
 
             if (cleanTitle.length > 8) {
+                // Çoklu hisse kodlu liste haberlerini (Örn: Hangisi Ralli Yapacak? ASTOR ASELS THYAO PGSUS SASA TUPRS) filtrele
+                const upperCodes = cleanTitle.match(/\b[A-Z]{4,5}\b/g) || [];
+                if (upperCodes.length >= 3) continue;
+
+                // Genel piyasa/borsa gün içi özetlerini filtrele
+                const tLower = cleanTitle.toLowerCase();
+                const genericPhrases = [
+                    'günün özeti', 'piyasalarda günün özeti', 'bist 100 günü', 'borsada gün',
+                    'borsa günü', 'sabah bülteni', 'kapanış özeti', 'gün ortası', 'ralli yapacak',
+                    'en çok kazandıran', 'en çok kaybettiren'
+                ];
+                if (genericPhrases.some(p => tLower.includes(p))) continue;
+
                 verifiedItems.push({
                     title: cleanTitle,
                     source,
@@ -812,9 +825,8 @@ async function generateNextMonthExpectations(
         paragraphs.push(goldGeopoliticalInsight);
     }
 
-    // Kapanış
-    const closingTakeaway = `Bizim tarafta önümüzdeki ay için sizlere en önemli tavsiyemiz; piyasadaki anlık gürültülü fiyat hareketlerine kapılmadan, şirketlerinizin bu somut takvim tarihlerini ve finansal gelişmelerini sükunetle takip etmenizdir.`;
-    paragraphs.push(closingTakeaway);
+    // Kapanış - Tavsiye cümlesi kaldırıldı (kullanıcı direktifi: tavsiye vermeye gerek yok)
+    const closingTakeaway = '';
 
     return {
         title: `${nextMonth.nextMonthLabel} Beklentileri & Stratejik Ajanda`,
@@ -1173,7 +1185,7 @@ export async function generateMonthlyPerformanceReport(
             const sectorResistText = topGainingSector
                 ? `Sektörel bazda ise en korunaklı duruşu **${topGainingSector.name}** sektörü sergiledi.`
                 : '';
-            p1GainText = `Genel piyasadaki dalgalanmalara rağmen cüzdanınızda değerini en dirayetli koruyan şirket, ayı sadece net **-${topGainTLFormatted} TL** sınırlı bir geri çekilme ile kapatan **${topGainingAsset.cleanSymbol}** oldu. ${sectorResistText} ${winningNewsSnippet}`;
+            p1GainText = `Genel piyasadaki dalgalanmalara rağmen cüzdanınızda değerini en dirayetli koruyan şirket, ayı sadece net **-${topGainTLFormatted} TL** sınırlı bir geri çekilme ile kapatan **${topGainingAsset.cleanSymbol}** oldu.${sectorResistText ? ' ' + sectorResistText : ''}`;
         }
     }
 
@@ -1201,16 +1213,14 @@ export async function generateMonthlyPerformanceReport(
         let researchConclusion = '';
         if (fallingFinding && fallingFinding.title) {
             const titleLower = fallingFinding.title.toLowerCase();
-            if (titleLower.includes('spk') || titleLower.includes('suç duyurusu') || titleLower.includes('tedbir') || titleLower.includes('yasak') || titleLower.includes('ceza') || titleLower.includes('soruşturma')) {
-                researchConclusion = `Yaptığımız araştırmalara dayanarak; Sermaye Piyasası Kurulu (SPK) veya düzenleyici otoriteler tarafından yürütülen incelemeler neticesinde alınan idari tedbir ve işlem kısıtlaması kararlarının ${fallingSubject} payları üzerinde değer kaybına yol açtığı görülmektedir.`;
-            } else if (titleLower.includes('zarar') || titleLower.includes('bilanço') || titleLower.includes('kâr') || titleLower.includes('kar') || titleLower.includes('gelir') || titleLower.includes('ciro')) {
-                researchConclusion = `Yaptığımız araştırmalara dayanarak; şirketin açıkladığı son dönem finansal tablolarında operasyonel kâr marjları ve ciro büyümesinin piyasa beklentilerinin gerisinde kalmasının ${fallingSubject} fiyatlamasını baskıladığı görülmektedir.`;
-            } else if (titleLower.includes('faiz') || titleLower.includes('enflasyon') || titleLower.includes('tcmb') || titleLower.includes('fed') || titleLower.includes('maliyet')) {
-                researchConclusion = `Yaptığımız araştırmalara dayanarak; makroekonomik finansman maliyetleri ile sektör genelindeki girdi fiyatlarının ${fallingSubject} kârlılık dinamikleri üzerinde oluşturduğu baskının öne çıktığı görülmektedir.`;
-            } else if (titleLower.includes('ihracat') || titleLower.includes('sipariş') || titleLower.includes('üretim') || titleLower.includes('talep') || titleLower.includes('satış')) {
-                researchConclusion = `Yaptığımız araştırmalara dayanarak; şirketin faaliyet gösterdiği pazarlardaki sipariş ve talep koşullarında izlenen dönemsel yavaşlamanın ${fallingSubject} performansını sınırlandırdığı görülmektedir.`;
+            if (titleLower.includes('spk') || titleLower.includes('suç duyurusu') || titleLower.includes('tedbir') || titleLower.includes('yasak') || titleLower.includes('ceza') || titleLower.includes('soruşturma') || titleLower.includes('dava')) {
+                researchConclusion = `Yaptığımız araştırmalara göre; SPK veya düzenleyici otoriteler tarafından şirket paylarına yönelik alınan tedbir ve işlem kısıtlaması kararlarının ${fallingSubject} payları üzerinde değer kaybına yol açtığı görülmektedir.`;
+            } else if ((titleLower.includes('bilanço') || titleLower.includes('kâr') || titleLower.includes('kar') || titleLower.includes('gelir')) && (titleLower.includes('zarar') || titleLower.includes('düştü') || titleLower.includes('geriledi') || titleLower.includes('kayıp') || titleLower.includes('altında'))) {
+                researchConclusion = `Yaptığımız araştırmalara göre; şirketin açıkladığı son dönem finansal tablolarında net kâr marjının piyasa beklentilerinin gerisinde kalması ${fallingSubject} fiyatlamasını baskılamıştır.`;
+            } else if (titleLower.includes('üretim durdurma') || titleLower.includes('bakım duruşu') || titleLower.includes('grev') || titleLower.includes('arıza')) {
+                researchConclusion = `Yaptığımız araştırmalara göre; şirketin operasyonel tesislerinde yaşanan bakım duruşu veya üretim aksamaları hisse fiyatlaması üzerinde baskı oluşturmuştur.`;
             } else {
-                researchConclusion = `Yaptığımız araştırmalara dayanarak; ${fallingSubject} tarafındaki kurumsal gelişmeler, operasyonel dinamikler ve sektörel kâr realizasyonlarının varlık üzerinde değer kaybına neden olduğu görülmektedir.`;
+                researchConclusion = `Bizim tarafta sizlere doğrudan aktarabileceğimiz kesinleşmiş bir bulgu veya şirket bazlı somut bir neden tespit edilemediği için, dilerseniz bu varlık hakkında kendi araştırmanızı yaparak hareketin arka planı hakkında daha detaylı bilgi sahibi olabilirsiniz.`;
             }
         } else {
             researchConclusion = `Bizim tarafta sizlere doğrudan aktarabileceğimiz kesinleşmiş bir bulgu veya şirket bazlı somut bir neden tespit edilemediği için, dilerseniz bu varlık hakkında kendi araştırmanızı yaparak hareketin arka planı hakkında daha detaylı bilgi sahibi olabilirsiniz.`;
