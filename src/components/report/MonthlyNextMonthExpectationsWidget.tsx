@@ -103,12 +103,59 @@ export default function MonthlyNextMonthExpectationsWidget({
                 </div>
             </div>
 
-            {/* 2. Ana Gövde: Akıcı Tek Paragraf Anlatım */}
+            {/* 2. Ana Gövde: Akıcı Anlatım ve Kronolojik Şirket Ajandası */}
             <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                <div className="text-xs sm:text-[13px] leading-relaxed text-[#D6E4FF]/90 tracking-normal">
-                    <p className="leading-relaxed">
-                        <WikipediaEntityText text={fullNarrativeText} activeSymbols={activeSymbols} variant="dark" />
-                    </p>
+                <div className="text-xs sm:text-[13px] leading-relaxed text-[#D6E4FF]/90 tracking-normal space-y-3">
+                    {/* Giriş Cümlesi */}
+                    {data.narrativeParagraphs && data.narrativeParagraphs[0] && (
+                        <p className="leading-relaxed">
+                            <WikipediaEntityText text={data.narrativeParagraphs[0]} activeSymbols={activeSymbols} variant="dark" />
+                        </p>
+                    )}
+
+                    {/* Tek Birleşik Kronolojik Şirket Ajandası Listesi (Temettü ve Bilanço) */}
+                    <div className="space-y-2 py-1">
+                        <div className="text-[11px] font-semibold tracking-wider uppercase text-[#93C5FD]/80">
+                            Şirket Ajandası Takvimi
+                        </div>
+                        {companyEvents.length > 0 ? (
+                            <ul className="space-y-1.5 text-xs text-white/95">
+                                {companyEvents.map((ev, idx) => {
+                                    const isDiv = ev.eventType === 'dividend';
+                                    return (
+                                        <li key={idx} className="flex items-start gap-2">
+                                            <span className="text-[#93C5FD] font-bold select-none">•</span>
+                                            <span>
+                                                <Link href={`/dashboard/varlik/${ev.symbol}`} className="font-semibold text-white underline decoration-[#93C5FD]/40 hover:decoration-[#93C5FD]">
+                                                    {ev.symbol}
+                                                </Link>
+                                                {isDiv ? (
+                                                    <span>
+                                                        {' '}– {ev.dateFormatted} Temettü Dağıtımı (Hisse Başı Net: {ev.netAmountPerShare} TL{ev.estimatedPayoutTL ? ` · Tahmini Net Giriş: ${Math.round(ev.estimatedPayoutTL).toLocaleString('tr-TR')} TL` : ''})
+                                                    </span>
+                                                ) : (
+                                                    <span>
+                                                        {' '}– {ev.dateFormatted} {ev.periodLabel || 'Dönemsel'} Finansal Sonuç Açıklaması
+                                                    </span>
+                                                )}
+                                            </span>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        ) : (
+                            <div className="text-xs text-[#D6E4FF]/75">
+                                Portföyünüzde yer alan şirketlerin resmi kurumsal takvimlerini ve KAP bildirimlerini taradığımızda; bu ay içerisinde kesinleşmiş bir temettü dağıtımı veya bilanço açıklaması bulunmamaktadır.
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Makroekonomik Takvim ve Küresel Analiz Bölümü */}
+                    {data.narrativeParagraphs && data.narrativeParagraphs.slice(1).map((para, idx) => (
+                        <p key={idx} className="leading-relaxed">
+                            <WikipediaEntityText text={para} activeSymbols={activeSymbols} variant="dark" />
+                        </p>
+                    ))}
                 </div>
 
                 {count > 0 && (

@@ -79,6 +79,27 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
+    const prefetchMonthlyReport = async () => {
+        try {
+            if (typeof window === 'undefined') return;
+            const cached = sessionStorage.getItem('finai_cached_monthly_report');
+            if (cached) return;
+            const currentUserId = currentUserRef.current?.id;
+            const currentUserName = currentUserRef.current?.user_metadata?.full_name || '';
+            const encodedName = encodeURIComponent(currentUserName);
+            const url = currentUserId
+                ? `/api/finai-daily-report?userId=${currentUserId}&timeframe=monthly&userName=${encodedName}`
+                : `/api/finai-daily-report?timeframe=monthly&userName=${encodedName}`;
+            const res = await fetch(url);
+            const json = await res.json();
+            if (json.success && json.monthlyReport) {
+                sessionStorage.setItem('finai_cached_monthly_report', JSON.stringify(json.monthlyReport));
+            }
+        } catch (error) {
+            console.error("Background monthly report prefetch error:", error);
+        }
+    };
+
     useEffect(() => {
         if (isAuthenticated && globalNews.length === 0) {
             prefetchNews();
@@ -87,6 +108,12 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
             return () => clearInterval(interval);
         }
     }, [isAuthenticated, globalNews.length]);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            prefetchMonthlyReport();
+        }
+    }, [isAuthenticated, user?.id]);
 
     // Her 60 saniyede bir canlı fiyatları ve portföy istatistiklerini arka planda güncelle
     useEffect(() => {

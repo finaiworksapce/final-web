@@ -741,6 +741,9 @@ async function generateNextMonthExpectations(
         }
     }
 
+    // Kronolojik Sıralama: En yakın tarihten en uzak tarihe (Tek ve birleşik liste)
+    companyEvents.sort((a, b) => (a.rawDate || '').localeCompare(b.rawDate || ''));
+
     // 2. KATMAN: DİNAMİK ÜLKE VE MAKRO EŞLEMESİ
     // BIST için tüm TR haberleri; Altın için sadece Fed Faiz Kararı ve Küresel riskler!
     const hasBistOrTL = computedAssets.some(a => a.type === 'STOCK' || a.cleanSymbol === 'TRY' || a.sector !== 'Kıymetli Maden');
@@ -796,27 +799,6 @@ async function generateNextMonthExpectations(
     paragraphs.push(
         `${userName}, geride bıraktığımız ayın ardından FinAi ekibi olarak rotamızı ${nextMonth.nextMonthLabel} ayına ve portföyünüzün karşılaşacağı kritik gelişmelere çeviriyoruz.`
     );
-
-    // Şirket Olayları (Portföy Gündemi: Temettü ve Bilanço)
-    if (companyEvents.length > 0) {
-        const eventDescriptions = companyEvents.map(ev => {
-            if (ev.eventType === 'dividend' && ev.estimatedPayoutTL) {
-                return `**${ev.symbol}**, ${ev.dateFormatted} tarihinde hisse başına net ${ev.netAmountPerShare} TL temettü dağıtımı gerçekleştirecek ve elinizdeki hisse adedi karşılığında portföyünüze tahmini toplam net **${Math.round(ev.estimatedPayoutTL).toLocaleString('tr-TR')} TL** nakit girişi sağlayacaktır`;
-            } else if (ev.eventType === 'dividend') {
-                return `**${ev.symbol}**, ${ev.dateFormatted} tarihinde hisse başına net ${ev.netAmountPerShare} TL temettü dağıtacaktır`;
-            } else {
-                return `**${ev.symbol}**, ${ev.dateFormatted} tarihinde ${ev.periodLabel || 'dönemsel'} finansal sonuç karnesini piyasaya sunacaktır`;
-            }
-        });
-
-        paragraphs.push(
-            `Portföyünüzün şirket ajandasını incelediğimizde; ${eventDescriptions.join('; ayrıca ')}.`
-        );
-    } else {
-        paragraphs.push(
-            `Portföyünüzde yer alan şirketlerin resmi kurumsal takvimlerini ve KAP bildirimlerini taradığımızda; ${nextMonth.nextMonthLabel} ayı içerisinde kesinleşmiş bir temettü dağıtımı veya bilanço açıklaması bulunmamaktadır. Şirketleriniz tarafından yeni bir takvim duyurusu yapıldığında ajandanız anlık olarak güncellenecektir.`
-        );
-    }
 
     // Makroekonomik Takvim Olayı (Sayfa linki ile doğrudan entegre)
     const calendarEventId = priorityEvent.id || 'tr_interest_rate';
@@ -1165,18 +1147,12 @@ export async function generateMonthlyPerformanceReport(
 
     const paragraphs: string[] = [];
 
-    // P1: Giriş ve Nakit Hareketi (Yüzdesiz)
-    if (Math.abs(netCapitalFlow) > 1000) {
-        paragraphs.push(
-            `${politeGreetingName}, portföyünüzdeki gerçek nakit hareketlerini incelediğimizde; ay boyunca yaptığınız ${Math.abs(netCapitalFlow).toLocaleString('tr-TR')} TL tutarındaki ${netCapitalFlow > 0 ? 'nakit para eklemesini' : 'para çıkışını'} piyasa kârından ayırdığımızda, doğrudan hisselerinizin kendi piyasa performansı ile portföyünüzün bu ayı net ${profitTLFormatted} TL ${isNetPositive ? 'kazançla' : 'farkla'} tamamladığını belirledik.`
-        );
-    } else {
-        paragraphs.push(
-            `${politeGreetingName}, portföyünüzdeki nakit hareketlerini ve şirketlerinizin performansını incelediğimizde; herhangi bir dış para girişine gerek kalmadan, doğrudan seçtiğiniz şirketlerin performansı ile portföyünüzün bu ayı net ${profitTLFormatted} TL ${isNetPositive ? 'artışla' : 'değişimle'} tamamladığını görmekteyiz.`
-        );
-    }
+    // PARAGRAF 1: Giriş ve Kazanç Tarafı (Genel portföy net durumu ve lokomotif varlık)
+    const p1Intro = Math.abs(netCapitalFlow) > 1000
+        ? `${politeGreetingName}, portföyünüzdeki gerçek nakit hareketlerini incelediğimizde; ay boyunca yaptığınız ${Math.abs(netCapitalFlow).toLocaleString('tr-TR')} TL tutarındaki ${netCapitalFlow > 0 ? 'nakit para eklemesini' : 'para çıkışını'} piyasa kârından ayırdığımızda, doğrudan hisselerinizin kendi piyasa performansı ile portföyünüzün bu ayı net ${profitTLFormatted} TL ${isNetPositive ? 'kazançla' : 'farkla'} tamamladığını belirledik.`
+        : `${politeGreetingName}, portföyünüzdeki nakit hareketlerini ve şirketlerinizin performansını incelediğimizde; herhangi bir dış para girişine gerek kalmadan, doğrudan seçtiğiniz şirketlerin performansı ile portföyünüzün bu ayı net ${profitTLFormatted} TL ${isNetPositive ? 'artışla' : 'değişimle'} tamamladığını görmekteyiz.`;
 
-    // P2: En Çok Kazandıran Hisse ve Sektör (Tamamen TL, Sıfır Yüzde!)
+    let p1GainText = '';
     if (topGainingAsset) {
         const isActuallyGain = topGainingAsset.monthlyReturnTL > 0;
         const topGainTLFormatted = Math.abs(topGainingAsset.monthlyReturnTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 });
@@ -1192,22 +1168,26 @@ export async function generateMonthlyPerformanceReport(
             const sectorGainText = topGainingSector
                 ? `Sektörel bazda ise cüzdanınıza en güçlü desteği net **+${topSectorGainTLFormatted} TL** ile **${topGainingSector.name}** sektörü verdi.`
                 : '';
-
-            paragraphs.push(
-                `Portföyünüzdeki büyümenin lokomotifi, tek başına portföyünüze net **+${topGainTLFormatted} TL** kazanç sağlayan **${topGainingAsset.cleanSymbol}** oldu. ${sectorGainText} ${winningNewsSnippet}`
-            );
+            p1GainText = `Portföyünüzdeki büyümenin lokomotifi, tek başına portföyünüze net **+${topGainTLFormatted} TL** kazanç sağlayan **${topGainingAsset.cleanSymbol}** oldu. ${sectorGainText} ${winningNewsSnippet}`;
         } else {
             const sectorResistText = topGainingSector
                 ? `Sektörel bazda ise en korunaklı duruşu **${topGainingSector.name}** sektörü sergiledi.`
                 : '';
-
-            paragraphs.push(
-                `Genel piyasadaki sert dalgalanmalara rağmen cüzdanınızda değerini en dirayetli koruyan şirket, ayı sadece net **-${topGainTLFormatted} TL** sınırlı bir geri çekilme ile kapatan **${topGainingAsset.cleanSymbol}** oldu. ${sectorResistText} ${winningNewsSnippet}`
-            );
+            p1GainText = `Genel piyasadaki dalgalanmalara rağmen cüzdanınızda değerini en dirayetli koruyan şirket, ayı sadece net **-${topGainTLFormatted} TL** sınırlı bir geri çekilme ile kapatan **${topGainingAsset.cleanSymbol}** oldu. ${sectorResistText} ${winningNewsSnippet}`;
         }
     }
 
-    // P3: Düşüş Tarafı ve Katalizör İncelemesi (Kaynak adı verilmez, başlık tırnaklanmaz, konunun özü anlatılır)
+    const positiveAssets = computedAssets.filter(a => a.monthlyReturnTL > 0);
+    const negativeAssets = computedAssets.filter(a => a.monthlyReturnTL < 0);
+    let p1DiversificationText = '';
+    if (positiveAssets.length > 0 && negativeAssets.length > 0) {
+        p1DiversificationText = `Portföyünüzü çeşitlendirmeniz sayesinde, değer kaybeden hisselerin getiri üzerindeki negatif baskısı dengelenerek çok büyük bir dalgalanma olmadan bu ayı bu şekilde atlatmış bulunmaktayız.`;
+    }
+
+    const paragraph1 = [p1Intro, p1GainText, p1DiversificationText].filter(Boolean).join(' ');
+    paragraphs.push(paragraph1);
+
+    // PARAGRAF 2: Zarar Tablosu ve Teyitli Araştırma (Başlangıç: Zarar tablosuna baktığımızda ise...)
     if (topLosingAsset && topLosingAsset.monthlyReturnTL < 0) {
         const lossTLFormatted = Math.abs(topLosingAsset.monthlyReturnTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 });
         const sectorLossTLFormatted = topLosingSector && topLosingSector.monthlyReturnTL < 0
@@ -1236,31 +1216,9 @@ export async function generateMonthlyPerformanceReport(
             researchConclusion = `Bizim tarafta sizlere doğrudan aktarabileceğimiz kesinleşmiş bir bulgu veya şirket bazlı somut bir neden tespit edilemediği için, dilerseniz bu varlık hakkında kendi araştırmanızı yaparak hareketin arka planı hakkında daha detaylı bilgi sahibi olabilirsiniz.`;
         }
 
-        paragraphs.push(
-            `Diğer taraftan portföy getirisini en çok gerileten hisse, net **-${lossTLFormatted} TL** kayıp yaşatan **${topLosingAsset.cleanSymbol}** oldu. ${sectorLossText} ${researchConclusion}`
-        );
+        const paragraph2 = `Zarar tablosuna baktığımızda ise; portföy getirisini en çok gerileten hisse, net **-${lossTLFormatted} TL** kayıp yaşatan **${topLosingAsset.cleanSymbol}** oldu. ${sectorLossText} ${researchConclusion}`.trim();
+        paragraphs.push(paragraph2);
     }
-
-    // P4: Dinamik Çeşitlendirme Analizi (Şablon yok, duruma göre esnek analiz)
-    const positiveAssets = computedAssets.filter(a => a.monthlyReturnTL > 0);
-    const negativeAssets = computedAssets.filter(a => a.monthlyReturnTL < 0);
-    if (positiveAssets.length > 0 && negativeAssets.length > 0) {
-        paragraphs.push(
-            `Portföyünüzü çeşitlendirmeniz sayesinde, değer kaybeden hisselerin getiri üzerindeki negatif baskısı dengelenerek çok büyük bir dalgalanma olmadan bu ayı bu şekilde atlatmış bulunmaktayız.`
-        );
-    } else if (negativeAssets.length > 0 && positiveAssets.length === 0) {
-        paragraphs.push(
-            `Bu ay borsa genelinde yaşanan genele yaygın satış baskısı nedeniyle portföydeki tüm hisseler geri çekilme yaşamış olup, bu süreçte sektörel çeşitlendirmenin dahi piyasa baskısını tamamen sınırlayamadığı bir seyir izlenmiştir.`
-        );
-    } else if (computedAssets.length === 1) {
-        paragraphs.push(
-            `Portföyünüz tek bir varlıkta yoğunlaştığı için, şirketteki fiyat hareketleri doğrudan tüm portföy performansınızı belirlemiştir.`
-        );
-    }
-
-    // P5: Kapanış Tavsiyesi
-    const closingTakeaway = `FinAi ekibi olarak sizlere tavsiyemiz; kısa vadeli piyasa dalgalanmalarına kapılmadan, ortak olduğunuz şirketlerin temel iş hacmini ve finansal gücünü sükunetle takip etmenizdir.`;
-    paragraphs.push(closingTakeaway);
 
     // Key Movements Listesi (Katkı payı kaldırıldı, tamamen net TL değişimi)
     const keyMovements: KeyMovementItem[] = [];
@@ -1324,7 +1282,7 @@ export async function generateMonthlyPerformanceReport(
         })),
         negativeLearningMoment: null,
         sectorInsight: null,
-        closingTakeaway
+        closingTakeaway: ''
     };
 
     // 8. GELECEK AY BEKLENTİLERİ MOTORUNU ÇALIŞTIR

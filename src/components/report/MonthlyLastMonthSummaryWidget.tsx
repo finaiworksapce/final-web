@@ -45,10 +45,9 @@ export default function MonthlyLastMonthSummaryWidget({
     const isNetPos = netTL >= 0;
     const activeSymbols = (mentor.keyMovements || mentor.topContributors || []).map(c => c.symbol);
 
-    const fullNarrativeText = [
-        mentor.greetingSentence,
-        ...(mentor.narrativeParagraphs || [])
-    ].filter(Boolean).join(" ");
+    const rawParagraphs = mentor.narrativeParagraphs && mentor.narrativeParagraphs.length > 0
+        ? mentor.narrativeParagraphs
+        : [mentor.greetingSentence].filter(Boolean);
 
     return (
         <article className="w-full h-full bg-white dark:bg-[#040989]/20 border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-xs overflow-hidden flex flex-col justify-between">
@@ -73,12 +72,14 @@ export default function MonthlyLastMonthSummaryWidget({
                 </div>
             </div>
 
-            {/* 2. Ana Gövde: Akıcı Tek Paragraf Anlatım */}
+            {/* 2. Ana Gövde: İki Paragraf Anlatım */}
             <div className="p-6 flex-1 flex flex-col justify-center">
-                <div className="text-xs sm:text-[13px] leading-relaxed text-slate-700 dark:text-slate-200 tracking-normal">
-                    <p className="leading-relaxed">
-                        <WikipediaEntityText text={fullNarrativeText} activeSymbols={activeSymbols} variant="light" />
-                    </p>
+                <div className="text-xs sm:text-[13px] leading-relaxed text-slate-700 dark:text-slate-200 tracking-normal space-y-3.5">
+                    {rawParagraphs.map((para, idx) => (
+                        <p key={idx} className="leading-relaxed">
+                            <WikipediaEntityText text={para} activeSymbols={activeSymbols} variant="light" />
+                        </p>
+                    ))}
                 </div>
             </div>
         </article>

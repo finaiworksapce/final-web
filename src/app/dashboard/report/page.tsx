@@ -121,12 +121,25 @@ const renderCustomBarLabel = (props: any) => {
 export default function FinAiReportViewPage() {
     const { user, myAssets = [], isDataLoaded, userName, email } = useUser();
     
-    // Varsayılan: 1 = Ekim 2026 (Tamamlanmış en son ay)
-    const [selectedMonthIndex, setSelectedMonthIndex] = useState<number>(1);
-    const [monthlyReport, setMonthlyReport] = useState<MonthlyReportData | null>(null);
-    const [loading, setLoading] = useState(true);
+    // Varsayılan: 1 = Ekim 2026 (Tamamlanmış güncel ay raporu)
+    const [selectedMonthIndex] = useState<number>(1);
+    const [monthlyReport, setMonthlyReport] = useState<MonthlyReportData | null>(() => {
+        if (typeof window !== 'undefined') {
+            const cached = sessionStorage.getItem('finai_cached_monthly_report');
+            if (cached) {
+                try { return JSON.parse(cached); } catch {}
+            }
+        }
+        return null;
+    });
+    const [loading, setLoading] = useState(() => {
+        if (typeof window !== 'undefined') {
+            const cached = sessionStorage.getItem('finai_cached_monthly_report');
+            if (cached) return false;
+        }
+        return true;
+    });
     const [isMounted, setIsMounted] = useState(false);
-    const [showNotice, setShowNotice] = useState(false);
     
     // Dikey Grafik Görünüm Modu: Hisseler vs Sektörler (Varsayılan: Hisseler)
     const [chartViewMode, setChartViewMode] = useState<'sectors' | 'assets'>('assets');
@@ -136,7 +149,10 @@ export default function FinAiReportViewPage() {
     }, []);
 
     const fetchReport = async (monthIdx: number = selectedMonthIndex) => {
-        setLoading(true);
+        // Eğer önbellekte veri yoksa loading spinner göster, varsa arka planda sessiz güncelle
+        if (!monthlyReport) {
+            setLoading(true);
+        }
         try {
             const encodedName = encodeURIComponent(userName || email?.split('@')[0] || '');
             const baseUrl = user 
@@ -146,6 +162,9 @@ export default function FinAiReportViewPage() {
             const json = await res.json();
             if (json.success && json.monthlyReport) {
                 setMonthlyReport(json.monthlyReport);
+                if (typeof window !== 'undefined') {
+                    sessionStorage.setItem('finai_cached_monthly_report', JSON.stringify(json.monthlyReport));
+                }
             }
         } catch (e) {
             console.error("FinAi monthly report error:", e);
@@ -238,45 +257,8 @@ export default function FinAiReportViewPage() {
                         </div>
                     </div>
 
-                    {/* Sağ Araçlar: Tarih Seçici, Yenile, PDF/Yazdır */}
-                    <div className="flex items-center gap-2 flex-wrap">
-                        <div className="relative flex items-center">
-                            <select
-                                value={selectedMonthIndex}
-                                onChange={(e) => {
-                                    const val = parseInt(e.target.value, 10);
-                                    if (val === 0) {
-                                        // Kasım ayı henüz tamamlanmadı!
-                                        setShowNotice(true);
-                                        setTimeout(() => setShowNotice(false), 4000);
-                                        return;
-                                    }
-                                    setSelectedMonthIndex(val);
-                                }}
-                                className="appearance-none pl-8 pr-8 py-2 rounded-xl bg-white dark:bg-[#040989]/30 border border-slate-200 dark:border-white/15 text-xs font-medium text-slate-800 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-[#004BFA]/40 shadow-2xs cursor-pointer"
-                            >
-                                {availableMonths.length > 0 ? (
-                                    availableMonths.map((m) => (
-                                        <option 
-                                            key={m.monthIndex} 
-                                            value={m.monthIndex} 
-                                            className="bg-white dark:bg-[#02041A] text-slate-900 dark:text-white"
-                                        >
-                                            {m.monthIndex === 0 ? `⏳ ${m.label} (Rapor Oluşturuluyor...)` : `✓ ${m.label}`}
-                                        </option>
-                                    ))
-                                ) : (
-                                    <>
-                                        <option value={1}>✓ Ekim 2026</option>
-                                        <option value={0}>⏳ Kasım 2026 (Rapor Oluşturuluyor...)</option>
-                                        <option value={2}>✓ Eylül 2026</option>
-                                    </>
-                                )}
-                            </select>
-                            <Calendar className="w-3.5 h-3.5 text-[#004BFA] absolute left-2.5 pointer-events-none" />
-                            <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 pointer-events-none" />
-                        </div>
-
+                    {/* Sağ Araçlar: Yenile, PDF/Yazdır */}
+                    <div className="flex items-center gap-2">
                         <button
                             onClick={() => fetchReport(selectedMonthIndex)}
                             disabled={loading}
@@ -297,17 +279,6 @@ export default function FinAiReportViewPage() {
                         </button>
                     </div>
                 </header>
-
-                {/* Kasım Ayı Bildirim Uyarısı (Seçilmeye çalışıldığında) */}
-                {showNotice && (
-                    <div className="p-3.5 bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 rounded-xl text-xs text-amber-900 dark:text-amber-200 flex items-center justify-between shadow-xs animate-in fade-in duration-200">
-                        <div className="flex items-center gap-2">
-                            <span className="text-base">⏳</span>
-                            <span><strong>Kasım 2026</strong> ayı henüz tamamlanmadığı için canlı portföy verileri toplanmakta ve rapor oluşturulmaktadır. İncelenen resmi tamamlanmış dönem: <strong>{period?.monthLabel || "Ekim 2026"}</strong></span>
-                        </div>
-                        <button onClick={() => setShowNotice(false)} className="text-amber-700 dark:text-amber-300 font-bold ml-3 cursor-pointer">✕</button>
-                    </div>
-                )}
 
                 {/* 2. EDİTORYAL MENTÖR VE STRATEJİK AJANDA (50/50 SİMETRİK YAN YANA GRİD) */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 w-full items-stretch">
