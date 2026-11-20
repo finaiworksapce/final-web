@@ -693,14 +693,26 @@ export default function AssetsPage() {
             .filter(s => typeof s.changePercent === "number" && !isNaN(s.changePercent))
             .sort((a, b) => (b.changePercent ?? 0) - (a.changePercent ?? 0))
             .slice(0, 5)
-            .map(s => ({
-                symbol: s.symbol,
-                name: s.name || STOCK_NAMES[s.symbol] || s.symbol,
-                price: s.price ?? 0,
-                change: s.changePercent ?? 0,
-                sector: s.sector || "BIST",
-                volume: formatCompactNumber(s.volume)
-            }));
+            .map(s => {
+                const high = s.high ?? 0;
+                const low = s.low ?? 0;
+                const price = s.price ?? 0;
+                const rangePercent = (high > low && price >= low)
+                    ? Math.max(0, Math.min(100, Math.round(((price - low) / (high - low)) * 100)))
+                    : null;
+                return {
+                    symbol: s.symbol,
+                    name: s.name || STOCK_NAMES[s.symbol] || s.symbol,
+                    price,
+                    change: s.changePercent ?? 0,
+                    changeAbs: s.changeAbs ?? 0,
+                    high,
+                    low,
+                    rangePercent,
+                    sector: s.sector || "BIST",
+                    volume: formatCompactNumber(s.volume)
+                };
+            });
     }, [validScreenerItems]);
 
     const topLosers = useMemo(() => {
@@ -709,14 +721,26 @@ export default function AssetsPage() {
             .filter(s => typeof s.changePercent === "number" && !isNaN(s.changePercent))
             .sort((a, b) => (a.changePercent ?? 0) - (b.changePercent ?? 0))
             .slice(0, 5)
-            .map(s => ({
-                symbol: s.symbol,
-                name: s.name || STOCK_NAMES[s.symbol] || s.symbol,
-                price: s.price ?? 0,
-                change: s.changePercent ?? 0,
-                sector: s.sector || "BIST",
-                volume: formatCompactNumber(s.volume)
-            }));
+            .map(s => {
+                const high = s.high ?? 0;
+                const low = s.low ?? 0;
+                const price = s.price ?? 0;
+                const rangePercent = (high > low && price >= low)
+                    ? Math.max(0, Math.min(100, Math.round(((price - low) / (high - low)) * 100)))
+                    : null;
+                return {
+                    symbol: s.symbol,
+                    name: s.name || STOCK_NAMES[s.symbol] || s.symbol,
+                    price,
+                    change: s.changePercent ?? 0,
+                    changeAbs: s.changeAbs ?? 0,
+                    high,
+                    low,
+                    rangePercent,
+                    sector: s.sector || "BIST",
+                    volume: formatCompactNumber(s.volume)
+                };
+            });
     }, [validScreenerItems]);
 
     const topVolumeStocks = useMemo(() => {
@@ -724,14 +748,26 @@ export default function AssetsPage() {
         return [...validScreenerItems]
             .sort((a, b) => (b.volume || 0) - (a.volume || 0))
             .slice(0, 5)
-            .map(s => ({
-                symbol: s.symbol,
-                name: s.name || STOCK_NAMES[s.symbol] || s.symbol,
-                price: s.price ?? 0,
-                change: s.changePercent ?? 0,
-                sector: s.sector || "BIST",
-                volume: formatCompactNumber(s.volume)
-            }));
+            .map(s => {
+                const high = s.high ?? 0;
+                const low = s.low ?? 0;
+                const price = s.price ?? 0;
+                const rangePercent = (high > low && price >= low)
+                    ? Math.max(0, Math.min(100, Math.round(((price - low) / (high - low)) * 100)))
+                    : null;
+                return {
+                    symbol: s.symbol,
+                    name: s.name || STOCK_NAMES[s.symbol] || s.symbol,
+                    price,
+                    change: s.changePercent ?? 0,
+                    changeAbs: s.changeAbs ?? 0,
+                    high,
+                    low,
+                    rangePercent,
+                    sector: s.sector || "BIST",
+                    volume: formatCompactNumber(s.volume)
+                };
+            });
     }, [validScreenerItems]);
 
     // Sektör Tıklama & Tabloya Kaydırma
@@ -859,65 +895,66 @@ export default function AssetsPage() {
                     </div>
                 </div>
 
-                {/* SAĞ WIDGET: GÜNÜN ENLERİ (PREMIUM FİNANSAL TERMİNAL TASARIMI) */}
+                {/* SAĞ WIDGET: GÜNÜN ENLERİ (INSTITUTIONAL CLEAN TERMINAL) */}
                 <div
                     className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs flex flex-col justify-between h-[390px] overflow-hidden"
                 >
                     {/* BAŞLIK VE SEKMELER */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-100 pb-3">
                         <div className="flex items-center gap-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-600 shadow-xs shrink-0">
-                                <Trophy className="w-4 h-4 text-amber-500" />
-                            </div>
+                            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0 ring-4 ring-emerald-500/10" />
                             <div>
-                                <h2 className="text-base font-medium text-[#0E1E38] tracking-tight leading-tight">Günün Enleri</h2>
-                                <p className="text-[10px] text-slate-400 font-medium">Canlı BIST Piyasasının Öne Çıkanları</p>
+                                <div className="flex items-center gap-2">
+                                    <h2 className="text-base font-semibold text-[#0E1E38] tracking-tight leading-tight">Günün Enleri</h2>
+                                    <span className="text-[10px] font-medium text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">BIST Canlı</span>
+                                </div>
+                                <p className="text-[11px] text-slate-400 font-normal mt-0.5">Piyasanın öne çıkan performans liderleri</p>
                             </div>
                         </div>
 
-                        {/* SEKMELER */}
-                        <div className="flex items-center bg-slate-100/90 p-1 rounded-xl gap-1 self-start sm:self-auto border border-slate-200/60">
+                        {/* SEKMELER: Minimalist Segmented Tabs */}
+                        <div className="flex items-center bg-slate-100/80 p-0.5 rounded-lg gap-0.5 self-start sm:self-auto border border-slate-200/50">
                             <button
                                 onClick={() => setActiveTopTab('gainers')}
                                 className={cn(
-                                    "px-2.5 py-1 rounded-lg text-[10px] font-medium transition-all flex items-center gap-1.5",
+                                    "px-2.5 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-1.5",
                                     activeTopTab === 'gainers' 
-                                        ? "bg-emerald-600 text-white shadow-xs font-semibold" 
+                                        ? "bg-white text-emerald-700 shadow-xs font-semibold" 
                                         : "text-slate-600 hover:text-[#0E1E38]"
                                 )}
                             >
-                                <TrendingUp className="w-3 h-3" />
+                                <TrendingUp className="w-3 h-3 text-emerald-600" />
                                 Kazandıranlar
                             </button>
                             <button
                                 onClick={() => setActiveTopTab('losers')}
                                 className={cn(
-                                    "px-2.5 py-1 rounded-lg text-[10px] font-medium transition-all flex items-center gap-1.5",
+                                    "px-2.5 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-1.5",
                                     activeTopTab === 'losers' 
-                                        ? "bg-rose-600 text-white shadow-xs font-semibold" 
+                                        ? "bg-white text-rose-700 shadow-xs font-semibold" 
                                         : "text-slate-600 hover:text-[#0E1E38]"
                                 )}
                             >
-                                <TrendingDown className="w-3 h-3" />
+                                <TrendingDown className="w-3 h-3 text-rose-600" />
                                 Kaybettirenler
                             </button>
                             <button
                                 onClick={() => setActiveTopTab('volume')}
                                 className={cn(
-                                    "px-2.5 py-1 rounded-lg text-[10px] font-medium transition-all flex items-center gap-1.5",
+                                    "px-2.5 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-1.5",
                                     activeTopTab === 'volume' 
-                                        ? "bg-[#0E1E38] text-white shadow-xs font-semibold" 
+                                        ? "bg-white text-[#0E1E38] shadow-xs font-semibold" 
                                         : "text-slate-600 hover:text-[#0E1E38]"
                                 )}
                             >
-                                <Flame className="w-3 h-3 text-amber-400" />
+                                <Flame className="w-3 h-3 text-amber-500" />
                                 Hacim
                             </button>
                         </div>
                     </div>
 
-                    {/* İÇERİK LİSTESİ (SADE, ESTETİK VE TAM TUTARLI) */}
-                    <div className="space-y-1.5 flex-1 flex flex-col justify-between py-1">
+                    {/* İÇERİK LİSTESİ (INSTITUTIONAL DIVIDED ROWS - KUTU İÇİNDE KUTU YOK) */}
+                    <div className="flex-1 flex flex-col justify-between divide-y divide-slate-100/90 pt-1">
                         {(() => {
                             const list = activeTopTab === 'gainers' ? topGainers : activeTopTab === 'losers' ? topLosers : topVolumeStocks;
 
@@ -925,11 +962,11 @@ export default function AssetsPage() {
                                 return Array.from({ length: 5 }).map((_, idx) => (
                                     <div
                                         key={`top-skeleton-${idx}`}
-                                        className="flex items-center justify-between px-3 py-1.5 bg-slate-50/70 border border-slate-100 rounded-xl animate-pulse text-xs"
+                                        className="flex items-center justify-between py-2 px-2 animate-pulse text-xs"
                                     >
-                                        <div className="flex items-center gap-2.5 min-w-0 flex-1 mr-2">
-                                            <span className="text-[10px] font-bold w-4 text-center text-slate-300">
-                                                #{idx + 1}
+                                        <div className="flex items-center gap-3 min-w-0 flex-1 mr-3">
+                                            <span className="font-mono text-[11px] font-semibold text-slate-300 w-5 text-center">
+                                                {String(idx + 1).padStart(2, '0')}
                                             </span>
                                             <div className="w-7 h-7 rounded-full bg-slate-200 shrink-0" />
                                             <div className="min-w-0 flex-1 space-y-1">
@@ -952,22 +989,19 @@ export default function AssetsPage() {
                                     <Link 
                                         key={item.symbol} 
                                         href={`/dashboard/varlik/${item.symbol}`}
-                                        className="flex items-center justify-between px-3 py-1.5 bg-slate-50/60 border border-slate-200/60 rounded-xl hover:bg-blue-50/50 hover:border-blue-200 transition-all text-xs group cursor-pointer"
+                                        className="flex items-center justify-between py-2 px-2 -mx-2 rounded-lg hover:bg-slate-50/90 transition-all text-xs group cursor-pointer"
                                     >
-                                        <div className="flex items-center gap-2.5 min-w-0 flex-1 mr-2">
-                                            <span className={cn(
-                                                "text-[10px] font-bold w-4 text-center shrink-0",
-                                                idx === 0 ? "text-amber-500" : idx === 1 ? "text-slate-500" : idx === 2 ? "text-amber-700" : "text-slate-400"
-                                            )}>
-                                                #{idx + 1}
+                                        <div className="flex items-center gap-3 min-w-0 flex-1 mr-3">
+                                            <span className="font-mono text-[11px] font-semibold text-slate-400 group-hover:text-slate-700 w-5 shrink-0 text-center">
+                                                {String(idx + 1).padStart(2, '0')}
                                             </span>
                                             <StockLogo symbol={item.symbol} className="w-7 h-7 rounded-full ring-1 ring-slate-200/80 shadow-2xs shrink-0" />
                                             <div className="min-w-0 flex-1">
                                                 <div className="flex items-center gap-1.5">
-                                                    <span className="font-semibold text-[#0E1E38] text-xs leading-tight group-hover:text-blue-600 transition-colors">
+                                                    <span className="font-bold text-[#0E1E38] text-xs leading-tight group-hover:text-blue-600 transition-colors">
                                                         {item.symbol}
                                                     </span>
-                                                    <span className="text-[10px] text-slate-400 truncate max-w-[120px] hidden sm:inline font-normal">
+                                                    <span className="text-[10px] text-slate-400 truncate max-w-[130px] hidden sm:inline font-normal">
                                                         • {item.sector}
                                                     </span>
                                                 </div>
@@ -977,37 +1011,55 @@ export default function AssetsPage() {
                                             </div>
                                         </div>
 
+                                        {item.rangePercent !== null && (
+                                            <div className="hidden md:flex flex-col items-center justify-center px-3 shrink-0" title={`Gün İçi Aralık: Min ₺${item.low?.toFixed(2)} - Max ₺${item.high?.toFixed(2)}`}>
+                                                <div className="flex items-center gap-1 text-[9px] text-slate-400 font-mono mb-0.5">
+                                                    <span>L</span>
+                                                    <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden relative">
+                                                        <div 
+                                                            className={cn(
+                                                                "h-full rounded-full transition-all duration-500",
+                                                                isPos ? "bg-emerald-500" : isNeg ? "bg-rose-500" : "bg-slate-400"
+                                                            )} 
+                                                            style={{ width: `${Math.max(8, item.rangePercent)}%` }} 
+                                                        />
+                                                    </div>
+                                                    <span>H</span>
+                                                </div>
+                                                <span className="text-[8px] text-slate-400 font-medium">Gün İçi Bant</span>
+                                            </div>
+                                        )}
+
                                         <div className="flex items-center gap-2.5 shrink-0 text-right">
                                             <div className="flex flex-col items-end">
-                                                <span className="font-semibold text-[#0E1E38] text-xs tabular-nums">
+                                                <span className="font-bold text-[#0E1E38] text-xs tabular-nums">
                                                     ₺{item.price.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                 </span>
-                                                {activeTopTab === 'volume' && (
+                                                {item.changeAbs !== 0 && (
+                                                    <span className="text-[10px] text-slate-400 font-medium tabular-nums">
+                                                        {item.changeAbs > 0 ? `+₺${item.changeAbs.toFixed(2)}` : `₺${item.changeAbs.toFixed(2)}`}
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            <div className="w-[74px] flex justify-end">
+                                                {activeTopTab === 'volume' ? (
+                                                    <span className="text-[11px] font-semibold text-[#0E1E38] bg-slate-100/90 px-2 py-0.5 rounded border border-slate-200/50 tabular-nums whitespace-nowrap">
+                                                        {item.volume}
+                                                    </span>
+                                                ) : (
                                                     <span className={cn(
-                                                        "text-[10px] font-semibold tabular-nums mt-0.5",
-                                                        isPos ? "text-emerald-700" : isNeg ? "text-rose-700" : "text-slate-400"
+                                                        "text-[11px] font-semibold tabular-nums px-2 py-0.5 rounded whitespace-nowrap",
+                                                        isPos 
+                                                            ? "bg-emerald-50 text-emerald-700 border border-emerald-200/60"
+                                                            : isNeg
+                                                                ? "bg-rose-50 text-rose-700 border border-rose-200/60"
+                                                                : "bg-slate-100 text-slate-600 border border-slate-200"
                                                     )}>
                                                         {isPos ? `+${item.change.toFixed(2)}%` : `${item.change.toFixed(2)}%`}
                                                     </span>
                                                 )}
                                             </div>
-
-                                            {activeTopTab === 'volume' ? (
-                                                <span className="text-xs font-semibold text-[#0E1E38] tabular-nums whitespace-nowrap">
-                                                    {item.volume}
-                                                </span>
-                                            ) : (
-                                                <span className={cn(
-                                                    "text-xs font-semibold tabular-nums whitespace-nowrap",
-                                                    isPos 
-                                                        ? "text-emerald-700"
-                                                        : isNeg
-                                                            ? "text-rose-700"
-                                                            : "text-slate-500"
-                                                )}>
-                                                    {isPos ? `+${item.change.toFixed(2)}%` : `${item.change.toFixed(2)}%`}
-                                                </span>
-                                            )}
                                         </div>
                                     </Link>
                                 );
