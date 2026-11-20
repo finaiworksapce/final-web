@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useRef } from "react";
+import Link from "next/link";
 import { useTheme } from "next-themes";
 import { 
   TrendingUp, 
@@ -551,76 +552,26 @@ const ALL_SECTORS_DATA = [
     { name: "Havacılık & Ulaştırma", annualReturn: 1.6, marketCap: "450 Mr TL", leader: "THYAO" }
 ];
 
-// SEKTÖR ADI -> STOCK_SECTORS KATALOG EŞLEŞTİRMESİ
-const SECTOR_MAPPING: Record<string, string[]> = {
-    "Teknoloji & Yazılım": ["Bilişim ve Yazılım", "Teknoloji Donanım ve Ticaret"],
-    "Savunma Sanayii": ["Savunma"],
-    "Enerji & Yenilenebilir": ["Enerji Teknolojileri", "Enerji Üretim ve Dağıtım"],
-    "Havacılık & Ulaştırma": ["Ulaştırma ve Lojistik"],
-    "Bankacılık & Finans": ["Bankacılık", "Aracı Kurum ve Finans"],
-    "Holdingler & Yatırım": ["Holding"],
-    "Otomotiv Sanayi": ["Otomotiv"],
-    "Perakende & Gıda": ["Gıda Perakendeciliği", "Gıda ve İçecek"],
-    "Demir Çelik & Sanayi": ["Ana Metal ve Madencilik", "Taş, Toprak, Çimento"],
-    "Gayrimenkul (GYO)": ["Gayrimenkul (GYO)"]
-};
-
-// MASTER BIST HİSSE LİSTESİ
-const MASTER_BIST_620 = Object.keys(STOCK_NAMES);
-
-interface StockItem {
-    symbol: string;
-    name: string;
-    price: number;
-    change: number;
-    volume: string;
-    rawVolumeNum: number;
-    pe: number;
-    high52: number;
-    sector: string;
-}
-
-type SortField = 'symbol' | 'price' | 'change' | 'volume' | 'pe';
-type SortOrder = 'asc' | 'desc';
 type TopTab = 'gainers' | 'losers' | 'volume';
-type QuickFilter = 'all' | 'gainers' | 'losers' | 'volume';
 
-// GÜVENLİ HACİM NORMALEŞTİRİCİ (String -> Sayısal TL)
-function normalizeVolume(volStr: string | undefined | null): number {
-  if (!volStr || typeof volStr !== "string") return 0;
-  
-  const cleanStr = volStr.trim().replace(/\s+/g, " ");
-  const match = cleanStr.match(/^([\d\.,]+)/);
-  if (!match) return 0;
-
-  let val = parseFloat(match[1].replace(/\./g, "").replace(",", "."));
-  if (isNaN(val)) return 0;
-
-  const unit = cleanStr.toLowerCase();
-  if (unit.includes("mr") || unit.includes("milyar") || unit.includes("b₺") || unit.includes("b ₺")) {
-    val = val * 1_000_000_000;
-  } else if (unit.includes("m₺") || unit.includes("m ₺") || unit.includes("milyon") || unit.includes("m")) {
-    val = val * 1_000_000;
-  } else if (unit.includes("bin") || unit.includes("k₺") || unit.includes("k ₺")) {
-    val = val * 1_000;
+// GÜVENLİ COMPACT SAYI FORMATLAYICI (BIST Tarayıcısı ile 100% Uyumlu Hacim Formatı)
+function formatCompactNumber(val: number | null | undefined): string {
+  if (val == null || !Number.isFinite(val) || val <= 0) return "-";
+  const abs = Math.abs(val);
+  const sign = val < 0 ? "-" : "";
+  if (abs >= 1_000_000_000_000) {
+    return `${sign}${(abs / 1_000_000_000_000).toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} T`;
   }
-
-  return isNaN(val) ? 0 : val;
-}
-
-// OKUNABİLİR HACİM FORMATLAYICI (TL)
-function formatVolumeDisplay(num: number): string {
-  if (!num || isNaN(num) || num <= 0) return "-";
-  if (num >= 1e12) {
-    return (num / 1e12).toLocaleString("tr-TR", { minimumFractionDigits: 1, maximumFractionDigits: 2 }) + " Trn ₺";
-  } else if (num >= 1e9) {
-    return (num / 1e9).toLocaleString("tr-TR", { minimumFractionDigits: 1, maximumFractionDigits: 2 }) + " Mr ₺";
-  } else if (num >= 1e6) {
-    return (num / 1e6).toLocaleString("tr-TR", { minimumFractionDigits: 1, maximumFractionDigits: 2 }) + " M₺";
-  } else if (num >= 1e3) {
-    return (num / 1e3).toLocaleString("tr-TR", { minimumFractionDigits: 1, maximumFractionDigits: 2 }) + " B₺";
+  if (abs >= 1_000_000_000) {
+    return `${sign}${(abs / 1_000_000_000).toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} B`;
   }
-  return num.toLocaleString("tr-TR") + " ₺";
+  if (abs >= 1_000_000) {
+    return `${sign}${(abs / 1_000_000).toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} M`;
+  }
+  if (abs >= 1_000) {
+    return `${sign}${(abs / 1_000).toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} K`;
+  }
+  return `${sign}${abs.toLocaleString("tr-TR")}`;
 }
 
 // SEKTÖR HEATMAP DİNAMİK RENK YOĞUNLUĞU HESAPLAYICI (BELİRGİN AÇIK SEVİYELER)
@@ -685,37 +636,24 @@ function getChangeBadgeStyle(change: number) {
 export default function AssetsPage() {
     const { resolvedTheme } = useTheme();
     const isDark = resolvedTheme === "dark";
-    const [searchTerm, setSearchTerm] = useState("");
     const [selectedSector, setSelectedSector] = useState<string | null>(null);
-    const [quickFilter, setQuickFilter] = useState<QuickFilter>('all');
-    const [currentPage, setCurrentPage] = useState(1);
-    const [sortField, setSortField] = useState<SortField>('change');
-    const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
     const [activeTopTab, setActiveTopTab] = useState<TopTab>('gainers');
-    const itemsPerPage = 12;
 
-    // CANLI BİST FİYATLARI VE OTOMATİK YENİLEME (30s Server Cache / 60s Client Polling)
-    const [livePrices, setLivePrices] = useState<Record<string, { price: number; change: number; volume: string; pe: number }>>({});
+    // CANLI BİST SCREENER VERİSİ (Aşağıdaki BIST Tarayıcısı ile 100% Senkron Tek Doğruluk Kaynağı)
     const [screenerStocks, setScreenerStocks] = useState<BistScreenerStockItem[]>([]);
     const [bist100Quote, setBist100Quote] = useState<{ price: number; changePercent: number } | null>(null);
-    const [lastUpdatedTime, setLastUpdatedTime] = useState<string>("");
-    const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
     const stockSectionRef = useRef<HTMLDivElement>(null);
 
     // Canlı Piyasa Verisini Çek
     const fetchLivePrices = async () => {
-        setIsRefreshing(true);
         try {
-            // 1. Canlı BIST Hisseleri (TradingView Scanner POST API)
-            const resPrices = await fetch("/api/bist/prices");
-            if (resPrices.ok) {
-                const data = await resPrices.json();
-                if (data && data.prices) {
-                    setLivePrices(data.prices);
-                    const now = new Date();
-                    const timeStr = now.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-                    setLastUpdatedTime(timeStr);
+            // 1. Canlı BIST Screener Verisi (Günün Enleri ve alt tarayıcı senkronizasyonu)
+            const resScreener = await fetch("/api/bist/screener");
+            if (resScreener.ok) {
+                const sJson = await resScreener.json();
+                if (sJson && sJson.success && Array.isArray(sJson.data)) {
+                    setScreenerStocks(sJson.data);
                 }
             }
 
@@ -733,19 +671,8 @@ export default function AssetsPage() {
                     }
                 }
             }
-
-            // 3. Canlı BIST Screener Verisi (Günün Enleri ve alt tarayıcı senkronizasyonu)
-            const resScreener = await fetch("/api/bist/screener");
-            if (resScreener.ok) {
-                const sJson = await resScreener.json();
-                if (sJson && sJson.success && Array.isArray(sJson.data)) {
-                    setScreenerStocks(sJson.data);
-                }
-            }
         } catch (e) {
             console.error("Live market data fetch failed:", e);
-        } finally {
-            setIsRefreshing(false);
         }
     };
 
@@ -755,217 +682,57 @@ export default function AssetsPage() {
         return () => clearInterval(interval);
     }, []);
 
-    // TÜM BIST HİSSELERİNİ ÜRETME VE CANLI VERİYLE NORMALEŞTİRME (DÜZELTİLMİŞ DOĞRUDAN API AKIŞI)
-    const allStocksList = useMemo(() => {
-        const result: StockItem[] = [];
-        const addedSymbols = new Set<string>();
-
-        // 1. Önce API'den gelen canlı hisselerin tümünü ekle (En öncelikli canlı veri kümesi)
-        Object.entries(livePrices).forEach(([sym, live]) => {
-            if (!sym || addedSymbols.has(sym)) return;
-            addedSymbols.add(sym);
-
-            const nameStr = STOCK_NAMES[sym] || `${sym} Şirket Grubu A.Ş.`;
-            
-            // Sektör tespiti
-            let foundSector = "Genel BIST";
-            for (const [displaySec, mappingKeys] of Object.entries(SECTOR_MAPPING)) {
-                for (const key of mappingKeys) {
-                    const secSymbols = (STOCK_SECTORS as Record<string, string[]>)[key] || [];
-                    if (secSymbols.includes(sym)) {
-                        foundSector = displaySec;
-                        break;
-                    }
-                }
-                if (foundSector !== "Genel BIST") break;
-            }
-
-            const volStr = live.volume || "-";
-            result.push({
-                symbol: sym,
-                name: nameStr,
-                price: live.price,
-                change: live.change,
-                volume: volStr,
-                rawVolumeNum: normalizeVolume(volStr),
-                pe: live.pe || 0,
-                high52: parseFloat((live.price * 1.25).toFixed(2)),
-                sector: foundSector
-            });
-        });
-
-        // 2. Statik katalogdaki eksik semboller varsa onları da ekle (Initial load fallback)
-        MASTER_BIST_620.forEach((sym) => {
-            if (!addedSymbols.has(sym)) {
-                addedSymbols.add(sym);
-                const basePrice = Math.abs((sym.charCodeAt(0) * 17 + (sym.charCodeAt(1) || 65) * 5) % 450) + 12.5;
-                const changeVal = parseFloat((((sym.charCodeAt(0) % 7) - 3) * 1.35).toFixed(2));
-                const nameStr = STOCK_NAMES[sym] || `${sym} Şirket Grubu A.Ş.`;
-                const volVal = ((sym.charCodeAt(0) * 12.4 + 50) % 850 + 40).toFixed(1) + " M₺";
-                const peVal = parseFloat(((sym.charCodeAt(0) % 18) + 4.2).toFixed(1));
-                const highVal = parseFloat((basePrice * 1.25).toFixed(2));
-                
-                result.push({
-                    symbol: sym,
-                    name: nameStr,
-                    price: parseFloat(basePrice.toFixed(2)),
-                    change: changeVal,
-                    volume: volVal,
-                    rawVolumeNum: normalizeVolume(volVal),
-                    pe: peVal,
-                    high52: highVal,
-                    sector: "Genel BIST"
-                });
-            }
-        });
-
-        return result;
-    }, [livePrices]);
-
     // GÜNÜN ENLERİ (DOĞRUDAN AŞAĞIDAKİ BIST TARAYICI VERİSİNDEN DERLENMİŞ 100% TUTARLI LİSTE)
     const validScreenerItems = useMemo(() => {
         return screenerStocks.filter(s => s && typeof s.price === "number" && !isNaN(s.price) && s.price > 0);
     }, [screenerStocks]);
 
     const topGainers = useMemo(() => {
-        if (validScreenerItems.length > 0) {
-            return [...validScreenerItems]
-                .filter(s => typeof s.changePercent === "number" && !isNaN(s.changePercent))
-                .sort((a, b) => (b.changePercent ?? 0) - (a.changePercent ?? 0))
-                .slice(0, 5)
-                .map(s => ({
-                    symbol: s.symbol,
-                    name: s.name || STOCK_NAMES[s.symbol] || s.symbol,
-                    price: s.price ?? 0,
-                    change: s.changePercent ?? 0,
-                    sector: s.sector || "BIST",
-                    volume: formatVolumeDisplay(s.valueTraded || s.volume || 0)
-                }));
-        }
-        return [...allStocksList].sort((a, b) => b.change - a.change).slice(0, 5);
-    }, [validScreenerItems, allStocksList]);
+        if (validScreenerItems.length === 0) return [];
+        return [...validScreenerItems]
+            .filter(s => typeof s.changePercent === "number" && !isNaN(s.changePercent))
+            .sort((a, b) => (b.changePercent ?? 0) - (a.changePercent ?? 0))
+            .slice(0, 5)
+            .map(s => ({
+                symbol: s.symbol,
+                name: s.name || STOCK_NAMES[s.symbol] || s.symbol,
+                price: s.price ?? 0,
+                change: s.changePercent ?? 0,
+                sector: s.sector || "BIST",
+                volume: formatCompactNumber(s.volume)
+            }));
+    }, [validScreenerItems]);
 
     const topLosers = useMemo(() => {
-        if (validScreenerItems.length > 0) {
-            return [...validScreenerItems]
-                .filter(s => typeof s.changePercent === "number" && !isNaN(s.changePercent))
-                .sort((a, b) => (a.changePercent ?? 0) - (b.changePercent ?? 0))
-                .slice(0, 5)
-                .map(s => ({
-                    symbol: s.symbol,
-                    name: s.name || STOCK_NAMES[s.symbol] || s.symbol,
-                    price: s.price ?? 0,
-                    change: s.changePercent ?? 0,
-                    sector: s.sector || "BIST",
-                    volume: formatVolumeDisplay(s.valueTraded || s.volume || 0)
-                }));
-        }
-        return [...allStocksList].sort((a, b) => a.change - b.change).slice(0, 5);
-    }, [validScreenerItems, allStocksList]);
+        if (validScreenerItems.length === 0) return [];
+        return [...validScreenerItems]
+            .filter(s => typeof s.changePercent === "number" && !isNaN(s.changePercent))
+            .sort((a, b) => (a.changePercent ?? 0) - (b.changePercent ?? 0))
+            .slice(0, 5)
+            .map(s => ({
+                symbol: s.symbol,
+                name: s.name || STOCK_NAMES[s.symbol] || s.symbol,
+                price: s.price ?? 0,
+                change: s.changePercent ?? 0,
+                sector: s.sector || "BIST",
+                volume: formatCompactNumber(s.volume)
+            }));
+    }, [validScreenerItems]);
 
     const topVolumeStocks = useMemo(() => {
-        if (validScreenerItems.length > 0) {
-            return [...validScreenerItems]
-                .sort((a, b) => (b.valueTraded || b.volume || 0) - (a.valueTraded || a.volume || 0))
-                .slice(0, 5)
-                .map(s => ({
-                    symbol: s.symbol,
-                    name: s.name || STOCK_NAMES[s.symbol] || s.symbol,
-                    price: s.price ?? 0,
-                    change: s.changePercent ?? 0,
-                    sector: s.sector || "BIST",
-                    volume: formatVolumeDisplay(s.valueTraded || s.volume || 0)
-                }));
-        }
-        return [...allStocksList].sort((a, b) => b.rawVolumeNum - a.rawVolumeNum).slice(0, 5);
-    }, [validScreenerItems, allStocksList]);
-
-    // PİYASA NABZI HESAPLAMALARI (DETERMİNİSTİK ANLIK HESAPLAMA - HARDCODE 0)
-    const marketStats = useMemo(() => {
-        const validStocks = allStocksList.filter(s => 
-            s && typeof s.price === "number" && !isNaN(s.price) && typeof s.change === "number" && !isNaN(s.change)
-        );
-
-        const totalCount = validStocks.length;
-        let rising = 0;
-        let falling = 0;
-        let unchanged = 0;
-        let totalVolSum = 0;
-
-        validStocks.forEach(s => {
-            if (s.change > 0) rising++;
-            else if (s.change < 0) falling++;
-            else unchanged++;
-
-            totalVolSum += s.rawVolumeNum;
-        });
-
-        return {
-            totalCount,
-            rising,
-            falling,
-            unchanged,
-            totalVolSum,
-            totalVolFormatted: formatVolumeDisplay(totalVolSum)
-        };
-    }, [allStocksList]);
-
-    // FİLTRELENMİŞ VE SIRALANMIŞ VARLIK MERKEZİ HİSSE LİSTESİ (HIZLI FİLTRELER DAHİL)
-    const filteredStocks = useMemo(() => {
-        let list = [...allStocksList];
-
-        // Hızlı Filtreler (Quick Filters)
-        if (quickFilter === 'gainers') {
-            list = list.filter(item => item.change > 0);
-        } else if (quickFilter === 'losers') {
-            list = list.filter(item => item.change < 0);
-        } else if (quickFilter === 'volume') {
-            list = list.sort((a, b) => b.rawVolumeNum - a.rawVolumeNum);
-        }
-
-        if (selectedSector) {
-            list = list.filter(item => item.sector === selectedSector);
-        }
-
-        if (searchTerm.trim()) {
-            const term = searchTerm.toLowerCase();
-            list = list.filter(item => 
-                item.symbol.toLowerCase().includes(term) || 
-                item.name.toLowerCase().includes(term) ||
-                item.sector.toLowerCase().includes(term)
-            );
-        }
-
-        // Sıralama (Quick Filter 'volume' değilse veya kullanıcı sıralama değiştirdiyse)
-        if (quickFilter !== 'volume' || sortField !== 'change') {
-            list.sort((a, b) => {
-                let valA: any = a[sortField];
-                let valB: any = b[sortField];
-
-                if (sortField === 'volume') {
-                    valA = a.rawVolumeNum;
-                    valB = b.rawVolumeNum;
-                }
-
-                if (typeof valA === 'string') {
-                    return sortOrder === 'asc' 
-                        ? valA.localeCompare(valB)
-                        : valB.localeCompare(valA);
-                }
-
-                return sortOrder === 'asc' ? valA - valB : valB - valA;
-            });
-        }
-
-        return list;
-    }, [allStocksList, quickFilter, selectedSector, searchTerm, sortField, sortOrder]);
-
-    // SAYFALAMA KONTROLLERİ
-    const totalPages = Math.max(1, Math.ceil(filteredStocks.length / itemsPerPage));
-    const paginatedStocks = useMemo(() => {
-        const start = (currentPage - 1) * itemsPerPage;
-        return filteredStocks.slice(start, start + itemsPerPage);
-    }, [filteredStocks, currentPage, itemsPerPage]);
+        if (validScreenerItems.length === 0) return [];
+        return [...validScreenerItems]
+            .sort((a, b) => (b.volume || 0) - (a.volume || 0))
+            .slice(0, 5)
+            .map(s => ({
+                symbol: s.symbol,
+                name: s.name || STOCK_NAMES[s.symbol] || s.symbol,
+                price: s.price ?? 0,
+                change: s.changePercent ?? 0,
+                sector: s.sector || "BIST",
+                volume: formatCompactNumber(s.volume)
+            }));
+    }, [validScreenerItems]);
 
     // Sektör Tıklama & Tabloya Kaydırma
     const handleSectorClick = (sectorName: string) => {
@@ -974,20 +741,9 @@ export default function AssetsPage() {
         } else {
             setSelectedSector(sectorName);
         }
-        setCurrentPage(1);
         setTimeout(() => {
             stockSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
-    };
-
-    // Tablo Sıralama
-    const handleSort = (field: SortField) => {
-        if (sortField === field) {
-            setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc');
-        } else {
-            setSortField(field);
-            setSortOrder('desc');
-        }
     };
 
     return (
@@ -1000,7 +756,7 @@ export default function AssetsPage() {
                 
                 {/* SOL WIDGET: SEKTÖRLER YILLIK GETİRİLERİ */}
                 <div
-                    className="bg-white border border-slate-200/90 rounded-[28px] p-5 shadow-xs flex flex-col justify-between h-[390px] overflow-hidden"
+                    className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs flex flex-col justify-between h-[390px] overflow-hidden"
                 >
                     <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                         <div className="flex items-center gap-2.5">
@@ -1025,7 +781,7 @@ export default function AssetsPage() {
                         </div>
                         {selectedSector && (
                             <button
-                                onClick={() => { setSelectedSector(null); setCurrentPage(1); }}
+                                onClick={() => setSelectedSector(null)}
                                 className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[10px] font-medium flex items-center gap-1 transition-all"
                             >
                                 <X className="w-3 h-3 text-rose-500" />
@@ -1105,7 +861,7 @@ export default function AssetsPage() {
 
                 {/* SAĞ WIDGET: GÜNÜN ENLERİ (PREMIUM FİNANSAL TERMİNAL TASARIMI) */}
                 <div
-                    className="bg-white border border-slate-200/90 rounded-[28px] p-5 shadow-xs flex flex-col justify-between h-[390px] overflow-hidden"
+                    className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs flex flex-col justify-between h-[390px] overflow-hidden"
                 >
                     {/* BAŞLIK VE SEKMELER */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-100 pb-3">
@@ -1164,15 +920,38 @@ export default function AssetsPage() {
                     <div className="space-y-1.5 flex-1 flex flex-col justify-between py-1">
                         {(() => {
                             const list = activeTopTab === 'gainers' ? topGainers : activeTopTab === 'losers' ? topLosers : topVolumeStocks;
+
+                            if (list.length === 0) {
+                                return Array.from({ length: 5 }).map((_, idx) => (
+                                    <div
+                                        key={`top-skeleton-${idx}`}
+                                        className="flex items-center justify-between px-3 py-1.5 bg-slate-50/70 border border-slate-100 rounded-xl animate-pulse text-xs"
+                                    >
+                                        <div className="flex items-center gap-2.5 min-w-0 flex-1 mr-2">
+                                            <span className="text-[10px] font-bold w-4 text-center text-slate-300">
+                                                #{idx + 1}
+                                            </span>
+                                            <div className="w-7 h-7 rounded-full bg-slate-200 shrink-0" />
+                                            <div className="min-w-0 flex-1 space-y-1">
+                                                <div className="h-3 w-16 bg-slate-200 rounded" />
+                                                <div className="h-2 w-32 bg-slate-100 rounded" />
+                                            </div>
+                                        </div>
+                                        <div className="flex flex-col items-end space-y-1 shrink-0">
+                                            <div className="h-3 w-14 bg-slate-200 rounded" />
+                                            <div className="h-2 w-10 bg-slate-100 rounded" />
+                                        </div>
+                                    </div>
+                                ));
+                            }
+
                             return list.map((item, idx) => {
                                 const isPos = item.change > 0;
                                 const isNeg = item.change < 0;
                                 return (
-                                    <a 
+                                    <Link 
                                         key={item.symbol} 
                                         href={`/dashboard/varlik/${item.symbol}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
                                         className="flex items-center justify-between px-3 py-1.5 bg-slate-50/60 border border-slate-200/60 rounded-xl hover:bg-blue-50/50 hover:border-blue-200 transition-all text-xs group cursor-pointer"
                                     >
                                         <div className="flex items-center gap-2.5 min-w-0 flex-1 mr-2">
@@ -1230,7 +1009,7 @@ export default function AssetsPage() {
                                                 </span>
                                             )}
                                         </div>
-                                    </a>
+                                    </Link>
                                 );
                             });
                         })()}
@@ -1248,7 +1027,7 @@ export default function AssetsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ layout: { duration: 0.52, type: "spring", bounce: 0.14 }, opacity: { duration: 0.36, delay: 0.16 }, y: { duration: 0.36, delay: 0.16 } }}
                 ref={stockSectionRef}
-                className="w-full bg-white border border-slate-200/90 rounded-[28px] p-3 sm:p-4 shadow-xs relative"
+                className="w-full bg-white border border-slate-200/90 rounded-2xl p-3 sm:p-4 shadow-xs relative"
             >
                 <TradingViewScreenerWidget
                     market="turkey"
