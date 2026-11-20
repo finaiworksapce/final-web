@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef, memo } from "react";
-import { useTheme } from "next-themes";
 
 export interface TradingViewMarketOverviewProps {
     className?: string;
@@ -9,8 +8,6 @@ export interface TradingViewMarketOverviewProps {
 
 export function TradingViewMarketOverview({ className = "" }: TradingViewMarketOverviewProps) {
     const containerRef = useRef<HTMLDivElement>(null);
-    const { resolvedTheme } = useTheme();
-    const isDark = resolvedTheme === "dark";
 
     useEffect(() => {
         const container = containerRef.current;
@@ -19,32 +16,37 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
         container.innerHTML = "";
 
         const widgetContainer = document.createElement("div");
-        widgetContainer.className = "tradingview-widget-container__widget h-full w-full";
-        container.appendChild(widgetContainer);
+        widgetContainer.className = "tradingview-widget-container";
+        widgetContainer.style.width = "100%";
+        widgetContainer.style.height = "100%";
 
-        const copyrightContainer = document.createElement("div");
-        copyrightContainer.className = "tradingview-widget-copyright";
-        copyrightContainer.style.display = "none";
-        copyrightContainer.innerHTML = '<a href="https://www.tradingview.com/markets/" rel="noopener nofollow" target="_blank"><span class="blue-text">World markets</span></a><span class="trademark">&nbsp;by TradingView</span>';
-        container.appendChild(copyrightContainer);
+        const widgetDiv = document.createElement("div");
+        widgetDiv.className = "tradingview-widget-container__widget";
+        widgetDiv.style.width = "100%";
+        widgetDiv.style.height = "100%";
+
+        const copyrightDiv = document.createElement("div");
+        copyrightDiv.className = "tradingview-widget-copyright";
+        copyrightDiv.style.display = "none";
+        copyrightDiv.innerHTML = '<a href="https://www.tradingview.com/markets/" rel="noopener nofollow" target="_blank"><span class="blue-text">World markets</span></a><span class="trademark">&nbsp;by TradingView</span>';
 
         const config = {
             lineWidth: 2,
             lineType: 0,
             chartType: "area",
-            fontColor: isDark ? "rgb(106, 109, 120)" : "#64748B",
-            gridLineColor: isDark ? "rgba(242, 242, 242, 0.06)" : "rgba(226, 232, 240, 0.6)",
+            fontColor: "rgb(106, 109, 120)",
+            gridLineColor: "rgba(242, 242, 242, 0.06)",
             volumeUpColor: "rgba(34, 171, 148, 0.5)",
             volumeDownColor: "rgba(247, 82, 95, 0.5)",
-            backgroundColor: isDark ? "#0F0F0F" : "#FFFFFF",
-            widgetFontColor: isDark ? "#DBDBDB" : "#0E1E38",
+            backgroundColor: "#0F0F0F",
+            widgetFontColor: "#DBDBDB",
             upColor: "#22ab94",
             downColor: "#f7525f",
             borderUpColor: "#22ab94",
             borderDownColor: "#f7525f",
             wickUpColor: "#22ab94",
             wickDownColor: "#f7525f",
-            colorTheme: isDark ? "dark" : "light",
+            colorTheme: "dark",
             isTransparent: false,
             locale: "en",
             chartOnly: false,
@@ -56,8 +58,10 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
             symbols: [
                 ["FX_IDC:XAUTRYG|1D"],
                 ["FX_IDC:XAGTRYG|1D"],
-                ["SKILLING:US100|1D"],
-                ["BITSTAMP:BTCUSD|1D"]
+                ["FX_IDC:EURTRY|1D"],
+                ["FX:USDTRY|1D"],
+                ["BITSTAMP:BTCUSD|1D"],
+                ["SKILLING:US100|1D"]
             ],
             dateRanges: [
                 "1d|1",
@@ -83,23 +87,25 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
         script.src = "https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js";
         script.async = true;
         script.innerHTML = JSON.stringify(config);
-        container.appendChild(script);
+
+        widgetContainer.appendChild(widgetDiv);
+        widgetContainer.appendChild(copyrightDiv);
+        widgetContainer.appendChild(script);
+        container.appendChild(widgetContainer);
 
         return () => {
             if (container) {
                 container.innerHTML = "";
             }
         };
-    }, [isDark]);
+    }, []);
 
     return (
         <div 
             ref={containerRef}
-            className={`tradingview-widget-container w-full h-full relative overflow-hidden min-h-[310px] ${className}`}
+            className={`w-full h-full min-h-[320px] relative overflow-hidden bg-[#0F0F0F] rounded-xl ${className}`}
             style={{ width: "100%", height: "100%" }}
-        >
-            <div className="tradingview-widget-container__widget h-full w-full" />
-        </div>
+        />
     );
 }
 
