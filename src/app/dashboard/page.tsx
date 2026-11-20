@@ -115,23 +115,10 @@ export default function DashboardPage() {
                 </AnimatePresence>
 
                 {/* Header Welcome Area (Zodiak Hierarchy 500/325/225 + 60-30-10) */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 relative z-10 mb-2">
-                    <div>
-                        <h1 className="text-2xl sm:text-3xl lg:text-4xl clash-title font-[500] text-[#040989] dark:text-[#F5F7FA] flex items-center gap-2 tracking-tight">
-                            Hoş Geldiniz, {userName || userEmail?.split('@')[0] || "Salih KAVAKCI"}
-                            <motion.span animate={{ rotate: [0, 14, -8, 14, -4, 10, 0, 0] }} transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 1 }}>👋</motion.span>
-                        </h1>
-                    </div>
-
-                    <div className="flex items-center gap-2.5 self-start sm:self-center">
-                        <Link 
-                            href="/dashboard/portfolio" 
-                            className="px-3.5 py-1.5 rounded-xl bg-[#004BFA] hover:bg-[#004BFA]/90 text-white font-normal text-xs clash-subtitle font-[325] shadow-xs transition-all flex items-center gap-1.5"
-                        >
-                            <span>Portföy Detayı</span>
-                            <ArrowRight className="w-3.5 h-3.5" />
-                        </Link>
-                    </div>
+                <div className="relative z-10 mb-2">
+                    <h1 className="text-2xl sm:text-3xl lg:text-4xl clash-title font-[500] text-[#040989] dark:text-[#F5F7FA] tracking-tight">
+                        Hoş Geldiniz, {userName || userEmail?.split('@')[0] || "Salih KAVAKCI"}
+                    </h1>
                 </div>
 
                 {/* UNIFIED RESPONSIVE LAYOUT (250px to 2500px) */}

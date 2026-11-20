@@ -18,9 +18,6 @@ export function MarketOverviewWidget() {
                         </h3>
                     </div>
                 </div>
-                <span className="text-[10px] clash-subtitle font-[325] text-white bg-[#004BFA] font-normal px-2.5 py-0.5 rounded-full shadow-xs">
-                    Canlı
-                </span>
             </div>
 
             {/* 2. TradingView Symbol Overview Entegrasyonu */}

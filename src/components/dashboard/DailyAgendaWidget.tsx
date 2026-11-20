@@ -276,9 +276,6 @@ export function DailyAgendaWidget() {
                             <h3 className="text-xs sm:text-[13px] clash-subtitle font-[325] text-[#040989] tracking-tight">
                                 Günlük Ajanda
                             </h3>
-                            <span className="text-[11px] clash-desc font-[225] text-[#040989]/60">
-                                (<span className="font-numbers">{todayFormattedDate}</span>)
-                            </span>
                         </div>
                     </div>
 
@@ -335,7 +332,7 @@ export function DailyAgendaWidget() {
                                         </span>
                                     ) : null}
                                     {item.category === 'economic' ? (
-                                        <span className="text-xs clash-subtitle font-[325] text-[#040989] px-2 py-0.5 rounded-md bg-[#D6E4FF]/30 border border-[#D6E4FF]/60 shrink-0 min-w-[32px] text-center">
+                                        <span className="text-sm shrink-0 min-w-[28px] text-center inline-block">
                                             {item.symbolOrCountry}
                                         </span>
                                     ) : (
@@ -385,10 +382,9 @@ export function DailyAgendaWidget() {
 
             {/* 3. Alt Bilgi & Yönlendirme */}
             <div className="relative z-10 shrink-0 pt-2.5 border-t border-[#D6E4FF]/50 flex items-center justify-between text-xs">
-                <div className="flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-[#040989]" />
-                    <span className="text-[11px] clash-desc font-[225] text-[#040989]/70">Bugünün piyasa ve şirket gelişmeleri</span>
-                </div>
+                <span className="text-[11px] font-numbers text-[#040989]/70 font-normal">
+                    ({todayFormattedDate})
+                </span>
 
                 <Link
                     href={activeCategory !== 'all' ? `/dashboard/calendar?type=${activeCategory === 'dividends' ? 'dividend' : activeCategory}` : "/dashboard/calendar"}

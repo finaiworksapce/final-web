@@ -23,8 +23,22 @@ function renderFormattedNarrative(text: string) {
 export function FinAiYesterdayReportWidget() {
     const { user, userName, email: userEmail, myAssets = [], prices = {}, isDataLoaded, isAuthenticated } = useUser();
     const [timeframe] = useState<'weekly' | 'monthly' | 'all-time'>('monthly');
-    const [report, setReport] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
+    const [report, setReport] = useState<any>(() => {
+        if (typeof window !== 'undefined') {
+            const cached = sessionStorage.getItem('finai_cached_dashboard_monthly_report');
+            if (cached) {
+                try { return JSON.parse(cached); } catch {}
+            }
+        }
+        return null;
+    });
+    const [loading, setLoading] = useState(() => {
+        if (typeof window !== 'undefined') {
+            const cached = sessionStorage.getItem('finai_cached_dashboard_monthly_report');
+            if (cached) return false;
+        }
+        return true;
+    });
 
     const sampleAssets = useMemo(() => [
         { symbol: 'THYAO', quantity: 350, avgCost: 285.50, type: 'STOCK' },
@@ -44,7 +58,7 @@ export function FinAiYesterdayReportWidget() {
     const effectivePrices = (prices && Object.keys(prices).length > 0) ? prices : (isAuthenticated ? {} : samplePrices);
 
     const fetchReport = async () => {
-        setLoading(true);
+        if (!report) setLoading(true);
         try {
             const encodedName = encodeURIComponent(userName || userEmail?.split('@')[0] || '');
             const baseUrl = user 
@@ -54,6 +68,9 @@ export function FinAiYesterdayReportWidget() {
             const json = await res.json();
             if (json.success && json.data) {
                 setReport(json.data);
+                if (typeof window !== 'undefined') {
+                    try { sessionStorage.setItem('finai_cached_dashboard_monthly_report', JSON.stringify(json.data)); } catch {}
+                }
             }
         } catch (e) {
             console.error("Failed to load FinAi monthly report:", e);
@@ -122,12 +139,11 @@ export function FinAiYesterdayReportWidget() {
     const displayDiffPercent = (!isApiEmpty && report?.diffPercent !== undefined) ? report.diffPercent : (displayDiffValue / (effectiveAssets.reduce((tot: number, a: any) => tot + a.avgCost * a.quantity, 0) || 1)) * 100;
     const isPositive = displayDiffValue >= 0;
 
-    const periodLabel = useMemo(() => {
-        if (report?.monthlyReport?.period?.monthName) {
-            return `${report.monthlyReport.period.monthName} ${report.monthlyReport.period.year || ''}`.trim();
-        }
-        return new Date().toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' });
-    }, [report]);
+    // Tamamlanan güncel rapor ayı (Ekim), kasım verisi gelince otomatik Kasım olur
+    const reportMonthName = report?.monthlyReport?.period?.monthName || "Ekim";
+    const reportTitle = `${reportMonthName} Ayı Özet Rapor`;
+
+    const isWaitingForInitialData = loading && !report;
 
     return (
         <Link
@@ -142,21 +158,22 @@ export function FinAiYesterdayReportWidget() {
                         <Compass className="w-3.5 h-3.5 text-[#040989]" />
                     </div>
                     <h3 className="text-xs sm:text-[13px] clash-subtitle font-[325] text-[#040989] tracking-tight">
-                        Aylık Özet Rapor
+                        {reportTitle}
                     </h3>
                 </div>
-
-                <span className="text-[10px] clash-subtitle font-[325] text-[#040989] bg-[#D6E4FF]/35 border border-[#D6E4FF]/60 font-normal px-2.5 py-0.5 rounded-full capitalize">
-                    {periodLabel}
-                </span>
             </div>
 
             {/* 2. Ana İçerik */}
             <div className="my-auto py-2">
-                {loading && !narrativeToDisplay ? (
-                    <div className="py-8 flex flex-col items-center justify-center gap-2 text-center">
-                        <Loader2 className="w-4 h-4 text-[#040989] animate-spin" />
-                        <span className="text-[11px] clash-desc font-[225] text-[#040989]/60">Aylık analiz hazırlanıyor...</span>
+                {isWaitingForInitialData ? (
+                    /* Skeleton (Shimmer) Yükleme Katmanı */
+                    <div className="space-y-2.5 py-1 animate-pulse">
+                        <div className="h-4 bg-slate-200/70 rounded-md w-3/4"></div>
+                        <div className="space-y-1.5 pt-1">
+                            <div className="h-3 bg-slate-200/60 rounded w-full"></div>
+                            <div className="h-3 bg-slate-200/60 rounded w-11/12"></div>
+                            <div className="h-3 bg-slate-200/60 rounded w-4/5"></div>
+                        </div>
                     </div>
                 ) : (
                     <div className="space-y-1.5">
@@ -180,13 +197,15 @@ export function FinAiYesterdayReportWidget() {
                     <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" />
                 </div>
 
-                <span className={`text-[10px] font-numbers font-medium px-2 py-0.5 rounded-md ${
-                    isPositive 
-                        ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' 
-                        : 'text-rose-700 bg-rose-50 border border-rose-200'
-                }`}>
-                    {isPositive ? '+' : ''}%{displayDiffPercent.toFixed(1)}
-                </span>
+                {isWaitingForInitialData ? (
+                    <div className="h-4 w-12 bg-slate-200/70 rounded animate-pulse"></div>
+                ) : (
+                    <span className={`text-xs font-numbers font-semibold ${
+                        isPositive ? 'text-emerald-600' : 'text-rose-600'
+                    }`}>
+                        {isPositive ? '+' : ''}%{displayDiffPercent.toFixed(1)}
+                    </span>
+                )}
             </div>
         </Link>
     );

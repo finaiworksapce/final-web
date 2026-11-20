@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Wallet, TrendingUp, TrendingDown, Eye, EyeOff, Sparkles } from "lucide-react";
+import { Wallet, TrendingUp, TrendingDown } from "lucide-react";
 import { useUser } from "@/components/providers/UserProvider";
 
 const formatCurrency = (val: number) => {
@@ -113,30 +113,9 @@ export function DashboardSummaryCards({ layout = "grid", compact = false }: { la
                         <div className={`rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white shadow-xs shrink-0 ${compact ? 'w-6 h-6' : 'w-7 h-7'}`}>
                             <Wallet className={`${compact ? 'w-3 h-3' : 'w-3.5 h-3.5'} text-white`} />
                         </div>
-                        <div className="flex items-center gap-1.5">
-                            <h3 className={`clash-subtitle font-[325] text-[#F5F7FA] tracking-tight ${compact ? 'text-[11px] min-[360px]:text-xs' : 'text-[11px] min-[360px]:text-xs sm:text-[13px]'}`}>
-                                Toplam Varlık Değeri
-                            </h3>
-                            {/* Bakiye Gizle / Göster */}
-                            <button
-                                onClick={() => setIsBalanceHidden(prev => !prev)}
-                                title={isBalanceHidden ? "Bakiyeyi Göster" : "Bakiyeyi Gizle"}
-                                className="p-1 rounded-md text-[#D6E4FF]/80 hover:text-white hover:bg-white/10 transition-colors"
-                                aria-label="Bakiyeyi Gizle / Göster"
-                            >
-                                {isBalanceHidden ? (
-                                    <EyeOff className="w-3.5 h-3.5" />
-                                ) : (
-                                    <Eye className="w-3.5 h-3.5" />
-                                )}
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Sağ Üst Canlı Portföy Rozeti (%35/#0E1E38 & White Accent) */}
-                    <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#004BFA] text-[#F5F7FA] font-medium shadow-sm shadow-[#004BFA]/30 clash-subtitle font-[325] shadow-xs ${compact ? 'text-[9px]' : 'text-[9px] min-[360px]:text-[10px] sm:text-[11px]'}`}>
-                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                        <span>Canlı Portföy</span>
+                        <h3 className={`clash-subtitle font-[325] text-[#F5F7FA] tracking-tight ${compact ? 'text-[11px] min-[360px]:text-xs' : 'text-[11px] min-[360px]:text-xs sm:text-[13px]'}`}>
+                            Toplam Varlık Değeri
+                        </h3>
                     </div>
                 </div>
 
@@ -145,16 +124,18 @@ export function DashboardSummaryCards({ layout = "grid", compact = false }: { la
                     <h2 className={`font-numbers font-normal text-white tracking-tight truncate leading-none ${
                         compact ? 'text-xl min-[360px]:text-2xl sm:text-3xl' : 'text-[22px] min-[320px]:text-[26px] min-[380px]:text-3xl sm:text-4xl lg:text-[40px] 2xl:text-[44px]'
                     }`}>
-                        {isBalanceHidden ? "₺ ••••••••" : formatCurrency(totalValue)}
+                        {formatCurrency(totalValue)}
                     </h2>
 
                     {/* Değişim Rozeti */}
                     <div className={`flex items-center gap-2 ${compact ? 'mt-1.5' : 'mt-2.5'}`}>
-                        <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full clash-subtitle font-[325] shadow-xs bg-[#004BFA] text-[#F5F7FA] font-medium shadow-sm shadow-[#004BFA]/30 ${
+                        <div className={`inline-flex items-center gap-1 clash-subtitle font-[325] ${
                             compact ? 'text-[11px]' : 'text-xs'
                         }`}>
-                            {isPositive ? <TrendingUp className="w-3.5 h-3.5 text-[#0E1E38]" /> : <TrendingDown className="w-3.5 h-3.5 text-rose-600" />}
-                            <span className="font-numbers">{isPositive ? "+" : ""}%{Math.abs(profitRatio).toFixed(2)}</span>
+                            {isPositive ? <TrendingUp className="w-3.5 h-3.5 text-emerald-400" /> : <TrendingDown className="w-3.5 h-3.5 text-rose-400" />}
+                            <span className={`font-numbers font-medium ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
+                                {isPositive ? "+" : ""}%{Math.abs(profitRatio).toFixed(2)}
+                            </span>
                         </div>
                         <span className={`clash-desc font-[225] text-[#D6E4FF] ${compact ? 'text-[10px]' : 'text-xs'}`}>
                             (Toplam Net Getiri)
