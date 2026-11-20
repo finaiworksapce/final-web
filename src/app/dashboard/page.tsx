@@ -16,6 +16,8 @@ import { MarketOverviewWidget } from "@/components/dashboard/MarketOverviewWidge
 import { DailyAgendaWidget } from "@/components/dashboard/DailyAgendaWidget";
 import { LatestNewsWidget } from "@/components/dashboard/LatestNewsWidget";
 import { FinancialTicker } from "@/components/FinancialTicker";
+import { GlobalSearch } from "@/components/GlobalSearch";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
 
 export default function DashboardPage() {
@@ -115,10 +117,14 @@ export default function DashboardPage() {
                 </AnimatePresence>
 
                 {/* Header Welcome Area (Zodiak Hierarchy 500/325/225 + 60-30-10) */}
-                <div className="relative z-10 mb-2">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3.5 relative z-10 mb-2">
                     <h1 className="text-2xl sm:text-3xl lg:text-4xl clash-title font-[500] text-[#040989] dark:text-[#F5F7FA] tracking-tight">
                         Hoş Geldiniz, {userName || userEmail?.split('@')[0] || "Salih KAVAKCI"}
                     </h1>
+                    <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+                        <GlobalSearch className="w-56 sm:w-64 md:w-72 lg:w-80" />
+                        <ThemeToggle />
+                    </div>
                 </div>
 
                 {/* UNIFIED RESPONSIVE LAYOUT (250px to 2500px) */}

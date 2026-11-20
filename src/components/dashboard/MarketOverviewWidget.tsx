@@ -21,7 +21,7 @@ export function MarketOverviewWidget() {
             </div>
 
             {/* 2. TradingView Symbol Overview Entegrasyonu */}
-            <div className="flex-1 min-h-[310px] w-full pt-1 overflow-hidden relative rounded-xl bg-white">
+            <div className="flex-1 min-h-[310px] w-full pt-1 overflow-hidden relative">
                 <TradingViewMarketOverview />
             </div>
         </div>
