@@ -795,25 +795,15 @@ export default function AssetsPage() {
                     className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs flex flex-col justify-between h-[390px] overflow-hidden"
                 >
                     <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                        <div className="flex items-center gap-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-[#0E1E38] flex items-center justify-center text-white shadow-xs shrink-0">
-                                <BarChart3 className="w-4 h-4 text-white" />
-                            </div>
-                            <div>
-                                <div className="flex items-center gap-2">
-                                    <h2 className="text-base font-medium text-[#0E1E38] tracking-tight leading-tight">
-                                        Sektörler Yıllık Getirileri (2025 BIST)
-                                    </h2>
-                                    {selectedSector && (
-                                        <span className="text-[10px] bg-blue-50 text-blue-700 border border-blue-200/70 font-semibold px-2 py-0.5 rounded-full">
-                                            Seçili: {selectedSector}
-                                        </span>
-                                    )}
-                                </div>
-                                <p className="text-[10px] text-slate-400 font-medium mt-0.5">
-                                    Getiriye göre sıralı • Filtrelemek için sütuna tıklayın
-                                </p>
-                            </div>
+                        <div className="flex items-center gap-2">
+                            <h2 className="text-base font-semibold text-[#0E1E38] tracking-tight leading-tight">
+                                Sektörler Yıllık Getirileri
+                            </h2>
+                            {selectedSector && (
+                                <span className="text-[10px] bg-blue-50 text-blue-700 border border-blue-200/70 font-semibold px-2 py-0.5 rounded-full">
+                                    Seçili: {selectedSector}
+                                </span>
+                            )}
                         </div>
                         {selectedSector && (
                             <button
@@ -901,10 +891,7 @@ export default function AssetsPage() {
                 >
                     {/* BAŞLIK VE SEKMELER */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
-                        <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0 ring-4 ring-emerald-500/10" />
-                            <h2 className="text-base font-semibold text-[#0E1E38] tracking-tight leading-tight">Günün Enleri</h2>
-                        </div>
+                        <h2 className="text-base font-semibold text-[#0E1E38] tracking-tight leading-tight">Günün Enleri</h2>
 
                         {/* SEKMELER: Kutusuz Minimalist Editoryal Menü */}
                         <div className="flex items-center gap-4 sm:gap-6 self-start sm:self-auto">
@@ -947,7 +934,7 @@ export default function AssetsPage() {
                         </div>
                     </div>
 
-                    {/* İÇERİK LİSTESİ (DENGELİ 3 SÜTUNLU GRİD - BOŞLUKSUZ VE KUTUSUZ) */}
+                    {/* İÇERİK LİSTESİ (EŞİT ARALIKLI %40-%20-%20-%20 GRİD - TAM DENGELİ) */}
                     <div className="flex-1 flex flex-col justify-between divide-y divide-slate-100/90 pt-1">
                         {(() => {
                             const list = activeTopTab === 'gainers' ? topGainers : activeTopTab === 'losers' ? topLosers : topVolumeStocks;
@@ -956,9 +943,9 @@ export default function AssetsPage() {
                                 return Array.from({ length: 5 }).map((_, idx) => (
                                     <div
                                         key={`top-skeleton-${idx}`}
-                                        className="grid grid-cols-12 items-center py-2.5 px-2 animate-pulse text-xs"
+                                        className="flex items-center py-2.5 px-2 animate-pulse text-xs"
                                     >
-                                        <div className="col-span-5 flex items-center gap-3 min-w-0 pr-2">
+                                        <div className="w-[40%] flex items-center gap-3 min-w-0 pr-3">
                                             <span className="font-mono text-[11px] font-semibold text-slate-300 w-5 text-center">
                                                 {String(idx + 1).padStart(2, '0')}
                                             </span>
@@ -968,13 +955,17 @@ export default function AssetsPage() {
                                                 <div className="h-2 w-28 bg-slate-100 rounded" />
                                             </div>
                                         </div>
-                                        <div className="col-span-3 flex flex-col items-center justify-center space-y-1">
+                                        <div className="w-[20%] flex flex-col items-end pr-2 space-y-1">
                                             <div className="h-3 w-12 bg-slate-200 rounded" />
-                                            <div className="h-2 w-14 bg-slate-100 rounded" />
+                                            <div className="h-2 w-10 bg-slate-100 rounded" />
                                         </div>
-                                        <div className="col-span-4 flex items-center justify-end gap-4">
-                                            <div className="h-3 w-14 bg-slate-200 rounded" />
+                                        <div className="w-[20%] flex flex-col items-end pr-2 space-y-1">
                                             <div className="h-3 w-12 bg-slate-200 rounded" />
+                                            <div className="h-2 w-8 bg-slate-100 rounded" />
+                                        </div>
+                                        <div className="w-[20%] flex flex-col items-end space-y-1">
+                                            <div className="h-3 w-14 bg-slate-200 rounded" />
+                                            <div className="h-2 w-10 bg-slate-100 rounded" />
                                         </div>
                                     </div>
                                 ));
@@ -987,10 +978,10 @@ export default function AssetsPage() {
                                     <Link 
                                         key={item.symbol} 
                                         href={`/dashboard/varlik/${item.symbol}`}
-                                        className="grid grid-cols-12 items-center py-2 px-2 -mx-2 rounded-lg hover:bg-slate-50/90 transition-all text-xs group cursor-pointer"
+                                        className="flex items-center py-2 px-2 -mx-2 rounded-lg hover:bg-slate-50/90 transition-all text-xs group cursor-pointer"
                                     >
-                                        {/* SÜTUN 1: Sıralama + Logo + Kod/İsim (~42%) */}
-                                        <div className="col-span-6 sm:col-span-5 flex items-center gap-2.5 sm:gap-3 min-w-0 pr-2">
+                                        {/* SÜTUN 1: Sıralama + Logo + Kod/İsim (%40) */}
+                                        <div className="w-[40%] flex items-center gap-2.5 sm:gap-3 min-w-0 pr-3">
                                             <span className="font-mono text-[11px] font-semibold text-slate-400 group-hover:text-slate-700 w-5 shrink-0 text-center">
                                                 {String(idx + 1).padStart(2, '0')}
                                             </span>
@@ -1004,16 +995,16 @@ export default function AssetsPage() {
                                                         • {item.sector}
                                                     </span>
                                                 </div>
-                                                <span className="text-[10px] text-slate-500 block truncate max-w-[130px] sm:max-w-[180px] mt-0.5 font-normal leading-tight">
+                                                <span className="text-[10px] text-slate-500 block truncate max-w-[130px] sm:max-w-[190px] mt-0.5 font-normal leading-tight">
                                                     {item.name}
                                                 </span>
                                             </div>
                                         </div>
 
-                                        {/* SÜTUN 2: Net TL Değişimi (Bantların kalktığı orta alan: ~25%) */}
-                                        <div className="col-span-3 sm:col-span-3 flex flex-col items-center justify-center text-center">
+                                        {/* SÜTUN 2: Net TL Değişimi (%20 - Eşit Aralık) */}
+                                        <div className="w-[20%] flex flex-col items-end pr-2 text-right">
                                             <span className={cn(
-                                                "font-semibold tabular-nums text-xs",
+                                                "font-semibold tabular-nums text-xs sm:text-sm",
                                                 isPos ? "text-emerald-600" : isNeg ? "text-rose-600" : "text-slate-500"
                                             )}>
                                                 {item.changeAbs !== 0 
@@ -1023,35 +1014,34 @@ export default function AssetsPage() {
                                             <span className="text-[9px] text-slate-400 font-normal">Net Fark</span>
                                         </div>
 
-                                        {/* SÜTUN 3: Güncel Fiyat & Salt Rakam Yüzde / Hacim (~33%, sağa dayalı) */}
-                                        <div className="col-span-3 sm:col-span-4 flex items-center justify-end gap-3 sm:gap-6 text-right pl-2">
-                                            <div className="flex flex-col items-end">
-                                                <span className="font-bold text-[#0E1E38] text-xs sm:text-sm tabular-nums">
-                                                    ₺{item.price.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                                </span>
-                                                <span className="text-[9px] text-slate-400 font-normal">Fiyat</span>
-                                            </div>
+                                        {/* SÜTUN 3: Güncel Fiyat (%20 - Eşit Aralık) */}
+                                        <div className="w-[20%] flex flex-col items-end pr-2 text-right">
+                                            <span className="font-bold text-[#0E1E38] text-xs sm:text-sm tabular-nums">
+                                                ₺{item.price.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                            </span>
+                                            <span className="text-[9px] text-slate-400 font-normal">Fiyat</span>
+                                        </div>
 
-                                            <div className="min-w-[65px] flex flex-col items-end">
-                                                {activeTopTab === 'volume' ? (
-                                                    <>
-                                                        <span className="font-bold text-xs sm:text-sm text-[#0E1E38] tabular-nums whitespace-nowrap">
-                                                            {item.volume}
-                                                        </span>
-                                                        <span className="text-[9px] text-slate-400 font-normal">Hacim</span>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <span className={cn(
-                                                            "font-bold text-xs sm:text-sm tabular-nums whitespace-nowrap",
-                                                            isPos ? "text-emerald-600" : isNeg ? "text-rose-600" : "text-slate-500"
-                                                        )}>
-                                                            {isPos ? `+${item.change.toFixed(2)}%` : `${item.change.toFixed(2)}%`}
-                                                        </span>
-                                                        <span className="text-[9px] text-slate-400 font-normal">Değişim</span>
-                                                    </>
-                                                )}
-                                            </div>
+                                        {/* SÜTUN 4: Değişim / Hacim (%20 - Eşit Aralık) */}
+                                        <div className="w-[20%] flex flex-col items-end text-right">
+                                            {activeTopTab === 'volume' ? (
+                                                <>
+                                                    <span className="font-bold text-xs sm:text-sm text-[#0E1E38] tabular-nums whitespace-nowrap">
+                                                        {item.volume}
+                                                    </span>
+                                                    <span className="text-[9px] text-slate-400 font-normal">Hacim</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span className={cn(
+                                                        "font-bold text-xs sm:text-sm tabular-nums whitespace-nowrap",
+                                                        isPos ? "text-emerald-600" : isNeg ? "text-rose-600" : "text-slate-500"
+                                                    )}>
+                                                        {isPos ? `+${item.change.toFixed(2)}%` : `${item.change.toFixed(2)}%`}
+                                                    </span>
+                                                    <span className="text-[9px] text-slate-400 font-normal">Değişim</span>
+                                                </>
+                                            )}
                                         </div>
                                     </Link>
                                 );
