@@ -67,8 +67,8 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
                 "60m|1W",
                 "all|1M"
             ],
-            fontSize: "10",
-            headerFontSize: "medium",
+            fontSize: "9",
+            headerFontSize: "small",
             autosize: true,
             width: "100%",
             height: "100%",
