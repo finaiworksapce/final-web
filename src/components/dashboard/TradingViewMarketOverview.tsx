@@ -38,32 +38,32 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
             chartType: "area",
             fontColor: "#64748B",
             gridLineColor: "rgba(4, 9, 137, 0.05)",
-            volumeUpColor: "rgba(34, 171, 148, 0.5)",
-            volumeDownColor: "rgba(247, 82, 95, 0.5)",
+            volumeUpColor: "rgba(4, 9, 137, 0.2)",
+            volumeDownColor: "rgba(4, 9, 137, 0.2)",
             backgroundColor: "#FFFFFF",
             widgetFontColor: "#040989",
-            upColor: "#22ab94",
-            downColor: "#f7525f",
-            borderUpColor: "#22ab94",
-            borderDownColor: "#f7525f",
-            wickUpColor: "#22ab94",
-            wickDownColor: "#f7525f",
+            upColor: "#040989",
+            downColor: "#040989",
+            borderUpColor: "#040989",
+            borderDownColor: "#040989",
+            wickUpColor: "#040989",
+            wickDownColor: "#040989",
             colorTheme: "light",
             isTransparent: false,
             locale: "tr",
             chartOnly: false,
             scalePosition: "right",
             scaleMode: "Normal",
-            fontFamily: "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
+            fontFamily: "'Zodiak', 'Zodiak-Variable', 'Expose-Medium', sans-serif",
             valuesTracking: "1",
             changeMode: "price-and-percent",
             symbols: [
-                ["FX_IDC:XAUTRYG|1D"],
-                ["FX_IDC:XAGTRYG|1D"],
-                ["FX_IDC:EURTRY|1D"],
-                ["FX:USDTRY|1D"],
-                ["BITSTAMP:BTCUSD|1D"],
-                ["SKILLING:US100|1D"]
+                ["Gram Altın", "FX_IDC:XAUTRYG|1D"],
+                ["Gram Gümüş", "FX_IDC:XAGTRYG|1D"],
+                ["Euro / TL", "FX_IDC:EURTRY|1D"],
+                ["Dolar / TL", "FX:USDTRY|1D"],
+                ["Bitcoin", "BITSTAMP:BTCUSD|1D"],
+                ["Nasdaq 100", "SKILLING:US100|1D"]
             ],
             dateRanges: [
                 "1d|1",
@@ -71,7 +71,7 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
                 "12m|1D",
                 "all|1M"
             ],
-            fontSize: "9",
+            fontSize: "8",
             headerFontSize: "small",
             autosize: true,
             width: "100%",
@@ -79,7 +79,7 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
             noTimeScale: false,
             hideDateRanges: false,
             hideMarketStatus: false,
-            hideSymbolLogo: false
+            hideSymbolLogo: true
         };
 
         const script = document.createElement("script");
