@@ -900,60 +900,54 @@ export default function AssetsPage() {
                     className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs flex flex-col justify-between h-[390px] overflow-hidden"
                 >
                     {/* BAŞLIK VE SEKMELER */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-100 pb-3">
-                        <div className="flex items-center gap-2.5">
-                            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0 ring-4 ring-emerald-500/10" />
-                            <div>
-                                <div className="flex items-center gap-2">
-                                    <h2 className="text-base font-semibold text-[#0E1E38] tracking-tight leading-tight">Günün Enleri</h2>
-                                    <span className="text-[10px] font-medium text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">BIST Canlı</span>
-                                </div>
-                                <p className="text-[11px] text-slate-400 font-normal mt-0.5">Piyasanın öne çıkan performans liderleri</p>
-                            </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                        <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0 ring-4 ring-emerald-500/10" />
+                            <h2 className="text-base font-semibold text-[#0E1E38] tracking-tight leading-tight">Günün Enleri</h2>
                         </div>
 
-                        {/* SEKMELER: Minimalist Segmented Tabs */}
-                        <div className="flex items-center bg-slate-100/80 p-0.5 rounded-lg gap-0.5 self-start sm:self-auto border border-slate-200/50">
+                        {/* SEKMELER: Kutusuz Minimalist Editoryal Menü */}
+                        <div className="flex items-center gap-4 sm:gap-6 self-start sm:self-auto">
                             <button
                                 onClick={() => setActiveTopTab('gainers')}
                                 className={cn(
-                                    "px-2.5 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-1.5",
+                                    "text-xs pb-1 transition-all flex items-center gap-1.5 border-b-2",
                                     activeTopTab === 'gainers' 
-                                        ? "bg-white text-emerald-700 shadow-xs font-semibold" 
-                                        : "text-slate-600 hover:text-[#0E1E38]"
+                                        ? "border-[#0E1E38] text-[#0E1E38] font-bold" 
+                                        : "border-transparent text-slate-400 hover:text-slate-700 font-medium"
                                 )}
                             >
-                                <TrendingUp className="w-3 h-3 text-emerald-600" />
+                                <TrendingUp className={cn("w-3.5 h-3.5", activeTopTab === 'gainers' ? "text-emerald-600" : "text-slate-400")} />
                                 Kazandıranlar
                             </button>
                             <button
                                 onClick={() => setActiveTopTab('losers')}
                                 className={cn(
-                                    "px-2.5 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-1.5",
+                                    "text-xs pb-1 transition-all flex items-center gap-1.5 border-b-2",
                                     activeTopTab === 'losers' 
-                                        ? "bg-white text-rose-700 shadow-xs font-semibold" 
-                                        : "text-slate-600 hover:text-[#0E1E38]"
+                                        ? "border-[#0E1E38] text-[#0E1E38] font-bold" 
+                                        : "border-transparent text-slate-400 hover:text-slate-700 font-medium"
                                 )}
                             >
-                                <TrendingDown className="w-3 h-3 text-rose-600" />
+                                <TrendingDown className={cn("w-3.5 h-3.5", activeTopTab === 'losers' ? "text-rose-600" : "text-slate-400")} />
                                 Kaybettirenler
                             </button>
                             <button
                                 onClick={() => setActiveTopTab('volume')}
                                 className={cn(
-                                    "px-2.5 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-1.5",
+                                    "text-xs pb-1 transition-all flex items-center gap-1.5 border-b-2",
                                     activeTopTab === 'volume' 
-                                        ? "bg-white text-[#0E1E38] shadow-xs font-semibold" 
-                                        : "text-slate-600 hover:text-[#0E1E38]"
+                                        ? "border-[#0E1E38] text-[#0E1E38] font-bold" 
+                                        : "border-transparent text-slate-400 hover:text-slate-700 font-medium"
                                 )}
                             >
-                                <Flame className="w-3 h-3 text-amber-500" />
+                                <Flame className={cn("w-3.5 h-3.5", activeTopTab === 'volume' ? "text-amber-500" : "text-slate-400")} />
                                 Hacim
                             </button>
                         </div>
                     </div>
 
-                    {/* İÇERİK LİSTESİ (INSTITUTIONAL DIVIDED ROWS - KUTU İÇİNDE KUTU YOK) */}
+                    {/* İÇERİK LİSTESİ (DENGELİ 3 SÜTUNLU GRİD - BOŞLUKSUZ VE KUTUSUZ) */}
                     <div className="flex-1 flex flex-col justify-between divide-y divide-slate-100/90 pt-1">
                         {(() => {
                             const list = activeTopTab === 'gainers' ? topGainers : activeTopTab === 'losers' ? topLosers : topVolumeStocks;
@@ -962,21 +956,25 @@ export default function AssetsPage() {
                                 return Array.from({ length: 5 }).map((_, idx) => (
                                     <div
                                         key={`top-skeleton-${idx}`}
-                                        className="flex items-center justify-between py-2 px-2 animate-pulse text-xs"
+                                        className="grid grid-cols-12 items-center py-2.5 px-2 animate-pulse text-xs"
                                     >
-                                        <div className="flex items-center gap-3 min-w-0 flex-1 mr-3">
+                                        <div className="col-span-5 flex items-center gap-3 min-w-0 pr-2">
                                             <span className="font-mono text-[11px] font-semibold text-slate-300 w-5 text-center">
                                                 {String(idx + 1).padStart(2, '0')}
                                             </span>
                                             <div className="w-7 h-7 rounded-full bg-slate-200 shrink-0" />
                                             <div className="min-w-0 flex-1 space-y-1">
                                                 <div className="h-3 w-16 bg-slate-200 rounded" />
-                                                <div className="h-2 w-32 bg-slate-100 rounded" />
+                                                <div className="h-2 w-28 bg-slate-100 rounded" />
                                             </div>
                                         </div>
-                                        <div className="flex flex-col items-end space-y-1 shrink-0">
+                                        <div className="col-span-3 flex flex-col items-center justify-center space-y-1">
+                                            <div className="h-3 w-12 bg-slate-200 rounded" />
+                                            <div className="h-2 w-14 bg-slate-100 rounded" />
+                                        </div>
+                                        <div className="col-span-4 flex items-center justify-end gap-4">
                                             <div className="h-3 w-14 bg-slate-200 rounded" />
-                                            <div className="h-2 w-10 bg-slate-100 rounded" />
+                                            <div className="h-3 w-12 bg-slate-200 rounded" />
                                         </div>
                                     </div>
                                 ));
@@ -989,9 +987,10 @@ export default function AssetsPage() {
                                     <Link 
                                         key={item.symbol} 
                                         href={`/dashboard/varlik/${item.symbol}`}
-                                        className="flex items-center justify-between py-2 px-2 -mx-2 rounded-lg hover:bg-slate-50/90 transition-all text-xs group cursor-pointer"
+                                        className="grid grid-cols-12 items-center py-2 px-2 -mx-2 rounded-lg hover:bg-slate-50/90 transition-all text-xs group cursor-pointer"
                                     >
-                                        <div className="flex items-center gap-3 min-w-0 flex-1 mr-3">
+                                        {/* SÜTUN 1: Sıralama + Logo + Kod/İsim (~42%) */}
+                                        <div className="col-span-6 sm:col-span-5 flex items-center gap-2.5 sm:gap-3 min-w-0 pr-2">
                                             <span className="font-mono text-[11px] font-semibold text-slate-400 group-hover:text-slate-700 w-5 shrink-0 text-center">
                                                 {String(idx + 1).padStart(2, '0')}
                                             </span>
@@ -1001,63 +1000,56 @@ export default function AssetsPage() {
                                                     <span className="font-bold text-[#0E1E38] text-xs leading-tight group-hover:text-blue-600 transition-colors">
                                                         {item.symbol}
                                                     </span>
-                                                    <span className="text-[10px] text-slate-400 truncate max-w-[130px] hidden sm:inline font-normal">
+                                                    <span className="text-[10px] text-slate-400 truncate max-w-[110px] hidden sm:inline font-normal">
                                                         • {item.sector}
                                                     </span>
                                                 </div>
-                                                <span className="text-[10px] text-slate-500 block truncate max-w-[160px] sm:max-w-[210px] mt-0.5 font-normal leading-tight">
+                                                <span className="text-[10px] text-slate-500 block truncate max-w-[130px] sm:max-w-[180px] mt-0.5 font-normal leading-tight">
                                                     {item.name}
                                                 </span>
                                             </div>
                                         </div>
 
-                                        {item.rangePercent !== null && (
-                                            <div className="hidden md:flex flex-col items-center justify-center px-3 shrink-0" title={`Gün İçi Aralık: Min ₺${item.low?.toFixed(2)} - Max ₺${item.high?.toFixed(2)}`}>
-                                                <div className="flex items-center gap-1 text-[9px] text-slate-400 font-mono mb-0.5">
-                                                    <span>L</span>
-                                                    <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden relative">
-                                                        <div 
-                                                            className={cn(
-                                                                "h-full rounded-full transition-all duration-500",
-                                                                isPos ? "bg-emerald-500" : isNeg ? "bg-rose-500" : "bg-slate-400"
-                                                            )} 
-                                                            style={{ width: `${Math.max(8, item.rangePercent)}%` }} 
-                                                        />
-                                                    </div>
-                                                    <span>H</span>
-                                                </div>
-                                                <span className="text-[8px] text-slate-400 font-medium">Gün İçi Bant</span>
-                                            </div>
-                                        )}
+                                        {/* SÜTUN 2: Net TL Değişimi (Bantların kalktığı orta alan: ~25%) */}
+                                        <div className="col-span-3 sm:col-span-3 flex flex-col items-center justify-center text-center">
+                                            <span className={cn(
+                                                "font-semibold tabular-nums text-xs",
+                                                isPos ? "text-emerald-600" : isNeg ? "text-rose-600" : "text-slate-500"
+                                            )}>
+                                                {item.changeAbs !== 0 
+                                                    ? (item.changeAbs > 0 ? `+₺${item.changeAbs.toFixed(2)}` : `-₺${Math.abs(item.changeAbs).toFixed(2)}`)
+                                                    : "₺0.00"}
+                                            </span>
+                                            <span className="text-[9px] text-slate-400 font-normal">Net Fark</span>
+                                        </div>
 
-                                        <div className="flex items-center gap-2.5 shrink-0 text-right">
+                                        {/* SÜTUN 3: Güncel Fiyat & Salt Rakam Yüzde / Hacim (~33%, sağa dayalı) */}
+                                        <div className="col-span-3 sm:col-span-4 flex items-center justify-end gap-3 sm:gap-6 text-right pl-2">
                                             <div className="flex flex-col items-end">
-                                                <span className="font-bold text-[#0E1E38] text-xs tabular-nums">
+                                                <span className="font-bold text-[#0E1E38] text-xs sm:text-sm tabular-nums">
                                                     ₺{item.price.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                 </span>
-                                                {item.changeAbs !== 0 && (
-                                                    <span className="text-[10px] text-slate-400 font-medium tabular-nums">
-                                                        {item.changeAbs > 0 ? `+₺${item.changeAbs.toFixed(2)}` : `₺${item.changeAbs.toFixed(2)}`}
-                                                    </span>
-                                                )}
+                                                <span className="text-[9px] text-slate-400 font-normal">Fiyat</span>
                                             </div>
 
-                                            <div className="w-[74px] flex justify-end">
+                                            <div className="min-w-[65px] flex flex-col items-end">
                                                 {activeTopTab === 'volume' ? (
-                                                    <span className="text-[11px] font-semibold text-[#0E1E38] bg-slate-100/90 px-2 py-0.5 rounded border border-slate-200/50 tabular-nums whitespace-nowrap">
-                                                        {item.volume}
-                                                    </span>
+                                                    <>
+                                                        <span className="font-bold text-xs sm:text-sm text-[#0E1E38] tabular-nums whitespace-nowrap">
+                                                            {item.volume}
+                                                        </span>
+                                                        <span className="text-[9px] text-slate-400 font-normal">Hacim</span>
+                                                    </>
                                                 ) : (
-                                                    <span className={cn(
-                                                        "text-[11px] font-semibold tabular-nums px-2 py-0.5 rounded whitespace-nowrap",
-                                                        isPos 
-                                                            ? "bg-emerald-50 text-emerald-700 border border-emerald-200/60"
-                                                            : isNeg
-                                                                ? "bg-rose-50 text-rose-700 border border-rose-200/60"
-                                                                : "bg-slate-100 text-slate-600 border border-slate-200"
-                                                    )}>
-                                                        {isPos ? `+${item.change.toFixed(2)}%` : `${item.change.toFixed(2)}%`}
-                                                    </span>
+                                                    <>
+                                                        <span className={cn(
+                                                            "font-bold text-xs sm:text-sm tabular-nums whitespace-nowrap",
+                                                            isPos ? "text-emerald-600" : isNeg ? "text-rose-600" : "text-slate-500"
+                                                        )}>
+                                                            {isPos ? `+${item.change.toFixed(2)}%` : `${item.change.toFixed(2)}%`}
+                                                        </span>
+                                                        <span className="text-[9px] text-slate-400 font-normal">Değişim</span>
+                                                    </>
                                                 )}
                                             </div>
                                         </div>
