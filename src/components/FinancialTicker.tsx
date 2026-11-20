@@ -25,9 +25,12 @@ export function FinancialTicker() {
                 "symbols",
                 "FX_IDC:XAUTRYG,FX_IDC:XAGTRYG,FX_IDC:EURTRY,FX:USDTRY,COINBASE:BTCUSD,SKILLING:US100"
             );
+            ticker.setAttribute("theme", "dark");
+            ticker.setAttribute("item-size", "compact");
+            ticker.setAttribute("transparent-background", "true");
             ticker.style.display = "block";
             ticker.style.width = "100%";
-            ticker.style.height = "46px";
+            ticker.style.height = "100%";
             container.appendChild(ticker);
         }
 
@@ -41,7 +44,7 @@ export function FinancialTicker() {
     return (
         <div 
             ref={containerRef}
-            className="w-full h-[46px] min-h-[46px] bg-white border-b border-[#D6E4FF]/50 relative overflow-hidden"
+            className="w-full h-[50px] min-h-[50px] bg-[#040989] border-b border-[#040989]/60 relative overflow-hidden flex items-center"
         />
     );
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, memo } from "react";
+import React, { useEffect, useRef, useState, memo } from "react";
+import { Loader2 } from "lucide-react";
 
 export interface TradingViewMarketOverviewProps {
     className?: string;
@@ -8,6 +9,7 @@ export interface TradingViewMarketOverviewProps {
 
 export function TradingViewMarketOverview({ className = "" }: TradingViewMarketOverviewProps) {
     const containerRef = useRef<HTMLDivElement>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -31,24 +33,24 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
         copyrightDiv.innerHTML = '<a href="https://www.tradingview.com/markets/" rel="noopener nofollow" target="_blank"><span class="blue-text">World markets</span></a><span class="trademark">&nbsp;by TradingView</span>';
 
         const config = {
-            lineWidth: 2,
+            lineWidth: 1.5,
             lineType: 0,
             chartType: "area",
-            fontColor: "rgb(106, 109, 120)",
-            gridLineColor: "rgba(242, 242, 242, 0.06)",
+            fontColor: "#64748B",
+            gridLineColor: "rgba(4, 9, 137, 0.05)",
             volumeUpColor: "rgba(34, 171, 148, 0.5)",
             volumeDownColor: "rgba(247, 82, 95, 0.5)",
-            backgroundColor: "#0F0F0F",
-            widgetFontColor: "#DBDBDB",
+            backgroundColor: "#FFFFFF",
+            widgetFontColor: "#040989",
             upColor: "#22ab94",
             downColor: "#f7525f",
             borderUpColor: "#22ab94",
             borderDownColor: "#f7525f",
             wickUpColor: "#22ab94",
             wickDownColor: "#f7525f",
-            colorTheme: "dark",
+            colorTheme: "light",
             isTransparent: false,
-            locale: "en",
+            locale: "tr",
             chartOnly: false,
             scalePosition: "right",
             scaleMode: "Normal",
@@ -66,13 +68,11 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
             dateRanges: [
                 "1d|1",
                 "1m|30",
-                "3m|60",
                 "12m|1D",
-                "60m|1W",
                 "all|1M"
             ],
-            fontSize: "10",
-            headerFontSize: "medium",
+            fontSize: "9",
+            headerFontSize: "small",
             autosize: true,
             width: "100%",
             height: "100%",
@@ -88,12 +88,21 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
         script.async = true;
         script.innerHTML = JSON.stringify(config);
 
+        script.onload = () => {
+            setIsLoading(false);
+        };
+
         widgetContainer.appendChild(widgetDiv);
         widgetContainer.appendChild(copyrightDiv);
         widgetContainer.appendChild(script);
         container.appendChild(widgetContainer);
 
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 1500);
+
         return () => {
+            clearTimeout(timer);
             if (container) {
                 container.innerHTML = "";
             }
@@ -101,11 +110,19 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
     }, []);
 
     return (
-        <div 
-            ref={containerRef}
-            className={`w-full h-full min-h-[320px] relative overflow-hidden bg-[#0F0F0F] rounded-xl ${className}`}
-            style={{ width: "100%", height: "100%" }}
-        />
+        <div className={`relative w-full h-full min-h-[310px] bg-white rounded-xl ${className}`}>
+            {isLoading && (
+                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/80 backdrop-blur-xs gap-2">
+                    <Loader2 className="w-5 h-5 text-[#040989] animate-spin" />
+                    <span className="text-[11px] clash-desc font-[225] text-[#040989]/70">Piyasa grafiği hazırlanıyor...</span>
+                </div>
+            )}
+            <div 
+                ref={containerRef}
+                className="w-full h-full min-h-[310px] relative overflow-hidden bg-white rounded-xl"
+                style={{ width: "100%", height: "100%" }}
+            />
+        </div>
     );
 }
 
