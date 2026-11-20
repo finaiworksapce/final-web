@@ -29,11 +29,12 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self';",
-      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com;",
-      "style-src 'self' 'unsafe-inline' https://api.fontshare.com;",
+      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://s3.tradingview.com https://widgets.tradingview-widget.com https://*.tradingview.com https://*.tradingview-widget.com;",
+      "style-src 'self' 'unsafe-inline' https://api.fontshare.com https://*.tradingview.com https://*.tradingview-widget.com;",
       "img-src 'self' data: https: blob:;",
-      "font-src 'self' data: https://cdn.fontshare.com;",
-      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://generativelanguage.googleapis.com https://finnhub.io https://*.vercel-insights.com;",
+      "font-src 'self' data: https://cdn.fontshare.com https://*.tradingview.com https://*.tradingview-widget.com;",
+      "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://generativelanguage.googleapis.com https://finnhub.io https://*.vercel-insights.com https://*.tradingview.com wss://*.tradingview.com https://*.tradingview-widget.com;",
+      "frame-src 'self' https://*.tradingview.com https://*.tradingview-widget.com;",
       "frame-ancestors 'none';"
     ].join(" ")
   }
