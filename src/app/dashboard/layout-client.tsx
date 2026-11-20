@@ -434,167 +434,84 @@ function DashboardShell({
                     <main className="flex-1 relative flex flex-col min-w-0 bg-transparent overflow-x-hidden">
                         {/* Header (Glassified & Safe-Area Aware) */}
                         <header className={`h-12 md:h-16 border-b border-[#D6E4FF]/50 flex items-center justify-between px-2 min-[360px]:px-3 md:px-6 sticky top-0 ${isProfileOpen ? "z-[60]" : "z-40"} bg-white/90 backdrop-blur-xl flex-shrink-0 relative pt-[env(safe-area-inset-top,0px)] transition-none`}>
-                            {pathname === "/dashboard" ? (
-                                <>
-                                    {/* Sol Taraf: Mobilde Hamburger, Masaüstünde Boşluk */}
-                                    <div className="flex items-center gap-2.5">
-                                        <button
-                                            ref={hamburgerRef}
-                                            onClick={() => setIsMobileMenuOpen(true)}
-                                            className="md:hidden flex flex-col items-center justify-center gap-1.5 w-10 h-10 min-[360px]:w-11 min-[360px]:h-11 min-w-[40px] min-[360px]:min-w-[44px] min-h-[40px] min-[360px]:min-h-[44px] rounded-xl bg-[#02041A] text-white shadow-sm active:scale-95 transition-[transform,background-color] duration-150 shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:active:scale-100"
-                                            aria-label="Menüyü aç"
-                                            aria-expanded={isMobileMenuOpen}
-                                            aria-controls="mobile-nav-drawer"
+                            <div className="flex items-center gap-2.5">
+                                {/* Hamburger Butonu (Dokunmatik Hedef >= 44x44px) */}
+                                <button
+                                    ref={hamburgerRef}
+                                    onClick={() => setIsMobileMenuOpen(true)}
+                                    className="md:hidden flex flex-col items-center justify-center gap-1.5 w-10 h-10 min-[360px]:w-11 min-[360px]:h-11 min-w-[40px] min-[360px]:min-w-[44px] min-h-[40px] min-[360px]:min-h-[44px] rounded-xl bg-[#02041A] text-white shadow-sm active:scale-95 transition-[transform,background-color] duration-150 shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:active:scale-100"
+                                    aria-label="Menüyü aç"
+                                    aria-expanded={isMobileMenuOpen}
+                                    aria-controls="mobile-nav-drawer"
+                                >
+                                    <span className="w-5 h-0.5 bg-white rounded-full block" />
+                                    <span className="w-5 h-0.5 bg-white rounded-full block" />
+                                    <span className="w-5 h-0.5 bg-white rounded-full block" />
+                                </button>
+                                <h1 className="text-[9px] min-[360px]:text-[10px] md:text-[11px] clash-subtitle text-[#040989] tracking-[0.1em] min-[360px]:tracking-[0.2em] uppercase opacity-80 select-none truncate">FinAi Workspace</h1>
+                            </div>
+                            
+                            <div className="flex items-center space-x-2 md:space-x-4">
+                                <div className="hidden sm:block">
+                                    <GlobalSearch className="w-56 lg:w-80" />
+                                </div>
+
+                                <ThemeToggle />
+
+                                <div className="relative" ref={profileRef}>
+                                    <button
+                                        onClick={() => setIsProfileOpen(!isProfileOpen)}
+                                        aria-label="Kullanıcı Profili ve Ayarlar"
+                                        aria-expanded={isProfileOpen}
+                                        aria-controls="profile-dropdown-menu"
+                                        aria-haspopup="true"
+                                        className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-100 flex items-center justify-center text-[#040989] clash-subtitle hover:bg-slate-200 border border-slate-200 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 focus-visible:ring-offset-2 overflow-hidden border border-[#0a192f]/5"
+                                    >
+                                        {avatarUrl ? (
+                                            <img src={avatarUrl} alt="Profil" className="w-full h-full object-cover" />
+                                        ) : (
+                                            userName ? userName.charAt(0).toUpperCase() : <User className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                                        )}
+                                    </button>
+
+                                    {isProfileOpen && (
+                                        <div 
+                                            id="profile-dropdown-menu"
+                                            role="menu"
+                                            aria-label="Kullanıcı Menüsü"
+                                            className="absolute right-0 mt-3 w-56 bg-white border border-[#0a192f]/10 rounded-xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in-95 duration-150 origin-top-right focus:outline-none"
                                         >
-                                            <span className="w-5 h-0.5 bg-white rounded-full block" />
-                                            <span className="w-5 h-0.5 bg-white rounded-full block" />
-                                            <span className="w-5 h-0.5 bg-white rounded-full block" />
-                                        </button>
-                                    </div>
-
-                                    {/* Sağ Taraf: Boşluğa Alınan FinAi Workspace Başlığı ve Profil */}
-                                    <div className="flex items-center gap-3 md:gap-4 ml-auto">
-                                        <h1 className="text-[9px] min-[360px]:text-[10px] md:text-[11px] clash-subtitle text-[#040989] tracking-[0.1em] min-[360px]:tracking-[0.2em] uppercase opacity-80 select-none truncate">
-                                            FinAi Workspace
-                                        </h1>
-
-                                        <div className="relative" ref={profileRef}>
-                                            <button
-                                                onClick={() => setIsProfileOpen(!isProfileOpen)}
-                                                aria-label="Kullanıcı Profili ve Ayarlar"
-                                                aria-expanded={isProfileOpen}
-                                                aria-controls="profile-dropdown-menu"
-                                                aria-haspopup="true"
-                                                className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-100 flex items-center justify-center text-[#040989] clash-subtitle hover:bg-slate-200 border border-slate-200 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 focus-visible:ring-offset-2 overflow-hidden border border-[#0a192f]/5"
-                                            >
-                                                {avatarUrl ? (
-                                                    <img src={avatarUrl} alt="Profil" className="w-full h-full object-cover" />
-                                                ) : (
-                                                    userName ? userName.charAt(0).toUpperCase() : <User className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                                                )}
-                                            </button>
-
-                                            {isProfileOpen && (
-                                                <div 
-                                                    id="profile-dropdown-menu"
-                                                    role="menu"
-                                                    aria-label="Kullanıcı Menüsü"
-                                                    className="absolute right-0 mt-3 w-56 bg-white border border-[#0a192f]/10 rounded-xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in-95 duration-150 origin-top-right focus:outline-none"
+                                            <div className="px-4 py-2 border-b border-[#D6E4FF]/50 mb-1">
+                                                <p className="text-xs font-bold text-[#0a192f]">{userName || "Kullanıcı"}</p>
+                                            </div>
+                                            <div className="py-1">
+                                                <Link 
+                                                    href="/dashboard/settings" 
+                                                    onClick={() => setIsProfileOpen(false)}
+                                                    role="menuitem"
+                                                    className="w-full text-left px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 hover:text-[#0a192f] flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20"
                                                 >
-                                                    <div className="px-4 py-2 border-b border-[#D6E4FF]/50 mb-1">
-                                                        <p className="text-xs font-bold text-[#0a192f]">{userName || "Kullanıcı"}</p>
-                                                    </div>
-                                                    <div className="py-1">
-                                                        <Link 
-                                                            href="/dashboard/settings" 
-                                                            onClick={() => setIsProfileOpen(false)}
-                                                            role="menuitem"
-                                                            className="w-full text-left px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 hover:text-[#0a192f] flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20"
-                                                        >
-                                                            <Settings className="w-4 h-4" />
-                                                            Kullanıcı Ayarları
-                                                        </Link>
-                                                    </div>
-                                                    <div className="border-t border-[#D6E4FF]/50 mt-1 py-1">
-                                                        <button 
-                                                            onClick={() => {
-                                                                setIsProfileOpen(false);
-                                                                handleLogout();
-                                                            }} 
-                                                            role="menuitem"
-                                                            className="w-full text-left px-4 py-2 text-sm font-bold text-rose-600 hover:bg-rose-50 flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
-                                                        >
-                                                            <LogOut className="w-4 h-4" />
-                                                            Çıkış Yap
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    <div className="flex items-center gap-2.5">
-                                        {/* Hamburger Butonu (Dokunmatik Hedef >= 44x44px) */}
-                                        <button
-                                            ref={hamburgerRef}
-                                            onClick={() => setIsMobileMenuOpen(true)}
-                                            className="md:hidden flex flex-col items-center justify-center gap-1.5 w-10 h-10 min-[360px]:w-11 min-[360px]:h-11 min-w-[40px] min-[360px]:min-w-[44px] min-h-[40px] min-[360px]:min-h-[44px] rounded-xl bg-[#02041A] text-white shadow-sm active:scale-95 transition-[transform,background-color] duration-150 shrink-0 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 focus-visible:ring-offset-2 motion-reduce:transition-none motion-reduce:active:scale-100"
-                                            aria-label="Menüyü aç"
-                                            aria-expanded={isMobileMenuOpen}
-                                            aria-controls="mobile-nav-drawer"
-                                        >
-                                            <span className="w-5 h-0.5 bg-white rounded-full block" />
-                                            <span className="w-5 h-0.5 bg-white rounded-full block" />
-                                            <span className="w-5 h-0.5 bg-white rounded-full block" />
-                                        </button>
-                                        <h1 className="text-[9px] min-[360px]:text-[10px] md:text-[11px] clash-subtitle text-[#040989] tracking-[0.1em] min-[360px]:tracking-[0.2em] uppercase opacity-80 select-none truncate">FinAi Workspace</h1>
-                                    </div>
-                                    
-                                    <div className="flex items-center space-x-2 md:space-x-4">
-                                        <div className="hidden sm:block">
-                                            <GlobalSearch className="w-56 lg:w-80" />
-                                        </div>
-
-                                        <ThemeToggle />
-
-                                        <div className="relative" ref={profileRef}>
-                                            <button
-                                                onClick={() => setIsProfileOpen(!isProfileOpen)}
-                                                aria-label="Kullanıcı Profili ve Ayarlar"
-                                                aria-expanded={isProfileOpen}
-                                                aria-controls="profile-dropdown-menu"
-                                                aria-haspopup="true"
-                                                className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-100 flex items-center justify-center text-[#040989] clash-subtitle hover:bg-slate-200 border border-slate-200 transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20 focus-visible:ring-offset-2 overflow-hidden border border-[#0a192f]/5"
-                                            >
-                                                {avatarUrl ? (
-                                                    <img src={avatarUrl} alt="Profil" className="w-full h-full object-cover" />
-                                                ) : (
-                                                    userName ? userName.charAt(0).toUpperCase() : <User className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                                                )}
-                                            </button>
-
-                                            {isProfileOpen && (
-                                                <div 
-                                                    id="profile-dropdown-menu"
-                                                    role="menu"
-                                                    aria-label="Kullanıcı Menüsü"
-                                                    className="absolute right-0 mt-3 w-56 bg-white border border-[#0a192f]/10 rounded-xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in-95 duration-150 origin-top-right focus:outline-none"
+                                                    <Settings className="w-4 h-4" />
+                                                    Kullanıcı Ayarları
+                                                </Link>
+                                            </div>
+                                            <div className="border-t border-[#D6E4FF]/50 mt-1 py-1">
+                                                <button 
+                                                    onClick={() => {
+                                                        setIsProfileOpen(false);
+                                                        handleLogout();
+                                                    }} 
+                                                    role="menuitem"
+                                                    className="w-full text-left px-4 py-2 text-sm font-bold text-rose-600 hover:bg-rose-50 flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
                                                 >
-                                                    <div className="px-4 py-2 border-b border-[#D6E4FF]/50 mb-1">
-                                                        <p className="text-xs font-bold text-[#0a192f]">{userName || "Kullanıcı"}</p>
-                                                    </div>
-                                                    <div className="py-1">
-                                                        <Link 
-                                                            href="/dashboard/settings" 
-                                                            onClick={() => setIsProfileOpen(false)}
-                                                            role="menuitem"
-                                                            className="w-full text-left px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 hover:text-[#0a192f] flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0E1E38]/20"
-                                                        >
-                                                            <Settings className="w-4 h-4" />
-                                                            Kullanıcı Ayarları
-                                                        </Link>
-                                                    </div>
-                                                    <div className="border-t border-[#D6E4FF]/50 mt-1 py-1">
-                                                        <button 
-                                                            onClick={() => {
-                                                                setIsProfileOpen(false);
-                                                                handleLogout();
-                                                            }} 
-                                                            role="menuitem"
-                                                            className="w-full text-left px-4 py-2 text-sm font-bold text-rose-600 hover:bg-rose-50 flex items-center gap-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400"
-                                                        >
-                                                            <LogOut className="w-4 h-4" />
-                                                            Çıkış Yap
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            )}
+                                                    <LogOut className="w-4 h-4" />
+                                                    Çıkış Yap
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </>
-                            )}
+                                    )}
+                                </div>
+                            </div>
                         </header>
 
                         {/* Mobile Drawer (FinAi Kurumsal Beyaz & Cam Tasarım Dili) */}
