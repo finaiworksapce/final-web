@@ -93,12 +93,19 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
     }, [isDark]);
 
     return (
-        <div 
-            ref={containerRef}
-            className={`tradingview-widget-container w-full h-full relative overflow-hidden min-h-[310px] ${className}`}
-            style={{ width: "100%", height: "100%" }}
-        >
-            <div className="tradingview-widget-container__widget h-full w-full" />
+        <div className="w-full h-full relative overflow-hidden min-h-[310px]">
+            <div 
+                ref={containerRef}
+                className={`tradingview-widget-container relative ${className}`}
+                style={{ 
+                    width: "166.6%", 
+                    height: "166.6%", 
+                    transform: "scale(0.6)", 
+                    transformOrigin: "top left" 
+                }}
+            >
+                <div className="tradingview-widget-container__widget h-full w-full" />
+            </div>
         </div>
     );
 }
