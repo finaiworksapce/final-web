@@ -29,9 +29,13 @@ export function FinancialTicker() {
             ticker.setAttribute("item-size", "compact");
             ticker.setAttribute("transparent-background", "true");
             ticker.style.display = "block";
-            ticker.style.width = "100%";
+            ticker.style.width = "118%";
             ticker.style.height = "100%";
+            ticker.style.transform = "scale(0.85)";
+            ticker.style.transformOrigin = "left center";
             ticker.style.setProperty("--tv-widget-background-color", "transparent");
+            ticker.style.setProperty("--tv-widget-hover-background-color", "rgba(255, 255, 255, 0.08)");
+            ticker.style.setProperty("--ja", "rgba(255, 255, 255, 0.08)");
             ticker.style.setProperty("--tv-widget-text-color", "#ffffff");
             ticker.style.setProperty("--tv-widget-price-text-color", "#ffffff");
             ticker.style.setProperty("--tv-widget-font-family", "'Zodiak', 'Zodiak-Variable', 'Expose-Medium', sans-serif");
@@ -48,7 +52,7 @@ export function FinancialTicker() {
     return (
         <div 
             ref={containerRef}
-            className="w-full h-[50px] min-h-[50px] bg-gradient-to-br from-[#02041A] via-[#040989] to-[#02041A] border-b border-white/10 relative overflow-hidden flex items-center"
+            className="w-full h-[42px] min-h-[42px] bg-gradient-to-br from-[#02041A] via-[#040989] to-[#02041A] border-b border-white/10 relative overflow-hidden flex items-center"
         />
     );
 }
