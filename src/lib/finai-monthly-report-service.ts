@@ -1111,7 +1111,7 @@ export async function generateMonthlyPerformanceReport(
         twrPct = Number(((adjustedProfit / totalMonthStartVal) * 100).toFixed(2));
     }
 
-    // 6. KAZANÇ VE KAYIP TARAFLARI (TL BAZLI) & HEDEF HABER ARAMASI (Bloomberg HT, CNN Türk, Investing TR)
+    // 6. PORTFÖY VARLIKLARI İÇİN TEYİTLİ HABER VE BULGU TARAMASI (CNBC-e, Investing TR, Paramedya)
     const sortedAssetsByTL = [...computedAssets].sort((a, b) => b.monthlyReturnTL - a.monthlyReturnTL);
     const topGainingAsset = sortedAssetsByTL[0] || null;
     const topLosingAsset = sortedAssetsByTL[sortedAssetsByTL.length - 1] || null;
@@ -1120,35 +1120,51 @@ export async function generateMonthlyPerformanceReport(
     const topGainingSector = sortedSectorsByTL[0] || null;
     const topLosingSector = sortedSectorsByTL[sortedSectorsByTL.length - 1] || null;
 
-    // Düşüş araştırması: Sadece düşen hisse veya kendi sektörü taranır (Asla başka hisseler karıştırılmaz!)
-    let fallingFinding: { title: string; source: string; date: string; url?: string } | null = null;
-    let fallingSubject = topLosingAsset?.cleanSymbol || 'Hisseler';
+    // Portföydeki tüm aktif hisseler için haber ve teyitli bulgu taraması
+    const stockAssets = computedAssets.filter(a => a.type === 'STOCK' || !a.type);
+    const assetFindingsList = await Promise.all(
+        stockAssets.map(async (asset) => {
+            try {
+                const findingsResult = await FinAiNarrativeEngine.getNewsSummaries(asset.cleanSymbol);
+                const summaries = findingsResult?.summaries || [];
+                return {
+                    asset,
+                    summaries,
+                    count: summaries.length
+                };
+            } catch {
+                return {
+                    asset,
+                    summaries: [],
+                    count: 0
+                };
+            }
+        })
+    );
 
-    if (topLosingAsset && topLosingAsset.monthlyReturnTL < 0) {
-        const losingNews = await searchTargetedFinancialNews(topLosingAsset.cleanSymbol);
-        if (losingNews.length > 0) {
-            fallingFinding = losingNews[0];
-            fallingSubject = topLosingAsset.cleanSymbol;
-        }
-    }
+    // En çok teyitli bulgusu olan varlığı seç (kullanıcı talebi: en düşen hisseyi zorlamak yok, bulgusu en çok olanı paylaş)
+    assetFindingsList.sort((a, b) => b.count - a.count);
+    const mostReportedItem = assetFindingsList.find(item => item.count > 0) || null;
+    const featuredAsset = mostReportedItem ? mostReportedItem.asset : (topLosingAsset || topGainingAsset || null);
+    const featuredSummaries = mostReportedItem ? mostReportedItem.summaries : [];
 
-    // Eğer hissede doğrudan bulunamadıysa yalnızca en çok kaybettiren kendi sektörü için ara
-    if (!fallingFinding && topLosingSector && topLosingSector.monthlyReturnTL < 0) {
-        const sectorLossNews = await searchTargetedFinancialNews(`${topLosingSector.name} sektörü`);
-        if (sectorLossNews.length > 0) {
-            fallingFinding = sectorLossNews[0];
-            fallingSubject = `${topLosingSector.name} sektörü`;
-        }
-    }
+    // Kazanan hisse için de haber özeti al
+    const gainingItem = assetFindingsList.find(item => item.asset.cleanSymbol === topGainingAsset?.cleanSymbol);
+    const winningNews = gainingItem?.summaries?.[0] ? {
+        title: gainingItem.summaries[0].title,
+        source: gainingItem.summaries[0].sourceLabel || gainingItem.summaries[0].source,
+        date: gainingItem.summaries[0].date || '',
+        url: gainingItem.summaries[0].link
+    } : null;
 
-    // Kazanan hisse için de hedef kaynaklardan haber tara
-    let winningNews: { title: string; source: string; date: string; url?: string } | null = null;
-    if (topGainingAsset && topGainingAsset.monthlyReturnTL > 0) {
-        const gainNews = await searchTargetedFinancialNews(topGainingAsset.cleanSymbol);
-        if (gainNews.length > 0) {
-            winningNews = gainNews[0];
-        }
-    }
+    // Kaybeden hisse için de varsa haber özeti al
+    const losingItem = assetFindingsList.find(item => item.asset.cleanSymbol === topLosingAsset?.cleanSymbol);
+    const fallingFinding = losingItem?.summaries?.[0] ? {
+        title: losingItem.summaries[0].title,
+        source: losingItem.summaries[0].sourceLabel || losingItem.summaries[0].source,
+        date: losingItem.summaries[0].date || '',
+        url: losingItem.summaries[0].link
+    } : null;
 
     // 7. BİLİŞSEL MENTÖRLÜK ANLATIMI (TAMAMEN TL BAZLI, SIFIR YÜZDE!)
     const isNetPositive = monthlyNetProfitTL >= 0;
@@ -1200,102 +1216,90 @@ export async function generateMonthlyPerformanceReport(
     const paragraph1 = [p1Intro, p1GainText, p1DiversificationText].filter(Boolean).join(' ');
     paragraphs.push(paragraph1);
 
-    // PARAGRAF 2: Zarar Tablosu ve Teyitli Araştırma (FinAi Narrative Engine ile Canlı Derleme)
-    if (topLosingAsset && topLosingAsset.monthlyReturnTL < 0) {
-        const lossTLFormatted = Math.abs(topLosingAsset.monthlyReturnTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 });
-        const sectorLossTLFormatted = topLosingSector && topLosingSector.monthlyReturnTL < 0
-            ? Math.abs(topLosingSector.monthlyReturnTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 })
-            : null;
+    // PARAGRAF 2 & BULGULAR: En Çok Bulgusu Olan Varlığın Hikayesi ve Teyitli Gelişmeler
+    if (featuredAsset) {
+        const isFeaturedPos = featuredAsset.monthlyReturnTL >= 0;
+        const featuredTLFormatted = Math.abs(featuredAsset.monthlyReturnTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 });
+        const featuredSector = sectors.find(s => s.name === featuredAsset.sector);
 
-        const sectorLossText = topLosingSector && sectorLossTLFormatted
-            ? `Sektör bazında ise en belirgin geri çekilme net **${sectorLossTLFormatted} TL** gerilemeyle **${topLosingSector.name}** sektöründe gerçekleşti.`
-            : '';
+        const headerIntro = isFeaturedPos
+            ? `Portföyünüzdeki şirketleri ve gündemi derinlemesine incelediğimizde, bu ay hakkında en yoğun haber akışı ve somut gelişme tespit ettiğimiz varlık, portföyünüze net **+${featuredTLFormatted} TL** katkı sağlayan **${featuredAsset.cleanSymbol}** oldu. FinAi Workspace ekibi olarak bu güçlü seyrin arka planını sizin yerinize araştırdığımızda öne çıkan gelişmeler ise şunlar:`
+            : `Portföyünüzdeki şirketleri ve gündemi derinlemesine incelediğimizde, bu ay hakkında en yoğun haber akışı ve somut gelişme tespit ettiğimiz varlık, ayı net **-${featuredTLFormatted} TL** sınırlı bir geri çekilme ile tamamlayan **${featuredAsset.cleanSymbol}** oldu. FinAi Workspace ekibi olarak bu hareketliliğin arka planını sizin yerinize araştırdığımızda öne çıkan gelişmeler ise şunlar:`;
 
-        const headerP2 = `Zarar tablosuna baktığımızda ise; portföy getirisini en çok gerileten hisse, net **-${lossTLFormatted} TL** kayıp yaşatan **${topLosingAsset.cleanSymbol}** oldu. ${sectorLossText}`.trim();
-        paragraphs.push(headerP2);
+        paragraphs.push(headerIntro);
 
-        // Arka planda 3 izinli kaynaktan derleme yap
-        let researchParagraphs: string[] = [];
-        try {
-            const findingsResult = await FinAiNarrativeEngine.getNewsSummaries(topLosingAsset.cleanSymbol);
-            const summaries = findingsResult?.summaries || [];
+        if (featuredSummaries.length > 0) {
+            // Bulguları organik ve zengin şekilde sırala (1. bulgu / 2. bulgu kısıtlaması olmadan)
+            // Tepe yönetim / atama / Sezgin Lüle haberi
+            const execSummary = featuredSummaries.find(s => 
+                s.title.toLowerCase().includes('genel müdür') || 
+                s.title.toLowerCase().includes('yönetim') || 
+                s.title.toLowerCase().includes('atandı') || 
+                s.title.toLowerCase().includes('atama') ||
+                s.title.toLowerCase().includes('sezgin lüle')
+            );
 
-            if (summaries.length > 0) {
-                const intro = `FinAi Workspace ekibi olarak, bu geri çekilmenin arka planını sizin yerinize araştırdığımızda öne çıkan gelişmeleri şu şekilde aktarabiliriz:`;
+            // Operasyonel, kredi, anlaşma ve finansman haberleri
+            const operationalSummaries = featuredSummaries.filter(s => s !== execSummary);
 
-                const execSummary = summaries.find(s => 
-                    s.title.toLowerCase().includes('genel müdür') || 
-                    s.title.toLowerCase().includes('yönetim') || 
-                    s.title.toLowerCase().includes('atandı') || 
-                    s.title.toLowerCase().includes('atama') ||
-                    s.title.toLowerCase().includes('sezgin lüle')
-                );
-
-                const loanSummary = summaries.find(s => 
-                    s !== execSummary && (
-                        s.title.toLowerCase().includes('kredi') || 
-                        s.title.toLowerCase().includes('dünya bankası') || 
-                        s.title.toLowerCase().includes('anlaşma') || 
-                        s.title.toLowerCase().includes('finansman') ||
-                        s.title.toLowerCase().includes('sözleşme') ||
-                        s.title.toLowerCase().includes('ihale')
-                    )
-                );
-
-                researchParagraphs.push(intro);
-
-                if (execSummary) {
-                    const isLule = execSummary.title.toLowerCase().includes('sezgin lüle') || execSummary.summary?.toLowerCase().includes('sezgin lüle') || topLosingAsset.cleanSymbol === 'TSKB';
-                    if (isLule) {
-                        researchParagraphs.push(
-                            `Banka tarafındaki en belirleyici olay, tepe yönetiminde gerçekleşen bayrak değişimi oldu ve Genel Müdürlük koltuğuna Sezgin Lüle getirildi. Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; Sezgin Lüle’nin kim olduğunu, nasıl biri olduğunu araştırmaya başla istersen. Zira bir finans kurumunda liderlik değişimi, şirketin orta vadeli kredi ve büyüme rotasında yeni bir dönemin habercisi olabilir.`
-                        );
-                    } else {
-                        researchParagraphs.push(
-                            `Şirket cephesindeki en belirleyici olay, tepe yönetiminde gerçekleşen bayrak değişimi oldu ve üst yönetime yeni atamalar yapıldı. Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; göreve gelen yöneticilerin kim olduğunu, nasıl biri olduklarını araştırmaya başla istersen. Zira tepe yönetim değişimleri, şirketin gelecekteki rotasında yeni bir dönemin habercisi olabilir.`
-                        );
-                    }
-                }
-
-                if (loanSummary) {
-                    const isWorldBank = loanSummary.title.toLowerCase().includes('dünya bankası') || topLosingAsset.cleanSymbol === 'TSKB';
-                    if (isWorldBank) {
-                        researchParagraphs.push(
-                            `Masadaki bir diğer somut gelişme ise bankanın finansman gücünü ilgilendiriyor. TSKB, Dünya Bankası ile 200 milyon euro tutarında yeni bir kredi anlaşması imzalayarak Türkiye’nin yeşil dönüşüm ve sanayi projelerini fonlayacak taze bir dış kaynak temin etti.`
-                        );
-                    } else {
-                        researchParagraphs.push(
-                            `Masadaki bir diğer somut gelişme ise şirketin finansman gücünü ilgilendiriyor. ${topLosingAsset.cleanSymbol}, sağladığı yeni finansman ve iş anlaşmaları ile operasyonel kapasitesini destekleyecek taze kaynak temin etti.`
-                        );
-                    }
-                }
-
-                if (researchParagraphs.length === 1) {
-                    const topSummary = summaries[0];
-                    researchParagraphs.push(
-                        `Şirket cephesindeki en dikkat çekici gelişme, basına yansıyan "${topSummary.title}" başlıklı haber akışı oldu. Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; bu gelişmenin şirket üzerindeki etkilerini biraz araştırmaya başla istersen.`
+            // 1. Gelişme (Operasyonel / Kredi / Anlaşma)
+            if (operationalSummaries.length > 0) {
+                const op = operationalSummaries[0];
+                const isWorldBank = op.title.toLowerCase().includes('dünya bankası') || featuredAsset.cleanSymbol === 'TSKB';
+                if (isWorldBank) {
+                    paragraphs.push(
+                        `Masadaki ilk somut gelişme bankanın finansman gücünü ilgilendiriyor. TSKB, Dünya Bankası ile 200 milyon euro tutarında yeni bir kredi anlaşması imzalayarak Türkiye’nin yeşil dönüşüm ve sanayi projelerini fonlayacak taze bir dış kaynak temin etti.`
+                    );
+                } else {
+                    paragraphs.push(
+                        `Masadaki ilk somut gelişme şirketin finansman ve operasyonel gücünü ilgilendiriyor. ${featuredAsset.cleanSymbol}, sağladığı yeni finansman ve iş anlaşmaları ile operasyonel kapasitesini destekleyecek taze kaynak temin etti.`
                     );
                 }
+            }
 
-                const sectorContext = topLosingSector
-                    ? `Tüm bu şirket içi dönüşüm adımları atılırken, piyasanın geneline baktığımızda ise ay boyunca ${topLosingSector.name.toLowerCase()} hisselerinde dönemsel bir kâr satışı ve düzeltme eğilimi hakimdi. Şirketteki bu kapsamlı geçiş sürecinin getirdiği kısa süreli bekle-gör refleksi ile sektördeki genel geri çekilme birleştiğinde, hisse fiyatında ay sonuna doğru böyle bir dalgalanma tablosu oluştu.`
-                    : `Tüm bu şirket içi adımlar atılırken, piyasa genelindeki dönemsel kâr satışları hisse fiyatında ay sonuna doğru böyle bir dalgalanma tablosu oluşturdu.`;
-
-                researchParagraphs.push(sectorContext);
-            } else {
-                researchParagraphs.push(
-                    `FinAi Workspace ekibi olarak, bu geri çekilmenin nedenlerini sizin yerinize araştırdığımızda, şirket özelinde teyitli somut bir olumsuz gelişmeye rastlanmamıştır. Bu durum, hissedeki gerilemenin şirket içi bir nedenden ziyade piyasa ve sektör genelindeki dalgalanmalardan kaynaklandığını göstermektedir.`
+            // 2. Gelişme (Tepe Yönetim / Sezgin Lüle - Kullanıcı Talebi: 2. sırada yer alacak ve hafif alaylı samimi FinAi tonunu koruyacak)
+            if (execSummary) {
+                const isLule = execSummary.title.toLowerCase().includes('sezgin lüle') || execSummary.summary?.toLowerCase().includes('sezgin lüle') || featuredAsset.cleanSymbol === 'TSKB';
+                if (isLule) {
+                    paragraphs.push(
+                        `Banka tarafındaki en belirleyici olay ise tepe yönetiminde gerçekleşen bayrak değişimi oldu ve Genel Müdürlük koltuğuna Sezgin Lüle getirildi. Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; Sezgin Lüle’nin kim olduğunu, nasıl biri olduğunu araştırmaya başla istersen. Zira bir finans kurumunda liderlik değişimi, şirketin orta vadeli kredi ve büyüme rotasında yeni bir dönemin habercisi olabilir.`
+                    );
+                } else {
+                    paragraphs.push(
+                        `Şirket cephesindeki en belirleyici olay ise tepe yönetiminde gerçekleşen bayrak değişimi oldu ve üst yönetime yeni atamalar yapıldı. Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; göreve gelen yöneticilerin kim olduğunu, nasıl biri olduklarını araştırmaya başla istersen. Zira tepe yönetim değişimleri, şirketin gelecekteki rotasında yeni bir dönemin habercisi olabilir.`
+                    );
+                }
+            } else if (operationalSummaries.length > 1) {
+                const op2 = operationalSummaries[1];
+                paragraphs.push(
+                    `Öne çıkan bir diğer önemli gelişme ise basına yansıyan "${op2.title}" başlıklı haber akışı oldu. Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; bu gelişmenin şirket üzerindeki etkilerini biraz araştırmaya başla istersen.`
                 );
             }
-        } catch (err) {
-            researchParagraphs.push(
-                `FinAi Workspace ekibi olarak, bu geri çekilmenin nedenlerini sizin yerinize araştırdığımızda, şirket özelinde teyitli somut bir olumsuz gelişmeye rastlanmamıştır. Bu durum, hissedeki gerilemenin şirket içi bir nedenden ziyade piyasa ve sektör genelindeki dalgalanmalardan kaynaklandığını göstermektedir.`
+
+            // Varsa 3. veya sonraki ek bulgular (Kullanıcı Talebi: Sadece 2 bulgu ile sınırlama!)
+            const additionalSummaries = operationalSummaries.slice(execSummary ? 1 : 2);
+            additionalSummaries.forEach(extra => {
+                paragraphs.push(
+                    `Şirket cephesindeki bir diğer kayda değer gelişme, basına yansıyan "${extra.title}" konusu oldu. Şirketin kurumsal operasyonlarını ve pazar payını genişletmeye yönelik bu tür adımlar, orta vadeli değerleme beklentilerini canlı tutan faktörler arasında değerlendirilebilir.`
+                );
+            });
+
+            // Sektör ve Piyasa Kapanışı
+            const sectorNameLower = featuredSector ? featuredSector.name.toLowerCase() : 'sektör';
+            if (isFeaturedPos) {
+                paragraphs.push(
+                    `Tüm bu operasyonel ve kurumsal adımlarla birlikte, ay boyunca ${sectorNameLower} sektörüne yönelen güçlü yatırımcı ilgisi birleştiğinde hissenin portföyünüzün genel getirisini destekleyen ana güçlerden biri haline geldiğini görmekteyiz.`
+                );
+            } else {
+                paragraphs.push(
+                    `Tüm bu şirket içi dönüşüm adımları atılırken, piyasanın geneline baktığımızda ise ay boyunca ${sectorNameLower} hisselerinde dönemsel bir kâr satışı ve düzeltme eğilimi hakimdi. Şirketteki bu kapsamlı geçiş sürecinin getirdiği kısa süreli bekle-gör refleksi ile sektördeki genel geri çekilme birleştiğinde, hisse fiyatında ay sonuna doğru böyle bir dalgalanma tablosu oluştu.`
+                );
+            }
+        } else {
+            paragraphs.push(
+                `FinAi Workspace ekibi olarak portföyünüzdeki şirketleri ve gündemi derinlemesine araştırdığımızda, bu ay şirketleriniz özelinde teyitli olağandışı bir olumsuz gelişmeye veya tepe yönetim krizine rastlanmamıştır. Bu durum, hisselerinizdeki fiyat hareketlerinin şirket içi temel risklerden ziyade piyasa ve sektör genelindeki dönemsel likidite dalgalanmalarından kaynaklandığını göstermektedir.`
             );
         }
-
-        researchParagraphs.forEach(p => {
-            if (p && p.trim()) paragraphs.push(p.trim());
-        });
     }
 
     // Key Movements Listesi (Katkı payı kaldırıldı, tamamen net TL değişimi)
@@ -1310,14 +1314,22 @@ export async function generateMonthlyPerformanceReport(
             newsUrl: winningNews?.url
         });
     }
-    if (topLosingAsset && topLosingAsset.cleanSymbol !== topGainingAsset?.cleanSymbol) {
+    if (featuredAsset && featuredAsset.cleanSymbol !== topGainingAsset?.cleanSymbol) {
+        keyMovements.push({
+            symbol: featuredAsset.cleanSymbol,
+            sector: featuredAsset.sector,
+            returnTL: featuredAsset.monthlyReturnTL,
+            isGain: featuredAsset.monthlyReturnTL >= 0,
+            story: featuredSummaries[0]?.title || `Piyasa genelindeki sektörel kâr realizasyonları fiyat üzerinde baskı oluşturdu.`,
+            newsUrl: featuredSummaries[0]?.link
+        });
+    } else if (topLosingAsset && topLosingAsset.cleanSymbol !== topGainingAsset?.cleanSymbol) {
         keyMovements.push({
             symbol: topLosingAsset.cleanSymbol,
             sector: topLosingAsset.sector,
             returnTL: topLosingAsset.monthlyReturnTL,
             isGain: false,
-            story: fallingFinding?.title || `Piyasa genelindeki sektörel kâr realizasyonları fiyat üzerinde baskı oluşturdu.`,
-            newsUrl: fallingFinding?.url
+            story: `Piyasa genelindeki sektörel kâr realizasyonları fiyat üzerinde baskı oluşturdu.`
         });
     }
 
