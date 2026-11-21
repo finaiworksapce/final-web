@@ -87,7 +87,7 @@ function AkademiContent() {
               <div className="w-full p-5 sm:p-6 xl:p-8 bg-[#0E1E38] text-white rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl shadow-[#0E1E38]/10 border border-white/10">
                 <div className="space-y-1.5 flex-1 pr-4">
                   <h3 className="text-lg sm:text-xl lg:text-2xl font-medium text-white clash-title tracking-tight">
-                    Gelir ve Gider Yönetimi: Nakit Akışı
+                    Gelir ve Gider Yönetimi
                   </h3>
                   <p className="text-xs sm:text-sm lg:text-base text-white/70 leading-relaxed font-normal">
                     Finansal gücün ne kadar kazandığınla değil; ay bittiğinde masada ne bırakabildiğinle başlar.
@@ -193,11 +193,11 @@ function AkademiContent() {
 
             <div className="relative z-10 space-y-6">
               
-              {/* Üst: FinAi Marka Başlığı */}
+              {/* Üst: Konu Başlıkları */}
               <div className="flex items-center gap-2.5 border-b border-white/10 pb-4">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#004BFA] animate-pulse" />
                 <span className="text-lg font-bold tracking-tight text-white clash-title">
-                  FinAi Akademi
+                  Konu Başlıkları
                 </span>
               </div>
 
@@ -219,37 +219,33 @@ function AkademiContent() {
                     <div
                       key={topic.id}
                       onClick={() => isActive && handleOpenTopic(topic.id)}
-                      className={`p-2.5 rounded-xl border transition-all text-xs flex items-start gap-2.5 ${
+                      className={`p-2.5 sm:p-3 rounded-xl border transition-all text-xs flex items-center justify-between gap-3 ${
                         isActive
                           ? "bg-[#004BFA]/25 border-[#004BFA]/70 text-white cursor-pointer hover:bg-[#004BFA]/35 hover:border-[#004BFA]"
                           : "bg-white/[0.02] border-white/5 text-white/40 cursor-not-allowed"
                       }`}
                     >
-                      <div className="mt-0.5 shrink-0">
-                        {isActive ? (
-                          <div className="w-4 h-4 rounded-full bg-[#004BFA] flex items-center justify-center text-white">
-                            <Play className="w-2 h-2 fill-white text-white ml-0.5" />
-                          </div>
-                        ) : (
-                          <div className="w-4 h-4 rounded-full bg-white/10 flex items-center justify-center text-white/40">
-                            <Lock className="w-2.5 h-2.5" />
-                          </div>
-                        )}
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="shrink-0">
+                          {isActive ? (
+                            <div className="w-4 h-4 rounded-full bg-[#004BFA] flex items-center justify-center text-white">
+                              <Play className="w-2 h-2 fill-white text-white ml-0.5" />
+                            </div>
+                          ) : (
+                            <div className="w-4 h-4 rounded-full bg-white/10 flex items-center justify-center text-white/40">
+                              <Lock className="w-2.5 h-2.5" />
+                            </div>
+                          )}
+                        </div>
+
+                        <span className={`font-semibold truncate text-xs sm:text-sm ${isActive ? "text-white" : "text-white/60"}`}>
+                          {topic.shortTitle}
+                        </span>
                       </div>
 
-                      <div className="space-y-0.5 flex-1 min-w-0">
-                        <div className="flex items-center justify-between gap-1">
-                          <span className={`font-semibold truncate ${isActive ? "text-white" : "text-white/60"}`}>
-                            {topic.shortTitle}
-                          </span>
-                          <span className={`text-[10px] shrink-0 ${isActive ? "text-[#78B8F5] font-semibold" : "text-white/30"}`}>
-                            {isActive ? "Derse Başla" : topic.readTime}
-                          </span>
-                        </div>
-                        <p className={`text-[11px] line-clamp-1 ${isActive ? "text-white/80" : "text-white/30"}`}>
-                          {topic.description}
-                        </p>
-                      </div>
+                      <span className={`text-[10px] shrink-0 font-medium ${isActive ? "text-[#78B8F5] font-semibold" : "text-white/30"}`}>
+                        {isActive ? "Derse Başla" : topic.readTime}
+                      </span>
                     </div>
                   );
                 })}

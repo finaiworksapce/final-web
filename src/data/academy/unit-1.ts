@@ -26,7 +26,7 @@ export const UNIT_1_CONFIG: UnitConfig = {
       id: '1-1',
       weekNumber: 1,
       title: 'Gelir ve Gider Yönetimi: Kendi Nakit Akışının Farkına Varmak',
-      shortTitle: 'Gelir ve Gider Yönetimi (Nakit Akışı)',
+      shortTitle: 'Gelir ve Gider Yönetimi',
       status: 'active',
       description: 'Zenginlik ne kadar kazandığınla değil; ay bittiğinde masada ne bırakabildiğinle başlar.',
       readTime: '3 dk okuma + Kişisel Analiz',
