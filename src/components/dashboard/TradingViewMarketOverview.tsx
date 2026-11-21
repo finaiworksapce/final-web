@@ -46,7 +46,7 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
             wickDownColor: "#f7525f",
             colorTheme: isDark ? "dark" : "light",
             isTransparent: false,
-            locale: "en",
+            locale: "tr",
             chartOnly: false,
             scalePosition: "right",
             scaleMode: "Normal",
@@ -54,10 +54,10 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
             valuesTracking: "1",
             changeMode: "price-and-percent",
             symbols: [
-                ["FX_IDC:XAUTRYG|1D"],
-                ["FX_IDC:XAGTRYG|1D"],
-                ["SKILLING:US100|1D"],
-                ["BITSTAMP:BTCUSD|1D"]
+                ["Gram Altın", "FX_IDC:XAUTRYG|1D"],
+                ["Gram Gümüş", "FX_IDC:XAGTRYG|1D"],
+                ["Nasdaq 100", "SKILLING:US100|1D"],
+                ["Bitcoin", "BITSTAMP:BTCUSD|1D"]
             ],
             dateRanges: [
                 "1d|1",
@@ -67,8 +67,8 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
                 "60m|1W",
                 "all|1M"
             ],
-            fontSize: "9",
-            headerFontSize: "small",
+            fontSize: "10",
+            headerFontSize: "medium",
             autosize: true,
             width: "100%",
             height: "100%",
@@ -93,19 +93,12 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
     }, [isDark]);
 
     return (
-        <div className="w-full h-full relative overflow-hidden min-h-[310px]">
-            <div 
-                ref={containerRef}
-                className={`tradingview-widget-container relative ${className}`}
-                style={{ 
-                    width: "166.6%", 
-                    height: "166.6%", 
-                    transform: "scale(0.6)", 
-                    transformOrigin: "top left" 
-                }}
-            >
-                <div className="tradingview-widget-container__widget h-full w-full" />
-            </div>
+        <div 
+            ref={containerRef}
+            className={`tradingview-widget-container w-full h-full relative overflow-hidden ${className}`}
+            style={{ width: "100%", height: "100%" }}
+        >
+            <div className="tradingview-widget-container__widget h-full w-full" />
         </div>
     );
 }
