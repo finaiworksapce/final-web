@@ -5,12 +5,11 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { 
   ArrowLeft, 
-  CheckCircle2, 
   Lock, 
   ChevronRight, 
   ArrowRight, 
   Play, 
-  ChevronLeft,
+  BookOpen
 } from "lucide-react";
 import { UNIT_1_CONFIG, getLesson1Content } from "@/data/academy/unit-1";
 import { CashFlowSimulator } from "@/components/academy/CashFlowSimulator";
@@ -35,34 +34,27 @@ function AkademiContent() {
   const urlTopic = searchParams.get("ders");
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(urlTopic);
   
-  // Slayt durumu (0: Gelir Yanılsaması, 1: Nakit Akışı, 2: Dürüst Yüzleşme, 3: Serbest Nakit)
-  const [activeSlide, setActiveSlide] = useState(0);
+  // Uygulama ekranı açık mı durumu
   const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
 
   useEffect(() => {
     setSelectedTopicId(urlTopic);
     if (!urlTopic) {
-      setActiveSlide(0);
       setIsSimulatorOpen(false);
     }
   }, [urlTopic]);
 
   const handleOpenTopic = (topicId: string) => {
     setSelectedTopicId(topicId);
-    setActiveSlide(0);
     setIsSimulatorOpen(false);
     router.push(`/dashboard/akademi?ders=${topicId}`, { scroll: true });
   };
 
   const handleBackToOverview = () => {
     setSelectedTopicId(null);
-    setActiveSlide(0);
     setIsSimulatorOpen(false);
     router.push("/dashboard/akademi", { scroll: true });
   };
-
-  const currentBlock = lessonContent.blocks[activeSlide] || lessonContent.blocks[0];
-  const totalSlides = lessonContent.blocks.length;
 
   return (
     <div className="min-h-screen font-clash w-full bg-white text-[#0E1E38] selection:bg-blue-100 selection:text-[#0E1E38]">
@@ -73,7 +65,7 @@ function AkademiContent() {
       {selectedTopicId === null ? (
         <div className="min-h-screen flex flex-col lg:flex-row w-full">
           
-          {/* SOL KOLON: %70 BEYAZ ZEMİN (Alan genişliğine tam sığdırılmış ve dengelenmiş) */}
+          {/* SOL KOLON: %70 BEYAZ ZEMİN */}
           <section className="w-full lg:w-[70%] bg-white flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16 2xl:p-20 min-h-screen">
             <div className="w-full space-y-8 xl:space-y-10">
 
@@ -84,14 +76,14 @@ function AkademiContent() {
                 </h1>
               </div>
 
-              {/* AÇIKLAMA METNİ (Geniş alana tam yayılan, orantılı ve rahat okunan tipografi) */}
+              {/* AÇIKLAMA METNİ */}
               <div className="w-full max-w-6xl">
                 <p className="text-base sm:text-lg lg:text-xl text-slate-700 leading-relaxed font-normal">
                   Finansal piyasaları öğrenmek isteyen çoğu insan, ezberletilen teorik formüller ve sonu gelmeyen teknik terimler yüzünden başlangıçta pes eder. Biz FinAi Akademi'de teoriyi bir kenara bırakıp, doğrudan bir şirketi ve piyasayı okuma mantığına odaklanıyoruz. Buradaki amacımız, kendi tasarruflarınızı yönetirken kimsenin tüyosuna ihtiyaç duymadan, neyi neden aldığınızı bilerek rasyonel kararlar verebilmenizi sağlamaktır.
                 </p>
               </div>
 
-              {/* BU HAFTANIN ODAK WIDGET'I (Tüm genişliği dolduran, dengeli ve şık koyu lacivert kart) */}
+              {/* BU HAFTANIN ODAK WIDGET'I (Kompakt ve zarif) */}
               <div className="w-full p-5 sm:p-6 xl:p-8 bg-[#0E1E38] text-white rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl shadow-[#0E1E38]/10 border border-white/10">
                 <div className="space-y-1.5 flex-1 pr-4">
                   <h3 className="text-lg sm:text-xl lg:text-2xl font-medium text-white clash-title tracking-tight">
@@ -112,7 +104,7 @@ function AkademiContent() {
                 </button>
               </div>
 
-              {/* BİZ NEYİ FARKLI YAPIYORUZ? (Tam genişliğe oturan, ferah, büyük ve okunaklı 3 kart) */}
+              {/* BİZ NEYİ FARKLI YAPIYORUZ? */}
               <div className="w-full pt-6 border-t border-slate-200 space-y-6">
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-normal text-[#0E1E38] clash-title tracking-tight">
@@ -219,7 +211,7 @@ function AkademiContent() {
                 </h3>
               </div>
 
-              {/* 12 HAFTALIK TÜM KONULAR (Scrollsuz, tam boy) */}
+              {/* 12 HAFTALIK TÜM KONULAR */}
               <div className="space-y-2 pt-2">
                 {UNIT_1_CONFIG.topics.map((topic) => {
                   const isActive = topic.status === "active";
@@ -277,14 +269,15 @@ function AkademiContent() {
         </div>
       ) : (
         /* =========================================================================
-            DURUM 2: SADECE BU HAFTANIN İÇERİĞİ (SAĞ KOLON KALDIRILDI - TAM EKRAN ODAK)
-            SLAYT BAZLI ANLATIM + SİMÜLASYON
+            DURUM 2: KONU VE UYGULAMA ALANI
+            - Kullanıcı uygulamaya geçtiğinde öğretici notlar ve başlık kalkar,
+              sadece verimli uygulama tablosu kalır.
             ========================================================================= */
-        <div className="min-h-screen w-full bg-white flex flex-col justify-between p-6 sm:p-10 lg:p-14 xl:p-16 max-w-4xl mx-auto">
+        <div className="min-h-screen w-full bg-white flex flex-col justify-between p-6 sm:p-10 lg:p-14 xl:p-16 max-w-5xl mx-auto">
           
           <div className="space-y-8">
             
-            {/* Üst Bar: Geri Dönüş ve Adım İndikatörü */}
+            {/* Üst Navigasyon Çubuğu */}
             <div className="flex items-center justify-between border-b border-slate-200 pb-4">
               <button
                 type="button"
@@ -295,125 +288,73 @@ function AkademiContent() {
                 <span>Akademi Haritasına Dön</span>
               </button>
 
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-                <span>Sayfa {activeSlide + 1} / {totalSlides}</span>
-              </div>
+              {isSimulatorOpen && (
+                <button
+                  type="button"
+                  onClick={() => setIsSimulatorOpen(false)}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#004BFA] hover:underline cursor-pointer"
+                >
+                  <BookOpen className="w-3.5 h-3.5" />
+                  <span>Ders Anlatımını Yeniden Oku</span>
+                </button>
+              )}
             </div>
 
-            {/* Başlık Silüeti */}
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-medium text-[#0E1E38] tracking-tight clash-title">
-                {lessonContent.title}
-              </h2>
-            </div>
-
-            {/* SLAYT BAZLI İÇERİK KARTI */}
+            {/* FAZ 1: DERS OKUMA EKRANI (Slaytsız, akıcı tam editoryal anlatım) */}
             {!isSimulatorOpen ? (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 
-                {/* İlerleme Çubuğu */}
-                <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-[#004BFA] transition-all duration-300 rounded-full"
-                    style={{ width: `${((activeSlide + 1) / totalSlides) * 100}%` }}
-                  />
+                {/* Başlık Silüeti */}
+                <div>
+                  <h2 className="text-2xl sm:text-3xl font-medium text-[#0E1E38] tracking-tight clash-title">
+                    {lessonContent.title}
+                  </h2>
                 </div>
 
-                {/* Aktif Slayt Gövdesi */}
-                <div className="p-6 sm:p-8 bg-slate-50/70 border border-slate-200 rounded-2xl space-y-4 min-h-[260px] flex flex-col justify-between">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-[#004BFA]" />
-                      <h3 className="text-lg sm:text-xl font-semibold text-[#0E1E38]">
-                        {currentBlock.title}
-                      </h3>
+                {/* 4 Editoryal Anlatım Bloğu (Akıcı, kesintisiz okuma) */}
+                <div className="space-y-8">
+                  {lessonContent.blocks.map((block) => (
+                    <div key={block.id} className="space-y-2.5">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[#004BFA]" />
+                        <h3 className="text-lg sm:text-xl font-semibold text-[#0E1E38]">
+                          {block.title}
+                        </h3>
+                      </div>
+                      <div className="space-y-2.5 pl-4 border-l-2 border-slate-200">
+                        {block.paragraphs.map((p, pIdx) => (
+                          <p key={pIdx} className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
+                            {p}
+                          </p>
+                        ))}
+                      </div>
                     </div>
-
-                    <div className="space-y-3 text-slate-700 leading-relaxed text-base sm:text-lg font-normal">
-                      {currentBlock.paragraphs.map((p, idx) => (
-                        <p key={idx}>{p}</p>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Slayt Alt Bilgisi */}
-                  <div className="pt-4 border-t border-slate-200/60 flex items-center justify-between text-xs text-slate-400">
-                    <span>FinAi Workspace Rehberi</span>
-                    <span>{activeSlide + 1} / {totalSlides}</span>
-                  </div>
+                  ))}
                 </div>
 
-                {/* Slayt Navigasyon Butonları */}
-                <div className="flex items-center justify-between pt-2">
+                {/* UYGULAMAYA GEÇİŞ BUTONU */}
+                <div className="pt-8 border-t border-slate-200">
                   <button
                     type="button"
-                    onClick={() => setActiveSlide((prev) => Math.max(0, prev - 1))}
-                    disabled={activeSlide === 0}
-                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-600 hover:text-[#0E1E38] hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
+                    onClick={() => setIsSimulatorOpen(true)}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer group"
                   >
-                    <ChevronLeft className="w-4 h-4" />
-                    <span>Önceki Sayfa</span>
+                    <span>Anlatımı Okudum, Nakit Akışımla Yüzleşmek İstiyorum</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </button>
-
-                  {/* Slayt Noktaları */}
-                  <div className="flex items-center gap-1.5">
-                    {lessonContent.blocks.map((_, i) => (
-                      <button
-                        key={i}
-                        type="button"
-                        onClick={() => setActiveSlide(i)}
-                        className={`h-2 rounded-full transition-all cursor-pointer ${
-                          activeSlide === i ? 'w-6 bg-[#004BFA]' : 'w-2 bg-slate-200 hover:bg-slate-300'
-                        }`}
-                        title={`${i + 1}. Sayfa`}
-                      />
-                    ))}
-                  </div>
-
-                  {activeSlide < totalSlides - 1 ? (
-                    <button
-                      type="button"
-                      onClick={() => setActiveSlide((prev) => Math.min(totalSlides - 1, prev + 1))}
-                      className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-[#0E1E38] hover:bg-[#004BFA] text-xs font-semibold text-white transition-all shadow-sm hover:shadow-md cursor-pointer group"
-                    >
-                      <span>Sonraki Sayfa</span>
-                      <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => setIsSimulatorOpen(true)}
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-xs font-semibold text-white transition-all shadow-md hover:shadow-lg cursor-pointer group"
-                    >
-                      <span>Nakit Akışımla Yüzleş</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                    </button>
-                  )}
                 </div>
 
               </div>
             ) : (
-              /* AÇILAN İNTERAKTİF SİMÜLATÖR MASASI */
-              <div className="space-y-6 animate-in fade-in duration-300">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wider flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    <span>İnteraktif Karar Masası Devrede</span>
-                  </span>
-
-                  <button
-                    type="button"
-                    onClick={() => setIsSimulatorOpen(false)}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#004BFA] hover:underline cursor-pointer"
-                  >
-                    <span>Ders Slaytlarına Geri Dön</span>
-                  </button>
-                </div>
-
+              /* FAZ 2: SAF UYGULAMA MASASI
+                 (Başlık, öğretici notlar ve widget kutusu kalktı; sadece verimli tablo var) */
+              <div className="space-y-8 animate-in fade-in duration-300">
+                
+                {/* Doğrudan Verimli Nakit Akışı Tablosu */}
                 <CashFlowSimulator />
 
                 {/* Gelecek Hafta Kartı */}
-                <div className="p-5 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-6">
+                <div className="p-5 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-8">
                   <div className="space-y-1">
                     <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
                       Gelecek Hafta (2. Hafta)
@@ -430,13 +371,14 @@ function AkademiContent() {
                     <span>Haftaya Yayında</span>
                   </div>
                 </div>
+
               </div>
             )}
 
           </div>
 
           {/* Alt Bilgi */}
-          <div className="pt-8 mt-10 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
+          <div className="pt-8 mt-12 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
             <span>© {new Date().getFullYear()} FinAi Akademi.</span>
             <button
               type="button"
