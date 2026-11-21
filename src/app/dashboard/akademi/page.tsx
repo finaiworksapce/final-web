@@ -8,9 +8,7 @@ import {
   CheckCircle2, 
   Lock, 
   ChevronRight, 
-  BookOpen, 
   ArrowRight, 
-  Compass, 
   Play, 
 } from "lucide-react";
 import { UNIT_1_CONFIG, getLesson1Content } from "@/data/academy/unit-1";
@@ -27,12 +25,12 @@ function AkademiContent() {
     const userCtx = useUser();
     userName = userCtx?.userName || null;
   } catch {
-    // UserProvider dışı çalışma durumu için koruma
+    // UserProvider dışı koruma
   }
 
   const lessonContent = useMemo(() => getLesson1Content(userName), [userName]);
 
-  // URL senkronizasyonu: ?ders=1-1 ise doğrudan ders açılır; yoksa ana harita açılır
+  // URL senkronizasyonu
   const urlTopic = searchParams.get("ders");
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(urlTopic);
   const [hasCompletedReading, setHasCompletedReading] = useState(false);
@@ -60,156 +58,29 @@ function AkademiContent() {
           ========================================================================= */}
       {selectedTopicId === null ? (
         <>
-          {/* SOL KOLON: %70 BEYAZ ZEMİN (AKADEMİ MANİFESTOSU VE FELSEFESİ) */}
+          {/* SOL KOLON: %70 BEYAZ ZEMİN */}
           <section className="w-full lg:w-[70%] bg-white flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16 min-h-screen">
-            <div>
-              {/* Üst Navigasyon */}
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-5 mb-8">
-                <Link
-                  href="/dashboard"
-                  className="inline-flex items-center gap-2 text-xs font-semibold text-slate-500 hover:text-[#0E1E38] uppercase tracking-wider transition-colors group"
-                >
-                  <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                  <span>Dashboard'a Dön</span>
-                </Link>
+            <div className="space-y-8 max-w-4xl">
 
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-semibold bg-blue-50 text-[#004BFA] border border-blue-100">
-                    Sıfırdan İleri Seviyeye
-                  </span>
-                  <span className="text-xs text-slate-400">•</span>
-                  <span className="text-xs text-slate-500 font-medium">
-                    12 Haftalık Program
-                  </span>
-                </div>
-              </div>
-
-              {/* Ana Başlık ve Alt Başlık */}
-              <div className="space-y-3 max-w-4xl">
-                <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#004BFA] uppercase tracking-wider">
-                  <Compass className="w-4 h-4" />
-                  <span>Finansal Sezgi ve Karar Alma Laboratuvarı</span>
-                </div>
-                <h1 className="text-3xl sm:text-4xl xl:text-5xl font-normal text-[#0E1E38] tracking-tight clash-title leading-tight">
-                  FinAi Akademi'ye Hoş Geldiniz
+              {/* Başlık Alanı */}
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-normal text-[#0E1E38] tracking-tight clash-title">
+                  FinAi Akademi
                 </h1>
-                <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed">
-                  Finansal piyasaları anlamak bir ezber işi değil; rasyonel düşünme ve sermayeyi doğru yönlendirme refleksidir.
-                </p>
               </div>
 
-              {/* MANİFESTO (Dürüst ve Rasyonel Açıklama) */}
-              <div className="mt-8 p-5 sm:p-6 bg-slate-50 border-l-4 border-[#004BFA] rounded-r-2xl space-y-2">
-                <h3 className="text-xs font-semibold text-[#004BFA] uppercase tracking-wider">
-                  Neden Buradasınız?
-                </h3>
-                <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
-                  Finansal piyasaları öğrenmek isteyen çoğu insan, ezberletilen teorik formüller ve sonu gelmeyen teknik terimler yüzünden başlangıçta pes eder. Biz FinAi Akademi'de teoriyi bir kenara bırakıp, doğrudan bir şirketi ve piyasayı okuma mantığına odaklanıyoruz. Buradaki amacımız, kendi tasarruflarınızı yönetirken kimsenin tüyosuna ihtiyaç duymadan, neyi neden aldığınızı bilerek rasyonel kararlar verebilmenizi sağlamaktır.
-                </p>
-              </div>
-
-              {/* BİZ NEYİ FARKLI YAPIYORUZ? (3 Temel Sütun) */}
-              <div className="mt-10 pt-8 border-t border-slate-200">
-                <div className="mb-6">
-                  <h2 className="text-xl sm:text-2xl font-normal text-[#0E1E38] clash-title">
-                    Biz Neyi Farklı Yapıyoruz?
-                  </h2>
-                  <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                    Bu sayfadaki metodolojiyi klasik eğitim sitelerinden ayıran 3 temel ilkemiz:
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  
-                  <div className="space-y-2 border-l-2 border-[#004BFA] pl-4">
-                    <span className="text-[11px] font-semibold text-[#004BFA] uppercase tracking-wider block">
-                      01 • Ticari Mantık
-                    </span>
-                    <h4 className="text-sm font-semibold text-[#0E1E38]">
-                      Teori Yerine Ticari Mantık
-                    </h4>
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                      Kitaplardaki finansal terimleri ezberletmek yerine, o kavramların şirketin kasasına ve günlük operasyonuna nasıl yansıdığını gösteriyoruz. Bir rasyoya baktığınızda bunun sadece matematiksel bir işlem değil, şirketin hayatta kalma mücadelesi olduğunu anlamanızı sağlıyoruz.
-                    </p>
-                  </div>
-
-                  <div className="space-y-2 border-l-2 border-slate-300 pl-4">
-                    <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
-                      02 • Karar Refleksi
-                    </span>
-                    <h4 className="text-sm font-semibold text-[#0E1E38]">
-                      Ezber Sınavı Yok, Karar Var
-                    </h4>
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                      Bölüm sonlarında klasik test soruları çözdürmüyoruz. Anlatım bittiğinde size simüle bir bütçe vererek gerçek bir karar aldırıyoruz; böylece kendi paranızı riske atmadan piyasanın mantığını aldığınız kararların sonuçlarıyla görüyorsunuz.
-                    </p>
-                  </div>
-
-                  <div className="space-y-2 border-l-2 border-slate-300 pl-4">
-                    <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
-                      03 • Bütüncül Sistem
-                    </span>
-                    <h4 className="text-sm font-semibold text-[#0E1E38]">
-                      Birbirine Bağlanan Sistem
-                    </h4>
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                      Burada öğrendiğiniz hiçbir konu havada kalmaz. İlk aşamada öğrendiğiniz temel nakit akışı mantığı, bir sonraki aşamada bilanço okurken ve şirket seçerken doğrudan karşınıza çıkar. Her ders bir sonrakini besler ve zamanla eksiksiz bir yatırım bakış açısı oluşturur.
-                    </p>
-                  </div>
-
-                </div>
-              </div>
-
-              {/* BU SAYFADA NASIL İLERLEYECEKSİNİZ? */}
-              <div className="mt-10 pt-8 border-t border-slate-200">
-                <div className="mb-4">
-                  <h3 className="text-lg font-semibold text-[#0E1E38]">
-                    Bu Sayfada Nasıl İlerleyeceksiniz?
-                  </h3>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1.5">
-                    <span className="text-xs font-semibold text-[#004BFA] uppercase tracking-wider block">
-                      1. Adım: Oku ve Özümse
-                    </span>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Her hafta açılan konunun editoryal metnini ve şemalarını dikkatle inceleyin.
-                    </p>
-                  </div>
-
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1.5">
-                    <span className="text-xs font-semibold text-[#004BFA] uppercase tracking-wider block">
-                      2. Adım: Kararını Ver
-                    </span>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Anlatım bitiminde açılan simülatörde kendi sayılarınızla gerçek bir finansal karar alın.
-                    </p>
-                  </div>
-
-                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1.5">
-                    <span className="text-xs font-semibold text-[#004BFA] uppercase tracking-wider block">
-                      3. Adım: Biriktir ve Büyüt
-                    </span>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Her haftanın dersi kümülatif olarak birikir ve sizi bağımsız bilanço okuma seviyesine taşır.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* BU HAFTANIN ODAK KARTI & EYLEME ÇAĞRI */}
-              <div className="mt-10 p-6 bg-[#0E1E38] text-white rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl shadow-[#0E1E38]/10">
-                <div className="space-y-1.5 max-w-xl">
+              {/* BU HAFTANIN ODAK KARTI (Kullanıcı talebiyle en üste taşındı) */}
+              <div className="p-6 sm:p-7 bg-[#0E1E38] text-white rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl shadow-[#0E1E38]/10">
+                <div className="space-y-2 max-w-xl">
                   <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-semibold border border-emerald-500/30">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                     <span>Bu Hafta Yayında • 1. Hafta</span>
                   </div>
-                  <h4 className="text-xl font-normal text-white clash-title mt-1">
-                    {lessonContent.title}
-                  </h4>
-                  <p className="text-xs text-white/70 leading-relaxed">
-                    {lessonContent.introSubtitle}
+                  <h3 className="text-xl sm:text-2xl font-normal text-white clash-title">
+                    1.1 Gelir ve Gider Yönetimi: Kendi Nakit Akışının Farkına Varmak
+                  </h3>
+                  <p className="text-xs sm:text-sm text-white/70 leading-relaxed font-normal">
+                    Finansal gücün ne kadar kazandığınla değil; ay bittiğinde masada ne bırakabildiğinle başlar.
                   </p>
                 </div>
 
@@ -223,6 +94,62 @@ function AkademiContent() {
                 </button>
               </div>
 
+              {/* AÇIKLAMA METNİ (Kutudan tamamen arındırıldı, salt editoryal yazı) */}
+              <div className="pt-2">
+                <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
+                  Finansal piyasaları öğrenmek isteyen çoğu insan, ezberletilen teorik formüller ve sonu gelmeyen teknik terimler yüzünden başlangıçta pes eder. Biz FinAi Akademi'de teoriyi bir kenara bırakıp, doğrudan bir şirketi ve piyasayı okuma mantığına odaklanıyoruz. Buradaki amacımız, kendi tasarruflarınızı yönetirken kimsenin tüyosuna ihtiyaç duymadan, neyi neden aldığınızı bilerek rasyonel kararlar verebilmenizi sağlamaktır.
+                </p>
+              </div>
+
+              {/* BİZ NEYİ FARKLI YAPIYORUZ? (Okunaklı, ferah, editoryal yeni tasarım) */}
+              <div className="pt-8 border-t border-slate-200 space-y-6">
+                <div>
+                  <h2 className="text-2xl font-normal text-[#0E1E38] clash-title">
+                    Biz Neyi Farklı Yapıyoruz?
+                  </h2>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  
+                  <div className="p-5 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-2.5">
+                    <span className="text-xs font-semibold text-[#004BFA] uppercase tracking-wider block">
+                      01 • Ticari Mantık
+                    </span>
+                    <h4 className="text-base font-semibold text-[#0E1E38]">
+                      Teori Yerine Ticari Mantık
+                    </h4>
+                    <p className="text-sm text-slate-600 leading-relaxed font-normal">
+                      Kitaplardaki finansal terimleri ezberletmek yerine, o kavramların şirketin kasasına ve günlük operasyonuna nasıl yansıdığını gösteriyoruz. Bir rasyoya baktığınızda bunun sadece matematiksel bir işlem değil, şirketin hayatta kalma mücadelesi olduğunu anlamanızı sağlıyoruz.
+                    </p>
+                  </div>
+
+                  <div className="p-5 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-2.5">
+                    <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">
+                      02 • Karar Refleksi
+                    </span>
+                    <h4 className="text-base font-semibold text-[#0E1E38]">
+                      Ezber Sınavı Yok, Karar Var
+                    </h4>
+                    <p className="text-sm text-slate-600 leading-relaxed font-normal">
+                      Bölüm sonlarında klasik test soruları çözdürmüyoruz. Anlatım bittiğinde size simüle bir bütçe vererek gerçek bir karar aldırıyoruz; böylece kendi paranızı riske atmadan piyasanın mantığını aldığınız kararların sonuçlarıyla görüyorsunuz.
+                    </p>
+                  </div>
+
+                  <div className="p-5 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-2.5">
+                    <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">
+                      03 • Bütüncül Sistem
+                    </span>
+                    <h4 className="text-base font-semibold text-[#0E1E38]">
+                      Birbirine Bağlanan Sistem
+                    </h4>
+                    <p className="text-sm text-slate-600 leading-relaxed font-normal">
+                      Burada öğrendiğiniz hiçbir konu havada kalmaz. İlk aşamada öğrendiğiniz temel nakit akışı mantığı, bir sonraki aşamada bilanço okurken ve şirket seçerken doğrudan karşınıza çıkar. Her ders bir sonrakini besler ve zamanla eksiksiz bir yatırım bakış açısı oluşturur.
+                    </p>
+                  </div>
+
+                </div>
+              </div>
+
             </div>
 
             {/* Alt Bilgi */}
@@ -231,106 +158,82 @@ function AkademiContent() {
             </div>
           </section>
 
-          {/* SAĞ KOLON: %30 DERİN LACİVERT VİTRİN & 12 HAFTALIK İLERLEME AĞACI */}
+          {/* SAĞ KOLON: %30 DERİN LACİVERT VİTRİN & 12 HAFTALIK İLERLEME (SCROLLSUZ TAM LİSTE) */}
           <section className="w-full lg:w-[30%] bg-[#0E1E38] text-white p-6 sm:p-8 lg:p-10 xl:p-12 flex flex-col justify-between relative overflow-hidden select-none border-t lg:border-t-0 lg:border-l border-white/10">
             
             <div className="absolute -top-32 -right-32 w-[450px] h-[450px] bg-[#004BFA]/20 rounded-full blur-[140px] pointer-events-none" />
             <div className="absolute -bottom-32 -left-32 w-[350px] h-[350px] bg-[#78B8F5]/10 rounded-full blur-[140px] pointer-events-none" />
 
-            <div className="relative z-10 space-y-7">
+            <div className="relative z-10 space-y-6">
               
-              <div className="flex items-center justify-between border-b border-white/10 pb-5">
-                <div className="flex items-center gap-2.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#004BFA] animate-pulse" />
-                  <span className="text-lg font-bold tracking-tight text-white clash-title">
-                    FinAi Akademi
-                  </span>
-                </div>
-                <span className="text-[11px] font-semibold text-[#78B8F5] bg-[#004BFA]/20 border border-[#004BFA]/40 px-2 py-0.5 rounded">
-                  Yol Haritası
+              {/* Üst: FinAi Marka Başlığı */}
+              <div className="flex items-center gap-2.5 border-b border-white/10 pb-4">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#004BFA] animate-pulse" />
+                <span className="text-lg font-bold tracking-tight text-white clash-title">
+                  FinAi Akademi
                 </span>
               </div>
 
-              <div className="space-y-1.5">
+              {/* Ünite Bilgisi */}
+              <div className="space-y-1">
                 <span className="text-xs font-semibold text-white/50 uppercase tracking-wider block">
                   1. Ünite
                 </span>
-                <h3 className="text-lg sm:text-xl font-normal text-white clash-title leading-snug">
+                <h3 className="text-base sm:text-lg font-normal text-white clash-title leading-snug">
                   {UNIT_1_CONFIG.title}
                 </h3>
-                <p className="text-xs text-white/60 leading-relaxed font-normal">
-                  {UNIT_1_CONFIG.subtitle}
-                </p>
               </div>
 
-              <div className="space-y-2 p-3.5 bg-white/5 border border-white/10 rounded-xl">
-                <div className="flex justify-between text-xs text-white/80">
-                  <span className="font-medium">Ünite 1 İlerlemesi</span>
-                  <span className="font-semibold text-[#78B8F5]">%8 Tamamlandı</span>
-                </div>
-                <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                  <div className="w-[8%] h-full bg-[#004BFA] rounded-full" />
-                </div>
-                <span className="text-[10px] text-white/50 block">
-                  12 konunun 1'i aktif • Her hafta 1 konu eklenir
-                </span>
-              </div>
-
-              {/* 12 HAFTALIK LİSTE */}
-              <div className="space-y-2 pt-1">
-                <span className="text-xs font-semibold text-white/50 uppercase tracking-wider block mb-2">
-                  Haftalık İlerleme Listesi
-                </span>
-
-                <div className="space-y-2 max-h-[440px] overflow-y-auto pr-1">
-                  {UNIT_1_CONFIG.topics.map((topic) => {
-                    const isActive = topic.status === "active";
-                    return (
-                      <div
-                        key={topic.id}
-                        onClick={() => isActive && handleOpenTopic(topic.id)}
-                        className={`p-3 rounded-xl border transition-all text-xs flex items-start gap-3 ${
-                          isActive
-                            ? "bg-[#004BFA]/20 border-[#004BFA]/60 text-white cursor-pointer hover:bg-[#004BFA]/30 hover:border-[#004BFA]"
-                            : "bg-white/[0.02] border-white/5 text-white/40 cursor-not-allowed"
-                        }`}
-                      >
-                        <div className="mt-0.5 shrink-0">
-                          {isActive ? (
-                            <div className="w-5 h-5 rounded-full bg-[#004BFA] flex items-center justify-center text-white">
-                              <Play className="w-2.5 h-2.5 fill-white text-white ml-0.5" />
-                            </div>
-                          ) : (
-                            <div className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-white/40">
-                              <Lock className="w-3 h-3" />
-                            </div>
-                          )}
-                        </div>
-
-                        <div className="space-y-0.5 flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-1">
-                            <span className={`font-semibold truncate ${isActive ? "text-white" : "text-white/60"}`}>
-                              {topic.shortTitle}
-                            </span>
-                            <span className={`text-[10px] shrink-0 ${isActive ? "text-[#78B8F5] font-semibold" : "text-white/30"}`}>
-                              {isActive ? "Derse Başla" : topic.readTime}
-                            </span>
+              {/* 12 HAFTALIK TÜM KONULAR LİSTESİ (Scroll kaldırıldı, tüm konular tam boy) */}
+              <div className="space-y-2 pt-2">
+                {UNIT_1_CONFIG.topics.map((topic) => {
+                  const isActive = topic.status === "active";
+                  return (
+                    <div
+                      key={topic.id}
+                      onClick={() => isActive && handleOpenTopic(topic.id)}
+                      className={`p-2.5 rounded-xl border transition-all text-xs flex items-start gap-2.5 ${
+                        isActive
+                          ? "bg-[#004BFA]/25 border-[#004BFA]/70 text-white cursor-pointer hover:bg-[#004BFA]/35 hover:border-[#004BFA]"
+                          : "bg-white/[0.02] border-white/5 text-white/40 cursor-not-allowed"
+                      }`}
+                    >
+                      <div className="mt-0.5 shrink-0">
+                        {isActive ? (
+                          <div className="w-4 h-4 rounded-full bg-[#004BFA] flex items-center justify-center text-white">
+                            <Play className="w-2 h-2 fill-white text-white ml-0.5" />
                           </div>
-                          <p className={`text-[11px] line-clamp-1 ${isActive ? "text-white/80" : "text-white/30"}`}>
-                            {topic.description}
-                          </p>
-                        </div>
+                        ) : (
+                          <div className="w-4 h-4 rounded-full bg-white/10 flex items-center justify-center text-white/40">
+                            <Lock className="w-2.5 h-2.5" />
+                          </div>
+                        )}
                       </div>
-                    );
-                  })}
-                </div>
+
+                      <div className="space-y-0.5 flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-1">
+                          <span className={`font-semibold truncate ${isActive ? "text-white" : "text-white/60"}`}>
+                            {topic.shortTitle}
+                          </span>
+                          <span className={`text-[10px] shrink-0 ${isActive ? "text-[#78B8F5] font-semibold" : "text-white/30"}`}>
+                            {isActive ? "Derse Başla" : topic.readTime}
+                          </span>
+                        </div>
+                        <p className={`text-[11px] line-clamp-1 ${isActive ? "text-white/80" : "text-white/30"}`}>
+                          {topic.description}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
             </div>
 
+            {/* Sağ Kolon Alt Bilgi */}
             <div className="relative z-10 pt-5 mt-5 border-t border-white/10">
               <p className="text-[11px] text-white/50 leading-relaxed">
-                Her hafta yeni bir kavram ve simülasyon aktif hale gelir. Sırayla ilerlemek finansal refleksinizi pekiştirir.
+                Her hafta yeni bir kavram ve simülasyon aktif hale gelir.
               </p>
             </div>
 
@@ -341,12 +244,12 @@ function AkademiContent() {
             DURUM 2: SADECE BU HAFTANIN İÇERİĞİ (DERS & SİMÜLASYON ÇALIŞMA MASASI)
             ========================================================================= */
         <>
-          {/* SOL KOLON: %70 BEYAZ ZEMİN (DERS METİNLERİ + SİMÜLASYON) */}
+          {/* SOL KOLON: %70 BEYAZ ZEMİN */}
           <section className="w-full lg:w-[70%] bg-white flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16 min-h-screen">
             <div>
               
-              {/* Üst Navigasyon: Haritaya Dönüş */}
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-5 mb-8">
+              {/* Üst Navigasyon: Yalnızca Haritaya Dönüş */}
+              <div className="border-b border-slate-200 pb-4 mb-6">
                 <button
                   type="button"
                   onClick={handleBackToOverview}
@@ -355,43 +258,29 @@ function AkademiContent() {
                   <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                   <span>Akademi Haritasına Dön</span>
                 </button>
-
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    1. Hafta Dersi
-                  </span>
-                  <span className="text-xs text-slate-400">•</span>
-                  <span className="text-xs text-slate-500 font-medium">
-                    {lessonContent.readTime}
-                  </span>
-                </div>
               </div>
 
-              {/* Ders Başlığı ve Giriş Açıklaması */}
-              <div className="space-y-3 max-w-4xl">
-                <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#004BFA] uppercase tracking-wider">
-                  <BookOpen className="w-4 h-4" />
-                  <span>Ünite 1 • Konu 1.1</span>
-                </div>
-                <h1 className="text-3xl sm:text-4xl xl:text-5xl font-normal text-[#0E1E38] tracking-tight clash-title leading-tight">
+              {/* Ders Başlığı (Kullanıcı talebiyle ölçülü boyuta indirildi) */}
+              <div className="space-y-2 max-w-4xl">
+                <h2 className="text-xl sm:text-2xl font-normal text-[#0E1E38] tracking-tight clash-title">
                   {lessonContent.title}
-                </h1>
-                <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed">
+                </h2>
+                <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed">
                   {lessonContent.introSubtitle}
                 </p>
               </div>
 
-              {/* 1.1 EDİTORYAL ANLATIM METİNLERİ (4 Blok - FinAi Workspace Ekibi Diliyle) */}
-              <div className="mt-10 space-y-8">
+              {/* 1.1 EDİTORYAL ANLATIM METİNLERİ (4 Blok) */}
+              <div className="mt-8 space-y-8">
                 {lessonContent.blocks.map((block) => (
-                  <div key={block.id} className="space-y-2.5">
+                  <div key={block.id} className="space-y-2">
                     <div className="flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-[#004BFA]" />
-                      <h3 className="text-lg sm:text-xl font-semibold text-[#0E1E38]">
+                      <h3 className="text-base sm:text-lg font-semibold text-[#0E1E38]">
                         {block.title}
                       </h3>
                     </div>
-                    <div className="space-y-2.5 pl-4 border-l-2 border-slate-200">
+                    <div className="space-y-2 pl-3.5 border-l-2 border-slate-200">
                       {block.paragraphs.map((p, pIdx) => (
                         <p key={pIdx} className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
                           {p}
@@ -416,7 +305,7 @@ function AkademiContent() {
                 </div>
               ) : null}
 
-              {/* AÇILAN İNTERAKTİF KARAR ARACI (CASH FLOW SIMULATOR) */}
+              {/* AÇILAN İNTERAKTİF KARAR ARACI */}
               {hasCompletedReading && (
                 <div className="mt-10 pt-8 border-t-2 border-[#004BFA] space-y-6 animate-in fade-in duration-500">
                   <div className="flex items-center justify-between">
@@ -431,10 +320,8 @@ function AkademiContent() {
                     </div>
                   </div>
 
-                  {/* Simülatör Bileşeni */}
                   <CashFlowSimulator />
 
-                  {/* Gelecek Hafta Kartı */}
                   <div className="p-5 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-6">
                     <div className="space-y-1">
                       <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
@@ -470,7 +357,7 @@ function AkademiContent() {
             </div>
           </section>
 
-          {/* SAĞ KOLON: %30 DERİN LACİVERT VİTRİN (DERS ODAK MODU) */}
+          {/* SAĞ KOLON: %30 DERİN LACİVERT VİTRİN */}
           <section className="w-full lg:w-[30%] bg-[#0E1E38] text-white p-6 sm:p-8 lg:p-10 xl:p-12 flex flex-col justify-between relative overflow-hidden select-none border-t lg:border-t-0 lg:border-l border-white/10">
             
             <div className="absolute -top-32 -right-32 w-[450px] h-[450px] bg-[#004BFA]/20 rounded-full blur-[140px] pointer-events-none" />
@@ -478,8 +365,7 @@ function AkademiContent() {
 
             <div className="relative z-10 space-y-7">
               
-              {/* Tepe Başlık */}
-              <div className="flex items-center justify-between border-b border-white/10 pb-5">
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
                   <span className="text-sm font-semibold tracking-wide text-white uppercase">
@@ -495,7 +381,6 @@ function AkademiContent() {
                 </button>
               </div>
 
-              {/* Ders Özeti Kartı */}
               <div className="space-y-3 p-4 bg-white/5 border border-white/10 rounded-2xl">
                 <span className="text-[11px] font-semibold text-[#78B8F5] uppercase tracking-wider block">
                   1. Haftanın Ana Fikri
@@ -505,7 +390,6 @@ function AkademiContent() {
                 </p>
               </div>
 
-              {/* Anahtar Terimler */}
               <div className="space-y-3 pt-2">
                 <span className="text-xs font-semibold text-white/50 uppercase tracking-wider block">
                   Dersin Anahtar Terimleri
@@ -535,19 +419,8 @@ function AkademiContent() {
                 </div>
               </div>
 
-              {/* Gelecek Hafta Bilgisi */}
-              <div className="p-3.5 bg-blue-500/10 border border-blue-500/20 rounded-xl space-y-1">
-                <span className="text-[10px] font-semibold text-[#78B8F5] uppercase tracking-wider block">
-                  Sırada Ne Var?
-                </span>
-                <p className="text-[11px] text-white/70 leading-relaxed">
-                  Haftaya bu serbest nakdi koruma ve lüzumsuz kaçakları kesme sanatını (1.2 Tasarruf) inceleyeceğiz.
-                </p>
-              </div>
-
             </div>
 
-            {/* Alt Buton */}
             <div className="relative z-10 pt-5 mt-5 border-t border-white/10">
               <button
                 type="button"
