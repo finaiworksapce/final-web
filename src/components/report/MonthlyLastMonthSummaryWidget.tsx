@@ -1,11 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { 
     TrendingUp, 
     Compass, 
     ArrowUpRight, 
-    ArrowDownRight 
+    ArrowDownRight,
+    ChevronDown,
+    ChevronUp
 } from "lucide-react";
 import { MonthlyReportData } from "@/lib/finai-monthly-report-service";
 import StockLogo from "@/components/StockLogo";
@@ -22,6 +24,7 @@ export default function MonthlyLastMonthSummaryWidget({
     report,
     loading
 }: MonthlyLastMonthSummaryWidgetProps) {
+    const [isExpanded, setIsExpanded] = useState(false);
     const mentor = report?.mentorSummary;
     const summary = report?.summary;
     const period = report?.period;
@@ -49,6 +52,11 @@ export default function MonthlyLastMonthSummaryWidget({
         ? mentor.narrativeParagraphs.flatMap(p => p.split(/\n\n+/))
         : [mentor.greetingSentence].filter(Boolean);
 
+    const canExpand = rawParagraphs.length > 4;
+    const displayedParagraphs = !isExpanded && canExpand
+        ? rawParagraphs.slice(0, 4)
+        : rawParagraphs;
+
     return (
         <article className="w-full h-full bg-white dark:bg-[#040989]/20 border border-slate-200/80 dark:border-white/10 rounded-2xl shadow-xs overflow-hidden flex flex-col justify-start">
             {/* 1. Editoryal Üst Başlık */}
@@ -72,15 +80,38 @@ export default function MonthlyLastMonthSummaryWidget({
                 </div>
             </div>
 
-            {/* 2. Ana Gövde: İki Paragraf Anlatım (Yukarıdan aşağıya hizalı) */}
+            {/* 2. Ana Gövde: Anlatım ve Bulgular (2. Bulguda 'Daha Fazla' Açılımı) */}
             <div className="p-6 flex-1 flex flex-col justify-start">
                 <div className="text-xs sm:text-[13px] leading-relaxed text-slate-700 dark:text-slate-200 tracking-normal space-y-3.5">
-                    {rawParagraphs.map((para, idx) => (
+                    {displayedParagraphs.map((para, idx) => (
                         <p key={idx} className="leading-relaxed">
                             <WikipediaEntityText text={para} activeSymbols={activeSymbols} variant="light" />
+                            {canExpand && !isExpanded && idx === 3 && (
+                                <button
+                                    type="button"
+                                    onClick={() => setIsExpanded(true)}
+                                    className="inline-flex items-center gap-1 ml-1.5 font-semibold text-[#004BFA] dark:text-[#93C5FD] hover:underline cursor-pointer transition-colors"
+                                >
+                                    <span>[Daha Fazla]</span>
+                                    <ChevronDown className="w-3.5 h-3.5 inline-block" />
+                                </button>
+                            )}
                         </p>
                     ))}
                 </div>
+
+                {canExpand && isExpanded && (
+                    <div className="pt-3.5 mt-2 border-t border-slate-100 dark:border-white/5 flex items-center justify-end">
+                        <button
+                            type="button"
+                            onClick={() => setIsExpanded(false)}
+                            className="inline-flex items-center gap-1 text-xs font-semibold text-[#004BFA] dark:text-[#93C5FD] hover:underline cursor-pointer transition-colors"
+                        >
+                            <span>[Daha Az Göster]</span>
+                            <ChevronUp className="w-3.5 h-3.5 inline-block" />
+                        </button>
+                    </div>
+                )}
             </div>
         </article>
     );

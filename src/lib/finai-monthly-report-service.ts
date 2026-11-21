@@ -1257,27 +1257,35 @@ export async function generateMonthlyPerformanceReport(
                 }
             }
 
-            // 2. Gelişme (Tepe Yönetim / Sezgin Lüle - Kullanıcı Talebi: 2. sırada yer alacak ve hafif alaylı samimi FinAi tonunu koruyacak)
+            // 2. Gelişme (Tepe Yönetim / Sezgin Lüle - Kullanıcı Talebi: 2. sırada yer alacak, 'Daha Fazla' butonu tam bu bulguda çıkacak şekilde iki aşamalı anlatım)
             if (execSummary) {
                 const isLule = execSummary.title.toLowerCase().includes('sezgin lüle') || execSummary.summary?.toLowerCase().includes('sezgin lüle') || featuredAsset.cleanSymbol === 'TSKB';
                 if (isLule) {
                     paragraphs.push(
-                        `Banka tarafındaki en belirleyici kurumsal olay ise tepe yönetiminde gerçekleşen bayrak değişimi oldu ve Genel Müdürlük koltuğuna Sezgin Lüle getirildi. Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; Sezgin Lüle’nin kim olduğunu, nasıl biri olduğunu araştırmaya başla istersen. Zira bir finans kurumunda liderlik değişimi, şirketin orta vadeli kredi ve büyüme rotasında yeni bir dönemin habercisi olabilir.`
+                        `Banka tarafındaki en belirleyici kurumsal olay ise tepe yönetiminde gerçekleşen bayrak değişimi oldu ve Genel Müdürlük koltuğuna Sezgin Lüle getirildi.`
+                    );
+                    paragraphs.push(
+                        `Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; Sezgin Lüle’nin kim olduğunu, nasıl biri olduğunu araştırmaya başla istersen. Zira bir finans kurumunda liderlik değişimi, şirketin orta vadeli kredi ve büyüme rotasında yeni bir dönemin habercisi olabilir.`
                     );
                 } else {
                     paragraphs.push(
-                        `Şirket cephesindeki en belirleyici olay ise tepe yönetiminde gerçekleşen bayrak değişimi oldu ve üst yönetime yeni atamalar yapıldı. Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; göreve gelen yöneticilerin kim olduğunu, nasıl biri olduklarını araştırmaya başla istersen. Zira tepe yönetim değişimleri, şirketin gelecekteki rotasında yeni bir dönemin habercisi olabilir.`
+                        `Şirket cephesindeki en belirleyici olay ise tepe yönetiminde gerçekleşen bayrak değişimi oldu ve üst yönetime yeni atamalar yapıldı.`
+                    );
+                    paragraphs.push(
+                        `Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; göreve gelen yöneticilerin kim olduğunu, nasıl biri olduklarını araştırmaya başla istersen. Zira tepe yönetim değişimleri, şirketin gelecekteki rotasında yeni bir dönemin habercisi olabilir.`
                     );
                 }
             } else if (operationalSummaries.length > 1) {
                 paragraphs.push(
-                    `Öne çıkan bir diğer önemli gelişme ise şirketin operasyonel faaliyetlerini ve ticari anlaşmalarını kapsıyor. Şirketin attığı bu adımlar operasyonel kapasitesini genişletmeye yönelik bir sürecin parçası olarak izleniyor. Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; bu kurumsal adımların detaylarını araştırmaya başla istersen.`
+                    `Öne çıkan bir diğer önemli gelişme ise şirketin operasyonel faaliyetlerini ve ticari anlaşmalarını kapsıyor. Şirketin attığı bu adımlar operasyonel kapasitesini genişletmeye yönelik bir sürecin parçası olarak izleniyor.`
+                );
+                paragraphs.push(
+                    `Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; bu kurumsal adımların detaylarını araştırmaya başla istersen.`
                 );
             }
 
             // Varsa 3. veya sonraki ek bulgular:
-            // DİKKAT: Dünya Bankası veya kredi konusu ilk paragrafta zaten işlendiyse, aynı konudaki haberleri ASLA tekrar etmiyoruz!
-            // Kesin kural: Başlık (title) ve link ("...") ASLA verilmeyecek, sadece gerçekten FARKLI bir konu varsa ne anlattığı açıklanacak!
+            // DİKKAT: Kullanıcı Talebi: Tekrarlayan kalıp cümle yok, maksimum 1 defa ve özgün dille anlatım!
             const usedThemes = ['kredi', 'dünya bankası', 'finansman'];
             if (execSummary) {
                 usedThemes.push('genel müdür', 'sezgin lüle', 'atama', 'yönetim');
@@ -1289,15 +1297,17 @@ export async function generateMonthlyPerformanceReport(
                 return !isDuplicateTheme;
             });
 
-            distinctExtraSummaries.forEach(extra => {
+            // En fazla 1 ek bulgu ve özgün editoryal anlatım
+            if (distinctExtraSummaries.length > 0) {
+                const extra = distinctExtraSummaries[0];
                 const cleanSummaryText = extra.summary && extra.summary.length > 30
                     ? extra.summary.replace(/^(CNBC-e|Paramedya|Investing\.com TR) tarafından aktarılan gelişmeye göre,?\s*/i, '').replace(/["”']/g, '')
-                    : 'Şirketin kurumsal operasyonlarını ve pazar payını genişletmeye yönelik adımları dikkat çekti.';
+                    : 'şirketin faaliyet alanındaki kurumsal operasyonlarını ve pazar payını genişletmeye yönelik adımları dikkat çekti.';
 
                 paragraphs.push(
-                    `Şirket cephesinde dikkat çeken bir diğer kurumsal başlık, operasyonel süreçlerin yönetimiyle ilgili oldu. ${cleanSummaryText} Şirketin faaliyet alanındaki bu tür hamleler, orta vadeli değerleme beklentilerini canlı tutan faktörler arasında değerlendirilebilir.`
+                    `Bunun yanı sıra şirketin ticari operasyonları ve pazar payını genişletmeye yönelik stratejik adımları da ay boyunca dikkat çeken başlıklar arasında yer aldı. ${cleanSummaryText} Bu tür hamleler, orta vadeli değerleme beklentilerini canlı tutan faktörler arasında değerlendirilebilir.`
                 );
-            });
+            }
 
             // Sektör ve Piyasa Kapanışı
             const sectorNameLower = featuredSector ? featuredSector.name.toLowerCase() : 'sektör';
