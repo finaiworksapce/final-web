@@ -10,6 +10,9 @@ import {
   ChevronRight, 
   ArrowRight, 
   Play, 
+  ChevronLeft,
+  SlidersHorizontal,
+  BookOpen
 } from "lucide-react";
 import { UNIT_1_CONFIG, getLesson1Content } from "@/data/academy/unit-1";
 import { CashFlowSimulator } from "@/components/academy/CashFlowSimulator";
@@ -33,53 +36,70 @@ function AkademiContent() {
   // URL senkronizasyonu
   const urlTopic = searchParams.get("ders");
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(urlTopic);
-  const [hasCompletedReading, setHasCompletedReading] = useState(false);
+  
+  // Slayt durumu (0: Gelir Yanılsaması, 1: Nakit Akışı, 2: Dürüst Yüzleşme, 3: Serbest Nakit)
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
 
   useEffect(() => {
     setSelectedTopicId(urlTopic);
+    if (!urlTopic) {
+      setActiveSlide(0);
+      setIsSimulatorOpen(false);
+    }
   }, [urlTopic]);
 
   const handleOpenTopic = (topicId: string) => {
     setSelectedTopicId(topicId);
-    setHasCompletedReading(false);
+    setActiveSlide(0);
+    setIsSimulatorOpen(false);
     router.push(`/dashboard/akademi?ders=${topicId}`, { scroll: true });
   };
 
   const handleBackToOverview = () => {
     setSelectedTopicId(null);
+    setActiveSlide(0);
+    setIsSimulatorOpen(false);
     router.push("/dashboard/akademi", { scroll: true });
   };
 
+  const currentBlock = lessonContent.blocks[activeSlide] || lessonContent.blocks[0];
+  const totalSlides = lessonContent.blocks.length;
+
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row font-clash w-full bg-white text-[#0E1E38] selection:bg-blue-100 selection:text-[#0E1E38]">
+    <div className="min-h-screen font-clash w-full bg-white text-[#0E1E38] selection:bg-blue-100 selection:text-[#0E1E38]">
       
       {/* =========================================================================
           DURUM 1: AKADEMİ MERKEZİ & YOL HARİTASI (VARSAYILAN AÇILIŞ GÖRÜNÜMÜ)
           ========================================================================= */}
       {selectedTopicId === null ? (
-        <>
+        <div className="min-h-screen flex flex-col lg:flex-row w-full">
+          
           {/* SOL KOLON: %70 BEYAZ ZEMİN */}
           <section className="w-full lg:w-[70%] bg-white flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16 min-h-screen">
             <div className="space-y-8 max-w-4xl">
 
-              {/* Başlık Alanı */}
+              {/* Başlık */}
               <div>
                 <h1 className="text-3xl sm:text-4xl font-normal text-[#0E1E38] tracking-tight clash-title">
                   FinAi Akademi
                 </h1>
               </div>
 
-              {/* BU HAFTANIN ODAK KARTI (Kullanıcı talebiyle en üste taşındı) */}
-              <div className="p-6 sm:p-7 bg-[#0E1E38] text-white rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl shadow-[#0E1E38]/10">
-                <div className="space-y-2 max-w-xl">
-                  <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-semibold border border-emerald-500/30">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>Bu Hafta Yayında • 1. Hafta</span>
-                  </div>
-                  <h3 className="text-xl sm:text-2xl font-normal text-white clash-title">
-                    1.1 Gelir ve Gider Yönetimi: Kendi Nakit Akışının Farkına Varmak
+              {/* AÇIKLAMA METNİ (Kutusuz salt editoryal yazı) */}
+              <div>
+                <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
+                  Finansal piyasaları öğrenmek isteyen çoğu insan, ezberletilen teorik formüller ve sonu gelmeyen teknik terimler yüzünden başlangıçta pes eder. Biz FinAi Akademi'de teoriyi bir kenara bırakıp, doğrudan bir şirketi ve piyasayı okuma mantığına odaklanıyoruz. Buradaki amacımız, kendi tasarruflarınızı yönetirken kimsenin tüyosuna ihtiyaç duymadan, neyi neden aldığınızı bilerek rasyonel kararlar verebilmenizi sağlamaktır.
+                </p>
+              </div>
+
+              {/* BU HAFTANIN ODAK WIDGET'I (Yarı yarıya küçültüldü, rozetsiz, Biz Neyi Farklı Yapıyoruz üstünde) */}
+              <div className="p-4 sm:p-5 bg-[#0E1E38] text-white rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-lg shadow-[#0E1E38]/10 border border-white/10">
+                <div className="space-y-1 max-w-lg">
+                  <h3 className="text-base sm:text-lg font-medium text-white clash-title tracking-tight">
+                    Gelir ve Gider Yönetimi: Nakit Akışı
                   </h3>
-                  <p className="text-xs sm:text-sm text-white/70 leading-relaxed font-normal">
+                  <p className="text-xs text-white/70 leading-relaxed font-normal">
                     Finansal gücün ne kadar kazandığınla değil; ay bittiğinde masada ne bırakabildiğinle başlar.
                   </p>
                 </div>
@@ -87,64 +107,81 @@ function AkademiContent() {
                 <button
                   type="button"
                   onClick={() => handleOpenTopic("1-1")}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg shrink-0 cursor-pointer group"
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg bg-[#004BFA] hover:bg-[#003ad1] text-white text-xs font-semibold transition-all duration-200 shadow-sm hover:shadow-md shrink-0 cursor-pointer group"
                 >
                   <span>1. Haftanın Dersine Başla</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                 </button>
               </div>
 
-              {/* AÇIKLAMA METNİ (Kutudan tamamen arındırıldı, salt editoryal yazı) */}
-              <div className="pt-2">
-                <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
-                  Finansal piyasaları öğrenmek isteyen çoğu insan, ezberletilen teorik formüller ve sonu gelmeyen teknik terimler yüzünden başlangıçta pes eder. Biz FinAi Akademi'de teoriyi bir kenara bırakıp, doğrudan bir şirketi ve piyasayı okuma mantığına odaklanıyoruz. Buradaki amacımız, kendi tasarruflarınızı yönetirken kimsenin tüyosuna ihtiyaç duymadan, neyi neden aldığınızı bilerek rasyonel kararlar verebilmenizi sağlamaktır.
-                </p>
-              </div>
-
-              {/* BİZ NEYİ FARKLI YAPIYORUZ? (Okunaklı, ferah, editoryal yeni tasarım) */}
-              <div className="pt-8 border-t border-slate-200 space-y-6">
+              {/* BİZ NEYİ FARKLI YAPIYORUZ? (Rafine, okunaklı ve modern yeni editoryal tasarım) */}
+              <div className="pt-6 border-t border-slate-200 space-y-5">
                 <div>
-                  <h2 className="text-2xl font-normal text-[#0E1E38] clash-title">
+                  <h2 className="text-xl sm:text-2xl font-normal text-[#0E1E38] clash-title tracking-tight">
                     Biz Neyi Farklı Yapıyoruz?
                   </h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                   
-                  <div className="p-5 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-2.5">
-                    <span className="text-xs font-semibold text-[#004BFA] uppercase tracking-wider block">
-                      01 • Ticari Mantık
-                    </span>
-                    <h4 className="text-base font-semibold text-[#0E1E38]">
-                      Teori Yerine Ticari Mantık
-                    </h4>
-                    <p className="text-sm text-slate-600 leading-relaxed font-normal">
-                      Kitaplardaki finansal terimleri ezberletmek yerine, o kavramların şirketin kasasına ve günlük operasyonuna nasıl yansıdığını gösteriyoruz. Bir rasyoya baktığınızda bunun sadece matematiksel bir işlem değil, şirketin hayatta kalma mücadelesi olduğunu anlamanızı sağlıyoruz.
-                    </p>
+                  {/* Kart 01 */}
+                  <div className="group p-5 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#004BFA]/50 hover:shadow-md transition-all duration-200 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="w-7 h-7 rounded-lg bg-blue-50 text-[#004BFA] text-xs font-bold flex items-center justify-center">
+                          01
+                        </span>
+                        <span className="text-[10px] font-semibold tracking-wider uppercase text-slate-400 group-hover:text-[#004BFA] transition-colors">
+                          Ticari Mantık
+                        </span>
+                      </div>
+                      <h4 className="text-base font-semibold text-[#0E1E38] tracking-tight">
+                        Teori Yerine Ticari Mantık
+                      </h4>
+                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                        Kitaplardaki finansal terimleri ezberletmek yerine, o kavramların şirketin kasasına ve günlük operasyonuna nasıl yansıdığını gösteriyoruz. Bir rasyoya baktığınızda bunun sadece matematiksel bir işlem değil, şirketin hayatta kalma mücadelesi olduğunu anlamanızı sağlıyoruz.
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="p-5 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-2.5">
-                    <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">
-                      02 • Karar Refleksi
-                    </span>
-                    <h4 className="text-base font-semibold text-[#0E1E38]">
-                      Ezber Sınavı Yok, Karar Var
-                    </h4>
-                    <p className="text-sm text-slate-600 leading-relaxed font-normal">
-                      Bölüm sonlarında klasik test soruları çözdürmüyoruz. Anlatım bittiğinde size simüle bir bütçe vererek gerçek bir karar aldırıyoruz; böylece kendi paranızı riske atmadan piyasanın mantığını aldığınız kararların sonuçlarıyla görüyorsunuz.
-                    </p>
+                  {/* Kart 02 */}
+                  <div className="group p-5 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#004BFA]/50 hover:shadow-md transition-all duration-200 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="w-7 h-7 rounded-lg bg-blue-50 text-[#004BFA] text-xs font-bold flex items-center justify-center">
+                          02
+                        </span>
+                        <span className="text-[10px] font-semibold tracking-wider uppercase text-slate-400 group-hover:text-[#004BFA] transition-colors">
+                          Karar Refleksi
+                        </span>
+                      </div>
+                      <h4 className="text-base font-semibold text-[#0E1E38] tracking-tight">
+                        Ezber Sınavı Yok, Karar Var
+                      </h4>
+                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                        Bölüm sonlarında klasik test soruları çözdürmüyoruz. Anlatım bittiğinde size simüle bir bütçe vererek gerçek bir karar aldırıyoruz; böylece kendi paranızı riske atmadan piyasanın mantığını aldığınız kararların sonuçlarıyla görüyorsunuz.
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="p-5 bg-slate-50/80 rounded-xl border border-slate-200/80 space-y-2.5">
-                    <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">
-                      03 • Bütüncül Sistem
-                    </span>
-                    <h4 className="text-base font-semibold text-[#0E1E38]">
-                      Birbirine Bağlanan Sistem
-                    </h4>
-                    <p className="text-sm text-slate-600 leading-relaxed font-normal">
-                      Burada öğrendiğiniz hiçbir konu havada kalmaz. İlk aşamada öğrendiğiniz temel nakit akışı mantığı, bir sonraki aşamada bilanço okurken ve şirket seçerken doğrudan karşınıza çıkar. Her ders bir sonrakini besler ve zamanla eksiksiz bir yatırım bakış açısı oluşturur.
-                    </p>
+                  {/* Kart 03 */}
+                  <div className="group p-5 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#004BFA]/50 hover:shadow-md transition-all duration-200 flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="w-7 h-7 rounded-lg bg-blue-50 text-[#004BFA] text-xs font-bold flex items-center justify-center">
+                          03
+                        </span>
+                        <span className="text-[10px] font-semibold tracking-wider uppercase text-slate-400 group-hover:text-[#004BFA] transition-colors">
+                          Bütüncül Sistem
+                        </span>
+                      </div>
+                      <h4 className="text-base font-semibold text-[#0E1E38] tracking-tight">
+                        Birbirine Bağlanan Sistem
+                      </h4>
+                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                        Burada öğrendiğiniz hiçbir konu havada kalmaz. İlk aşamada öğrendiğiniz temel nakit akışı mantığı, bir sonraki aşamada bilanço okurken ve şirket seçerken doğrudan karşınıza çıkar. Her ders bir sonrakini besler ve zamanla eksiksiz bir yatırım bakış açısı oluşturur.
+                      </p>
+                    </div>
                   </div>
 
                 </div>
@@ -153,7 +190,7 @@ function AkademiContent() {
             </div>
 
             {/* Alt Bilgi */}
-            <div className="pt-10 mt-10 border-t border-slate-200 text-center sm:text-left text-xs text-slate-400">
+            <div className="pt-8 mt-10 border-t border-slate-200 text-center sm:text-left text-xs text-slate-400">
               © {new Date().getFullYear()} FinAi Akademi. Bilinçli yatırımcılar için sıfırdan inşa edildi.
             </div>
           </section>
@@ -184,7 +221,7 @@ function AkademiContent() {
                 </h3>
               </div>
 
-              {/* 12 HAFTALIK TÜM KONULAR LİSTESİ (Scroll kaldırıldı, tüm konular tam boy) */}
+              {/* 12 HAFTALIK TÜM KONULAR (Scrollsuz, tam boy) */}
               <div className="space-y-2 pt-2">
                 {UNIT_1_CONFIG.topics.map((topic) => {
                   const isActive = topic.status === "active";
@@ -238,202 +275,181 @@ function AkademiContent() {
             </div>
 
           </section>
-        </>
+
+        </div>
       ) : (
         /* =========================================================================
-            DURUM 2: SADECE BU HAFTANIN İÇERİĞİ (DERS & SİMÜLASYON ÇALIŞMA MASASI)
+            DURUM 2: SADECE BU HAFTANIN İÇERİĞİ (SAĞ KOLON KALDIRILDI - TAM EKRAN ODAK)
+            SLAYT BAZLI ANLATIM + SİMÜLASYON
             ========================================================================= */
-        <>
-          {/* SOL KOLON: %70 BEYAZ ZEMİN */}
-          <section className="w-full lg:w-[70%] bg-white flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16 min-h-screen">
+        <div className="min-h-screen w-full bg-white flex flex-col justify-between p-6 sm:p-10 lg:p-14 xl:p-16 max-w-4xl mx-auto">
+          
+          <div className="space-y-8">
+            
+            {/* Üst Bar: Geri Dönüş ve Adım İndikatörü */}
+            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+              <button
+                type="button"
+                onClick={handleBackToOverview}
+                className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-[#0E1E38] uppercase tracking-wider transition-colors group cursor-pointer"
+              >
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                <span>Akademi Haritasına Dön</span>
+              </button>
+
+              <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                <span>Sayfa {activeSlide + 1} / {totalSlides}</span>
+              </div>
+            </div>
+
+            {/* Başlık Silüeti (1.1 yazılmadı, temiz ve zarif başlık) */}
             <div>
-              
-              {/* Üst Navigasyon: Yalnızca Haritaya Dönüş */}
-              <div className="border-b border-slate-200 pb-4 mb-6">
-                <button
-                  type="button"
-                  onClick={handleBackToOverview}
-                  className="inline-flex items-center gap-2 text-xs font-semibold text-slate-600 hover:text-[#0E1E38] uppercase tracking-wider transition-colors group cursor-pointer"
-                >
-                  <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                  <span>Akademi Haritasına Dön</span>
-                </button>
-              </div>
+              <h2 className="text-2xl sm:text-3xl font-medium text-[#0E1E38] tracking-tight clash-title">
+                {lessonContent.title}
+              </h2>
+            </div>
 
-              {/* Ders Başlığı (Kullanıcı talebiyle ölçülü boyuta indirildi) */}
-              <div className="space-y-2 max-w-4xl">
-                <h2 className="text-xl sm:text-2xl font-normal text-[#0E1E38] tracking-tight clash-title">
-                  {lessonContent.title}
-                </h2>
-                <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed">
-                  {lessonContent.introSubtitle}
-                </p>
-              </div>
+            {/* SLAYT BAZLI İÇERİK KARTI */}
+            {!isSimulatorOpen ? (
+              <div className="space-y-6">
+                
+                {/* İlerleme Çubuğu */}
+                <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-[#004BFA] transition-all duration-300 rounded-full"
+                    style={{ width: `${((activeSlide + 1) / totalSlides) * 100}%` }}
+                  />
+                </div>
 
-              {/* 1.1 EDİTORYAL ANLATIM METİNLERİ (4 Blok) */}
-              <div className="mt-8 space-y-8">
-                {lessonContent.blocks.map((block) => (
-                  <div key={block.id} className="space-y-2">
+                {/* Aktif Slayt Gövdesi */}
+                <div className="p-6 sm:p-8 bg-slate-50/70 border border-slate-200 rounded-2xl space-y-4 min-h-[260px] flex flex-col justify-between">
+                  <div className="space-y-3">
                     <div className="flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-[#004BFA]" />
-                      <h3 className="text-base sm:text-lg font-semibold text-[#0E1E38]">
-                        {block.title}
+                      <h3 className="text-lg sm:text-xl font-semibold text-[#0E1E38]">
+                        {currentBlock.title}
                       </h3>
                     </div>
-                    <div className="space-y-2 pl-3.5 border-l-2 border-slate-200">
-                      {block.paragraphs.map((p, pIdx) => (
-                        <p key={pIdx} className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
-                          {p}
-                        </p>
+
+                    <div className="space-y-3 text-slate-700 leading-relaxed text-base sm:text-lg font-normal">
+                      {currentBlock.paragraphs.map((p, idx) => (
+                        <p key={idx}>{p}</p>
                       ))}
                     </div>
                   </div>
-                ))}
-              </div>
 
-              {/* SİMÜLATÖRÜ AÇAN BUTON */}
-              {!hasCompletedReading ? (
-                <div className="mt-10 pt-6 border-t border-slate-200">
+                  {/* Slayt Alt Bilgisi */}
+                  <div className="pt-4 border-t border-slate-200/60 flex items-center justify-between text-xs text-slate-400">
+                    <span>FinAi Workspace Rehberi</span>
+                    <span>{activeSlide + 1} / {totalSlides}</span>
+                  </div>
+                </div>
+
+                {/* Slayt Navigasyon Butonları */}
+                <div className="flex items-center justify-between pt-2">
                   <button
                     type="button"
-                    onClick={() => setHasCompletedReading(true)}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-[#0E1E38] hover:bg-[#004BFA] text-white text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer group"
+                    onClick={() => setActiveSlide((prev) => Math.max(0, prev - 1))}
+                    disabled={activeSlide === 0}
+                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-600 hover:text-[#0E1E38] hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
                   >
-                    <span>Anlatımı Okudum, Nakit Akışımla Yüzleşmek İstiyorum</span>
-                    <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                    <ChevronLeft className="w-4 h-4" />
+                    <span>Önceki Sayfa</span>
+                  </button>
+
+                  {/* Slayt Noktaları */}
+                  <div className="flex items-center gap-1.5">
+                    {lessonContent.blocks.map((_, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setActiveSlide(i)}
+                        className={`h-2 rounded-full transition-all cursor-pointer ${
+                          activeSlide === i ? 'w-6 bg-[#004BFA]' : 'w-2 bg-slate-200 hover:bg-slate-300'
+                        }`}
+                        title={`${i + 1}. Sayfa`}
+                      />
+                    ))}
+                  </div>
+
+                  {activeSlide < totalSlides - 1 ? (
+                    <button
+                      type="button"
+                      onClick={() => setActiveSlide((prev) => Math.min(totalSlides - 1, prev + 1))}
+                      className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-[#0E1E38] hover:bg-[#004BFA] text-xs font-semibold text-white transition-all shadow-sm hover:shadow-md cursor-pointer group"
+                    >
+                      <span>Sonraki Sayfa</span>
+                      <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setIsSimulatorOpen(true)}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-xs font-semibold text-white transition-all shadow-md hover:shadow-lg cursor-pointer group"
+                    >
+                      <span>Nakit Akışımla Yüzleş</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                    </button>
+                  )}
+                </div>
+
+              </div>
+            ) : (
+              /* AÇILAN İNTERAKTİF SİMÜLATÖR MASASI */
+              <div className="space-y-6 animate-in fade-in duration-300">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wider flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span>İnteraktif Karar Masası Devrede</span>
+                  </span>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsSimulatorOpen(false)}
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#004BFA] hover:underline cursor-pointer"
+                  >
+                    <span>Ders Slaytlarına Geri Dön</span>
                   </button>
                 </div>
-              ) : null}
 
-              {/* AÇILAN İNTERAKTİF KARAR ARACI */}
-              {hasCompletedReading && (
-                <div className="mt-10 pt-8 border-t-2 border-[#004BFA] space-y-6 animate-in fade-in duration-500">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-xs font-semibold text-emerald-600 uppercase tracking-wider flex items-center gap-1.5">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                        <span>İnteraktif Alan Devrede</span>
-                      </span>
-                      <h3 className="text-xl sm:text-2xl font-normal text-[#0E1E38] clash-title mt-1">
-                        Şimdi Sıra Sende: Kendi Sayılarını Masaya Yatır
-                      </h3>
-                    </div>
-                  </div>
+                <CashFlowSimulator />
 
-                  <CashFlowSimulator />
-
-                  <div className="p-5 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-6">
-                    <div className="space-y-1">
-                      <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
-                        Gelecek Hafta (2. Hafta)
-                      </span>
-                      <h5 className="text-sm font-semibold text-[#0E1E38]">
-                        1.2 Tasarruf Nedir, Nasıl Yapılır? (Harcamaları Kısma Sanatı)
-                      </h5>
-                      <p className="text-xs text-slate-500">
-                        Bu hafta tespit ettiğin serbest nakdi veya açığı nasıl yöneteceğini öğreneceğiz.
-                      </p>
-                    </div>
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs text-slate-500 font-medium shrink-0">
-                      <Lock className="w-3.5 h-3.5 text-slate-400" />
-                      <span>Haftaya Yayında</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-            </div>
-
-            {/* Alt Bilgi */}
-            <div className="pt-10 mt-10 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400">
-              <span>© {new Date().getFullYear()} FinAi Akademi.</span>
-              <button
-                type="button"
-                onClick={handleBackToOverview}
-                className="text-[#004BFA] hover:underline font-semibold cursor-pointer"
-              >
-                Yol Haritasına Geri Dön ↑
-              </button>
-            </div>
-          </section>
-
-          {/* SAĞ KOLON: %30 DERİN LACİVERT VİTRİN */}
-          <section className="w-full lg:w-[30%] bg-[#0E1E38] text-white p-6 sm:p-8 lg:p-10 xl:p-12 flex flex-col justify-between relative overflow-hidden select-none border-t lg:border-t-0 lg:border-l border-white/10">
-            
-            <div className="absolute -top-32 -right-32 w-[450px] h-[450px] bg-[#004BFA]/20 rounded-full blur-[140px] pointer-events-none" />
-            <div className="absolute -bottom-32 -left-32 w-[350px] h-[350px] bg-[#78B8F5]/10 rounded-full blur-[140px] pointer-events-none" />
-
-            <div className="relative z-10 space-y-7">
-              
-              <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
-                  <span className="text-sm font-semibold tracking-wide text-white uppercase">
-                    Ders Odak Modu
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleBackToOverview}
-                  className="text-xs text-[#78B8F5] hover:text-white hover:underline transition-colors cursor-pointer"
-                >
-                  Haritaya Dön
-                </button>
-              </div>
-
-              <div className="space-y-3 p-4 bg-white/5 border border-white/10 rounded-2xl">
-                <span className="text-[11px] font-semibold text-[#78B8F5] uppercase tracking-wider block">
-                  1. Haftanın Ana Fikri
-                </span>
-                <p className="text-xs text-white/80 leading-relaxed">
-                  "Finansal gücün ne kadar kazandığınla değil; ay bittiğinde masada ne bırakabildiğinle başlar."
-                </p>
-              </div>
-
-              <div className="space-y-3 pt-2">
-                <span className="text-xs font-semibold text-white/50 uppercase tracking-wider block">
-                  Dersin Anahtar Terimleri
-                </span>
-
-                <div className="space-y-2.5">
-                  <div className="p-3 bg-white/[0.03] border border-white/5 rounded-xl space-y-1">
-                    <h5 className="text-xs font-semibold text-white">Nakit Akışı (Cash Flow)</h5>
-                    <p className="text-[11px] text-white/60 leading-relaxed">
-                      Belirli bir zaman diliminde cüzdana giren ve cüzdandan çıkan tüm paranın net farkı.
+                {/* Gelecek Hafta Kartı */}
+                <div className="p-5 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-6">
+                  <div className="space-y-1">
+                    <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+                      Gelecek Hafta (2. Hafta)
+                    </span>
+                    <h5 className="text-sm font-semibold text-[#0E1E38]">
+                      1.2 Tasarruf Nedir, Nasıl Yapılır? (Harcamaları Kısma Sanatı)
+                    </h5>
+                    <p className="text-xs text-slate-500">
+                      Bu hafta tespit ettiğin serbest nakdi veya açığı nasıl yöneteceğini öğreneceğiz.
                     </p>
                   </div>
-
-                  <div className="p-3 bg-white/[0.03] border border-white/5 rounded-xl space-y-1">
-                    <h5 className="text-xs font-semibold text-white">Serbest Nakit (Free Cash)</h5>
-                    <p className="text-[11px] text-white/60 leading-relaxed">
-                      Tüm zorunlu yaşam harcamaları ödendikten sonra yatırıma dönüştürülebilecek kalan para.
-                    </p>
-                  </div>
-
-                  <div className="p-3 bg-white/[0.03] border border-white/5 rounded-xl space-y-1">
-                    <h5 className="text-xs font-semibold text-white">Tasarruf Kapasitesi (%)</h5>
-                    <p className="text-[11px] text-white/60 leading-relaxed">
-                      Kazanılan toplam gelirin yüzde kaçının sermaye olarak kenara ayrılabildiği oranı.
-                    </p>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs text-slate-500 font-medium shrink-0">
+                    <Lock className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Haftaya Yayında</span>
                   </div>
                 </div>
               </div>
+            )}
 
-            </div>
+          </div>
 
-            <div className="relative z-10 pt-5 mt-5 border-t border-white/10">
-              <button
-                type="button"
-                onClick={handleBackToOverview}
-                className="w-full py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                <span>Akademi Ana Haritasına Dön</span>
-              </button>
-            </div>
+          {/* Alt Bilgi */}
+          <div className="pt-8 mt-10 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
+            <span>© {new Date().getFullYear()} FinAi Akademi.</span>
+            <button
+              type="button"
+              onClick={handleBackToOverview}
+              className="text-[#004BFA] hover:underline font-semibold cursor-pointer"
+            >
+              Yol Haritasına Geri Dön ↑
+            </button>
+          </div>
 
-          </section>
-        </>
+        </div>
       )}
 
     </div>

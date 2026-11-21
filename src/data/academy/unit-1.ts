@@ -25,7 +25,7 @@ export const UNIT_1_CONFIG: UnitConfig = {
     {
       id: '1-1',
       weekNumber: 1,
-      title: '1.1 Gelir ve Gider Yönetimi: Kendi Nakit Akışının Farkına Varmak',
+      title: 'Gelir ve Gider Yönetimi: Kendi Nakit Akışının Farkına Varmak',
       shortTitle: 'Gelir ve Gider Yönetimi (Nakit Akışı)',
       status: 'active',
       description: 'Zenginlik ne kadar kazandığınla değil; ay bittiğinde masada ne bırakabildiğinle başlar.',
@@ -34,7 +34,7 @@ export const UNIT_1_CONFIG: UnitConfig = {
     {
       id: '1-2',
       weekNumber: 2,
-      title: '1.2 Tasarruf Nedir, Nasıl Yapılır? (Harcamaları Kısma Sanatı)',
+      title: 'Tasarruf Nedir, Nasıl Yapılır? (Harcamaları Kısma Sanatı)',
       shortTitle: 'Tasarruf Nedir ve Nasıl Yapılır?',
       status: 'locked',
       description: 'Cimrilik değil, cüzdandaki görünmeyen kaçakları tespit etme bilinci.',
@@ -43,7 +43,7 @@ export const UNIT_1_CONFIG: UnitConfig = {
     {
       id: '1-3',
       weekNumber: 3,
-      title: '1.3 Bütçe Kuralı (50/30/20): Geliri Rasyonel Dağıtmak',
+      title: 'Bütçe Kuralı (50/30/20): Geliri Rasyonel Dağıtmak',
       shortTitle: 'Bütçe Kuralı (50/30/20)',
       status: 'locked',
       description: 'Zorunlu ihtiyaçlar, kişisel istekler ve yatırımı dengelemenin altın oranı.',
@@ -52,7 +52,7 @@ export const UNIT_1_CONFIG: UnitConfig = {
     {
       id: '1-4',
       weekNumber: 4,
-      title: '1.4 Borçluluk Nedir? Kötü Borç ile İyi Borç Ayrımı',
+      title: 'Borçluluk Nedir? Kötü Borç ile İyi Borç Ayrımı',
       shortTitle: 'Kötü Borç ile İyi Borç Ayrımı',
       status: 'locked',
       description: 'Tüketen borç köleleştirir, üreten borç kaldıraç yaratır.',
@@ -61,7 +61,7 @@ export const UNIT_1_CONFIG: UnitConfig = {
     {
       id: '1-5',
       weekNumber: 5,
-      title: '1.5 Acil Durum Fonu (Güvenlik Yastığı): Yatırımdan Önceki İlk Zırh',
+      title: 'Acil Durum Fonu (Güvenlik Yastığı): Yatırımdan Önceki İlk Zırh',
       shortTitle: 'Acil Durum Fonu (Güvenlik Yastığı)',
       status: 'locked',
       description: 'Borsada en dip fiyattan hisse satmamak için gereken nakit güvencesi.',
@@ -70,7 +70,7 @@ export const UNIT_1_CONFIG: UnitConfig = {
     {
       id: '1-6',
       weekNumber: 6,
-      title: '1.6 Enflasyon Nedir? Satın Alma Gücü ve Paranın Sessizce Erimesi',
+      title: 'Enflasyon Nedir? Satın Alma Gücü ve Paranın Sessizce Erimesi',
       shortTitle: 'Enflasyon ve Satın Alma Gücü',
       status: 'locked',
       description: 'Parayı nakitte tutmanın neden kesin bir kayıp olduğunu görmek.',
@@ -79,7 +79,7 @@ export const UNIT_1_CONFIG: UnitConfig = {
     {
       id: '1-7',
       weekNumber: 7,
-      title: '1.7 Paranın Zaman Değeri ve Fırsat Maliyeti',
+      title: 'Paranın Zaman Değeri ve Fırsat Maliyeti',
       shortTitle: 'Zaman Değeri ve Fırsat Maliyeti',
       status: 'locked',
       description: 'Bugün harcanan küçük paraların gelecekteki bileşik bedeli.',
@@ -88,7 +88,7 @@ export const UNIT_1_CONFIG: UnitConfig = {
     {
       id: '1-8',
       weekNumber: 8,
-      title: '1.8 Neden Yatırım Yapmalıyım? (Tasarruftan Yatırıma Geçiş)',
+      title: 'Neden Yatırım Yapmalıyım? (Tasarruftan Yatırıma Geçiş)',
       shortTitle: 'Neden Yatırım Yapmalıyım?',
       status: 'locked',
       description: 'Parayı sadece saklamak yerine üreten işletmelere ortak etmek.',
@@ -97,7 +97,7 @@ export const UNIT_1_CONFIG: UnitConfig = {
     {
       id: '1-9',
       weekNumber: 9,
-      title: '1.9 Yatırım Nedir, Nasıl Yapılır? (Varlık Edinme Mantığı)',
+      title: 'Yatırım Nedir, Nasıl Yapılır? (Varlık Edinme Mantığı)',
       shortTitle: 'Yatırım Nedir ve Nasıl Yapılır?',
       status: 'locked',
       description: 'Fiyat tahmini yapmak ile varlığın nakit üretimine ortak olmak arasındaki fark.',
@@ -106,7 +106,7 @@ export const UNIT_1_CONFIG: UnitConfig = {
     {
       id: '1-10',
       weekNumber: 10,
-      title: '1.10 Bileşik Getirinin Çarpan Gücü: Zaman ve Kartopu Etkisi',
+      title: 'Bileşik Getirinin Çarpan Gücü: Zaman ve Kartopu Etkisi',
       shortTitle: 'Bileşik Getirinin Çarpan Gücü',
       status: 'locked',
       description: 'Zamanın sermayeyi nasıl katladığını ve erken başlamanın gücünü kanıtlamak.',
@@ -115,7 +115,7 @@ export const UNIT_1_CONFIG: UnitConfig = {
     {
       id: '1-11',
       weekNumber: 11,
-      title: '1.11 Pasif Gelir Nedir? Pasif Gelir Kaynakları ve Finansal Bağımsızlık',
+      title: 'Pasif Gelir Nedir? Pasif Gelir Kaynakları ve Finansal Bağımsızlık',
       shortTitle: 'Pasif Gelir ve Finansal Bağımsızlık',
       status: 'locked',
       description: 'Varlık getirilerinin temel yaşam masraflarını karşıladığı özgürlük eşiği.',
@@ -124,7 +124,7 @@ export const UNIT_1_CONFIG: UnitConfig = {
     {
       id: '1-12',
       weekNumber: 12,
-      title: '1.12 Resesyon ve Ekonomik Krizler Nedir? Fırtınalarda Ayakta Kalmak',
+      title: 'Resesyon ve Ekonomik Krizler Nedir? Fırtınalarda Ayakta Kalmak',
       shortTitle: 'Resesyon ve Ekonomik Krizler',
       status: 'locked',
       description: 'Durgunluk dönemlerinde güçlü şirketleri ve sermaye transferini okuma sanatı.',
@@ -137,9 +137,8 @@ export const getLesson1Content = (userName?: string | null) => {
   const name = userName ? userName.split(' ')[0] : 'Öğrencimiz';
 
   return {
-    title: '1.1 Gelir ve Gider Yönetimi: Kendi Nakit Akışının Farkına Varmak',
+    title: 'Gelir ve Gider Yönetimi: Kendi Nakit Akışının Farkına Varmak',
     readTime: '3 dk okuma + Kişisel Analiz',
-    introSubtitle: 'Finansal gücün ne kadar kazandığınla değil; ay bittiğinde masada ne bırakabildiğinle başlar.',
     blocks: [
       {
         id: 'block-1',
