@@ -25,11 +25,11 @@ export const UNIT_1_CONFIG: UnitConfig = {
     {
       id: '1-1',
       weekNumber: 1,
-      title: '1.1 Gelir ve Gider Yönetimi: Ev Ekonomisi ve Nakit Akışı Nedir?',
+      title: '1.1 Gelir ve Gider Yönetimi: Kendi Nakit Akışının Farkına Varmak',
       shortTitle: 'Gelir ve Gider Yönetimi (Nakit Akışı)',
       status: 'active',
-      description: 'Zenginlik kazanılan parayla değil, ay sonunda elde kalan nakitle ölçülür.',
-      readTime: '4 dk okuma + Simülasyon',
+      description: 'Zenginlik ne kadar kazandığınla değil; ay bittiğinde masada ne bırakabildiğinle başlar.',
+      readTime: '3 dk okuma + Kişisel Analiz',
     },
     {
       id: '1-2',
@@ -133,34 +133,48 @@ export const UNIT_1_CONFIG: UnitConfig = {
   ],
 };
 
-export const LESSON_1_1_CONTENT = {
-  title: '1.1 Gelir ve Gider Yönetimi: Ev Ekonomisi ve Nakit Akışı Nedir?',
-  readTime: '3 dk okuma + Kişisel Analiz',
-  introSubtitle: 'Zenginlik, kazandığınız toplam rakamla değil; ay sonunda elinizde tutabildiğiniz nakitle başlar.',
-  blocks: [
-    {
-      id: 'block-1',
-      title: 'Gelir Tek Başına Neden Bir Şey İfade Etmez?',
-      paragraphs: [
-        'Finansal dünyada insanların yaptığı en yaygın hata, zenginliği sadece kazanılan paranın büyüklüğüyle ölçmektir. Oysa ayda 100.000 ₺ kazanıp 105.000 ₺ harcayan biri finansal olarak uçurumun kenarındayken, 30.000 ₺ kazanıp 10.000 ₺ biriktirebilen biri gerçek sermaye sahibidir.',
-        'Biz FinAi olarak gücünüzü ne kadar kazandığınızla değil, ay sonunda elinizde ne kaldığıyla ölçeriz.',
-      ],
-    },
-    {
-      id: 'block-2',
-      title: 'Nakit Akışı Nedir? (Musluk ve Tekne Dengesi)',
-      paragraphs: [
-        'Nakit akışı; cebinize giren parayla cebinizden çıkan paranın zamana karşı dansıdır. Geliriniz teknenize su dolduran ana musluk, giderleriniz ise teknenin altındaki irili ufaklı deliklerdir.',
-        'Eğer deliklerin nerede olduğunu bilmezseniz, musluğu ne kadar açarsanız açın teknenin batmasını engelleyemezsiniz.',
-      ],
-    },
-    {
-      id: 'block-3',
-      title: 'İlk Adım Yüzleşmektir',
-      paragraphs: [
-        'Yatırım yapmaya, hisse seçmeye veya şirket bilançosu okumaya başlamadan önceki ilk zorunlu adım, kendi kişisel bilançonuzla dürüstçe yüzleşmektir. Harcamalarınızın nereye gittiğini tam olarak görmeden borsaya para yatırmak, gözü kapalı araba kullanmaktan farksızdır.',
-        'Şimdi aşağıda, hiçbir zorlama ve şablon kısıtlaması olmadan kendi hayatınızın rakamlarını masaya yatırarak ilk adımı atacağız.',
-      ],
-    },
-  ],
+export const getLesson1Content = (userName?: string | null) => {
+  const name = userName ? userName.split(' ')[0] : 'Öğrencimiz';
+
+  return {
+    title: '1.1 Gelir ve Gider Yönetimi: Kendi Nakit Akışının Farkına Varmak',
+    readTime: '3 dk okuma + Kişisel Analiz',
+    introSubtitle: 'Finansal gücün ne kadar kazandığınla değil; ay bittiğinde masada ne bırakabildiğinle başlar.',
+    blocks: [
+      {
+        id: 'block-1',
+        title: 'Gelir Yanılsaması (Kazanmak vs. Masada Bırakmak)',
+        paragraphs: [
+          `Finans dünyasına adım atarken cebe koymamız gereken ilk altın kural şudur ${name}: Çok para kazanmak, otomatik olarak zengin olmak anlamına gelmez. Çünkü ne kadar kazanırsan kazan, giden parayı kontrol edemiyorsan ay sonunda elinde koca bir sıfırla kalırsın.`,
+          'FinAi Workspace ekibi olarak biz senin finansal gücünü ne kadar ciro yaptığınla değil, ay bittiğinde cüzdanında ne kadar para tutabildiğinle ölçeceğiz.',
+        ],
+      },
+      {
+        id: 'block-2',
+        title: 'Nakit Akışı (Musluk ve Tekne Mantığı)',
+        paragraphs: [
+          'İlk kuralı cebimize koyduysak, şimdi resmin kalbine, yani nakit akışının çalışma mantığına odaklanalım. Gelirini evine temiz su taşıyan ana musluk, harcamalarını ise bu suyun biriktiği teknenin altındaki irili ufaklı delikler gibi düşünebilirsin.',
+          'Deliklerin nerede olduğunu bilmezsen, musluğu sonuna kadar açsan bile teknenin su almasını ve batmasını engelleyemezsin.',
+          'Tam da bu yüzden, bu metinleri bitirdiğinde kendi teknendeki kaçakları tek tek fark etmeni sağlayacak interaktif bir uygulama yapacağız; bu sayede paranın nereye sızdığını ilk kez kendi gözlerinle göreceksin.',
+        ],
+      },
+      {
+        id: 'block-3',
+        title: 'Dürüst Bir Yüzleşme (Zorlama Yok, Farkındalık Var)',
+        paragraphs: [
+          `Teknedeki delikleri kapatmanın ilk adımı ise, bu sayılarla dürüstçe yüzleşme cesaretini göstermektir ${name}. Burada kimse seni harcamaların yüzünden yargılamayacak; kira ödüyorsan yazacak, ödemiyorsan alanı boş bırakacak veya küçük keyif harcamaların varsa onları da dürüstçe masaya koyacaksın.`,
+          'Birazdan yapacağımız çalışmada amacımız hayat standardını kısıtlamak değil; kazandığın paranın tam olarak nereye aktığını fark ederek kontrolü ilk kez gerçekten eline almanı sağlamaktır.',
+        ],
+      },
+      {
+        id: 'block-4',
+        title: 'Serbest Nakit (Gelecekteki Yatırımının Tohumu)',
+        paragraphs: [
+          "Bütün bu resmi netleştirdikten sonra, şimdi işin en heyecan verici tarafına, yani geleceğini inşa edeceğimiz adıma geçiyoruz. Zorunlu tüm giderlerin çıktıktan sonra elinde kalan her bir liraya FinAi Workspace ekibi olarak biz 'serbest nakit' deriz.",
+          'Bu kalan para, ilerleyen haftalarda şirketlere ortak edeceğimiz ve senin yerine gece gündüz çalıştıracağımız tohum sermayendir.',
+          'Şimdi aşağıdaki masaya geçelim ve kendi gerçek sayılarını girerek bu tohumun büyüklüğünü birlikte keşfedelim.',
+        ],
+      },
+    ],
+  };
 };

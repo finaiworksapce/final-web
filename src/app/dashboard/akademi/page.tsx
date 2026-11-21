@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense, useMemo } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { 
@@ -10,21 +10,28 @@ import {
   ChevronRight, 
   BookOpen, 
   ArrowRight, 
-  Layers, 
-  Target, 
   Compass, 
   Play, 
-  Award, 
-  Lightbulb,
-  Sparkles
 } from "lucide-react";
-import { UNIT_1_CONFIG, LESSON_1_1_CONTENT } from "@/data/academy/unit-1";
+import { UNIT_1_CONFIG, getLesson1Content } from "@/data/academy/unit-1";
 import { CashFlowSimulator } from "@/components/academy/CashFlowSimulator";
+import { useUser } from "@/components/providers/UserProvider";
 
 function AkademiContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
+  // Kullanıcı adı bilgisi
+  let userName: string | null = null;
+  try {
+    const userCtx = useUser();
+    userName = userCtx?.userName || null;
+  } catch {
+    // UserProvider dışı çalışma durumu için koruma
+  }
+
+  const lessonContent = useMemo(() => getLesson1Content(userName), [userName]);
+
   // URL senkronizasyonu: ?ders=1-1 ise doğrudan ders açılır; yoksa ana harita açılır
   const urlTopic = searchParams.get("ders");
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(urlTopic);
@@ -91,7 +98,7 @@ function AkademiContent() {
                 </p>
               </div>
 
-              {/* MANİFESTO (Söz Verilen Dürüst ve Rasyonel Açıklama - 3 Cümle) */}
+              {/* MANİFESTO (Dürüst ve Rasyonel Açıklama) */}
               <div className="mt-8 p-5 sm:p-6 bg-slate-50 border-l-4 border-[#004BFA] rounded-r-2xl space-y-2">
                 <h3 className="text-xs font-semibold text-[#004BFA] uppercase tracking-wider">
                   Neden Buradasınız?
@@ -153,7 +160,7 @@ function AkademiContent() {
                 </div>
               </div>
 
-              {/* BU SAYFADA NASIL İLERLEYECEKSİNİZ? (İşleyiş Kuralı) */}
+              {/* BU SAYFADA NASIL İLERLEYECEKSİNİZ? */}
               <div className="mt-10 pt-8 border-t border-slate-200">
                 <div className="mb-4">
                   <h3 className="text-lg font-semibold text-[#0E1E38]">
@@ -191,7 +198,7 @@ function AkademiContent() {
                 </div>
               </div>
 
-              {/* BU HAFTANIN ODAK KARTI & EYLEME ÇAĞRI BUTONU */}
+              {/* BU HAFTANIN ODAK KARTI & EYLEME ÇAĞRI */}
               <div className="mt-10 p-6 bg-[#0E1E38] text-white rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xl shadow-[#0E1E38]/10">
                 <div className="space-y-1.5 max-w-xl">
                   <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[11px] font-semibold border border-emerald-500/30">
@@ -199,10 +206,10 @@ function AkademiContent() {
                     <span>Bu Hafta Yayında • 1. Hafta</span>
                   </div>
                   <h4 className="text-xl font-normal text-white clash-title mt-1">
-                    1.1 Gelir ve Gider Yönetimi: Ev Ekonomisi ve Nakit Akışı Nedir?
+                    {lessonContent.title}
                   </h4>
                   <p className="text-xs text-white/70 leading-relaxed">
-                    Zenginlik ne kadar kazandığınızla değil, ay sonunda elinizde ne kaldığıyla ölçülür. Kendi nakit akışınızla yüzleşmek için ilk adıma başlayın.
+                    {lessonContent.introSubtitle}
                   </p>
                 </div>
 
@@ -227,13 +234,11 @@ function AkademiContent() {
           {/* SAĞ KOLON: %30 DERİN LACİVERT VİTRİN & 12 HAFTALIK İLERLEME AĞACI */}
           <section className="w-full lg:w-[30%] bg-[#0E1E38] text-white p-6 sm:p-8 lg:p-10 xl:p-12 flex flex-col justify-between relative overflow-hidden select-none border-t lg:border-t-0 lg:border-l border-white/10">
             
-            {/* Ambient Arka Plan Işıltısı */}
             <div className="absolute -top-32 -right-32 w-[450px] h-[450px] bg-[#004BFA]/20 rounded-full blur-[140px] pointer-events-none" />
             <div className="absolute -bottom-32 -left-32 w-[350px] h-[350px] bg-[#78B8F5]/10 rounded-full blur-[140px] pointer-events-none" />
 
             <div className="relative z-10 space-y-7">
               
-              {/* Üst: FinAi Marka Başlığı */}
               <div className="flex items-center justify-between border-b border-white/10 pb-5">
                 <div className="flex items-center gap-2.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#004BFA] animate-pulse" />
@@ -246,7 +251,6 @@ function AkademiContent() {
                 </span>
               </div>
 
-              {/* Ünite Bilgisi */}
               <div className="space-y-1.5">
                 <span className="text-xs font-semibold text-white/50 uppercase tracking-wider block">
                   1. Ünite
@@ -259,7 +263,6 @@ function AkademiContent() {
                 </p>
               </div>
 
-              {/* İlerleme Çubuğu */}
               <div className="space-y-2 p-3.5 bg-white/5 border border-white/10 rounded-xl">
                 <div className="flex justify-between text-xs text-white/80">
                   <span className="font-medium">Ünite 1 İlerlemesi</span>
@@ -325,7 +328,6 @@ function AkademiContent() {
 
             </div>
 
-            {/* Sağ Kolon Alt */}
             <div className="relative z-10 pt-5 mt-5 border-t border-white/10">
               <p className="text-[11px] text-white/50 leading-relaxed">
                 Her hafta yeni bir kavram ve simülasyon aktif hale gelir. Sırayla ilerlemek finansal refleksinizi pekiştirir.
@@ -339,7 +341,7 @@ function AkademiContent() {
             DURUM 2: SADECE BU HAFTANIN İÇERİĞİ (DERS & SİMÜLASYON ÇALIŞMA MASASI)
             ========================================================================= */
         <>
-          {/* SOL KOLON: %70 BEYAZ ZEMİN (YALNIZCA 1.1 DERSİ + SİMÜLASYON) */}
+          {/* SOL KOLON: %70 BEYAZ ZEMİN (DERS METİNLERİ + SİMÜLASYON) */}
           <section className="w-full lg:w-[70%] bg-white flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16 min-h-screen">
             <div>
               
@@ -360,7 +362,7 @@ function AkademiContent() {
                   </span>
                   <span className="text-xs text-slate-400">•</span>
                   <span className="text-xs text-slate-500 font-medium">
-                    {LESSON_1_1_CONTENT.readTime}
+                    {lessonContent.readTime}
                   </span>
                 </div>
               </div>
@@ -372,17 +374,17 @@ function AkademiContent() {
                   <span>Ünite 1 • Konu 1.1</span>
                 </div>
                 <h1 className="text-3xl sm:text-4xl xl:text-5xl font-normal text-[#0E1E38] tracking-tight clash-title leading-tight">
-                  {LESSON_1_1_CONTENT.title}
+                  {lessonContent.title}
                 </h1>
                 <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed">
-                  {LESSON_1_1_CONTENT.introSubtitle}
+                  {lessonContent.introSubtitle}
                 </p>
               </div>
 
-              {/* 1.1 EDİTORYAL ANLATIM METİNLERİ (3 Blok) */}
+              {/* 1.1 EDİTORYAL ANLATIM METİNLERİ (4 Blok - FinAi Workspace Ekibi Diliyle) */}
               <div className="mt-10 space-y-8">
-                {LESSON_1_1_CONTENT.blocks.map((block) => (
-                  <div key={block.id} className="space-y-2">
+                {lessonContent.blocks.map((block) => (
+                  <div key={block.id} className="space-y-2.5">
                     <div className="flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-[#004BFA]" />
                       <h3 className="text-lg sm:text-xl font-semibold text-[#0E1E38]">
@@ -442,7 +444,7 @@ function AkademiContent() {
                         1.2 Tasarruf Nedir, Nasıl Yapılır? (Harcamaları Kısma Sanatı)
                       </h5>
                       <p className="text-xs text-slate-500">
-                        Bu hafta tespit ettiğiniz serbest nakdi veya açığı nasıl yöneteceğinizi öğreneceğiz.
+                        Bu hafta tespit ettiğin serbest nakdi veya açığı nasıl yöneteceğini öğreneceğiz.
                       </p>
                     </div>
                     <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs text-slate-500 font-medium shrink-0">
@@ -499,7 +501,7 @@ function AkademiContent() {
                   1. Haftanın Ana Fikri
                 </span>
                 <p className="text-xs text-white/80 leading-relaxed">
-                  "Zenginlik, ne kadar kazandığınız değil; ay sonunda ne kadar nakdi elinizde tutabildiğinizdir."
+                  "Finansal gücün ne kadar kazandığınla değil; ay bittiğinde masada ne bırakabildiğinle başlar."
                 </p>
               </div>
 
