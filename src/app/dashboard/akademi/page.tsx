@@ -300,44 +300,70 @@ function AkademiContent() {
               )}
             </div>
 
-            {/* FAZ 1: DERS OKUMA EKRANI (Arındırılmış, Akıcı Editoryal Okuma) */}
+            {/* FAZ 1: DERS OKUMA EKRANI (Tüm Ekranı Etkin Kullanan Editoryal Düzen) */}
             {!isSimulatorOpen ? (
-              <div className="w-full max-w-4xl mx-auto space-y-10 py-2">
+              <div className="w-full space-y-10 py-2">
                 
                 {/* Başlık Silüeti */}
-                <div>
-                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-normal text-[#0E1E38] tracking-tight clash-title">
+                <div className="border-b border-slate-200 pb-6 w-full">
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-normal text-[#0E1E38] tracking-tight clash-title">
                     {lessonContent.title}
                   </h2>
                 </div>
 
-                {/* 4 Editoryal Anlatım Bloğu (Akıcı, kesintisiz okuma) */}
-                <div className="space-y-8">
-                  {lessonContent.blocks.map((block) => (
-                    <div key={block.id} className="space-y-3">
-                      <div className="flex items-center gap-2.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#004BFA]" />
-                        <h3 className="text-lg sm:text-xl font-semibold text-[#0E1E38]">
-                          {block.title}
-                        </h3>
+                {/* 4 Editoryal Anlatım Bloğu (Tüm Sayfaya Yayılan 2 Sütunlu Gazete/Akademi Düzeni) */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 w-full items-start">
+                  
+                  {/* SOL SÜTUN (1. ve 2. Bölümler) */}
+                  <div className="space-y-10">
+                    {lessonContent.blocks.slice(0, 2).map((block) => (
+                      <div key={block.id} className="space-y-3.5">
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#004BFA]" />
+                          <h3 className="text-xl sm:text-2xl font-semibold text-[#0E1E38]">
+                            {block.title}
+                          </h3>
+                        </div>
+                        <div className="space-y-3.5 pl-4 border-l-2 border-slate-200">
+                          {block.paragraphs.map((p, pIdx) => (
+                            <p key={pIdx} className="text-sm sm:text-base lg:text-lg text-slate-700 leading-relaxed font-normal">
+                              {p}
+                            </p>
+                          ))}
+                        </div>
                       </div>
-                      <div className="space-y-3 pl-4 border-l-2 border-slate-200">
-                        {block.paragraphs.map((p, pIdx) => (
-                          <p key={pIdx} className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
-                            {p}
-                          </p>
-                        ))}
+                    ))}
+                  </div>
+
+                  {/* SAĞ SÜTUN (3. ve 4. Bölümler) */}
+                  <div className="space-y-10">
+                    {lessonContent.blocks.slice(2, 4).map((block) => (
+                      <div key={block.id} className="space-y-3.5">
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#004BFA]" />
+                          <h3 className="text-xl sm:text-2xl font-semibold text-[#0E1E38]">
+                            {block.title}
+                          </h3>
+                        </div>
+                        <div className="space-y-3.5 pl-4 border-l-2 border-slate-200">
+                          {block.paragraphs.map((p, pIdx) => (
+                            <p key={pIdx} className="text-sm sm:text-base lg:text-lg text-slate-700 leading-relaxed font-normal">
+                              {p}
+                            </p>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+
                 </div>
 
                 {/* UYGULAMAYA GEÇİŞ BUTONU */}
-                <div className="pt-8 border-t border-slate-200">
+                <div className="pt-8 border-t border-slate-200 w-full flex justify-end">
                   <button
                     type="button"
                     onClick={() => setIsSimulatorOpen(true)}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer group"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer group"
                   >
                     <span>Anlatımı Okudum, Nakit Akışımla Yüzleşmek İstiyorum</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
