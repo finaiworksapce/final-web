@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { UNIT_1_CONFIG, getLesson1Content } from "@/data/academy/unit-1";
 import { CashFlowSimulator } from "@/components/academy/CashFlowSimulator";
+import { LessonVisuals } from "@/components/academy/LessonVisuals";
 import { useUser } from "@/components/providers/UserProvider";
 
 function AkademiContent() {
@@ -273,12 +274,12 @@ function AkademiContent() {
             - Kullanıcı uygulamaya geçtiğinde öğretici notlar ve başlık kalkar,
               sadece verimli uygulama tablosu kalır.
             ========================================================================= */
-        <div className="min-h-screen w-full bg-white flex flex-col justify-between p-6 sm:p-10 lg:p-14 xl:p-16 max-w-5xl mx-auto">
+        <div className="min-h-screen w-full bg-white flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16">
           
-          <div className="space-y-8">
+          <div className="space-y-8 w-full">
             
             {/* Üst Navigasyon Çubuğu */}
-            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-4 w-full">
               <button
                 type="button"
                 onClick={handleBackToOverview}
@@ -300,55 +301,65 @@ function AkademiContent() {
               )}
             </div>
 
-            {/* FAZ 1: DERS OKUMA EKRANI (Slaytsız, akıcı tam editoryal anlatım) */}
+            {/* FAZ 1: DERS OKUMA EKRANI (İki Kolonlu Full-Viewport İstasyon) */}
             {!isSimulatorOpen ? (
-              <div className="space-y-8">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-start w-full">
                 
-                {/* Başlık Silüeti */}
-                <div>
-                  <h2 className="text-2xl sm:text-3xl font-medium text-[#0E1E38] tracking-tight clash-title">
-                    {lessonContent.title}
-                  </h2>
+                {/* SOL KOLON: Editoryal Anlatım & Karar Masasına Geçiş */}
+                <div className="lg:col-span-7 xl:col-span-7 space-y-8">
+                  
+                  {/* Başlık Silüeti */}
+                  <div>
+                    <h2 className="text-2xl sm:text-3xl font-medium text-[#0E1E38] tracking-tight clash-title">
+                      {lessonContent.title}
+                    </h2>
+                  </div>
+
+                  {/* 4 Editoryal Anlatım Bloğu (Akıcı, kesintisiz okuma) */}
+                  <div className="space-y-8">
+                    {lessonContent.blocks.map((block) => (
+                      <div key={block.id} className="space-y-2.5">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-[#004BFA]" />
+                          <h3 className="text-lg sm:text-xl font-semibold text-[#0E1E38]">
+                            {block.title}
+                          </h3>
+                        </div>
+                        <div className="space-y-2.5 pl-4 border-l-2 border-slate-200">
+                          {block.paragraphs.map((p, pIdx) => (
+                            <p key={pIdx} className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
+                              {p}
+                            </p>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* UYGULAMAYA GEÇİŞ BUTONU */}
+                  <div className="pt-8 border-t border-slate-200">
+                    <button
+                      type="button"
+                      onClick={() => setIsSimulatorOpen(true)}
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer group"
+                    >
+                      <span>Anlatımı Okudum, Nakit Akışımla Yüzleşmek İstiyorum</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
+
                 </div>
 
-                {/* 4 Editoryal Anlatım Bloğu (Akıcı, kesintisiz okuma) */}
-                <div className="space-y-8">
-                  {lessonContent.blocks.map((block) => (
-                    <div key={block.id} className="space-y-2.5">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#004BFA]" />
-                        <h3 className="text-lg sm:text-xl font-semibold text-[#0E1E38]">
-                          {block.title}
-                        </h3>
-                      </div>
-                      <div className="space-y-2.5 pl-4 border-l-2 border-slate-200">
-                        {block.paragraphs.map((p, pIdx) => (
-                          <p key={pIdx} className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
-                            {p}
-                          </p>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* UYGULAMAYA GEÇİŞ BUTONU */}
-                <div className="pt-8 border-t border-slate-200">
-                  <button
-                    type="button"
-                    onClick={() => setIsSimulatorOpen(true)}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer group"
-                  >
-                    <span>Anlatımı Okudum, Nakit Akışımla Yüzleşmek İstiyorum</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </button>
+                {/* SAĞ KOLON: Şematik Finansal Görselleştirme (Zero AI Slop) */}
+                <div className="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-8">
+                  <LessonVisuals />
                 </div>
 
               </div>
             ) : (
               /* FAZ 2: SAF UYGULAMA MASASI
                  (Başlık, öğretici notlar ve widget kutusu kalktı; sadece verimli tablo var) */
-              <div className="space-y-8 animate-in fade-in duration-300">
+              <div className="space-y-8 animate-in fade-in duration-300 w-full max-w-6xl mx-auto">
                 
                 {/* Doğrudan Verimli Nakit Akışı Tablosu */}
                 <CashFlowSimulator />
