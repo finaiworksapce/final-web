@@ -11,8 +11,6 @@ import {
   ArrowRight, 
   Play, 
   ChevronLeft,
-  SlidersHorizontal,
-  BookOpen
 } from "lucide-react";
 import { UNIT_1_CONFIG, getLesson1Content } from "@/data/academy/unit-1";
 import { CashFlowSimulator } from "@/components/academy/CashFlowSimulator";
@@ -70,36 +68,36 @@ function AkademiContent() {
     <div className="min-h-screen font-clash w-full bg-white text-[#0E1E38] selection:bg-blue-100 selection:text-[#0E1E38]">
       
       {/* =========================================================================
-          DURUM 1: AKADEMİ MERKEZİ & YOL HARİTASI (VARSAYILAN AÇILIŞ GÖRÜNÜMÜ)
+          DURUM 1: AKADEMİ MERKEZİ & YOL HARİTASI (FULL-VIEWPORT SIĞDIRILMIŞ DÜZEN)
           ========================================================================= */}
       {selectedTopicId === null ? (
         <div className="min-h-screen flex flex-col lg:flex-row w-full">
           
-          {/* SOL KOLON: %70 BEYAZ ZEMİN */}
-          <section className="w-full lg:w-[70%] bg-white flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16 min-h-screen">
-            <div className="space-y-8 max-w-4xl">
+          {/* SOL KOLON: %70 BEYAZ ZEMİN (Alan genişliğine tam sığdırılmış ve dengelenmiş) */}
+          <section className="w-full lg:w-[70%] bg-white flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16 2xl:p-20 min-h-screen">
+            <div className="w-full space-y-8 xl:space-y-10">
 
               {/* Başlık */}
               <div>
-                <h1 className="text-3xl sm:text-4xl font-normal text-[#0E1E38] tracking-tight clash-title">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-normal text-[#0E1E38] tracking-tight clash-title">
                   FinAi Akademi
                 </h1>
               </div>
 
-              {/* AÇIKLAMA METNİ (Kutusuz salt editoryal yazı) */}
-              <div>
-                <p className="text-base sm:text-lg text-slate-700 leading-relaxed font-normal">
+              {/* AÇIKLAMA METNİ (Geniş alana tam yayılan, orantılı ve rahat okunan tipografi) */}
+              <div className="w-full max-w-6xl">
+                <p className="text-base sm:text-lg lg:text-xl text-slate-700 leading-relaxed font-normal">
                   Finansal piyasaları öğrenmek isteyen çoğu insan, ezberletilen teorik formüller ve sonu gelmeyen teknik terimler yüzünden başlangıçta pes eder. Biz FinAi Akademi'de teoriyi bir kenara bırakıp, doğrudan bir şirketi ve piyasayı okuma mantığına odaklanıyoruz. Buradaki amacımız, kendi tasarruflarınızı yönetirken kimsenin tüyosuna ihtiyaç duymadan, neyi neden aldığınızı bilerek rasyonel kararlar verebilmenizi sağlamaktır.
                 </p>
               </div>
 
-              {/* BU HAFTANIN ODAK WIDGET'I (Yarı yarıya küçültüldü, rozetsiz, Biz Neyi Farklı Yapıyoruz üstünde) */}
-              <div className="p-4 sm:p-5 bg-[#0E1E38] text-white rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-lg shadow-[#0E1E38]/10 border border-white/10">
-                <div className="space-y-1 max-w-lg">
-                  <h3 className="text-base sm:text-lg font-medium text-white clash-title tracking-tight">
+              {/* BU HAFTANIN ODAK WIDGET'I (Tüm genişliği dolduran, dengeli ve şık koyu lacivert kart) */}
+              <div className="w-full p-5 sm:p-6 xl:p-8 bg-[#0E1E38] text-white rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl shadow-[#0E1E38]/10 border border-white/10">
+                <div className="space-y-1.5 flex-1 pr-4">
+                  <h3 className="text-lg sm:text-xl lg:text-2xl font-medium text-white clash-title tracking-tight">
                     Gelir ve Gider Yönetimi: Nakit Akışı
                   </h3>
-                  <p className="text-xs text-white/70 leading-relaxed font-normal">
+                  <p className="text-xs sm:text-sm lg:text-base text-white/70 leading-relaxed font-normal">
                     Finansal gücün ne kadar kazandığınla değil; ay bittiğinde masada ne bırakabildiğinle başlar.
                   </p>
                 </div>
@@ -107,78 +105,78 @@ function AkademiContent() {
                 <button
                   type="button"
                   onClick={() => handleOpenTopic("1-1")}
-                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg bg-[#004BFA] hover:bg-[#003ad1] text-white text-xs font-semibold transition-all duration-200 shadow-sm hover:shadow-md shrink-0 cursor-pointer group"
+                  className="inline-flex items-center justify-center gap-2 px-5 py-3 xl:px-6 xl:py-3.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-xs sm:text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg shrink-0 cursor-pointer group"
                 >
                   <span>1. Haftanın Dersine Başla</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
 
-              {/* BİZ NEYİ FARKLI YAPIYORUZ? (Rafine, okunaklı ve modern yeni editoryal tasarım) */}
-              <div className="pt-6 border-t border-slate-200 space-y-5">
+              {/* BİZ NEYİ FARKLI YAPIYORUZ? (Tam genişliğe oturan, ferah, büyük ve okunaklı 3 kart) */}
+              <div className="w-full pt-6 border-t border-slate-200 space-y-6">
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-normal text-[#0E1E38] clash-title tracking-tight">
+                  <h2 className="text-2xl sm:text-3xl font-normal text-[#0E1E38] clash-title tracking-tight">
                     Biz Neyi Farklı Yapıyoruz?
                   </h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 xl:gap-8 w-full">
                   
                   {/* Kart 01 */}
-                  <div className="group p-5 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#004BFA]/50 hover:shadow-md transition-all duration-200 flex flex-col justify-between">
-                    <div className="space-y-3">
+                  <div className="group p-6 xl:p-8 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#004BFA]/60 hover:shadow-lg transition-all duration-300 flex flex-col justify-between space-y-4">
+                    <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                        <span className="w-7 h-7 rounded-lg bg-blue-50 text-[#004BFA] text-xs font-bold flex items-center justify-center">
+                        <span className="w-9 h-9 rounded-xl bg-blue-50 text-[#004BFA] text-sm font-bold flex items-center justify-center">
                           01
                         </span>
-                        <span className="text-[10px] font-semibold tracking-wider uppercase text-slate-400 group-hover:text-[#004BFA] transition-colors">
+                        <span className="text-xs font-semibold tracking-wider uppercase text-slate-400 group-hover:text-[#004BFA] transition-colors">
                           Ticari Mantık
                         </span>
                       </div>
-                      <h4 className="text-base font-semibold text-[#0E1E38] tracking-tight">
+                      <h4 className="text-lg xl:text-xl font-semibold text-[#0E1E38] tracking-tight">
                         Teori Yerine Ticari Mantık
                       </h4>
-                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                      <p className="text-sm xl:text-base text-slate-600 leading-relaxed font-normal">
                         Kitaplardaki finansal terimleri ezberletmek yerine, o kavramların şirketin kasasına ve günlük operasyonuna nasıl yansıdığını gösteriyoruz. Bir rasyoya baktığınızda bunun sadece matematiksel bir işlem değil, şirketin hayatta kalma mücadelesi olduğunu anlamanızı sağlıyoruz.
                       </p>
                     </div>
                   </div>
 
                   {/* Kart 02 */}
-                  <div className="group p-5 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#004BFA]/50 hover:shadow-md transition-all duration-200 flex flex-col justify-between">
-                    <div className="space-y-3">
+                  <div className="group p-6 xl:p-8 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#004BFA]/60 hover:shadow-lg transition-all duration-300 flex flex-col justify-between space-y-4">
+                    <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                        <span className="w-7 h-7 rounded-lg bg-blue-50 text-[#004BFA] text-xs font-bold flex items-center justify-center">
+                        <span className="w-9 h-9 rounded-xl bg-blue-50 text-[#004BFA] text-sm font-bold flex items-center justify-center">
                           02
                         </span>
-                        <span className="text-[10px] font-semibold tracking-wider uppercase text-slate-400 group-hover:text-[#004BFA] transition-colors">
+                        <span className="text-xs font-semibold tracking-wider uppercase text-slate-400 group-hover:text-[#004BFA] transition-colors">
                           Karar Refleksi
                         </span>
                       </div>
-                      <h4 className="text-base font-semibold text-[#0E1E38] tracking-tight">
+                      <h4 className="text-lg xl:text-xl font-semibold text-[#0E1E38] tracking-tight">
                         Ezber Sınavı Yok, Karar Var
                       </h4>
-                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                      <p className="text-sm xl:text-base text-slate-600 leading-relaxed font-normal">
                         Bölüm sonlarında klasik test soruları çözdürmüyoruz. Anlatım bittiğinde size simüle bir bütçe vererek gerçek bir karar aldırıyoruz; böylece kendi paranızı riske atmadan piyasanın mantığını aldığınız kararların sonuçlarıyla görüyorsunuz.
                       </p>
                     </div>
                   </div>
 
                   {/* Kart 03 */}
-                  <div className="group p-5 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#004BFA]/50 hover:shadow-md transition-all duration-200 flex flex-col justify-between">
-                    <div className="space-y-3">
+                  <div className="group p-6 xl:p-8 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#004BFA]/60 hover:shadow-lg transition-all duration-300 flex flex-col justify-between space-y-4">
+                    <div className="space-y-4">
                       <div className="flex items-center justify-between">
-                        <span className="w-7 h-7 rounded-lg bg-blue-50 text-[#004BFA] text-xs font-bold flex items-center justify-center">
+                        <span className="w-9 h-9 rounded-xl bg-blue-50 text-[#004BFA] text-sm font-bold flex items-center justify-center">
                           03
                         </span>
-                        <span className="text-[10px] font-semibold tracking-wider uppercase text-slate-400 group-hover:text-[#004BFA] transition-colors">
+                        <span className="text-xs font-semibold tracking-wider uppercase text-slate-400 group-hover:text-[#004BFA] transition-colors">
                           Bütüncül Sistem
                         </span>
                       </div>
-                      <h4 className="text-base font-semibold text-[#0E1E38] tracking-tight">
+                      <h4 className="text-lg xl:text-xl font-semibold text-[#0E1E38] tracking-tight">
                         Birbirine Bağlanan Sistem
                       </h4>
-                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                      <p className="text-sm xl:text-base text-slate-600 leading-relaxed font-normal">
                         Burada öğrendiğiniz hiçbir konu havada kalmaz. İlk aşamada öğrendiğiniz temel nakit akışı mantığı, bir sonraki aşamada bilanço okurken ve şirket seçerken doğrudan karşınıza çıkar. Her ders bir sonrakini besler ve zamanla eksiksiz bir yatırım bakış açısı oluşturur.
                       </p>
                     </div>
@@ -190,12 +188,12 @@ function AkademiContent() {
             </div>
 
             {/* Alt Bilgi */}
-            <div className="pt-8 mt-10 border-t border-slate-200 text-center sm:text-left text-xs text-slate-400">
+            <div className="w-full pt-10 mt-12 border-t border-slate-200 text-center sm:text-left text-xs sm:text-sm text-slate-400">
               © {new Date().getFullYear()} FinAi Akademi. Bilinçli yatırımcılar için sıfırdan inşa edildi.
             </div>
           </section>
 
-          {/* SAĞ KOLON: %30 DERİN LACİVERT VİTRİN & 12 HAFTALIK İLERLEME (SCROLLSUZ TAM LİSTE) */}
+          {/* SAĞ KOLON: %30 DERİN LACİVERT VİTRİN & 12 HAFTALIK İLERLEME */}
           <section className="w-full lg:w-[30%] bg-[#0E1E38] text-white p-6 sm:p-8 lg:p-10 xl:p-12 flex flex-col justify-between relative overflow-hidden select-none border-t lg:border-t-0 lg:border-l border-white/10">
             
             <div className="absolute -top-32 -right-32 w-[450px] h-[450px] bg-[#004BFA]/20 rounded-full blur-[140px] pointer-events-none" />
@@ -302,7 +300,7 @@ function AkademiContent() {
               </div>
             </div>
 
-            {/* Başlık Silüeti (1.1 yazılmadı, temiz ve zarif başlık) */}
+            {/* Başlık Silüeti */}
             <div>
               <h2 className="text-2xl sm:text-3xl font-medium text-[#0E1E38] tracking-tight clash-title">
                 {lessonContent.title}
