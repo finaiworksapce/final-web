@@ -142,35 +142,37 @@ export const getLesson1Content = (userName?: string | null) => {
     blocks: [
       {
         id: 'block-1',
-        title: 'Gelir Yanılsaması (Kazanmak vs. Masada Bırakmak)',
+        title: 'Gelir Yanılsaması',
         paragraphs: [
           `Finans dünyasına adım atarken cebe koymamız gereken ilk altın kural şudur ${name}: Çok para kazanmak, otomatik olarak zengin olmak anlamına gelmez. Çünkü ne kadar kazanırsan kazan, giden parayı kontrol edemiyorsan ay sonunda elinde koca bir sıfırla kalırsın.`,
-          'FinAi Workspace ekibi olarak biz senin finansal gücünü ne kadar ciro yaptığınla değil, ay bittiğinde cüzdanında ne kadar para tutabildiğinle ölçeceğiz.',
+          'Pek çok insan gelirini artırdığı anda aynı hızla harcamalarını da artırarak bitmek bilmeyen bir tüketim döngüsüne hapsolur. Oysa gerçek varlık, kazandığın rakamın büyüklüğünde değil; o paranın ne kadarını koruyup geleceğe taşıyabildiğinde saklıdır.',
+          'FinAi Workspace ekibi olarak biz senin finansal gücünü ne kadar ciro yaptığınla değil, ay bittiğinde masada ne kadar net para bırakabildiğinle ölçeceğiz.',
         ],
       },
       {
         id: 'block-2',
-        title: 'Nakit Akışı (Musluk ve Tekne Mantığı)',
+        title: 'Nakit Akışı',
         paragraphs: [
           'İlk kuralı cebimize koyduysak, şimdi resmin kalbine, yani nakit akışının çalışma mantığına odaklanalım. Gelirini evine temiz su taşıyan ana musluk, harcamalarını ise bu suyun biriktiği teknenin altındaki irili ufaklı delikler gibi düşünebilirsin.',
-          'Deliklerin nerede olduğunu bilmezsen, musluğu sonuna kadar açsan bile teknenin su almasını ve batmasını engelleyemezsin.',
+          'Deliklerin nerede olduğunu bilmezsen, musluğu sonuna kadar açsan bile teknenin su almasını ve batmasını engelleyemezsin. Genellikle bütçemizi sarsan şeyler tek seferlik büyük harcamalar değil; fark etmeden her gün tekrarladığımız küçük sızıntılardır. Bir delik ne kadar küçük görünürse görünsün, zamanla koca bir gemiyi batıracak kadar su biriktirebilir.',
           'Tam da bu yüzden, bu metinleri bitirdiğinde kendi teknendeki kaçakları tek tek fark etmeni sağlayacak interaktif bir uygulama yapacağız; bu sayede paranın nereye sızdığını ilk kez kendi gözlerinle göreceksin.',
         ],
       },
       {
         id: 'block-3',
-        title: 'Dürüst Bir Yüzleşme (Zorlama Yok, Farkındalık Var)',
+        title: 'Dürüst Bir Yüzleşme',
         paragraphs: [
           `Teknedeki delikleri kapatmanın ilk adımı ise, bu sayılarla dürüstçe yüzleşme cesaretini göstermektir ${name}. Burada kimse seni harcamaların yüzünden yargılamayacak; kira ödüyorsan yazacak, ödemiyorsan alanı boş bırakacak veya küçük keyif harcamaların varsa onları da dürüstçe masaya koyacaksın.`,
+          'Finansal kontrol, harcamaktan korkmak veya kendini her şeyden mahrum bırakmak değil; her liranın nereye gittiğini bilerek bilinçli tercih yapmaktır. Nereye gittiğini bilmediğin bir parayı yönetemez ve asla yatırıma dönüştüremezsin.',
           'Birazdan yapacağımız çalışmada amacımız hayat standardını kısıtlamak değil; kazandığın paranın tam olarak nereye aktığını fark ederek kontrolü ilk kez gerçekten eline almanı sağlamaktır.',
         ],
       },
       {
         id: 'block-4',
-        title: 'Serbest Nakit (Gelecekteki Yatırımının Tohumu)',
+        title: 'Serbest Nakit',
         paragraphs: [
           "Bütün bu resmi netleştirdikten sonra, şimdi işin en heyecan verici tarafına, yani geleceğini inşa edeceğimiz adıma geçiyoruz. Zorunlu tüm giderlerin çıktıktan sonra elinde kalan her bir liraya FinAi Workspace ekibi olarak biz 'serbest nakit' deriz.",
-          'Bu kalan para, ilerleyen haftalarda şirketlere ortak edeceğimiz ve senin yerine gece gündüz çalıştıracağımız tohum sermayendir.',
+          'Bu kalan para, ilerleyen haftalarda şirketlere ortak edeceğimiz ve senin yerine gece gündüz çalıştıracağımız tohum sermayendir. Bugün masada bırakabildiğin her serbest nakit, gelecekte senin için çalışan ve sana zaman kazandıran sessiz birer çalışana dönüşecektir. Ne kadar küçük başlarsan başla, bu tohum doğru sulandığında finansal bağımsızlığının en sağlam kalesini oluşturur.',
           'Şimdi aşağıdaki masaya geçelim ve kendi gerçek sayılarını girerek bu tohumun büyüklüğünü birlikte keşfedelim.',
         ],
       },

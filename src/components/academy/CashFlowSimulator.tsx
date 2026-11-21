@@ -550,11 +550,6 @@ export function CashFlowSimulator() {
           <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6">
             
             <div className="space-y-3 text-center sm:text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-semibold">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                <span>1. Hafta Tamamlandı</span>
-              </div>
-
               <h3 className="text-3xl sm:text-4xl font-normal clash-title text-white tracking-tight">
                 Tebrikler!
               </h3>
@@ -565,7 +560,7 @@ export function CashFlowSimulator() {
 
               <div className="pt-1">
                 <p className="text-emerald-300 font-semibold text-sm sm:text-base">
-                  Sıradaki ders için haftaya Pazartesi beklemede kalın.
+                  Sıradaki ders haftaya Pazartesi gelecektir.
                 </p>
               </div>
             </div>

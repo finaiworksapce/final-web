@@ -311,17 +311,19 @@ function AkademiContent() {
                   </h2>
                 </div>
 
-                {/* 4 Editoryal Anlatım Bloğu (Alt Alta Akıcı Okuma Akışı) */}
-                <div className="space-y-10 w-full max-w-5xl">
-                  {lessonContent.blocks.map((block) => (
+                {/* 4 Editoryal Anlatım Bloğu (Alt Alta Akıcı Okuma Akışı - Tüm Sayfaya Yayılmış) */}
+                <div className="space-y-12 w-full">
+                  {lessonContent.blocks.map((block, bIdx) => (
                     <div key={block.id} className="space-y-3.5">
-                      <div className="flex items-center gap-2.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#004BFA]" />
-                        <h3 className="text-xl sm:text-2xl font-semibold text-[#0E1E38]">
+                      <div className="flex items-center gap-3">
+                        <span className="w-8 h-8 rounded-xl bg-blue-50 text-[#004BFA] text-xs font-bold flex items-center justify-center border border-blue-100/80 shrink-0">
+                          {String(bIdx + 1).padStart(2, '0')}
+                        </span>
+                        <h3 className="text-xl sm:text-2xl font-semibold text-[#0E1E38] clash-title tracking-tight">
                           {block.title}
                         </h3>
                       </div>
-                      <div className="space-y-3.5 pl-4 border-l-2 border-slate-200">
+                      <div className="space-y-3.5 pl-4 sm:pl-5 border-l-2 border-slate-200">
                         {block.paragraphs.map((p, pIdx) => (
                           <p key={pIdx} className="text-sm sm:text-base lg:text-lg text-slate-700 leading-relaxed font-normal">
                             {p}
