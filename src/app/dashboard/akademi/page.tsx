@@ -311,51 +311,25 @@ function AkademiContent() {
                   </h2>
                 </div>
 
-                {/* 4 Editoryal Anlatım Bloğu (Tüm Sayfaya Yayılan 2 Sütunlu Gazete/Akademi Düzeni) */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 w-full items-start">
-                  
-                  {/* SOL SÜTUN (1. ve 2. Bölümler) */}
-                  <div className="space-y-10">
-                    {lessonContent.blocks.slice(0, 2).map((block) => (
-                      <div key={block.id} className="space-y-3.5">
-                        <div className="flex items-center gap-2.5">
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#004BFA]" />
-                          <h3 className="text-xl sm:text-2xl font-semibold text-[#0E1E38]">
-                            {block.title}
-                          </h3>
-                        </div>
-                        <div className="space-y-3.5 pl-4 border-l-2 border-slate-200">
-                          {block.paragraphs.map((p, pIdx) => (
-                            <p key={pIdx} className="text-sm sm:text-base lg:text-lg text-slate-700 leading-relaxed font-normal">
-                              {p}
-                            </p>
-                          ))}
-                        </div>
+                {/* 4 Editoryal Anlatım Bloğu (Alt Alta Akıcı Okuma Akışı) */}
+                <div className="space-y-10 w-full max-w-5xl">
+                  {lessonContent.blocks.map((block) => (
+                    <div key={block.id} className="space-y-3.5">
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#004BFA]" />
+                        <h3 className="text-xl sm:text-2xl font-semibold text-[#0E1E38]">
+                          {block.title}
+                        </h3>
                       </div>
-                    ))}
-                  </div>
-
-                  {/* SAĞ SÜTUN (3. ve 4. Bölümler) */}
-                  <div className="space-y-10">
-                    {lessonContent.blocks.slice(2, 4).map((block) => (
-                      <div key={block.id} className="space-y-3.5">
-                        <div className="flex items-center gap-2.5">
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#004BFA]" />
-                          <h3 className="text-xl sm:text-2xl font-semibold text-[#0E1E38]">
-                            {block.title}
-                          </h3>
-                        </div>
-                        <div className="space-y-3.5 pl-4 border-l-2 border-slate-200">
-                          {block.paragraphs.map((p, pIdx) => (
-                            <p key={pIdx} className="text-sm sm:text-base lg:text-lg text-slate-700 leading-relaxed font-normal">
-                              {p}
-                            </p>
-                          ))}
-                        </div>
+                      <div className="space-y-3.5 pl-4 border-l-2 border-slate-200">
+                        {block.paragraphs.map((p, pIdx) => (
+                          <p key={pIdx} className="text-sm sm:text-base lg:text-lg text-slate-700 leading-relaxed font-normal">
+                            {p}
+                          </p>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-
+                    </div>
+                  ))}
                 </div>
 
                 {/* UYGULAMAYA GEÇİŞ BUTONU */}

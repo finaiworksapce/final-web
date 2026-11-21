@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Plus, Trash2, RotateCcw } from 'lucide-react';
+import { Plus, Trash2, RotateCcw, CheckCircle2, ArrowRight } from 'lucide-react';
 
 interface CashItem {
   id: string;
@@ -29,6 +29,7 @@ export function CashFlowSimulator() {
   const [newIncomeAmount, setNewIncomeAmount] = useState('');
   const [newExpenseName, setNewExpenseName] = useState('');
   const [newExpenseAmount, setNewExpenseAmount] = useState('');
+  const [isLessonCompleted, setIsLessonCompleted] = useState(false);
 
   // LocalStorage senkronizasyonu
   useEffect(() => {
@@ -39,10 +40,23 @@ export function CashFlowSimulator() {
         if (parsed.incomes && Array.isArray(parsed.incomes)) setIncomes(parsed.incomes);
         if (parsed.expenses && Array.isArray(parsed.expenses)) setExpenses(parsed.expenses);
       }
+      const completed = localStorage.getItem('finai_lesson_1_completed');
+      if (completed === 'true') {
+        setIsLessonCompleted(true);
+      }
     } catch {
       // ignore
     }
   }, []);
+
+  const handleCompleteLesson = () => {
+    setIsLessonCompleted(true);
+    try {
+      localStorage.setItem('finai_lesson_1_completed', 'true');
+    } catch {
+      // ignore
+    }
+  };
 
   const saveToStorage = (updatedIncomes: CashItem[], updatedExpenses: CashItem[]) => {
     try {
@@ -508,6 +522,78 @@ export function CashFlowSimulator() {
         </div>
 
       </div>
+
+      {/* =========================================================================
+          DERSİ BİTİR AKSİYONU VEYA TEBRİKLER & BİLGİLENDİRME KARTI
+          ========================================================================= */}
+      {!isLessonCompleted ? (
+        <div className="pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
+          <div className="space-y-0.5 text-center sm:text-left">
+            <h5 className="text-sm font-semibold text-[#0E1E38]">1. Haftanın Çalışmasını Tamamla</h5>
+            <p className="text-xs text-slate-500">Nakit akışı verilerini doldurduysan ilk dersi bitirip haftalık kaydını oluşturabilirsin.</p>
+          </div>
+          <button
+            type="button"
+            onClick={handleCompleteLesson}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer group shrink-0"
+          >
+            <CheckCircle2 className="w-4 h-4" />
+            <span>Dersi Bitir</span>
+          </button>
+        </div>
+      ) : (
+        <div className="p-8 sm:p-10 bg-gradient-to-br from-[#0E1E38] via-[#122444] to-[#0A1628] text-white rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden animate-in fade-in zoom-in-95 duration-500 w-full">
+          {/* Arka plan ışıltıları */}
+          <div className="absolute top-0 right-1/4 w-72 h-72 bg-emerald-500/15 rounded-full blur-[90px] pointer-events-none" />
+          <div className="absolute bottom-0 left-1/4 w-72 h-72 bg-[#004BFA]/20 rounded-full blur-[90px] pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6">
+            
+            <div className="space-y-3 text-center sm:text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-semibold">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <span>1. Hafta Tamamlandı</span>
+              </div>
+
+              <h3 className="text-3xl sm:text-4xl font-normal clash-title text-white tracking-tight">
+                Tebrikler!
+              </h3>
+
+              <p className="text-sm sm:text-base text-white/80 max-w-xl leading-relaxed font-normal">
+                Kişisel nakit akışı masasını başarıyla tamamladın. İlk adım olan cüzdanındaki kaçakları ve sıfır noktanı tespit ettin.
+              </p>
+
+              <div className="pt-1">
+                <p className="text-emerald-300 font-semibold text-sm sm:text-base">
+                  Sıradaki ders için haftaya Pazartesi beklemede kalın.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0 w-full sm:w-auto">
+              <button
+                type="button"
+                onClick={() => {
+                  window.location.href = '/dashboard/akademi';
+                }}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-xs sm:text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer"
+              >
+                <span>Akademi Haritasına Dön</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsLessonCompleted(false)}
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-3.5 text-xs text-white/60 hover:text-white transition-colors cursor-pointer"
+              >
+                <span>Tablomu Düzenle</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
 
     </div>
   );
