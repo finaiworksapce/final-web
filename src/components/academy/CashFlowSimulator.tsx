@@ -295,29 +295,33 @@ export function CashFlowSimulator() {
 
         </div>
 
-        {/* SAĞ TARAF (%40): DEĞERLENDİRMEMİZ (SALT YAZI & BAĞLANTILI METİN) */}
-        <div className="lg:col-span-5 xl:col-span-5 bg-white border border-slate-200 rounded-3xl p-6 sm:p-7 shadow-xs flex flex-col justify-between">
-          <div className="space-y-4">
+        {/* SAĞ TARAF (%40): DEĞERLENDİRMEMİZ (LACİVERT GEÇİŞLİ WIDGET) */}
+        <div className="lg:col-span-5 xl:col-span-5 bg-gradient-to-br from-[#0E1E38] via-[#122444] to-[#0A1628] text-white border border-white/10 rounded-3xl p-6 sm:p-7 shadow-xl flex flex-col justify-between relative overflow-hidden">
+          
+          {/* İnce Ortam Işığı */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#004BFA]/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="space-y-4 relative z-10">
             
             {/* Sade Başlık (Emoji / Sembol Yok) */}
-            <div className="pb-3 border-b border-slate-100">
-              <h4 className="text-base sm:text-lg font-semibold text-[#0E1E38] clash-title">
+            <div className="pb-3 border-b border-white/10">
+              <h4 className="text-base sm:text-lg font-semibold text-white clash-title">
                 Değerlendirmemiz
               </h4>
             </div>
 
             {/* Salt Akıcı Metin (Kutu / Widget Yok, Paragraflar Birbiriyle Bağlantılı) */}
-            <div className="space-y-3.5 text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
+            <div className="space-y-3.5 text-xs sm:text-sm text-white/85 leading-relaxed font-normal">
               
               {/* 1. Paragraf: Genel Durum Değerlendirmesi */}
               <p>
                 {netCashFlow > 0 ? (
                   <>
-                    Biz FinAi Workspace ekibi olarak tablonu incelediğimizde; her ay eline geçen toplam gelirin <strong>%{savingsRate}</strong>'sini masada bırakabildiğini, yani <strong>+{netCashFlow.toLocaleString('tr-TR')} ₺</strong> pozitif serbest nakit ürettiğini görüyoruz. Bu rakam senin finansal bağımsızlık yolculuğundaki temel sıfır noktandır; sonraki haftalarda bu sermayeyi enflasyona ezdirmeyip üreten ortaklıklara dönüştürmenin temellerini atacağız.
+                    Biz FinAi Workspace ekibi olarak tablonu incelediğimizde; her ay eline geçen toplam gelirin <strong>%{savingsRate}</strong>'sini masada bırakabildiğini, yani <strong className="text-emerald-300">+{netCashFlow.toLocaleString('tr-TR')} ₺</strong> pozitif serbest nakit ürettiğini görüyoruz. Bu rakam senin finansal bağımsızlık yolculuğundaki temel sıfır noktandır; sonraki haftalarda bu sermayeyi enflasyona ezdirmeyip üreten ortaklıklara dönüştürmenin temellerini atacağız.
                   </>
                 ) : netCashFlow < 0 ? (
                   <>
-                    Biz FinAi Workspace ekibi olarak tablonu incelediğimizde; mevcut gelirinin aylık harcamalarını karşılamaya yetmediğini ve her ay <strong>{Math.abs(netCashFlow).toLocaleString('tr-TR')} ₺</strong> açık verdiğini görüyoruz. Bu açık, farkında olmadan borçlanarak ya da mevcut birikimlerini eriterek finanse ediliyor demektir. Yatırıma adım atmadan önceki ilk ve en kritik görevimiz, bu kanamayı durdurmaktır.
+                    Biz FinAi Workspace ekibi olarak tablonu incelediğimizde; mevcut gelirinin aylık harcamalarını karşılamaya yetmediğini ve her ay <strong className="text-rose-300">{Math.abs(netCashFlow).toLocaleString('tr-TR')} ₺</strong> açık verdiğini görüyoruz. Bu açık, farkında olmadan borçlanarak ya da mevcut birikimlerini eriterek finanse ediliyor demektir. Yatırıma adım atmadan önceki ilk ve en kritik görevimiz, bu kanamayı durdurmaktır.
                   </>
                 ) : (
                   <>
@@ -353,8 +357,8 @@ export function CashFlowSimulator() {
           ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-10 w-full items-start">
         
-        {/* GELİR KALEMLERİ TABLOSU */}
-        <div className="space-y-4 bg-white p-5 sm:p-7 rounded-3xl border border-slate-200 shadow-xs hover:border-[#004BFA]/40 transition-all duration-300">
+        {/* GELİR KALEMLERİ TABLOSU (Hafif Yeşil Efektli Arka Plan) */}
+        <div className="space-y-4 bg-gradient-to-b from-emerald-50/35 via-white to-white p-5 sm:p-7 rounded-3xl border border-emerald-200/60 shadow-xs hover:border-emerald-300 transition-all duration-300">
           <div className="flex items-center justify-between pb-3 border-b-2 border-emerald-500">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
@@ -368,14 +372,14 @@ export function CashFlowSimulator() {
           </div>
 
           {/* Satırlar */}
-          <div className="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-2xs">
+          <div className="divide-y divide-slate-100 border border-emerald-100 rounded-2xl overflow-hidden bg-white shadow-2xs">
             {incomes.length === 0 ? (
               <div className="p-6 text-xs text-slate-400 italic text-center">Henüz gelir kalemi eklenmedi.</div>
             ) : (
               incomes.map((inc) => (
                 <div
                   key={inc.id}
-                  className="flex items-center justify-between gap-4 p-3.5 text-xs hover:bg-emerald-50/20 transition-all duration-200 group"
+                  className="flex items-center justify-between gap-4 p-3.5 text-xs bg-emerald-50/20 hover:bg-emerald-50/50 transition-all duration-200 group"
                 >
                   <span className="font-semibold text-[#0E1E38] truncate flex-1">{inc.name}</span>
                   <div className="flex items-center gap-2 shrink-0">
@@ -384,7 +388,7 @@ export function CashFlowSimulator() {
                       min="0"
                       value={inc.amount}
                       onChange={(e) => handleUpdateIncomeAmount(inc.id, e.target.value)}
-                      className="w-32 text-right font-bold text-[#0E1E38] bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#004BFA] focus:bg-white transition-colors"
+                      className="w-32 text-right font-bold text-[#0E1E38] bg-white border border-emerald-200/70 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-[#004BFA] transition-colors"
                     />
                     <span className="text-slate-400 font-semibold">₺</span>
                     <button
@@ -428,8 +432,8 @@ export function CashFlowSimulator() {
           </form>
         </div>
 
-        {/* GİDER KALEMLERİ TABLOSU */}
-        <div className="space-y-4 bg-white p-5 sm:p-7 rounded-3xl border border-slate-200 shadow-xs hover:border-rose-400/40 transition-all duration-300">
+        {/* GİDER KALEMLERİ TABLOSU (Çıtırdan Kırmızı Efektli Arka Plan) */}
+        <div className="space-y-4 bg-gradient-to-b from-rose-50/35 via-white to-white p-5 sm:p-7 rounded-3xl border border-rose-200/60 shadow-xs hover:border-rose-300 transition-all duration-300">
           <div className="flex items-center justify-between pb-3 border-b-2 border-rose-500">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
@@ -442,15 +446,15 @@ export function CashFlowSimulator() {
             </span>
           </div>
 
-          {/* Satırlar */}
-          <div className="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-2xs">
+          {/* Satırlar (Çıtırdan Kırmızı Zemin Efektli) */}
+          <div className="divide-y divide-rose-100/60 border border-rose-100 rounded-2xl overflow-hidden bg-white shadow-2xs">
             {expenses.length === 0 ? (
               <div className="p-6 text-xs text-slate-400 italic text-center">Henüz gider kalemi eklenmedi.</div>
             ) : (
               expenses.map((exp) => (
                 <div
                   key={exp.id}
-                  className="flex items-center justify-between gap-4 p-3.5 text-xs hover:bg-rose-50/20 transition-all duration-200 group"
+                  className="flex items-center justify-between gap-4 p-3.5 text-xs bg-rose-50/25 hover:bg-rose-50/50 transition-all duration-200 group"
                 >
                   <span className="font-semibold text-[#0E1E38] truncate flex-1">{exp.name}</span>
                   <div className="flex items-center gap-2 shrink-0">
@@ -459,7 +463,7 @@ export function CashFlowSimulator() {
                       min="0"
                       value={exp.amount}
                       onChange={(e) => handleUpdateExpenseAmount(exp.id, e.target.value)}
-                      className="w-32 text-right font-bold text-[#0E1E38] bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-rose-500 focus:bg-white transition-colors"
+                      className="w-32 text-right font-bold text-[#0E1E38] bg-white border border-rose-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-rose-500 transition-colors"
                     />
                     <span className="text-slate-400 font-semibold">₺</span>
                     <button
