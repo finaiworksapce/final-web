@@ -1248,7 +1248,7 @@ export async function generateMonthlyPerformanceReport(
                 const isWorldBank = op.title.toLowerCase().includes('dünya bankası') || featuredAsset.cleanSymbol === 'TSKB';
                 if (isWorldBank) {
                     paragraphs.push(
-                        `Masadaki ilk somut gelişme bankanın finansman gücünü ilgilendiriyor. TSKB, Dünya Bankası ile 200 milyon euro tutarında yeni bir kredi anlaşması imzalayarak Türkiye’nin yeşil dönüşüm ve sanayi projelerini fonlayacak taze bir dış kaynak temin etti.`
+                        `Masadaki ilk somut gelişme bankanın finansman gücünü doğrudan ilgilendiriyor. TSKB, Dünya Bankası ile 200 milyon euro tutarında yeni bir kredi anlaşması imzalayarak Türkiye’nin yeşil dönüşüm ve sanayi projelerini fonlayacak taze bir dış kaynak temin etti. Bu kaynak, bankanın orta vadeli kredi hacmini genişletmesini ve reel sektöre uzun vadeli kaynak aktarmasını destekleyen stratejik bir likidite adımı niteliği taşıyor.`
                     );
                 } else {
                     paragraphs.push(
@@ -1262,7 +1262,7 @@ export async function generateMonthlyPerformanceReport(
                 const isLule = execSummary.title.toLowerCase().includes('sezgin lüle') || execSummary.summary?.toLowerCase().includes('sezgin lüle') || featuredAsset.cleanSymbol === 'TSKB';
                 if (isLule) {
                     paragraphs.push(
-                        `Banka tarafındaki en belirleyici olay ise tepe yönetiminde gerçekleşen bayrak değişimi oldu ve Genel Müdürlük koltuğuna Sezgin Lüle getirildi. Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; Sezgin Lüle’nin kim olduğunu, nasıl biri olduğunu araştırmaya başla istersen. Zira bir finans kurumunda liderlik değişimi, şirketin orta vadeli kredi ve büyüme rotasında yeni bir dönemin habercisi olabilir.`
+                        `Banka tarafındaki en belirleyici kurumsal olay ise tepe yönetiminde gerçekleşen bayrak değişimi oldu ve Genel Müdürlük koltuğuna Sezgin Lüle getirildi. Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; Sezgin Lüle’nin kim olduğunu, nasıl biri olduğunu araştırmaya başla istersen. Zira bir finans kurumunda liderlik değişimi, şirketin orta vadeli kredi ve büyüme rotasında yeni bir dönemin habercisi olabilir.`
                     );
                 } else {
                     paragraphs.push(
@@ -1270,17 +1270,32 @@ export async function generateMonthlyPerformanceReport(
                     );
                 }
             } else if (operationalSummaries.length > 1) {
-                const op2 = operationalSummaries[1];
                 paragraphs.push(
-                    `Öne çıkan bir diğer önemli gelişme ise basına yansıyan "${op2.title}" başlıklı haber akışı oldu. Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; bu gelişmenin şirket üzerindeki etkilerini biraz araştırmaya başla istersen.`
+                    `Öne çıkan bir diğer önemli gelişme ise şirketin operasyonel faaliyetlerini ve ticari anlaşmalarını kapsıyor. Şirketin attığı bu adımlar operasyonel kapasitesini genişletmeye yönelik bir sürecin parçası olarak izleniyor. Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; bu kurumsal adımların detaylarını araştırmaya başla istersen.`
                 );
             }
 
-            // Varsa 3. veya sonraki ek bulgular (Kullanıcı Talebi: Sadece 2 bulgu ile sınırlama!)
-            const additionalSummaries = operationalSummaries.slice(execSummary ? 1 : 2);
-            additionalSummaries.forEach(extra => {
+            // Varsa 3. veya sonraki ek bulgular:
+            // DİKKAT: Dünya Bankası veya kredi konusu ilk paragrafta zaten işlendiyse, aynı konudaki haberleri ASLA tekrar etmiyoruz!
+            // Kesin kural: Başlık (title) ve link ("...") ASLA verilmeyecek, sadece gerçekten FARKLI bir konu varsa ne anlattığı açıklanacak!
+            const usedThemes = ['kredi', 'dünya bankası', 'finansman'];
+            if (execSummary) {
+                usedThemes.push('genel müdür', 'sezgin lüle', 'atama', 'yönetim');
+            }
+
+            const distinctExtraSummaries = operationalSummaries.slice(1).filter(s => {
+                const lower = s.title.toLowerCase();
+                const isDuplicateTheme = usedThemes.some(theme => lower.includes(theme));
+                return !isDuplicateTheme;
+            });
+
+            distinctExtraSummaries.forEach(extra => {
+                const cleanSummaryText = extra.summary && extra.summary.length > 30
+                    ? extra.summary.replace(/^(CNBC-e|Paramedya|Investing\.com TR) tarafından aktarılan gelişmeye göre,?\s*/i, '').replace(/["”']/g, '')
+                    : 'Şirketin kurumsal operasyonlarını ve pazar payını genişletmeye yönelik adımları dikkat çekti.';
+
                 paragraphs.push(
-                    `Şirket cephesindeki bir diğer kayda değer gelişme, basına yansıyan "${extra.title}" konusu oldu. Şirketin kurumsal operasyonlarını ve pazar payını genişletmeye yönelik bu tür adımlar, orta vadeli değerleme beklentilerini canlı tutan faktörler arasında değerlendirilebilir.`
+                    `Şirket cephesinde dikkat çeken bir diğer kurumsal başlık, operasyonel süreçlerin yönetimiyle ilgili oldu. ${cleanSummaryText} Şirketin faaliyet alanındaki bu tür hamleler, orta vadeli değerleme beklentilerini canlı tutan faktörler arasında değerlendirilebilir.`
                 );
             });
 
