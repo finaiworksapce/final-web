@@ -1,211 +1,157 @@
 "use client";
 
 import React from "react";
-import { ArrowDown, ShieldCheck, AlertTriangle, ArrowRight, Layers, HelpCircle } from "lucide-react";
 
 export function LessonVisuals() {
   return (
     <div className="w-full space-y-6 select-none">
-      
-      {/* BAŞLIK & VİTRİN ETİKETİ */}
-      <div className="flex items-center justify-between pb-3 border-b border-slate-200">
-        <span className="text-xs font-bold text-[#0E1E38] uppercase tracking-wider flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#004BFA]" />
-          <span>Finansal Şematik Harita</span>
-        </span>
-        <span className="text-[11px] font-medium text-slate-400">
-          Editoryal Görselleştirme
-        </span>
-      </div>
+      <style jsx>{`
+        @keyframes waterFlow {
+          0% { transform: translateY(-10px); opacity: 0; }
+          40% { opacity: 0.9; }
+          100% { transform: translateY(35px); opacity: 0; }
+        }
+        @keyframes leakDrip {
+          0% { transform: translateY(0); opacity: 0.9; }
+          100% { transform: translateY(24px); opacity: 0; }
+        }
+        @keyframes waveMotion {
+          0%, 100% { transform: translateX(0); }
+          50% { transform: translateX(-25%); }
+        }
+        @keyframes scaleSway {
+          0%, 100% { transform: rotate(-3deg); }
+          50% { transform: rotate(3deg); }
+        }
+        @keyframes pulseGlow {
+          0%, 100% { opacity: 0.4; transform: scale(0.96); }
+          50% { opacity: 0.9; transform: scale(1.04); }
+        }
+        @keyframes nodeTravel {
+          0% { stroke-dashoffset: 120; }
+          100% { stroke-dashoffset: 0; }
+        }
+      `}</style>
 
-      {/* 1. GÖRSEL: İKİ PROFİL KARŞILAŞTIRMA TERAZİSİ (Gelir Yanılsaması) */}
-      <div className="p-5 xl:p-6 bg-white border border-slate-200 rounded-2xl shadow-xs space-y-4">
-        <div className="flex items-center justify-between">
-          <h4 className="text-xs font-bold text-[#0E1E38] uppercase tracking-wide">
-            1. Şema: Gelir Yanılsaması (Top Line vs. Masada Kalan)
-          </h4>
-          <span className="text-[10px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
-            Ders Paragrafı 1
-          </span>
-        </div>
+      {/* 1. ŞEMA: TERAZİ / DENGE DİNAMİĞİ (Sıfır Yazı - Salt Görsel) */}
+      <div className="p-6 bg-white border border-slate-200 rounded-2xl shadow-xs flex flex-col items-center justify-center min-h-[170px]">
+        <svg viewBox="0 0 320 130" className="w-full max-w-[280px] h-auto overflow-visible">
+          {/* Taban & Merkez Direk */}
+          <path d="M140 120 L180 120" stroke="#0E1E38" strokeWidth="4" strokeLinecap="round" />
+          <path d="M160 120 L160 40" stroke="#0E1E38" strokeWidth="4" strokeLinecap="round" />
+          <circle cx="160" cy="40" r="5" fill="#004BFA" />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-          
-          {/* PROFİL A */}
-          <div className="p-3.5 bg-rose-50/40 border border-rose-200/80 rounded-xl space-y-2.5">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-rose-900">Profil A (Yüksek Ciro)</span>
-              <span className="text-[10px] font-semibold text-rose-700 bg-rose-100 px-1.5 py-0.5 rounded flex items-center gap-1">
-                <AlertTriangle className="w-3 h-3" />
-                <span>Kırılgan</span>
-              </span>
-            </div>
+          {/* Sallanan Terazi Kolu */}
+          <g style={{ transformOrigin: "160px 40px", animation: "scaleSway 6s ease-in-out infinite" }}>
+            <line x1="60" y1="40" x2="260" y2="40" stroke="#0E1E38" strokeWidth="3" strokeLinecap="round" />
             
-            <div className="space-y-1.5 text-[11px]">
-              <div>
-                <div className="flex justify-between text-slate-600 mb-0.5">
-                  <span>Gelir</span>
-                  <span className="font-semibold text-slate-900">120.000 ₺</span>
-                </div>
-                <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                  <div className="w-full h-full bg-slate-800 rounded-full" />
-                </div>
-              </div>
+            {/* Sol Kefe (Ağır / Tüketim Yükü) */}
+            <line x1="60" y1="40" x2="40" y2="75" stroke="#94A3B8" strokeWidth="1.5" />
+            <line x1="60" y1="40" x2="80" y2="75" stroke="#94A3B8" strokeWidth="1.5" />
+            <path d="M30 75 Q60 90 90 75 Z" fill="#F43F5E" fillOpacity="0.2" stroke="#F43F5E" strokeWidth="2" />
+            {/* Sol Kefe Yük Blokları */}
+            <rect x="45" y="60" width="14" height="14" rx="2" fill="#F43F5E" />
+            <rect x="61" y="63" width="12" height="11" rx="2" fill="#E11D48" />
+            <rect x="52" y="47" width="15" height="12" rx="2" fill="#BE123C" />
 
-              <div>
-                <div className="flex justify-between text-slate-600 mb-0.5">
-                  <span>Gider / Tüketim</span>
-                  <span className="font-semibold text-rose-600">120.000 ₺</span>
-                </div>
-                <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                  <div className="w-full h-full bg-rose-500 rounded-full" />
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-2 border-t border-rose-200/60 flex justify-between items-center text-xs">
-              <span className="text-slate-500">Masada Kalan:</span>
-              <span className="font-bold text-rose-700">0 ₺ (Sıfır Güç)</span>
-            </div>
-          </div>
-
-          {/* PROFİL B */}
-          <div className="p-3.5 bg-emerald-50/40 border border-emerald-200/80 rounded-xl space-y-2.5">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-emerald-900">Profil B (Disiplinli Kasa)</span>
-              <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3" />
-                <span>Sağlam</span>
-              </span>
-            </div>
-            
-            <div className="space-y-1.5 text-[11px]">
-              <div>
-                <div className="flex justify-between text-slate-600 mb-0.5">
-                  <span>Gelir</span>
-                  <span className="font-semibold text-slate-900">45.000 ₺</span>
-                </div>
-                <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                  <div className="w-[70%] h-full bg-slate-800 rounded-full" />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between text-slate-600 mb-0.5">
-                  <span>Gider / Tüketim</span>
-                  <span className="font-semibold text-emerald-700">25.000 ₺</span>
-                </div>
-                <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                  <div className="w-[40%] h-full bg-emerald-500 rounded-full" />
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-2 border-t border-emerald-200/60 flex justify-between items-center text-xs">
-              <span className="text-slate-500">Masada Kalan:</span>
-              <span className="font-bold text-emerald-700">+20.000 ₺ Nakit</span>
-            </div>
-          </div>
-
-        </div>
+            {/* Sağ Kefe (Kompakt / Değerli Sermaye Çekirdeği) */}
+            <line x1="260" y1="40" x2="240" y2="75" stroke="#94A3B8" strokeWidth="1.5" />
+            <line x1="260" y1="40" x2="280" y2="75" stroke="#94A3B8" strokeWidth="1.5" />
+            <path d="M230 75 Q260 90 290 75 Z" fill="#10B981" fillOpacity="0.2" stroke="#10B981" strokeWidth="2" />
+            {/* Sağ Kefe Cevheri (Pırlanta / Zenginlik Çekirdeği) */}
+            <polygon points="260,50 273,65 260,74 247,65" fill="#10B981" stroke="#059669" strokeWidth="1.5" />
+            <circle cx="260" cy="62" r="3" fill="#ECFDF5" />
+          </g>
+        </svg>
       </div>
 
-      {/* 2. GÖRSEL: ŞEMATİK NAKİT AKIŞI MOTORU (Musluk & Kaçaklar) */}
-      <div className="p-5 xl:p-6 bg-white border border-slate-200 rounded-2xl shadow-xs space-y-4">
-        <div className="flex items-center justify-between">
-          <h4 className="text-xs font-bold text-[#0E1E38] uppercase tracking-wide">
-            2. Şema: Nakit Akışı Motoru (Giriş → Havuz → Çıkış)
-          </h4>
-          <span className="text-[10px] font-semibold text-[#004BFA] bg-blue-50 px-2 py-0.5 rounded">
-            Ders Paragrafı 2
-          </span>
-        </div>
+      {/* 2. ŞEMA: NAKİT REZERVİ & KAÇAK MOTORU (Sıfır Yazı - Salt Görsel) */}
+      <div className="p-6 bg-white border border-slate-200 rounded-2xl shadow-xs flex flex-col items-center justify-center min-h-[220px]">
+        <svg viewBox="0 0 280 200" className="w-full max-w-[260px] h-auto overflow-visible">
+          {/* Üst Musluk / Giriş Borusu */}
+          <path d="M120 15 L140 15 L140 35 L120 35" fill="none" stroke="#0E1E38" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M115 10 L125 10" stroke="#004BFA" strokeWidth="3" strokeLinecap="round" />
 
-        {/* Akış Şeması */}
-        <div className="space-y-2.5 pt-1">
+          {/* Düşen Su Damlaları (Akış) */}
+          <circle cx="130" cy="45" r="3" fill="#004BFA" style={{ animation: "waterFlow 1.8s infinite ease-in" }} />
+          <circle cx="130" cy="55" r="2.5" fill="#3B82F6" style={{ animation: "waterFlow 1.8s infinite 0.6s ease-in" }} />
+          <circle cx="130" cy="65" r="2" fill="#60A5FA" style={{ animation: "waterFlow 1.8s infinite 1.2s ease-in" }} />
+
+          {/* Ana Rezervuar / Cam Kasa Havuzu */}
+          <rect x="70" y="70" width="120" height="85" rx="10" fill="#0E1E38" fillOpacity="0.04" stroke="#0E1E38" strokeWidth="2.5" />
           
-          {/* 1. Giriş Musluğu */}
-          <div className="p-3 bg-blue-50/70 border border-blue-200 rounded-xl flex items-center justify-between text-xs">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#004BFA]" />
-              <span className="font-semibold text-[#0E1E38]">Aylık Gelir Akımı (Ana Musluk)</span>
-            </div>
-            <span className="text-[11px] font-bold text-[#004BFA]">+ Giriş</span>
-          </div>
+          {/* Havuz İçi Su Kütlesi */}
+          <g clipPath="url(#tankClip)">
+            <rect x="72" y="98" width="116" height="55" fill="#004BFA" fillOpacity="0.25" />
+            <path
+              d="M50 98 Q75 92 100 98 T150 98 T200 98 T250 98 V160 H50 Z"
+              fill="#004BFA"
+              fillOpacity="0.55"
+              style={{ animation: "waveMotion 4s ease-in-out infinite" }}
+            />
+          </g>
+          
+          <clipPath id="tankClip">
+            <rect x="72" y="72" width="116" height="81" rx="8" />
+          </clipPath>
 
-          {/* Akış Oku */}
-          <div className="flex justify-center">
-            <ArrowDown className="w-3.5 h-3.5 text-slate-400" />
-          </div>
+          {/* Havuz Cam Yansıması */}
+          <line x1="82" y1="78" x2="82" y2="145" stroke="#FFFFFF" strokeWidth="2" strokeOpacity="0.7" strokeLinecap="round" />
 
-          {/* 2. Merkez Kasa Havuzu */}
-          <div className="p-3.5 bg-[#0E1E38] text-white rounded-xl space-y-2">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-medium text-white/90">Kişisel Kasa Rezervi (Nakit Havuzu)</span>
-              <span className="text-[11px] text-[#78B8F5] font-semibold">Aktif Denge</span>
-            </div>
-            <div className="w-full h-1.5 bg-white/20 rounded-full overflow-hidden">
-              <div className="w-[65%] h-full bg-[#004BFA] rounded-full" />
-            </div>
-          </div>
+          {/* Yan Kaçak Çıkışları (Sızıntı Boruları) */}
+          {/* Sol Kaçak */}
+          <path d="M70 125 L50 125 L50 135" fill="none" stroke="#F43F5E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="50" cy="142" r="2" fill="#F43F5E" style={{ animation: "leakDrip 1.4s infinite ease-in" }} />
 
-          {/* Akış Oku */}
-          <div className="flex justify-center">
-            <ArrowDown className="w-3.5 h-3.5 text-slate-400" />
-          </div>
+          {/* Sağ Kaçak */}
+          <path d="M190 115 L210 115 L210 125" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <circle cx="210" cy="132" r="2" fill="#F59E0B" style={{ animation: "leakDrip 1.6s infinite 0.5s ease-in" }} />
 
-          {/* 3. Kaçaklar / Çıkışlar */}
-          <div className="grid grid-cols-3 gap-2">
-            <div className="p-2.5 bg-rose-50 border border-rose-200/80 rounded-lg text-center">
-              <span className="text-[10px] font-bold text-rose-900 block truncate">Kira & Barınma</span>
-              <span className="text-[9px] text-rose-600 block mt-0.5">Zorunlu Gider</span>
-            </div>
-
-            <div className="p-2.5 bg-amber-50 border border-amber-200/80 rounded-lg text-center">
-              <span className="text-[10px] font-bold text-amber-900 block truncate">Faturalar & Gıda</span>
-              <span className="text-[9px] text-amber-600 block mt-0.5">Yaşam Gideri</span>
-            </div>
-
-            <div className="p-2.5 bg-slate-100 border border-slate-200 rounded-lg text-center">
-              <span className="text-[10px] font-bold text-slate-800 block truncate">Görünmeyen Kaçak</span>
-              <span className="text-[9px] text-slate-500 block mt-0.5">Keyfi Sızıntı</span>
-            </div>
-          </div>
-
-        </div>
+          {/* Alt Ana Temiz Çıkış (Sermaye Havuzu) */}
+          <path d="M130 155 L130 175" stroke="#10B981" strokeWidth="3" strokeLinecap="round" />
+          <circle cx="130" cy="183" r="5" fill="#10B981" style={{ animation: "pulseGlow 2.5s infinite" }} />
+        </svg>
       </div>
 
-      {/* 3. GÖRSEL: SERMAYE DÖNÜŞÜM YOLCULUĞU (4. Bölüm Köprüsü) */}
-      <div className="p-5 xl:p-6 bg-white border border-slate-200 rounded-2xl shadow-xs space-y-3">
-        <div className="flex items-center justify-between">
-          <h4 className="text-xs font-bold text-[#0E1E38] uppercase tracking-wide">
-            3. Şema: Serbest Nakdin Şirket Ortaklığına Dönüşümü
-          </h4>
-          <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
-            Ders Paragrafı 4
-          </span>
-        </div>
+      {/* 3. ŞEMA: SERMAYE BÜYÜME VE ORTAKLIK BORU HATTI (Sıfır Yazı - Salt Görsel) */}
+      <div className="p-6 bg-white border border-slate-200 rounded-2xl shadow-xs flex flex-col items-center justify-center min-h-[160px]">
+        <svg viewBox="0 0 280 100" className="w-full max-w-[260px] h-auto overflow-visible">
+          {/* Bağlantı Yolu */}
+          <line x1="45" y1="50" x2="135" y2="50" stroke="#E2E8F0" strokeWidth="3" strokeLinecap="round" />
+          <line x1="145" y1="50" x2="235" y2="50" stroke="#E2E8F0" strokeWidth="3" strokeLinecap="round" />
 
-        {/* 3 Adımlı Yolculuk */}
-        <div className="grid grid-cols-3 gap-2 pt-1 text-center">
-          <div className="p-2.5 bg-blue-50/50 border border-blue-200 rounded-xl space-y-1">
-            <span className="text-[10px] font-bold text-[#004BFA] block">1. HAFTA (ŞU AN)</span>
-            <span className="text-xs font-semibold text-[#0E1E38] block leading-tight">Nakit Akışı Tespiti</span>
-            <span className="text-[10px] text-slate-500 block">Sıfır Noktası</span>
-          </div>
+          {/* Dinamik Işık Akışı */}
+          <line
+            x1="45"
+            y1="50"
+            x2="235"
+            y2="50"
+            stroke="#004BFA"
+            strokeWidth="3"
+            strokeDasharray="16 100"
+            style={{ animation: "nodeTravel 3s linear infinite" }}
+          />
 
-          <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
-            <span className="text-[10px] font-bold text-slate-400 block">2. HAFTA</span>
-            <span className="text-xs font-semibold text-slate-700 block leading-tight">Tasarruf Kalkanı</span>
-            <span className="text-[10px] text-slate-500 block">Kaçakları Kesme</span>
-          </div>
+          {/* 1. Düğüm: Başlangıç Tohumu */}
+          <g>
+            <circle cx="40" cy="50" r="14" fill="#EFF6FF" stroke="#004BFA" strokeWidth="2" />
+            <circle cx="40" cy="50" r="5" fill="#004BFA" />
+          </g>
 
-          <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
-            <span className="text-[10px] font-bold text-slate-400 block">İLERİ DÜZEY</span>
-            <span className="text-xs font-semibold text-[#0E1E38] block leading-tight">Borsa Ortaklığı</span>
-            <span className="text-[10px] text-slate-500 block">Üreten Varlıklar</span>
-          </div>
-        </div>
+          {/* 2. Düğüm: Koruyucu Kalkan / Rezerv */}
+          <g>
+            <circle cx="140" cy="50" r="16" fill="#F8FAFC" stroke="#64748B" strokeWidth="2" />
+            <path d="M140 42 L147 46 V53 Q147 57 140 60 Q133 57 133 53 V46 Z" fill="#64748B" fillOpacity="0.25" stroke="#475569" strokeWidth="1.5" />
+          </g>
+
+          {/* 3. Düğüm: Çarpan & Üreten Varlık Ağacı */}
+          <g>
+            <circle cx="240" cy="50" r="18" fill="#ECFDF5" stroke="#10B981" strokeWidth="2" style={{ animation: "pulseGlow 2.5s infinite" }} />
+            {/* Yükselen Grafik Çizgisi */}
+            <path d="M232 56 L237 52 L242 54 L248 44" fill="none" stroke="#10B981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <polygon points="247,43 250,47 245,46" fill="#10B981" />
+          </g>
+        </svg>
       </div>
 
     </div>

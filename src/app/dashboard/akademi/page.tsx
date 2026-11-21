@@ -358,8 +358,8 @@ function AkademiContent() {
               </div>
             ) : (
               /* FAZ 2: SAF UYGULAMA MASASI
-                 (Başlık, öğretici notlar ve widget kutusu kalktı; sadece verimli tablo var) */
-              <div className="space-y-8 animate-in fade-in duration-300 w-full max-w-6xl mx-auto">
+                 (Başlık, öğretici notlar ve widget kutusu kalktı; tüm sayfa genişliğinde canlı istasyon) */
+              <div className="space-y-10 animate-in fade-in duration-300 w-full">
                 
                 {/* Doğrudan Verimli Nakit Akışı Tablosu */}
                 <CashFlowSimulator />
