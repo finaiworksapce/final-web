@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { UNIT_1_CONFIG, getLesson1Content } from "@/data/academy/unit-1";
 import { CashFlowSimulator } from "@/components/academy/CashFlowSimulator";
-import { LessonVisuals } from "@/components/academy/LessonVisuals";
 import { useUser } from "@/components/providers/UserProvider";
 
 function AkademiContent() {
@@ -301,88 +300,57 @@ function AkademiContent() {
               )}
             </div>
 
-            {/* FAZ 1: DERS OKUMA EKRANI (İki Kolonlu Full-Viewport İstasyon) */}
+            {/* FAZ 1: DERS OKUMA EKRANI (Arındırılmış, Akıcı Editoryal Okuma) */}
             {!isSimulatorOpen ? (
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-start w-full">
+              <div className="w-full max-w-4xl mx-auto space-y-10 py-2">
                 
-                {/* SOL KOLON: Editoryal Anlatım & Karar Masasına Geçiş */}
-                <div className="lg:col-span-7 xl:col-span-7 space-y-8">
-                  
-                  {/* Başlık Silüeti */}
-                  <div>
-                    <h2 className="text-2xl sm:text-3xl font-medium text-[#0E1E38] tracking-tight clash-title">
-                      {lessonContent.title}
-                    </h2>
-                  </div>
-
-                  {/* 4 Editoryal Anlatım Bloğu (Akıcı, kesintisiz okuma) */}
-                  <div className="space-y-8">
-                    {lessonContent.blocks.map((block) => (
-                      <div key={block.id} className="space-y-2.5">
-                        <div className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#004BFA]" />
-                          <h3 className="text-lg sm:text-xl font-semibold text-[#0E1E38]">
-                            {block.title}
-                          </h3>
-                        </div>
-                        <div className="space-y-2.5 pl-4 border-l-2 border-slate-200">
-                          {block.paragraphs.map((p, pIdx) => (
-                            <p key={pIdx} className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
-                              {p}
-                            </p>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* UYGULAMAYA GEÇİŞ BUTONU */}
-                  <div className="pt-8 border-t border-slate-200">
-                    <button
-                      type="button"
-                      onClick={() => setIsSimulatorOpen(true)}
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-4 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer group"
-                    >
-                      <span>Anlatımı Okudum, Nakit Akışımla Yüzleşmek İstiyorum</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </button>
-                  </div>
-
+                {/* Başlık Silüeti */}
+                <div>
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-normal text-[#0E1E38] tracking-tight clash-title">
+                    {lessonContent.title}
+                  </h2>
                 </div>
 
-                {/* SAĞ KOLON: Şematik Finansal Görselleştirme (Zero AI Slop) */}
-                <div className="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-8">
-                  <LessonVisuals />
+                {/* 4 Editoryal Anlatım Bloğu (Akıcı, kesintisiz okuma) */}
+                <div className="space-y-8">
+                  {lessonContent.blocks.map((block) => (
+                    <div key={block.id} className="space-y-3">
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#004BFA]" />
+                        <h3 className="text-lg sm:text-xl font-semibold text-[#0E1E38]">
+                          {block.title}
+                        </h3>
+                      </div>
+                      <div className="space-y-3 pl-4 border-l-2 border-slate-200">
+                        {block.paragraphs.map((p, pIdx) => (
+                          <p key={pIdx} className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
+                            {p}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* UYGULAMAYA GEÇİŞ BUTONU */}
+                <div className="pt-8 border-t border-slate-200">
+                  <button
+                    type="button"
+                    onClick={() => setIsSimulatorOpen(true)}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer group"
+                  >
+                    <span>Anlatımı Okudum, Nakit Akışımla Yüzleşmek İstiyorum</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </button>
                 </div>
 
               </div>
             ) : (
               /* FAZ 2: SAF UYGULAMA MASASI
-                 (Başlık, öğretici notlar ve widget kutusu kalktı; tüm sayfa genişliğinde canlı istasyon) */
-              <div className="space-y-10 animate-in fade-in duration-300 w-full">
-                
+                 (Tüm sayfa genişliğinde, dikkat dağıtmayan doğrudan karar istasyonu) */
+              <div className="space-y-8 animate-in fade-in duration-300 w-full">
                 {/* Doğrudan Verimli Nakit Akışı Tablosu */}
                 <CashFlowSimulator />
-
-                {/* Gelecek Hafta Kartı */}
-                <div className="p-5 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-8">
-                  <div className="space-y-1">
-                    <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
-                      Gelecek Hafta (2. Hafta)
-                    </span>
-                    <h5 className="text-sm font-semibold text-[#0E1E38]">
-                      1.2 Tasarruf Nedir, Nasıl Yapılır? (Harcamaları Kısma Sanatı)
-                    </h5>
-                    <p className="text-xs text-slate-500">
-                      Bu hafta tespit ettiğin serbest nakdi veya açığı nasıl yöneteceğini öğreneceğiz.
-                    </p>
-                  </div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs text-slate-500 font-medium shrink-0">
-                    <Lock className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Haftaya Yayında</span>
-                  </div>
-                </div>
-
               </div>
             )}
 

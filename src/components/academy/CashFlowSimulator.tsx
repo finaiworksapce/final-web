@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Plus, Trash2, ArrowUpRight, ArrowDownRight, RotateCcw, CheckCircle2, AlertCircle, Activity, Sparkles, TrendingUp, TrendingDown, Layers } from 'lucide-react';
+import { Plus, Trash2, ArrowUpRight, ArrowDownRight, RotateCcw, CheckCircle2, AlertCircle, Sparkles, TrendingUp } from 'lucide-react';
 
 interface CashItem {
   id: string;
@@ -64,6 +64,16 @@ export function CashFlowSimulator() {
   const savingsRate = totalIncome > 0 ? Math.round((netCashFlow / totalIncome) * 100) : 0;
   const expenseRate = totalIncome > 0 ? Math.min(100, Math.round((totalExpense / totalIncome) * 100)) : 100;
 
+  // En çok harcanılan kalem analizi
+  const sortedExpenses = useMemo(() => {
+    return [...expenses].sort((a, b) => (Number(b.amount) || 0) - (Number(a.amount) || 0));
+  }, [expenses]);
+
+  const topExpense = sortedExpenses.length > 0 && (sortedExpenses[0].amount || 0) > 0 ? sortedExpenses[0] : null;
+  const isHousing = topExpense ? /kira|barınma|ev|konut|mortgage|aidat/i.test(topExpense.name) : false;
+  const secondTopExpense = sortedExpenses.length > 1 && (sortedExpenses[1].amount || 0) > 0 ? sortedExpenses[1] : null;
+  const topExpenseRatio = totalExpense > 0 && topExpense ? Math.round((topExpense.amount / totalExpense) * 100) : 0;
+
   const handleAddIncome = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newIncomeName.trim() || !newIncomeAmount) return;
@@ -115,219 +125,183 @@ export function CashFlowSimulator() {
   };
 
   return (
-    <div className="w-full space-y-10">
+    <div className="w-full space-y-8 select-none font-clash">
       
       {/* Özel CSS Animasyonları */}
       <style jsx>{`
-        @keyframes streamDash {
-          0% { stroke-dashoffset: 100; }
+        @keyframes streamFlow {
+          0% { stroke-dashoffset: 80; }
           100% { stroke-dashoffset: 0; }
         }
-        @keyframes pulseAura {
-          0%, 100% { transform: scale(1); opacity: 0.8; }
-          50% { transform: scale(1.08); opacity: 1; }
+        @keyframes nodeBreathing {
+          0%, 100% { transform: scale(1); opacity: 0.85; }
+          50% { transform: scale(1.06); opacity: 1; }
         }
-        @keyframes shimmerBar {
+        @keyframes shimmerEffect {
           0% { background-position: -200% 0; }
           100% { background-position: 200% 0; }
         }
-        @keyframes floatSlow {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-4px); }
+        .stream-active {
+          stroke-dasharray: 10 6;
+          animation: streamFlow 2.4s linear infinite;
         }
-        .stream-line {
-          stroke-dasharray: 12 8;
-          animation: streamDash 2s linear infinite;
-        }
-        .stream-line-reverse {
-          stroke-dasharray: 12 8;
-          animation: streamDash 2.5s linear infinite reverse;
-        }
-        .shimmer-active {
-          background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+        .shimmer-bar {
+          background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
           background-size: 200% 100%;
-          animation: shimmerBar 3s infinite linear;
+          animation: shimmerEffect 2.8s infinite linear;
         }
       `}</style>
 
-      {/* ÜST İŞLEM ÇUBUĞU (Tam Genişlik) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-200 gap-3 w-full">
-        <div className="flex items-center gap-2.5">
-          <span className="w-3 h-3 rounded-full bg-[#004BFA] animate-pulse" />
-          <span className="text-sm font-bold text-[#0E1E38] uppercase tracking-wider clash-title">
-            Canlı Nakit Akışı ve Karar İstasyonu
-          </span>
-        </div>
-        <button
-          type="button"
-          onClick={handleReset}
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-slate-500 hover:text-[#0E1E38] hover:bg-slate-100 rounded-lg transition-colors cursor-pointer self-start sm:self-auto"
-        >
-          <RotateCcw className="w-3.5 h-3.5" />
-          <span>Varsayılan Verileri Geri Yükle</span>
-        </button>
-      </div>
-
       {/* =========================================================================
-          ETKİN ANİMASYONLU SANKEY / AKIŞ DİNAMİĞİ (TÜM SAYFA GENİŞLİĞİNDE)
+          1. ÜST: ULTRA-PROFESYONEL CANLI NAKİT AKIMI (SANKEY / CAPITAL STREAM)
           ========================================================================= */}
-      <div className="w-full bg-[#0E1E38] text-white p-6 sm:p-8 rounded-2xl border border-white/10 shadow-xl overflow-hidden relative select-none">
+      <div className="w-full bg-gradient-to-r from-[#0E1E38] via-[#102445] to-[#0A1628] text-white p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden">
         
-        {/* Arka Plan Glow Efektleri */}
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#004BFA]/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+        {/* Arka Plan Ortam Işığı */}
+        <div className="absolute top-0 right-1/3 w-96 h-96 bg-[#004BFA]/15 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-emerald-500/10 rounded-full blur-[100px] pointer-events-none" />
 
-        {/* Canlı SVG Akım Şeması */}
+        {/* Üst Reset Butonu (Sağa Hizalı, Sade) */}
+        <div className="flex items-center justify-end relative z-10 mb-4">
+          <button
+            type="button"
+            onClick={handleReset}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Varsayılan Verileri Geri Yükle</span>
+          </button>
+        </div>
+
+        {/* Kurumsal Vektör Akış Kanalları */}
         <div className="w-full relative z-10">
-          <svg viewBox="0 0 1000 180" className="w-full h-auto max-h-[220px] overflow-visible">
+          <svg viewBox="0 0 1000 160" className="w-full h-auto max-h-[200px] overflow-visible">
             
             <defs>
-              <linearGradient id="incomeStream" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#3B82F6" />
-                <stop offset="100%" stopColor="#004BFA" />
+              <linearGradient id="streamInflow" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#004BFA" stopOpacity="1" />
               </linearGradient>
-              <linearGradient id="expenseStream" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#0E1E38" />
-                <stop offset="50%" stopColor="#F43F5E" />
-                <stop offset="100%" stopColor="#E11D48" />
+              <linearGradient id="streamExpense" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#004BFA" />
+                <stop offset="40%" stopColor="#FB7185" />
+                <stop offset="100%" stopColor="#F43F5E" />
               </linearGradient>
-              <linearGradient id="surplusStream" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#0E1E38" />
-                <stop offset="50%" stopColor="#10B981" />
-                <stop offset="100%" stopColor="#059669" />
+              <linearGradient id="streamSurplus" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#004BFA" />
+                <stop offset="40%" stopColor="#34D399" />
+                <stop offset="100%" stopColor="#10B981" />
               </linearGradient>
             </defs>
 
-            {/* AKIŞ 1: SOL -> MERKEZ HAVUZ (GELİR AKIMI) */}
+            {/* Arka Plan Statik Kılavuz Kanalları */}
+            <path d="M 120 80 C 260 80, 320 80, 480 80" fill="none" stroke="#FFFFFF" strokeWidth="6" strokeOpacity="0.06" strokeLinecap="round" />
+            <path d="M 520 75 C 660 75, 720 40, 860 40" fill="none" stroke="#FFFFFF" strokeWidth="5" strokeOpacity="0.06" strokeLinecap="round" />
+            <path d="M 520 85 C 660 85, 720 120, 860 120" fill="none" stroke="#FFFFFF" strokeWidth="5" strokeOpacity="0.06" strokeLinecap="round" />
+
+            {/* 1. GELİR AKIŞI (Sol -> Merkez) */}
             <path
-              d="M 120 90 C 260 90, 320 90, 460 90"
+              d="M 120 80 C 260 80, 320 80, 480 80"
               fill="none"
-              stroke="#004BFA"
-              strokeWidth="6"
-              strokeLinecap="round"
-              opacity="0.3"
-            />
-            <path
-              d="M 120 90 C 260 90, 320 90, 460 90"
-              fill="none"
-              stroke="url(#incomeStream)"
+              stroke="url(#streamInflow)"
               strokeWidth="4"
               strokeLinecap="round"
-              className="stream-line"
+              className="stream-active"
             />
 
-            {/* AKIŞ 2: MERKEZ -> SAĞ ÜST (GİDER ÇIKIŞI) */}
+            {/* 2. GİDER ÇIKIŞI (Merkez -> Sağ Üst) */}
             <path
-              d="M 540 85 C 660 85, 720 45, 840 45"
+              d="M 520 75 C 660 75, 720 40, 860 40"
               fill="none"
-              stroke="#F43F5E"
-              strokeWidth="5"
-              strokeLinecap="round"
-              opacity="0.3"
-            />
-            <path
-              d="M 540 85 C 660 85, 720 45, 840 45"
-              fill="none"
-              stroke="url(#expenseStream)"
+              stroke="url(#streamExpense)"
               strokeWidth="3.5"
               strokeLinecap="round"
-              className="stream-line"
+              className="stream-active"
             />
 
-            {/* AKIŞ 3: MERKEZ -> SAĞ ALT (SERBEST NAKİT / MASADA KALAN) */}
+            {/* 3. SERBEST NAKİT ÇIKIŞI (Merkez -> Sağ Alt) */}
             <path
-              d="M 540 95 C 660 95, 720 135, 840 135"
+              d="M 520 85 C 660 85, 720 120, 860 120"
               fill="none"
-              stroke={netCashFlow >= 0 ? "#10B981" : "#F43F5E"}
-              strokeWidth="5"
-              strokeLinecap="round"
-              opacity="0.3"
-            />
-            <path
-              d="M 540 95 C 660 95, 720 135, 840 135"
-              fill="none"
-              stroke={netCashFlow >= 0 ? "url(#surplusStream)" : "url(#expenseStream)"}
+              stroke={netCashFlow >= 0 ? "url(#streamSurplus)" : "url(#streamExpense)"}
               strokeWidth="3.5"
               strokeLinecap="round"
-              className="stream-line"
+              className="stream-active"
             />
 
-            {/* DÜĞÜM 1: GELİR GİRİŞ MERKEZİ (SOL) */}
-            <g transform="translate(60, 90)">
-              <circle cx="0" cy="0" r="32" fill="#0E1E38" stroke="#3B82F6" strokeWidth="2.5" />
-              <circle cx="0" cy="0" r="24" fill="#1E3A8A" opacity="0.6" />
-              <circle cx="0" cy="0" r="14" fill="#004BFA" style={{ animation: 'pulseAura 3s infinite ease-in-out' }} />
-              <text x="0" y="4" textAnchor="middle" fill="#FFFFFF" fontSize="11" fontWeight="bold" fontFamily="sans-serif">
-                GİRİŞ
-              </text>
+            {/* DÜĞÜM 1: GELİR PORTU (SOL) */}
+            <g transform="translate(60, 80)">
+              <rect x="-45" y="-22" width="90" height="44" rx="12" fill="#0E1E38" stroke="#3B82F6" strokeWidth="1.5" />
+              <circle cx="-25" cy="0" r="4" fill="#3B82F6" style={{ animation: 'nodeBreathing 2.5s infinite ease-in-out' }} />
+              <text x="2" y="-3" fill="#94A3B8" fontSize="9" fontWeight="bold" letterSpacing="0.5">GELİR</text>
+              <text x="2" y="11" fill="#FFFFFF" fontSize="11" fontWeight="bold">%{100}</text>
             </g>
 
             {/* DÜĞÜM 2: MERKEZ REZERV / KASA HAVUZU (ORTA) */}
-            <g transform="translate(500, 90)">
-              <circle cx="0" cy="0" r="44" fill="#0A1526" stroke="#004BFA" strokeWidth="3" />
-              <circle cx="0" cy="0" r="36" fill="#004BFA" fillOpacity="0.2" />
-              <circle cx="0" cy="0" r="28" fill="#004BFA" fillOpacity="0.4" style={{ animation: 'pulseAura 2.2s infinite ease-in-out' }} />
-              <circle cx="0" cy="0" r="16" fill="#004BFA" />
-              <text x="0" y="4" textAnchor="middle" fill="#FFFFFF" fontSize="10" fontWeight="bold" fontFamily="sans-serif">
-                REZERV
-              </text>
+            <g transform="translate(500, 80)">
+              <circle cx="0" cy="0" r="32" fill="#0A1526" stroke="#004BFA" strokeWidth="2" />
+              <circle cx="0" cy="0" r="22" fill="#004BFA" fillOpacity="0.25" style={{ animation: 'nodeBreathing 2s infinite ease-in-out' }} />
+              <circle cx="0" cy="0" r="8" fill="#004BFA" />
             </g>
 
-            {/* DÜĞÜM 3: GİDERLER (SAĞ ÜST) */}
-            <g transform="translate(890, 45)">
-              <circle cx="0" cy="0" r="28" fill="#0E1E38" stroke="#F43F5E" strokeWidth="2.5" />
-              <circle cx="0" cy="0" r="18" fill="#881337" opacity="0.6" />
-              <circle cx="0" cy="0" r="10" fill="#F43F5E" style={{ animation: 'pulseAura 2.8s infinite ease-in-out' }} />
-              <text x="0" y="4" textAnchor="middle" fill="#FECDD3" fontSize="10" fontWeight="bold" fontFamily="sans-serif">
-                GİDER
-              </text>
+            {/* DÜĞÜM 3: GİDER PORTU (SAĞ ÜST) */}
+            <g transform="translate(915, 40)">
+              <rect x="-45" y="-20" width="90" height="40" rx="12" fill="#0E1E38" stroke="#F43F5E" strokeWidth="1.5" />
+              <circle cx="-25" cy="0" r="4" fill="#F43F5E" style={{ animation: 'nodeBreathing 2.2s infinite ease-in-out' }} />
+              <text x="2" y="-2" fill="#FB7185" fontSize="9" fontWeight="bold" letterSpacing="0.5">TÜKETİM</text>
+              <text x="2" y="11" fill="#FFFFFF" fontSize="11" fontWeight="bold">%{expenseRate}</text>
             </g>
 
-            {/* DÜĞÜM 4: SERBEST NAKİT (SAĞ ALT) */}
-            <g transform="translate(890, 135)">
-              <circle
-                cx="0"
-                cy="0"
-                r="30"
+            {/* DÜĞÜM 4: SERBEST NAKİT PORTU (SAĞ ALT) */}
+            <g transform="translate(915, 120)">
+              <rect
+                x="-45"
+                y="-20"
+                width="90"
+                height="40"
+                rx="12"
                 fill="#0E1E38"
                 stroke={netCashFlow >= 0 ? "#10B981" : "#F43F5E"}
-                strokeWidth="2.5"
+                strokeWidth="1.5"
               />
               <circle
-                cx="0"
+                cx="-25"
                 cy="0"
-                r="20"
-                fill={netCashFlow >= 0 ? "#064E3B" : "#881337"}
-                opacity="0.6"
-              />
-              <circle
-                cx="0"
-                cy="0"
-                r="12"
+                r="4"
                 fill={netCashFlow >= 0 ? "#10B981" : "#F43F5E"}
-                style={{ animation: 'pulseAura 2s infinite ease-in-out' }}
+                style={{ animation: 'nodeBreathing 2s infinite ease-in-out' }}
               />
-              <text x="0" y="4" textAnchor="middle" fill="#D1FAE5" fontSize="10" fontWeight="bold" fontFamily="sans-serif">
-                {netCashFlow >= 0 ? 'KALAN' : 'AÇIK'}
+              <text
+                x="2"
+                y="-2"
+                fill={netCashFlow >= 0 ? "#6EE7B7" : "#FB7185"}
+                fontSize="9"
+                fontWeight="bold"
+                letterSpacing="0.5"
+              >
+                {netCashFlow >= 0 ? 'SERBEST' : 'AÇIK'}
+              </text>
+              <text x="2" y="11" fill="#FFFFFF" fontSize="11" fontWeight="bold">
+                %{savingsRate > 0 ? savingsRate : (totalIncome > 0 ? Math.round((Math.abs(netCashFlow)/totalIncome)*100) : 0)}
               </text>
             </g>
 
           </svg>
         </div>
 
-        {/* Akış Değerlerinin Alt Göstergeleri */}
-        <div className="grid grid-cols-3 gap-4 pt-3 border-t border-white/10 text-center relative z-10 text-xs">
+        {/* Akış Değerleri Göstergesi */}
+        <div className="grid grid-cols-3 gap-4 pt-4 border-t border-white/10 text-center relative z-10">
           <div>
-            <span className="text-white/50 block text-[11px]">Toplam Giriş Akımı</span>
-            <span className="text-sm sm:text-base font-bold text-[#78B8F5]">+{totalIncome.toLocaleString('tr-TR')} ₺</span>
+            <span className="text-white/40 block text-[11px] font-medium tracking-wider uppercase">Toplam Giriş Akımı</span>
+            <span className="text-base sm:text-lg font-semibold text-[#78B8F5] clash-title">+{totalIncome.toLocaleString('tr-TR')} ₺</span>
           </div>
           <div>
-            <span className="text-white/50 block text-[11px]">Aylık Tüketim Çıkışı</span>
-            <span className="text-sm sm:text-base font-bold text-rose-400">-{totalExpense.toLocaleString('tr-TR')} ₺</span>
+            <span className="text-white/40 block text-[11px] font-medium tracking-wider uppercase">Aylık Tüketim Çıkışı</span>
+            <span className="text-base sm:text-lg font-semibold text-rose-400 clash-title">-{totalExpense.toLocaleString('tr-TR')} ₺</span>
           </div>
           <div>
-            <span className="text-white/50 block text-[11px]">Masada Kalan Net</span>
-            <span className={`text-sm sm:text-base font-bold ${netCashFlow >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+            <span className="text-white/40 block text-[11px] font-medium tracking-wider uppercase">Masada Kalan Net</span>
+            <span className={`text-base sm:text-lg font-semibold clash-title ${netCashFlow >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
               {netCashFlow >= 0 ? '+' : ''}{netCashFlow.toLocaleString('tr-TR')} ₺
             </span>
           </div>
@@ -336,12 +310,12 @@ export function CashFlowSimulator() {
       </div>
 
       {/* =========================================================================
-          2 SÜTUNLU VERİMLİ FİNANSAL TABLO MİMARİSİ (TAM SAYFA GENİŞLİĞİ)
+          2. ORTA: 2 SÜTUNLU VERİMLİ FİNANSAL TABLO (TAM SAYFA GENİŞLİĞİ)
           ========================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-12 w-full items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 xl:gap-10 w-full items-start">
         
         {/* GELİR KALEMLERİ TABLOSU */}
-        <div className="space-y-4 bg-white p-5 sm:p-7 rounded-2xl border border-slate-200 shadow-xs hover:border-[#004BFA]/50 transition-all duration-300">
+        <div className="space-y-4 bg-white p-5 sm:p-7 rounded-3xl border border-slate-200 shadow-xs hover:border-[#004BFA]/40 transition-all duration-300">
           <div className="flex items-center justify-between pb-3 border-b-2 border-emerald-500">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
@@ -349,13 +323,13 @@ export function CashFlowSimulator() {
                 Aylık Gelir Kalemleri
               </span>
             </div>
-            <span className="text-sm sm:text-base font-bold text-emerald-600">
+            <span className="text-sm sm:text-base font-bold text-emerald-600 clash-title">
               +{totalIncome.toLocaleString('tr-TR')} ₺
             </span>
           </div>
 
           {/* Satırlar */}
-          <div className="divide-y divide-slate-100 border border-slate-200 rounded-xl overflow-hidden bg-white shadow-2xs">
+          <div className="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-2xs">
             {incomes.length === 0 ? (
               <div className="p-6 text-xs text-slate-400 italic text-center">Henüz gelir kalemi eklenmedi.</div>
             ) : (
@@ -392,7 +366,7 @@ export function CashFlowSimulator() {
           <form onSubmit={handleAddIncome} className="flex gap-2.5 pt-1">
             <input
               type="text"
-              placeholder="Yeni gelir kalemi (örn. Freelance, Ek İş)"
+              placeholder="Yeni gelir kalemi (örn. Freelance, Ek Gelir)"
               value={newIncomeName}
               onChange={(e) => setNewIncomeName(e.target.value)}
               className="flex-1 text-xs bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-[#0E1E38] placeholder:text-slate-400 focus:outline-none focus:border-[#004BFA] focus:bg-white transition-colors"
@@ -416,7 +390,7 @@ export function CashFlowSimulator() {
         </div>
 
         {/* GİDER KALEMLERİ TABLOSU */}
-        <div className="space-y-4 bg-white p-5 sm:p-7 rounded-2xl border border-slate-200 shadow-xs hover:border-rose-400/50 transition-all duration-300">
+        <div className="space-y-4 bg-white p-5 sm:p-7 rounded-3xl border border-slate-200 shadow-xs hover:border-rose-400/40 transition-all duration-300">
           <div className="flex items-center justify-between pb-3 border-b-2 border-rose-500">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
@@ -424,13 +398,13 @@ export function CashFlowSimulator() {
                 Aylık Gider Kalemleri
               </span>
             </div>
-            <span className="text-sm sm:text-base font-bold text-rose-600">
+            <span className="text-sm sm:text-base font-bold text-rose-600 clash-title">
               -{totalExpense.toLocaleString('tr-TR')} ₺
             </span>
           </div>
 
           {/* Satırlar */}
-          <div className="divide-y divide-slate-100 border border-slate-200 rounded-xl overflow-hidden bg-white shadow-2xs">
+          <div className="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-2xs">
             {expenses.length === 0 ? (
               <div className="p-6 text-xs text-slate-400 italic text-center">Henüz gider kalemi eklenmedi.</div>
             ) : (
@@ -493,109 +467,155 @@ export function CashFlowSimulator() {
       </div>
 
       {/* =========================================================================
-          ANALİTİK METRİKLER & MENTÖR GERİ BİLDİRİMİ (TAM SAYFA GENİŞLİĞİNDE)
+          3. ALT: LACİVERT GRADYANLI PROFESYONEL ANALİTİK KONSOLU
           ========================================================================= */}
-      <div className="pt-8 border-t border-slate-200 space-y-6 w-full">
+      <div className="w-full bg-gradient-to-br from-[#0E1E38] via-[#122444] to-[#091527] text-white p-6 sm:p-8 lg:p-10 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden space-y-8">
         
-        {/* Dağılım İlerleme Göstergesi (Canlı Shimmer) */}
-        <div className="space-y-2 bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-          <div className="flex justify-between text-xs font-semibold text-[#0E1E38]">
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-rose-500" />
+        {/* Ortam Işıkları */}
+        <div className="absolute top-0 right-1/4 w-80 h-80 bg-[#004BFA]/10 rounded-full blur-[110px] pointer-events-none" />
+        <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-emerald-500/10 rounded-full blur-[110px] pointer-events-none" />
+
+        {/* 1. Canlı Dağılım Çubuğu */}
+        <div className="space-y-3 relative z-10">
+          <div className="flex justify-between text-xs sm:text-sm font-medium">
+            <span className="flex items-center gap-2 text-rose-300 font-semibold">
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
               <span>Gider Yükü: %{expenseRate}</span>
             </span>
-            <span className={`flex items-center gap-1.5 ${savingsRate > 0 ? 'text-emerald-600 font-bold' : 'text-slate-500'}`}>
-              <span className={`w-2 h-2 rounded-full ${savingsRate > 0 ? 'bg-emerald-500' : 'bg-slate-400'}`} />
+            <span className={`flex items-center gap-2 ${savingsRate > 0 ? 'text-emerald-300 font-semibold' : 'text-white/50'}`}>
+              <span className={`w-2.5 h-2.5 rounded-full ${savingsRate > 0 ? 'bg-emerald-400' : 'bg-white/30'}`} />
               <span>Tasarruf Kapasitesi: %{savingsRate > 0 ? savingsRate : 0}</span>
             </span>
           </div>
-          <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden flex relative">
+          
+          <div className="w-full h-3.5 bg-white/10 rounded-full overflow-hidden flex relative border border-white/10 p-0.5">
             <div
-              className={`h-full transition-all duration-500 ${netCashFlow >= 0 ? 'bg-rose-400' : 'bg-rose-600'}`}
+              className={`h-full rounded-full transition-all duration-500 ${netCashFlow >= 0 ? 'bg-gradient-to-r from-rose-500 to-rose-400' : 'bg-rose-500'}`}
               style={{ width: `${Math.min(100, expenseRate)}%` }}
             />
             {netCashFlow > 0 && (
               <div
-                className="h-full bg-emerald-500 transition-all duration-500 relative"
+                className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all duration-500 relative overflow-hidden"
                 style={{ width: `${Math.min(100, savingsRate)}%` }}
               >
-                <div className="absolute inset-0 shimmer-active" />
+                <div className="absolute inset-0 shimmer-bar" />
               </div>
             )}
           </div>
         </div>
 
-        {/* 3 Ana Metrik Kartı */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 w-full">
-          <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-xs">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+        {/* 2. Üç Ana Finansal Metrik Kartı (Lacivert Konsol İçinde) */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 relative z-10 w-full">
+          
+          {/* Toplam Gelir */}
+          <div className="p-5 bg-white/[0.04] border border-white/10 rounded-2xl hover:bg-white/[0.07] transition-all">
+            <span className="text-[11px] font-bold text-white/50 uppercase tracking-wider block">
               Toplam Aylık Gelir
             </span>
-            <span className="text-2xl sm:text-3xl font-medium text-[#0E1E38] clash-title mt-1.5 block">
+            <span className="text-2xl sm:text-3xl font-medium text-white clash-title mt-1.5 block">
               {totalIncome.toLocaleString('tr-TR')} ₺
             </span>
           </div>
 
-          <div className="p-5 bg-white border border-slate-200 rounded-2xl shadow-xs">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+          {/* Toplam Gider */}
+          <div className="p-5 bg-white/[0.04] border border-white/10 rounded-2xl hover:bg-white/[0.07] transition-all">
+            <span className="text-[11px] font-bold text-white/50 uppercase tracking-wider block">
               Toplam Aylık Gider
             </span>
-            <span className="text-2xl sm:text-3xl font-medium text-rose-600 clash-title mt-1.5 block">
+            <span className="text-2xl sm:text-3xl font-medium text-rose-400 clash-title mt-1.5 block">
               {totalExpense.toLocaleString('tr-TR')} ₺
             </span>
           </div>
 
-          <div className={`p-5 border rounded-2xl shadow-xs transition-all duration-300 ${
+          {/* Net Nakit Akışı */}
+          <div className={`p-5 rounded-2xl border transition-all ${
             netCashFlow > 0 
-              ? 'bg-emerald-50/60 border-emerald-300 text-emerald-950 shadow-emerald-500/5' 
+              ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300' 
               : netCashFlow < 0 
-              ? 'bg-rose-50/60 border-rose-300 text-rose-950 shadow-rose-500/5' 
-              : 'bg-slate-50 border-slate-200 text-slate-900'
+              ? 'bg-rose-500/10 border-rose-500/30 text-rose-300' 
+              : 'bg-white/[0.04] border-white/10 text-white'
           }`}>
-            <span className="text-[11px] font-bold uppercase tracking-wider block opacity-70">
+            <span className="text-[11px] font-bold uppercase tracking-wider block opacity-75">
               Net Aylık Nakit Akışı
             </span>
             <div className="flex items-center gap-2 mt-1.5">
               {netCashFlow > 0 ? (
-                <ArrowUpRight className="w-6 h-6 text-emerald-600 shrink-0" />
+                <ArrowUpRight className="w-6 h-6 text-emerald-400 shrink-0" />
               ) : netCashFlow < 0 ? (
-                <ArrowDownRight className="w-6 h-6 text-rose-600 shrink-0" />
+                <ArrowDownRight className="w-6 h-6 text-rose-400 shrink-0" />
               ) : null}
               <span className="text-2xl sm:text-3xl font-medium clash-title">
                 {netCashFlow > 0 ? '+' : ''}{netCashFlow.toLocaleString('tr-TR')} ₺
               </span>
             </div>
           </div>
+
         </div>
 
-        {/* FinAi Mentör Gözlemi (Canlı Vurgu) */}
-        <div className="p-6 bg-white border-l-4 border-[#004BFA] border-y border-r border-slate-200 rounded-r-2xl shadow-xs w-full">
-          <div className="flex items-start gap-4">
-            {netCashFlow > 0 ? (
-              <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
-            ) : (
-              <AlertCircle className="w-6 h-6 text-amber-600 shrink-0 mt-0.5" />
-            )}
-            <div className="space-y-1.5">
-              <h5 className="text-xs font-bold text-[#0E1E38] uppercase tracking-wide">
-                FinAi Mentör Tespiti
+        {/* 3. FinAi Mentör Tespiti & Dinamik Harcama Analizi */}
+        <div className="p-6 sm:p-7 bg-white/[0.03] border border-white/15 rounded-2xl relative z-10 space-y-4">
+          <div className="flex items-center gap-3">
+            <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
+              netCashFlow >= 0 ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'
+            }`}>
+              {netCashFlow >= 0 ? (
+                <CheckCircle2 className="w-5 h-5" />
+              ) : (
+                <AlertCircle className="w-5 h-5" />
+              )}
+            </div>
+            <div>
+              <h5 className="text-xs font-bold text-white uppercase tracking-wider clash-title">
+                FinAi Mentör Tespiti & Nakit Akışı Analizi
               </h5>
-              <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
-                {netCashFlow > 0 ? (
+              <span className="text-[11px] text-white/50">Objektif Finansal Durum & Düşünme Refleksi</span>
+            </div>
+          </div>
+
+          <div className="space-y-3.5 text-sm sm:text-base text-white/85 leading-relaxed font-normal pt-1">
+            
+            {/* Paragraf 1: Objektif Genel Durum (Biz Diliyle) */}
+            <p>
+              {netCashFlow > 0 ? (
+                <>
+                  Biz FinAi Workspace ekibi olarak tablonu incelediğimizde; her ay eline geçen toplam gelirin <strong>%{savingsRate}</strong>'sini masada bırakabildiğini, yani <strong>+{netCashFlow.toLocaleString('tr-TR')} ₺</strong> pozitif serbest nakit ürettiğini görüyoruz. Bu rakam senin finansal bağımsızlık yolculuğundaki temel sıfır noktandır; sonraki haftalarda bu sermayeyi enflasyona ezdirmeyip üreten ortaklıklara dönüştürmenin adımlarını atacağız.
+                </>
+              ) : netCashFlow < 0 ? (
+                <>
+                  Biz FinAi Workspace ekibi olarak tablonu incelediğimizde; mevcut gelirinin aylık harcamalarını karşılamaya yetmediğini ve her ay <strong>{Math.abs(netCashFlow).toLocaleString('tr-TR')} ₺</strong> açık verdiğini görüyoruz. Bu açık, farkında olmadan borçlanarak ya da mevcut birikimlerini eriterek finanse ediliyor demektir. Yatırım dünyasına adım atmadan önceki ilk ve en kritik görevimiz, bu sızıntıyı durdurmaktır.
+                </>
+              ) : (
+                <>
+                  Biz FinAi Workspace ekibi olarak tablonu incelediğimizde; gelir ve giderlerinin tam başa baş noktasında olduğunu görüyoruz. Masada hiç nakit bırakamamak, beklenmedik ilk acil harcamada seni borçlanmaya itebilir. Önceliğimiz bu dengeyi hızla artıya çevirmek olacaktır.
+                </>
+              )}
+            </p>
+
+            {/* Paragraf 2: En Çok Harcanılan Kalem & Düşündürücü Soru */}
+            {topExpense && (
+              <div className="p-4 bg-white/[0.04] border border-white/10 rounded-xl text-xs sm:text-sm text-white/90 space-y-1.5">
+                {isHousing ? (
                   <>
-                    Tebrikler. Ay sonunda elinizde <strong>+{netCashFlow.toLocaleString('tr-TR')} ₺</strong> pozitif serbest nakit kalıyor (Gelirinizin %{savingsRate}'i). Bu rakam sizin sıfır noktanızdır; sonraki haftalarda bu sermayeyi enflasyona karşı korumayı ve üreten varlıklara dönüştürmeyi öğreneceğiz.
-                  </>
-                ) : netCashFlow < 0 ? (
-                  <>
-                    Dikkat: Ay sonunda <strong>{netCashFlow.toLocaleString('tr-TR')} ₺</strong> açık veriyorsunuz. Bu açık her ay ya borçlanarak ya da mevcut birikimlerinizi eriterek finanse ediliyor demektir. Yatırıma adım atmadan önce sonraki haftalarda bu gider kaçaklarını kontrol altına alacağız.
+                    <p>
+                      Giderlerinin en büyük payını <strong>{topExpense.amount.toLocaleString('tr-TR')} ₺</strong> ile <strong>"{topExpense.name}"</strong> oluşturuyor (Tüm harcamalarının %{topExpenseRatio}'i). Kira ve barınma gibi temel sabit giderleri kısa vadede kısmak her zaman mümkün olmayabilir.
+                    </p>
+                    <p className="text-emerald-300 font-medium">
+                      Peki listendeki ikinci en büyük harcama kalemin olan <strong>"{secondTopExpense ? secondTopExpense.name : 'diğer harcamaların'}"</strong> ({secondTopExpense ? secondTopExpense.amount.toLocaleString('tr-TR') + ' ₺' : ''}) sence hayat standardını düşürmeden optimize edilebilir mi? Bir sonraki hafta tam olarak bu görünmeyen kaçakları nasıl budayabileceğimizi konuşacağız.
+                    </p>
                   </>
                 ) : (
                   <>
-                    Gelir ve giderleriniz tam başa baş noktasında. Elinizde kalan serbest nakit sıfır olduğu için, en ufak bir beklenmedik harcamada borçlanma riski taşıyorsunuz. İkinci haftada bu dengeyi nasıl pozitife çevireceğimize odaklanacağız.
+                    <p>
+                      Gider kalemlerinin içinde en yüksek payı <strong>{topExpense.amount.toLocaleString('tr-TR')} ₺</strong> ile <strong>"{topExpense.name}"</strong> alıyor (Toplam giderinin %{topExpenseRatio}'i).
+                    </p>
+                    <p className="text-[#78B8F5] font-medium">
+                      Biz FinAi Workspace ekibi olarak sana şu soruyu sormak istiyoruz: Sence bu harcama kalemini hayat kalitenden ödün vermeden kısmanın veya daha verimli bir alternatife dönüştürmenin bir yolu var mıdır? İkinci haftadaki tasarruf kalkanı dersimizde doğrudan bu tür harcamaları yönetme refleksini kazanacağız.
+                    </p>
                   </>
                 )}
-              </p>
-            </div>
+              </div>
+            )}
+
           </div>
         </div>
 
