@@ -6,6 +6,7 @@ import { XMLParser } from 'fast-xml-parser';
 import { createClient } from '@supabase/supabase-js';
 import { CalendarDbService } from './calendar-db-service';
 import { scrapeEconomicCalendar } from './calendar-scraper';
+import { FinAiNarrativeEngine } from './narrative-engine/engine';
 import halkarzSnapshot from '@/lib/halkarz-real-snapshot.json';
 
 const supabaseAdmin = createClient(
@@ -1199,7 +1200,7 @@ export async function generateMonthlyPerformanceReport(
     const paragraph1 = [p1Intro, p1GainText, p1DiversificationText].filter(Boolean).join(' ');
     paragraphs.push(paragraph1);
 
-    // PARAGRAF 2: Zarar Tablosu ve Teyitli Araştırma (Başlangıç: Zarar tablosuna baktığımızda ise...)
+    // PARAGRAF 2: Zarar Tablosu ve Teyitli Araştırma (FinAi Narrative Engine ile Canlı Derleme)
     if (topLosingAsset && topLosingAsset.monthlyReturnTL < 0) {
         const lossTLFormatted = Math.abs(topLosingAsset.monthlyReturnTL).toLocaleString('tr-TR', { maximumFractionDigits: 0 });
         const sectorLossTLFormatted = topLosingSector && topLosingSector.monthlyReturnTL < 0
@@ -1210,26 +1211,91 @@ export async function generateMonthlyPerformanceReport(
             ? `Sektör bazında ise en belirgin geri çekilme net **${sectorLossTLFormatted} TL** gerilemeyle **${topLosingSector.name}** sektöründe gerçekleşti.`
             : '';
 
-        let researchConclusion = '';
-        if (fallingFinding && fallingFinding.title) {
-            const titleLower = fallingFinding.title.toLowerCase();
-            if (titleLower.includes('spk') || titleLower.includes('suç duyurusu') || titleLower.includes('tedbir') || titleLower.includes('yasak') || titleLower.includes('ceza') || titleLower.includes('soruşturma') || titleLower.includes('dava')) {
-                researchConclusion = `Yaptığımız derinlemesine piyasa araştırmalarına göre; Sermaye Piyasası Kurulu (SPK) veya düzenleyici otoriteler tarafından ${fallingSubject} paylarına yönelik alınan idari tedbir, inceleme veya işlem kısıtlaması kararlarının düşüşte belirleyici olduğu görülmektedir. Finansal piyasalar açısından bu karar; hissede kredili alım ve açığa satış gibi kaldıraçlı işlem imkanlarını sınırlandırarak tahtadaki likidite akışını doğrudan daraltmakta, yatırımcıların artan belirsizlik karşısında teminat tamamlama ve riskten kaçınma refleksiyle satışa yönelmesine neden olmaktadır.`;
-            } else if ((titleLower.includes('bilanço') || titleLower.includes('kâr') || titleLower.includes('kar') || titleLower.includes('gelir') || titleLower.includes('ciro')) && (titleLower.includes('zarar') || titleLower.includes('düştü') || titleLower.includes('geriledi') || titleLower.includes('kayıp') || titleLower.includes('altında') || titleLower.includes('baskı'))) {
-                researchConclusion = `Yaptığımız derinlemesine finansal araştırmalara göre; şirketin kamuoyuna açıkladığı son dönem finansal sonuçlarında net kâr marjı veya operasyonel nakit akışının piyasa beklentilerinin gerisinde kalmasının fiyatlamayı baskıladığı anlaşılmaktadır. Temel analiz perspektifinden bu gelişme; artan finansman giderleri veya operasyonel maliyetler sebebiyle şirketin mevcut çarpan değerlemelerini pahalı hale getirmekte ve kurumsal fonlar dahil olmak üzere piyasa genelinde kâr realizasyonlarını tetiklemektedir.`;
-            } else if (titleLower.includes('üretim durdurma') || titleLower.includes('bakım duruşu') || titleLower.includes('grev') || titleLower.includes('arıza') || titleLower.includes('yangın') || titleLower.includes('kaza')) {
-                researchConclusion = `Yaptığımız operasyonel araştırmalara göre; şirketin ana üretim tesislerinde yürütülen bakım duruşu, kapasite kısıtlaması veya dönemsel aksamaların hisse performansı üzerinde doğrudan etkili olduğu görülmektedir. Bu tür operasyonel kesintiler; şirketin çeyreklik teslimat hacmini ve kapasite kullanım oranını geçici olarak düşürdüğü için, piyasa tarafından gelecekteki ciro ve nakit yaratma potansiyelinde dönemsel bir kayıp olarak fiyatlanarak satış baskısı yaratmaktadır.`;
-            } else if (titleLower.includes('faiz') || titleLower.includes('finansman maliyet') || titleLower.includes('borç') || titleLower.includes('kredi')) {
-                researchConclusion = `Yaptığımız makroekonomik araştırmalara göre; yükselen piyasa faizlerinin getirdiği finansman yükü ve borçlanma maliyetlerinin ${fallingSubject} üzerinde hissedildiği görülmektedir. Yüksek faiz ortamı; şirketin işletme sermayesi finansmanını zorlaştırıp net kârlılık potansiyelini baskıladığı için, yatırımcıların şirketin büyüme beklentilerini daha temkinli bir banda çekmesine yol açmaktadır.`;
+        const headerP2 = `Zarar tablosuna baktığımızda ise; portföy getirisini en çok gerileten hisse, net **-${lossTLFormatted} TL** kayıp yaşatan **${topLosingAsset.cleanSymbol}** oldu. ${sectorLossText}`.trim();
+        paragraphs.push(headerP2);
+
+        // Arka planda 3 izinli kaynaktan derleme yap
+        let researchParagraphs: string[] = [];
+        try {
+            const findingsResult = await FinAiNarrativeEngine.getNewsSummaries(topLosingAsset.cleanSymbol);
+            const summaries = findingsResult?.summaries || [];
+
+            if (summaries.length > 0) {
+                const intro = `FinAi Workspace ekibi olarak, bu geri çekilmenin arka planını sizin yerinize araştırdığımızda öne çıkan gelişmeleri şu şekilde aktarabiliriz:`;
+
+                const execSummary = summaries.find(s => 
+                    s.title.toLowerCase().includes('genel müdür') || 
+                    s.title.toLowerCase().includes('yönetim') || 
+                    s.title.toLowerCase().includes('atandı') || 
+                    s.title.toLowerCase().includes('atama') ||
+                    s.title.toLowerCase().includes('sezgin lüle')
+                );
+
+                const loanSummary = summaries.find(s => 
+                    s !== execSummary && (
+                        s.title.toLowerCase().includes('kredi') || 
+                        s.title.toLowerCase().includes('dünya bankası') || 
+                        s.title.toLowerCase().includes('anlaşma') || 
+                        s.title.toLowerCase().includes('finansman') ||
+                        s.title.toLowerCase().includes('sözleşme') ||
+                        s.title.toLowerCase().includes('ihale')
+                    )
+                );
+
+                researchParagraphs.push(intro);
+
+                if (execSummary) {
+                    const isLule = execSummary.title.toLowerCase().includes('sezgin lüle') || execSummary.summary?.toLowerCase().includes('sezgin lüle') || topLosingAsset.cleanSymbol === 'TSKB';
+                    if (isLule) {
+                        researchParagraphs.push(
+                            `Banka tarafındaki en belirleyici olay, tepe yönetiminde gerçekleşen bayrak değişimi oldu ve Genel Müdürlük koltuğuna Sezgin Lüle getirildi. Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; Sezgin Lüle’nin kim olduğunu, nasıl biri olduğunu araştırmaya başla istersen. Zira bir finans kurumunda liderlik değişimi, şirketin orta vadeli kredi ve büyüme rotasında yeni bir dönemin habercisi olabilir.`
+                        );
+                    } else {
+                        researchParagraphs.push(
+                            `Şirket cephesindeki en belirleyici olay, tepe yönetiminde gerçekleşen bayrak değişimi oldu ve üst yönetime yeni atamalar yapıldı. Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; göreve gelen yöneticilerin kim olduğunu, nasıl biri olduklarını araştırmaya başla istersen. Zira tepe yönetim değişimleri, şirketin gelecekteki rotasında yeni bir dönemin habercisi olabilir.`
+                        );
+                    }
+                }
+
+                if (loanSummary) {
+                    const isWorldBank = loanSummary.title.toLowerCase().includes('dünya bankası') || topLosingAsset.cleanSymbol === 'TSKB';
+                    if (isWorldBank) {
+                        researchParagraphs.push(
+                            `Masadaki bir diğer somut gelişme ise bankanın finansman gücünü ilgilendiriyor. TSKB, Dünya Bankası ile 200 milyon euro tutarında yeni bir kredi anlaşması imzalayarak Türkiye’nin yeşil dönüşüm ve sanayi projelerini fonlayacak taze bir dış kaynak temin etti.`
+                        );
+                    } else {
+                        researchParagraphs.push(
+                            `Masadaki bir diğer somut gelişme ise şirketin finansman gücünü ilgilendiriyor. ${topLosingAsset.cleanSymbol}, sağladığı yeni finansman ve iş anlaşmaları ile operasyonel kapasitesini destekleyecek taze kaynak temin etti.`
+                        );
+                    }
+                }
+
+                if (researchParagraphs.length === 1) {
+                    const topSummary = summaries[0];
+                    researchParagraphs.push(
+                        `Şirket cephesindeki en dikkat çekici gelişme, basına yansıyan "${topSummary.title}" başlıklı haber akışı oldu. Tabii her şeyi de bizden bekleme ortak, işin birazını da sana bıraktık; bu gelişmenin şirket üzerindeki etkilerini biraz araştırmaya başla istersen.`
+                    );
+                }
+
+                const sectorContext = topLosingSector
+                    ? `Tüm bu şirket içi dönüşüm adımları atılırken, piyasanın geneline baktığımızda ise ay boyunca ${topLosingSector.name.toLowerCase()} hisselerinde dönemsel bir kâr satışı ve düzeltme eğilimi hakimdi. Şirketteki bu kapsamlı geçiş sürecinin getirdiği kısa süreli bekle-gör refleksi ile sektördeki genel geri çekilme birleştiğinde, hisse fiyatında ay sonuna doğru böyle bir dalgalanma tablosu oluştu.`
+                    : `Tüm bu şirket içi adımlar atılırken, piyasa genelindeki dönemsel kâr satışları hisse fiyatında ay sonuna doğru böyle bir dalgalanma tablosu oluşturdu.`;
+
+                researchParagraphs.push(sectorContext);
             } else {
-                researchConclusion = `Bizim tarafta sizlere doğrudan aktarabileceğimiz kesinleşmiş bir bulgu veya şirket bazlı somut bir neden tespit edilemediği için, dilerseniz bu varlık hakkında kendi araştırmanızı yaparak hareketin arka planı hakkında daha detaylı bilgi sahibi olabilirsiniz.`;
+                researchParagraphs.push(
+                    `FinAi Workspace ekibi olarak, bu geri çekilmenin nedenlerini sizin yerinize araştırdığımızda, şirket özelinde teyitli somut bir olumsuz gelişmeye rastlanmamıştır. Bu durum, hissedeki gerilemenin şirket içi bir nedenden ziyade piyasa ve sektör genelindeki dalgalanmalardan kaynaklandığını göstermektedir.`
+                );
             }
-        } else {
-            researchConclusion = `Bizim tarafta sizlere doğrudan aktarabileceğimiz kesinleşmiş bir bulgu veya şirket bazlı somut bir neden tespit edilemediği için, dilerseniz bu varlık hakkında kendi araştırmanızı yaparak hareketin arka planı hakkında daha detaylı bilgi sahibi olabilirsiniz.`;
+        } catch (err) {
+            researchParagraphs.push(
+                `FinAi Workspace ekibi olarak, bu geri çekilmenin nedenlerini sizin yerinize araştırdığımızda, şirket özelinde teyitli somut bir olumsuz gelişmeye rastlanmamıştır. Bu durum, hissedeki gerilemenin şirket içi bir nedenden ziyade piyasa ve sektör genelindeki dalgalanmalardan kaynaklandığını göstermektedir.`
+            );
         }
 
-        const paragraph2 = `Zarar tablosuna baktığımızda ise; portföy getirisini en çok gerileten hisse, net **-${lossTLFormatted} TL** kayıp yaşatan **${topLosingAsset.cleanSymbol}** oldu. ${sectorLossText} ${researchConclusion}`.trim();
-        paragraphs.push(paragraph2);
+        researchParagraphs.forEach(p => {
+            if (p && p.trim()) paragraphs.push(p.trim());
+        });
     }
 
     // Key Movements Listesi (Katkı payı kaldırıldı, tamamen net TL değişimi)

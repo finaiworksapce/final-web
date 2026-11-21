@@ -34,7 +34,6 @@ import {
 } from "@/lib/finai-monthly-report-service";
 import MonthlyLastMonthSummaryWidget from "@/components/report/MonthlyLastMonthSummaryWidget";
 import MonthlyNextMonthExpectationsWidget from "@/components/report/MonthlyNextMonthExpectationsWidget";
-import FinAiMonthlyNewsFindings from "@/components/report/FinAiMonthlyNewsFindings";
 
 const formatCurrency = (val: number) => {
     return new Intl.NumberFormat("tr-TR", {
@@ -481,14 +480,6 @@ export default function FinAiReportViewPage() {
                             )}
                         </div>
                     </div>
-                </div>
-
-                {/* 3. BÖLÜM: DOĞRULANMIŞ HABER BULGULARI & EDİTORYAL ANLATI (3 İZİNLİ KAYNAK) */}
-                <div className="w-full pt-2">
-                    <FinAiMonthlyNewsFindings 
-                        availableSymbols={sortedAssets.map(a => ({ symbol: a.symbol || a.cleanSymbol, cleanSymbol: a.cleanSymbol, name: a.name }))}
-                        userName={userName || email?.split('@')[0]}
-                    />
                 </div>
 
             </div>

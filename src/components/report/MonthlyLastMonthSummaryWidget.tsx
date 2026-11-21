@@ -46,7 +46,7 @@ export default function MonthlyLastMonthSummaryWidget({
     const activeSymbols = (mentor.keyMovements || mentor.topContributors || []).map(c => c.symbol);
 
     const rawParagraphs = mentor.narrativeParagraphs && mentor.narrativeParagraphs.length > 0
-        ? mentor.narrativeParagraphs
+        ? mentor.narrativeParagraphs.flatMap(p => p.split(/\n\n+/))
         : [mentor.greetingSentence].filter(Boolean);
 
     return (
