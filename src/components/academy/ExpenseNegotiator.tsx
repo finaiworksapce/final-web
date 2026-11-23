@@ -473,14 +473,14 @@ export function ExpenseNegotiator() {
   const showSummaryMetrics = allItemsSettled || isFinishedAll;
 
   return (
-    <div className="w-full space-y-10 animate-in fade-in duration-300">
+    <div className="w-full space-y-8 animate-in fade-in duration-300 flex-1 flex flex-col">
       
       {/* =========================================================================
           ANA ÇALIŞMA MASASI:
-          SOL KOLON: FinAi Workspace Ekibi Mesajlaşma & Pazarlık Alanı (KUTUSUZ)
-          SAĞ KOLON: 1. Hafta Nakit Akış Tablosu (KUTUSUZ - YAN YANA - EŞİT BOYDA)
+          SOL KOLON: FinAi Workspace Ekibi Mesajlaşma & Pazarlık Alanı (%65)
+          SAĞ KOLON: 1. Hafta Nakit Akış Tablosu (%35)
           ========================================================================= */}
-      <div className="w-full bg-white p-6 sm:p-8 lg:p-9 rounded-3xl border border-slate-200/80 shadow-xs space-y-7">
+      <div className="w-full bg-white p-6 sm:p-8 lg:p-10 rounded-3xl border border-slate-200/80 shadow-xs flex-1 flex flex-col justify-between min-h-[580px] space-y-7">
         
         {/* Üst Başlık & Adım Butonları */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
@@ -511,20 +511,20 @@ export function ExpenseNegotiator() {
         </div>
 
         {/* =========================================================================
-            İKİLİ KOLON DÜZENİ (ITEMS-STRETCH İLE BOY EŞİTLEME):
-            SOL: FinAi Workspace Ekibi Mesajlaşması (Kutusuz, Temiz Arka Plan)
-            SAĞ: 1. Hafta Nakit Akış Tablosu (Kutusuz, Yan Yana, Solla Eşit Boy)
+            İKİLİ DÜZEN (SOHBET %65, TABLO %35, BOY EŞİT):
+            SOL: FinAi Workspace Ekibi Mesajlaşması (%65)
+            SAĞ: 1. Hafta Nakit Akış Tablosu (%35)
             ========================================================================= */}
         {currentItem && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-stretch flex-1 w-full pt-1">
             
             {/* =====================================================================
-                SOL KOLON: FİNAİ WORKSPACE EKİBİ CANLI MESAJLAŞMA (KUTUSUZ) (7 Kolon)
+                SOL KOLON: FİNAİ WORKSPACE EKİBİ CANLI MESAJLAŞMA (%65 BOYUTUNDA)
                 ===================================================================== */}
-            <div className="lg:col-span-7 flex flex-col justify-between space-y-5 h-full lg:pr-8 lg:border-r lg:border-slate-100">
+            <div className="w-full lg:w-[65%] flex flex-col justify-between space-y-5 h-full lg:pr-8 lg:border-r lg:border-slate-100">
               
               {/* Canlı Mesajlaşma Akışı */}
-              <div className="flex-1 space-y-4 overflow-y-auto max-h-[380px] min-h-[220px] pr-1">
+              <div className="flex-1 space-y-4 overflow-y-auto max-h-[440px] min-h-[260px] pr-2">
                 
                 {/* Mesaj Balonları (Diyalog Geçmişi) */}
                 {currentItem.chatHistory && currentItem.chatHistory.length > 0 ? (
@@ -538,9 +538,7 @@ export function ExpenseNegotiator() {
                         }`}
                       >
                         {isAi && (
-                          <div className="w-8 h-8 rounded-full bg-[#0E1E38] text-white flex items-center justify-center p-1.5 shrink-0 mt-0.5 shadow-2xs overflow-hidden border border-slate-200/50">
-                            <img src="/icon.png" alt="FinAi" className="w-full h-full object-contain rounded-full" />
-                          </div>
+                          <img src="/icon.png" alt="FinAi" className="w-7 h-7 object-contain shrink-0 mt-0.5" />
                         )}
 
                         <div className="space-y-1">
@@ -566,9 +564,7 @@ export function ExpenseNegotiator() {
                   })
                 ) : (
                   <div className="flex gap-3 max-w-[85%] self-start">
-                    <div className="w-8 h-8 rounded-full bg-[#0E1E38] text-white flex items-center justify-center p-1.5 shrink-0 mt-0.5 shadow-2xs overflow-hidden border border-slate-200/50">
-                      <img src="/icon.png" alt="FinAi" className="w-full h-full object-contain rounded-full" />
-                    </div>
+                    <img src="/icon.png" alt="FinAi" className="w-7 h-7 object-contain shrink-0 mt-0.5" />
                     <div className="p-4 sm:p-5 rounded-2xl bg-[#0E1E38] text-slate-100 rounded-tl-xs text-xs sm:text-sm lg:text-[15px] leading-relaxed shadow-md">
                       {currentItem.lastDialogue}
                     </div>
@@ -668,9 +664,9 @@ export function ExpenseNegotiator() {
             </div>
 
             {/* =====================================================================
-                SAĞ KOLON: 1. HAFTA NAKİT AKIŞ TABLON (KUTUSUZ - YAN YANA - EŞİT BOY) (5 Kolon)
+                SAĞ KOLON: 1. HAFTA NAKİT AKIŞ TABLON (%35 BOYUTUNDA)
                 ===================================================================== */}
-            <div className="lg:col-span-5 flex flex-col justify-between space-y-4 h-full">
+            <div className="w-full lg:w-[35%] flex flex-col justify-between space-y-4 h-full">
               
               {/* Tablo Başlığı ve Hızlı Düzenle Butonu */}
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">

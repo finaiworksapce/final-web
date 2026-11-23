@@ -283,9 +283,9 @@ function AkademiContent() {
             - Kullanıcı uygulamaya geçtiğinde öğretici notlar ve başlık kalkar,
               sadece verimli uygulama tablosu kalır.
             ========================================================================= */
-        <div className="min-h-screen w-full bg-white flex flex-col justify-between p-6 sm:p-10 lg:p-12 xl:p-16">
+        <div className={`min-h-screen w-full bg-white flex flex-col justify-between ${isSimulatorOpen ? 'p-4 sm:p-6 lg:p-8' : 'p-6 sm:p-10 lg:p-12 xl:p-16'}`}>
           
-          <div className="space-y-8 w-full">
+          <div className={`w-full ${isSimulatorOpen ? 'flex-1 flex flex-col space-y-6' : 'space-y-8'}`}>
             
             {/* Üst Navigasyon Çubuğu */}
             <div className="flex items-center justify-between border-b border-slate-200 pb-4 w-full">
@@ -388,7 +388,7 @@ function AkademiContent() {
             ) : (
               /* FAZ 2: SAF UYGULAMA MASASI
                  (Tüm sayfa genişliğinde, dikkat dağıtmayan doğrudan karar istasyonu) */
-              <div className="space-y-8 animate-in fade-in duration-300 w-full">
+              <div className="flex-1 flex flex-col space-y-6 animate-in fade-in duration-300 w-full">
                 {selectedTopicId === "1-2" ? (
                   <ExpenseNegotiator />
                 ) : (

@@ -22,6 +22,18 @@ const DEFAULT_EXPENSES: CashItem[] = [
 
 const STORAGE_KEY = 'finai_cashflow_data_v2';
 
+const PRESET_EXPENSE_CATEGORIES = [
+  { label: 'Kira / Barınma', icon: '🏠', defaultVal: 12000 },
+  { label: 'Mutfak ve Market Gideri', icon: '🛒', defaultVal: 6500 },
+  { label: 'Faturalar (Elektrik, Su, İnternet)', icon: '⚡', defaultVal: 2200 },
+  { label: 'Ulaşım ve Seyahat', icon: '🚗', defaultVal: 2500 },
+  { label: 'Dışarıda Yeme / Sosyal Yaşam', icon: '☕', defaultVal: 2000 },
+  { label: 'Abonelikler ve Eğlence', icon: '📱', defaultVal: 600 },
+  { label: 'Kredi / Borç Taksiti', icon: '💳', defaultVal: 4000 },
+  { label: 'Giyim ve Kişisel Bakım', icon: '👕', defaultVal: 1500 },
+  { label: 'Diğer', icon: '✏️', defaultVal: 1000 },
+];
+
 export function CashFlowSimulator() {
   const [incomes, setIncomes] = useState<CashItem[]>(DEFAULT_INCOMES);
   const [expenses, setExpenses] = useState<CashItem[]>(DEFAULT_EXPENSES);
@@ -29,6 +41,7 @@ export function CashFlowSimulator() {
   const [newIncomeAmount, setNewIncomeAmount] = useState('');
   const [newExpenseName, setNewExpenseName] = useState('');
   const [newExpenseAmount, setNewExpenseAmount] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [isLessonCompleted, setIsLessonCompleted] = useState(false);
 
   // LocalStorage senkronizasyonu
@@ -115,15 +128,17 @@ export function CashFlowSimulator() {
 
   const handleAddExpense = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newExpenseName.trim() || !newExpenseAmount) return;
+    const name = newExpenseName.trim() || (selectedCategory && selectedCategory !== 'Diğer' ? selectedCategory : '');
+    if (!name || !newExpenseAmount) return;
     const updated = [
       ...expenses,
-      { id: 'exp-' + Date.now(), name: newExpenseName.trim(), amount: Math.abs(Number(newExpenseAmount)) || 0 },
+      { id: 'exp-' + Date.now(), name, amount: Math.abs(Number(newExpenseAmount)) || 0 },
     ];
     setExpenses(updated);
     saveToStorage(incomes, updated);
     setNewExpenseName('');
     setNewExpenseAmount('');
+    setSelectedCategory('');
   };
 
   const handleDeleteExpense = (id: string) => {
@@ -494,19 +509,58 @@ export function CashFlowSimulator() {
             )}
           </div>
 
+          {/* Hızlı Kategori Seçimi */}
+          <div className="space-y-1.5 pt-1">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+              Hızlı Kategori Seçimi
+            </span>
+            <div className="flex flex-wrap gap-1.5">
+              {PRESET_EXPENSE_CATEGORIES.map((cat) => {
+                const isSelected = selectedCategory === cat.label || (!selectedCategory && newExpenseName === cat.label);
+                return (
+                  <button
+                    key={cat.label}
+                    type="button"
+                    onClick={() => {
+                      if (cat.label === 'Diğer') {
+                        setSelectedCategory('Diğer');
+                        setNewExpenseName('');
+                      } else {
+                        setSelectedCategory(cat.label);
+                        setNewExpenseName(cat.label);
+                        if (!newExpenseAmount) setNewExpenseAmount(String(cat.defaultVal));
+                      }
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-xs transition-all cursor-pointer flex items-center gap-1.5 ${
+                      isSelected
+                        ? 'bg-rose-100 text-rose-800 font-bold border border-rose-300 shadow-2xs'
+                        : 'bg-white border border-slate-200 text-slate-600 hover:border-rose-300 hover:text-rose-700'
+                    }`}
+                  >
+                    <span>{cat.icon}</span>
+                    <span>{cat.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Yeni Gider Ekleme Formu */}
           <form onSubmit={handleAddExpense} className="flex gap-2.5 pt-1">
             <input
               type="text"
-              placeholder="Yeni gider kalemi (örn. Abonelikler, Spor)"
+              placeholder={selectedCategory === 'Diğer' ? "Özel gider adı belirle (örn. Spor, Kurs, Evcil Hayvan)" : "Gider kalemi adı (veya yukarıdan kategori seç)"}
               value={newExpenseName}
-              onChange={(e) => setNewExpenseName(e.target.value)}
+              onChange={(e) => {
+                setNewExpenseName(e.target.value);
+                if (selectedCategory && selectedCategory !== 'Diğer') setSelectedCategory('');
+              }}
               className="flex-1 text-xs bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-[#0E1E38] placeholder:text-slate-400 focus:outline-none focus:border-rose-500 focus:bg-white transition-colors"
             />
             <input
               type="number"
               min="0"
-              placeholder="Tutar"
+              placeholder="Tutar (₺)"
               value={newExpenseAmount}
               onChange={(e) => setNewExpenseAmount(e.target.value)}
               className="w-32 text-xs bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-[#0E1E38] placeholder:text-slate-400 focus:outline-none focus:border-rose-500 focus:bg-white transition-colors font-semibold"
