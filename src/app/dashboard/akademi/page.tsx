@@ -352,12 +352,12 @@ function AkademiContent() {
                       <p key={pIdx}>{p}</p>
                     ))}
 
-                    {/* İki Kritik Soru (Özel Tasarımlı Liste) */}
+                    {/* İki Kritik Soru (Widget YOK - Doğrudan Saf Metin Akışı) */}
                     {lessonContent.bulletQuestions && lessonContent.bulletQuestions.length > 0 && (
-                      <div className="my-6 p-6 sm:p-8 rounded-2xl bg-blue-50/60 border border-blue-100/80 space-y-4">
+                      <div className="space-y-4 my-6 pl-2 sm:pl-4 border-l-2 border-[#004BFA]/30 py-1">
                         {lessonContent.bulletQuestions.map((q, qIdx) => (
                           <div key={qIdx} className="flex items-start gap-3">
-                            <span className="w-2.5 h-2.5 rounded-full bg-[#004BFA] mt-2 sm:mt-2.5 shrink-0" />
+                            <span className="w-2 h-2 rounded-full bg-[#004BFA] mt-2 sm:mt-2.5 shrink-0" />
                             <p className="text-base sm:text-lg lg:text-xl font-medium text-[#0E1E38] italic">
                               {q}
                             </p>

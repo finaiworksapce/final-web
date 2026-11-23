@@ -4,15 +4,14 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { 
   ShieldCheck, 
   TrendingDown, 
-  Sparkles, 
   ArrowRight, 
   Check, 
-  RotateCcw, 
   ArrowLeft,
   Building2,
   Flame,
   CheckCircle2,
-  Coins
+  Coins,
+  Sparkles
 } from 'lucide-react';
 import { useUser } from '@/components/providers/UserProvider';
 import { 
@@ -270,67 +269,76 @@ export function ExpenseNegotiator() {
     <div className="w-full space-y-8 animate-in fade-in duration-300">
       
       {/* =========================================================================
-          ÜST GÖSTERGE & CANLI TASARRUF SAYACI
+          ÜST GÖSTERGE & CANLI TASARRUF SAYACI (Minimalist ve Rafine Kartlar)
           ========================================================================= */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
-        <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200">
-          <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">
-            Önceki Aylık Gider
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 w-full">
+        
+        {/* Kart 1: Önceki Gider */}
+        <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+            1. Hafta Sıfır Noktan
           </span>
-          <div className="text-xl sm:text-2xl font-bold text-[#0E1E38] clash-title mt-1">
+          <div className="text-2xl sm:text-3xl font-normal text-[#0E1E38] clash-title mt-2">
             {totalOriginal.toLocaleString('tr-TR')} ₺
           </div>
-          <span className="text-[11px] text-slate-400">1. Haftadaki Sıfır Noktan</span>
+          <span className="text-xs text-slate-500 mt-1">Önceki Aylık Toplam Gider</span>
         </div>
 
-        <div className="p-5 rounded-2xl bg-blue-50/70 border border-blue-100">
-          <span className="text-xs font-semibold text-[#004BFA] uppercase tracking-wider block">
-            Yeni Optimize Gider
+        {/* Kart 2: Yeni Optimize Gider */}
+        <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <span className="text-[11px] font-semibold text-[#004BFA] uppercase tracking-wider block">
+            Yeni Masadaki Bütçe
           </span>
-          <div className="text-xl sm:text-2xl font-bold text-[#004BFA] clash-title mt-1">
+          <div className="text-2xl sm:text-3xl font-normal text-[#004BFA] clash-title mt-2">
             {totalCurrent.toLocaleString('tr-TR')} ₺
           </div>
-          <span className="text-[11px] text-blue-500/80">Pazarlık Sonrası Masadaki Bütçe</span>
+          <span className="text-xs text-slate-500 mt-1">Optimize Edilmiş Aylık Gider</span>
         </div>
 
-        <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-100">
-          <span className="text-xs font-semibold text-emerald-700 uppercase tracking-wider block flex items-center gap-1.5">
+        {/* Kart 3: Aylık Kurtarılan Net */}
+        <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <span className="text-[11px] font-semibold text-emerald-600 uppercase tracking-wider flex items-center gap-1.5">
             <TrendingDown className="w-3.5 h-3.5 text-emerald-600" />
             <span>Aylık Kurtarılan Net</span>
           </span>
-          <div className="text-xl sm:text-2xl font-bold text-emerald-600 clash-title mt-1">
+          <div className="text-2xl sm:text-3xl font-normal text-emerald-600 clash-title mt-2">
             +{monthlySaved.toLocaleString('tr-TR')} ₺ / ay
           </div>
-          <span className="text-[11px] text-emerald-600/80">Tüketimden Kurtarılan Taze Nakit</span>
+          <span className="text-xs text-slate-500 mt-1">Tüketimden Kurtarılan Taze Nakit</span>
         </div>
 
-        <div className="p-5 rounded-2xl bg-[#0E1E38] text-white border border-white/10 shadow-md">
-          <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider block flex items-center gap-1.5">
-            <Coins className="w-3.5 h-3.5 text-emerald-400" />
+        {/* Kart 4: Yıllık Ortaklık Tohumu */}
+        <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <span className="text-[11px] font-semibold text-[#0E1E38] uppercase tracking-wider flex items-center gap-1.5">
+            <Coins className="w-3.5 h-3.5 text-[#004BFA]" />
             <span>Yıllık Ortaklık Tohumu</span>
           </span>
-          <div className="text-xl sm:text-2xl font-bold text-white clash-title mt-1">
+          <div className="text-2xl sm:text-3xl font-normal text-[#0E1E38] clash-title mt-2">
             +{yearlySaved.toLocaleString('tr-TR')} ₺ / yıl
           </div>
-          <span className="text-[11px] text-white/60">BIST Şirketlerine Yatırım Gücü</span>
+          <span className="text-xs text-slate-500 mt-1">BIST Şirketlerine Yatırım Gücü</span>
         </div>
+
       </div>
 
       {/* =========================================================================
-          ADIM ÇUBUĞU (Hangi Kalemdeyiz?)
+          ANA ÇALIŞMA ALANI & PAZARLIK MASASI
           ========================================================================= */}
-      <div className="w-full bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
-          <div>
-            <h4 className="text-base sm:text-lg font-semibold text-[#0E1E38] clash-title">
-              Harcama Masası & Pazarlık İstasyonu
-            </h4>
-            <p className="text-xs text-slate-500">
+      <div className="w-full bg-white p-6 sm:p-8 lg:p-10 rounded-3xl border border-slate-200/80 shadow-xs space-y-6">
+        
+        {/* Üst Başlık & İlerleme Çubuğu */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+          <div className="space-y-0.5">
+            <h3 className="text-xl sm:text-2xl font-normal text-[#0E1E38] clash-title tracking-tight">
+              Kişisel Harcama Masası & Pazarlık
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-500 font-normal">
               Kalem {currentIndex + 1} / {items.length} — FinAi Koçu ile karşılıklı uzlaşarak sızıntıları buduyoruz.
             </p>
           </div>
 
-          <div className="flex items-center gap-1.5">
+          {/* İlerleme Bölmeleri */}
+          <div className="flex items-center gap-1.5 shrink-0">
             {items.map((it, idx) => (
               <button
                 key={it.id}
@@ -340,10 +348,10 @@ export function ExpenseNegotiator() {
                   idx === currentIndex
                     ? 'w-8 bg-[#004BFA]'
                     : it.status === 'settled'
-                    ? 'w-4 bg-emerald-500'
-                    : 'w-4 bg-slate-200 hover:bg-slate-300'
+                    ? 'w-5 bg-emerald-500'
+                    : 'w-5 bg-slate-200 hover:bg-slate-300'
                 }`}
-                title={`${it.name} (${it.status === 'settled' ? 'Tamamlandı' : 'Bekliyor'})`}
+                title={`${it.name} (${it.status === 'settled' ? 'Uzlaşıldı' : 'Sırada'})`}
               />
             ))}
           </div>
@@ -353,59 +361,65 @@ export function ExpenseNegotiator() {
             ODAKLANILAN GİDER KARTI VE DİYALOG ALANI
             ========================================================================= */}
         {currentItem && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-2">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 pt-2">
             
-            {/* SOL: ODAK KALEM KARTI (4 Kolon) */}
-            <div className="lg:col-span-5 p-6 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100/60 border border-slate-200 flex flex-col justify-between space-y-6">
-              <div className="space-y-3">
+            {/* SOL KOLON: ODAK KALEM KARTI (5 Kolon) */}
+            <div className="lg:col-span-5 p-6 sm:p-7 rounded-2xl bg-slate-50/70 border border-slate-200/70 flex flex-col justify-between space-y-6">
+              
+              <div className="space-y-4">
                 <div className="flex items-center justify-between gap-2">
                   <span
                     className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${
                       currentItem.category === 'A'
-                        ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                        ? 'bg-slate-200/80 text-slate-700 border border-slate-300/60'
                         : currentItem.category === 'B'
-                        ? 'bg-blue-100 text-blue-800 border border-blue-200'
-                        : 'bg-rose-100 text-rose-800 border border-rose-200'
+                        ? 'bg-blue-50 text-[#004BFA] border border-blue-100'
+                        : 'bg-purple-50 text-purple-700 border border-purple-100'
                     }`}
                   >
-                    {currentItem.category === 'A' && <ShieldCheck className="w-3.5 h-3.5" />}
-                    {currentItem.category === 'B' && <Building2 className="w-3.5 h-3.5" />}
-                    {currentItem.category === 'C' && <Flame className="w-3.5 h-3.5" />}
+                    {currentItem.category === 'A' && <ShieldCheck className="w-3.5 h-3.5 text-slate-600" />}
+                    {currentItem.category === 'B' && <Building2 className="w-3.5 h-3.5 text-[#004BFA]" />}
+                    {currentItem.category === 'C' && <Flame className="w-3.5 h-3.5 text-purple-600" />}
                     <span>
-                      {currentItem.category === 'A' && 'A Kategorisi (Sabit Yaşam)'}
-                      {currentItem.category === 'B' && 'B Kategorisi (Yarı-Değişken)'}
-                      {currentItem.category === 'C' && 'C Kategorisi (Esnek / Keyfi)'}
+                      {currentItem.category === 'A' && 'Sabit Yaşam Gideri'}
+                      {currentItem.category === 'B' && 'Yarı-Değişken Gider'}
+                      {currentItem.category === 'C' && 'Esnek / Keyfi Tüketim'}
                     </span>
                   </span>
 
                   {isCurrentSettled && (
-                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
                       <Check className="w-3 h-3" />
-                      <span>Anlaşıldı</span>
+                      <span>Uzlaşıldı</span>
                     </span>
                   )}
                 </div>
 
-                <h3 className="text-xl sm:text-2xl font-semibold text-[#0E1E38] clash-title">
-                  {currentItem.name}
-                </h3>
+                <div>
+                  <h4 className="text-2xl sm:text-3xl font-medium text-[#0E1E38] clash-title tracking-tight">
+                    {currentItem.name}
+                  </h4>
+                </div>
 
-                <div className="pt-2 space-y-1.5">
+                {/* Sayısal Göstergeler */}
+                <div className="pt-2 space-y-2 border-t border-slate-200/60">
                   <div className="flex items-center justify-between text-xs text-slate-500">
-                    <span>1. Hafta Tutarın:</span>
+                    <span>1. Hafta Tutarın</span>
                     <span className="font-semibold text-slate-700">
                       {currentItem.originalAmount.toLocaleString('tr-TR')} ₺
                     </span>
                   </div>
+                  
                   <div className="flex items-center justify-between text-xs text-slate-500">
-                    <span>Masa Tutarı:</span>
-                    <span className="text-base font-bold text-[#004BFA]">
+                    <span>Masa Tutarı</span>
+                    <span className="text-lg sm:text-xl font-bold text-[#004BFA] clash-title">
                       {currentItem.currentAmount.toLocaleString('tr-TR')} ₺
                     </span>
                   </div>
+
                   {currentItem.originalAmount > currentItem.currentAmount && (
-                    <div className="flex items-center justify-between text-xs text-emerald-600 font-semibold pt-1 border-t border-slate-200/60">
-                      <span>Kurtarılan Tasarruf:</span>
+                    <div className="flex items-center justify-between text-xs text-emerald-600 font-semibold pt-1 border-t border-slate-200/40">
+                      <span>Kurtarılan Tasarruf</span>
                       <span>
                         +{(currentItem.originalAmount - currentItem.currentAmount).toLocaleString('tr-TR')} ₺ / ay
                       </span>
@@ -416,29 +430,29 @@ export function ExpenseNegotiator() {
 
               {/* Hızlı Kısma Seçenekleri (Kullanıcıya Kolaylık) */}
               {!isCurrentSettled && currentItem.category !== 'A' && (
-                <div className="space-y-2 pt-2 border-t border-slate-200">
-                  <span className="text-[11px] font-semibold text-slate-500 block">
-                    Hızlı Öneri Seçenekleri:
+                <div className="space-y-2 pt-3 border-t border-slate-200/60">
+                  <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+                    Hızlı Seçenekler:
                   </span>
                   <div className="grid grid-cols-3 gap-2">
                     <button
                       type="button"
                       onClick={() => handleOffer(Math.round(currentItem.originalAmount * 0.9))}
-                      className="px-2.5 py-2 text-xs font-semibold rounded-lg bg-white border border-slate-200 text-slate-700 hover:border-[#004BFA] hover:text-[#004BFA] transition-all cursor-pointer text-center"
+                      className="px-2.5 py-1.5 text-xs font-medium rounded-full bg-white border border-slate-200 text-slate-700 hover:border-[#004BFA] hover:text-[#004BFA] hover:bg-blue-50/20 transition-all cursor-pointer text-center"
                     >
-                      -%10 Budama
+                      -%10 Kıs
                     </button>
                     <button
                       type="button"
                       onClick={() => handleOffer(Math.round(currentItem.originalAmount * 0.75))}
-                      className="px-2.5 py-2 text-xs font-semibold rounded-lg bg-white border border-slate-200 text-slate-700 hover:border-[#004BFA] hover:text-[#004BFA] transition-all cursor-pointer text-center"
+                      className="px-2.5 py-1.5 text-xs font-medium rounded-full bg-white border border-slate-200 text-slate-700 hover:border-[#004BFA] hover:text-[#004BFA] hover:bg-blue-50/20 transition-all cursor-pointer text-center"
                     >
-                      -%25 Akıllı
+                      -%25 Budama
                     </button>
                     <button
                       type="button"
                       onClick={() => handleOffer(Math.round(currentItem.originalAmount * 0.5))}
-                      className="px-2.5 py-2 text-xs font-semibold rounded-lg bg-white border border-slate-200 text-slate-700 hover:border-[#004BFA] hover:text-[#004BFA] transition-all cursor-pointer text-center"
+                      className="px-2.5 py-1.5 text-xs font-medium rounded-full bg-white border border-slate-200 text-slate-700 hover:border-[#004BFA] hover:text-[#004BFA] hover:bg-blue-50/20 transition-all cursor-pointer text-center"
                     >
                       -%50 Cesur
                     </button>
@@ -447,47 +461,48 @@ export function ExpenseNegotiator() {
               )}
             </div>
 
-            {/* SAĞ: FİNAİ KOÇU VE PAZARLIK ALANI (7 Kolon) */}
+            {/* SAĞ KOLON: FİNAİ KOÇU VE DİYALOG ALANI (7 Kolon) */}
             <div className="lg:col-span-7 flex flex-col justify-between space-y-6">
               
-              {/* FinAi Koçunun Konuşma Balonu */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-[#004BFA] flex items-center justify-center text-white text-xs font-bold shadow-md shrink-0">
+              {/* FinAi Koçunun Konuşma Kartı (Rafine Lacivert Gradyan Kart) */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full bg-[#0E1E38] text-white text-xs font-bold flex items-center justify-center border border-slate-200 shadow-xs shrink-0">
                     FA
                   </div>
                   <div>
-                    <h5 className="text-sm font-semibold text-[#0E1E38] leading-tight">
-                      FinAi Tasarruf Koçu (İş Ortağın)
+                    <h5 className="text-sm font-semibold text-[#0E1E38]">
+                      FinAi Tasarruf Koçu
                     </h5>
                     <span className="text-[11px] text-slate-400">
                       {currentItem.category === 'A'
                         ? '0 Pazarlık (Korumalı Sabit Gider)'
                         : currentItem.category === 'B'
-                        ? `${1 - currentItem.turns > 0 ? '1 Karşı Teklif Hakkı Kaldı' : 'Son Uzlaşma Turu'}`
-                        : `${2 - currentItem.turns > 0 ? `${2 - currentItem.turns} Israr Turu Kaldı` : 'Son Uzlaşma Turu'}`}
+                        ? `${1 - currentItem.turns > 0 ? '1 Karşı Teklif Hakkı' : 'Son Uzlaşma Turu'}`
+                        : `${2 - currentItem.turns > 0 ? `${2 - currentItem.turns} Israr Turu` : 'Son Uzlaşma Turu'}`}
                     </span>
                   </div>
                 </div>
 
-                <div className="p-5 sm:p-6 rounded-2xl bg-slate-900 text-white space-y-3 relative overflow-hidden shadow-lg border border-slate-800">
-                  <div className="text-sm sm:text-base leading-relaxed text-slate-100 font-normal">
+                <div className="p-6 sm:p-7 rounded-2xl bg-gradient-to-br from-[#0E1E38] via-[#122444] to-[#0A1628] text-white shadow-xl shadow-[#0E1E38]/10 border border-white/10 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-48 h-48 bg-[#004BFA]/10 rounded-full blur-[60px] pointer-events-none" />
+                  <p className="text-sm sm:text-base leading-relaxed text-slate-100 font-normal relative z-10">
                     {currentItem.lastDialogue}
-                  </div>
+                  </p>
                 </div>
               </div>
 
-              {/* Kullanıcı Karşı Hamle / Cevap Girişi */}
-              <div className="space-y-3 pt-2 border-t border-slate-100">
+              {/* Kullanıcı Karşı Hamle / Teklif Alanı */}
+              <div className="space-y-3 pt-2">
                 {!isCurrentSettled ? (
                   currentItem.category === 'A' ? (
                     <button
                       type="button"
                       onClick={() => handleOffer(currentItem.originalAmount)}
-                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm font-semibold transition-all duration-200 shadow-md cursor-pointer"
+                      className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer"
                     >
                       <Check className="w-4 h-4" />
-                      <span>Onaylıyorum, Bu Sabit Gideri Aynen Koruyalım</span>
+                      <span>Bu Sabit Gideri Aynen Koru ve Devam Et →</span>
                     </button>
                   ) : (
                     <form
@@ -503,8 +518,8 @@ export function ExpenseNegotiator() {
                           type="number"
                           value={userOfferInput}
                           onChange={(e) => setUserOfferInput(e.target.value)}
-                          placeholder="Teklif ettiğin yeni tutar (örn: 5500)"
-                          className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200 text-sm font-semibold text-[#0E1E38] placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-[#004BFA]/20 focus:border-[#004BFA]"
+                          placeholder="Önerdiğin yeni aylık tutar (örn: 5500)"
+                          className="w-full px-4 py-3.5 rounded-xl bg-slate-50 border border-slate-200/80 text-sm font-semibold text-[#0E1E38] placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-[#004BFA]/20 focus:border-[#004BFA] transition-all"
                         />
                         <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 font-semibold">
                           ₺
@@ -514,15 +529,15 @@ export function ExpenseNegotiator() {
                       <button
                         type="submit"
                         disabled={!userOfferInput || Number(userOfferInput) <= 0}
-                        className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] disabled:bg-slate-200 disabled:text-slate-400 text-white text-sm font-semibold transition-all duration-200 shadow-md cursor-pointer disabled:cursor-not-allowed shrink-0"
+                        className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] disabled:bg-slate-100 disabled:text-slate-400 text-white text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer disabled:cursor-not-allowed shrink-0"
                       >
-                        Pazarlık Et / Teklif Ver
+                        Teklif Et →
                       </button>
                     </form>
                   )
                 ) : (
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-xl bg-emerald-50 border border-emerald-200">
-                    <div className="flex items-center gap-2 text-emerald-800 text-xs sm:text-sm font-semibold">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-xl bg-emerald-50/70 border border-emerald-200/80">
+                    <div className="flex items-center gap-2 text-emerald-800 text-xs sm:text-sm font-medium">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                       <span>Bu kalemde uzlaşma sağlandı ({currentItem.currentAmount.toLocaleString('tr-TR')} ₺).</span>
                     </div>
@@ -540,7 +555,7 @@ export function ExpenseNegotiator() {
                   </div>
                 )}
 
-                {/* Önceki Kalem Butonu */}
+                {/* Alt Gezinme Barı */}
                 <div className="flex justify-between items-center text-xs text-slate-400 pt-1">
                   <button
                     type="button"
