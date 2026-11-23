@@ -31,7 +31,12 @@ interface NegotiatedItem extends PredefinedExpense {
   lastDialogue: string;
 }
 
-const STORAGE_KEY = 'finai_cash_flow_data';
+const POSSIBLE_STORAGE_KEYS = [
+  'finai_cashflow_data_v2',
+  'finai_cashflow_data',
+  'finai_cash_flow_data',
+  'finai_cash_flow',
+];
 const LESSON_2_KEY = 'finai_lesson_2_completed';
 
 function detectCategory(name: string): ExpenseCategory {
@@ -59,20 +64,28 @@ export function ExpenseNegotiator() {
         setIsLessonCompleted(true);
       }
 
-      const saved = localStorage.getItem(STORAGE_KEY);
       let loadedExpenses: { name: string; amount: number }[] = [];
 
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed.expenses && Array.isArray(parsed.expenses) && parsed.expenses.length > 0) {
-          loadedExpenses = parsed.expenses.map((e: any) => ({
-            name: e.name || 'Özel Kalem',
-            amount: Number(e.amount) || 1000,
-          }));
+      // 1. Haftada kaydedilmiş olabilecek tüm olası anahtarları sırayla tara
+      for (const key of POSSIBLE_STORAGE_KEYS) {
+        const saved = localStorage.getItem(key);
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            if (parsed && parsed.expenses && Array.isArray(parsed.expenses) && parsed.expenses.length > 0) {
+              loadedExpenses = parsed.expenses.map((e: any) => ({
+                name: e.name || 'Özel Kalem',
+                amount: Number(e.amount) || 0,
+              })).filter((e: any) => e.amount > 0 || e.name);
+              if (loadedExpenses.length > 0) break;
+            }
+          } catch {
+            // continue
+          }
         }
       }
 
-      // Eğer 1. haftada gider kaydedilmediyse varsayılan 4 kalemi alalım
+      // Eğer 1. haftada hiçbir gider bulunamadıysa varsayılan 4 kalemi alalım
       if (loadedExpenses.length === 0) {
         loadedExpenses = PREDEFINED_EXPENSES.slice(0, 4).map((p) => ({
           name: p.name,
@@ -237,12 +250,19 @@ export function ExpenseNegotiator() {
     try {
       localStorage.setItem(LESSON_2_KEY, 'true');
 
-      // Güncellenmiş optimize giderleri finai_cash_flow_data içine kaydet
-      const saved = localStorage.getItem(STORAGE_KEY);
+      // Güncellenmiş optimize giderleri hem v2 hem legacy anahtarlarına kaydet
       let incomes = [{ id: 'inc-1', name: 'Aylık Gelir', amount: 35000 }];
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed.incomes) incomes = parsed.incomes;
+      for (const key of POSSIBLE_STORAGE_KEYS) {
+        const saved = localStorage.getItem(key);
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            if (parsed && parsed.incomes) {
+              incomes = parsed.incomes;
+              break;
+            }
+          } catch {}
+        }
       }
 
       const updatedExpenses = items.map((it) => ({
@@ -251,13 +271,14 @@ export function ExpenseNegotiator() {
         amount: it.currentAmount,
       }));
 
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify({
-          incomes,
-          expenses: updatedExpenses,
-        })
-      );
+      const payload = JSON.stringify({
+        incomes,
+        expenses: updatedExpenses,
+      });
+
+      for (const key of POSSIBLE_STORAGE_KEYS) {
+        localStorage.setItem(key, payload);
+      }
     } catch {
       // ignore
     }
