@@ -11,8 +11,9 @@ import {
   Play, 
   BookOpen
 } from "lucide-react";
-import { UNIT_1_CONFIG, getLesson1Content } from "@/data/academy/unit-1";
+import { UNIT_1_CONFIG, getLessonContent } from "@/data/academy/unit-1";
 import { CashFlowSimulator } from "@/components/academy/CashFlowSimulator";
+import { ExpenseNegotiator } from "@/components/academy/ExpenseNegotiator";
 import { useUser } from "@/components/providers/UserProvider";
 
 function AkademiContent() {
@@ -28,14 +29,25 @@ function AkademiContent() {
     // UserProvider dışı koruma
   }
 
-  const lessonContent = useMemo(() => getLesson1Content(userName), [userName]);
-
   // URL senkronizasyonu
   const urlTopic = searchParams.get("ders");
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(urlTopic);
+
+  const lessonContent = useMemo(() => {
+    return getLessonContent(selectedTopicId || "1-1", userName);
+  }, [selectedTopicId, userName]);
   
   // Uygulama ekranı açık mı durumu
   const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
+  const [isLesson1Done, setIsLesson1Done] = useState(false);
+
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        setIsLesson1Done(localStorage.getItem("finai_lesson_1_completed") === "true");
+      }
+    } catch {}
+  }, []);
 
   useEffect(() => {
     setSelectedTopicId(urlTopic);
@@ -87,19 +99,21 @@ function AkademiContent() {
               <div className="w-full p-5 sm:p-6 xl:p-8 bg-[#0E1E38] text-white rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl shadow-[#0E1E38]/10 border border-white/10">
                 <div className="space-y-1.5 flex-1 pr-4">
                   <h3 className="text-lg sm:text-xl lg:text-2xl font-medium text-white clash-title tracking-tight">
-                    Gelir ve Gider Yönetimi
+                    {isLesson1Done ? "Tasarruf Nedir ve Nasıl Yapılır?" : "Gelir ve Gider Yönetimi"}
                   </h3>
                   <p className="text-xs sm:text-sm lg:text-base text-white/70 leading-relaxed font-normal">
-                    Finansal gücün ne kadar kazandığınla değil; ay bittiğinde masada ne bırakabildiğinle başlar.
+                    {isLesson1Done 
+                      ? "Cimrilik değil, cüzdandaki görünmeyen kaçakları tespit etme ve budama bilinci." 
+                      : "Finansal gücün ne kadar kazandığınla değil; ay bittiğinde masada ne bırakabildiğinle başlar."}
                   </p>
                 </div>
 
                 <button
                   type="button"
-                  onClick={() => handleOpenTopic("1-1")}
+                  onClick={() => handleOpenTopic(isLesson1Done ? "1-2" : "1-1")}
                   className="inline-flex items-center justify-center gap-2 px-5 py-3 xl:px-6 xl:py-3.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-xs sm:text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg shrink-0 cursor-pointer group"
                 >
-                  <span>1. Haftanın Dersine Başla</span>
+                  <span>{isLesson1Done ? "2. Haftanın Dersine Başla" : "1. Haftanın Dersine Başla"}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
@@ -307,28 +321,56 @@ function AkademiContent() {
                   </h2>
                 </div>
 
-                {/* 4 Editoryal Anlatım Bloğu (Alt Alta Akıcı Okuma Akışı - Tüm Sayfaya Yayılmış) */}
-                <div className="space-y-12 w-full">
-                  {lessonContent.blocks.map((block, bIdx) => (
-                    <div key={block.id} className="space-y-3.5">
-                      <div className="flex items-center gap-3">
-                        <span className="w-8 h-8 rounded-xl bg-blue-50 text-[#004BFA] text-xs font-bold flex items-center justify-center border border-blue-100/80 shrink-0">
-                          {String(bIdx + 1).padStart(2, '0')}
-                        </span>
-                        <h3 className="text-xl sm:text-2xl font-semibold text-[#0E1E38] clash-title tracking-tight">
-                          {block.title}
-                        </h3>
+                {/* İÇERİK ANLATIMI: Bloklu veya Akıcı Paragraflar */}
+                {lessonContent.blocks && lessonContent.blocks.length > 0 ? (
+                  /* 1. HAFTA: 4 Editoryal Anlatım Bloğu */
+                  <div className="space-y-12 w-full">
+                    {lessonContent.blocks.map((block, bIdx) => (
+                      <div key={block.id} className="space-y-3.5">
+                        <div className="flex items-center gap-3">
+                          <span className="w-8 h-8 rounded-xl bg-blue-50 text-[#004BFA] text-xs font-bold flex items-center justify-center border border-blue-100/80 shrink-0">
+                            {String(bIdx + 1).padStart(2, '0')}
+                          </span>
+                          <h3 className="text-xl sm:text-2xl font-semibold text-[#0E1E38] clash-title tracking-tight">
+                            {block.title}
+                          </h3>
+                        </div>
+                        <div className="space-y-3.5 pl-4 sm:pl-5 border-l-2 border-slate-200">
+                          {block.paragraphs.map((p, pIdx) => (
+                            <p key={pIdx} className="text-sm sm:text-base lg:text-lg text-slate-700 leading-relaxed font-normal">
+                              {p}
+                            </p>
+                          ))}
+                        </div>
                       </div>
-                      <div className="space-y-3.5 pl-4 sm:pl-5 border-l-2 border-slate-200">
-                        {block.paragraphs.map((p, pIdx) => (
-                          <p key={pIdx} className="text-sm sm:text-base lg:text-lg text-slate-700 leading-relaxed font-normal">
-                            {p}
-                          </p>
+                    ))}
+                  </div>
+                ) : (
+                  /* 2. HAFTA: Bölmesiz, Alt Başlıksız, Akıcı Editoryal Paragraflar */
+                  <div className="space-y-6 sm:space-y-8 w-full text-slate-700 font-normal leading-relaxed text-base sm:text-lg lg:text-xl">
+                    {lessonContent.paragraphs?.slice(0, 3).map((p, pIdx) => (
+                      <p key={pIdx}>{p}</p>
+                    ))}
+
+                    {/* İki Kritik Soru (Özel Tasarımlı Liste) */}
+                    {lessonContent.bulletQuestions && lessonContent.bulletQuestions.length > 0 && (
+                      <div className="my-6 p-6 sm:p-8 rounded-2xl bg-blue-50/60 border border-blue-100/80 space-y-4">
+                        {lessonContent.bulletQuestions.map((q, qIdx) => (
+                          <div key={qIdx} className="flex items-start gap-3">
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#004BFA] mt-2 sm:mt-2.5 shrink-0" />
+                            <p className="text-base sm:text-lg lg:text-xl font-medium text-[#0E1E38] italic">
+                              {q}
+                            </p>
+                          </div>
                         ))}
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    )}
+
+                    {lessonContent.paragraphs?.slice(3).map((p, pIdx) => (
+                      <p key={pIdx + 3}>{p}</p>
+                    ))}
+                  </div>
+                )}
 
                 {/* UYGULAMAYA GEÇİŞ BUTONU */}
                 <div className="pt-8 border-t border-slate-200 w-full flex justify-end">
@@ -337,7 +379,7 @@ function AkademiContent() {
                     onClick={() => setIsSimulatorOpen(true)}
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer group"
                   >
-                    <span>Anlatımı Okudum, Nakit Akışımla Yüzleşmek İstiyorum</span>
+                    <span>{lessonContent.actionButtonText}</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
@@ -347,8 +389,11 @@ function AkademiContent() {
               /* FAZ 2: SAF UYGULAMA MASASI
                  (Tüm sayfa genişliğinde, dikkat dağıtmayan doğrudan karar istasyonu) */
               <div className="space-y-8 animate-in fade-in duration-300 w-full">
-                {/* Doğrudan Verimli Nakit Akışı Tablosu */}
-                <CashFlowSimulator />
+                {selectedTopicId === "1-2" ? (
+                  <ExpenseNegotiator />
+                ) : (
+                  <CashFlowSimulator />
+                )}
               </div>
             )}
 

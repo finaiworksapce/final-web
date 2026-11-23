@@ -34,11 +34,11 @@ export const UNIT_1_CONFIG: UnitConfig = {
     {
       id: '1-2',
       weekNumber: 2,
-      title: 'Tasarruf Nedir, Nasıl Yapılır? (Harcamaları Kısma Sanatı)',
+      title: 'Tasarruf Nedir ve Nasıl Yapılır?',
       shortTitle: 'Tasarruf Nedir ve Nasıl Yapılır?',
-      status: 'locked',
+      status: 'active',
       description: 'Cimrilik değil, cüzdandaki görünmeyen kaçakları tespit etme bilinci.',
-      readTime: 'Hafta 2',
+      readTime: '3 dk okuma + Tasarruf Masası',
     },
     {
       id: '1-3',
@@ -133,12 +133,30 @@ export const UNIT_1_CONFIG: UnitConfig = {
   ],
 };
 
-export const getLesson1Content = (userName?: string | null) => {
+export interface LessonBlock {
+  id: string;
+  title: string;
+  paragraphs: string[];
+}
+
+export interface LessonContent {
+  id: string;
+  title: string;
+  readTime: string;
+  actionButtonText: string;
+  blocks?: LessonBlock[];
+  paragraphs?: string[];
+  bulletQuestions?: string[];
+}
+
+export const getLesson1Content = (userName?: string | null): LessonContent => {
   const name = userName ? userName.split(' ')[0] : 'Öğrencimiz';
 
   return {
+    id: '1-1',
     title: 'Gelir ve Gider Yönetimi: Kendi Nakit Akışının Farkına Varmak',
     readTime: '3 dk okuma + Kişisel Analiz',
+    actionButtonText: 'Anlatımı Okudum, Nakit Akışımla Yüzleşmek İstiyorum',
     blocks: [
       {
         id: 'block-1',
@@ -179,3 +197,34 @@ export const getLesson1Content = (userName?: string | null) => {
     ],
   };
 };
+
+export const getLesson2Content = (userName?: string | null): LessonContent => {
+  const name = userName ? userName.split(' ')[0] : 'Öğrencimiz';
+
+  return {
+    id: '1-2',
+    title: 'Tasarruf Nedir ve Nasıl Yapılır?',
+    readTime: '3 dk okuma + Tasarruf Masası',
+    actionButtonText: 'Anlatımı Okudum, Harcama Pazarlığına Başlamak İstiyorum',
+    paragraphs: [
+      `Tasarruf kelimesi çoğu insanın zihninde yoksunluk, kendini her şeyden mahrum bırakma veya cimrilik gibi soğuk çağrışımlar yapar ${name}. Oysa FinAi Workspace ekibi olarak biz tasarrufu bir kısıtlama değil; tam aksine finansal bağımsızlığa giden yoldaki ilk stratejik savunma hattı olarak görürüz. Tasarruf hayat standardınızı acımasızca kısmak değildir; kazandığınız parayı değer üretmeyen sızıntılara saçmayı bırakıp, kendi geleceğinizi ve zamanınızı satın alma gücüdür.`,
+      `Hatırlarsan geçen hafta çıkardığımız FinAi Analiz Raporu'nda, eline geçen paranın ne kadarını masada bırakabildiğini ve harcamalarının ana omurgasını birlikte incelemiştik. O raporda özellikle kira gibi temel barınma giderlerinin hemen ardında yer alan market, mutfak ve günlük yaşam harcamalarının bütçendeki ağırlığına dikkat çekmiştik. Bir tekneyi batıran şey genellikle dev dalgalar değil; gövdede fark edilmeden su alan küçük çatlaklardır. Kira gibi temel bir sabit gideri bugünden yarına kısmak hayat standardını zedeleyebilir ve gerçekçi bir hedef de değildir. Ancak market alışverişinde veya günlük tüketimlerde hayat kalitenden hiç ödün vermeden tasarruf yapıp yapamayacağını birazdan seninle birlikte birer iş ortağı gibi kontrol edeceğiz. Az sonra geçeceğimiz interaktif masada, seninle adeta karşılıklı oturup harcama kalemlerini tek tek masaya yatıracak; hangisini ne kadar optimize edebileceğimizi birlikte konuşup pazarlığını yapacağız.`,
+      `Bu sızıntıları hayat kalitenizi düşürmeden durdurmanın yolu, harcamalarınıza rasyonel bir süzgeç koyma alışkanlığı kazanmaktır. Bir ödeme yapmadan önce durup kendinize şu iki kritik soruyu sormak bile bakış açınızı kökten değiştirecektir:`,
+      `Masada bıraktığınız ve sızıntılardan kurtardığınız miktar ilk başta ne kadar küçük görünürse görünsün, asla küçümsenmeyecek bir tohumdur. Kestiğiniz her lüzumsuz harcama; borsada üreten, ihracat yapan ve kâr payı dağıtan köklü şirketlere ortak olabilmeniz için cebinizde taze bir paya, yeni bir ortaklık imkânına dönüşür. Bugün tüketimi bilinçle yönetip masada tuttuğunuz her sermaye parçası, yarın size en değerli varlığınızı, yani özgürlüğünüzü geri verecektir.`,
+      `Şimdi bu bilinci geçen haftaki kendi sayıların üzerinde test etme zamanı. Birazdan geçeceğimiz karar masasında, 1. haftada belirlediğin kendi gerçek harcama kalemlerin doğrudan karşına gelecek. Her harcama kalemini seninle tek tek ele alacak, nerede ne kadar tasarruf üretebileceğimizi konuşarak ay sonunda masada kalan serbest nakdini nasıl büyütebildiğini canlı olarak göreceğiz.`,
+    ],
+    bulletQuestions: [
+      '"Bu gerçekten hayatımı kolaylaştıran vazgeçilmez bir ihtiyaç mı, yoksa anlık bir dürtüyle satın aldığım geçici bir heves mi?"',
+      '"Bugün bu harcamayı yapmazsam, 72 saat sonra hayatımda gerçekten herhangi bir eksiklik hissedecek miyim?"',
+    ],
+    blocks: undefined, // 2. haftada numaralı kutular yerine akıcı paragraflar kullanıyoruz
+  };
+};
+
+export const getLessonContent = (topicId: string, userName?: string | null): LessonContent => {
+  if (topicId === '1-2') {
+    return getLesson2Content(userName);
+  }
+  return getLesson1Content(userName);
+};
+
