@@ -736,7 +736,7 @@ export function ExpenseNegotiator() {
                               type="number"
                               value={userOfferInput}
                               onChange={(e) => setUserOfferInput(e.target.value)}
-                              placeholder="Önerdiğin aylık tutarı yaz (örn: 5500 ₺)..."
+                              placeholder="Önerdiğin aylık tutarı yaz..."
                               className="w-full pl-5 pr-11 py-3.5 sm:py-4 rounded-xl bg-slate-50 border border-slate-200 text-sm sm:text-base font-semibold text-[#0E1E38] placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-[#004BFA]/20 focus:border-[#004BFA] transition-all"
                             />
                             <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm sm:text-base text-slate-400 font-semibold">
