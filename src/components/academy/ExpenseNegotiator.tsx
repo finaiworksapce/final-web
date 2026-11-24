@@ -23,6 +23,7 @@ import {
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import { useUser } from '@/components/providers/UserProvider';
+import { supabase } from '@/lib/supabase';
 import { 
   PREDEFINED_EXPENSES, 
   ExpenseCategory, 
@@ -98,6 +99,33 @@ export function ExpenseNegotiator() {
   const [editIncomes, setEditIncomes] = useState<CashItem[]>([]);
   const [editExpenses, setEditExpenses] = useState<{ id: string; name: string; amount: number }[]>([]);
 
+  // Cevapları ve Pazarlık Verilerini Hem LocalStorage Hem Supabase'e Kalıcı Kaydetme
+  const persistNegotiatedData = (updatedItems: NegotiatedItem[], isCompleted = false) => {
+    try {
+      const payload = JSON.stringify(updatedItems);
+      localStorage.setItem(NEGOTIATED_STORAGE_KEY, payload);
+      if (userCtx?.user?.id) {
+        localStorage.setItem(`finai_negotiated_${userCtx.user.id}`, payload);
+      }
+    } catch (err) {
+      console.warn('LocalStorage save error:', err);
+    }
+
+    // Supabase auth metadata senkronizasyonu
+    try {
+      if (userCtx?.user?.id) {
+        supabase.auth.updateUser({
+          data: {
+            academy_negotiated_items: updatedItems,
+            academy_lesson_2_completed: isCompleted,
+          },
+        }).catch(() => {});
+      }
+    } catch (err) {
+      console.warn('Supabase sync error:', err);
+    }
+  };
+
   // 1. Hafta Verisini veya Varsayılanları Yükle
   useEffect(() => {
     try {
@@ -142,21 +170,79 @@ export function ExpenseNegotiator() {
         setIncomes(loadedIncomes);
       }
 
-      // Daha önce kaydedilmiş pazarlık kalemleri var mı?
-      const savedNegotiated = localStorage.getItem(NEGOTIATED_STORAGE_KEY);
+      // 1. Önce LocalStorage'dan kontrol et (user ID bazlı veya genel)
+      let savedNegotiated: string | null = null;
+      if (userCtx?.user?.id) {
+        savedNegotiated = localStorage.getItem(`finai_negotiated_${userCtx.user.id}`);
+      }
+      if (!savedNegotiated) {
+        savedNegotiated = localStorage.getItem(NEGOTIATED_STORAGE_KEY);
+      }
+
+      let parsedNegotiated: any[] | null = null;
       if (savedNegotiated) {
         try {
-          const parsed = JSON.parse(savedNegotiated);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            if (completed === 'true') {
-              setItems(parsed.map((it: any): NegotiatedItem => ({ ...it, status: 'settled' as const })));
-              return;
-            } else {
-              setItems(parsed as NegotiatedItem[]);
-              return;
-            }
-          }
+          parsedNegotiated = JSON.parse(savedNegotiated);
         } catch {}
+      }
+
+      // 2. LocalStorage'da yoksa Supabase metadata'dan al
+      if ((!parsedNegotiated || parsedNegotiated.length === 0) && userCtx?.userMetadata?.academy_negotiated_items) {
+        parsedNegotiated = userCtx.userMetadata.academy_negotiated_items;
+      }
+
+      if (Array.isArray(parsedNegotiated) && parsedNegotiated.length > 0) {
+        const restored = parsedNegotiated.map((savedIt: any, idx: number): NegotiatedItem => {
+          const category = savedIt.category || detectCategory(savedIt.name);
+          const originalAmount = Number(savedIt.originalAmount) || Number(savedIt.defaultAmount) || Number(savedIt.amount) || 0;
+          const currentAmount = Number(savedIt.currentAmount) || originalAmount;
+          const targetCut = Number(savedIt.targetCutAmount) || originalAmount;
+          const isSettled = savedIt.status === 'settled' || completed === 'true' || category === 'A';
+
+          let chatHistory = savedIt.chatHistory;
+          let lastDialogue = savedIt.lastDialogue;
+
+          if (!chatHistory || !Array.isArray(chatHistory) || chatHistory.length === 0) {
+            const initialDialogue = getNegotiationDialogue({
+              category,
+              round: 0,
+              isSettled,
+              context: {
+                userName,
+                itemName: savedIt.name,
+                currentAmount: originalAmount,
+                suggestedCut: targetCut,
+              },
+            });
+            lastDialogue = initialDialogue;
+            chatHistory = [
+              {
+                id: `msg-${idx}-0`,
+                sender: 'ai',
+                text: initialDialogue,
+                time: 'Şimdi',
+              },
+            ];
+          }
+
+          return {
+            id: savedIt.id || `item-${idx}`,
+            name: savedIt.name,
+            category,
+            defaultAmount: originalAmount,
+            originalAmount,
+            currentAmount,
+            targetCutAmount: targetCut,
+            status: isSettled ? 'settled' : (savedIt.status || 'pending'),
+            turns: savedIt.turns || (isSettled ? 1 : 0),
+            lastDialogue: lastDialogue || '',
+            chatHistory,
+            description: '',
+          };
+        });
+
+        setItems(restored);
+        return;
       }
 
       if (loadedExpenses.length === 0) {
@@ -327,9 +413,7 @@ export function ExpenseNegotiator() {
 
     setItems(updated);
     setUserOfferInput('');
-    try {
-      localStorage.setItem(NEGOTIATED_STORAGE_KEY, JSON.stringify(updated));
-    } catch {}
+    persistNegotiatedData(updated, updated.every((it) => it.status === 'settled'));
   };
 
   // Sonraki Kaleme Geçiş
@@ -343,14 +427,12 @@ export function ExpenseNegotiator() {
           if (idx === nextIdx) {
             return {
               ...it,
-              status: (it.category === 'A' ? 'settled' : 'in_progress') as 'settled' | 'in_progress',
+              status: (it.status === 'settled' ? 'settled' : (it.category === 'A' ? 'settled' : 'in_progress')) as 'settled' | 'in_progress',
             };
           }
           return it;
         });
-        try {
-          localStorage.setItem(NEGOTIATED_STORAGE_KEY, JSON.stringify(next));
-        } catch {}
+        persistNegotiatedData(next, next.every((it) => it.status === 'settled'));
         return next;
       });
     } else {
@@ -358,9 +440,7 @@ export function ExpenseNegotiator() {
       setIsSpotlightActive(false);
       setItems((prev) => {
         const settled = prev.map((it) => ({ ...it, status: 'settled' as const }));
-        try {
-          localStorage.setItem(NEGOTIATED_STORAGE_KEY, JSON.stringify(settled));
-        } catch {}
+        persistNegotiatedData(settled, true);
         return settled;
       });
     }
@@ -401,13 +481,12 @@ export function ExpenseNegotiator() {
         }
         return it;
       });
-      try {
-        localStorage.setItem(NEGOTIATED_STORAGE_KEY, JSON.stringify(updated));
-      } catch {}
+      persistNegotiatedData(updated, false);
       return updated;
     });
     setCurrentIndex(itemIndex);
     setUserOfferInput('');
+    setIsSpotlightActive(true);
   };
 
   // Önceki Kaleme Dönüş
@@ -524,7 +603,8 @@ export function ExpenseNegotiator() {
     setIsSpotlightActive(false);
     try {
       localStorage.setItem(LESSON_2_KEY, 'true');
-      localStorage.setItem(NEGOTIATED_STORAGE_KEY, JSON.stringify(items.map(it => ({ ...it, status: 'settled' }))));
+      const settledItems = items.map(it => ({ ...it, status: 'settled' as const }));
+      persistNegotiatedData(settledItems, true);
 
       const updatedExpenses = items.map((it) => ({
         id: it.id,
@@ -802,36 +882,59 @@ export function ExpenseNegotiator() {
                         </form>
                       )
                     ) : (
-                      <div className="flex flex-col sm:flex-row items-center justify-between gap-3.5 w-full">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            handleReNegotiate(currentIndex);
-                          }}
-                          className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-[#0E1E38] text-sm font-medium transition-all cursor-pointer shadow-2xs"
-                        >
-                          <RotateCcw className="w-4 h-4 text-slate-500" />
-                          <span>Tekrar Pazarlık Et</span>
-                        </button>
+                      <div className="space-y-3 w-full">
+                        <div className="flex flex-col sm:flex-row items-center justify-between gap-3.5 w-full">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              handleReNegotiate(currentIndex);
+                            }}
+                            className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-[#0E1E38] text-sm font-medium transition-all cursor-pointer shadow-2xs"
+                          >
+                            <RotateCcw className="w-4 h-4 text-slate-500" />
+                            <span>Tekrar Pazarlık Et</span>
+                          </button>
 
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (currentIndex < items.length - 1) {
-                              handleNextItem();
-                            } else {
-                              handleNextItem();
+                          {currentIndex < items.length - 1 ? (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                handleNextItem();
+                              }}
+                              className="w-full sm:flex-1 inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-md cursor-pointer"
+                            >
+                              <span>Sonraki Pazarlığa Geç</span>
+                              <ArrowRight className="w-5 h-5" />
+                            </button>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                handleNextItem();
+                                setIsFinishedAll(true);
+                                setIsSpotlightActive(false);
+                              }}
+                              className="w-full sm:flex-1 inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer"
+                            >
+                              <span>Sonuçları Gör</span>
+                              <ArrowRight className="w-5 h-5" />
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Tüm kalemler tamamlandıysa veya uzlaşıldıysa ara adımlarda da Sonuçları Gör imkanı */}
+                        {(allItemsSettled || isFinishedAll) && currentIndex < items.length - 1 && (
+                          <button
+                            type="button"
+                            onClick={() => {
                               setIsFinishedAll(true);
                               setIsSpotlightActive(false);
-                            }
-                          }}
-                          className="w-full sm:flex-1 inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-md cursor-pointer"
-                        >
-                          <span>
-                            {currentIndex < items.length - 1 ? 'Sonraki Pazarlığa Geç' : 'Sonuçları Gör'}
-                          </span>
-                          <ArrowRight className="w-5 h-5" />
-                        </button>
+                            }}
+                            className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-2xs"
+                          >
+                            <span>Tüm Kalemler Tamamlandı • Sonuçları Gör →</span>
+                          </button>
+                        )}
                       </div>
                     )}
 
