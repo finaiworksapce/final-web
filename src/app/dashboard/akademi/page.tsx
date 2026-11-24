@@ -352,13 +352,15 @@ function AkademiContent() {
                                 stroke={isCompleted ? "#10B981" : `url(#circleGrad-${topic.id})`}
                                 strokeWidth="3.5"
                                 strokeDasharray={81.68}
-                                strokeDashoffset={81.68 - (81.68 * progress) / 100}
+                                strokeDashoffset={isCompleted ? 0 : 81.68 - (81.68 * progress) / 100}
                                 strokeLinecap="round"
                               />
                             </svg>
-                            <span className="absolute text-[8.5px] font-bold text-white tracking-tighter">
-                              %{progress}
-                            </span>
+                            {progress > 0 && progress < 100 && (
+                              <span className="absolute text-[8px] font-sans font-bold text-white tracking-tight">
+                                %{progress}
+                              </span>
+                            )}
                           </div>
                         </div>
                       ) : (
