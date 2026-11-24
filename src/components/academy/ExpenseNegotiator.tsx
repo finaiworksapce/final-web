@@ -105,8 +105,9 @@ export function ExpenseNegotiator() {
       if (completed === 'true') {
         setIsLessonCompleted(true);
         setIsFinishedAll(true);
-        setIsSpotlightActive(false);
       }
+      // Kullanıcı 2. haftaya girdiğinde doğrudan Spotlight moduna girsin
+      setIsSpotlightActive(true);
 
       let loadedIncomes: CashItem[] = [];
       let loadedExpenses: { name: string; amount: number }[] = [];
@@ -807,33 +808,30 @@ export function ExpenseNegotiator() {
                           onClick={() => {
                             handleReNegotiate(currentIndex);
                           }}
-                          className={`w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-[#0E1E38] text-sm font-medium transition-all cursor-pointer shadow-2xs ${
-                            showSummaryMetrics && currentIndex === items.length - 1 ? 'sm:w-full' : 'sm:flex-1'
-                          }`}
+                          className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-[#0E1E38] text-sm font-medium transition-all cursor-pointer shadow-2xs"
                         >
                           <RotateCcw className="w-4 h-4 text-slate-500" />
                           <span>Tekrar Pazarlık Et</span>
                         </button>
 
-                        {!(showSummaryMetrics && currentIndex === items.length - 1) && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              if (currentIndex < items.length - 1) {
-                                handleNextItem();
-                              } else {
-                                handleNextItem();
-                                setIsSpotlightActive(false);
-                              }
-                            }}
-                            className="w-full sm:flex-1 inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-md cursor-pointer"
-                          >
-                            <span>
-                              {currentIndex < items.length - 1 ? 'Sonraki Pazarlığa Geç' : 'Sonuçları Gör'}
-                            </span>
-                            <ArrowRight className="w-5 h-5" />
-                          </button>
-                        )}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (currentIndex < items.length - 1) {
+                              handleNextItem();
+                            } else {
+                              handleNextItem();
+                              setIsFinishedAll(true);
+                              setIsSpotlightActive(false);
+                            }
+                          }}
+                          className="w-full sm:flex-1 inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-md cursor-pointer"
+                        >
+                          <span>
+                            {currentIndex < items.length - 1 ? 'Sonraki Pazarlığa Geç' : 'Sonuçları Gör'}
+                          </span>
+                          <ArrowRight className="w-5 h-5" />
+                        </button>
                       </div>
                     )}
 
@@ -948,14 +946,14 @@ export function ExpenseNegotiator() {
                           setIsSpotlightActive(true);
                         }}
                         className={`inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs sm:text-sm font-medium transition-all cursor-pointer ${
-                          showSummaryMetrics && currentIndex === items.length - 1 ? 'w-full' : 'flex-1'
+                          showSummaryMetrics ? 'w-full' : 'flex-1'
                         }`}
                       >
                         <RotateCcw className="w-4 h-4 text-slate-500" />
                         <span>Tekrar Pazarlık Et</span>
                       </button>
 
-                      {!(showSummaryMetrics && currentIndex === items.length - 1) && (
+                      {!showSummaryMetrics && (
                         <button
                           type="button"
                           onClick={() => {
@@ -964,6 +962,8 @@ export function ExpenseNegotiator() {
                               setIsSpotlightActive(true);
                             } else {
                               handleNextItem();
+                              setIsFinishedAll(true);
+                              setIsSpotlightActive(false);
                             }
                           }}
                           className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer"
