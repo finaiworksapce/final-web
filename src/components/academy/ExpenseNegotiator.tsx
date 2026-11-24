@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   TrendingDown, 
   ArrowRight, 
@@ -15,7 +16,9 @@ import {
   Plus,
   Trash2,
   X,
-  HelpCircle
+  HelpCircle,
+  Maximize2,
+  Minimize2
 } from 'lucide-react';
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
@@ -471,116 +474,84 @@ export function ExpenseNegotiator() {
     }
   };
 
-  const [isTableDrawerOpen, setIsTableDrawerOpen] = useState(false);
-
-  // Driver.js Bire Bir Akıl Hocası Spotlight (Odaklama) Turu
-  const runSpotlightTour = (force = false) => {
-    try {
-      if (typeof window === 'undefined') return;
-      if (!force && localStorage.getItem('finai_negotiator_spotlight_seen') === 'true') {
-        return;
-      }
-
-      const driverObj = driver({
-        showProgress: false,
-        animate: true,
-        overlayColor: 'rgba(14, 30, 56, 0.78)',
-        stagePadding: 10,
-        stageRadius: 16,
-        popoverClass: 'finai-driver-popover',
-        steps: [
-          {
-            element: '#finai-consultation-stage',
-            popover: {
-              title: 'FinAi Akıl Hocası Masası',
-              description: 'Bu masada harcamaların tek tek seninle birlikte değerlendirilir. Sabit giderlerini koruyup, gereksiz tüketim sızıntılarını birlikte optimize edeceğiz.',
-              nextBtnText: 'Masaya Başla →',
-            },
-          },
-        ],
-        onDestroyed: () => {
-          try {
-            localStorage.setItem('finai_negotiator_spotlight_seen', 'true');
-          } catch {}
-        },
-      });
-
-      setTimeout(() => {
-        driverObj.drive();
-      }, 350);
-    } catch (err) {
-      console.warn('Driver.js spotlight başlatılamadı:', err);
-    }
-  };
-
-  useEffect(() => {
-    if (items.length > 0) {
-      runSpotlightTour(false);
-    }
-  }, [items.length]);
+  const [isSpotlightActive, setIsSpotlightActive] = useState(true);
 
   const isCurrentSettled = currentItem?.status === 'settled';
   const allItemsSettled = items.length > 0 && items.every((it) => it.status === 'settled');
   const showSummaryMetrics = allItemsSettled || isFinishedAll;
 
   return (
-    <div className="w-full space-y-8 animate-in fade-in duration-300 flex-1 flex flex-col">
+    <div className="w-full space-y-8 animate-in fade-in duration-300 flex-1 flex flex-col relative">
       
       {/* =========================================================================
-          ANA ÇALIŞMA MASASI:
-          BİRE BİR DANIŞMANLIK İSTASYONU (SAYFANIN MERKEZİNDE ODAKLI MİZANPAJ)
+          DERİN KARARTMA KATMANI (SPOTLİGHT / SİNEMATİK ODAK PERDESİ)
           ========================================================================= */}
-      <div className="w-full flex-1 flex flex-col space-y-6">
-        
-        {/* Üst Navigasyon & Durum Barı */}
-        <div className="w-full max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <h3 className="text-xl sm:text-2xl font-normal text-[#0E1E38] clash-title tracking-tight">
-                Harcama Masası & Pazarlık İstasyonu
-              </h3>
-              {currentItem && (
-                <span className={`text-[11px] px-2.5 py-0.5 rounded-full font-semibold ${
-                  currentItem.category === 'A'
-                    ? 'bg-amber-100 text-amber-800 border border-amber-200'
-                    : currentItem.category === 'B'
-                    ? 'bg-blue-100 text-blue-800 border border-blue-200'
-                    : 'bg-rose-100 text-rose-800 border border-rose-200'
-                }`}>
-                  {currentItem.category === 'A' ? 'Sabit Gider' : currentItem.category === 'B' ? 'Temel Yaşam' : 'Esnek Sızıntı'}
-                </span>
-              )}
+      <AnimatePresence>
+        {isSpotlightActive && (
+          <motion.div
+            key="spotlight-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35 }}
+            onClick={() => setIsSpotlightActive(false)}
+            className="fixed inset-0 z-40 bg-[#02041A]/92 backdrop-blur-xs flex flex-col items-center justify-between p-6 cursor-pointer"
+          >
+            {/* Üst Bilgi Rozeti */}
+            <div className="text-center pt-3 pointer-events-auto">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white/90 text-xs font-medium border border-white/15 shadow-lg">
+                <span className="w-2 h-2 rounded-full bg-[#004BFA] animate-pulse" />
+                FinAi Bire Bir Akıl Hocası Masası • Dışarı tıklayarak masayı tam ekranda görebilirsiniz
+              </span>
             </div>
-            <p className="text-xs text-slate-500">
-              Gereksiz pazarlıklarla vakit kaybetmeden doğrudan nakit sızıntılarını masaya yatırıyoruz.
-            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* =========================================================================
+          ANA ÇALIŞMA MASASI:
+          ORİJİNAL İKİLİ DÜZEN (SOL %65 SOHBET, SAĞ %35 NAKİT AKIŞ TABLOSU)
+          ========================================================================= */}
+      <div className="w-full bg-white p-6 sm:p-8 lg:p-10 rounded-3xl border border-slate-200/80 shadow-xs flex-1 flex flex-col justify-between min-h-[580px] space-y-7">
+        
+        {/* Üst Başlık & Adım Butonları */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div className="space-y-0.5">
+            <h3 className="text-xl sm:text-2xl font-normal text-[#0E1E38] clash-title tracking-tight">
+              Harcama Masası & Pazarlık İstasyonu
+            </h3>
+            {currentItem && (
+              <p className="text-xs text-slate-400">
+                Görüşülen: <span className="font-semibold text-[#0E1E38]">{currentItem.name}</span> ({currentItem.category === 'A' ? 'Sabit Gider' : currentItem.category === 'B' ? 'Temel Yaşam' : 'Esnek Sızıntı'})
+              </p>
+            )}
           </div>
 
-          <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
-            {/* Spotlight Rehberi Butonu */}
+          <div className="flex items-center gap-3">
+            {/* Spotlight Modunu Yeniden Başlat Butonu */}
             <button
               type="button"
-              onClick={() => runSpotlightTour(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium transition-all cursor-pointer"
-              title="Akıl hocası odaklama turunu yeniden başlat"
+              onClick={() => setIsSpotlightActive(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-[#004BFA] text-xs font-semibold transition-all cursor-pointer shadow-2xs"
+              title="Sohbeti ekranın merkezine odakla"
             >
-              <HelpCircle className="w-3.5 h-3.5 text-slate-500" />
-              <span>Rehberi Aç</span>
+              <Maximize2 className="w-3.5 h-3.5" />
+              <span>Odak Modu</span>
             </button>
 
             {/* İlerleme Bölmeleri */}
-            <div className="flex items-center gap-1.5 pl-2 border-l border-slate-200">
+            <div className="flex items-center gap-1.5 shrink-0 pl-2 border-l border-slate-100">
               {items.map((it, idx) => (
                 <button
                   key={it.id}
                   type="button"
                   onClick={() => setCurrentIndex(idx)}
-                  className={`h-2.5 rounded-full transition-all cursor-pointer ${
+                  className={`h-2 rounded-full transition-all cursor-pointer ${
                     idx === currentIndex
-                      ? 'w-7 bg-[#004BFA]'
+                      ? 'w-8 bg-[#004BFA]'
                       : it.status === 'settled'
-                      ? 'w-4 bg-emerald-500'
-                      : 'w-4 bg-slate-200 hover:bg-slate-300'
+                      ? 'w-5 bg-emerald-500'
+                      : 'w-5 bg-slate-200 hover:bg-slate-300'
                   }`}
                   title={`${it.name} (${it.status === 'settled' ? 'Uzlaşıldı' : 'Sırada'})`}
                 />
@@ -590,283 +561,367 @@ export function ExpenseNegotiator() {
         </div>
 
         {/* =========================================================================
-            SAYFANIN TAM ORTASINDA: FİNAİ AKIL HOCASI BİRE BİR DANIŞMANLIK SAHNESİ
+            İKİLİ DÜZEN (SOHBET %65, TABLO %35, BOY EŞİT):
+            SOL: FinAi Workspace Ekibi Mesajlaşması (%65)
+            SAĞ: 1. Hafta Nakit Akış Tablosu (%35)
             ========================================================================= */}
         {currentItem && (
-          <div className="w-full max-w-4xl mx-auto space-y-5">
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-10 items-stretch flex-1 w-full pt-1">
             
-            {/* ODAK SAHNESİ: BİRE BİR DİYALOG KARTI */}
-            <div 
-              id="finai-consultation-stage"
-              className="w-full bg-[#0E1E38] text-white p-6 sm:p-8 lg:p-10 rounded-2xl shadow-xl shadow-[#0E1E38]/10 border border-white/10 flex flex-col justify-between space-y-6"
-            >
+            {/* =====================================================================
+                SOL KOLON: FİNAİ WORKSPACE EKİBİ CANLI MESAJLAŞMA (%65 BOYUTUNDA)
+                (Spotlight anında animasyonla merkeze uçar, bittiğinde geri döner)
+                ===================================================================== */}
+            <div className="w-full lg:w-[65%] min-h-[500px] relative flex flex-col">
               
-              {/* Diyalog Üst Başlığı (Akıl Hocası Kimliği) */}
-              <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                <div className="flex items-center gap-3">
-                  <img src="/icon.png" alt="FinAi" className="w-8 h-8 object-contain shrink-0" />
+              {/* Spotlight açıkken sol kolondaki yer tutucu (Layout zıplamasını önler) */}
+              {isSpotlightActive && (
+                <div className="w-full h-full min-h-[460px] rounded-2xl border-2 border-dashed border-slate-200/80 bg-slate-50/60 flex flex-col items-center justify-center p-8 text-center space-y-3">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-[#004BFA]">
+                    <Maximize2 className="w-5 h-5 animate-pulse" />
+                  </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-white tracking-wide">
-                      FinAi Workspace Ekibi
-                    </h4>
-                    <span className="text-[11px] text-white/50 block">
-                      Kişisel Bütçe ve Sermaye Akıl Hocası • Şimdi
-                    </span>
-                  </div>
-                </div>
-
-                <div className="text-right">
-                  <span className="text-xs text-white/60 block">Görüşülen Kalem</span>
-                  <span className="text-sm sm:text-base font-semibold text-[#78B8F5]">
-                    {currentItem.name} ({currentItem.currentAmount.toLocaleString('tr-TR')} ₺)
-                  </span>
-                </div>
-              </div>
-
-              {/* Diyalog Metni (Bire Bir Konuşma Alanı) */}
-              <div className="space-y-4 min-h-[140px] flex flex-col justify-center">
-                {currentItem.chatHistory && currentItem.chatHistory.length > 0 ? (
-                  <div className="space-y-3">
-                    {currentItem.chatHistory.map((msg) => {
-                      const isAi = msg.sender === 'ai';
-                      return (
-                        <div
-                          key={msg.id}
-                          className={`flex gap-3 max-w-[95%] ${
-                            isAi ? 'self-start' : 'ml-auto justify-end'
-                          }`}
-                        >
-                          <div
-                            className={`p-4 sm:p-5 rounded-xl text-sm sm:text-base leading-relaxed ${
-                              isAi
-                                ? 'bg-white/10 text-white border border-white/10'
-                                : 'bg-[#004BFA] text-white shadow-sm'
-                            }`}
-                          >
-                            <p className="font-normal font-clash">{msg.text}</p>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="p-4 sm:p-5 rounded-xl bg-white/10 border border-white/10">
-                    <p className="text-sm sm:text-base lg:text-lg text-white font-normal leading-relaxed font-clash">
-                      {currentItem.lastDialogue}
+                    <h5 className="text-sm font-semibold text-[#0E1E38] clash-title">
+                      Akıl Hocası Odak Modu Aktif
+                    </h5>
+                    <p className="text-xs text-slate-400 mt-1 max-w-xs">
+                      Konuşma şu an ekranın merkezinde odaklanmış durumdadır.
                     </p>
                   </div>
-                )}
-              </div>
-
-              {/* Eylem Butonları & Teklif Alanı */}
-              <div className="pt-4 border-t border-white/10 space-y-4">
-                {!isCurrentSettled ? (
-                  currentItem.category === 'A' ? (
-                    <button
-                      type="button"
-                      onClick={() => handleOffer(currentItem.originalAmount)}
-                      className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer"
-                    >
-                      <Check className="w-4 h-4" />
-                      <span>Bu Sabit Gideri Aynen Koru ve Devam Et →</span>
-                    </button>
-                  ) : (
-                    <form
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        const val = Number(userOfferInput.replace(/\D/g, ''));
-                        if (val > 0) handleOffer(val);
-                      }}
-                      className="flex flex-col sm:flex-row items-center gap-3 w-full"
-                    >
-                      <div className="relative flex-1 w-full">
-                        <input
-                          type="number"
-                          value={userOfferInput}
-                          onChange={(e) => setUserOfferInput(e.target.value)}
-                          placeholder="Önerdiğin aylık tutarı yaz (örn: 5500 ₺)..."
-                          className="w-full pl-4 pr-10 py-3.5 rounded-xl bg-slate-900/80 border border-white/20 text-sm sm:text-base font-semibold text-white placeholder:text-white/40 focus:outline-hidden focus:ring-2 focus:ring-[#004BFA] transition-all"
-                        />
-                        <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-white/50 font-semibold">
-                          ₺
-                        </span>
-                      </div>
-
-                      <button
-                        type="submit"
-                        disabled={!userOfferInput || Number(userOfferInput) <= 0}
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] disabled:bg-white/10 disabled:text-white/40 text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-xs cursor-pointer disabled:cursor-not-allowed shrink-0"
-                      >
-                        <span>Teklif Et</span>
-                        <Send className="w-4 h-4" />
-                      </button>
-                    </form>
-                  )
-                ) : (
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 w-full">
-                    <button
-                      type="button"
-                      onClick={() => handleReNegotiate(currentIndex)}
-                      className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-slate-200 hover:text-white text-xs sm:text-sm font-medium transition-all cursor-pointer"
-                    >
-                      <RotateCcw className="w-4 h-4 text-slate-300" />
-                      <span>Tekrar Pazarlık Et</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={handleNextItem}
-                      className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-semibold transition-all duration-200 shadow-md cursor-pointer"
-                    >
-                      <span>
-                        {currentIndex < items.length - 1 ? 'Sonraki Pazarlığa Geç' : 'Sonuçları Gör'}
-                      </span>
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                )}
-
-                {/* Alt Gezinme Barı */}
-                <div className="flex justify-between items-center text-xs text-white/50 pt-1">
                   <button
                     type="button"
-                    onClick={handlePrevItem}
-                    disabled={currentIndex === 0}
-                    className="inline-flex items-center gap-1 hover:text-white disabled:opacity-30 disabled:hover:text-white/50 cursor-pointer disabled:cursor-not-allowed transition-colors"
+                    onClick={() => setIsSpotlightActive(false)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-semibold text-slate-600 hover:text-[#004BFA] shadow-2xs cursor-pointer"
                   >
-                    <ArrowLeft className="w-3.5 h-3.5" />
-                    <span>Önceki Kalem</span>
+                    <span>Masaya Geri Dön</span>
                   </button>
-
-                  <span>
-                    Kalan Kalem: {items.length - (currentIndex + 1)}
-                  </span>
                 </div>
+              )}
 
-              </div>
-
-            </div>
-
-            {/* HIZLI NAKİT AKIŞ VE BÜTÇE ŞERİDİ (MASANIN HEMEN ALTINDA DENGEYİ GÖSTERİR) */}
-            <div className="w-full bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex items-center gap-4 text-xs sm:text-sm">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-slate-500">Mevcut Gider:</span>
-                  <span className="font-semibold text-[#0E1E38]">-{totalCurrent.toLocaleString('tr-TR')} ₺</span>
-                </div>
-                <div className="h-4 w-px bg-slate-200 hidden sm:block" />
-                <div className="flex items-center gap-1.5">
-                  <span className="text-slate-500">Kalan Serbest Nakit:</span>
-                  <span className="font-bold text-emerald-600">+{remainingCashFlow.toLocaleString('tr-TR')} ₺ / ay</span>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setIsTableDrawerOpen(!isTableDrawerOpen)}
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#004BFA] hover:text-[#003ad1] cursor-pointer self-start sm:self-auto"
+              {/* HAREKETLİ BEYAZ SOHBET KARTI (SOL VEYA MERKEZ) */}
+              <div
+                className={`transition-all duration-500 ease-in-out ${
+                  isSpotlightActive
+                    ? 'fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[94%] sm:w-[88%] max-w-2xl bg-white text-[#0E1E38] shadow-2xl rounded-2xl p-6 sm:p-8 border border-slate-200 ring-1 ring-slate-900/5'
+                    : 'w-full h-full flex flex-col justify-between bg-white text-[#0E1E38] rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-xs'
+                }`}
               >
-                <Wallet className="w-3.5 h-3.5" />
-                <span>{isTableDrawerOpen ? 'Bütçe Tablosunu Gizle ▲' : 'Bütçe Tablosunu İncele ▼'}</span>
-              </button>
-            </div>
-
-            {/* AÇILIR BÜTÇE & NAKİT AKIŞ TABLOSU PANELİ */}
-            {isTableDrawerOpen && (
-              <div className="w-full bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4 animate-in fade-in slide-in-from-top-2 duration-200">
-                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                  <div className="flex items-center gap-2">
-                    <Wallet className="w-4 h-4 text-[#004BFA]" />
-                    <span className="text-xs font-semibold text-[#0E1E38] uppercase tracking-wider">
-                      1. Hafta Nakit Akış Tablon
-                    </span>
+                
+                {/* Kart Üst Bilgisi */}
+                <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                  <div className="flex items-center gap-3">
+                    <img src="/icon.png" alt="FinAi" className="w-8 h-8 object-contain shrink-0" />
+                    <div>
+                      <h4 className="text-sm font-semibold text-[#0E1E38] tracking-wide clash-title">
+                        FinAi Workspace Ekibi
+                      </h4>
+                      <span className="text-[11px] text-slate-400 block">
+                        Kişisel Bütçe ve Sermaye Akıl Hocası • Şimdi
+                      </span>
+                    </div>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={handleOpenEditModal}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-[11px] font-semibold text-slate-600 hover:text-[#004BFA] hover:border-[#004BFA] transition-all cursor-pointer shadow-2xs"
-                  >
-                    <Pencil className="w-3 h-3 text-[#004BFA]" />
-                    <span>Düzenle</span>
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <div className="text-right">
+                      <span className="text-[11px] text-slate-400 block">Görüşülen Kalem</span>
+                      <span className="text-xs sm:text-sm font-bold text-[#004BFA]">
+                        {currentItem.name} ({currentItem.currentAmount.toLocaleString('tr-TR')} ₺)
+                      </span>
+                    </div>
+
+                    {isSpotlightActive && (
+                      <button
+                        type="button"
+                        onClick={() => setIsSpotlightActive(false)}
+                        className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                        title="Masaya Geri Dön (Sola Çek)"
+                      >
+                        <Minimize2 className="w-4 h-4 text-slate-500" />
+                      </button>
+                    )}
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-1">
-                  {/* Gelirler */}
-                  <div className="space-y-2">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                      Aylık Düzenli Gelirler
-                    </span>
-                    <div className="space-y-1.5">
-                      {incomes.map((inc) => (
-                        <div
-                          key={inc.id}
-                          className="py-1.5 border-b border-slate-100 flex items-center justify-between text-xs"
-                        >
-                          <span className="font-medium text-slate-700 truncate pr-2">{inc.name}</span>
-                          <span className="font-semibold text-emerald-700 shrink-0">+{inc.amount.toLocaleString('tr-TR')} ₺</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="pt-2 text-[11px] text-slate-500 font-semibold flex justify-between">
-                      <span>Toplam Gelir:</span>
-                      <span className="text-slate-800">+{totalIncome.toLocaleString('tr-TR')} ₺</span>
-                    </div>
-                  </div>
-
-                  {/* Giderler */}
-                  <div className="space-y-2">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                      Aylık Harcama Kalemleri
-                    </span>
-                    <div className="space-y-1">
-                      {items.map((item, idx) => {
-                        const isFocus = idx === currentIndex;
-                        const isSettled = item.status === 'settled';
-                        const hasSaved = item.originalAmount > item.currentAmount;
-
+                {/* Beyaz Kart Üzerinde Yüksek Kontrastlı Diyalog Alanı */}
+                <div className="space-y-4 my-5 flex-1 flex flex-col justify-center">
+                  {currentItem.chatHistory && currentItem.chatHistory.length > 0 ? (
+                    <div className="space-y-3">
+                      {currentItem.chatHistory.map((msg) => {
+                        const isAi = msg.sender === 'ai';
                         return (
                           <div
-                            key={item.id}
-                            onClick={() => setCurrentIndex(idx)}
-                            className={`py-1.5 px-2 rounded-lg transition-all duration-150 cursor-pointer flex items-center justify-between text-xs ${
-                              isFocus
-                                ? 'bg-blue-50 text-[#0E1E38] font-bold border-l-2 border-[#004BFA]'
-                                : 'text-slate-600 opacity-60 hover:opacity-100 border-l-2 border-transparent'
+                            key={msg.id}
+                            className={`flex gap-3 max-w-[95%] ${
+                              isAi ? 'self-start' : 'ml-auto justify-end'
                             }`}
                           >
-                            <div className="flex items-center gap-1.5 truncate pr-1.5">
-                              {isSettled ? (
-                                <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
-                              ) : (
-                                <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isFocus ? 'bg-[#004BFA]' : 'bg-slate-300'}`} />
-                              )}
-                              <span className="truncate">{item.name}</span>
-                            </div>
-
-                            <div className="flex items-center gap-1.5 shrink-0">
-                              {hasSaved && (
-                                <span className="line-through text-[10px] text-slate-400">
-                                  {item.originalAmount.toLocaleString('tr-TR')} ₺
-                                </span>
-                              )}
-                              <span className={isFocus ? 'text-[#004BFA] font-bold' : isSettled && hasSaved ? 'text-emerald-700 font-semibold' : 'text-slate-800 font-medium'}>
-                                {item.currentAmount.toLocaleString('tr-TR')} ₺
-                              </span>
+                            <div
+                              className={`p-4 sm:p-5 rounded-xl text-sm sm:text-base leading-relaxed ${
+                                isAi
+                                  ? 'bg-slate-50 text-slate-800 border border-slate-200/80 shadow-2xs'
+                                  : 'bg-[#004BFA] text-white shadow-xs'
+                              }`}
+                            >
+                              <p className="font-normal font-clash">{msg.text}</p>
                             </div>
                           </div>
                         );
                       })}
                     </div>
-                    <div className="pt-2 text-[11px] text-slate-500 font-semibold flex justify-between">
-                      <span>Masadaki Gider:</span>
-                      <span className="text-slate-800">-{totalCurrent.toLocaleString('tr-TR')} ₺</span>
+                  ) : (
+                    <div className="p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200/80 text-slate-800 shadow-2xs">
+                      <p className="text-sm sm:text-base lg:text-[16px] text-slate-800 font-normal leading-relaxed font-clash">
+                        {currentItem.lastDialogue}
+                      </p>
                     </div>
+                  )}
+                </div>
+
+                {/* Alt Aksiyon Butonları & Teklif Alanı */}
+                <div className="pt-4 border-t border-slate-100 space-y-4 mt-auto">
+                  {!isCurrentSettled ? (
+                    currentItem.category === 'A' ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleOffer(currentItem.originalAmount);
+                          setIsSpotlightActive(false);
+                        }}
+                        className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer"
+                      >
+                        <Check className="w-4 h-4" />
+                        <span>Bu Sabit Gideri Aynen Koru ve Devam Et →</span>
+                      </button>
+                    ) : (
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          const val = Number(userOfferInput.replace(/\D/g, ''));
+                          if (val > 0) handleOffer(val);
+                        }}
+                        className="flex flex-col sm:flex-row items-center gap-2.5 w-full"
+                      >
+                        <div className="relative flex-1 w-full">
+                          <input
+                            type="number"
+                            value={userOfferInput}
+                            onChange={(e) => setUserOfferInput(e.target.value)}
+                            placeholder="Önerdiğin aylık tutarı yaz (örn: 5500 ₺)..."
+                            className="w-full pl-4 pr-10 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm sm:text-base font-semibold text-[#0E1E38] placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-[#004BFA]/20 focus:border-[#004BFA] transition-all"
+                          />
+                          <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-slate-400 font-semibold">
+                            ₺
+                          </span>
+                        </div>
+
+                        <button
+                          type="submit"
+                          disabled={!userOfferInput || Number(userOfferInput) <= 0}
+                          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] disabled:bg-slate-200 disabled:text-slate-400 text-white text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer disabled:cursor-not-allowed shrink-0"
+                        >
+                          <span>Teklif Et</span>
+                          <Send className="w-4 h-4" />
+                        </button>
+                      </form>
+                    )
+                  ) : (
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 w-full">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleReNegotiate(currentIndex);
+                          setIsSpotlightActive(true);
+                        }}
+                        className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-[#0E1E38] text-xs sm:text-sm font-medium transition-all cursor-pointer shadow-2xs"
+                      >
+                        <RotateCcw className="w-4 h-4 text-slate-500" />
+                        <span>Tekrar Pazarlık Et</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          handleNextItem();
+                        }}
+                        className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition-all duration-200 shadow-md cursor-pointer"
+                      >
+                        <span>
+                          {currentIndex < items.length - 1 ? 'Sonraki Pazarlığa Geç' : 'Sonuçları Gör'}
+                        </span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Alt Gezinme Barı */}
+                  <div className="flex justify-between items-center text-xs text-slate-400 pt-1">
+                    <button
+                      type="button"
+                      onClick={handlePrevItem}
+                      disabled={currentIndex === 0}
+                      className="inline-flex items-center gap-1 hover:text-[#004BFA] disabled:opacity-30 disabled:hover:text-slate-400 cursor-pointer disabled:cursor-not-allowed transition-colors"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                      <span>Önceki Kalem</span>
+                    </button>
+
+                    {isSpotlightActive && (
+                      <button
+                        type="button"
+                        onClick={() => setIsSpotlightActive(false)}
+                        className="text-xs text-[#004BFA] hover:underline font-medium cursor-pointer"
+                      >
+                        Tabloya Dön (Sola Çek) ↓
+                      </button>
+                    )}
+
+                    <span>
+                      Kalan Kalem: {items.length - (currentIndex + 1)}
+                    </span>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            {/* =====================================================================
+                SAĞ KOLON: 1. HAFTA NAKİT AKIŞ TABLON (%35 BOYUTUNDA - ORİJİNAL KONUM)
+                ===================================================================== */}
+            <div className="w-full lg:w-[35%] flex flex-col justify-between space-y-4 h-full bg-slate-50/50 rounded-2xl border border-slate-200/80 p-5 sm:p-6">
+              
+              {/* Tablo Başlığı ve Hızlı Düzenle Butonu */}
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+                <div className="flex items-center gap-2">
+                  <Wallet className="w-4 h-4 text-[#004BFA]" />
+                  <span className="text-xs font-semibold text-[#0E1E38] uppercase tracking-wider">
+                    1. Hafta Nakit Akış Tablon
+                  </span>
+                </div>
+
+                {/* Hızlı Düzenle Butonu */}
+                <button
+                  type="button"
+                  onClick={handleOpenEditModal}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-[11px] font-semibold text-slate-600 hover:text-[#004BFA] hover:border-[#004BFA] transition-all cursor-pointer shadow-2xs"
+                >
+                  <Pencil className="w-3 h-3 text-[#004BFA]" />
+                  <span>Düzenle</span>
+                </button>
+              </div>
+
+              {/* YAN YANA İKİ SÜTUN: SOL GELİR, SAĞ GİDER KALEMLERİ */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 flex-1 content-start pt-1">
+                
+                {/* SOL SÜTUN: GELİRLER */}
+                <div className="space-y-2">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                    Aylık Düzenli Gelirler
+                  </span>
+
+                  <div className="space-y-1.5">
+                    {incomes.map((inc) => (
+                      <div
+                        key={inc.id}
+                        className="py-1.5 border-b border-slate-200/60 flex items-center justify-between text-xs"
+                      >
+                        <span className="font-medium text-slate-700 truncate pr-2">
+                          {inc.name}
+                        </span>
+                        <span className="font-semibold text-emerald-700 shrink-0">
+                          +{inc.amount.toLocaleString('tr-TR')} ₺
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="pt-2 text-[11px] text-slate-500 font-semibold flex justify-between">
+                    <span>Toplam Gelir:</span>
+                    <span className="text-slate-800">+{totalIncome.toLocaleString('tr-TR')} ₺</span>
                   </div>
                 </div>
+
+                {/* SAĞ SÜTUN: GİDER KALEMLERİ (DİKTÖRTGENSİZ, SADE LİSTE) */}
+                <div className="space-y-2">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                    Aylık Harcama Kalemleri
+                  </span>
+
+                  <div className="space-y-1">
+                    {items.map((item, idx) => {
+                      const isFocus = idx === currentIndex;
+                      const isSettled = item.status === 'settled';
+                      const hasSaved = item.originalAmount > item.currentAmount;
+
+                      return (
+                        <div
+                          key={item.id}
+                          onClick={() => {
+                            setCurrentIndex(idx);
+                            setIsSpotlightActive(true);
+                          }}
+                          className={`py-1.5 px-2 rounded-lg transition-all duration-150 cursor-pointer flex items-center justify-between text-xs ${
+                            isFocus
+                              ? 'bg-blue-50/90 text-[#0E1E38] font-bold border-l-2 border-[#004BFA]'
+                              : 'text-slate-600 opacity-50 hover:opacity-100 border-l-2 border-transparent'
+                          }`}
+                        >
+                          <div className="flex items-center gap-1.5 truncate pr-1.5">
+                            {isSettled ? (
+                              <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                            ) : (
+                              <span
+                                className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                                  isFocus ? 'bg-[#004BFA]' : 'bg-slate-300'
+                                }`}
+                              />
+                            )}
+                            <span className="truncate">{item.name}</span>
+                          </div>
+
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            {hasSaved && (
+                              <span className="line-through text-[10px] text-slate-400">
+                                {item.originalAmount.toLocaleString('tr-TR')} ₺
+                              </span>
+                            )}
+                            <span
+                              className={`${
+                                isFocus
+                                  ? 'text-[#004BFA] font-bold'
+                                  : isSettled && hasSaved
+                                  ? 'text-emerald-700 font-semibold'
+                                  : 'text-slate-800 font-medium'
+                              }`}
+                            >
+                              {item.currentAmount.toLocaleString('tr-TR')} ₺
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className="pt-2 text-[11px] text-slate-500 font-semibold flex justify-between">
+                    <span>Masadaki Gider:</span>
+                    <span className="text-slate-800">-{totalCurrent.toLocaleString('tr-TR')} ₺</span>
+                  </div>
+                </div>
+
               </div>
-            )}
+
+              {/* BİLANÇO DİP ÖZETİ (SOL İLE HİZALANMIŞ ALT TABAN) */}
+              <div className="pt-3 border-t border-slate-200 space-y-1.5 text-xs mt-auto">
+                <div className="flex items-center justify-between font-semibold">
+                  <span className="text-[#0E1E38]">Kalan Serbest Nakit:</span>
+                  <span className="text-emerald-600 font-bold">
+                    +{remainingCashFlow.toLocaleString('tr-TR')} ₺ / ay
+                  </span>
+                </div>
+              </div>
+
+            </div>
 
           </div>
         )}
