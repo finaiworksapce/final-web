@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Compass, ArrowRight, ArrowLeft, X } from "lucide-react";
+import { Compass, ArrowRight, ArrowLeft } from "lucide-react";
 
 interface StepConfig {
   element: string;
@@ -20,7 +20,7 @@ interface DashboardTourProps {
 
 const STORAGE_KEY = "finai_dashboard_tour_seen";
 
-export function DashboardTour({ hasActiveAssets, news = [], className = "" }: DashboardTourProps) {
+export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTourProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
@@ -39,21 +39,21 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
         title: "Portföyünün Finansal Nabzı",
         description:
           "Sahip olduğun tüm hisse senedi, fon ve nakit varlıklarının güncel toplam değerini tek bakışta buradan izleyebilirsin. Günlük kâr/zarar durumunu ve genel getiri oranını anlık olarak takip ederek portföyünün performansını ölçebilirsin. Detaylı varlık listene ve işlem geçmişine ulaşmak için kartlara tıklayabilirsin.",
-        placement: "right", // Salih Bey'in talebi: Sağ taraftaki geniş alana yerleşecek
+        placement: "right", // Sağ taraftaki geniş alana yerleşir
       },
       {
         element: "#finai-widget-allocation",
         title: "Risk ve Varlık Dağılımı",
         description:
           "Portföyünün hisse, yatırım fonu, emtia ve nakit arasındaki oransal ağırlığını gösterir. Finansal okuryazarlığın temel kuralı tüm birikimi tek bir enstrümana bağlamamaktır; buradaki dağılım grafiği risk dengeni anında kontrol etmeni sağlar. Bu widget'ın üzerine bastığın zaman ise seni doğrudan detaylı Portföy sayfana yönlendirir.",
-        placement: "left",
+        placement: "bottom", // Salih Bey'in talebi: Kartın hemen altına yerleşecek
       },
       {
         element: "#finai-widget-monthly-report",
         title: "FinAi Aylık Portföy Raporu",
         description:
           "Bu alan, yapay zekanın portföyünü detaylı inceleyerek oluşturduğu aylık performans ve strateji analizidir. Bu rapor aylık olarak hazırlandığından dolayı, ilk kapsamlı analizini portföyünü oluşturduktan 1 ay sonra burada görebileceksin. Her ayın sonunda yatırımlarının genel seyrini ve derinlemesine içgörülerini buradan takip edebilirsin.",
-        placement: "left",
+        placement: "left", // Salih Bey'in talebi: Sol menünün sağından başlayacak
       },
       {
         element: "#finai-widget-market",
@@ -95,7 +95,7 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
         title: "Finansal Okuryazarlık & Akademi",
         description:
           "Bütçe yönetiminden hisse senedi ve şirket ortaklığına uzanan adım adım interaktif eğitim haritandır. Her hafta yeni bir modülü tamamlayarak finansal okuryazarlığını geliştirebilir ve tasarruflarını bilinçli yatırımlara dönüştürmeyi öğrenebilirsin.",
-        placement: "left",
+        placement: "bottom",
       },
       {
         element: "#finai-widget-market",
@@ -353,17 +353,18 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
       }
     }
 
-    // 2. SOL YERLEŞİM (Varlık Dağılımı, Aylık Rapor & Ajanda İçin)
+    // 2. SOL YERLEŞİM (Aylık Rapor & Ajanda İçin: Sol Menü Kısayolunun Hemen Sağından Başlar)
     if (placement === "left") {
       const leftAvailableSpace = targetRect.left;
       if (leftAvailableSpace >= 340) {
-        const rightPos = winWidth - targetRect.left + 36;
-        const availableWidth = Math.min(620, targetRect.left - 50);
+        // Sol menü kısayolunun hemen sağından hizalanarak başlar (~96px)
+        const leftPos = Math.max(40, isDesktop ? 96 : 24);
+        const availableWidth = Math.min(620, targetRect.left - leftPos - 36);
         const topPos = Math.max(80, Math.min(targetRect.top, winHeight - 380));
         return {
           position: "fixed" as const,
           top: topPos,
-          right: rightPos,
+          left: leftPos,
           maxWidth: availableWidth,
         };
       } else {
@@ -378,7 +379,19 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
       }
     }
 
-    // 3. ÜST YERLEŞİM (Son Haberler %100 Genişlik İçin)
+    // 3. ALT YERLEŞİM (Varlık Dağılımı İçin: Salih Bey'in Talebi)
+    if (placement === "bottom") {
+      const topPos = targetRect.bottom + 24;
+      const leftPos = Math.max(32, Math.min(targetRect.left, winWidth - 680));
+      return {
+        position: "fixed" as const,
+        top: topPos,
+        left: leftPos,
+        maxWidth: Math.min(680, winWidth - leftPos - 32),
+      };
+    }
+
+    // 4. ÜST YERLEŞİM (Son Haberler %100 Genişlik İçin)
     if (placement === "top") {
       const availableTopSpace = targetRect.top;
       if (availableTopSpace >= 240) {
@@ -402,7 +415,7 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
       }
     }
 
-    // 4. ALT YERLEŞİM (Yedek)
+    // Yedek Varsayılan
     const topPos = Math.min(targetRect.bottom + 28, winHeight - 320);
     const leftPos = Math.max(32, Math.min(targetRect.left, winWidth - 680));
     return {
@@ -435,7 +448,7 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
           <AnimatePresence>
             {isOpen && currentStep && (
               <div className="fixed inset-0 z-[99999] pointer-events-auto overflow-hidden">
-                {/* 1. FinAi İmza Gradyanlı SVG Cutout Mask */}
+                {/* 1. FinAi İmza Gradyanlı SVG Cutout Mask (Yumuşak Morf Geçişli) */}
                 <svg
                   className="fixed inset-0 w-full h-full pointer-events-none"
                   style={{ width: "100vw", height: "100vh" }}
@@ -444,11 +457,19 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
                     <mask id="finai-portal-spotlight-mask">
                       <rect x="0" y="0" width="100%" height="100%" fill="white" />
                       {targetRect && (
-                        <rect
-                          x={targetRect.left - 6}
-                          y={targetRect.top - 6}
-                          width={targetRect.width + 12}
-                          height={targetRect.height + 12}
+                        <motion.rect
+                          animate={{
+                            x: targetRect.left - 6,
+                            y: targetRect.top - 6,
+                            width: targetRect.width + 12,
+                            height: targetRect.height + 12,
+                          }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 95,
+                            damping: 18,
+                            mass: 0.9,
+                          }}
                           rx="24"
                           fill="black"
                         />
@@ -475,13 +496,21 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
                     onClick={handleBackdropClick}
                   />
 
-                  {/* Vurgulanan Widget Çevresindeki İnce Işıklı Çerçeve */}
+                  {/* Vurgulanan Widget Çevresindeki İnce Işıklı Çerçeve (Yumuşak Morf Geçişli) */}
                   {targetRect && (
-                    <rect
-                      x={targetRect.left - 6}
-                      y={targetRect.top - 6}
-                      width={targetRect.width + 12}
-                      height={targetRect.height + 12}
+                    <motion.rect
+                      animate={{
+                        x: targetRect.left - 6,
+                        y: targetRect.top - 6,
+                        width: targetRect.width + 12,
+                        height: targetRect.height + 12,
+                      }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 95,
+                        damping: 18,
+                        mass: 0.9,
+                      }}
                       rx="24"
                       fill="none"
                       stroke="#5B80FF"
@@ -499,86 +528,70 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
                 </div>
 
                 {/* 3. KUTUSUZ, DOĞRUDAN ALANA YERLEŞEN ZARİF TİPOGRAFİ METİN ALANI */}
-                <motion.div
-                  key={`tour-step-${currentStepIndex}`}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -16 }}
-                  transition={{ duration: 0.35, ease: "easeOut" }}
-                  style={textPositionStyles}
-                  onClick={(e) => e.stopPropagation()}
-                  className="z-[100000] space-y-4 pointer-events-auto select-none"
-                >
-                  {/* Adım Rozeti */}
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[11px] font-semibold text-white/80 uppercase tracking-widest backdrop-blur-md">
-                    <span className="w-2 h-2 rounded-full bg-[#5B80FF] animate-pulse" />
-                    <span>
-                      Widget Rehberi • Adım {currentStepIndex + 1} / {steps.length}
-                    </span>
-                  </div>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={`tour-step-${currentStepIndex}`}
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -14, transition: { duration: 0.2 } }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    style={textPositionStyles}
+                    onClick={(e) => e.stopPropagation()}
+                    className="z-[100000] space-y-4 pointer-events-auto select-none"
+                  >
+                    {/* Başlık (Kutusuz, doğrudan gradyan üzerinde) */}
+                    <h3 className="text-2xl sm:text-3xl lg:text-4xl font-normal text-white clash-title tracking-tight leading-tight">
+                      {currentStep.title}
+                    </h3>
 
-                  {/* Başlık (Kutusuz, doğrudan gradyan üzerinde) */}
-                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-normal text-white clash-title tracking-tight leading-tight">
-                    {currentStep.title}
-                  </h3>
+                    {/* Açıklama Paragrafı (Kutusuz, berrak beyaz kontrast) */}
+                    <p className="text-sm sm:text-base lg:text-[17px] text-white/90 leading-relaxed font-normal font-clash">
+                      {currentStep.description}
+                    </p>
 
-                  {/* Açıklama Paragrafı (Kutusuz, berrak beyaz kontrast) */}
-                  <p className="text-sm sm:text-base lg:text-[17px] text-white/90 leading-relaxed font-normal font-clash">
-                    {currentStep.description}
-                  </p>
+                    {/* Şık Gezinme Butonları */}
+                    <div className="flex items-center gap-3 pt-2 flex-wrap">
+                      {currentStepIndex > 0 && (
+                        <button
+                          type="button"
+                          onClick={handlePrev}
+                          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer backdrop-blur-md shadow-xs"
+                        >
+                          <ArrowLeft className="w-4 h-4" />
+                          <span>Önceki</span>
+                        </button>
+                      )}
 
-                  {/* Şık Gezinme Butonları */}
-                  <div className="flex items-center gap-3 pt-3 flex-wrap">
-                    {currentStepIndex > 0 && (
                       <button
                         type="button"
-                        onClick={handlePrev}
-                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer backdrop-blur-md shadow-xs"
+                        onClick={handleNext}
+                        className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-xs sm:text-sm font-semibold shadow-lg shadow-[#004BFA]/30 hover:shadow-xl transition-all cursor-pointer group"
                       >
-                        <ArrowLeft className="w-4 h-4" />
-                        <span>Önceki</span>
+                        <span>{currentStepIndex < steps.length - 1 ? "Sonraki Adım" : "Turu Tamamla"}</span>
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                       </button>
-                    )}
+                    </div>
 
-                    <button
-                      type="button"
-                      onClick={handleNext}
-                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-xs sm:text-sm font-semibold shadow-lg shadow-[#004BFA]/30 hover:shadow-xl transition-all cursor-pointer group"
-                    >
-                      <span>{currentStepIndex < steps.length - 1 ? "Sonraki Adım" : "Turu Tamamla"}</span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                    </button>
-
-                    {/* Turu Kapat Butonu */}
-                    <button
-                      type="button"
-                      onClick={handleClose}
-                      className="ml-auto text-xs text-white/60 hover:text-white transition-colors cursor-pointer font-medium flex items-center gap-1.5 py-1 px-2 rounded-lg hover:bg-white/10"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                      <span>Kapat (ESC)</span>
-                    </button>
-                  </div>
-
-                  {/* İlerleme Çizgisi / Noktalar */}
-                  <div className="flex items-center gap-1.5 pt-1">
-                    {steps.map((_, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        onClick={() => setCurrentStepIndex(idx)}
-                        className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                          idx === currentStepIndex
-                            ? "w-8 bg-[#5B80FF]"
-                            : idx < currentStepIndex
-                            ? "w-4 bg-emerald-400/80"
-                            : "w-3 bg-white/20 hover:bg-white/40"
-                        }`}
-                        title={`Adım ${idx + 1}`}
-                      />
-                    ))}
-                  </div>
-                </motion.div>
+                    {/* İlerleme Çizgisi / Noktalar */}
+                    <div className="flex items-center gap-1.5 pt-1">
+                      {steps.map((_, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setCurrentStepIndex(idx)}
+                          className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                            idx === currentStepIndex
+                              ? "w-8 bg-[#5B80FF]"
+                              : idx < currentStepIndex
+                              ? "w-4 bg-emerald-400/80"
+                              : "w-3 bg-white/20 hover:bg-white/40"
+                          }`}
+                          title={`Adım ${idx + 1}`}
+                        />
+                      ))}
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
               </div>
             )}
           </AnimatePresence>,
