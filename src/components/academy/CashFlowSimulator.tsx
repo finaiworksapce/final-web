@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { Plus, Trash2, RotateCcw, CheckCircle2, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { Plus, Trash2, RotateCcw, CheckCircle2, ArrowRight, ChevronDown } from 'lucide-react';
 
 interface CashItem {
   id: string;
@@ -31,7 +31,7 @@ const PRESET_EXPENSE_CATEGORIES = [
   { label: 'Abonelikler ve Eğlence', icon: '📱', defaultVal: 600 },
   { label: 'Kredi / Borç Taksiti', icon: '💳', defaultVal: 4000 },
   { label: 'Giyim ve Kişisel Bakım', icon: '👕', defaultVal: 1500 },
-  { label: 'Diğer', icon: '✏️', defaultVal: 1000 },
+  { label: 'Diğer (Özel Kalem Adı Yaz)', icon: '✏️', defaultVal: 1000, isCustom: true },
 ];
 
 export function CashFlowSimulator() {
@@ -41,8 +41,22 @@ export function CashFlowSimulator() {
   const [newIncomeAmount, setNewIncomeAmount] = useState('');
   const [newExpenseName, setNewExpenseName] = useState('');
   const [newExpenseAmount, setNewExpenseAmount] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
   const [isLessonCompleted, setIsLessonCompleted] = useState(false);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Kategori dropdown dışına tıklandığında kapat
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsCategoryDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // LocalStorage senkronizasyonu
   useEffect(() => {
@@ -128,7 +142,7 @@ export function CashFlowSimulator() {
 
   const handleAddExpense = (e: React.FormEvent) => {
     e.preventDefault();
-    const name = newExpenseName.trim() || (selectedCategory && selectedCategory !== 'Diğer' ? selectedCategory : '');
+    const name = newExpenseName.trim();
     if (!name || !newExpenseAmount) return;
     const updated = [
       ...expenses,
@@ -138,7 +152,7 @@ export function CashFlowSimulator() {
     saveToStorage(incomes, updated);
     setNewExpenseName('');
     setNewExpenseAmount('');
-    setSelectedCategory('');
+    setIsCategoryDropdownOpen(false);
   };
 
   const handleDeleteExpense = (id: string) => {
@@ -509,54 +523,75 @@ export function CashFlowSimulator() {
             )}
           </div>
 
-          {/* Hızlı Kategori Seçimi */}
-          <div className="space-y-1.5 pt-1">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-              Hızlı Kategori Seçimi
-            </span>
-            <div className="flex flex-wrap gap-1.5">
-              {PRESET_EXPENSE_CATEGORIES.map((cat) => {
-                const isSelected = selectedCategory === cat.label || (!selectedCategory && newExpenseName === cat.label);
-                return (
-                  <button
-                    key={cat.label}
-                    type="button"
-                    onClick={() => {
-                      if (cat.label === 'Diğer') {
-                        setSelectedCategory('Diğer');
-                        setNewExpenseName('');
-                      } else {
-                        setSelectedCategory(cat.label);
-                        setNewExpenseName(cat.label);
-                        if (!newExpenseAmount) setNewExpenseAmount(String(cat.defaultVal));
-                      }
-                    }}
-                    className={`px-2.5 py-1 rounded-lg text-xs transition-all cursor-pointer flex items-center gap-1.5 ${
-                      isSelected
-                        ? 'bg-rose-100 text-rose-800 font-bold border border-rose-300 shadow-2xs'
-                        : 'bg-white border border-slate-200 text-slate-600 hover:border-rose-300 hover:text-rose-700'
-                    }`}
-                  >
-                    <span>{cat.icon}</span>
-                    <span>{cat.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Yeni Gider Ekleme Formu */}
+          {/* Yeni Gider Ekleme Formu (Input Dropdown Entegre) */}
           <form onSubmit={handleAddExpense} className="flex gap-2.5 pt-1">
-            <input
-              type="text"
-              placeholder={selectedCategory === 'Diğer' ? "Özel gider adı belirle (örn. Spor, Kurs, Evcil Hayvan)" : "Gider kalemi adı (veya yukarıdan kategori seç)"}
-              value={newExpenseName}
-              onChange={(e) => {
-                setNewExpenseName(e.target.value);
-                if (selectedCategory && selectedCategory !== 'Diğer') setSelectedCategory('');
-              }}
-              className="flex-1 text-xs bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-[#0E1E38] placeholder:text-slate-400 focus:outline-none focus:border-rose-500 focus:bg-white transition-colors"
-            />
+            <div ref={dropdownRef} className="relative flex-1">
+              <div className="relative flex items-center">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Gider kalemi adı (Kategori seç veya yaz)"
+                  value={newExpenseName}
+                  onFocus={() => setIsCategoryDropdownOpen(true)}
+                  onClick={() => setIsCategoryDropdownOpen(true)}
+                  onChange={(e) => {
+                    setNewExpenseName(e.target.value);
+                  }}
+                  className="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl pl-3.5 pr-8 py-2.5 text-[#0E1E38] placeholder:text-slate-400 focus:outline-none focus:border-rose-500 focus:bg-white transition-colors"
+                />
+                <button
+                  type="button"
+                  tabIndex={-1}
+                  onClick={() => setIsCategoryDropdownOpen((prev) => !prev)}
+                  className="absolute right-2.5 text-slate-400 hover:text-slate-600 cursor-pointer"
+                  title="Kategori Listesi"
+                >
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isCategoryDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+              </div>
+
+              {/* Açılır Kategori Menüsü */}
+              {isCategoryDropdownOpen && (
+                <div className="absolute z-30 left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden py-1 divide-y divide-slate-100 max-h-64 overflow-y-auto animate-in fade-in zoom-in-95 duration-150">
+                  <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50">
+                    Önerilen Kalemler
+                  </div>
+                  <div className="py-1">
+                    {PRESET_EXPENSE_CATEGORIES.map((cat) => (
+                      <button
+                        key={cat.label}
+                        type="button"
+                        onClick={() => {
+                          if (cat.isCustom) {
+                            setNewExpenseName('');
+                            setIsCategoryDropdownOpen(false);
+                            setTimeout(() => inputRef.current?.focus(), 50);
+                          } else {
+                            setNewExpenseName(cat.label);
+                            if (!newExpenseAmount) setNewExpenseAmount(String(cat.defaultVal));
+                            setIsCategoryDropdownOpen(false);
+                          }
+                        }}
+                        className="w-full flex items-center justify-between px-3 py-2 text-xs text-left hover:bg-rose-50/70 text-[#0E1E38] transition-colors cursor-pointer group"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm">{cat.icon}</span>
+                          <span className={cat.isCustom ? 'font-semibold text-rose-600' : 'font-medium group-hover:text-rose-600'}>
+                            {cat.label}
+                          </span>
+                        </div>
+                        {!cat.isCustom && (
+                          <span className="text-[11px] text-slate-400 font-mono">
+                            ~{cat.defaultVal.toLocaleString('tr-TR')} ₺
+                          </span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
             <input
               type="number"
               min="0"

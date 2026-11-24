@@ -61,6 +61,7 @@ const POSSIBLE_STORAGE_KEYS = [
   'finai_cash_flow',
 ];
 const LESSON_2_KEY = 'finai_lesson_2_completed';
+const NEGOTIATED_STORAGE_KEY = 'finai_negotiated_items_v2';
 
 function detectCategory(name: string): ExpenseCategory {
   const lower = name.toLowerCase();
@@ -81,6 +82,7 @@ export function ExpenseNegotiator() {
   const [userOfferInput, setUserOfferInput] = useState('');
   const [isLessonCompleted, setIsLessonCompleted] = useState(false);
   const [isFinishedAll, setIsFinishedAll] = useState(false);
+  const [isSpotlightActive, setIsSpotlightActive] = useState(true);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inlineChatEndRef = useRef<HTMLDivElement>(null);
@@ -102,6 +104,8 @@ export function ExpenseNegotiator() {
       const completed = localStorage.getItem(LESSON_2_KEY);
       if (completed === 'true') {
         setIsLessonCompleted(true);
+        setIsFinishedAll(true);
+        setIsSpotlightActive(false);
       }
 
       let loadedIncomes: CashItem[] = [];
@@ -135,6 +139,23 @@ export function ExpenseNegotiator() {
 
       if (loadedIncomes.length > 0) {
         setIncomes(loadedIncomes);
+      }
+
+      // Daha önce kaydedilmiş pazarlık kalemleri var mı?
+      const savedNegotiated = localStorage.getItem(NEGOTIATED_STORAGE_KEY);
+      if (savedNegotiated) {
+        try {
+          const parsed = JSON.parse(savedNegotiated);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            if (completed === 'true') {
+              setItems(parsed.map((it: any): NegotiatedItem => ({ ...it, status: 'settled' as const })));
+              return;
+            } else {
+              setItems(parsed as NegotiatedItem[]);
+              return;
+            }
+          }
+        } catch {}
       }
 
       if (loadedExpenses.length === 0) {
@@ -184,8 +205,8 @@ export function ExpenseNegotiator() {
           originalAmount: amount,
           currentAmount: amount,
           targetCutAmount: targetCut,
-          status: idx === 0 ? (category === 'A' ? 'settled' : 'in_progress') : 'pending',
-          turns: 0,
+          status: (completed === 'true' ? 'settled' : (idx === 0 ? (category === 'A' ? 'settled' : 'in_progress') : 'pending')) as 'pending' | 'in_progress' | 'settled',
+          turns: completed === 'true' ? 1 : 0,
           lastDialogue: initialDialogue,
           chatHistory: initialHistory,
           description: '',
@@ -193,6 +214,11 @@ export function ExpenseNegotiator() {
       });
 
       setItems(initialItems);
+      if (completed === 'true') {
+        try {
+          localStorage.setItem(NEGOTIATED_STORAGE_KEY, JSON.stringify(initialItems));
+        } catch {}
+      }
     } catch {
       // ignore
     }
@@ -300,6 +326,9 @@ export function ExpenseNegotiator() {
 
     setItems(updated);
     setUserOfferInput('');
+    try {
+      localStorage.setItem(NEGOTIATED_STORAGE_KEY, JSON.stringify(updated));
+    } catch {}
   };
 
   // Sonraki Kaleme Geçiş
@@ -308,26 +337,38 @@ export function ExpenseNegotiator() {
       const nextIdx = currentIndex + 1;
       setCurrentIndex(nextIdx);
 
-      setItems((prev) =>
-        prev.map((it, idx) => {
+      setItems((prev: NegotiatedItem[]): NegotiatedItem[] => {
+        const next: NegotiatedItem[] = prev.map((it, idx): NegotiatedItem => {
           if (idx === nextIdx) {
             return {
               ...it,
-              status: it.category === 'A' ? 'settled' : 'in_progress',
+              status: (it.category === 'A' ? 'settled' : 'in_progress') as 'settled' | 'in_progress',
             };
           }
           return it;
-        })
-      );
+        });
+        try {
+          localStorage.setItem(NEGOTIATED_STORAGE_KEY, JSON.stringify(next));
+        } catch {}
+        return next;
+      });
     } else {
       setIsFinishedAll(true);
+      setIsSpotlightActive(false);
+      setItems((prev) => {
+        const settled = prev.map((it) => ({ ...it, status: 'settled' as const }));
+        try {
+          localStorage.setItem(NEGOTIATED_STORAGE_KEY, JSON.stringify(settled));
+        } catch {}
+        return settled;
+      });
     }
   };
 
   // Tekrar Pazarlık Et (Uzlaşmayı yeniden açma)
   const handleReNegotiate = (itemIndex: number) => {
-    setItems((prev) =>
-      prev.map((it, idx) => {
+    setItems((prev) => {
+      const updated = prev.map((it, idx) => {
         if (idx === itemIndex) {
           const initialDialogue = getNegotiationDialogue({
             category: it.category,
@@ -342,7 +383,7 @@ export function ExpenseNegotiator() {
           });
           return {
             ...it,
-            status: 'in_progress',
+            status: 'in_progress' as const,
             turns: 0,
             currentAmount: it.originalAmount,
             lastDialogue: initialDialogue,
@@ -350,7 +391,7 @@ export function ExpenseNegotiator() {
               ...it.chatHistory,
               {
                 id: `re-${Date.now()}`,
-                sender: 'ai',
+                sender: 'ai' as const,
                 text: initialDialogue,
                 time: 'Şimdi',
               },
@@ -358,8 +399,12 @@ export function ExpenseNegotiator() {
           };
         }
         return it;
-      })
-    );
+      });
+      try {
+        localStorage.setItem(NEGOTIATED_STORAGE_KEY, JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
     setCurrentIndex(itemIndex);
     setUserOfferInput('');
   };
@@ -438,7 +483,7 @@ export function ExpenseNegotiator() {
         originalAmount: amount,
         currentAmount: amount,
         targetCutAmount: targetCut,
-        status: idx === 0 ? (category === 'A' ? 'settled' : 'in_progress') : 'pending',
+        status: (idx === 0 ? (category === 'A' ? 'settled' : 'in_progress') : 'pending') as 'pending' | 'in_progress' | 'settled',
         turns: 0,
         lastDialogue: initialDialogue,
         chatHistory: [
@@ -474,8 +519,11 @@ export function ExpenseNegotiator() {
   // 2. Haftayı Tamamlama Aksiyonu
   const handleCompleteLesson = () => {
     setIsLessonCompleted(true);
+    setIsFinishedAll(true);
+    setIsSpotlightActive(false);
     try {
       localStorage.setItem(LESSON_2_KEY, 'true');
+      localStorage.setItem(NEGOTIATED_STORAGE_KEY, JSON.stringify(items.map(it => ({ ...it, status: 'settled' }))));
 
       const updatedExpenses = items.map((it) => ({
         id: it.id,
@@ -495,8 +543,6 @@ export function ExpenseNegotiator() {
       // ignore
     }
   };
-
-  const [isSpotlightActive, setIsSpotlightActive] = useState(true);
 
   const isCurrentSettled = currentItem?.status === 'settled';
   const allItemsSettled = items.length > 0 && items.every((it) => it.status === 'settled');
@@ -761,29 +807,33 @@ export function ExpenseNegotiator() {
                           onClick={() => {
                             handleReNegotiate(currentIndex);
                           }}
-                          className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-[#0E1E38] text-sm font-medium transition-all cursor-pointer shadow-2xs"
+                          className={`w-full inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-[#0E1E38] text-sm font-medium transition-all cursor-pointer shadow-2xs ${
+                            showSummaryMetrics && currentIndex === items.length - 1 ? 'sm:w-full' : 'sm:flex-1'
+                          }`}
                         >
                           <RotateCcw className="w-4 h-4 text-slate-500" />
                           <span>Tekrar Pazarlık Et</span>
                         </button>
 
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (currentIndex < items.length - 1) {
-                              handleNextItem();
-                            } else {
-                              handleNextItem();
-                              setIsSpotlightActive(false);
-                            }
-                          }}
-                          className="w-full sm:flex-1 inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-md cursor-pointer"
-                        >
-                          <span>
-                            {currentIndex < items.length - 1 ? 'Sonraki Pazarlığa Geç' : 'Sonuçları Gör'}
-                          </span>
-                          <ArrowRight className="w-5 h-5" />
-                        </button>
+                        {!(showSummaryMetrics && currentIndex === items.length - 1) && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (currentIndex < items.length - 1) {
+                                handleNextItem();
+                              } else {
+                                handleNextItem();
+                                setIsSpotlightActive(false);
+                              }
+                            }}
+                            className="w-full sm:flex-1 inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-md cursor-pointer"
+                          >
+                            <span>
+                              {currentIndex < items.length - 1 ? 'Sonraki Pazarlığa Geç' : 'Sonuçları Gör'}
+                            </span>
+                            <ArrowRight className="w-5 h-5" />
+                          </button>
+                        )}
                       </div>
                     )}
 
@@ -897,29 +947,33 @@ export function ExpenseNegotiator() {
                           handleReNegotiate(currentIndex);
                           setIsSpotlightActive(true);
                         }}
-                        className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs sm:text-sm font-medium transition-all cursor-pointer"
+                        className={`inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs sm:text-sm font-medium transition-all cursor-pointer ${
+                          showSummaryMetrics && currentIndex === items.length - 1 ? 'w-full' : 'flex-1'
+                        }`}
                       >
                         <RotateCcw className="w-4 h-4 text-slate-500" />
                         <span>Tekrar Pazarlık Et</span>
                       </button>
 
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (currentIndex < items.length - 1) {
-                            handleNextItem();
-                            setIsSpotlightActive(true);
-                          } else {
-                            handleNextItem();
-                          }
-                        }}
-                        className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer"
-                      >
-                        <span>
-                          {currentIndex < items.length - 1 ? 'Sonraki Pazarlığa Geç' : 'Sonuçları Gör'}
-                        </span>
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
+                      {!(showSummaryMetrics && currentIndex === items.length - 1) && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (currentIndex < items.length - 1) {
+                              handleNextItem();
+                              setIsSpotlightActive(true);
+                            } else {
+                              handleNextItem();
+                            }
+                          }}
+                          className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+                        >
+                          <span>
+                            {currentIndex < items.length - 1 ? 'Sonraki Pazarlığa Geç' : 'Sonuçları Gör'}
+                          </span>
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
