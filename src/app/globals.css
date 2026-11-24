@@ -474,3 +474,70 @@ img, svg, video, canvas, audio, iframe, embed, object {
   border-color: rgba(91, 128, 255, 0.3) !important;
   color: #F5F7FA !important;
 }
+
+/* =========================================================================
+   FİNAİ TUTORIAL & DRIVER.JS ÖZEL TEMA STİLLERİ (AI SLOP ÖNLEME UYUMLU)
+   ========================================================================= */
+.driver-popover.finai-driver-popover {
+  background-color: #0E1E38 !important;
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 40px -15px rgba(14, 30, 56, 0.4) !important;
+  padding: 24px !important;
+  max-width: 420px !important;
+  font-family: 'Zodiak', 'Zodiak-Variable', serif !important;
+}
+
+.driver-popover.finai-driver-popover .driver-popover-title {
+  font-size: 19px !important;
+  font-weight: 500 !important;
+  color: #FFFFFF !important;
+  margin-bottom: 8px !important;
+  letter-spacing: -0.01em !important;
+  font-family: 'Zodiak', 'Zodiak-Variable', serif !important;
+}
+
+.driver-popover.finai-driver-popover .driver-popover-description {
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  margin-bottom: 18px !important;
+  font-family: 'Zodiak', 'Zodiak-Variable', serif !important;
+}
+
+.driver-popover.finai-driver-popover .driver-popover-footer {
+  margin-top: 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+}
+
+.driver-popover.finai-driver-popover .driver-popover-next-btn,
+.driver-popover.finai-driver-popover .driver-popover-prev-btn {
+  background-color: #004BFA !important;
+  color: #FFFFFF !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 9px 20px !important;
+  border-radius: 10px !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  text-shadow: none !important;
+}
+
+.driver-popover.finai-driver-popover .driver-popover-next-btn:hover {
+  background-color: #003ad1 !important;
+}
+
+.driver-popover.finai-driver-popover .driver-popover-close-btn {
+  color: rgba(255, 255, 255, 0.5) !important;
+  transition: color 0.15s ease !important;
+}
+
+.driver-popover.finai-driver-popover .driver-popover-close-btn:hover {
+  color: #FFFFFF !important;
+}
+
