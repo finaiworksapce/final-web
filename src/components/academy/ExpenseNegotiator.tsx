@@ -748,15 +748,26 @@ export function ExpenseNegotiator() {
     }
   };
 
+  // Spotlight açıkken arka plan kaydırmasını engelle
+  useEffect(() => {
+    if (isSpotlightActive) {
+      const originalStyle = window.getComputedStyle(document.body).overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalStyle;
+      };
+    }
+  }, [isSpotlightActive]);
+
   const isCurrentSettled = currentItem?.status === 'settled';
   const allItemsSettled = items.length > 0 && items.every((it) => it.status === 'settled');
-  const showSummaryMetrics = allItemsSettled || isFinishedAll;
+  const showSummaryMetrics = !isSpotlightActive && (allItemsSettled || isFinishedAll);
 
   return (
     <div className="w-full space-y-8 animate-in fade-in duration-300 flex-1 flex flex-col relative">
       
       {/* =========================================================================
-          DERİN KARARTMA KATMANI:
+          DERİN KARARTMA VE BUĞULAMA KATMANI:
           TOPLAM VARLIK DEĞERİ GRADYANI VE AMBIENT IŞIMALARI
           ========================================================================= */}
       <AnimatePresence>
@@ -767,7 +778,7 @@ export function ExpenseNegotiator() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-40 bg-gradient-to-br from-[#02041A] via-[#040989] to-[#02041A] overflow-hidden pointer-events-auto"
+            className="fixed inset-0 z-50 bg-[#02041A]/85 backdrop-blur-xl bg-gradient-to-br from-[#02041A]/95 via-[#040989]/90 to-[#02041A]/95 overflow-hidden pointer-events-auto"
           >
             {/* Ambient Background Gradient Circles (Toplam Varlık Kartı ile Birebir Aynı) */}
             <div className="absolute -top-24 -right-24 w-96 h-96 sm:w-[540px] sm:h-[540px] bg-[#004BFA]/20 rounded-full blur-3xl pointer-events-none" />
@@ -874,7 +885,7 @@ export function ExpenseNegotiator() {
                     damping: 18,
                     mass: 0.85
                   }}
-                  className="fixed z-50 top-1/2 left-1/2 w-[95%] sm:w-[90%] max-w-3xl lg:max-w-4xl bg-white text-[#0E1E38] shadow-2xl rounded-3xl p-7 sm:p-10 lg:p-12 border border-slate-100 ring-1 ring-slate-900/10 flex flex-col justify-between space-y-6"
+                  className="fixed z-[60] top-1/2 left-1/2 w-[95%] sm:w-[90%] max-w-3xl lg:max-w-4xl bg-white text-[#0E1E38] shadow-2xl rounded-3xl p-7 sm:p-10 lg:p-12 border border-slate-100 ring-1 ring-slate-900/10 flex flex-col justify-between space-y-6"
                 >
                   {/* Kart Üst Bilgisi */}
                   <div className="flex items-center justify-between border-b border-slate-100 pb-4 sm:pb-5">
