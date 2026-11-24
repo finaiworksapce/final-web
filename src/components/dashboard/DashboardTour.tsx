@@ -377,17 +377,17 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
       }
     }
 
-    // 2. SOL YERLEŞİM (Aylık Rapor & Ajanda İçin: Ferah Sol Alan)
+    // 2. SOL YERLEŞİM (Aylık Rapor & Ajanda İçin: Widget'ın Hemen Soluna Yakın Konum)
     if (placement === "left") {
       const leftAvailableSpace = targetRect.left;
       if (leftAvailableSpace >= 340) {
-        const leftPos = Math.max(36, isDesktop ? 64 : 20);
-        const availableWidth = Math.min(580, targetRect.left - leftPos - 36);
-        const topPos = Math.max(80, Math.min(targetRect.top + 16, winHeight - 380));
+        const rightPos = winWidth - targetRect.left + 36;
+        const availableWidth = Math.min(560, targetRect.left - 60);
+        const topPos = Math.max(80, Math.min(targetRect.top + 8, winHeight - 380));
         return {
           position: "fixed" as const,
           top: topPos,
-          left: leftPos,
+          right: rightPos,
           maxWidth: availableWidth,
         };
       } else {
