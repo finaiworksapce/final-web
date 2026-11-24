@@ -100,7 +100,7 @@ export default function Footer() {
             </div>
 
             {/* Alt Telif Yazısı (İnce Çizgisiz, Bütünleşik Mavi Arka Plan) */}
-            <div className="py-6 px-4 text-center text-xs text-white/60 font-bold uppercase tracking-widest bg-[#0E1E38]">
+            <div className="py-6 px-4 pb-24 sm:pb-6 text-center text-xs text-white/60 font-bold uppercase tracking-widest bg-[#0E1E38]">
                 © {new Date().getFullYear()} FinAi. Tüm hakları saklıdır.
             </div>
         </footer>

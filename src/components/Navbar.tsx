@@ -55,31 +55,29 @@ export default function Navbar() {
                     <FinAiLogo className="h-9 sm:h-10 md:h-12 w-auto" />
                 </Link>
 
-                {/* Orta Taraf - Tubelight Menu (Sadece Desktoptan Görünür) */}
-                <div className="hidden md:block">
-                    <TubelightNavbar items={desktopNavItems} />
-                </div>
+                {/* Orta Taraf - Tubelight Menu (Desktopta Üstte, Mobilde Altta Alt Bar) */}
+                <TubelightNavbar items={desktopNavItems} />
 
-                {/* Sağ Taraf - Butonlar / Mobil Menü Butonu */}
-                <div className="flex items-center gap-2 lg:gap-3 relative z-50 shrink-0">
+                {/* Sağ Taraf - Butonlar */}
+                <div className="flex items-center gap-1.5 sm:gap-2.5 relative z-50 shrink-0">
                     <ThemeToggle />
                     {isAuthenticated ? (
                         <Link href="/dashboard" passHref legacyBehavior>
                             <motion.a
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm clash-subtitle text-white bg-[#0E1E38] hover:bg-[#102240] rounded-full shadow-[0_8px_30px_-5px_rgba(20,43,80,0.35)] transition-all hidden md:block whitespace-nowrap"
+                                className="cursor-pointer px-3 sm:px-5 py-1.5 sm:py-2 text-xs sm:text-sm clash-subtitle text-white bg-[#0E1E38] hover:bg-[#102240] rounded-full shadow-sm transition-all block whitespace-nowrap"
                             >
                                 Panele Git
                             </motion.a>
                         </Link>
                     ) : (
-                        <div className="hidden md:flex items-center gap-2 lg:gap-3">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
                             <Link href="/login" passHref legacyBehavior>
                                 <motion.a
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm clash-subtitle text-[#0E1E38] hover:bg-[#78B8F5]/15 rounded-full border-2 border-[#78B8F5] transition-all bg-white relative z-50 block whitespace-nowrap shadow-sm"
+                                    className="cursor-pointer px-3 sm:px-4 py-1.5 text-xs sm:text-sm clash-subtitle text-[#0E1E38] hover:bg-[#78B8F5]/15 rounded-full border border-[#78B8F5] transition-all bg-white relative z-50 block whitespace-nowrap shadow-xs"
                                 >
                                     Giriş Yap
                                 </motion.a>
@@ -88,7 +86,7 @@ export default function Navbar() {
                                 <motion.a
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="cursor-pointer px-4 lg:px-6 py-2 lg:py-2.5 text-xs lg:text-sm clash-subtitle text-white bg-[#0E1E38] hover:bg-[#102240] rounded-full shadow-[0_8px_30px_-5px_rgba(20,43,80,0.35)] transition-all relative z-50 block whitespace-nowrap"
+                                    className="cursor-pointer px-3 sm:px-4 py-1.5 text-xs sm:text-sm clash-subtitle text-white bg-[#0E1E38] hover:bg-[#102240] rounded-full shadow-sm transition-all relative z-50 hidden min-[400px]:block whitespace-nowrap"
                                 >
                                     Kaydol
                                 </motion.a>

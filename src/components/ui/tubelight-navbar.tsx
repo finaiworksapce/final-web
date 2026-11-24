@@ -40,11 +40,11 @@ export function TubelightNavbar({ items, className }: NavBarProps) {
   return (
     <div
       className={cn(
-        "fixed bottom-0 sm:top-0 left-1/2 -translate-x-1/2 z-50 mb-6 sm:mt-5",
+        "fixed bottom-4 sm:top-5 sm:bottom-auto left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-24px)]",
         className,
       )}
     >
-      <div className="flex items-center gap-2 lg:gap-3 bg-white/50 border border-[#78B8F5]/30 bg-white/70 backdrop-blur-md py-1.5 px-3 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
+      <div className="flex items-center gap-1 sm:gap-2 lg:gap-3 border border-[#78B8F5]/30 bg-white/90 dark:bg-[#02041A]/90 dark:border-white/10 backdrop-blur-xl py-1.5 px-2.5 sm:px-3 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
         {items.map((item) => {
           const Icon = item.icon
           const isActive = activeTab === item.name
@@ -55,9 +55,9 @@ export function TubelightNavbar({ items, className }: NavBarProps) {
               href={item.url}
               onClick={() => setActiveTab(item.name)}
               className={cn(
-                "relative cursor-pointer text-xs lg:text-sm clash-subtitle font-[325] tracking-tight px-3.5 lg:px-5 py-1.5 lg:py-2 rounded-full transition-colors duration-300 border-b-0",
-                "text-slate-600 hover:text-[#0E1E38]", // Inaktif renk
-                isActive && "text-[#0E1E38] font-medium", // Aktif yazı rengi (DarkBlue)
+                "relative cursor-pointer text-xs lg:text-sm clash-subtitle font-[325] tracking-tight px-3 sm:px-3.5 lg:px-5 py-1.5 lg:py-2 rounded-full transition-colors duration-300 border-b-0",
+                "text-slate-600 dark:text-slate-300 hover:text-[#0E1E38] dark:hover:text-white", // Inaktif renk
+                isActive && "text-[#004BFA] dark:text-[#78B8F5] font-medium", // Aktif yazı rengi
               )}
               style={{ borderBottom: 'none' }}
             >
@@ -69,7 +69,7 @@ export function TubelightNavbar({ items, className }: NavBarProps) {
               {isActive && (
                 <motion.div
                   layoutId="lamp"
-                  className="absolute inset-0 w-full bg-[#78B8F5]/20 rounded-full -z-10 border border-[#78B8F5]/40"
+                  className="absolute inset-0 w-full bg-[#78B8F5]/20 dark:bg-[#004BFA]/30 rounded-full -z-10 border border-[#78B8F5]/40 dark:border-blue-400/40"
                   initial={false}
                   transition={{
                     type: "spring",
