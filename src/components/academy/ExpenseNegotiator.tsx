@@ -484,7 +484,8 @@ export function ExpenseNegotiator() {
     <div className="w-full space-y-8 animate-in fade-in duration-300 flex-1 flex flex-col relative">
       
       {/* =========================================================================
-          DERİN KARARTMA KATMANI (SPOTLİGHT / SİNEMATİK ODAK PERDESİ)
+          DERİN KARARTMA KATMANI:
+          TOPLAM VARLIK DEĞERİ GRADYANI VE AMBIENT IŞIMALARI
           ========================================================================= */}
       <AnimatePresence>
         {isSpotlightActive && (
@@ -493,16 +494,32 @@ export function ExpenseNegotiator() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.35 }}
-            onClick={() => setIsSpotlightActive(false)}
-            className="fixed inset-0 z-40 bg-[#02041A]/92 backdrop-blur-xs flex flex-col items-center justify-between p-6 cursor-pointer"
+            transition={{ duration: 0.4 }}
+            className="fixed inset-0 z-40 bg-gradient-to-br from-[#02041A] via-[#040989] to-[#02041A] overflow-hidden pointer-events-auto"
           >
-            {/* Üst Bilgi Rozeti */}
-            <div className="text-center pt-3 pointer-events-auto">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white/90 text-xs font-medium border border-white/15 shadow-lg">
-                <span className="w-2 h-2 rounded-full bg-[#004BFA] animate-pulse" />
-                FinAi Bire Bir Akıl Hocası Masası • Dışarı tıklayarak masayı tam ekranda görebilirsiniz
-              </span>
+            {/* Ambient Background Gradient Circles (Toplam Varlık Kartı ile Birebir Aynı) */}
+            <div className="absolute -top-24 -right-24 w-96 h-96 sm:w-[540px] sm:h-[540px] bg-[#004BFA]/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-24 -left-24 w-96 h-96 sm:w-[540px] sm:h-[540px] bg-[#004BFA]/20 rounded-full blur-3xl pointer-events-none" />
+
+            {/* Subtle SVG Wave Background (Toplam Varlık Trend Çizgisi) */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
+              <svg viewBox="0 0 500 160" className="w-full h-full" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="spotlightHeroWave" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#004BFA" stopOpacity="0.2" />
+                    <stop offset="50%" stopColor="#5B80FF" stopOpacity="0.6" />
+                    <stop offset="100%" stopColor="#5B80FF" stopOpacity="0.95" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M 0,118 C 60,130 90,125 140,112 C 190,99 220,118 270,103 C 320,88 360,95 400,72 C 430,55 465,38 500,24"
+                  fill="none"
+                  stroke="url(#spotlightHeroWave)"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+                <circle cx="499" cy="24" r="4" fill="#5B80FF" opacity="1" className="animate-pulse" />
+              </svg>
             </div>
           </motion.div>
         )}
@@ -528,19 +545,8 @@ export function ExpenseNegotiator() {
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Spotlight Modunu Yeniden Başlat Butonu */}
-            <button
-              type="button"
-              onClick={() => setIsSpotlightActive(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-[#004BFA] text-xs font-semibold transition-all cursor-pointer shadow-2xs"
-              title="Sohbeti ekranın merkezine odakla"
-            >
-              <Maximize2 className="w-3.5 h-3.5" />
-              <span>Odak Modu</span>
-            </button>
-
             {/* İlerleme Bölmeleri */}
-            <div className="flex items-center gap-1.5 shrink-0 pl-2 border-l border-slate-100">
+            <div className="flex items-center gap-1.5 shrink-0">
               {items.map((it, idx) => (
                 <button
                   key={it.id}
@@ -572,167 +578,235 @@ export function ExpenseNegotiator() {
                 SOL KOLON: FİNAİ WORKSPACE EKİBİ CANLI MESAJLAŞMA (%65 BOYUTUNDA)
                 (Spotlight anında animasyonla merkeze uçar, bittiğinde geri döner)
                 ===================================================================== */}
-            <div className="w-full lg:w-[65%] min-h-[500px] relative flex flex-col">
+            <div className="w-full lg:w-[65%] min-h-[520px] relative flex flex-col">
               
-              {/* Spotlight açıkken sol kolondaki yer tutucu (Layout zıplamasını önler) */}
+              {/* Spotlight açıkken sol kolondaki yer tutucu */}
               {isSpotlightActive && (
-                <div className="w-full h-full min-h-[460px] rounded-2xl border-2 border-dashed border-slate-200/80 bg-slate-50/60 flex flex-col items-center justify-center p-8 text-center space-y-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-[#004BFA]">
-                    <Maximize2 className="w-5 h-5 animate-pulse" />
+                <div className="w-full h-full min-h-[500px] rounded-2xl border-2 border-dashed border-slate-200/80 bg-slate-50/50 flex flex-col items-center justify-center p-8 text-center space-y-2">
+                  <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center text-[#004BFA]">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#004BFA] animate-pulse" />
                   </div>
-                  <div>
-                    <h5 className="text-sm font-semibold text-[#0E1E38] clash-title">
-                      Akıl Hocası Odak Modu Aktif
-                    </h5>
-                    <p className="text-xs text-slate-400 mt-1 max-w-xs">
-                      Konuşma şu an ekranın merkezinde odaklanmış durumdadır.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setIsSpotlightActive(false)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-semibold text-slate-600 hover:text-[#004BFA] shadow-2xs cursor-pointer"
-                  >
-                    <span>Masaya Geri Dön</span>
-                  </button>
+                  <h5 className="text-sm font-semibold text-[#0E1E38] clash-title">
+                    FinAi Akıl Hocası Görüşmesi Devam Ediyor
+                  </h5>
+                  <p className="text-xs text-slate-400 max-w-xs">
+                    Kararınızı onayladığınızda masadaki bütçe dengeniz anlık olarak güncellenecektir.
+                  </p>
                 </div>
               )}
 
-              {/* HAREKETLİ BEYAZ SOHBET KARTI (SOL VEYA MERKEZ) */}
-              <div
-                className={`transition-all duration-500 ease-in-out ${
-                  isSpotlightActive
-                    ? 'fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[94%] sm:w-[88%] max-w-2xl bg-white text-[#0E1E38] shadow-2xl rounded-2xl p-6 sm:p-8 border border-slate-200 ring-1 ring-slate-900/5'
-                    : 'w-full h-full flex flex-col justify-between bg-white text-[#0E1E38] rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-xs'
-                }`}
-              >
-                
-                {/* Kart Üst Bilgisi */}
-                <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-                  <div className="flex items-center gap-3">
-                    <img src="/icon.png" alt="FinAi" className="w-8 h-8 object-contain shrink-0" />
-                    <div>
-                      <h4 className="text-sm font-semibold text-[#0E1E38] tracking-wide clash-title">
-                        FinAi Workspace Ekibi
-                      </h4>
-                      <span className="text-[11px] text-slate-400 block">
-                        Kişisel Bütçe ve Sermaye Akıl Hocası • Şimdi
+              {/* HAREKETLİ BEYAZ SOHBET KARTI (BÜYÜTÜLMÜŞ, SOLDAN ORTAYA YAYLANMALI UÇUŞ) */}
+              {isSpotlightActive ? (
+                <motion.div
+                  key={`spotlight-card-${currentIndex}`}
+                  initial={{ x: "-70vw", y: "-50%", opacity: 0.1, scale: 0.88 }}
+                  animate={{ x: "-50%", y: "-50%", opacity: 1, scale: 1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 120,
+                    damping: 18,
+                    mass: 0.85
+                  }}
+                  className="fixed z-50 top-1/2 left-1/2 w-[95%] sm:w-[90%] max-w-3xl lg:max-w-4xl bg-white text-[#0E1E38] shadow-2xl rounded-3xl p-7 sm:p-10 lg:p-12 border border-slate-100 ring-1 ring-slate-900/10 flex flex-col justify-between space-y-6"
+                >
+                  {/* Kart Üst Bilgisi */}
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-4 sm:pb-5">
+                    <div className="flex items-center gap-3.5">
+                      <img src="/icon.png" alt="FinAi" className="w-9 h-9 object-contain shrink-0" />
+                      <div>
+                        <h4 className="text-base sm:text-lg font-semibold text-[#0E1E38] tracking-wide clash-title">
+                          FinAi Workspace Ekibi
+                        </h4>
+                        <span className="text-xs text-slate-400 block mt-0.5">
+                          Kişisel Bütçe ve Sermaye Akıl Hocası • Şimdi
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="text-right">
+                      <span className="text-xs text-slate-400 block">Görüşülen Kalem</span>
+                      <span className="text-sm sm:text-base font-bold text-[#004BFA]">
+                        {currentItem.name} ({currentItem.currentAmount.toLocaleString('tr-TR')} ₺)
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  {/* Beyaz Kart Üzerinde Büyütülmüş ve Ferah Diyalog Alanı */}
+                  <div className="my-2 sm:my-4 flex-1 flex flex-col justify-center">
+                    {currentItem.chatHistory && currentItem.chatHistory.length > 0 ? (
+                      <div className="space-y-4">
+                        {currentItem.chatHistory.map((msg) => {
+                          const isAi = msg.sender === 'ai';
+                          return (
+                            <div
+                              key={msg.id}
+                              className={`flex gap-3 max-w-[95%] ${
+                                isAi ? 'self-start' : 'ml-auto justify-end'
+                              }`}
+                            >
+                              <div
+                                className={`p-5 sm:p-7 rounded-2xl text-base sm:text-lg leading-relaxed ${
+                                  isAi
+                                    ? 'bg-slate-50 text-slate-800 border border-slate-200/80 shadow-xs'
+                                    : 'bg-[#004BFA] text-white shadow-sm'
+                                }`}
+                              >
+                                <p className="font-normal font-clash">{msg.text}</p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="p-6 sm:p-8 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-800 shadow-xs">
+                        <p className="text-base sm:text-lg lg:text-xl text-slate-800 font-normal leading-relaxed font-clash">
+                          {currentItem.lastDialogue}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Alt Aksiyon Butonları & Karar Alanı */}
+                  <div className="pt-4 sm:pt-6 border-t border-slate-100 space-y-4 mt-auto">
+                    {!isCurrentSettled ? (
+                      currentItem.category === 'A' ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleOffer(currentItem.originalAmount);
+                          }}
+                          className="w-full inline-flex items-center justify-center gap-3 px-8 py-4 sm:py-4.5 rounded-2xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer"
+                        >
+                          <Check className="w-5 h-5" />
+                          <span>Bu Sabit Gideri Aynen Koru ve Devam Et →</span>
+                        </button>
+                      ) : (
+                        <form
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            const val = Number(userOfferInput.replace(/\D/g, ''));
+                            if (val > 0) handleOffer(val);
+                          }}
+                          className="flex flex-col sm:flex-row items-center gap-3 w-full"
+                        >
+                          <div className="relative flex-1 w-full">
+                            <input
+                              type="number"
+                              value={userOfferInput}
+                              onChange={(e) => setUserOfferInput(e.target.value)}
+                              placeholder="Önerdiğin aylık tutarı yaz (örn: 5500 ₺)..."
+                              className="w-full pl-5 pr-11 py-3.5 sm:py-4 rounded-xl bg-slate-50 border border-slate-200 text-sm sm:text-base font-semibold text-[#0E1E38] placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-[#004BFA]/20 focus:border-[#004BFA] transition-all"
+                            />
+                            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm sm:text-base text-slate-400 font-semibold">
+                              ₺
+                            </span>
+                          </div>
+
+                          <button
+                            type="submit"
+                            disabled={!userOfferInput || Number(userOfferInput) <= 0}
+                            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 sm:py-4 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] disabled:bg-slate-200 disabled:text-slate-400 text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-xs cursor-pointer disabled:cursor-not-allowed shrink-0"
+                          >
+                            <span>Teklif Et</span>
+                            <Send className="w-4 h-4" />
+                          </button>
+                        </form>
+                      )
+                    ) : (
+                      <div className="flex flex-col sm:flex-row items-center justify-between gap-3.5 w-full">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleReNegotiate(currentIndex);
+                          }}
+                          className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-[#0E1E38] text-sm font-medium transition-all cursor-pointer shadow-2xs"
+                        >
+                          <RotateCcw className="w-4 h-4 text-slate-500" />
+                          <span>Tekrar Pazarlık Et</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (currentIndex < items.length - 1) {
+                              handleNextItem();
+                            } else {
+                              handleNextItem();
+                              setIsSpotlightActive(false);
+                            }
+                          }}
+                          className="w-full sm:flex-1 inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-md cursor-pointer"
+                        >
+                          <span>
+                            {currentIndex < items.length - 1 ? 'Sonraki Pazarlığa Geç' : 'Sonuçları Gör'}
+                          </span>
+                          <ArrowRight className="w-5 h-5" />
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Alt Gezinme Barı */}
+                    <div className="flex justify-between items-center text-xs sm:text-sm text-slate-400 pt-2 border-t border-slate-100">
+                      <button
+                        type="button"
+                        onClick={handlePrevItem}
+                        disabled={currentIndex === 0}
+                        className="inline-flex items-center gap-1.5 hover:text-[#004BFA] disabled:opacity-30 disabled:hover:text-slate-400 cursor-pointer disabled:cursor-not-allowed transition-colors font-medium"
+                      >
+                        <ArrowLeft className="w-4 h-4" />
+                        <span>Önceki Kalem</span>
+                      </button>
+
+                      <span className="font-medium text-slate-500">
+                        Kalan Kalem: {items.length - (currentIndex + 1)}
+                      </span>
+                    </div>
+
+                  </div>
+
+                </motion.div>
+              ) : (
+                /* Spotlight kapandığında orijinal sol sütunda dinlenen kart */
+                <div className="w-full h-full flex flex-col justify-between bg-white text-[#0E1E38] rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-xs">
+                  {/* Kart Üst Bilgisi */}
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <div className="flex items-center gap-3">
+                      <img src="/icon.png" alt="FinAi" className="w-8 h-8 object-contain shrink-0" />
+                      <div>
+                        <h4 className="text-sm font-semibold text-[#0E1E38] tracking-wide clash-title">
+                          FinAi Workspace Ekibi
+                        </h4>
+                        <span className="text-[11px] text-slate-400 block">
+                          Kişisel Bütçe ve Sermaye Akıl Hocası • Şimdi
+                        </span>
+                      </div>
+                    </div>
+
                     <div className="text-right">
                       <span className="text-[11px] text-slate-400 block">Görüşülen Kalem</span>
                       <span className="text-xs sm:text-sm font-bold text-[#004BFA]">
                         {currentItem.name} ({currentItem.currentAmount.toLocaleString('tr-TR')} ₺)
                       </span>
                     </div>
-
-                    {isSpotlightActive && (
-                      <button
-                        type="button"
-                        onClick={() => setIsSpotlightActive(false)}
-                        className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
-                        title="Masaya Geri Dön (Sola Çek)"
-                      >
-                        <Minimize2 className="w-4 h-4 text-slate-500" />
-                      </button>
-                    )}
                   </div>
-                </div>
 
-                {/* Beyaz Kart Üzerinde Yüksek Kontrastlı Diyalog Alanı */}
-                <div className="space-y-4 my-5 flex-1 flex flex-col justify-center">
-                  {currentItem.chatHistory && currentItem.chatHistory.length > 0 ? (
-                    <div className="space-y-3">
-                      {currentItem.chatHistory.map((msg) => {
-                        const isAi = msg.sender === 'ai';
-                        return (
-                          <div
-                            key={msg.id}
-                            className={`flex gap-3 max-w-[95%] ${
-                              isAi ? 'self-start' : 'ml-auto justify-end'
-                            }`}
-                          >
-                            <div
-                              className={`p-4 sm:p-5 rounded-xl text-sm sm:text-base leading-relaxed ${
-                                isAi
-                                  ? 'bg-slate-50 text-slate-800 border border-slate-200/80 shadow-2xs'
-                                  : 'bg-[#004BFA] text-white shadow-xs'
-                              }`}
-                            >
-                              <p className="font-normal font-clash">{msg.text}</p>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
+                  <div className="space-y-4 my-5 flex-1 flex flex-col justify-center">
                     <div className="p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200/80 text-slate-800 shadow-2xs">
-                      <p className="text-sm sm:text-base lg:text-[16px] text-slate-800 font-normal leading-relaxed font-clash">
+                      <p className="text-sm sm:text-base text-slate-800 font-normal leading-relaxed font-clash">
                         {currentItem.lastDialogue}
                       </p>
                     </div>
-                  )}
-                </div>
+                  </div>
 
-                {/* Alt Aksiyon Butonları & Teklif Alanı */}
-                <div className="pt-4 border-t border-slate-100 space-y-4 mt-auto">
-                  {!isCurrentSettled ? (
-                    currentItem.category === 'A' ? (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          handleOffer(currentItem.originalAmount);
-                          setIsSpotlightActive(false);
-                        }}
-                        className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer"
-                      >
-                        <Check className="w-4 h-4" />
-                        <span>Bu Sabit Gideri Aynen Koru ve Devam Et →</span>
-                      </button>
-                    ) : (
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          const val = Number(userOfferInput.replace(/\D/g, ''));
-                          if (val > 0) handleOffer(val);
-                        }}
-                        className="flex flex-col sm:flex-row items-center gap-2.5 w-full"
-                      >
-                        <div className="relative flex-1 w-full">
-                          <input
-                            type="number"
-                            value={userOfferInput}
-                            onChange={(e) => setUserOfferInput(e.target.value)}
-                            placeholder="Önerdiğin aylık tutarı yaz (örn: 5500 ₺)..."
-                            className="w-full pl-4 pr-10 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm sm:text-base font-semibold text-[#0E1E38] placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-[#004BFA]/20 focus:border-[#004BFA] transition-all"
-                          />
-                          <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-sm text-slate-400 font-semibold">
-                            ₺
-                          </span>
-                        </div>
-
-                        <button
-                          type="submit"
-                          disabled={!userOfferInput || Number(userOfferInput) <= 0}
-                          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] disabled:bg-slate-200 disabled:text-slate-400 text-white text-sm font-semibold transition-all duration-200 shadow-xs cursor-pointer disabled:cursor-not-allowed shrink-0"
-                        >
-                          <span>Teklif Et</span>
-                          <Send className="w-4 h-4" />
-                        </button>
-                      </form>
-                    )
-                  ) : (
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 w-full">
+                  <div className="pt-4 border-t border-slate-100 space-y-4 mt-auto">
+                    <div className="flex items-center justify-between gap-3 w-full">
                       <button
                         type="button"
                         onClick={() => {
                           handleReNegotiate(currentIndex);
                           setIsSpotlightActive(true);
                         }}
-                        className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 hover:text-[#0E1E38] text-xs sm:text-sm font-medium transition-all cursor-pointer shadow-2xs"
+                        className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs sm:text-sm font-medium transition-all cursor-pointer"
                       >
                         <RotateCcw className="w-4 h-4 text-slate-500" />
                         <span>Tekrar Pazarlık Et</span>
@@ -741,9 +815,14 @@ export function ExpenseNegotiator() {
                       <button
                         type="button"
                         onClick={() => {
-                          handleNextItem();
+                          if (currentIndex < items.length - 1) {
+                            handleNextItem();
+                            setIsSpotlightActive(true);
+                          } else {
+                            handleNextItem();
+                          }
                         }}
-                        className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition-all duration-200 shadow-md cursor-pointer"
+                        className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer"
                       >
                         <span>
                           {currentIndex < items.length - 1 ? 'Sonraki Pazarlığa Geç' : 'Sonuçları Gör'}
@@ -751,38 +830,9 @@ export function ExpenseNegotiator() {
                         <ArrowRight className="w-4 h-4" />
                       </button>
                     </div>
-                  )}
-
-                  {/* Alt Gezinme Barı */}
-                  <div className="flex justify-between items-center text-xs text-slate-400 pt-1">
-                    <button
-                      type="button"
-                      onClick={handlePrevItem}
-                      disabled={currentIndex === 0}
-                      className="inline-flex items-center gap-1 hover:text-[#004BFA] disabled:opacity-30 disabled:hover:text-slate-400 cursor-pointer disabled:cursor-not-allowed transition-colors"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" />
-                      <span>Önceki Kalem</span>
-                    </button>
-
-                    {isSpotlightActive && (
-                      <button
-                        type="button"
-                        onClick={() => setIsSpotlightActive(false)}
-                        className="text-xs text-[#004BFA] hover:underline font-medium cursor-pointer"
-                      >
-                        Tabloya Dön (Sola Çek) ↓
-                      </button>
-                    )}
-
-                    <span>
-                      Kalan Kalem: {items.length - (currentIndex + 1)}
-                    </span>
                   </div>
-
                 </div>
-
-              </div>
+              )}
 
             </div>
 
