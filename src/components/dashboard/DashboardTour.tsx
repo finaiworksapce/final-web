@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Compass, ArrowRight, ArrowLeft, X } from "lucide-react";
@@ -25,6 +25,7 @@ interface StepConfig {
     | "news"
     | "sample-portfolio"
     | "academy";
+  element: string;
   title: string;
   description: string;
 }
@@ -41,12 +42,17 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
   const [isOpen, setIsOpen] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
+  const [origin, setOrigin] = useState<{ deltaX: number; deltaY: number; scale: number }>({
+    deltaX: 0,
+    deltaY: 0,
+    scale: 0.85,
+  });
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Sayfa kilitlenmesi (Modal açıkken arka plan kaymasını önler)
+  // Modal açıkken sayfa kaymasını kilitle
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -63,36 +69,42 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
     () => [
       {
         id: "summary",
+        element: "#finai-widget-summary",
         title: "Portföyünün Finansal Nabzı",
         description:
           "Sahip olduğun tüm hisse senedi, fon ve nakit varlıklarının güncel toplam değerini tek bakışta buradan izleyebilirsin. Günlük kâr/zarar durumunu ve genel getiri oranını anlık olarak takip ederek portföyünün performansını ölçebilirsin. Detaylı varlık listene ve işlem geçmişine ulaşmak için kartlara tıklayabilirsin.",
       },
       {
         id: "allocation",
+        element: "#finai-widget-allocation",
         title: "Risk ve Varlık Dağılımı",
         description:
           "Portföyünün hisse, yatırım fonu, emtia ve nakit arasındaki oransal ağırlığını gösterir. Finansal okuryazarlığın temel kuralı tüm birikimi tek bir enstrümana bağlamamaktır; buradaki dağılım grafiği risk dengeni anında kontrol etmeni sağlar. Bu widget'ın üzerine bastığın zaman ise seni doğrudan detaylı Portföy sayfana yönlendirir.",
       },
       {
         id: "monthly-report",
+        element: "#finai-widget-monthly-report",
         title: "FinAi Aylık Portföy Raporu",
         description:
           "Bu alan, yapay zekanın portföyünü detaylı inceleyerek oluşturduğu aylık performans ve strateji analizidir. Bu rapor aylık olarak hazırlandığından dolayı, ilk kapsamlı analizini portföyünü oluşturduktan 1 ay sonra burada görebileceksin. Her ayın sonunda yatırımlarının genel seyrini ve derinlemesine içgörülerini buradan takip edebilirsin.",
       },
       {
         id: "market",
+        element: "#finai-widget-market",
         title: "Piyasa Genel Görünümü & Canlı Grafikler",
         description:
           "Borsa İstanbul endeksinin yanı sıra bu alandaki grafikten en popüler varlıklar olan Gram Altın, Gümüş, Döviz Kurları ve Bitcoin gibi grafiklere hızlıca bakabilirsin. Sekmeler arasında geçiş yaparak canlı fiyat hareketlerini ve teknik grafikleri anında inceleyebilirsin. Kendi yatırımlarının performansını genel piyasa trendleriyle kıyaslamak için en pratik izleme alanındır.",
       },
       {
         id: "agenda",
+        element: "#finai-widget-agenda",
         title: "Günlük Ajanda & Kritik Gelişmeler",
         description:
           "Takvim sayfandaki bugün içerisinde açıklanacak önemli şirket ve ekonomi gelişmelerini senin için bu kısımda kısayol olarak özetler. Takip ettiğin şirketlerin bugünkü bilanço açıklamaları, temettü ödemeleri veya kritik KAP bildirimleri doğrudan bu karta düşer. Detaylı takvime gitmeden günün en kritik olaylarını anında yakalamanı sağlar.",
       },
       {
         id: "news",
+        element: "#finai-widget-news",
         title: "Doğrulanmış Ekonomi ve Borsa Gündemi",
         description:
           "Borsa İstanbul, şirketler ve makroekonomiye dair en güncel haber akışını filtreleyerek sana sunar. Spekülasyonlardan uzak, doğrudan şirket KAP açıklamalarına ve resmi verilere dayalı haberlerle piyasayı ilk elden takip edebilirsin.",
@@ -106,30 +118,35 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
     () => [
       {
         id: "sample-portfolio",
+        element: "#finai-widget-sample-portfolio",
         title: "Model Portföy Rehberi",
         description:
           "Henüz portföyüne varlık eklemediysen, FinAi uzmanları ve algoritmaları tarafından dengeli biçimde hazırlanmış BIST model portföyünü buradan inceleyebilirsin. Risk dağılımı yapılmış örnek bir hisse senedi sepetinin nasıl kurgulandığını görerek kendi portföyün için ilham alabilirsin.",
       },
       {
         id: "academy",
+        element: "#finai-widget-academy",
         title: "Finansal Okuryazarlık & Akademi",
         description:
           "Bütçe yönetiminden hisse senedi ve şirket ortaklığına uzanan adım adım interaktif eğitim haritandır. Her hafta yeni bir modülü tamamlayarak finansal okuryazarlığını geliştirebilir ve tasarruflarını bilinçli yatırımlara dönüştürmeyi öğrenebilirsin.",
       },
       {
         id: "market",
+        element: "#finai-widget-market",
         title: "Piyasa Genel Görünümü & Canlı Grafikler",
         description:
           "Borsa İstanbul endeksinin yanı sıra bu alandaki grafikten en popüler varlıklar olan Gram Altın, Gümüş, Döviz Kurları ve Bitcoin gibi grafiklere hızlıca bakabilirsin. Sekmeler arasında geçiş yaparak canlı fiyat hareketlerini ve teknik grafikleri anında inceleyebilirsin. Kendi yatırımlarının performansını genel piyasa trendleriyle kıyaslamak için en pratik izleme alanındır.",
       },
       {
         id: "agenda",
+        element: "#finai-widget-agenda",
         title: "Günlük Ajanda & Kritik Gelişmeler",
         description:
           "Takvim sayfandaki bugün içerisinde açıklanacak önemli şirket ve ekonomi gelişmelerini senin için bu kısımda kısayol olarak özetler. Takip ettiğin şirketlerin bugünkü bilanço açıklamaları, temettü ödemeleri veya kritik KAP bildirimleri doğrudan bu karta düşer. Detaylı takvime gitmeden günün en kritik olaylarını anında yakalamanı sağlar.",
       },
       {
         id: "news",
+        element: "#finai-widget-news",
         title: "Doğrulanmış Ekonomi ve Borsa Gündemi",
         description:
           "Borsa İstanbul, şirketler ve makroekonomiye dair en güncel haber akışını filtreleyerek sana sunar. Spekülasyonlardan uzak, doğrudan şirket KAP açıklamalarına ve resmi verilere dayalı haberlerle piyasayı ilk elden takip edebilirsin.",
@@ -138,7 +155,7 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
     []
   );
 
-  // Aktif adımları belirle
+  // Aktif adımları belirle (DOM mevcudiyeti öncelikli)
   const steps = useMemo(() => {
     if (typeof document !== "undefined") {
       if (document.querySelector("#finai-widget-summary")) {
@@ -150,6 +167,56 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
     }
     return hasActiveAssets ? stepsWithAssets : stepsWithoutAssets;
   }, [hasActiveAssets, stepsWithAssets, stepsWithoutAssets]);
+
+  // Her widget'ın sayfadaki kendi gerçek konumunu hesapla (Ortaya sürüklenişin başlangıç noktası)
+  const updateOriginForStep = useCallback((step: StepConfig) => {
+    if (typeof window === "undefined") return;
+
+    const el = document.querySelector(step.element);
+    const winW = window.innerWidth;
+    const winH = window.innerHeight;
+    const isDesktop = winW >= 1024;
+
+    if (!el) {
+      setOrigin({ deltaX: -winW * 0.45, deltaY: 0, scale: 0.85 });
+      return;
+    }
+
+    const rect = el.getBoundingClientRect();
+    const elCenterX = rect.left + rect.width / 2;
+    const elCenterY = rect.top + rect.height / 2;
+
+    let targetWidth = 640;
+    let widgetCenterX = winW / 2;
+    let widgetCenterY = winH / 2;
+
+    if (isDesktop) {
+      const modalWidth = Math.min(1152, winW * 0.92);
+      const modalLeft = (winW - modalWidth) / 2;
+      targetWidth = modalWidth * 0.58;
+      widgetCenterX = modalLeft + targetWidth / 2;
+      widgetCenterY = winH / 2;
+    } else {
+      targetWidth = Math.min(winW - 48, 520);
+      widgetCenterX = winW / 2;
+      widgetCenterY = Math.max(160, winH * 0.32);
+    }
+
+    const deltaX = elCenterX - widgetCenterX;
+    const deltaY = elCenterY - widgetCenterY;
+    const scale = targetWidth > 0 ? Math.min(1, Math.max(0.4, rect.width / targetWidth)) : 0.85;
+
+    setOrigin({ deltaX, deltaY, scale });
+  }, []);
+
+  // Adım değiştikçe hedef widget'ın başlangıç koordinatını güncelle
+  useEffect(() => {
+    if (!isOpen) return;
+    const step = steps[currentStepIndex];
+    if (step) {
+      updateOriginForStep(step);
+    }
+  }, [isOpen, currentStepIndex, steps, updateOriginForStep]);
 
   // Klavye Kontrolleri
   useEffect(() => {
@@ -189,6 +256,18 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
   };
 
   const handleStart = () => {
+    let activeSteps = steps;
+    if (typeof document !== "undefined") {
+      if (document.querySelector("#finai-widget-summary")) {
+        activeSteps = stepsWithAssets;
+      } else if (document.querySelector("#finai-widget-sample-portfolio")) {
+        activeSteps = stepsWithoutAssets;
+      }
+    }
+    const firstStep = activeSteps[0];
+    if (firstStep) {
+      updateOriginForStep(firstStep);
+    }
     setCurrentStepIndex(0);
     setIsOpen(true);
   };
@@ -268,8 +347,8 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
       </button>
 
       {/* =========================================================================
-          PORTAL: AKADEMİ 2. HAFTA İLE BİREBİR AYNI YAYLANMALI MERKEZE UÇUŞ
-          (FinAi İmza Gradyanlı Arka Plan + Sayfanın Ortasına Gelen Widget & Tipografi)
+          PORTAL: HER WIDGET'IN KENDİ YERİNDEN BAŞLAYIP ORTAYA DOĞRU SÜRÜKLENDİĞİ
+          AKADEMİ 2. HAFTA YAYLANMALI MERKEZE UÇUŞ MİMARİSİ
           ========================================================================= */}
       {isMounted &&
         createPortal(
@@ -312,31 +391,56 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
                   </div>
                 </motion.div>
 
-                {/* 2. SAYFANIN ORTASINA YAYLANMALI UÇAN WIDGET VE HEMEN YANINDAKİ TİPOGRAFİ */}
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={`spotlight-step-${currentStepIndex}`}
-                    initial={{ x: "-70vw", opacity: 0.1, scale: 0.88 }}
-                    animate={{ x: 0, opacity: 1, scale: 1 }}
-                    exit={{ x: "70vw", opacity: 0.1, scale: 0.88 }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 120,
-                      damping: 18,
-                      mass: 0.85,
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                    className="relative z-10 w-full max-w-5xl xl:max-w-6xl my-auto flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 pointer-events-auto"
-                  >
-                    {/* SOL KOLON: SAYFANIN ORTASINA GELEN ANİMASYONLU WIDGET */}
-                    <div className="w-full lg:w-[58%] xl:w-[60%] flex items-center justify-center">
-                      <div className="w-full shadow-2xl rounded-3xl overflow-hidden ring-1 ring-white/20">
+                {/* 2. MERKEZE UÇUŞ VİTRİNİ: WIDGET KENDİ YERİNDEN BAŞLAYARAK ORTAYA SÜRÜKLENİR */}
+                <div
+                  onClick={(e) => e.stopPropagation()}
+                  className="relative z-10 w-full max-w-5xl xl:max-w-6xl my-auto flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 pointer-events-auto"
+                >
+                  {/* SOL KOLON: SAYFADAKİ KENDİ GERÇEK YERİNDEN MERKEZE SÜRÜKLENEN ANİMASYONLU WIDGET */}
+                  <div className="w-full lg:w-[58%] xl:w-[60%] flex items-center justify-center">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={`widget-fly-${currentStep.id}`}
+                        initial={{
+                          x: origin.deltaX,
+                          y: origin.deltaY,
+                          scale: origin.scale,
+                          opacity: 0.85,
+                        }}
+                        animate={{
+                          x: 0,
+                          y: 0,
+                          scale: 1,
+                          opacity: 1,
+                        }}
+                        exit={{
+                          opacity: 0,
+                          scale: 0.92,
+                          transition: { duration: 0.2 },
+                        }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 110,
+                          damping: 17,
+                          mass: 0.85,
+                        }}
+                        className="w-full shadow-2xl rounded-3xl overflow-hidden ring-1 ring-white/20"
+                      >
                         {renderActiveWidget()}
-                      </div>
-                    </div>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
 
-                    {/* SAĞ KOLON: HEMEN YANINA GELEN KUTUSUZ ZARİF TİPOGRAFİ */}
-                    <div className="w-full lg:w-[42%] xl:w-[40%] flex flex-col space-y-5 text-white select-none">
+                  {/* SAĞ KOLON: HEMEN YANINA GELEN KUTUSUZ ZARİF TİPOGRAFİ */}
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={`text-step-${currentStep.id}`}
+                      initial={{ opacity: 0, x: 28 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -16, transition: { duration: 0.2 } }}
+                      transition={{ duration: 0.35, delay: 0.1, ease: "easeOut" }}
+                      className="w-full lg:w-[42%] xl:w-[40%] flex flex-col space-y-5 text-white select-none"
+                    >
                       {/* Adım Rozeti */}
                       <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[11px] font-semibold text-white/80 uppercase tracking-widest backdrop-blur-md self-start">
                         <span className="w-2 h-2 rounded-full bg-[#5B80FF] animate-pulse" />
@@ -406,9 +510,9 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
                           />
                         ))}
                       </div>
-                    </div>
-                  </motion.div>
-                </AnimatePresence>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
               </div>
             )}
           </AnimatePresence>,
