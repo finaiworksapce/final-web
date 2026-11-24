@@ -21,15 +21,9 @@ function AkademiContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
-  // Kullanıcı adı bilgisi
-  let userName: string | null = null;
-  let userCtx: any = null;
-  try {
-    userCtx = useUser();
-    userName = userCtx?.userName || null;
-  } catch {
-    // UserProvider dışı koruma
-  }
+  // Kullanıcı adı ve bağlam bilgisi
+  const userCtx = useUser();
+  const userName = userCtx?.userName || null;
 
   // URL senkronizasyonu
   const urlTopic = searchParams.get("ders");
