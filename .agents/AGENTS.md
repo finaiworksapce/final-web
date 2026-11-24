@@ -1,0 +1,7 @@
+# Project Rules
+
+- **Strict Scope**: Portföyüm sayfası istenildiğinde sadece Portföyüm sayfası değiştirilmeli, veri akışı ve fonksiyonellik korunmalıdır.
+- **Auto Deploy**: Değişiklikler tamamlandıktan sonra yapılan güncellemeler otomatik olarak git repository'ye commit edilip `main` dalına push edilmelidir (canlı siteye otomatik canlıya alma için).
+- **Ekonomik Takvim Geçmiş Veri Kuralı**: Açıklanan tüm ekonomik veriler arka planda otomatik olarak yerel veritabanına kaydedilmeli ve geçmiş veriler ASLA SİLİNMEMELİDİR. Bu sayede zaman içinde %100 organik reel geçmiş veri deposu oluşturulacaktır.
+- **Tasarım ve Bileşen Referansları**: Tasarımlar yapılırken UI/UX Pro Max kuralları gözetilerek, gerektiğinde ilham ve bileşen yardımı için `https://www.tradingview.com/widget-docs/widgets/` (Finansal widget'lar) ve `https://21st.dev/` (Modern React/Tailwind UI bileşenleri) sitelerinden destek alınmalıdır. (Sadece bu sitelere bağımlı kalınmamalı, harmanlanmalıdır).
+- **Mobil Telefon Standart Kuralı (700px)**: FinAi platformunda mobil telefon standart genişlik eşiği kesin olarak 700px'dir (0px – 700px arası mobil telefon görünümüdür; eski 575px standardı 700px ile güncellenmiştir). Tüm arayüz, kart, tablo, widget ve responsive geliştirmelerde 700px ve altı tek sütunlu, ergonomik dokunmatik ve sıfır yatay taşmalı mobil telefon deneyimi olarak optimize edilmelidir. Tailwind konfigürasyonunda `--breakpoint-sm: 700px` ve `--breakpoint-mobile: 700px` esas alınır.

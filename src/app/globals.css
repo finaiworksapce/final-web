@@ -148,6 +148,10 @@ body {
 }
 
 @theme {
+  /* FinAi Standart Breakpoint'leri: Mobil Telefon Standardı 700px (0-700px) */
+  --breakpoint-sm: 700px;
+  --breakpoint-mobile: 700px;
+
   /* Luminous Silver & Navy Palette */
   --color-background: #F5F7FA;
   --color-foreground: #040989;
@@ -276,6 +280,7 @@ img, svg, video, canvas, audio, iframe, embed, object {
 
 
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant mobile (@media (max-width: 700px));
 
 /* ==========================================================================
    FINAI THEME SYSTEM (LIGHT & DARK MODES)
