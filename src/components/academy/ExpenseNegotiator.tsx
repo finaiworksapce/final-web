@@ -862,10 +862,10 @@ export function ExpenseNegotiator() {
                 </div>
               )}
 
-              {/* HAREKETLİ BEYAZ SOHBET KARTI (BÜYÜTÜLMÜŞ, SOLDAN ORTAYA YAYLANMALI UÇUŞ) */}
+              {/* HAREKETLİ BEYAZ SOHBET KARTI (BÜYÜTÜLMÜŞ, İLK AÇILIŞTA SOLDAN ORTAYA YAYLANMALI UÇUŞ) */}
               {isSpotlightActive ? (
                 <motion.div
-                  key={`spotlight-card-${currentIndex}`}
+                  key="spotlight-card-modal"
                   initial={{ x: "-70vw", y: "-50%", opacity: 0.1, scale: 0.88 }}
                   animate={{ x: "-50%", y: "-50%", opacity: 1, scale: 1 }}
                   transition={{

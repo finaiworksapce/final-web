@@ -95,143 +95,143 @@ export interface DialogueContext {
   savedSoFar?: number;
 }
 
-// 4 ile 6 Cümlelik Zengin Finansal Okuryazarlık ve Yatırım Odaklı Diyalog Havuzu (Benzetmesiz)
+// 1 ile 3 Cümlelik Öz, Net ve Yatırım Odaklı Diyalog Havuzu
 export const NEGOTIATION_DIALOGUES = {
   // =========================================================================
-  // GRUP 1: A KATEGORİSİ — SABİT MASRAFLAR (0 PAZARLIK, DOĞRUDAN ONAY) [5 Varyasyon, 4-5 Cümle]
+  // GRUP 1: A KATEGORİSİ — SABİT MASRAFLAR (0 PAZARLIK, DOĞRUDAN ONAY) [1-3 Cümle]
   // =========================================================================
   categoryA_approval: [
     (ctx: DialogueContext) =>
-      `${ctx.userName}, nakit akış tablomuzda ${ctx.itemName} için ayırdığın ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ tutarını inceliyoruz. Burası senin barınma, yaşam güvenliği ve sözleşmeli yasal yükümlülük alanındır. Finansal okuryazarlığın temel kuralı, hayat kaliteni ve temel güvenliğini olumsuz etkileyecek harcamalardan tasarruf aranmamasıdır. Sabit giderlerin yerli yerinde ve koruma altında olması, birazdan optimize edeceğimiz diğer harcamalar için bize sağlam bir temel sağlıyor. Bu kaleme hiç dokunmuyor, ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ tutarını doğrudan onaylayarak sonraki adıma geçiyoruz.`,
+      `${ctx.userName}, ${ctx.itemName} (${ctx.currentAmount.toLocaleString('tr-TR')} ₺) zorunlu sabit yaşam giderin olduğu için bu kalemde kesinti yapmıyoruz. Temel güvenliğini koruyarak bu tutarı aynen onaylıyorum.`,
 
     (ctx: DialogueContext) =>
-      `Masadaki ilk sabit harcamamız ${ctx.itemName} (${ctx.currentAmount.toLocaleString('tr-TR')} ₺). Bu harcama senin bütçendeki zorunlu sabit harcamandır ve bugünden yarına burayı kısmak gerçekçi bir hedef olmaz. Finansal disiplin demek kendini temel ihtiyaçlardan mahrum bırakmak veya yaşam standartlarını düşürmek değildir. Burada gereksiz bir pazarlık yaparak odağımızı dağıtmayacak, bütçenin dengesini aynen muhafaza edeceğiz. Enerjimizi asıl fark yaratabileceğimiz harcama başlıklarına saklayarak bu kalemi olduğu gibi onaylıyorum.`,
+      `Bütçendeki ${ctx.itemName} (${ctx.currentAmount.toLocaleString('tr-TR')} ₺) harcamasını doğrudan güvenli listemize alıyoruz. Yaşam kaliteni korumak adına bu kalemi olduğu gibi muhafaza edelim.`,
 
     (ctx: DialogueContext) =>
-      `${ctx.userName}, ${ctx.itemName} kalemi senin yaşam alanının ve finansal düzeninin temel harcamasıdır. Sözleşmeli ve sabit harcamalar bütçede öngörülebilirliği sağlayan en değerli unsurlardır. Bu tutarda bir kısıntı yapmaya çalışmak uzun vadede daha büyük finansal streslere yol açabilir. FinAi Workspace ekibi olarak bu rakamı aynen koruyor ve bütçe dengeni güvenceye alıyoruz. ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ tutarını sisteme kilitledim; şimdi asıl tasarruf sağlayacağımız diğer kalemlere geçebiliriz.`,
+      `${ctx.itemName} için ayırdığın ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ sözleşmeli sabit harcamandır; bu rakama dokunmuyoruz. Bütçe dengeni sarsmamak için bu tutarı kilitleyip sonraki adıma geçiyoruz.`,
 
     (ctx: DialogueContext) =>
-      `Bütçendeki ${ctx.itemName} harcamasını doğrudan güvenli listemize dahil ediyoruz. Hayat standardını ayakta tutan zorunlu masraflarda pazarlık yapılmaz. Bütçe optimizasyonu yaparken en büyük hata, temel yaşam giderlerini kısıp motivasyonu kaybetmektir. Biz stratejimizi temel giderleri koruyup değişken harcamalardaki tasarrufları yatırıma dönüştürmek üzerine kuruyoruz. Bu kalemi ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ olarak tescilleyip bir sonraki harcama başlığına ilerliyoruz.`,
+      `${ctx.userName}, ${ctx.itemName} harcamasını ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ olarak güvenli havuza alıyoruz. Sabit giderlerini koruyarak enerjimizi asıl tasarruf sağlayacağımız değişken kalemlere saklıyoruz.`,
 
     (ctx: DialogueContext) =>
-      `${ctx.itemName} için ayırdığın ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ bütçenin en sağlam dengesini oluşturuyor. Yasal ve zorunlu yükümlülükleri eksiksiz karşılamak finansal sağlığın birinci şartıdır. Bu tutarı hiç değiştirmeden korumak, birazdan yapacağımız sermaye üretiminde bütçemizi çok rahatlatacak. Kararımızı bu yönde veriyor ve bu kalemi güvenle kilitleyerek yolumuza devam ediyoruz.`,
+      `${ctx.itemName} bütçenin temel direğidir; burada gereksiz bir kısıntıya gitmiyoruz. ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ tutarını güvenle onaylayarak yolumuza devam ediyoruz.`,
   ],
 
   // =========================================================================
-  // GRUP 2: B KATEGORİSİ — 1. TUR TEKLİF / MAKUL TASARRUF [5 Varyasyon, 4-5 Cümle]
+  // GRUP 2: B KATEGORİSİ — 1. TUR TEKLİF / MAKUL TASARRUF [1-3 Cümle]
   // =========================================================================
   categoryB_round1: [
     (ctx: DialogueContext) =>
-      `Geçen hafta nakit akış tablonu oluştururken ${ctx.itemName} harcamana ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ yazmıştın ortak. Burası temel yaşam giderin olsa da ay içerisinde plansız alımların ve fazla harcamaların en çok biriktiği yerdir. FinAi Workspace ekibi olarak amacımız seni temel konforundan mahrum bırakmak değil, bütçeni bilinçli yönetmektir. Akıllı tercihler ve ihtiyaç listesine sadık kalarak bu kalemi daha dengeli ve makul bir seviyeye çekmeyi öneriyoruz. Burada sağlayacağın tasarruf bütçene her ay taze bir nakit kazandıracak; ne dersin, sence bu harcamayı kaça düşürebiliriz yaz bakalım.`,
+      `${ctx.itemName} için masada ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ duruyor ${ctx.userName}. Temel konforundan ödün vermeden, bu harcamayı kaça düşürebiliriz yaz bakalım.`,
 
     (ctx: DialogueContext) =>
-      `${ctx.userName}, 1. haftada ${ctx.itemName} kalemi için sisteme ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ girmiştik. Bu harcama hayatının vazgeçilmezi gibi görünse de içinde kontrolsüzce büyüyen tüketim alışkanlıkları barındırabilir. Kaliteden ödün vermeden yalnızca alternatifleri değerlendirerek bile düzenli bir tasarruf üretebilirsin. Masada bu kalemde disiplinli bir optimizasyon yapmak yıllık bilançonda ciddi bir birikim farkı yaratacaktır. Gel burada bütçeni rasyonel bir dengeye oturtalım; sence bu harcamayı kaça çekebilirsin, teklifini bekliyorum.`,
+      `Geçen hafta ${ctx.itemName} harcamana ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ yazmıştın. Kalitenden taviz vermeden ufak bir tasarruf yapabiliriz; sence bu tutarı kaça çekelim?`,
 
     (ctx: DialogueContext) =>
-      `Sıradaki kalemimiz geçen hafta masaya koyduğun ${ctx.itemName} (${ctx.currentAmount.toLocaleString('tr-TR')} ₺). Market ve fatura gibi harcamalar disiplinli yönetildiğinde bütçede en düzenli nakit akışını serbest bırakan yerdir. Tüketimini tamamen kısmak yerine sadece plansız alışverişleri ayıklamayı hedefliyoruz. Amacımız yaşam standardını bozmadan bütçende sürdürülebilir bir tasarruf alanı açmak. Kararı tamamen senin iradene bırakıyoruz; ne dersin ortak, bu kalemi kaça düşürebiliriz yaz bakalım.`,
+      `${ctx.itemName} tarafındaki ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ bütçende düzenli tasarruf üretebileceğimiz bir alan. Ne dersin ortak, bu kalemi kaça düşürebiliriz masaya gerçekçi bir rakam yaz.`,
 
     (ctx: DialogueContext) =>
-      `${ctx.userName}, ${ctx.itemName} tarafında her ay ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ masada duruyor. Finansal okuryazarlık gereksiz yere harcanan her tutarın farkına varıp onu korumayı gerektirir. Buradan kurtaracağımız her miktar, gelecekte senin adına değer kazanacak yatırımların temel sermayesi olacak. Yaşam standardını sarsmadan bu harcamada makul bir indirim sağlamak son derece rasyonel bir adımdır. Sen bu harcamada nereye kadar inebilirsin; masaya aklındaki gerçekçi rakamı yaz bakalım.`,
+      `${ctx.userName}, ${ctx.itemName} kaleminde yapacağımız akıllı bir optimizasyon bütçene her ay taze nakit kazandırır. Bu harcamada aklındaki yeni tutar nedir, teklifini bekliyorum.`,
 
     (ctx: DialogueContext) =>
-      `Geçen hafta bütçene yazdığın ${ctx.itemName} tutarı olan ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ üzerinde biraz tasarruf alanı görüyoruz. Temel ihtiyaçlarını kısıtlamadan sadece tüketim verimliliğini artırarak bütçene güç kazandırabiliriz. FinAi Workspace ekibi olarak bu gideri daha verimli bir seviyeye dengelemeyi tavsiye ediyoruz. Bütçenin kontrolünü eline almak için ilk adımını at; sence bu kalemi kaça çekelim ortak?`,
+      `Masadaki ${ctx.itemName} tutarımız ${ctx.currentAmount.toLocaleString('tr-TR')} ₺. İhtiyaçlarını kısmadan tüketimini daha dengeli yönetmek için bu kalemi kaça indirelim?`,
   ],
 
   // =========================================================================
-  // GRUP 3: B KATEGORİSİ — 2. TUR UZLAŞMA & KİLİT [5 Varyasyon, 4-5 Cümle]
+  // GRUP 3: B KATEGORİSİ — 2. TUR UZLAŞMA & KİLİT [1-3 Cümle]
   // =========================================================================
   categoryB_round2_settle: [
     (ctx: DialogueContext) =>
-      `Harika bir rasyonel karar; teklifini masada onaylıyorum ${ctx.userName}. ${ctx.itemName} için belirlediğin ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ tutarı hem son derece gerçekçi hem de bütçeni disipline sokacak dengeli bir hedef oldu. Yaşam standardından hiçbir şey kaybetmeden her ay bütçene net bir tasarruf kazandırmayı başardın. Masada kalan bu taze nakit, yıl genelinde bilançona çok ciddi bir finansal güç katacak. Bu tutarı sisteme kaydediyorum; şimdi enerjimizi bir sonraki harcama kalemine taşıyalım.`,
+      `Harika bir karar ${ctx.userName}; ${ctx.itemName} harcamanı ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ olarak onaylıyorum. Hem bütçeni korudun hem de taze bir tasarruf alanı açtın.`,
 
     (ctx: DialogueContext) =>
-      `Teklifini sisteme kilitledim ${ctx.userName}, el sıkıştık. ${ctx.itemName} harcamasını ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ seviyesine çekerek bütçendeki kontrolsüz harcamaları durdurmuş oldun. Finansal okuryazarlık tam olarak budur; kendini mahrum bırakmadan harcamalarını yönetebilmek. Cebinde kalan bu düzenli tasarruf birazdan göreceğin genel nakit akışını doğrudan güçlendirecek. Kararlı duruşun için seni tebrik ediyorum; sonraki adıma güvenle geçebiliriz.`,
+      `Teklifini kabul ettim ortak, ${ctx.itemName} artık ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ olarak kilitlendi. Yaşam standardını bozmadan çok dengeli bir tasarruf sağladın.`,
 
     (ctx: DialogueContext) =>
-      `Son derece ölçülü ve sürdürülebilir bir uzlaşma sağladık. ${ctx.itemName} kalemini ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ olarak güncelledim ve yeni bütçene işledim. Bu kalemde yarattığın tasarruf, küçük optimizasyonların birleştiğinde ne kadar büyük bir sermayeye dönüştüğünü kanıtlıyor. Finansal kontrolün tamamen sende olduğunu gösteren çok doğru bir adım attın. Şimdi masadaki bir sonraki harcama kalemini ele alarak tasarruf planlamamızı sürdürelim.`,
+      `Son derece ölçülü bir uzlaşma oldu; ${ctx.itemName} kalemini ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ olarak güncelledim. Finansal kontrolü eline aldığın için tebrikler, sıradaki kaleme geçebiliriz.`,
 
     (ctx: DialogueContext) =>
-      `Sözünü aldım; ${ctx.itemName} artık bütçende ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ olarak tescillendi. Bütçeni zorlamadan böyle bir tasarruf üretmen finansal disiplin kazandığının en somut işaretidir. Her ay cebinde kalacak olan bu fark, gelecekteki yatırım havuzunun düzenli sermayesi olacak. Bu kalemi başarıyla tamamladık, sıradaki harcamaya odaklanabiliriz.`,
+      `Sözünü aldım ${ctx.userName}; ${ctx.itemName} bütçene ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ olarak işlendi. Bu kalemde yarattığın tasarruf yıl genelinde sana güçlü bir nakit kazandıracak.`,
 
     (ctx: DialogueContext) =>
-      `Tebrikler ${ctx.userName}; ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ kararın tam bir ortak gibi masanın hakkını verdi. Günlük yaşam konforunu bozmadan bütçende somut bir iyileştirme gerçekleştirdin. Bu tutarı kilitliyorum; her ay masada tuttuğun bu miktar yıllık bilançonda büyük fark yaratacaktır. Vakit kaybetmeden sonraki harcama başlığına geçiyoruz.`,
+      `Tebrikler; ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ kararın masanın hakkını verdi. Bu tutarı kaydediyorum, vakit kaybetmeden sonraki harcamaya geçelim.`,
   ],
 
   // =========================================================================
-  // GRUP 4: C KATEGORİSİ — 1. TUR SERT TEKLİF (ASIL TASARRUF ALANI) [5 Varyasyon, 5 Cümle]
+  // GRUP 4: C KATEGORİSİ — 1. TUR SERT TEKLİF (ASIL TASARRUF ALANI) [1-3 Cümle]
   // =========================================================================
   categoryC_round1: [
     (ctx: DialogueContext) =>
-      `Geçen hafta nakit akış tablonu oluştururken ${ctx.itemName} harcamana ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ yazmıştın ortak. FinAi Workspace ekibi olarak açık ve net konuşalım: Masada asıl tasarruf yapacağımız ve sermaye üreteceğimiz ana gider başlıkları tam olarak bu ve benzeri kalemler olacak. Gelecek haftalarda öğreneceğin yatırım kısmında doğrudan bu tasarruflarını hisse senedi alımlarında sermaye olarak kullanacaksın. Bu kalemde ciddi bir tasarruf optimizasyonu yapmak hayatını kesinlikle zorlaştırmaz ama sana güçlü bir yatırım bütçesi kazandırır. Gelecekteki yatırımların için ilk kararlı adımı atalım; ne dersin, bu harcamayı kaça düşürebiliriz yaz bakalım.`,
+      `${ctx.userName}, ${ctx.itemName} (${ctx.currentAmount.toLocaleString('tr-TR')} ₺) harcaması bütçende asıl yatırım sermayesini üreteceğimiz yerdir. Gelecek haftalardaki borsa yatırımların için bu kalemi cesurca kaça düşürebilirsin yaz bakalım.`,
 
     (ctx: DialogueContext) =>
-      `${ctx.userName}, geçen hafta sisteme girdiğin ${ctx.itemName} harcaman ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ olarak masada duruyor. Bütçende en somut ve en yüksek sermayeyi üreteceğimiz yer tam olarak bu harcama kalemidir. Gelecek haftalarda hisse senedi yatırımı yapmayı öğrendiğinde, hisse alabilmek için doğrudan bu tasarruflarına ihtiyacımız olacak. Tüketim alışkanlıklarını biraz disipline ederek bu harcamayı kararlı bir şekilde aşağı çekmeyi öneriyoruz. Tercihini gelecekteki finansal gücünden yana kullan ortak; sence bu kalemi kaça çekebiliriz, rakamını yaz.`,
+      `Masadaki ${ctx.itemName} harcaman ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ olarak duruyor ortak. Buradan kurtaracağımız her kuruş hisse senedi alımlarında öz sermayen olacak; sence bu kalemi kaça çekebiliriz?`,
 
     (ctx: DialogueContext) =>
-      `Asıl tasarruf yapacağımız harcama başlıklarının başında ${ctx.itemName} (${ctx.currentAmount.toLocaleString('tr-TR')} ₺) geliyor. Buraya giden nakit şu anda doğrudan tüketime gidiyor ve sana hiçbir getiri sağlamadan harcanıyor. Oysa gelecek haftalarda borsa ve şirket ortaklığını öğrendiğinde, bu para senin hisse senedi yatırımlarındaki öz sermayen olacak. Hayat kalitenden ödün vermeden bu harcamada kararlı bir tasarruf sağlamak büyük bir yatırım bütçesi bırakır. Masaya dürüst ve kararlı bir rakam koymanı bekliyorum; bu harcamayı kaça indirelim yaz bakalım.`,
+      `Asıl tasarrufu üreteceğimiz en kritik başlık ${ctx.itemName} (${ctx.currentAmount.toLocaleString('tr-TR')} ₺). Tüketimi yatırıma dönüştürmek için masaya kararlı bir rakam koy; bu harcamayı kaça indirelim?`,
 
     (ctx: DialogueContext) =>
-      `${ctx.userName}, ${ctx.itemName} harcamanda her ay masadan ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ çıkıyor. Asıl tasarrufu bu gider başlıklarında üretemezsek, gelecek haftalarda yatırıma aktarabileceğimiz düzenli bir kaynak bulamayız. Gelecek haftalarda öğreneceğin yatırım eğitiminde yöneteceğin portföyün büyüklüğü, bugün burada göstereceğin iradeye bağlıdır. Bizim önerimiz bu harcamayı cesurca optimize ederek güçlü bir sermaye açığa çıkarmak. Gelecekteki yatırımların için bu adımı atmaya hazır mısın; kaça düşürebileceğini masaya yaz.`,
+      `${ctx.userName}, ${ctx.itemName} için ayırdığın ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ gelecekteki hisse senedi portföyünün kaynağı olacak. Tüketim alışkanlıklarını disipline etmek adına ilk teklifini bekliyorum; bu tutarı kaça çekelim?`,
 
     (ctx: DialogueContext) =>
-      `Geçen hafta belirlediğin ${ctx.itemName} bütçesi olan ${ctx.currentAmount.toLocaleString('tr-TR')} ₺ masada duruyor. Finansal okuryazarlığın temeli burasıdır; anlık tüketimleri geleceğin üretken hisse senedi yatırımlarına dönüştürmek. Gelecek haftalarda şirket yatırımlarına adım atarken tam olarak buradan kurtardığın tasarrufları kullanacaksın. Burada güçlü bir tasarruf disiplini yakalamak bütçende dev bir yatırım sermayesi yaratacaktır. İlk teklifini masaya bırak; sence bu harcamayı kaça çekebiliriz ortak?`,
+      `Geçen hafta masaya koyduğun ${ctx.itemName} (${ctx.currentAmount.toLocaleString('tr-TR')} ₺) kaleminde güçlü bir sermaye potansiyeli var. Gelecekteki finansal gücün için bu harcamayı kaça düşürebilirsin yaz bakalım ortak.`,
   ],
 
   // =========================================================================
-  // GRUP 5: C KATEGORİSİ — 2. TUR İKİNCİ ISRAR [5 Varyasyon, 4-5 Cümle]
+  // GRUP 5: C KATEGORİSİ — 2. TUR İKİNCİ ISRAR [1-3 Cümle]
   // =========================================================================
   categoryC_round2: [
     (ctx: DialogueContext) =>
-      `${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ teklifini aldım ancak asıl tasarruf yapacağımız bu ana kalemde biraz daha cesur olmalıyız ${ctx.userName}. Unutma; gelecek haftalarda öğreneceğin yatırım kısmında hisse senedi alırken doğrudan bu tasarruflarını kullanacaksın. Günlük bazı harcama alışkanlıklarını kontrol altına almak seni hiçbir şeyden mahrum etmez, aksine kendi sermayeni büyütmeni sağlar. Bu kalemde biraz daha fedakarlık yapmak, her ay Borsa İstanbul şirketlerinin hisselerine aktarabileceğimiz taze bir bütçe demektir. Gel bu kalemde potansiyelini sonuna kadar kullanalım; masaya son ve kararlı bir rakam yaz bakalım.`,
+      `${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ iyi bir başlangıç ama asıl sermaye üreteceğimiz bu kalemde biraz daha cesur olabilirsin ${ctx.userName}. Gelecek haftalardaki hisse senedi alımların için masaya son ve kararlı rakamını yaz bakalım.`,
 
     (ctx: DialogueContext) =>
-      `${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ başlangıç için iyi bir adım olsa da bu kalemin potansiyelinin biraz altında kalıyor. Burası bütçende en yüksek sermaye üreteceğimiz başlık olduğu için biraz daha gayret göstermeye değer. Gelecek haftalarda şirket ortağı olmayı ve portföy yönetimini öğrendiğinde iyi ki bu parayı masada tutmuşum diyeceksin. Bu harcamayı biraz daha optimize edip daha aşağıya çekmek sana hiçbir şey kaybettirmez. Masaya daha güçlü bir tasarruf hedefi bırakalım; son sözünü söyle ortak.`,
+      `Teklifini aldım ortak, fakat bu kalemin tasarruf potansiyeli biraz daha yüksek. Gelecekteki portföyünü büyütmek adına bu harcamayı biraz daha aşağı çekebilir misin; son sözün nedir?`,
 
     (ctx: DialogueContext) =>
-      `${ctx.userName}, anlık tüketimi ertelemek bir kısıtlama değil, gelecekteki finansal bağımsızlığını inşa etmektir. Gelecek haftalardaki yatırım derslerinde öğreneceğin gibi, her ay düzenli hisse senedi almak en sağlam varlık edinme yöntemidir. O hisseleri satın alacak bütçeyi tam olarak bu harcama kaleminden kurtaracağımız tasarrufla oluşturacağız. Gel bu kalemde taviz vermeyelim ve bütçeyi çok daha disiplinli bir banda oturtalım. Kararlı bir adım at; sence son olarak kaça kadar inebiliriz?`,
+      `${ctx.userName}, anlık tüketimi ertelemek hisse senedi yatırımlarında sana dev bir güç katacak. Gel bu kalemde biraz daha gayret gösterelim; son olarak kaça kadar inebilirsin?`,
 
     (ctx: DialogueContext) =>
-      `Masadaki ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ teklifin fena değil ama asıl tasarruf hedefimizin biraz gerisinde. Gelecek haftalarda yapacağımız hisse senedi alımlarında yatırım sermayemizin güçlü olmasını istiyorsan burada biraz daha irade göstermelisin. Tüketim harcamalarını kontrol altına almak yarın senin adına değer üretecek bir portföyün temeli demektir. Biraz daha cesur bir indirim sağlarsak bu kalemi gerçek bir başarıyla tamamlamış olacağız. Kendine güven ve masaya nihai bir rakam bırak ortak; ne diyorsun?`,
+      `Masadaki ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ teklifin fena değil ama asıl tasarruf hedefimizin biraz gerisinde kaldı. Yatırım bütçeni güçlendirmek için bu harcamada son bir indirim daha yapalım; ne dersin?`,
 
     (ctx: DialogueContext) =>
-      `Gelecek haftalarda öğreneceğin yatırım kısmında doğrudan bu tasarruflarını kullanacaksın ${ctx.userName}. Tüketime giden parayı sermayeye çevirmek için asıl tasarruf yapacağımız bu alanda son bir adım daha atabilirsin. Rakamı biraz daha aşağı çekmeyi kabul edersen harika bir yatırım bütçesi açığa çıkaracağız. Bütçenin geleceğini düşünerek masaya son ve kesin bir teklif yaz bakalım.`,
+      `Gelecek haftalarda hisse senedi alırken doğrudan buradan kurtardığın parayı kullanacaksın ${ctx.userName}. Bütçenin geleceğini düşünerek masaya son ve kesin teklifini bırak.`,
   ],
 
   // =========================================================================
-  // GRUP 6: C KATEGORİSİ — 3. TUR NİHAİ UZLAŞMA & KİLİT [5 Varyasyon, 4-5 Cümle]
+  // GRUP 6: C KATEGORİSİ — 3. TUR NİHAİ UZLAŞMA & KİLİT [1-3 Cümle]
   // =========================================================================
   categoryC_round3_settle: [
     (ctx: DialogueContext) =>
-      `Harika bir irade gösterdin; ${ctx.itemName} kalemini ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ olarak sisteme kilitliyorum. Asıl tasarruf sağlayacağımız bu kritik başlıkta gösterdiğin kararlılık, bütçendeki en büyük sermaye üretimini sağladı. Gelecek haftalarda öğreneceğin yatırım kısmında hisse senedi alırken doğrudan bu tasarruflarını kullanacaksın. Bugün tüketimden kurtardığın her miktar, yarın senin adına değer kazanacak bir portföyün ilk yatırımı oldu. Finansal okuryazarlık yolculuğunda ilk büyük zaferini kazandın; bir sonraki adıma gururla geçebiliriz.`,
+      `Harika bir irade gösterdin ${ctx.userName}; ${ctx.itemName} kalemini ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ olarak kilitliyorum. Tüketimden kurtardığın bu para gelecek haftalarda hisse senedi yatırımlarının ilk sermayesi olacak.`,
 
     (ctx: DialogueContext) =>
-      `Anlaştık ${ctx.userName}, ${ctx.itemName} için belirlediğin ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ hedefini tescilledim. Asıl tasarruf yapacağımız bu harcamayı başarıyla optimize ederek tam bir bilinçli yatırımcı duruşu sergiledin. Cebinde kalan bu ekstra nakit, gelecek haftalarda hisse senedi alımlarında kullanılmak üzere havuzumuza eklendi. Masada kurtardığın bu paranın değerini önümüzdeki derslerde yatırım yaparken çok daha net göreceksin. Bu önemli adımı tamamladık; şimdi tasarruf planlamamızın sonuçlarına ilerleyebiliriz.`,
+      `Anlaştık ortak; ${ctx.itemName} için belirlediğin ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ hedefini sisteme işledim. Asıl tasarruf alanında gösterdiğin bu disiplin bilançona seviye atlatacak.`,
 
     (ctx: DialogueContext) =>
-      `Sözünü aldım; ${ctx.itemName} artık bütçende ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ olarak kilitlendi. Kolay bir pazarlık olmadı ama asıl tasarruf yapacağımız bu alanda gösterdiğin disiplin takdire şayan. Gelecek haftalarda öğreneceğin yatırım eğitimlerinde bu tasarruflarını doğrudan öz sermaye olarak değerlendireceksin. Bütçendeki gereksiz harcamaları durdurup paranın kontrolünü eline aldığını kanıtladın. FinAi Workspace ekibi olarak seni tebrik ediyoruz; gururla sonraki adıma geçiyoruz.`,
+      `Sözünü aldım ${ctx.userName}; ${ctx.itemName} artık ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ olarak tescillendi. Paranın kontrolünü eline alıp güçlü bir yatırım sermayesi açığa çıkardın.`,
 
     (ctx: DialogueContext) =>
-      `Tebrikler ${ctx.userName}; ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ kararınla bu harcamayı muazzam bir yatırım sermayesine dönüştürdün. Tüketime teslim olmak yerine iradeni ortaya koyup masada güçlü bir tasarruf bıraktın. Gelecek haftalarda hisse senedi yatırımlarına adım attığında bu kararın ne kadar hayati olduğunu anlayacaksın. Yıllık bazda yaratacağın bu birikim bilançona seviye atlatacak. Bu kalemi zaferle kapatıyorum; şimdi genel sonuçlarımızı görelim.`,
+      `Tebrikler ortak, ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ kararın tam bir bilinçli yatırımcı duruşu oldu. Bu kalemi zaferle kapatıyorum; şimdi genel sonuçlarımıza geçebiliriz.`,
 
     (ctx: DialogueContext) =>
-      `El sıkıştık; ${ctx.itemName} kalemi için ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ tutarını sisteme işliyorum. Asıl tasarruf sağlayacağımız bu başlıkta elde ettiğin başarı bütçene yeni bir soluk kazandırdı. Kurtardığımız her tutarı gelecek haftalardaki yatırım eğitimlerimizde değerlendirmek üzere korumaya aldık. Kararlı duruşun için teşekkürler; şimdi haftalık tasarruf tablomuzun özetine geçebiliriz.`,
+      `El sıkıştık; ${ctx.itemName} harcamanı ${ctx.offeredAmount?.toLocaleString('tr-TR')} ₺ olarak sisteme kaydettim. Kararlı duruşun için teşekkürler, tasarruf planımızın özetine ilerleyebiliriz.`,
   ],
 
   // =========================================================================
-  // GRUP 7: ÖZEL DURUMLAR (SIFIR KISMA, AŞIRI KISMA, ISRAR) [4-5 Cümle]
+  // GRUP 7: ÖZEL DURUMLAR (SIFIR KISMA, AŞIRI KISMA, ISRAR) [1-3 Cümle]
   // =========================================================================
   special_responses: {
     zero_cut: [
       (ctx: DialogueContext) =>
-        `Yapma ortak, masaya hiç dokunmadan öylece kalkmak olmaz; hadi birazcık kısabiliriz bu kısımları. Pazarlık adettendir, gel düşürelim bu rakamı ve bütçene nefes aldıracak taze bir adım atalım. Asıl tasarrufu bu kalemlerde üretemezsek, gelecek haftalarda öğreneceğin yatırım kısmında kullanacağımız sermayemiz oluşmaz. FinAi Workspace ekibi olarak seni gereksiz zorlamak istemiyoruz ama sembolik de olsa masaya bir indirim koymalıyız. Aklındaki o ufak indirimi yaz bakalım, bu harcamayı kaça düşürebiliriz?`,
+        `Masaya hiç dokunmadan kalkmak olmaz ortak; pazarlık adettendir. Gelecek haftalardaki yatırımlarımız için sembolik de olsa bir indirim yaz bakalım, bu harcamayı kaça düşürebiliriz?`,
     ],
     extreme_cut: [
       (ctx: DialogueContext) =>
-        `Oo, görüyorum ki gelecekte yatırım yapmaya bayağı bir heveslisin ortak! Fakat bu kalemi bu kadar sert kısmak günlük hayatını fazlasıyla etkileyip sonrasında bizim kulaklarımızı çınlatmanı istemiyoruz. Finansal okuryazarlıkta en kritik kural sürdürülebilirliktir; aşırı kısıntılar genellikle birkaç hafta sonra pes etmeye ve daha büyük harcamalara yol açar. Dilersen bu kalemi teklif ettiğin bu aşırı düşük rakamdan birazcık yükseltelim ve dengeli bir orta yolda buluşalım. Hem hayatını rahatça sürdürebileceğin hem de yatırım sermayesi üretebileceğin daha makul bir rakam yaz bakalım.`,
+        `Yatırım hevesini takdir ediyorum ortak ama bu kadar sert bir kesinti günlük hayatını zorlaştırabilir. Sürdürülebilir bir bütçe için biraz daha dengeli ve makul bir rakam yaz bakalım.`,
     ],
     same_offer: [
       (ctx: DialogueContext) =>
-        `Görüyorum ki ilk söylediğin rakamda hala diretiyorsun ${ctx.userName}. Ama pazarlık adettendir ortak, gel bunu birazcık daha düşürelim! Burada masada bırakacağın her lira, gelecek haftalarda öğreneceğin yatırım kısmında doğrudan senin hisse senedi yatırımlarında kullanacağın sermayen olacak. Kendini zorlamadan verebileceğin ufak bir esneklik bile genel tasarruf tablomuzda çok büyük bir fark yaratır. Hadi son bir hamle yap ve bu kalemi biraz daha aşağı çekelim; yeni teklifini bekliyorum.`,
+        `Görüyorum ki ilk teklifinde ısrarcısın ${ctx.userName}. Masada bırakacağın her lira hisse senedi yatırımlarında sermayen olacak; gel son bir ufak esneklik göster ve rakamı biraz daha aşağı çekelim.`,
     ],
   },
 };
