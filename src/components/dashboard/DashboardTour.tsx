@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Compass, ArrowRight, ArrowLeft, X } from "lucide-react";
 
@@ -23,8 +24,13 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
   const [windowDimensions, setWindowDimensions] = useState({ width: 1440, height: 900 });
+  const [isMounted, setIsMounted] = useState(false);
 
-  // Senaryo A (Portföyü Olan Kullanıcı)
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Senaryo A (Portföyünde Varlık Olan Kullanıcı)
   const stepsWithAssets: StepConfig[] = useMemo(
     () => [
       {
@@ -39,7 +45,7 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
         title: "Risk ve Varlık Dağılımı",
         description:
           "Portföyünün hisse, yatırım fonu, emtia ve nakit arasındaki oransal ağırlığını gösterir. Finansal okuryazarlığın temel kuralı tüm birikimi tek bir enstrümana bağlamamaktır; buradaki dağılım grafiği risk dengeni anında kontrol etmeni sağlar. Bu widget'ın üzerine bastığın zaman ise seni doğrudan detaylı Portföy sayfana yönlendirir.",
-        placement: "left", // Solundaki özet kartları alanında gösterilecek
+        placement: "left",
       },
       {
         element: "#finai-widget-monthly-report",
@@ -115,13 +121,20 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
     []
   );
 
+  // Doğrudan portföy durumuna göre adımları belirle (DOM mevcudiyeti öncelikli)
   const steps = useMemo(() => {
-    const list = hasActiveAssets ? stepsWithAssets : stepsWithoutAssets;
-    if (typeof window === "undefined") return list;
-    return list.filter((s) => document.querySelector(s.element) !== null);
+    if (typeof document !== "undefined") {
+      if (document.querySelector("#finai-widget-summary")) {
+        return stepsWithAssets;
+      }
+      if (document.querySelector("#finai-widget-sample-portfolio")) {
+        return stepsWithoutAssets;
+      }
+    }
+    return hasActiveAssets ? stepsWithAssets : stepsWithoutAssets;
   }, [hasActiveAssets, stepsWithAssets, stepsWithoutAssets]);
 
-  // Window dimensions
+  // Window resize listener
   useEffect(() => {
     const handleResize = () => {
       setWindowDimensions({
@@ -134,11 +147,12 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Update target rect
+  // Hedef elementi bul ve rect hesapla
   const updateTargetRect = useCallback(() => {
     if (!isOpen || steps.length === 0) return;
     const step = steps[currentStepIndex];
     if (!step) return;
+
     const el = document.querySelector(step.element);
     if (el) {
       const rect = el.getBoundingClientRect();
@@ -146,30 +160,46 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
     }
   }, [isOpen, steps, currentStepIndex]);
 
-  // Sayfa kaydırma ve odaklama
+  // Adım değiştiğinde yumuşak kaydır ve takip et
   useEffect(() => {
     if (!isOpen || steps.length === 0) return;
     const step = steps[currentStepIndex];
     if (!step) return;
+
+    const syncPosition = () => {
+      const el = document.querySelector(step.element);
+      if (el) {
+        setTargetRect(el.getBoundingClientRect());
+      }
+    };
+
     const el = document.querySelector(step.element);
     if (el) {
       el.scrollIntoView({ behavior: "smooth", block: "center" });
-
-      // Animasyon süresince rect'i güncelle
-      const interval = setInterval(updateTargetRect, 60);
-      const timer = setTimeout(() => {
-        clearInterval(interval);
-        updateTargetRect();
-      }, 600);
-
-      return () => {
-        clearInterval(interval);
-        clearTimeout(timer);
-      };
+      setTargetRect(el.getBoundingClientRect());
     }
-  }, [isOpen, currentStepIndex, steps, updateTargetRect]);
 
-  // Scroll and Resize event listeners
+    let animationFrameId: number;
+    let startTime = performance.now();
+    const duration = 800; // ms
+
+    const trackElement = (now: number) => {
+      syncPosition();
+      if (now - startTime < duration) {
+        animationFrameId = requestAnimationFrame(trackElement);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(trackElement);
+
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, [isOpen, currentStepIndex, steps]);
+
+  // Scroll ve Resize anında koordinat senkronizasyonu
   useEffect(() => {
     if (!isOpen) return;
     window.addEventListener("scroll", updateTargetRect, { passive: true });
@@ -180,7 +210,7 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
     };
   }, [isOpen, updateTargetRect]);
 
-  // Klavye Kontrolleri (ESC, Ok tuşları)
+  // Klavye kontrolleri
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -217,40 +247,69 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
     setIsOpen(false);
   };
 
+  // Butona basıldığında anında açma ve ilk hedefe odaklanma
   const handleStart = () => {
+    let activeSteps = steps;
+    if (typeof document !== "undefined") {
+      if (document.querySelector("#finai-widget-summary")) {
+        activeSteps = stepsWithAssets;
+      } else if (document.querySelector("#finai-widget-sample-portfolio")) {
+        activeSteps = stepsWithoutAssets;
+      }
+    }
+
     setCurrentStepIndex(0);
+    const firstStep = activeSteps[0];
+    if (firstStep && typeof document !== "undefined") {
+      const el = document.querySelector(firstStep.element);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        setTargetRect(el.getBoundingClientRect());
+      }
+    }
     setIsOpen(true);
   };
 
-  // İlk girişte otomatik tetikleme
-  useEffect(() => {
-    try {
-      const seen = localStorage.getItem(STORAGE_KEY);
-      if (!seen) {
-        const timer = setTimeout(() => {
-          setIsOpen(true);
-        }, 1200);
-        return () => clearTimeout(timer);
+  // Tıklama spotlight kesik alanı içindeyse kapatma
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (targetRect) {
+      const { clientX, clientY } = e;
+      const isInsideCutout =
+        clientX >= targetRect.left - 8 &&
+        clientX <= targetRect.right + 8 &&
+        clientY >= targetRect.top - 8 &&
+        clientY <= targetRect.bottom + 8;
+      if (isInsideCutout) {
+        return;
       }
-    } catch {}
-  }, []);
+    }
+    handleClose();
+  };
 
   const currentStep = steps[currentStepIndex];
 
-  // Yazıların Yerleşimi (Kutu olmadan, açık alana zarif tipografi olarak)
+  // Kutusuz tipografi yerleşim koordinatları (Akıllı Boş Alan Hesaplaması)
   const textPositionStyles = useMemo(() => {
-    if (!targetRect || !currentStep) return {};
     const { width: winWidth, height: winHeight } = windowDimensions;
     const isDesktop = winWidth >= 1024;
 
+    if (!targetRect || !currentStep) {
+      return {
+        position: "fixed" as const,
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        maxWidth: 600,
+      };
+    }
+
+    // Mobil ve dar ekranlar: Widget altına veya üstüne oturur
     if (!isDesktop) {
-      // Mobil & Tablet: Hedefin altına veya üstüne tam genişlikte yerleştir
-      const topSpace = targetRect.top;
       const bottomSpace = winHeight - targetRect.bottom;
       if (bottomSpace > 280) {
         return {
           position: "fixed" as const,
-          top: targetRect.bottom + 24,
+          top: targetRect.bottom + 20,
           left: 16,
           right: 16,
           maxWidth: "calc(100vw - 32px)",
@@ -258,7 +317,7 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
       } else {
         return {
           position: "fixed" as const,
-          bottom: winHeight - targetRect.top + 24,
+          bottom: winHeight - targetRect.top + 20,
           left: 16,
           right: 16,
           maxWidth: "calc(100vw - 32px)",
@@ -266,59 +325,98 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
       }
     }
 
-    // Masaüstü: Belirlenen yerleşim alanına kutusuz, doğrudan tipografi olarak konumlandır
     const placement = currentStep.placement;
 
+    // 1. SAĞ YERLEŞİM (Toplam Varlık Değeri & Market Grafikleri İçin)
     if (placement === "right") {
-      const leftPos = targetRect.right + 40;
-      const availableWidth = Math.min(620, winWidth - leftPos - 40);
-      const topPos = Math.max(80, targetRect.top + (targetRect.height > 200 ? 10 : -20));
-      return {
-        position: "fixed" as const,
-        top: topPos,
-        left: leftPos,
-        maxWidth: availableWidth,
-      };
+      const rightAvailableSpace = winWidth - targetRect.right;
+      if (rightAvailableSpace >= 340) {
+        const leftPos = targetRect.right + 36;
+        const availableWidth = Math.min(620, winWidth - leftPos - 36);
+        const topPos = Math.max(80, Math.min(targetRect.top, winHeight - 380));
+        return {
+          position: "fixed" as const,
+          top: topPos,
+          left: leftPos,
+          maxWidth: availableWidth,
+        };
+      } else {
+        const topPos = Math.min(targetRect.bottom + 24, winHeight - 320);
+        const leftPos = Math.max(24, Math.min(targetRect.left, winWidth - 650));
+        return {
+          position: "fixed" as const,
+          top: topPos,
+          left: leftPos,
+          maxWidth: Math.min(650, winWidth - 48),
+        };
+      }
     }
 
+    // 2. SOL YERLEŞİM (Varlık Dağılımı, Aylık Rapor & Ajanda İçin)
     if (placement === "left") {
-      const rightPos = winWidth - targetRect.left + 40;
-      const availableWidth = Math.min(620, targetRect.left - 60);
-      const topPos = Math.max(80, targetRect.top + (targetRect.height > 200 ? 10 : -20));
-      return {
-        position: "fixed" as const,
-        top: topPos,
-        right: rightPos,
-        maxWidth: availableWidth,
-      };
+      const leftAvailableSpace = targetRect.left;
+      if (leftAvailableSpace >= 340) {
+        const rightPos = winWidth - targetRect.left + 36;
+        const availableWidth = Math.min(620, targetRect.left - 50);
+        const topPos = Math.max(80, Math.min(targetRect.top, winHeight - 380));
+        return {
+          position: "fixed" as const,
+          top: topPos,
+          right: rightPos,
+          maxWidth: availableWidth,
+        };
+      } else {
+        const topPos = Math.min(targetRect.bottom + 24, winHeight - 320);
+        const leftPos = Math.max(24, Math.min(targetRect.left, winWidth - 650));
+        return {
+          position: "fixed" as const,
+          top: topPos,
+          left: leftPos,
+          maxWidth: Math.min(650, winWidth - 48),
+        };
+      }
     }
 
+    // 3. ÜST YERLEŞİM (Son Haberler %100 Genişlik İçin)
     if (placement === "top") {
-      const bottomPos = winHeight - targetRect.top + 28;
-      const leftPos = Math.max(40, targetRect.left);
-      return {
-        position: "fixed" as const,
-        bottom: bottomPos,
-        left: leftPos,
-        maxWidth: Math.min(700, winWidth - leftPos - 40),
-      };
+      const availableTopSpace = targetRect.top;
+      if (availableTopSpace >= 240) {
+        const bottomPos = winHeight - targetRect.top + 28;
+        const leftPos = Math.max(32, Math.min(targetRect.left, winWidth - 680));
+        return {
+          position: "fixed" as const,
+          bottom: bottomPos,
+          left: leftPos,
+          maxWidth: Math.min(660, winWidth - leftPos - 32),
+        };
+      } else {
+        const topPos = Math.min(targetRect.bottom + 28, winHeight - 320);
+        const leftPos = Math.max(32, Math.min(targetRect.left, winWidth - 680));
+        return {
+          position: "fixed" as const,
+          top: topPos,
+          left: leftPos,
+          maxWidth: Math.min(660, winWidth - leftPos - 32),
+        };
+      }
     }
 
-    // placement === 'bottom'
-    const topPos = targetRect.bottom + 28;
-    const leftPos = Math.max(40, targetRect.left);
+    // 4. ALT YERLEŞİM (Yedek)
+    const topPos = Math.min(targetRect.bottom + 28, winHeight - 320);
+    const leftPos = Math.max(32, Math.min(targetRect.left, winWidth - 680));
     return {
       position: "fixed" as const,
       top: topPos,
       left: leftPos,
-      maxWidth: Math.min(700, winWidth - leftPos - 40),
+      maxWidth: Math.min(660, winWidth - leftPos - 32),
     };
   }, [targetRect, currentStep, windowDimensions]);
 
   return (
     <>
-      {/* Sayfa Başlığı Yanındaki Manuel Tetikleme Butonu */}
+      {/* Sayfa Başlığı Yanındaki Tetikleme Butonu */}
       <button
+        id="finai-dashboard-tour-trigger"
         type="button"
         onClick={handleStart}
         className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/80 dark:bg-white/10 hover:bg-white dark:hover:bg-white/20 border border-slate-200/80 dark:border-white/15 text-xs font-semibold text-[#040989] dark:text-white shadow-2xs hover:shadow-xs transition-all duration-200 cursor-pointer ${className}`}
@@ -329,155 +427,162 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
       </button>
 
       {/* =========================================================================
-          SPOTLIGHT OVERLAY & SADE TİPOGRAFİ METİN ALANI (KUTUSUZ, GRADYANLI)
+          PORTAL: BODY ÜZERİNDE EN ÜST KATMAN SPOTLIGHT (GRADYANLI & KUTUSUZ)
           ========================================================================= */}
-      <AnimatePresence>
-        {isOpen && targetRect && currentStep && (
-          <div className="fixed inset-0 z-[100] pointer-events-auto">
-            {/* 1. FinAi İmza Gradyanlı SVG Cutout Mask */}
-            <svg
-              className="fixed inset-0 w-full h-full pointer-events-none"
-              style={{ width: "100vw", height: "100vh" }}
-            >
-              <defs>
-                <mask id="finai-spotlight-mask">
-                  {/* Beyaz: Tüm ekranı gradyanla kapla */}
-                  <rect x="0" y="0" width="100%" height="100%" fill="white" />
-                  {/* Siyah: Açıklanan widget'ın olduğu yeri pürüzsüzce del */}
+      {isMounted &&
+        createPortal(
+          <AnimatePresence>
+            {isOpen && currentStep && (
+              <div className="fixed inset-0 z-[99999] pointer-events-auto overflow-hidden">
+                {/* 1. FinAi İmza Gradyanlı SVG Cutout Mask */}
+                <svg
+                  className="fixed inset-0 w-full h-full pointer-events-none"
+                  style={{ width: "100vw", height: "100vh" }}
+                >
+                  <defs>
+                    <mask id="finai-portal-spotlight-mask">
+                      <rect x="0" y="0" width="100%" height="100%" fill="white" />
+                      {targetRect && (
+                        <rect
+                          x={targetRect.left - 6}
+                          y={targetRect.top - 6}
+                          width={targetRect.width + 12}
+                          height={targetRect.height + 12}
+                          rx="24"
+                          fill="black"
+                        />
+                      )}
+                    </mask>
+
+                    {/* Toplam Varlık Değeri ile Birebir Aynı Gradyan */}
+                    <linearGradient id="finaiTourGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#02041A" stopOpacity="0.94" />
+                      <stop offset="45%" stopColor="#040989" stopOpacity="0.88" />
+                      <stop offset="100%" stopColor="#02041A" stopOpacity="0.94" />
+                    </linearGradient>
+                  </defs>
+
+                  {/* Arka Plan Gradyan Maskesi */}
                   <rect
-                    x={targetRect.left - 6}
-                    y={targetRect.top - 6}
-                    width={targetRect.width + 12}
-                    height={targetRect.height + 12}
-                    rx="22"
-                    fill="black"
+                    x="0"
+                    y="0"
+                    width="100%"
+                    height="100%"
+                    fill="url(#finaiTourGradient)"
+                    mask="url(#finai-portal-spotlight-mask)"
+                    className="pointer-events-auto cursor-pointer"
+                    onClick={handleBackdropClick}
                   />
-                </mask>
 
-                {/* Toplam Varlık Değeri ile Birebir Aynı Gradyan */}
-                <linearGradient id="finaiBackdropGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#02041A" stopOpacity="0.94" />
-                  <stop offset="45%" stopColor="#040989" stopOpacity="0.88" />
-                  <stop offset="100%" stopColor="#02041A" stopOpacity="0.94" />
-                </linearGradient>
-              </defs>
+                  {/* Vurgulanan Widget Çevresindeki İnce Işıklı Çerçeve */}
+                  {targetRect && (
+                    <rect
+                      x={targetRect.left - 6}
+                      y={targetRect.top - 6}
+                      width={targetRect.width + 12}
+                      height={targetRect.height + 12}
+                      rx="24"
+                      fill="none"
+                      stroke="#5B80FF"
+                      strokeWidth="2.5"
+                      opacity="0.95"
+                      className="animate-pulse"
+                    />
+                  )}
+                </svg>
 
-              {/* Arka Plan Gradyan Maskesi */}
-              <rect
-                x="0"
-                y="0"
-                width="100%"
-                height="100%"
-                fill="url(#finaiBackdropGradient)"
-                mask="url(#finai-spotlight-mask)"
-                className="pointer-events-auto"
-                onClick={handleClose}
-              />
+                {/* 2. Arka Plan Ambient Işık Halkaları */}
+                <div className="fixed inset-0 pointer-events-none overflow-hidden">
+                  <div className="absolute -top-32 -right-32 w-[540px] h-[540px] bg-[#004BFA]/20 rounded-full blur-[140px]" />
+                  <div className="absolute -bottom-32 -left-32 w-[540px] h-[540px] bg-[#004BFA]/20 rounded-full blur-[140px]" />
+                </div>
 
-              {/* Vurgulanan Widget Çevresindeki İnce Işıklı Çerçeve */}
-              <rect
-                x={targetRect.left - 6}
-                y={targetRect.top - 6}
-                width={targetRect.width + 12}
-                height={targetRect.height + 12}
-                rx="22"
-                fill="none"
-                stroke="#5B80FF"
-                strokeWidth="2.5"
-                opacity="0.95"
-                className="animate-pulse"
-              />
-            </svg>
-
-            {/* 2. Arka Plan Ambient Işık Halkaları */}
-            <div className="fixed inset-0 pointer-events-none overflow-hidden">
-              <div className="absolute -top-32 -right-32 w-[540px] h-[540px] bg-[#004BFA]/20 rounded-full blur-[140px]" />
-              <div className="absolute -bottom-32 -left-32 w-[540px] h-[540px] bg-[#004BFA]/20 rounded-full blur-[140px]" />
-            </div>
-
-            {/* 3. KUTUSUZ, DOĞRUDAN ALANA YERLEŞEN ZARİF TİPOGRAFİ METİN ALANI */}
-            <motion.div
-              key={`tour-step-${currentStepIndex}`}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
-              style={textPositionStyles}
-              className="z-[110] space-y-4 pointer-events-auto select-none"
-            >
-              {/* Adım Rozeti */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[11px] font-semibold text-white/80 uppercase tracking-widest backdrop-blur-md">
-                <span className="w-2 h-2 rounded-full bg-[#5B80FF] animate-pulse" />
-                <span>
-                  Widget Rehberi • Adım {currentStepIndex + 1} / {steps.length}
-                </span>
-              </div>
-
-              {/* Başlık (Kutusuz, doğrudan gradyan üzerinde) */}
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-normal text-white clash-title tracking-tight leading-tight">
-                {currentStep.title}
-              </h3>
-
-              {/* Açıklama Paragrafı (Kutusuz, berrak beyaz kontrast) */}
-              <p className="text-sm sm:text-base lg:text-[17px] text-white/90 leading-relaxed font-normal font-clash">
-                {currentStep.description}
-              </p>
-
-              {/* Şık Gezinme Butonları */}
-              <div className="flex items-center gap-3 pt-3">
-                {currentStepIndex > 0 && (
-                  <button
-                    type="button"
-                    onClick={handlePrev}
-                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer backdrop-blur-md"
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                    <span>Önceki</span>
-                  </button>
-                )}
-
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-xs sm:text-sm font-semibold shadow-lg hover:shadow-xl transition-all cursor-pointer group"
+                {/* 3. KUTUSUZ, DOĞRUDAN ALANA YERLEŞEN ZARİF TİPOGRAFİ METİN ALANI */}
+                <motion.div
+                  key={`tour-step-${currentStepIndex}`}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  style={textPositionStyles}
+                  onClick={(e) => e.stopPropagation()}
+                  className="z-[100000] space-y-4 pointer-events-auto select-none"
                 >
-                  <span>{currentStepIndex < steps.length - 1 ? "Sonraki Adım" : "Turu Tamamla"}</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                </button>
+                  {/* Adım Rozeti */}
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[11px] font-semibold text-white/80 uppercase tracking-widest backdrop-blur-md">
+                    <span className="w-2 h-2 rounded-full bg-[#5B80FF] animate-pulse" />
+                    <span>
+                      Widget Rehberi • Adım {currentStepIndex + 1} / {steps.length}
+                    </span>
+                  </div>
 
-                {/* Turu Kapat Butonu */}
-                <button
-                  type="button"
-                  onClick={handleClose}
-                  className="ml-auto text-xs text-white/50 hover:text-white transition-colors cursor-pointer font-medium flex items-center gap-1"
-                >
-                  <X className="w-3.5 h-3.5" />
-                  <span>Kapat (ESC)</span>
-                </button>
-              </div>
+                  {/* Başlık (Kutusuz, doğrudan gradyan üzerinde) */}
+                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-normal text-white clash-title tracking-tight leading-tight">
+                    {currentStep.title}
+                  </h3>
 
-              {/* İlerleme Çizgisi */}
-              <div className="flex items-center gap-1.5 pt-1">
-                {steps.map((_, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setCurrentStepIndex(idx)}
-                    className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                      idx === currentStepIndex
-                        ? "w-8 bg-[#5B80FF]"
-                        : idx < currentStepIndex
-                        ? "w-4 bg-emerald-400/80"
-                        : "w-3 bg-white/20 hover:bg-white/40"
-                    }`}
-                    title={`Adım ${idx + 1}`}
-                  />
-                ))}
+                  {/* Açıklama Paragrafı (Kutusuz, berrak beyaz kontrast) */}
+                  <p className="text-sm sm:text-base lg:text-[17px] text-white/90 leading-relaxed font-normal font-clash">
+                    {currentStep.description}
+                  </p>
+
+                  {/* Şık Gezinme Butonları */}
+                  <div className="flex items-center gap-3 pt-3 flex-wrap">
+                    {currentStepIndex > 0 && (
+                      <button
+                        type="button"
+                        onClick={handlePrev}
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer backdrop-blur-md shadow-xs"
+                      >
+                        <ArrowLeft className="w-4 h-4" />
+                        <span>Önceki</span>
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={handleNext}
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-xs sm:text-sm font-semibold shadow-lg shadow-[#004BFA]/30 hover:shadow-xl transition-all cursor-pointer group"
+                    >
+                      <span>{currentStepIndex < steps.length - 1 ? "Sonraki Adım" : "Turu Tamamla"}</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                    </button>
+
+                    {/* Turu Kapat Butonu */}
+                    <button
+                      type="button"
+                      onClick={handleClose}
+                      className="ml-auto text-xs text-white/60 hover:text-white transition-colors cursor-pointer font-medium flex items-center gap-1.5 py-1 px-2 rounded-lg hover:bg-white/10"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                      <span>Kapat (ESC)</span>
+                    </button>
+                  </div>
+
+                  {/* İlerleme Çizgisi / Noktalar */}
+                  <div className="flex items-center gap-1.5 pt-1">
+                    {steps.map((_, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setCurrentStepIndex(idx)}
+                        className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                          idx === currentStepIndex
+                            ? "w-8 bg-[#5B80FF]"
+                            : idx < currentStepIndex
+                            ? "w-4 bg-emerald-400/80"
+                            : "w-3 bg-white/20 hover:bg-white/40"
+                        }`}
+                        title={`Adım ${idx + 1}`}
+                      />
+                    ))}
+                  </div>
+                </motion.div>
               </div>
-            </motion.div>
-          </div>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </>
   );
 }
