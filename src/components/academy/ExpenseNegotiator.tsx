@@ -205,11 +205,13 @@ export function ExpenseNegotiator() {
           let chatHistory = savedIt.chatHistory;
           let lastDialogue = savedIt.lastDialogue;
 
-          if (!chatHistory || !Array.isArray(chatHistory) || chatHistory.length === 0) {
+          const hasUserMsg = Array.isArray(chatHistory) && chatHistory.some((m) => m.sender === 'user');
+
+          if (!hasUserMsg) {
             const initialDialogue = getNegotiationDialogue({
               category,
               round: 0,
-              isSettled,
+              isSettled: false,
               context: {
                 userName,
                 itemName: savedIt.name,
@@ -217,15 +219,81 @@ export function ExpenseNegotiator() {
                 suggestedCut: targetCut,
               },
             });
-            lastDialogue = initialDialogue;
-            chatHistory = [
-              {
-                id: `msg-${idx}-0`,
-                sender: 'ai',
-                text: initialDialogue,
-                time: 'Şimdi',
-              },
-            ];
+
+            if (isSettled) {
+              if (category === 'A') {
+                const userConfirmMsg: ChatMessage = {
+                  id: `usr-${idx}-${Date.now()}`,
+                  sender: 'user',
+                  text: `Bu sabit gideri aynen koruyarak onaylıyorum (${originalAmount.toLocaleString('tr-TR')} ₺).`,
+                  time: 'Şimdi',
+                };
+                const aiConfirmMsg: ChatMessage = {
+                  id: `ai-${idx}-${Date.now() + 1}`,
+                  sender: 'ai',
+                  text: `Harika ${userName || 'Salih'}, ${savedIt.name} tutarını (${originalAmount.toLocaleString('tr-TR')} ₺) güvenli listemize kilitledik. Temel yaşam standartlarını korumak bütçe disiplininin en sağlam zeminidir.`,
+                  time: 'Şimdi',
+                };
+                chatHistory = [
+                  {
+                    id: `msg-${idx}-0`,
+                    sender: 'ai',
+                    text: initialDialogue,
+                    time: 'Şimdi',
+                  },
+                  userConfirmMsg,
+                  aiConfirmMsg,
+                ];
+                lastDialogue = aiConfirmMsg.text;
+              } else {
+                const userOfferMsg: ChatMessage = {
+                  id: `usr-${idx}-${Date.now()}`,
+                  sender: 'user',
+                  text: `${currentAmount.toLocaleString('tr-TR')} ₺ olarak güncellemeyi teklif ediyorum.`,
+                  time: 'Şimdi',
+                };
+                const aiAgreeText = getNegotiationDialogue({
+                  category,
+                  round: 1,
+                  isSettled: true,
+                  context: {
+                    userName,
+                    itemName: savedIt.name,
+                    currentAmount: originalAmount,
+                    offeredAmount: currentAmount,
+                    suggestedCut: targetCut,
+                    savedSoFar: originalAmount - currentAmount,
+                  },
+                });
+                const aiAgreeMsg: ChatMessage = {
+                  id: `ai-${idx}-${Date.now() + 1}`,
+                  sender: 'ai',
+                  text: aiAgreeText,
+                  time: 'Şimdi',
+                };
+                chatHistory = [
+                  {
+                    id: `msg-${idx}-0`,
+                    sender: 'ai',
+                    text: initialDialogue,
+                    time: 'Şimdi',
+                  },
+                  userOfferMsg,
+                  aiAgreeMsg,
+                ];
+                lastDialogue = aiAgreeText;
+              }
+            } else {
+              chatHistory = [
+                {
+                  id: `msg-${idx}-0`,
+                  sender: 'ai',
+                  text: initialDialogue,
+                  time: 'Şimdi',
+                },
+              ];
+              lastDialogue = initialDialogue;
+            }
           }
 
           return {
@@ -282,7 +350,7 @@ export function ExpenseNegotiator() {
         const initialDialogue = getNegotiationDialogue({
           category,
           round: 0,
-          isSettled: category === 'A',
+          isSettled: false,
           context: ctx,
         });
 
@@ -303,7 +371,7 @@ export function ExpenseNegotiator() {
           originalAmount: amount,
           currentAmount: amount,
           targetCutAmount: targetCut,
-          status: (completed === 'true' ? 'settled' : (idx === 0 ? (category === 'A' ? 'settled' : 'in_progress') : 'pending')) as 'pending' | 'in_progress' | 'settled',
+          status: (completed === 'true' ? 'settled' : (idx === 0 ? 'in_progress' : 'pending')) as 'pending' | 'in_progress' | 'settled',
           turns: completed === 'true' ? 1 : 0,
           lastDialogue: initialDialogue,
           chatHistory: initialHistory,
@@ -386,18 +454,22 @@ export function ExpenseNegotiator() {
       savedSoFar: monthlySaved,
     };
 
-    const newDialogue = getNegotiationDialogue({
-      category,
-      round: nextTurns,
-      isSettled,
-      context: ctx,
-      specialCondition,
-    });
+    const newDialogue = category === 'A'
+      ? `Harika ${userName || 'Salih'}, ${currentItem.name} tutarını (${offerAmount.toLocaleString('tr-TR')} ₺) güvenli listemize kilitledik. Temel yaşam standartlarını korumak bütçe disiplininin en sağlam zeminidir.`
+      : getNegotiationDialogue({
+          category,
+          round: nextTurns,
+          isSettled,
+          context: ctx,
+          specialCondition,
+        });
 
     const userMsg: ChatMessage = {
       id: `usr-${Date.now()}`,
       sender: 'user',
-      text: `${offerAmount.toLocaleString('tr-TR')} ₺ olarak güncellemeyi teklif ediyorum.`,
+      text: category === 'A'
+        ? `Bu sabit gideri aynen koruyarak onaylıyorum (${offerAmount.toLocaleString('tr-TR')} ₺).`
+        : `${offerAmount.toLocaleString('tr-TR')} ₺ olarak güncellemeyi teklif ediyorum.`,
       time: 'Şimdi',
     };
 
@@ -438,7 +510,7 @@ export function ExpenseNegotiator() {
           if (idx === nextIdx) {
             return {
               ...it,
-              status: (it.status === 'settled' ? 'settled' : (it.category === 'A' ? 'settled' : 'in_progress')) as 'settled' | 'in_progress',
+              status: (it.status === 'settled' ? 'settled' : 'in_progress') as 'settled' | 'in_progress',
             };
           }
           return it;
@@ -457,7 +529,7 @@ export function ExpenseNegotiator() {
     }
   };
 
-  // Tekrar Pazarlık Et (Uzlaşmayı yeniden açma)
+  // Tekrar Pazarlık Et (Uzlaşmayı yeniden açma - seçilen kalemin tüm sohbet geçmişini siler)
   const handleReNegotiate = (itemIndex: number) => {
     setItems((prev) => {
       const updated = prev.map((it, idx) => {
@@ -480,9 +552,8 @@ export function ExpenseNegotiator() {
             currentAmount: it.originalAmount,
             lastDialogue: initialDialogue,
             chatHistory: [
-              ...it.chatHistory,
               {
-                id: `re-${Date.now()}`,
+                id: `msg-${it.id}-${Date.now()}`,
                 sender: 'ai' as const,
                 text: initialDialogue,
                 time: 'Şimdi',
@@ -498,6 +569,47 @@ export function ExpenseNegotiator() {
     setCurrentIndex(itemIndex);
     setUserOfferInput('');
     setIsSpotlightActive(true);
+    setIsFinishedAll(false);
+  };
+
+  // Tüm Pazarlıkları Sıfırla ve Baştan Başla (Tüm kalemlerin sohbet geçmişlerini ve tutarlarını sıfırlar)
+  const handleResetAll = () => {
+    setItems((prev) => {
+      const reset = prev.map((it, idx) => {
+        const initialDialogue = getNegotiationDialogue({
+          category: it.category,
+          round: 0,
+          isSettled: false,
+          context: {
+            userName,
+            itemName: it.name,
+            currentAmount: it.originalAmount,
+            suggestedCut: it.targetCutAmount,
+          },
+        });
+        return {
+          ...it,
+          status: (idx === 0 ? 'in_progress' : 'pending') as 'in_progress' | 'pending',
+          turns: 0,
+          currentAmount: it.originalAmount,
+          lastDialogue: initialDialogue,
+          chatHistory: [
+            {
+              id: `msg-${it.id}-${Date.now()}`,
+              sender: 'ai' as const,
+              text: initialDialogue,
+              time: 'Şimdi',
+            },
+          ],
+        };
+      });
+      persistNegotiatedData(reset, false);
+      return reset;
+    });
+    setCurrentIndex(0);
+    setUserOfferInput('');
+    setIsSpotlightActive(true);
+    setIsFinishedAll(false);
   };
 
   // Önceki Kaleme Dönüş
@@ -817,15 +929,30 @@ export function ExpenseNegotiator() {
                               return (
                                 <div
                                   key={msg.id}
-                                  className={`flex gap-3 max-w-[95%] ${
-                                    isAi ? 'self-start' : 'ml-auto justify-end'
+                                  className={`flex flex-col gap-1.5 max-w-[92%] sm:max-w-[85%] ${
+                                    isAi ? 'self-start items-start' : 'ml-auto justify-end items-end'
                                   }`}
                                 >
+                                  {/* Gönderen Etiketi */}
+                                  <div className="flex items-center gap-1.5 px-1 text-[11px] font-semibold text-slate-400">
+                                    {isAi ? (
+                                      <>
+                                        <span className="w-1.5 h-1.5 rounded-full bg-[#004BFA]" />
+                                        <span>FinAi Workspace</span>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <span>{userName || 'Sen'} (Teklifin)</span>
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                      </>
+                                    )}
+                                  </div>
+
                                   <div
-                                    className={`p-4 sm:p-6 rounded-2xl text-sm sm:text-base leading-relaxed ${
+                                    className={`p-4 sm:p-5 rounded-2xl text-sm sm:text-base leading-relaxed ${
                                       isAi
-                                        ? 'bg-slate-50 text-slate-800 border border-slate-200/80 shadow-2xs'
-                                        : 'bg-[#004BFA] text-white shadow-xs'
+                                        ? 'bg-slate-50 text-slate-800 border border-slate-200/80 shadow-2xs rounded-tl-xs'
+                                        : 'bg-[#004BFA] text-white shadow-xs rounded-tr-xs'
                                     }`}
                                   >
                                     <p className="font-normal font-clash">{msg.text}</p>
@@ -858,7 +985,7 @@ export function ExpenseNegotiator() {
                           className="w-full inline-flex items-center justify-center gap-3 px-8 py-4 sm:py-4.5 rounded-2xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-sm sm:text-base font-semibold transition-all duration-200 shadow-md hover:shadow-lg cursor-pointer"
                         >
                           <Check className="w-5 h-5" />
-                          <span>Bu Sabit Gideri Aynen Koru ve Devam Et →</span>
+                          <span>Bu Sabit Gideri Aynen Koru ve Devam Et ({currentItem.originalAmount.toLocaleString('tr-TR')} ₺) →</span>
                         </button>
                       ) : (
                         <form
@@ -961,6 +1088,16 @@ export function ExpenseNegotiator() {
                         <span>Önceki Kalem</span>
                       </button>
 
+                      <button
+                        type="button"
+                        onClick={handleResetAll}
+                        className="inline-flex items-center gap-1.5 text-slate-400 hover:text-rose-500 transition-colors font-medium cursor-pointer"
+                        title="Tüm süreci ve sohbetleri sıfırlar"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        <span>Tümünü Sıfırla</span>
+                      </button>
+
                       <span className="font-medium text-slate-500">
                         Kalan Kalem: {items.length - (currentIndex + 1)}
                       </span>
@@ -1022,15 +1159,29 @@ export function ExpenseNegotiator() {
                               return (
                                 <div
                                   key={msg.id}
-                                  className={`flex gap-2.5 max-w-[95%] ${
-                                    isAi ? 'self-start' : 'ml-auto justify-end'
+                                  className={`flex flex-col gap-1 max-w-[94%] ${
+                                    isAi ? 'self-start items-start' : 'ml-auto justify-end items-end'
                                   }`}
                                 >
+                                  {/* Gönderen Etiketi */}
+                                  <div className="flex items-center gap-1 px-1 text-[10px] font-semibold text-slate-400">
+                                    {isAi ? (
+                                      <>
+                                        <span className="w-1.5 h-1.5 rounded-full bg-[#004BFA]" />
+                                        <span>FinAi Workspace</span>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <span>{userName || 'Sen'} (Teklifin)</span>
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                      </>
+                                    )}
+                                  </div>
                                   <div
                                     className={`p-3.5 sm:p-4 rounded-xl text-xs sm:text-sm leading-relaxed ${
                                       isAi
-                                        ? 'bg-slate-50 text-slate-800 border border-slate-200/80 shadow-2xs'
-                                        : 'bg-[#004BFA] text-white shadow-2xs'
+                                        ? 'bg-slate-50 text-slate-800 border border-slate-200/80 shadow-2xs rounded-tl-xs'
+                                        : 'bg-[#004BFA] text-white shadow-2xs rounded-tr-xs'
                                     }`}
                                   >
                                     <p className="font-normal font-clash">{msg.text}</p>
@@ -1056,15 +1207,21 @@ export function ExpenseNegotiator() {
                       <button
                         type="button"
                         onClick={() => {
-                          handleReNegotiate(currentIndex);
-                          setIsSpotlightActive(true);
+                          if (showSummaryMetrics) {
+                            handleResetAll();
+                          } else {
+                            handleReNegotiate(currentIndex);
+                            setIsSpotlightActive(true);
+                          }
                         }}
-                        className={`inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs sm:text-sm font-medium transition-all cursor-pointer ${
+                        className={`inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs sm:text-sm font-medium transition-all cursor-pointer shadow-2xs ${
                           showSummaryMetrics ? 'w-full' : 'flex-1'
                         }`}
                       >
                         <RotateCcw className="w-4 h-4 text-slate-500" />
-                        <span>Tekrar Pazarlık Et</span>
+                        <span>
+                          {showSummaryMetrics ? 'Tüm Pazarlıkları Sıfırla ve Baştan Başla' : 'Tekrar Pazarlık Et'}
+                        </span>
                       </button>
 
                       {!showSummaryMetrics && (
