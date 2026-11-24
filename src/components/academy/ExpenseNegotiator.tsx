@@ -87,6 +87,7 @@ export function ExpenseNegotiator() {
 
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inlineChatEndRef = useRef<HTMLDivElement>(null);
+  const isLoadedRef = useRef(false);
 
   // Otomatik olarak son mesaja kaydır
   useEffect(() => {
@@ -128,6 +129,8 @@ export function ExpenseNegotiator() {
 
   // 1. Hafta Verisini veya Varsayılanları Yükle
   useEffect(() => {
+    if (isLoadedRef.current && items.length > 0) return;
+
     try {
       const completed = localStorage.getItem(LESSON_2_KEY);
       if (completed === 'true') {
@@ -242,6 +245,14 @@ export function ExpenseNegotiator() {
         });
 
         setItems(restored);
+        const firstUnsettled = restored.findIndex((it) => it.status !== 'settled');
+        if (firstUnsettled !== -1) {
+          setCurrentIndex(firstUnsettled);
+        } else {
+          setCurrentIndex(restored.length - 1);
+          setIsFinishedAll(true);
+        }
+        isLoadedRef.current = true;
         return;
       }
 
@@ -301,15 +312,12 @@ export function ExpenseNegotiator() {
       });
 
       setItems(initialItems);
-      if (completed === 'true') {
-        try {
-          localStorage.setItem(NEGOTIATED_STORAGE_KEY, JSON.stringify(initialItems));
-        } catch {}
-      }
+      persistNegotiatedData(initialItems, completed === 'true');
+      isLoadedRef.current = true;
     } catch {
       // ignore
     }
-  }, [userName]);
+  }, [userName, userCtx?.user?.id]);
 
   const currentItem = items[currentIndex];
 
@@ -360,7 +368,10 @@ export function ExpenseNegotiator() {
         nextStatus = 'settled';
       }
     } else if (category === 'C') {
-      if (nextTurns >= 2 && !specialCondition) {
+      if (nextTurns >= 1 && !specialCondition) {
+        isSettled = true;
+        nextStatus = 'settled';
+      } else if (nextTurns >= 2) {
         isSettled = true;
         nextStatus = 'settled';
       }
