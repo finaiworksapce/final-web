@@ -25,19 +25,19 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
         const copyrightContainer = document.createElement("div");
         copyrightContainer.className = "tradingview-widget-copyright";
         copyrightContainer.style.display = "none";
-        copyrightContainer.innerHTML = '<a href="https://www.tradingview.com/markets/" rel="noopener nofollow" target="_blank"><span class="blue-text">World markets</span></a><span class="trademark">&nbsp;by TradingView</span>';
+        copyrightContainer.innerHTML = '<span class="trademark">&nbsp;TradingView tarafından</span> <a href="https://tr.tradingview.com/markets/" rel="noopener nofollow" target="_blank"><span class="blue-text">dünya piyasaları</span></a>';
         container.appendChild(copyrightContainer);
 
         const config = {
             lineWidth: 2,
             lineType: 0,
             chartType: "area",
-            fontColor: isDark ? "rgb(106, 109, 120)" : "#64748B",
-            gridLineColor: isDark ? "rgba(242, 242, 242, 0.06)" : "rgba(226, 232, 240, 0.6)",
+            fontColor: "rgb(106, 109, 120)",
+            gridLineColor: isDark ? "rgba(242, 242, 242, 0.06)" : "rgba(46, 46, 46, 0.06)",
             volumeUpColor: "rgba(34, 171, 148, 0.5)",
             volumeDownColor: "rgba(247, 82, 95, 0.5)",
-            backgroundColor: isDark ? "#0F0F0F" : "#FFFFFF",
-            widgetFontColor: isDark ? "#DBDBDB" : "#0E1E38",
+            backgroundColor: isDark ? "#0F0F0F" : "#ffffff",
+            widgetFontColor: isDark ? "#DBDBDB" : "#0F0F0F",
             upColor: "#22ab94",
             downColor: "#f7525f",
             borderUpColor: "#22ab94",
@@ -50,14 +50,16 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
             chartOnly: false,
             scalePosition: "right",
             scaleMode: "Normal",
-            fontFamily: "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
+            fontFamily: "Trebuchet MS, sans-serif",
             valuesTracking: "1",
             changeMode: "price-and-percent",
             symbols: [
-                ["Gram Altın", "FX_IDC:XAUTRYG|1D"],
-                ["Gram Gümüş", "FX_IDC:XAGTRYG|1D"],
-                ["Nasdaq 100", "SKILLING:US100|1D"],
-                ["Bitcoin", "BITSTAMP:BTCUSD|1D"]
+                ["FX_IDC:XAUTRYG|3M"],
+                ["FX_IDC:XAGTRYG|3M"],
+                ["FX:USDTRY|3M"],
+                ["FX_IDC:EURTRY|3M"],
+                ["BITSTAMP:BTCUSD|3M"],
+                ["IG:NASDAQ|3M"]
             ],
             dateRanges: [
                 "1d|1",
@@ -68,13 +70,14 @@ export function TradingViewMarketOverview({ className = "" }: TradingViewMarketO
                 "all|1M"
             ],
             fontSize: "10",
-            headerFontSize: "medium",
-            autosize: true,
+            headerFontSize: "small",
+            autosize: false,
+            dateFormat: "dd MMM 'yy",
             width: "100%",
             height: "100%",
             noTimeScale: false,
             hideDateRanges: false,
-            hideMarketStatus: false,
+            hideMarketStatus: true,
             hideSymbolLogo: false
         };
 
