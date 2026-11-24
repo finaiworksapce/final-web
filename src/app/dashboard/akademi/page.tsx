@@ -9,7 +9,8 @@ import {
   ChevronRight, 
   ArrowRight, 
   Play, 
-  BookOpen
+  BookOpen,
+  Check
 } from "lucide-react";
 import { UNIT_1_CONFIG, getLessonContent } from "@/data/academy/unit-1";
 import { CashFlowSimulator } from "@/components/academy/CashFlowSimulator";
@@ -22,8 +23,9 @@ function AkademiContent() {
   
   // Kullanıcı adı bilgisi
   let userName: string | null = null;
+  let userCtx: any = null;
   try {
-    const userCtx = useUser();
+    userCtx = useUser();
     userName = userCtx?.userName || null;
   } catch {
     // UserProvider dışı koruma
@@ -40,14 +42,59 @@ function AkademiContent() {
   // Uygulama ekranı açık mı durumu
   const [isSimulatorOpen, setIsSimulatorOpen] = useState(false);
   const [isLesson1Done, setIsLesson1Done] = useState(false);
+  const [isLesson2Done, setIsLesson2Done] = useState(false);
+  const [completedTopics, setCompletedTopics] = useState<Record<string, boolean>>({});
+  const [topicProgress, setTopicProgress] = useState<Record<string, number>>({});
 
   useEffect(() => {
     try {
       if (typeof window !== "undefined") {
-        setIsLesson1Done(localStorage.getItem("finai_lesson_1_completed") === "true");
+        const userMeta = userCtx?.user?.user_metadata || {};
+
+        const l1 = 
+          localStorage.getItem("finai_lesson_1_completed") === "true" ||
+          userMeta.academy_lesson_1_completed === true;
+
+        const l2 = 
+          localStorage.getItem("finai_lesson_2_completed") === "true" ||
+          localStorage.getItem("finai_academy_1_2_completed") === "true" ||
+          userMeta.academy_lesson_2_completed === true;
+
+        setIsLesson1Done(l1);
+        setIsLesson2Done(l2);
+
+        let p1 = l1 ? 100 : 0;
+        if (!l1 && localStorage.getItem("finai_cash_flow_incomes")) {
+          p1 = 50;
+        }
+
+        let p2 = l2 ? 100 : 0;
+        if (!l2) {
+          const raw = localStorage.getItem("finai_academy_1_2_data");
+          if (raw) {
+            try {
+              const parsed = JSON.parse(raw);
+              const items = parsed.items || (Array.isArray(parsed) ? parsed : []);
+              if (Array.isArray(items) && items.length > 0) {
+                const settled = items.filter((it: any) => it.status === "settled").length;
+                p2 = Math.round((settled / items.length) * 100);
+              }
+            } catch {}
+          }
+        }
+
+        setCompletedTopics({
+          "1-1": l1,
+          "1-2": l2,
+        });
+
+        setTopicProgress({
+          "1-1": p1,
+          "1-2": p2,
+        });
       }
     } catch {}
-  }, []);
+  }, [userCtx?.user?.id, urlTopic]);
 
   useEffect(() => {
     setSelectedTopicId(urlTopic);
@@ -99,10 +146,16 @@ function AkademiContent() {
               <div className="w-full p-5 sm:p-6 xl:p-8 bg-[#0E1E38] text-white rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl shadow-[#0E1E38]/10 border border-white/10">
                 <div className="space-y-1.5 flex-1 pr-4">
                   <h3 className="text-lg sm:text-xl lg:text-2xl font-medium text-white clash-title tracking-tight">
-                    {isLesson1Done ? "Tasarruf Nedir ve Nasıl Yapılır?" : "Gelir ve Gider Yönetimi"}
+                    {isLesson1Done && isLesson2Done 
+                      ? "1. Üniteyi Başarıyla Tamamladın!"
+                      : isLesson1Done 
+                      ? "Tasarruf Nedir ve Nasıl Yapılır?" 
+                      : "Gelir ve Gider Yönetimi"}
                   </h3>
                   <p className="text-xs sm:text-sm lg:text-base text-white/70 leading-relaxed font-normal">
-                    {isLesson1Done 
+                    {isLesson1Done && isLesson2Done
+                      ? "Nakit akışı ve tasarruf masası simülasyonlarını başarıyla tamamladın. Yeni haftalık dersler yakında aktif hale gelecektir."
+                      : isLesson1Done 
                       ? "Cimrilik değil, cüzdandaki görünmeyen kaçakları tespit etme ve budama bilinci." 
                       : "Finansal gücün ne kadar kazandığınla değil; ay bittiğinde masada ne bırakabildiğinle başlar."}
                   </p>
@@ -110,10 +163,16 @@ function AkademiContent() {
 
                 <button
                   type="button"
-                  onClick={() => handleOpenTopic(isLesson1Done ? "1-2" : "1-1")}
+                  onClick={() => handleOpenTopic(isLesson1Done && isLesson2Done ? "1-2" : isLesson1Done ? "1-2" : "1-1")}
                   className="inline-flex items-center justify-center gap-2 px-5 py-3 xl:px-6 xl:py-3.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-xs sm:text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg shrink-0 cursor-pointer group"
                 >
-                  <span>{isLesson1Done ? "2. Haftanın Dersine Başla" : "1. Haftanın Dersine Başla"}</span>
+                  <span>
+                    {isLesson1Done && isLesson2Done 
+                      ? "Dersleri İncele" 
+                      : isLesson1Done 
+                      ? "2. Haftanın Dersine Başla" 
+                      : "1. Haftanın Dersine Başla"}
+                  </span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
@@ -229,19 +288,28 @@ function AkademiContent() {
               <div className="space-y-2 pt-2">
                 {UNIT_1_CONFIG.topics.map((topic) => {
                   const isActive = topic.status === "active";
+                  const isCompleted = completedTopics[topic.id] === true || topicProgress[topic.id] === 100;
+                  const progress = topicProgress[topic.id] || 0;
+
                   return (
                     <div
                       key={topic.id}
                       onClick={() => isActive && handleOpenTopic(topic.id)}
                       className={`p-2.5 sm:p-3 rounded-xl border transition-all text-xs flex items-center justify-between gap-3 ${
-                        isActive
+                        isCompleted
+                          ? "bg-emerald-950/20 border-emerald-500/40 text-white cursor-pointer hover:bg-emerald-950/30 hover:border-emerald-500/60 shadow-xs"
+                          : isActive
                           ? "bg-[#004BFA]/25 border-[#004BFA]/70 text-white cursor-pointer hover:bg-[#004BFA]/35 hover:border-[#004BFA]"
                           : "bg-white/[0.02] border-white/5 text-white/40 cursor-not-allowed"
                       }`}
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
                         <div className="shrink-0">
-                          {isActive ? (
+                          {isCompleted ? (
+                            <div className="w-4 h-4 rounded-full bg-emerald-500/90 flex items-center justify-center text-white shadow-xs">
+                              <Check className="w-2.5 h-2.5 stroke-[3] text-white" />
+                            </div>
+                          ) : isActive ? (
                             <div className="w-4 h-4 rounded-full bg-[#004BFA] flex items-center justify-center text-white">
                               <Play className="w-2 h-2 fill-white text-white ml-0.5" />
                             </div>
@@ -252,14 +320,58 @@ function AkademiContent() {
                           )}
                         </div>
 
-                        <span className={`font-semibold truncate text-xs sm:text-sm ${isActive ? "text-white" : "text-white/60"}`}>
+                        <span className={`font-semibold truncate text-xs sm:text-sm ${isActive || isCompleted ? "text-white" : "text-white/60"}`}>
                           {topic.shortTitle}
                         </span>
                       </div>
 
-                      <span className={`text-[10px] shrink-0 font-medium ${isActive ? "text-[#78B8F5] font-semibold" : "text-white/30"}`}>
-                        {isActive ? "Derse Başla" : topic.readTime}
-                      </span>
+                      {/* Sağ Taraf: Tamamlanan / İlerlemesi olan dersler için daire grafiği, kilitliler için Hafta X, başlanmamışlar için Derse Başla */}
+                      {isCompleted || progress > 0 ? (
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className="text-[10px] font-semibold text-emerald-400 hidden min-[420px]:inline">
+                            {isCompleted ? "Tamamlandı" : "Devam Et"}
+                          </span>
+                          <div className="relative w-8 h-8 flex items-center justify-center shrink-0">
+                            <svg className="w-8 h-8 -rotate-90" viewBox="0 0 36 36">
+                              <defs>
+                                <linearGradient id={`circleGrad-${topic.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                  <stop offset="0%" stopColor="#004BFA" />
+                                  <stop offset="50%" stopColor="#5B80FF" />
+                                  <stop offset="100%" stopColor="#10B981" />
+                                </linearGradient>
+                              </defs>
+                              {/* Arka plan izi */}
+                              <circle
+                                cx="18"
+                                cy="18"
+                                r="13"
+                                fill="none"
+                                stroke="rgba(255, 255, 255, 0.12)"
+                                strokeWidth="3.5"
+                              />
+                              {/* İlerleme dairesi */}
+                              <circle
+                                cx="18"
+                                cy="18"
+                                r="13"
+                                fill="none"
+                                stroke={isCompleted ? "#10B981" : `url(#circleGrad-${topic.id})`}
+                                strokeWidth="3.5"
+                                strokeDasharray={81.68}
+                                strokeDashoffset={81.68 - (81.68 * progress) / 100}
+                                strokeLinecap="round"
+                              />
+                            </svg>
+                            <span className="absolute text-[8.5px] font-bold text-white tracking-tighter">
+                              %{progress}
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <span className={`text-[10px] shrink-0 font-medium ${isActive ? "text-[#78B8F5] font-semibold" : "text-white/30"}`}>
+                          {isActive ? "Derse Başla" : topic.readTime}
+                        </span>
+                      )}
                     </div>
                   );
                 })}
