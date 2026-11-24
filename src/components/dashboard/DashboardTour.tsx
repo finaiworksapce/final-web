@@ -53,7 +53,7 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
         title: "FinAi Aylık Portföy Raporu",
         description:
           "Bu alan, yapay zekanın portföyünü detaylı inceleyerek oluşturduğu aylık performans ve strateji analizidir. Bu rapor aylık olarak hazırlandığından dolayı, ilk kapsamlı analizini portföyünü oluşturduktan 1 ay sonra burada görebileceksin. Her ayın sonunda yatırımlarının genel seyrini ve derinlemesine içgörülerini buradan takip edebilirsin.",
-        placement: "left", // Salih Bey'in talebi: Sol menünün sağından başlayacak
+        placement: "left", // Sol taraftaki ferah alana dengeli yerleşim
       },
       {
         element: "#finai-widget-market",
@@ -248,8 +248,8 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
     setIsOpen(false);
   };
 
-  // Butona basıldığında anında açma ve ilk hedefe odaklanma
-  const handleStart = () => {
+  // Butona basıldığında veya otomatik açılışta ilk hedefe odaklanma
+  const handleStart = useCallback(() => {
     let activeSteps = steps;
     if (typeof document !== "undefined") {
       if (document.querySelector("#finai-widget-summary")) {
@@ -269,7 +269,31 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
       }
     }
     setIsOpen(true);
-  };
+  }, [steps, stepsWithAssets, stepsWithoutAssets]);
+
+  // Yeni kayıt olan kullanıcılar için otomatik karşılama tutorial'ı
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const forceTour = urlParams.get("tour") === "true";
+      const hasSeen = localStorage.getItem(STORAGE_KEY);
+
+      if (hasSeen === "true" && !forceTour) {
+        return;
+      }
+
+      // Sayfa ve widget DOM elemanlarının yerleşmesi için kısa bir bekleme
+      const timer = setTimeout(() => {
+        handleStart();
+      }, 750);
+
+      return () => clearTimeout(timer);
+    } catch {
+      // localStorage erişim kısıtlamasında sessizce geç
+    }
+  }, [handleStart]);
 
   // Tıklama spotlight kesik alanı içindeyse kapatma
   const handleBackdropClick = (e: React.MouseEvent) => {
@@ -353,14 +377,13 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
       }
     }
 
-    // 2. SOL YERLEŞİM (Aylık Rapor & Ajanda İçin: Sol Menü Kısayolunun Hemen Sağından Başlar)
+    // 2. SOL YERLEŞİM (Aylık Rapor & Ajanda İçin: Ferah Sol Alan)
     if (placement === "left") {
       const leftAvailableSpace = targetRect.left;
       if (leftAvailableSpace >= 340) {
-        // Sol menü kısayolunun hemen sağından hizalanarak başlar (~96px)
-        const leftPos = Math.max(40, isDesktop ? 96 : 24);
-        const availableWidth = Math.min(620, targetRect.left - leftPos - 36);
-        const topPos = Math.max(80, Math.min(targetRect.top, winHeight - 380));
+        const leftPos = Math.max(36, isDesktop ? 64 : 20);
+        const availableWidth = Math.min(580, targetRect.left - leftPos - 36);
+        const topPos = Math.max(80, Math.min(targetRect.top + 16, winHeight - 380));
         return {
           position: "fixed" as const,
           top: topPos,
@@ -448,7 +471,7 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
           <AnimatePresence>
             {isOpen && currentStep && (
               <div className="fixed inset-0 z-[99999] pointer-events-auto overflow-hidden">
-                {/* 1. FinAi İmza Gradyanlı SVG Cutout Mask (Yumuşak Morf Geçişli) */}
+                {/* 1. FinAi İmza Gradyanlı SVG Cutout Mask (İlk Açılışta Anında, Sonraki Adımlarda Yumuşak Morf Geçişli) */}
                 <svg
                   className="fixed inset-0 w-full h-full pointer-events-none"
                   style={{ width: "100vw", height: "100vh" }}
@@ -458,6 +481,7 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
                       <rect x="0" y="0" width="100%" height="100%" fill="white" />
                       {targetRect && (
                         <motion.rect
+                          initial={false}
                           animate={{
                             x: targetRect.left - 6,
                             y: targetRect.top - 6,
@@ -496,9 +520,10 @@ export function DashboardTour({ hasActiveAssets, className = "" }: DashboardTour
                     onClick={handleBackdropClick}
                   />
 
-                  {/* Vurgulanan Widget Çevresindeki İnce Işıklı Çerçeve (Yumuşak Morf Geçişli) */}
+                  {/* Vurgulanan Widget Çevresindeki İnce Işıklı Çerçeve (İlk Açılışta Anında, Sonraki Adımlarda Yumuşak Morf Geçişli) */}
                   {targetRect && (
                     <motion.rect
+                      initial={false}
                       animate={{
                         x: targetRect.left - 6,
                         y: targetRect.top - 6,
