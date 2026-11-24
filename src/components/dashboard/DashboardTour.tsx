@@ -5,29 +5,11 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Compass, ArrowRight, ArrowLeft, X } from "lucide-react";
 
-// Dashboard Widgets
-import { DashboardSummaryCards } from "@/components/DashboardSummaryCards";
-import { TopAssetDistributionCard } from "@/components/dashboard/TopAssetDistributionCard";
-import { FinAiYesterdayReportWidget } from "@/components/FinAiYesterdayReportWidget";
-import { MarketOverviewWidget } from "@/components/dashboard/MarketOverviewWidget";
-import { DailyAgendaWidget } from "@/components/dashboard/DailyAgendaWidget";
-import { LatestNewsWidget } from "@/components/dashboard/LatestNewsWidget";
-import { SamplePortfolioWidget } from "@/components/dashboard/SamplePortfolioWidget";
-import { FinAiAkademiWidget } from "@/components/dashboard/FinAiAkademiWidget";
-
 interface StepConfig {
-  id:
-    | "summary"
-    | "allocation"
-    | "monthly-report"
-    | "market"
-    | "agenda"
-    | "news"
-    | "sample-portfolio"
-    | "academy";
   element: string;
   title: string;
   description: string;
+  placement: "left" | "right" | "top" | "bottom";
 }
 
 interface DashboardTourProps {
@@ -41,73 +23,58 @@ const STORAGE_KEY = "finai_dashboard_tour_seen";
 export function DashboardTour({ hasActiveAssets, news = [], className = "" }: DashboardTourProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
+  const [windowDimensions, setWindowDimensions] = useState({ width: 1440, height: 900 });
   const [isMounted, setIsMounted] = useState(false);
-  const [origin, setOrigin] = useState<{ deltaX: number; deltaY: number; scale: number }>({
-    deltaX: 0,
-    deltaY: 0,
-    scale: 0.85,
-  });
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  // Modal açıkken sayfa kaymasını kilitle
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
-
   // Senaryo A (Portföyünde Varlık Olan Kullanıcı)
   const stepsWithAssets: StepConfig[] = useMemo(
     () => [
       {
-        id: "summary",
         element: "#finai-widget-summary",
         title: "Portföyünün Finansal Nabzı",
         description:
           "Sahip olduğun tüm hisse senedi, fon ve nakit varlıklarının güncel toplam değerini tek bakışta buradan izleyebilirsin. Günlük kâr/zarar durumunu ve genel getiri oranını anlık olarak takip ederek portföyünün performansını ölçebilirsin. Detaylı varlık listene ve işlem geçmişine ulaşmak için kartlara tıklayabilirsin.",
+        placement: "right", // Salih Bey'in talebi: Sağ taraftaki geniş alana yerleşecek
       },
       {
-        id: "allocation",
         element: "#finai-widget-allocation",
         title: "Risk ve Varlık Dağılımı",
         description:
           "Portföyünün hisse, yatırım fonu, emtia ve nakit arasındaki oransal ağırlığını gösterir. Finansal okuryazarlığın temel kuralı tüm birikimi tek bir enstrümana bağlamamaktır; buradaki dağılım grafiği risk dengeni anında kontrol etmeni sağlar. Bu widget'ın üzerine bastığın zaman ise seni doğrudan detaylı Portföy sayfana yönlendirir.",
+        placement: "left",
       },
       {
-        id: "monthly-report",
         element: "#finai-widget-monthly-report",
         title: "FinAi Aylık Portföy Raporu",
         description:
           "Bu alan, yapay zekanın portföyünü detaylı inceleyerek oluşturduğu aylık performans ve strateji analizidir. Bu rapor aylık olarak hazırlandığından dolayı, ilk kapsamlı analizini portföyünü oluşturduktan 1 ay sonra burada görebileceksin. Her ayın sonunda yatırımlarının genel seyrini ve derinlemesine içgörülerini buradan takip edebilirsin.",
+        placement: "left",
       },
       {
-        id: "market",
         element: "#finai-widget-market",
         title: "Piyasa Genel Görünümü & Canlı Grafikler",
         description:
           "Borsa İstanbul endeksinin yanı sıra bu alandaki grafikten en popüler varlıklar olan Gram Altın, Gümüş, Döviz Kurları ve Bitcoin gibi grafiklere hızlıca bakabilirsin. Sekmeler arasında geçiş yaparak canlı fiyat hareketlerini ve teknik grafikleri anında inceleyebilirsin. Kendi yatırımlarının performansını genel piyasa trendleriyle kıyaslamak için en pratik izleme alanındır.",
+        placement: "right",
       },
       {
-        id: "agenda",
         element: "#finai-widget-agenda",
         title: "Günlük Ajanda & Kritik Gelişmeler",
         description:
           "Takvim sayfandaki bugün içerisinde açıklanacak önemli şirket ve ekonomi gelişmelerini senin için bu kısımda kısayol olarak özetler. Takip ettiğin şirketlerin bugünkü bilanço açıklamaları, temettü ödemeleri veya kritik KAP bildirimleri doğrudan bu karta düşer. Detaylı takvime gitmeden günün en kritik olaylarını anında yakalamanı sağlar.",
+        placement: "left",
       },
       {
-        id: "news",
         element: "#finai-widget-news",
         title: "Doğrulanmış Ekonomi ve Borsa Gündemi",
         description:
           "Borsa İstanbul, şirketler ve makroekonomiye dair en güncel haber akışını filtreleyerek sana sunar. Spekülasyonlardan uzak, doğrudan şirket KAP açıklamalarına ve resmi verilere dayalı haberlerle piyasayı ilk elden takip edebilirsin.",
+        placement: "top",
       },
     ],
     []
@@ -117,45 +84,45 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
   const stepsWithoutAssets: StepConfig[] = useMemo(
     () => [
       {
-        id: "sample-portfolio",
         element: "#finai-widget-sample-portfolio",
         title: "Model Portföy Rehberi",
         description:
           "Henüz portföyüne varlık eklemediysen, FinAi uzmanları ve algoritmaları tarafından dengeli biçimde hazırlanmış BIST model portföyünü buradan inceleyebilirsin. Risk dağılımı yapılmış örnek bir hisse senedi sepetinin nasıl kurgulandığını görerek kendi portföyün için ilham alabilirsin.",
+        placement: "right",
       },
       {
-        id: "academy",
         element: "#finai-widget-academy",
         title: "Finansal Okuryazarlık & Akademi",
         description:
           "Bütçe yönetiminden hisse senedi ve şirket ortaklığına uzanan adım adım interaktif eğitim haritandır. Her hafta yeni bir modülü tamamlayarak finansal okuryazarlığını geliştirebilir ve tasarruflarını bilinçli yatırımlara dönüştürmeyi öğrenebilirsin.",
+        placement: "left",
       },
       {
-        id: "market",
         element: "#finai-widget-market",
         title: "Piyasa Genel Görünümü & Canlı Grafikler",
         description:
           "Borsa İstanbul endeksinin yanı sıra bu alandaki grafikten en popüler varlıklar olan Gram Altın, Gümüş, Döviz Kurları ve Bitcoin gibi grafiklere hızlıca bakabilirsin. Sekmeler arasında geçiş yaparak canlı fiyat hareketlerini ve teknik grafikleri anında inceleyebilirsin. Kendi yatırımlarının performansını genel piyasa trendleriyle kıyaslamak için en pratik izleme alanındır.",
+        placement: "right",
       },
       {
-        id: "agenda",
         element: "#finai-widget-agenda",
         title: "Günlük Ajanda & Kritik Gelişmeler",
         description:
           "Takvim sayfandaki bugün içerisinde açıklanacak önemli şirket ve ekonomi gelişmelerini senin için bu kısımda kısayol olarak özetler. Takip ettiğin şirketlerin bugünkü bilanço açıklamaları, temettü ödemeleri veya kritik KAP bildirimleri doğrudan bu karta düşer. Detaylı takvime gitmeden günün en kritik olaylarını anında yakalamanı sağlar.",
+        placement: "left",
       },
       {
-        id: "news",
         element: "#finai-widget-news",
         title: "Doğrulanmış Ekonomi ve Borsa Gündemi",
         description:
           "Borsa İstanbul, şirketler ve makroekonomiye dair en güncel haber akışını filtreleyerek sana sunar. Spekülasyonlardan uzak, doğrudan şirket KAP açıklamalarına ve resmi verilere dayalı haberlerle piyasayı ilk elden takip edebilirsin.",
+        placement: "top",
       },
     ],
     []
   );
 
-  // Aktif adımları belirle (DOM mevcudiyeti öncelikli)
+  // Doğrudan portföy durumuna göre adımları belirle (DOM mevcudiyeti öncelikli)
   const steps = useMemo(() => {
     if (typeof document !== "undefined") {
       if (document.querySelector("#finai-widget-summary")) {
@@ -168,57 +135,83 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
     return hasActiveAssets ? stepsWithAssets : stepsWithoutAssets;
   }, [hasActiveAssets, stepsWithAssets, stepsWithoutAssets]);
 
-  // Her widget'ın sayfadaki kendi gerçek konumunu hesapla (Ortaya sürüklenişin başlangıç noktası)
-  const updateOriginForStep = useCallback((step: StepConfig) => {
-    if (typeof window === "undefined") return;
-
-    const el = document.querySelector(step.element);
-    const winW = window.innerWidth;
-    const winH = window.innerHeight;
-    const isDesktop = winW >= 1024;
-
-    if (!el) {
-      setOrigin({ deltaX: -winW * 0.45, deltaY: 0, scale: 0.85 });
-      return;
-    }
-
-    const rect = el.getBoundingClientRect();
-    const elCenterX = rect.left + rect.width / 2;
-    const elCenterY = rect.top + rect.height / 2;
-
-    let targetWidth = 640;
-    let widgetCenterX = winW / 2;
-    let widgetCenterY = winH / 2;
-
-    if (isDesktop) {
-      const modalWidth = Math.min(1152, winW * 0.92);
-      const modalLeft = (winW - modalWidth) / 2;
-      targetWidth = modalWidth * 0.58;
-      widgetCenterX = modalLeft + targetWidth / 2;
-      widgetCenterY = winH / 2;
-    } else {
-      targetWidth = Math.min(winW - 48, 520);
-      widgetCenterX = winW / 2;
-      widgetCenterY = Math.max(160, winH * 0.32);
-    }
-
-    const deltaX = elCenterX - widgetCenterX;
-    const deltaY = elCenterY - widgetCenterY;
-    const scale = targetWidth > 0 ? Math.min(1, Math.max(0.4, rect.width / targetWidth)) : 0.85;
-
-    setOrigin({ deltaX, deltaY, scale });
+  // Window resize listener
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Adım değiştikçe hedef widget'ın başlangıç koordinatını güncelle
+  // Hedef elementi bul ve rect hesapla
+  const updateTargetRect = useCallback(() => {
+    if (!isOpen || steps.length === 0) return;
+    const step = steps[currentStepIndex];
+    if (!step) return;
+
+    const el = document.querySelector(step.element);
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      setTargetRect(rect);
+    }
+  }, [isOpen, steps, currentStepIndex]);
+
+  // Adım değiştiğinde yumuşak kaydır ve takip et
+  useEffect(() => {
+    if (!isOpen || steps.length === 0) return;
+    const step = steps[currentStepIndex];
+    if (!step) return;
+
+    const syncPosition = () => {
+      const el = document.querySelector(step.element);
+      if (el) {
+        setTargetRect(el.getBoundingClientRect());
+      }
+    };
+
+    const el = document.querySelector(step.element);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      setTargetRect(el.getBoundingClientRect());
+    }
+
+    let animationFrameId: number;
+    let startTime = performance.now();
+    const duration = 800; // ms
+
+    const trackElement = (now: number) => {
+      syncPosition();
+      if (now - startTime < duration) {
+        animationFrameId = requestAnimationFrame(trackElement);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(trackElement);
+
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, [isOpen, currentStepIndex, steps]);
+
+  // Scroll ve Resize anında koordinat senkronizasyonu
   useEffect(() => {
     if (!isOpen) return;
-    const step = steps[currentStepIndex];
-    if (step) {
-      updateOriginForStep(step);
-    }
-  }, [isOpen, currentStepIndex, steps, updateOriginForStep]);
+    window.addEventListener("scroll", updateTargetRect, { passive: true });
+    window.addEventListener("resize", updateTargetRect);
+    return () => {
+      window.removeEventListener("scroll", updateTargetRect);
+      window.removeEventListener("resize", updateTargetRect);
+    };
+  }, [isOpen, updateTargetRect]);
 
-  // Klavye Kontrolleri
+  // Klavye kontrolleri
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -255,6 +248,7 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
     setIsOpen(false);
   };
 
+  // Butona basıldığında anında açma ve ilk hedefe odaklanma
   const handleStart = () => {
     let activeSteps = steps;
     if (typeof document !== "undefined") {
@@ -264,73 +258,160 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
         activeSteps = stepsWithoutAssets;
       }
     }
-    const firstStep = activeSteps[0];
-    if (firstStep) {
-      updateOriginForStep(firstStep);
-    }
+
     setCurrentStepIndex(0);
+    const firstStep = activeSteps[0];
+    if (firstStep && typeof document !== "undefined") {
+      const el = document.querySelector(firstStep.element);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        setTargetRect(el.getBoundingClientRect());
+      }
+    }
     setIsOpen(true);
+  };
+
+  // Tıklama spotlight kesik alanı içindeyse kapatma
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (targetRect) {
+      const { clientX, clientY } = e;
+      const isInsideCutout =
+        clientX >= targetRect.left - 8 &&
+        clientX <= targetRect.right + 8 &&
+        clientY >= targetRect.top - 8 &&
+        clientY <= targetRect.bottom + 8;
+      if (isInsideCutout) {
+        return;
+      }
+    }
+    handleClose();
   };
 
   const currentStep = steps[currentStepIndex];
 
-  // Aktif Widget Bileşenini Render Et
-  const renderActiveWidget = () => {
-    if (!currentStep) return null;
+  // Kutusuz tipografi yerleşim koordinatları (Akıllı Boş Alan Hesaplaması)
+  const textPositionStyles = useMemo(() => {
+    const { width: winWidth, height: winHeight } = windowDimensions;
+    const isDesktop = winWidth >= 1024;
 
-    switch (currentStep.id) {
-      case "summary":
-        return (
-          <div className="w-full">
-            <DashboardSummaryCards />
-          </div>
-        );
-      case "allocation":
-        return (
-          <div className="w-full bg-white rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-100 min-h-[300px] flex items-center justify-center">
-            <TopAssetDistributionCard />
-          </div>
-        );
-      case "monthly-report":
-        return (
-          <div className="w-full bg-white rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-100 max-h-[460px] overflow-y-auto">
-            <FinAiYesterdayReportWidget />
-          </div>
-        );
-      case "market":
-        return (
-          <div className="w-full bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 h-[380px] sm:h-[420px]">
-            <MarketOverviewWidget />
-          </div>
-        );
-      case "agenda":
-        return (
-          <div className="w-full bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 max-h-[440px] overflow-y-auto">
-            <DailyAgendaWidget />
-          </div>
-        );
-      case "news":
-        return (
-          <div className="w-full bg-white rounded-3xl p-4 sm:p-5 shadow-sm border border-slate-100 max-h-[440px] overflow-y-auto">
-            <LatestNewsWidget news={news} />
-          </div>
-        );
-      case "sample-portfolio":
-        return (
-          <div className="w-full bg-white rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-100">
-            <SamplePortfolioWidget />
-          </div>
-        );
-      case "academy":
-        return (
-          <div className="w-full bg-white rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-100">
-            <FinAiAkademiWidget />
-          </div>
-        );
-      default:
-        return null;
+    if (!targetRect || !currentStep) {
+      return {
+        position: "fixed" as const,
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        maxWidth: 600,
+      };
     }
-  };
+
+    // Mobil ve dar ekranlar: Widget altına veya üstüne oturur
+    if (!isDesktop) {
+      const bottomSpace = winHeight - targetRect.bottom;
+      if (bottomSpace > 280) {
+        return {
+          position: "fixed" as const,
+          top: targetRect.bottom + 20,
+          left: 16,
+          right: 16,
+          maxWidth: "calc(100vw - 32px)",
+        };
+      } else {
+        return {
+          position: "fixed" as const,
+          bottom: winHeight - targetRect.top + 20,
+          left: 16,
+          right: 16,
+          maxWidth: "calc(100vw - 32px)",
+        };
+      }
+    }
+
+    const placement = currentStep.placement;
+
+    // 1. SAĞ YERLEŞİM (Toplam Varlık Değeri & Market Grafikleri İçin)
+    if (placement === "right") {
+      const rightAvailableSpace = winWidth - targetRect.right;
+      if (rightAvailableSpace >= 340) {
+        const leftPos = targetRect.right + 36;
+        const availableWidth = Math.min(620, winWidth - leftPos - 36);
+        const topPos = Math.max(80, Math.min(targetRect.top, winHeight - 380));
+        return {
+          position: "fixed" as const,
+          top: topPos,
+          left: leftPos,
+          maxWidth: availableWidth,
+        };
+      } else {
+        const topPos = Math.min(targetRect.bottom + 24, winHeight - 320);
+        const leftPos = Math.max(24, Math.min(targetRect.left, winWidth - 650));
+        return {
+          position: "fixed" as const,
+          top: topPos,
+          left: leftPos,
+          maxWidth: Math.min(650, winWidth - 48),
+        };
+      }
+    }
+
+    // 2. SOL YERLEŞİM (Varlık Dağılımı, Aylık Rapor & Ajanda İçin)
+    if (placement === "left") {
+      const leftAvailableSpace = targetRect.left;
+      if (leftAvailableSpace >= 340) {
+        const rightPos = winWidth - targetRect.left + 36;
+        const availableWidth = Math.min(620, targetRect.left - 50);
+        const topPos = Math.max(80, Math.min(targetRect.top, winHeight - 380));
+        return {
+          position: "fixed" as const,
+          top: topPos,
+          right: rightPos,
+          maxWidth: availableWidth,
+        };
+      } else {
+        const topPos = Math.min(targetRect.bottom + 24, winHeight - 320);
+        const leftPos = Math.max(24, Math.min(targetRect.left, winWidth - 650));
+        return {
+          position: "fixed" as const,
+          top: topPos,
+          left: leftPos,
+          maxWidth: Math.min(650, winWidth - 48),
+        };
+      }
+    }
+
+    // 3. ÜST YERLEŞİM (Son Haberler %100 Genişlik İçin)
+    if (placement === "top") {
+      const availableTopSpace = targetRect.top;
+      if (availableTopSpace >= 240) {
+        const bottomPos = winHeight - targetRect.top + 28;
+        const leftPos = Math.max(32, Math.min(targetRect.left, winWidth - 680));
+        return {
+          position: "fixed" as const,
+          bottom: bottomPos,
+          left: leftPos,
+          maxWidth: Math.min(660, winWidth - leftPos - 32),
+        };
+      } else {
+        const topPos = Math.min(targetRect.bottom + 28, winHeight - 320);
+        const leftPos = Math.max(32, Math.min(targetRect.left, winWidth - 680));
+        return {
+          position: "fixed" as const,
+          top: topPos,
+          left: leftPos,
+          maxWidth: Math.min(660, winWidth - leftPos - 32),
+        };
+      }
+    }
+
+    // 4. ALT YERLEŞİM (Yedek)
+    const topPos = Math.min(targetRect.bottom + 28, winHeight - 320);
+    const leftPos = Math.max(32, Math.min(targetRect.left, winWidth - 680));
+    return {
+      position: "fixed" as const,
+      top: topPos,
+      left: leftPos,
+      maxWidth: Math.min(660, winWidth - leftPos - 32),
+    };
+  }, [targetRect, currentStep, windowDimensions]);
 
   return (
     <>
@@ -347,172 +428,157 @@ export function DashboardTour({ hasActiveAssets, news = [], className = "" }: Da
       </button>
 
       {/* =========================================================================
-          PORTAL: HER WIDGET'IN KENDİ YERİNDEN BAŞLAYIP ORTAYA DOĞRU SÜRÜKLENDİĞİ
-          AKADEMİ 2. HAFTA YAYLANMALI MERKEZE UÇUŞ MİMARİSİ
+          PORTAL: BODY ÜZERİNDE EN ÜST KATMAN SPOTLIGHT (GRADYANLI & KUTUSUZ)
           ========================================================================= */}
       {isMounted &&
         createPortal(
           <AnimatePresence>
             {isOpen && currentStep && (
-              <div className="fixed inset-0 z-[99999] pointer-events-auto flex items-center justify-center p-4 sm:p-6 lg:p-12 overflow-y-auto">
-                {/* 1. FinAi İmza Gradyanlı Arka Plan Katmanı (Akademi 2. Hafta ile Birebir) */}
-                <motion.div
-                  key="tour-backdrop"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.35 }}
-                  className="fixed inset-0 bg-gradient-to-br from-[#02041A] via-[#040989] to-[#02041A] overflow-hidden cursor-pointer"
-                  onClick={handleClose}
+              <div className="fixed inset-0 z-[99999] pointer-events-auto overflow-hidden">
+                {/* 1. FinAi İmza Gradyanlı SVG Cutout Mask */}
+                <svg
+                  className="fixed inset-0 w-full h-full pointer-events-none"
+                  style={{ width: "100vw", height: "100vh" }}
                 >
-                  {/* Ambient Background Gradient Circles */}
-                  <div className="absolute -top-24 -right-24 w-96 h-96 sm:w-[540px] sm:h-[540px] bg-[#004BFA]/20 rounded-full blur-3xl pointer-events-none" />
-                  <div className="absolute -bottom-24 -left-24 w-96 h-96 sm:w-[540px] sm:h-[540px] bg-[#004BFA]/20 rounded-full blur-3xl pointer-events-none" />
+                  <defs>
+                    <mask id="finai-portal-spotlight-mask">
+                      <rect x="0" y="0" width="100%" height="100%" fill="white" />
+                      {targetRect && (
+                        <rect
+                          x={targetRect.left - 6}
+                          y={targetRect.top - 6}
+                          width={targetRect.width + 12}
+                          height={targetRect.height + 12}
+                          rx="24"
+                          fill="black"
+                        />
+                      )}
+                    </mask>
 
-                  {/* Subtle SVG Wave Background (Toplam Varlık Trend Çizgisi) */}
-                  <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
-                    <svg viewBox="0 0 500 160" className="w-full h-full" preserveAspectRatio="none">
-                      <defs>
-                        <linearGradient id="tourHeroWave" x1="0" y1="0" x2="1" y2="0">
-                          <stop offset="0%" stopColor="#004BFA" stopOpacity="0.2" />
-                          <stop offset="50%" stopColor="#5B80FF" stopOpacity="0.6" />
-                          <stop offset="100%" stopColor="#5B80FF" stopOpacity="0.95" />
-                        </linearGradient>
-                      </defs>
-                      <path
-                        d="M 0,118 C 60,130 90,125 140,112 C 190,99 220,118 270,103 C 320,88 360,95 400,72 C 430,55 465,38 500,24"
-                        fill="none"
-                        stroke="url(#tourHeroWave)"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
+                    {/* Toplam Varlık Değeri ile Birebir Aynı Gradyan */}
+                    <linearGradient id="finaiTourGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#02041A" stopOpacity="0.94" />
+                      <stop offset="45%" stopColor="#040989" stopOpacity="0.88" />
+                      <stop offset="100%" stopColor="#02041A" stopOpacity="0.94" />
+                    </linearGradient>
+                  </defs>
+
+                  {/* Arka Plan Gradyan Maskesi */}
+                  <rect
+                    x="0"
+                    y="0"
+                    width="100%"
+                    height="100%"
+                    fill="url(#finaiTourGradient)"
+                    mask="url(#finai-portal-spotlight-mask)"
+                    className="pointer-events-auto cursor-pointer"
+                    onClick={handleBackdropClick}
+                  />
+
+                  {/* Vurgulanan Widget Çevresindeki İnce Işıklı Çerçeve */}
+                  {targetRect && (
+                    <rect
+                      x={targetRect.left - 6}
+                      y={targetRect.top - 6}
+                      width={targetRect.width + 12}
+                      height={targetRect.height + 12}
+                      rx="24"
+                      fill="none"
+                      stroke="#5B80FF"
+                      strokeWidth="2.5"
+                      opacity="0.95"
+                      className="animate-pulse"
+                    />
+                  )}
+                </svg>
+
+                {/* 2. Arka Plan Ambient Işık Halkaları */}
+                <div className="fixed inset-0 pointer-events-none overflow-hidden">
+                  <div className="absolute -top-32 -right-32 w-[540px] h-[540px] bg-[#004BFA]/20 rounded-full blur-[140px]" />
+                  <div className="absolute -bottom-32 -left-32 w-[540px] h-[540px] bg-[#004BFA]/20 rounded-full blur-[140px]" />
+                </div>
+
+                {/* 3. KUTUSUZ, DOĞRUDAN ALANA YERLEŞEN ZARİF TİPOGRAFİ METİN ALANI */}
+                <motion.div
+                  key={`tour-step-${currentStepIndex}`}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -16 }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  style={textPositionStyles}
+                  onClick={(e) => e.stopPropagation()}
+                  className="z-[100000] space-y-4 pointer-events-auto select-none"
+                >
+                  {/* Adım Rozeti */}
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[11px] font-semibold text-white/80 uppercase tracking-widest backdrop-blur-md">
+                    <span className="w-2 h-2 rounded-full bg-[#5B80FF] animate-pulse" />
+                    <span>
+                      Widget Rehberi • Adım {currentStepIndex + 1} / {steps.length}
+                    </span>
+                  </div>
+
+                  {/* Başlık (Kutusuz, doğrudan gradyan üzerinde) */}
+                  <h3 className="text-2xl sm:text-3xl lg:text-4xl font-normal text-white clash-title tracking-tight leading-tight">
+                    {currentStep.title}
+                  </h3>
+
+                  {/* Açıklama Paragrafı (Kutusuz, berrak beyaz kontrast) */}
+                  <p className="text-sm sm:text-base lg:text-[17px] text-white/90 leading-relaxed font-normal font-clash">
+                    {currentStep.description}
+                  </p>
+
+                  {/* Şık Gezinme Butonları */}
+                  <div className="flex items-center gap-3 pt-3 flex-wrap">
+                    {currentStepIndex > 0 && (
+                      <button
+                        type="button"
+                        onClick={handlePrev}
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer backdrop-blur-md shadow-xs"
+                      >
+                        <ArrowLeft className="w-4 h-4" />
+                        <span>Önceki</span>
+                      </button>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={handleNext}
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-xs sm:text-sm font-semibold shadow-lg shadow-[#004BFA]/30 hover:shadow-xl transition-all cursor-pointer group"
+                    >
+                      <span>{currentStepIndex < steps.length - 1 ? "Sonraki Adım" : "Turu Tamamla"}</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                    </button>
+
+                    {/* Turu Kapat Butonu */}
+                    <button
+                      type="button"
+                      onClick={handleClose}
+                      className="ml-auto text-xs text-white/60 hover:text-white transition-colors cursor-pointer font-medium flex items-center gap-1.5 py-1 px-2 rounded-lg hover:bg-white/10"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                      <span>Kapat (ESC)</span>
+                    </button>
+                  </div>
+
+                  {/* İlerleme Çizgisi / Noktalar */}
+                  <div className="flex items-center gap-1.5 pt-1">
+                    {steps.map((_, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setCurrentStepIndex(idx)}
+                        className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                          idx === currentStepIndex
+                            ? "w-8 bg-[#5B80FF]"
+                            : idx < currentStepIndex
+                            ? "w-4 bg-emerald-400/80"
+                            : "w-3 bg-white/20 hover:bg-white/40"
+                        }`}
+                        title={`Adım ${idx + 1}`}
                       />
-                      <circle cx="499" cy="24" r="4" fill="#5B80FF" opacity="1" className="animate-pulse" />
-                    </svg>
+                    ))}
                   </div>
                 </motion.div>
-
-                {/* 2. MERKEZE UÇUŞ VİTRİNİ: WIDGET KENDİ YERİNDEN BAŞLAYARAK ORTAYA SÜRÜKLENİR */}
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  className="relative z-10 w-full max-w-5xl xl:max-w-6xl my-auto flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12 pointer-events-auto"
-                >
-                  {/* SOL KOLON: SAYFADAKİ KENDİ GERÇEK YERİNDEN MERKEZE SÜRÜKLENEN ANİMASYONLU WIDGET */}
-                  <div className="w-full lg:w-[58%] xl:w-[60%] flex items-center justify-center">
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={`widget-fly-${currentStep.id}`}
-                        initial={{
-                          x: origin.deltaX,
-                          y: origin.deltaY,
-                          scale: origin.scale,
-                          opacity: 0.85,
-                        }}
-                        animate={{
-                          x: 0,
-                          y: 0,
-                          scale: 1,
-                          opacity: 1,
-                        }}
-                        exit={{
-                          opacity: 0,
-                          scale: 0.92,
-                          transition: { duration: 0.2 },
-                        }}
-                        transition={{
-                          type: "spring",
-                          stiffness: 110,
-                          damping: 17,
-                          mass: 0.85,
-                        }}
-                        className="w-full shadow-2xl rounded-3xl overflow-hidden ring-1 ring-white/20"
-                      >
-                        {renderActiveWidget()}
-                      </motion.div>
-                    </AnimatePresence>
-                  </div>
-
-                  {/* SAĞ KOLON: HEMEN YANINA GELEN KUTUSUZ ZARİF TİPOGRAFİ */}
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={`text-step-${currentStep.id}`}
-                      initial={{ opacity: 0, x: 28 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -16, transition: { duration: 0.2 } }}
-                      transition={{ duration: 0.35, delay: 0.1, ease: "easeOut" }}
-                      className="w-full lg:w-[42%] xl:w-[40%] flex flex-col space-y-5 text-white select-none"
-                    >
-                      {/* Adım Rozeti */}
-                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-[11px] font-semibold text-white/80 uppercase tracking-widest backdrop-blur-md self-start">
-                        <span className="w-2 h-2 rounded-full bg-[#5B80FF] animate-pulse" />
-                        <span>
-                          Widget Rehberi • Adım {currentStepIndex + 1} / {steps.length}
-                        </span>
-                      </div>
-
-                      {/* Başlık (Kutusuz, doğrudan gradyan üzerinde) */}
-                      <h3 className="text-2xl sm:text-3xl lg:text-[34px] font-normal text-white clash-title tracking-tight leading-tight">
-                        {currentStep.title}
-                      </h3>
-
-                      {/* Açıklama Paragrafı (Kutusuz, berrak beyaz) */}
-                      <p className="text-sm sm:text-base lg:text-[16px] text-white/90 leading-relaxed font-normal font-clash">
-                        {currentStep.description}
-                      </p>
-
-                      {/* Gezinme Butonları */}
-                      <div className="flex items-center gap-3 pt-2 flex-wrap">
-                        {currentStepIndex > 0 && (
-                          <button
-                            type="button"
-                            onClick={handlePrev}
-                            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer backdrop-blur-md shadow-xs"
-                          >
-                            <ArrowLeft className="w-4 h-4" />
-                            <span>Önceki</span>
-                          </button>
-                        )}
-
-                        <button
-                          type="button"
-                          onClick={handleNext}
-                          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white text-xs sm:text-sm font-semibold shadow-lg shadow-[#004BFA]/30 hover:shadow-xl transition-all cursor-pointer group"
-                        >
-                          <span>{currentStepIndex < steps.length - 1 ? "Sonraki Adım" : "Turu Tamamla"}</span>
-                          <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                        </button>
-
-                        {/* Turu Kapat Butonu */}
-                        <button
-                          type="button"
-                          onClick={handleClose}
-                          className="ml-auto text-xs text-white/60 hover:text-white transition-colors cursor-pointer font-medium flex items-center gap-1.5 py-1 px-2 rounded-lg hover:bg-white/10"
-                        >
-                          <X className="w-3.5 h-3.5" />
-                          <span>Kapat (ESC)</span>
-                        </button>
-                      </div>
-
-                      {/* İlerleme Çizgisi / Noktalar */}
-                      <div className="flex items-center gap-1.5 pt-2">
-                        {steps.map((_, idx) => (
-                          <button
-                            key={idx}
-                            type="button"
-                            onClick={() => setCurrentStepIndex(idx)}
-                            className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                              idx === currentStepIndex
-                                ? "w-8 bg-[#5B80FF]"
-                                : idx < currentStepIndex
-                                ? "w-4 bg-emerald-400/80"
-                                : "w-3 bg-white/20 hover:bg-white/40"
-                            }`}
-                            title={`Adım ${idx + 1}`}
-                          />
-                        ))}
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
               </div>
             )}
           </AnimatePresence>,
