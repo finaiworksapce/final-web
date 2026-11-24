@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   TrendingDown, 
@@ -81,6 +81,15 @@ export function ExpenseNegotiator() {
   const [userOfferInput, setUserOfferInput] = useState('');
   const [isLessonCompleted, setIsLessonCompleted] = useState(false);
   const [isFinishedAll, setIsFinishedAll] = useState(false);
+
+  const chatEndRef = useRef<HTMLDivElement>(null);
+  const inlineChatEndRef = useRef<HTMLDivElement>(null);
+
+  // Otomatik olarak son mesaja kaydır
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    inlineChatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [items, currentIndex]);
 
   // Hızlı Tablo Düzenleme Modalı
   const [isEditingTable, setIsEditingTable] = useState(false);
@@ -217,16 +226,28 @@ export function ExpenseNegotiator() {
     let nextStatus: 'in_progress' | 'settled' = 'in_progress';
     let isSettled = false;
 
+    // Özel Durum Tespiti (Sıfır Kısma, Aşırı Kısma, Israr)
+    let specialCondition: 'zero_cut' | 'extreme_cut' | 'same_offer' | undefined = undefined;
+    if (category !== 'A') {
+      if (offerAmount >= currentItem.originalAmount) {
+        specialCondition = 'zero_cut';
+      } else if (offerAmount <= currentItem.originalAmount * 0.25) {
+        specialCondition = 'extreme_cut';
+      } else if (currentItem.turns > 0 && offerAmount === currentItem.currentAmount) {
+        specialCondition = 'same_offer';
+      }
+    }
+
     if (category === 'A') {
       isSettled = true;
       nextStatus = 'settled';
     } else if (category === 'B') {
-      if (nextTurns >= 1) {
+      if (nextTurns >= 1 && !specialCondition) {
         isSettled = true;
         nextStatus = 'settled';
       }
     } else if (category === 'C') {
-      if (nextTurns >= 2) {
+      if (nextTurns >= 2 && !specialCondition) {
         isSettled = true;
         nextStatus = 'settled';
       }
@@ -246,6 +267,7 @@ export function ExpenseNegotiator() {
       round: nextTurns,
       isSettled,
       context: ctx,
+      specialCondition,
     });
 
     const userMsg: ChatMessage = {
@@ -535,13 +557,8 @@ export function ExpenseNegotiator() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
           <div className="space-y-0.5">
             <h3 className="text-xl sm:text-2xl font-normal text-[#0E1E38] clash-title tracking-tight">
-              Harcama Masası & Pazarlık İstasyonu
+              Tasarruf Planlaması
             </h3>
-            {currentItem && (
-              <p className="text-xs text-slate-400">
-                Görüşülen: <span className="font-semibold text-[#0E1E38]">{currentItem.name}</span> ({currentItem.category === 'A' ? 'Sabit Gider' : currentItem.category === 'B' ? 'Temel Yaşam' : 'Esnek Sızıntı'})
-              </p>
-            )}
           </div>
 
           <div className="flex items-center gap-3">
@@ -631,39 +648,64 @@ export function ExpenseNegotiator() {
                     </div>
                   </div>
 
-                  {/* Beyaz Kart Üzerinde Büyütülmüş ve Ferah Diyalog Alanı */}
-                  <div className="my-2 sm:my-4 flex-1 flex flex-col justify-center">
-                    {currentItem.chatHistory && currentItem.chatHistory.length > 0 ? (
-                      <div className="space-y-4">
-                        {currentItem.chatHistory.map((msg) => {
-                          const isAi = msg.sender === 'ai';
-                          return (
-                            <div
-                              key={msg.id}
-                              className={`flex gap-3 max-w-[95%] ${
-                                isAi ? 'self-start' : 'ml-auto justify-end'
-                              }`}
-                            >
-                              <div
-                                className={`p-5 sm:p-7 rounded-2xl text-base sm:text-lg leading-relaxed ${
-                                  isAi
-                                    ? 'bg-slate-50 text-slate-800 border border-slate-200/80 shadow-xs'
-                                    : 'bg-[#004BFA] text-white shadow-sm'
+                  {/* Beyaz Kart Üzerinde Büyütülmüş ve Ferah Kesintisiz Diyalog Alanı */}
+                  <div className="my-2 sm:my-3 flex-1 overflow-y-auto max-h-[46vh] sm:max-h-[50vh] pr-2 space-y-4">
+                    {items.slice(0, currentIndex + 1).map((item, itemIdx) => {
+                      const isCurrent = itemIdx === currentIndex;
+                      return (
+                        <div key={item.id} className="space-y-3">
+                          {/* 1'den fazla kalem varsa her kalemin ayrım başlığı */}
+                          {currentIndex > 0 && (
+                            <div className="flex items-center gap-3 py-1">
+                              <div className="h-px bg-slate-200 flex-1" />
+                              <span
+                                className={`text-xs font-semibold px-3 py-1 rounded-full ${
+                                  isCurrent
+                                    ? 'bg-blue-50 text-[#004BFA] border border-blue-200'
+                                    : 'bg-slate-100 text-slate-500 border border-slate-200'
                                 }`}
                               >
-                                <p className="font-normal font-clash">{msg.text}</p>
-                              </div>
+                                {isCurrent ? '📌 Görüşülen Kalem: ' : '✓ Tamamlandı: '}
+                                {item.name} ({item.currentAmount.toLocaleString('tr-TR')} ₺)
+                              </span>
+                              <div className="h-px bg-slate-200 flex-1" />
                             </div>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      <div className="p-6 sm:p-8 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-800 shadow-xs">
-                        <p className="text-base sm:text-lg lg:text-xl text-slate-800 font-normal leading-relaxed font-clash">
-                          {currentItem.lastDialogue}
-                        </p>
-                      </div>
-                    )}
+                          )}
+
+                          {/* Bu kaleme ait mesajlar */}
+                          {item.chatHistory && item.chatHistory.length > 0 ? (
+                            item.chatHistory.map((msg) => {
+                              const isAi = msg.sender === 'ai';
+                              return (
+                                <div
+                                  key={msg.id}
+                                  className={`flex gap-3 max-w-[95%] ${
+                                    isAi ? 'self-start' : 'ml-auto justify-end'
+                                  }`}
+                                >
+                                  <div
+                                    className={`p-4 sm:p-6 rounded-2xl text-sm sm:text-base leading-relaxed ${
+                                      isAi
+                                        ? 'bg-slate-50 text-slate-800 border border-slate-200/80 shadow-2xs'
+                                        : 'bg-[#004BFA] text-white shadow-xs'
+                                    }`}
+                                  >
+                                    <p className="font-normal font-clash">{msg.text}</p>
+                                  </div>
+                                </div>
+                              );
+                            })
+                          ) : (
+                            <div className="p-4 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200/80 text-slate-800 shadow-2xs">
+                              <p className="text-sm sm:text-base text-slate-800 font-normal leading-relaxed font-clash">
+                                {item.lastDialogue}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                    <div ref={chatEndRef} />
                   </div>
 
                   {/* Alt Aksiyon Butonları & Karar Alanı */}
@@ -790,12 +832,61 @@ export function ExpenseNegotiator() {
                     </div>
                   </div>
 
-                  <div className="space-y-4 my-5 flex-1 flex flex-col justify-center">
-                    <div className="p-4 sm:p-5 rounded-xl bg-slate-50 border border-slate-200/80 text-slate-800 shadow-2xs">
-                      <p className="text-sm sm:text-base text-slate-800 font-normal leading-relaxed font-clash">
-                        {currentItem.lastDialogue}
-                      </p>
-                    </div>
+                  <div className="my-4 flex-1 overflow-y-auto max-h-[380px] pr-2 space-y-4">
+                    {items.slice(0, currentIndex + 1).map((item, itemIdx) => {
+                      const isCurrent = itemIdx === currentIndex;
+                      return (
+                        <div key={item.id} className="space-y-3">
+                          {currentIndex > 0 && (
+                            <div className="flex items-center gap-2 py-1">
+                              <div className="h-px bg-slate-200 flex-1" />
+                              <span
+                                className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full ${
+                                  isCurrent
+                                    ? 'bg-blue-50 text-[#004BFA] border border-blue-200'
+                                    : 'bg-slate-100 text-slate-500 border border-slate-200'
+                                }`}
+                              >
+                                {isCurrent ? '📌 Görüşülen: ' : '✓ '}
+                                {item.name} ({item.currentAmount.toLocaleString('tr-TR')} ₺)
+                              </span>
+                              <div className="h-px bg-slate-200 flex-1" />
+                            </div>
+                          )}
+
+                          {item.chatHistory && item.chatHistory.length > 0 ? (
+                            item.chatHistory.map((msg) => {
+                              const isAi = msg.sender === 'ai';
+                              return (
+                                <div
+                                  key={msg.id}
+                                  className={`flex gap-2.5 max-w-[95%] ${
+                                    isAi ? 'self-start' : 'ml-auto justify-end'
+                                  }`}
+                                >
+                                  <div
+                                    className={`p-3.5 sm:p-4 rounded-xl text-xs sm:text-sm leading-relaxed ${
+                                      isAi
+                                        ? 'bg-slate-50 text-slate-800 border border-slate-200/80 shadow-2xs'
+                                        : 'bg-[#004BFA] text-white shadow-2xs'
+                                    }`}
+                                  >
+                                    <p className="font-normal font-clash">{msg.text}</p>
+                                  </div>
+                                </div>
+                              );
+                            })
+                          ) : (
+                            <div className="p-3.5 sm:p-4 rounded-xl bg-slate-50 border border-slate-200/80 text-slate-800 shadow-2xs">
+                              <p className="text-xs sm:text-sm text-slate-800 font-normal leading-relaxed font-clash">
+                                {item.lastDialogue}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                    <div ref={inlineChatEndRef} />
                   </div>
 
                   <div className="pt-4 border-t border-slate-100 space-y-4 mt-auto">
@@ -838,14 +929,19 @@ export function ExpenseNegotiator() {
 
             {/* =====================================================================
                 SAĞ KOLON: 1. HAFTA NAKİT AKIŞ TABLON (%35 BOYUTUNDA - ORİJİNAL KONUM)
+                TOPLAM VARLIK DEĞERİ GRADYANI & AMBIENT IŞIMALARI
                 ===================================================================== */}
-            <div className="w-full lg:w-[35%] flex flex-col justify-between space-y-4 h-full bg-slate-50/50 rounded-2xl border border-slate-200/80 p-5 sm:p-6">
+            <div className="w-full lg:w-[35%] flex flex-col justify-between space-y-4 min-h-[520px] bg-gradient-to-br from-[#02041A] via-[#040989] to-[#02041A] text-white rounded-3xl border border-white/10 p-5 sm:p-6 shadow-xl relative overflow-hidden">
               
+              {/* Ambient Background Circles */}
+              <div className="absolute -top-16 -right-16 w-48 h-48 bg-[#004BFA]/25 rounded-full blur-2xl pointer-events-none" />
+              <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-[#004BFA]/20 rounded-full blur-2xl pointer-events-none" />
+
               {/* Tablo Başlığı ve Hızlı Düzenle Butonu */}
-              <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+              <div className="relative z-10 flex items-center justify-between pb-3 border-b border-white/10">
                 <div className="flex items-center gap-2">
-                  <Wallet className="w-4 h-4 text-[#004BFA]" />
-                  <span className="text-xs font-semibold text-[#0E1E38] uppercase tracking-wider">
+                  <Wallet className="w-4 h-4 text-[#5B80FF]" />
+                  <span className="text-xs font-semibold text-white/90 uppercase tracking-wider">
                     1. Hafta Nakit Akış Tablon
                   </span>
                 </div>
@@ -854,19 +950,19 @@ export function ExpenseNegotiator() {
                 <button
                   type="button"
                   onClick={handleOpenEditModal}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-[11px] font-semibold text-slate-600 hover:text-[#004BFA] hover:border-[#004BFA] transition-all cursor-pointer shadow-2xs"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-[11px] font-semibold text-white transition-all cursor-pointer shadow-2xs"
                 >
-                  <Pencil className="w-3 h-3 text-[#004BFA]" />
+                  <Pencil className="w-3 h-3 text-[#5B80FF]" />
                   <span>Düzenle</span>
                 </button>
               </div>
 
               {/* YAN YANA İKİ SÜTUN: SOL GELİR, SAĞ GİDER KALEMLERİ */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 flex-1 content-start pt-1">
+              <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 flex-1 content-start pt-1">
                 
                 {/* SOL SÜTUN: GELİRLER */}
                 <div className="space-y-2">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                  <span className="text-[10px] font-bold text-white/50 uppercase tracking-wider block">
                     Aylık Düzenli Gelirler
                   </span>
 
@@ -874,27 +970,27 @@ export function ExpenseNegotiator() {
                     {incomes.map((inc) => (
                       <div
                         key={inc.id}
-                        className="py-1.5 border-b border-slate-200/60 flex items-center justify-between text-xs"
+                        className="py-1.5 border-b border-white/10 flex items-center justify-between text-xs"
                       >
-                        <span className="font-medium text-slate-700 truncate pr-2">
+                        <span className="font-medium text-white/80 truncate pr-2">
                           {inc.name}
                         </span>
-                        <span className="font-semibold text-emerald-700 shrink-0">
+                        <span className="font-semibold text-emerald-400 shrink-0">
                           +{inc.amount.toLocaleString('tr-TR')} ₺
                         </span>
                       </div>
                     ))}
                   </div>
 
-                  <div className="pt-2 text-[11px] text-slate-500 font-semibold flex justify-between">
+                  <div className="pt-2 text-[11px] text-white/50 font-semibold flex justify-between">
                     <span>Toplam Gelir:</span>
-                    <span className="text-slate-800">+{totalIncome.toLocaleString('tr-TR')} ₺</span>
+                    <span className="text-emerald-400 font-bold">+{totalIncome.toLocaleString('tr-TR')} ₺</span>
                   </div>
                 </div>
 
-                {/* SAĞ SÜTUN: GİDER KALEMLERİ (DİKTÖRTGENSİZ, SADE LİSTE) */}
+                {/* SAĞ SÜTUN: GİDER KALEMLERİ */}
                 <div className="space-y-2">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                  <span className="text-[10px] font-bold text-white/50 uppercase tracking-wider block">
                     Aylık Harcama Kalemleri
                   </span>
 
@@ -913,17 +1009,17 @@ export function ExpenseNegotiator() {
                           }}
                           className={`py-1.5 px-2 rounded-lg transition-all duration-150 cursor-pointer flex items-center justify-between text-xs ${
                             isFocus
-                              ? 'bg-blue-50/90 text-[#0E1E38] font-bold border-l-2 border-[#004BFA]'
-                              : 'text-slate-600 opacity-50 hover:opacity-100 border-l-2 border-transparent'
+                              ? 'bg-white/15 text-white font-bold border-l-2 border-[#5B80FF] shadow-xs'
+                              : 'text-white/60 hover:text-white/90 hover:bg-white/5 border-l-2 border-transparent'
                           }`}
                         >
                           <div className="flex items-center gap-1.5 truncate pr-1.5">
                             {isSettled ? (
-                              <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                             ) : (
                               <span
                                 className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                                  isFocus ? 'bg-[#004BFA]' : 'bg-slate-300'
+                                  isFocus ? 'bg-[#5B80FF]' : 'bg-white/30'
                                 }`}
                               />
                             )}
@@ -932,17 +1028,17 @@ export function ExpenseNegotiator() {
 
                           <div className="flex items-center gap-1.5 shrink-0">
                             {hasSaved && (
-                              <span className="line-through text-[10px] text-slate-400">
+                              <span className="line-through text-[10px] text-white/40">
                                 {item.originalAmount.toLocaleString('tr-TR')} ₺
                               </span>
                             )}
                             <span
                               className={`${
                                 isFocus
-                                  ? 'text-[#004BFA] font-bold'
+                                  ? 'text-[#5B80FF] font-bold'
                                   : isSettled && hasSaved
-                                  ? 'text-emerald-700 font-semibold'
-                                  : 'text-slate-800 font-medium'
+                                  ? 'text-emerald-400 font-semibold'
+                                  : 'text-white/90 font-medium'
                               }`}
                             >
                               {item.currentAmount.toLocaleString('tr-TR')} ₺
@@ -953,19 +1049,19 @@ export function ExpenseNegotiator() {
                     })}
                   </div>
 
-                  <div className="pt-2 text-[11px] text-slate-500 font-semibold flex justify-between">
+                  <div className="pt-2 text-[11px] text-white/50 font-semibold flex justify-between">
                     <span>Masadaki Gider:</span>
-                    <span className="text-slate-800">-{totalCurrent.toLocaleString('tr-TR')} ₺</span>
+                    <span className="text-white/90 font-bold">-{totalCurrent.toLocaleString('tr-TR')} ₺</span>
                   </div>
                 </div>
 
               </div>
 
               {/* BİLANÇO DİP ÖZETİ (SOL İLE HİZALANMIŞ ALT TABAN) */}
-              <div className="pt-3 border-t border-slate-200 space-y-1.5 text-xs mt-auto">
+              <div className="relative z-10 pt-3 border-t border-white/10 space-y-1.5 text-xs mt-auto">
                 <div className="flex items-center justify-between font-semibold">
-                  <span className="text-[#0E1E38]">Kalan Serbest Nakit:</span>
-                  <span className="text-emerald-600 font-bold">
+                  <span className="text-white/80">Kalan Serbest Nakit:</span>
+                  <span className="text-emerald-400 font-bold text-sm">
                     +{remainingCashFlow.toLocaleString('tr-TR')} ₺ / ay
                   </span>
                 </div>
@@ -1021,11 +1117,11 @@ export function ExpenseNegotiator() {
               <span className="text-xs text-slate-500 mt-1">Tüketimden Kurtarılan Taze Nakit</span>
             </div>
 
-            {/* Kart 4: Yıllık Ortaklık Tohumu */}
+            {/* Kart 4: Yıllık Yatırım Sermayesi */}
             <div className="p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between">
               <span className="text-[11px] font-semibold text-[#0E1E38] uppercase tracking-wider flex items-center gap-1.5">
                 <Coins className="w-3.5 h-3.5 text-[#004BFA]" />
-                <span>Yıllık Ortaklık Tohumu</span>
+                <span>Yıllık Yatırım Sermayesi</span>
               </span>
               <div className="text-2xl sm:text-3xl font-normal text-[#0E1E38] clash-title mt-2">
                 +{yearlySaved.toLocaleString('tr-TR')} ₺ / yıl
@@ -1040,7 +1136,7 @@ export function ExpenseNegotiator() {
             <div className="p-6 sm:p-8 rounded-2xl bg-blue-50/60 border border-blue-200/80 flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
               <div className="space-y-1 text-center sm:text-left">
                 <h5 className="text-base font-semibold text-[#0E1E38]">
-                  2. Haftanın Pazarlık Masasını Tamamladın!
+                  2. Haftanın Tasarruf Planlamasını Tamamladın!
                 </h5>
                 <p className="text-xs sm:text-sm text-slate-600">
                   Tüm harcama süzgecini tamamladın; kurtardığın <strong className="text-emerald-600">+{monthlySaved.toLocaleString('tr-TR')} ₺/ay</strong> tasarrufu kaydederek haftalık dersi bitirebilirsin.
@@ -1068,7 +1164,7 @@ export function ExpenseNegotiator() {
                   </h3>
 
                   <p className="text-sm sm:text-base text-white/80 max-w-xl leading-relaxed font-normal">
-                    Harcama süzgecini ve pazarlık masasını başarıyla tamamladın. Hayat standardını bozmadan her ay masada tam <strong className="text-emerald-400 font-semibold">+{monthlySaved.toLocaleString('tr-TR')} ₺</strong> ek tohum bıraktın. Bu rakam yılda <strong className="text-emerald-400 font-semibold">+{yearlySaved.toLocaleString('tr-TR')} ₺</strong> değerinde üreten şirket hissesi demektir!
+                    Tasarruf planlamasını başarıyla tamamladın. Hayat standardını bozmadan her ay masada tam <strong className="text-emerald-400 font-semibold">+{monthlySaved.toLocaleString('tr-TR')} ₺</strong> ek sermaye ürettin. Bu rakam yılda <strong className="text-emerald-400 font-semibold">+{yearlySaved.toLocaleString('tr-TR')} ₺</strong> değerinde üreten şirket hissesi demektir!
                   </p>
 
                   <div className="pt-1">
