@@ -120,7 +120,7 @@ export default function DashboardPage() {
                     <h1 className="text-2xl sm:text-3xl lg:text-4xl clash-title font-[500] text-[#040989] dark:text-[#F5F7FA] tracking-tight">
                         Hoş Geldiniz, {userName || userEmail?.split('@')[0] || "Salih KAVAKCI"}
                     </h1>
-                    <DashboardTour hasActiveAssets={hasActiveAssets} />
+                    <DashboardTour hasActiveAssets={hasActiveAssets} news={news} />
                 </div>
 
                 {/* UNIFIED RESPONSIVE LAYOUT (250px to 2500px) */}
