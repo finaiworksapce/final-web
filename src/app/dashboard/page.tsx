@@ -16,6 +16,7 @@ import { MarketOverviewWidget } from "@/components/dashboard/MarketOverviewWidge
 import { DailyAgendaWidget } from "@/components/dashboard/DailyAgendaWidget";
 import { LatestNewsWidget } from "@/components/dashboard/LatestNewsWidget";
 import { FinancialTicker } from "@/components/FinancialTicker";
+import { DashboardTour } from "@/components/dashboard/DashboardTour";
 import Link from "next/link";
 
 export default function DashboardPage() {
@@ -115,10 +116,11 @@ export default function DashboardPage() {
                 </AnimatePresence>
 
                 {/* Header Welcome Area (Zodiak Hierarchy 500/325/225 + 60-30-10) */}
-                <div className="relative z-10 mb-2">
+                <div className="relative z-10 mb-2 flex items-center justify-between gap-4 flex-wrap">
                     <h1 className="text-2xl sm:text-3xl lg:text-4xl clash-title font-[500] text-[#040989] dark:text-[#F5F7FA] tracking-tight">
                         Hoş Geldiniz, {userName || userEmail?.split('@')[0] || "Salih KAVAKCI"}
                     </h1>
+                    <DashboardTour hasActiveAssets={hasActiveAssets} />
                 </div>
 
                 {/* UNIFIED RESPONSIVE LAYOUT (250px to 2500px) */}
@@ -126,22 +128,22 @@ export default function DashboardPage() {
                     {/* 1. ÜST BÖLÜM: KULLANICININ HİÇBİR VARLIĞI YOKSA SADECE ÖRNEK PORTFÖY VE FİNAİ AKADEMİ */}
                     {!hasActiveAssets ? (
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5 sm:gap-4 xl:gap-5 items-stretch w-full">
-                            <div className="flex flex-col min-w-0">
+                            <div id="finai-widget-sample-portfolio" className="flex flex-col min-w-0">
                                 <SamplePortfolioWidget />
                             </div>
-                            <div className="flex flex-col min-w-0">
+                            <div id="finai-widget-academy" className="flex flex-col min-w-0">
                                 <FinAiAkademiWidget />
                             </div>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 sm:gap-4 xl:gap-5 items-stretch w-full">
-                            <div className="flex flex-col min-w-0 lg:col-span-12 xl:col-span-5 2xl:col-span-5">
+                            <div id="finai-widget-summary" className="flex flex-col min-w-0 lg:col-span-12 xl:col-span-5 2xl:col-span-5">
                                 <DashboardSummaryCards />
                             </div>
-                            <div className="flex flex-col min-w-0 lg:col-span-6 xl:col-span-3 2xl:col-span-3">
+                            <div id="finai-widget-allocation" className="flex flex-col min-w-0 lg:col-span-6 xl:col-span-3 2xl:col-span-3">
                                 <DynamicAssetAllocationContainer />
                             </div>
-                            <div className="flex flex-col min-w-0 lg:col-span-6 xl:col-span-4 2xl:col-span-4">
+                            <div id="finai-widget-monthly-report" className="flex flex-col min-w-0 lg:col-span-6 xl:col-span-4 2xl:col-span-4">
                                 <FinAiYesterdayReportWidget />
                             </div>
                         </div>
@@ -149,16 +151,16 @@ export default function DashboardPage() {
 
                     {/* 2. İKİNCİ BÖLÜM: PİYASA GENEL GÖRÜNÜMÜ (%50) & GÜNLÜK AJANDA (%50) */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5 sm:gap-4 xl:gap-5 items-stretch w-full">
-                        <div className="flex flex-col min-w-0">
+                        <div id="finai-widget-market" className="flex flex-col min-w-0">
                             <MarketOverviewWidget />
                         </div>
-                        <div className="flex flex-col min-w-0">
+                        <div id="finai-widget-agenda" className="flex flex-col min-w-0">
                             <DailyAgendaWidget />
                         </div>
                     </div>
 
                     {/* 3. ÜÇÜNCÜ BÖLÜM: SON HABERLER (%100) */}
-                    <div className="w-full">
+                    <div id="finai-widget-news" className="w-full">
                         <LatestNewsWidget news={news} />
                     </div>
                 </div>
