@@ -42,6 +42,9 @@ import TradingViewSymbolOverview from "@/components/TradingViewSymbolOverview";
 import StockKeyStatisticsSection from "@/components/StockKeyStatisticsSection";
 import StockScreenerRatiosSection from "@/components/StockScreenerRatiosSection";
 import StockLogo from "@/components/StockLogo";
+import RelatedSectorStocks from "@/components/RelatedSectorStocks";
+import StockSeoSummaryCard from "@/components/StockSeoSummaryCard";
+import { sectorMapping } from "@/data/sectorMapping";
 
 // REEL BIST FİYAT KATALOĞU (Yedek Referans)
 const BIST_REAL_PRICES: Record<string, { current: number; high: number; low: number; change: number; changePercent: number; prevClose: number }> = {
@@ -822,8 +825,9 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                 <div className="flex items-center gap-4 min-w-0 flex-1">
                   <StockLogo symbol={symbol} className="w-12 h-12 sm:w-14 sm:h-14 ring-2 ring-white/30 shadow-lg shrink-0" />
                   <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-baseline gap-2 flex-wrap">
                       <span className="text-2xl sm:text-3xl font-normal text-white tracking-tight">{symbol}</span>
+                      <span className="text-xs sm:text-sm font-medium text-blue-200">Bilanço ve Hisse Analizi</span>
                     </div>
                     <h2 className="text-xs sm:text-[13px] font-normal text-white mt-1 line-clamp-1 truncate" title={fullName}>{fullName}</h2>
                   </div>
@@ -928,6 +932,21 @@ export default function StockDetailClient({ symbol: rawSymbol }: { symbol: strin
                 />
               </div>
             </div>
+
+            {/* DİNAMİK BİLANÇO VE FİNANSAL DEĞERLENDİRME ÖZETİ (SEO & YATIRIMCI BİLGİLENDİRME) */}
+            <StockSeoSummaryCard
+              symbol={symbol}
+              fullName={fullName}
+              sector={companyData?.sector || (sectorMapping as Record<string, string>)[symbol] || "Borsa İstanbul"}
+              about={companyData?.businessSummary || (halkarzAboutDb as Record<string, string>)[symbol] || null}
+              currentPrice={stockData?.currentPrice || (BIST_REAL_PRICES[symbol]?.current || null)}
+              changePercent={stockData?.changePercent || null}
+              peRatio={ratiosData?.valuation?.pe?.value || null}
+              pbRatio={ratiosData?.valuation?.pb?.value || null}
+            />
+
+            {/* SEKTÖR İÇİ ÇAPRAZ LİNKLEME VE BENZER VARLIKLAR (INTERNAL PAGERANK BOOST) */}
+            <RelatedSectorStocks currentSymbol={symbol} maxCount={8} />
 
           </div>
         )}

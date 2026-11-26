@@ -3,6 +3,7 @@ import { permanentRedirect } from 'next/navigation';
 import { cache } from 'react';
 import StockDetailClient from './stock-detail-client';
 import halkarzAboutDb from '@/data/halkarz_about_db.json';
+import { sectorMapping } from '@/data/sectorMapping';
 import { FinAiArchiveReader } from '@/lib/api/finai-archive-reader';
 import { SEO_PUBLIC_STOCK_SYMBOLS, SEO_PUBLIC_STOCK_SYMBOL_SET } from '@/lib/seo-public-stock-symbols';
 
@@ -87,7 +88,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     : `${symbol} Hisse Fiyatı, Grafik ve Bilanço Analizi`;
   const socialTitle = `${title} | FinAi`;
   const subject = fullName === symbol ? `${symbol} hissesi` : `${fullName} (${symbol})`;
-  const description = `${subject} güncel hisse fiyatı, canlı grafik, bilanço ve rasyo analizleri (F/K, PD/DD), teknik göstergeler ve yapay zeka piyasa değerlendirmeleri FinAi'da.`;
+  const description = `${subject} 2026 güncel hisse fiyatı, canlı grafik, son çeyrek bilanço ve rasyo analizleri (F/K, PD/DD), teknik göstergeler ve yapay zeka piyasa değerlendirmeleri FinAi'da. Detaylı analiz için tıklayın.`;
 
   return {
     title: `${title} | FinAi`,
@@ -130,6 +131,11 @@ export default async function Page({ params }: PageProps) {
   const about = profile?.businessSummary || (halkarzAboutDb as Record<string, string>)[symbol] || null;
   const hasCompanyIdentity = Boolean(profile?.companyName || STOCK_NAMES[symbol] || about);
 
+  const sector = (sectorMapping as Record<string, string>)[symbol] || "Borsa İstanbul";
+  const peers = Object.keys(sectorMapping)
+    .filter((s) => s !== symbol && sectorMapping[s] === sector)
+    .slice(0, 8);
+
   // Google JSON-LD Yapılandırılmış Veri (Schema.org)
   const jsonLd = hasCompanyIdentity ? {
     "@context": "https://schema.org",
@@ -165,9 +171,46 @@ export default async function Page({ params }: PageProps) {
             "item": `https://www.finai.net.tr/varlik/${symbol}`
           }
         ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `https://www.finai.net.tr/varlik/${symbol}#faq`,
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": `${fullName} (${symbol}) hangi sektörde faaliyet gösterir ve ne iş yapar?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": `${fullName}, Borsa İstanbul'da ${sector} sektöründe faaliyet göstermektedir. ${about ? about.slice(0, 260) : `${symbol} kodu ile işlem gören şirket hakkında detaylı kurumsal bilgiler ve bilanço raporları FinAi'da yer almaktadır.`}`
+            }
+          },
+          {
+            "@type": "Question",
+            "name": `${symbol} güncel bilanço ve finansal sonuçlarına nereden bakılır?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": `${fullName} (${symbol}) hissesinin son çeyrek bilançosu, gelir tablosu, net kâr marjı, F/K ve PD/DD değerleme çarpanları FinAi varlık sayfasından canlı olarak takip edilebilir.`
+            }
+          },
+          {
+            "@type": "Question",
+            "name": `${symbol} hisse fiyatı ve teknik grafiği nasıl incelenir?`,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": `${symbol} hissesinin anlık seans fiyatları, teknik osilatörler, destek-direnç noktaları ve yapay zeka analizleri FinAi üzerinde güncel olarak sunulmaktadır.`
+            }
+          }
+        ]
       }
     ]
   } : null;
+
+  const pageTitle = fullName !== symbol
+    ? `${fullName} (${symbol}) Hisse Fiyatı, Bilanço ve Canlı Grafik Analizi`
+    : `${symbol} Hisse Fiyatı, Bilanço ve Canlı Grafik Analizi`;
+  const pageDescription = about
+    ? `${about.slice(0, 240)}... ${symbol} güncel hisse fiyatı, bilanço verileri, gelir tablosu, net kâr ve teknik analiz grafikleri FinAi'da.`
+    : `${fullName} (${symbol}) güncel hisse senedi fiyatı, bilanço verileri, gelir tablosu, net kâr marjı, F/K, PD/DD rasyoları, teknik analiz grafikleri ve yapay zeka destekli piyasa değerlendirmesi FinAi'da.`;
 
   return (
     <>
@@ -177,6 +220,41 @@ export default async function Page({ params }: PageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
         />
       )}
+      {/* Arama Motorları (Googlebot, Bingbot) için SSR Semantik Başlık, SSS ve Çapraz Linkleme Katmanı */}
+      <header className="sr-only">
+        <h1>{pageTitle}</h1>
+        <p>{pageDescription}</p>
+        <section aria-label="Finansal Sıkça Sorulan Sorular">
+          <h2>{fullName} ({symbol}) Bilanço ve Hisse Sıkça Sorulan Sorular</h2>
+          <dl>
+            <dt>{fullName} ({symbol}) hangi sektörde faaliyet gösterir?</dt>
+            <dd>{fullName}, Borsa İstanbul'da {sector} sektöründe işlem görmektedir.</dd>
+            <dt>{symbol} bilanço ve mali tablolarına nasıl ulaşılır?</dt>
+            <dd>FinAi üzerinden {symbol} çeyreklik bilançosu, gelir tablosu, F/K ve PD/DD rasyolarına ulaşabilirsiniz.</dd>
+          </dl>
+        </section>
+        {peers.length > 0 && (
+          <section aria-label="Sektör Hisseleri Çapraz Linkleme">
+            <h2>{sector} Sektöründeki Diğer Hisseler</h2>
+            <ul>
+              {peers.map((peer) => (
+                <li key={peer}>
+                  <a href={`https://www.finai.net.tr/varlik/${peer}`}>
+                    {peer} Hisse Fiyatı ve Bilanço Analizi
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+        <nav aria-label="Sayfa Haritası">
+          <ol>
+            <li><a href="https://www.finai.net.tr">Ana Sayfa</a></li>
+            <li><a href="https://www.finai.net.tr/varlik">Borsa İstanbul Varlıklar</a></li>
+            <li><span>{symbol} Bilanço ve Hisse Analizi</span></li>
+          </ol>
+        </nav>
+      </header>
       <StockDetailClient symbol={symbol} />
     </>
   );
