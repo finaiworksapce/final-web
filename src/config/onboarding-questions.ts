@@ -199,7 +199,7 @@ export const WIZARD_QUESTIONS: WizardQuestion[] = [
       {
         id: 'intermediate',
         keyNumber: 2,
-        title: 'Gelişmekte Olan (Dengeli)',
+        title: 'Gelişmekte Olan',
         description: 'Hisse ve fon alım-satımı yapıyorum. Temel piyasa verilerini ve haber akışını düzenli takip ederim.',
         deltaWeights: { stock: -5, fund: 5, gold: 0, cash: 0 }
       },
@@ -230,28 +230,28 @@ export const WIZARD_QUESTIONS: WizardQuestion[] = [
       {
         id: 'short_1_3m',
         keyNumber: 1,
-        title: 'Çok Kısa Vade (1 - 3 Ay)',
+        title: 'Çok Kısa Vade: 1 - 3 Ay',
         description: 'Kısa sürede nakde dönebilmek önceliğim. Riski minimum, likiditesi yüksek enstrümanlar olsun.',
         deltaWeights: { stock: -20, fund: 10, gold: 10, cash: 0 }
       },
       {
         id: 'medium_3_12m',
         keyNumber: 2,
-        title: 'Kısa - Orta Vade (3 - 12 Ay)',
+        title: 'Kısa - Orta Vade: 3 - 12 Ay',
         description: 'Dönemsel piyasa fırsatlarını değerlendirmek ve dengeli getiri sağlamak istiyorum.',
         deltaWeights: { stock: -5, fund: 5, gold: 0, cash: 0 }
       },
       {
         id: 'long_1_3y',
         keyNumber: 3,
-        title: 'Orta - Uzun Vade (1 - 3 Yıl)',
+        title: 'Orta - Uzun Vade: 1 - 3 Yıl',
         description: 'Enflasyon üzeri reel büyüme hedefliyorum; dönemsel dalgalanmaları rahatlıkla tolere ederim.',
         deltaWeights: { stock: 10, fund: 0, gold: -10, cash: 0 }
       },
       {
         id: 'very_long_3y_plus',
         keyNumber: 4,
-        title: 'Gerçek Uzun Vade (3+ Yıl)',
+        title: 'Gerçek Uzun Vade: 3 Yıl ve Üzeri',
         description: 'Bileşik getirinin gücünden faydalanarak uzun soluklu büyük bir sermaye inşası planlıyorum.',
         deltaWeights: { stock: 20, fund: -5, gold: -15, cash: 0 }
       }
@@ -289,7 +289,7 @@ export const WIZARD_QUESTIONS: WizardQuestion[] = [
       {
         id: 'monthly_dca_add',
         keyNumber: 4,
-        title: 'Para Çekmeyecek, Aksine Düzenli Ekleme Yapacağım (DCA)',
+        title: 'Para Çekmeyecek, Düzenli Ekleme Yapacağım',
         description: 'Her ay düzenli tasarruf aktararak maliyet düşürüp sepetimi büyüteceğim.',
         deltaWeights: { stock: 15, fund: -5, gold: -10, cash: 0 }
       }
@@ -306,21 +306,21 @@ export const WIZARD_QUESTIONS: WizardQuestion[] = [
       {
         id: 'dividend_yield',
         keyNumber: 1,
-        title: 'Düzenli Kâr Payı (Temettü & Pasif Gelir)',
+        title: 'Düzenli Kâr Payı ve Temettü',
         description: 'Düzenli kâr payı dağıtan BIST Temettü 25 şirketleri ve ZTM fonuyla sürdürülebilir nakit akışı.',
         deltaWeights: { stock: 5, fund: 5, gold: -10, cash: 0 }
       },
       {
         id: 'growth_alpha',
         keyNumber: 2,
-        title: 'Sermaye Kazancı & Yüksek Büyüme (Alfa)',
+        title: 'Sermaye Kazancı ve Yüksek Büyüme',
         description: 'Hızlı büyüyen teknoloji, savunma sanayii ve inovasyon hisseleriyle sermayeyi katlamak.',
         deltaWeights: { stock: 15, fund: 0, gold: -15, cash: 0 }
       },
       {
         id: 'inflation_shield',
         keyNumber: 3,
-        title: 'Enflasyon Kalkanı & Alım Gücünü Koruma',
+        title: 'Alım Gücünü Koruma',
         description: 'Enflasyona ve kur dalgalanmalarına karşı altın, kıymetli maden ve defansif gıda perakendesi.',
         deltaWeights: { stock: -10, fund: -5, gold: 15, cash: 0 }
       },
@@ -344,28 +344,28 @@ export const WIZARD_QUESTIONS: WizardQuestion[] = [
       {
         id: 'panic_flight_gold',
         keyNumber: 1,
-        title: 'Çok Kaygılanırım; Hemen Nakde ve Altına Geçerim',
+        title: 'Çok Kaygılanırım, Nakit ve Altına Geçerim',
         description: 'Ana paramı kaybetme riski beni huzursuz eder; risk tavanım düşük olsun.',
         deltaWeights: { stock: -15, fund: 0, gold: 15, cash: 0 }
       },
       {
         id: 'uncomfortable_hold',
         keyNumber: 2,
-        title: 'Rahatsız Olurum Ama Plana Sadık Kalır, Beklerim',
+        title: 'Rahatsız Olurum Ama Plana Sadık Kalırım',
         description: 'Dalgalanmalar canımı sıksa da stratejimi bozmam, piyasanın toparlanmasını izlerim.',
         deltaWeights: { stock: 0, fund: 0, gold: 0, cash: 0 }
       },
       {
         id: 'calm_accept_risk',
         keyNumber: 3,
-        title: 'Sakinliğimi Korurum; Borsada Dalgalanma Olağandır',
+        title: 'Sakinliğimi Korurum, Dalgalanma Olağandır',
         description: 'Fiyat hareketlerinin geçici olduğunu bilir, uzun vadeli hedeflerime odaklanırım.',
         deltaWeights: { stock: 10, fund: 0, gold: -10, cash: 0 }
       },
       {
         id: 'aggressive_buy_dip',
         keyNumber: 4,
-        title: 'Fırsat Olarak Görürüm; Ucuzlayan Hisselerden Ek Alım Yaparım',
+        title: 'Fırsat Olarak Görürüm, Ek Alım Yaparım',
         description: 'Geri çekilmeleri iskontolu alış fırsatı olarak değerlendirip agresif maliyet düşürürüm.',
         deltaWeights: { stock: 20, fund: -5, gold: -15, cash: 0 }
       }
@@ -382,15 +382,15 @@ export const WIZARD_QUESTIONS: WizardQuestion[] = [
       {
         id: 'islamic_sensitive',
         keyNumber: 1,
-        title: 'Evet (Katılım Esaslı)',
-        description: 'Yalnızca BIST Katılım Endeksi hisseleri, ZKP/ZKE hisse fonları, ZTK katılım TLREF ve altın fonu dahil edilsin.',
+        title: 'Evet, Katılım Esaslı',
+        description: '',
         deltaWeights: { stock: 0, fund: 0, gold: 0, cash: 0 }
       },
       {
         id: 'conventional',
         keyNumber: 2,
-        title: 'Hayır (Genel Piyasa)',
-        description: 'Banka, sanayi, teknoloji ve TLREF fonları dahil tablodaki tüm enstrümanlar serbestçe değerlendirilsin.',
+        title: 'Hayır, Genel Piyasa',
+        description: '',
         deltaWeights: { stock: 0, fund: 0, gold: 0, cash: 0 }
       }
     ]
@@ -420,14 +420,14 @@ export const WIZARD_QUESTIONS: WizardQuestion[] = [
       {
         id: 'freq_quarterly',
         keyNumber: 3,
-        title: 'Çeyreklik (3 Aylık Bilanço Dönemlerinde)',
+        title: 'Çeyreklik Bilanço Dönemleri',
         description: 'Şirketlerin finansal bilanço dönemlerine göre 3 ayda bir dengeleme yapmak bana yeterlidir.',
         deltaWeights: { stock: 0, fund: 0, gold: 0, cash: 0 }
       },
       {
         id: 'freq_passive_yearly',
         keyNumber: 4,
-        title: '6 Ay - 1 Yıl (Pasif / Al ve Unut)',
+        title: 'Uzun Vadeli ve Pasif',
         description: 'Zamanım kısıtlı; sepeti kurup kendi haline bırakmak, bakım gerektirmeyen fonlara emanet etmek isterim.',
         deltaWeights: { stock: -10, fund: 10, gold: 0, cash: 0 }
       }
@@ -444,28 +444,28 @@ export const WIZARD_QUESTIONS: WizardQuestion[] = [
       {
         id: 'shield_strong_35',
         keyNumber: 1,
-        title: 'Güçlü Kalkan (%25 - %35 Ağırlık)',
+        title: 'Güçlü Kalkan: %25 - %35',
         description: 'Kur şoklarına ve jeopolitik krizlere karşı paramın önemli bir kısmı altın, gümüş ve dolarda dursun.',
         deltaWeights: { stock: -10, fund: -5, gold: 15, cash: 0 }
       },
       {
         id: 'shield_moderate_20',
         keyNumber: 2,
-        title: 'Makul Sigorta (%15 - %20 Ağırlık)',
+        title: 'Makul Sigorta: %15 - %20',
         description: 'Olası piyasa çalkantılarına karşı makul bir altın ve kıymetli maden dengesi yeterlidir.',
         deltaWeights: { stock: 0, fund: 0, gold: 0, cash: 0 }
       },
       {
         id: 'shield_symbolic_10',
         keyNumber: 3,
-        title: 'Sembolik Koruma (%5 - %10 Ağırlık)',
+        title: 'Sembolik Koruma: %5 - %10',
         description: 'Kıymetli madeni minimumda tutalım; asıl getiri şirketlerin büyümesinde gerçekleşir.',
         deltaWeights: { stock: 10, fund: 0, gold: -10, cash: 0 }
       },
       {
         id: 'shield_zero',
         keyNumber: 4,
-        title: 'Sıfır / Minimum Kalkan (Yalnızca Üretken Şirketler)',
+        title: 'Sıfır veya Minimum Kalkan',
         description: 'Emtia veya döviz taşımak istemem; paramın tamamı borsa şirketlerinde ve hisse fonlarında çalışsın.',
         deltaWeights: { stock: 15, fund: 0, gold: -15, cash: 0 }
       }
@@ -503,47 +503,54 @@ export const WIZARD_QUESTIONS: WizardQuestion[] = [
       {
         id: 'sec_reit_dividend',
         keyNumber: 4,
-        title: 'Gayrimenkul (GYO), Temettü ve Perakende',
+        title: 'Gayrimenkul, Temettü ve Perakende',
         description: 'Her dönem nakit üreten temel gıda perakendesi, ZTM temettü fonu ve OPK kâr payı ödeyen GYO fonu.',
         deltaWeights: { stock: -5, fund: 5, gold: 0, cash: 0 }
       }
     ]
   },
-  // Soru 10: Bütçe Skalası & Yatırım Sıklığı (Açık Uçlu + Seçmeli)
+  // Soru 10: Yatırım Sıklığı & Bütçe Planı
   {
     id: 'investment_budget_plan',
     stepNumber: 10,
-    category: '10. Bütçe ve Ekleme Planı',
-    title: 'Bu portföy için ayırmayı düşündüğünüz yatırım bütçesi ve ekleme sıklığınız nedir?',
+    category: '10. Yatırım Sıklığı ve Bütçe',
+    title: 'Bu portföy için yatırım sıklığınız ve ayırmayı düşündüğünüz bütçe nedir?',
     contextExplanation: 'FinAi bileşik getiri motoru bu tutarı baz alarak 1, 3 ve 5 yıllık gelecek kazanç simülasyonunu çizer.',
     isCustomInputAllowed: true,
     options: [
       {
-        id: 'budget_10k_monthly',
+        id: 'freq_single',
         keyNumber: 1,
-        title: '10.000 ₺ / Ay (Her Ay Düzenli - DCA)',
-        description: 'Her ay 10.000 TL tasarruf ekleyerek disiplinli birikim ve bileşik büyüme.',
+        title: 'Tek Seferlik Yatırım',
+        description: 'Tek seferde toplu sermaye girişi yaparak uzun vadeli büyümesini izleyeceğim.',
         deltaWeights: { stock: 0, fund: 0, gold: 0, cash: 0 }
       },
       {
-        id: 'budget_25k_monthly',
+        id: 'freq_weekly',
         keyNumber: 2,
-        title: '25.000 ₺ / Ay (Her Ay Düzenli - DCA)',
-        description: 'Aylık 25.000 TL ekleme ile hızlandırılmış sermaye birikimi.',
+        title: 'Her Hafta',
+        description: 'Haftalık düzenli tasarruf ekleyerek disiplinli birikim yapacağım.',
         deltaWeights: { stock: 5, fund: 0, gold: -5, cash: 0 }
       },
       {
-        id: 'budget_50k_monthly',
+        id: 'freq_monthly',
         keyNumber: 3,
-        title: '50.000 ₺ / Ay (Her Ay Düzenli - DCA)',
-        description: 'Aylık 50.000 TL ve üzeri güçlü sermaye ile genişletilmiş sektör sepeti.',
-        deltaWeights: { stock: 10, fund: -5, gold: -5, cash: 0 }
+        title: 'Her Ay',
+        description: 'Her ay düzenli ekleme yaparak maliyet düşüreceğim.',
+        deltaWeights: { stock: 5, fund: 0, gold: -5, cash: 0 }
       },
       {
-        id: 'budget_custom',
+        id: 'freq_quarterly',
         keyNumber: 4,
-        title: 'Özel Tutar (Serbest Sayısal Giriş)',
-        description: 'Kendi aylık bütçenizi sayısal olarak girerek kişiselleştirilmiş simülasyonu çalıştırın.',
+        title: '3 Ayda Bir',
+        description: 'Çeyreklik bilanço ve kâr payı dönemlerinde ek alım yapacağım.',
+        deltaWeights: { stock: 0, fund: 0, gold: 0, cash: 0 }
+      },
+      {
+        id: 'freq_semiannual',
+        keyNumber: 5,
+        title: '6 Ayda Bir',
+        description: 'Yarıyıl periyotlarıyla planlı sermaye eklemesi gerçekleştireceğim.',
         deltaWeights: { stock: 0, fund: 0, gold: 0, cash: 0 }
       }
     ]
@@ -771,11 +778,24 @@ export function calculateDynamicStrategy(answers: Record<string, string>): Dynam
   // 6. 10. SORU BÜTÇESİ & BİLEŞİK GETİRİ SİMÜLASYONU
   let monthlyBudget = 10000;
   const rawBudgetAnswer = answers['investment_budget_plan'];
-  if (rawBudgetAnswer === 'budget_25k_monthly') monthlyBudget = 25000;
-  else if (rawBudgetAnswer === 'budget_50k_monthly') monthlyBudget = 50000;
-  else if (rawBudgetAnswer && !isNaN(Number(rawBudgetAnswer))) {
+  const customBudgetVal = Number(answers['custom_amount_input'] || answers['investment_amount']);
+
+  if (!isNaN(customBudgetVal) && customBudgetVal > 0) {
+    monthlyBudget = Math.max(500, customBudgetVal);
+  } else if (rawBudgetAnswer && !isNaN(Number(rawBudgetAnswer))) {
     monthlyBudget = Math.max(500, Number(rawBudgetAnswer));
+  } else if (rawBudgetAnswer === 'budget_25k_monthly') {
+    monthlyBudget = 25000;
+  } else if (rawBudgetAnswer === 'budget_50k_monthly') {
+    monthlyBudget = 50000;
   }
+
+  let freqLabel = 'Her Ay Düzenli';
+  if (rawBudgetAnswer === 'freq_single') freqLabel = 'Tek Seferlik';
+  else if (rawBudgetAnswer === 'freq_weekly') freqLabel = 'Her Hafta Düzenli';
+  else if (rawBudgetAnswer === 'freq_monthly') freqLabel = 'Her Ay Düzenli';
+  else if (rawBudgetAnswer === 'freq_quarterly') freqLabel = '3 Ayda Bir Düzenli';
+  else if (rawBudgetAnswer === 'freq_semiannual') freqLabel = '6 Ayda Bir Düzenli';
 
   // 3 Senaryo Bileşik Yıllıklandırılmış Oranları (CAGR):
   // 1. MEDYAN (Reel Senaryo): Portföy bileşenlerinin medyan bileşik getirisi ~ %46.5
@@ -787,7 +807,7 @@ export function calculateDynamicStrategy(answers: Record<string, string>): Dynam
 
   const projection: CompoundProjection = {
     monthlyContribution: monthlyBudget,
-    frequency: 'Her Ay Düzenli (DCA)',
+    frequency: freqLabel,
     scenarios: {
       median: {
         label: 'FinAi Reel Beklenti (Medyan)',

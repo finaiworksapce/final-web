@@ -79,7 +79,7 @@ export default function SamplePortfolioPage() {
       rebalance_cycle: saved.rebalance_cycle || "freq_monthly",
       currency_gold_shield: saved.currency_gold_shield || "shield_moderate_20",
       sector_thematic_focus: saved.sector_thematic_focus || "sec_tech_energy",
-      investment_budget_plan: saved.investment_budget_plan || "budget_10k_monthly"
+      investment_budget_plan: saved.investment_budget_plan || "freq_monthly"
     };
   }, [userMetadata, financialLiteracyLevel]);
 
@@ -510,7 +510,7 @@ export default function SamplePortfolioPage() {
                   Gelecek Kazanç & Bileşik Getiri Simülatörü
                 </h3>
                 <span className="text-[11px] clash-desc font-[225] text-[#040989]/60 dark:text-[#F5F7FA]/60">
-                  Aylık {Number(answers["investment_budget_plan"]?.replace(/\D/g, '') || customAmountInput || '10000').toLocaleString('tr-TR')} ₺ Düzenli Tasarruf Planı (DCA)
+                  {currentTelemetry.projection.frequency} • {Number(answers["custom_amount_input"] || customAmountInput || '10000').toLocaleString('tr-TR')} ₺ Tasarruf Planı
                 </span>
               </div>
             </div>
@@ -776,11 +776,8 @@ export default function SamplePortfolioPage() {
                   <img src="/icon.png" alt="FinAi" className="w-8 h-8 object-contain shrink-0" />
                   <div>
                     <h3 className="text-sm sm:text-base clash-title font-[500] text-[#040989] dark:text-[#F5F7FA]">
-                      FinAi 10 Aşamalı Portföy Kalibrasyonu
+                      FinAi Workspace Kişiye Özel Model Portföy
                     </h3>
-                    <span className="text-[11px] clash-desc font-[225] text-slate-400 block">
-                      Kişiselleştirilmiş BIST Model Portföy & Dağılım Motoru
-                    </span>
                   </div>
                 </div>
 
@@ -839,45 +836,41 @@ export default function SamplePortfolioPage() {
                       className="space-y-4"
                     >
                       <div className="space-y-1">
-                        <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-[#004BFA]/10 dark:bg-[#004BFA]/20 text-[#004BFA] dark:text-[#5B80FF] text-[11px] font-semibold tracking-wide">
-                          <span>{currentModalQuestion.category}</span>
-                          <span className="text-slate-400 dark:text-slate-500">•</span>
-                          <span>Adım {quizStep + 1} / {WIZARD_QUESTIONS.length}</span>
-                        </div>
                         <h4 className="text-base sm:text-xl clash-title font-[500] text-[#040989] dark:text-[#F5F7FA] leading-snug pt-1">
                           {currentModalQuestion.title}
                         </h4>
-                        <p className="text-xs sm:text-[13px] clash-desc font-[225] text-slate-500 dark:text-slate-400 leading-relaxed">
-                          {currentModalQuestion.contextExplanation}
-                        </p>
                       </div>
 
-                      {/* Soru 10 İçin Özel Açık Uçlu Sayısal Giriş Alanı */}
+                      {/* Soru 10 İçin Özel Açık Uçlu Sayısal Giriş Alanı (Elegant FinAi Kartı) */}
                       {currentModalQuestion.isCustomInputAllowed && (
-                        <div className="p-4 rounded-2xl bg-blue-50/70 dark:bg-white/5 border border-blue-200/80 dark:border-white/10 space-y-2">
-                          <label className="text-xs clash-subtitle font-[325] text-[#004BFA] dark:text-[#93C5FD] block">
-                            Aylık Yatırım Bütçenizi Serbest Olarak Girin (₺):
-                          </label>
-                          <div className="flex items-center gap-2">
-                            <div className="relative flex-1">
-                              <input
-                                type="number"
-                                min="500"
-                                step="500"
-                                placeholder="Örn: 10000"
-                                value={customAmountInput}
-                                onChange={(e) => {
-                                  setCustomAmountInput(e.target.value);
-                                  handleOptionSelect(currentModalQuestion.id, e.target.value);
-                                }}
-                                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-white/20 bg-white dark:bg-[#02041A] text-sm font-numbers text-[#040989] dark:text-white focus:outline-hidden focus:border-[#004BFA]"
-                              />
-                              <span className="absolute right-3.5 top-2.5 text-xs font-semibold text-slate-400">₺ / Ay</span>
-                            </div>
+                        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-[#02041A] via-[#040989]/50 to-[#02041A] border border-blue-500/25 shadow-xl space-y-2.5">
+                          <div className="flex items-center justify-between">
+                            <label className="text-xs clash-subtitle font-[400] text-blue-200 tracking-wide">
+                              Yatırım Bütçesi
+                            </label>
+                            <span className="text-[10px] text-blue-300 font-medium px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-400/20">
+                              Simülasyon Tutarı
+                            </span>
                           </div>
-                          <span className="text-[10px] text-slate-400 block">
-                            * Aşağıdaki hazır bütçe şablonlarından birini seçebilir veya buraya doğrudan kendi bütçenizi yazabilirsiniz.
-                          </span>
+                          <div className="relative flex items-center">
+                            <span className="absolute left-4 text-base font-bold text-[#5B80FF]">₺</span>
+                            <input
+                              type="number"
+                              min="500"
+                              step="500"
+                              placeholder="10000"
+                              value={customAmountInput}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                setCustomAmountInput(val);
+                                handleOptionSelect('custom_amount_input', val);
+                              }}
+                              className="w-full pl-9 pr-14 py-3 rounded-xl bg-white/[0.07] border border-white/15 text-lg font-numbers font-medium text-white placeholder-white/30 focus:outline-hidden focus:border-[#5B80FF] focus:ring-2 focus:ring-[#5B80FF]/30 transition-all shadow-inner"
+                            />
+                            <span className="absolute right-4 text-xs font-medium text-slate-300 pointer-events-none">
+                              TL
+                            </span>
+                          </div>
                         </div>
                       )}
 
@@ -890,9 +883,6 @@ export default function SamplePortfolioPage() {
                               key={option.id}
                               onClick={() => {
                                 handleOptionSelect(currentModalQuestion.id, option.id);
-                                if (option.id === "budget_10k_monthly") setCustomAmountInput("10000");
-                                else if (option.id === "budget_25k_monthly") setCustomAmountInput("25000");
-                                else if (option.id === "budget_50k_monthly") setCustomAmountInput("50000");
                               }}
                               className={`cursor-pointer p-4 rounded-2xl border transition-all duration-200 flex items-start justify-between gap-3 ${
                                 isSelected
@@ -904,9 +894,11 @@ export default function SamplePortfolioPage() {
                                 <h5 className="text-xs sm:text-sm clash-title font-[500] text-[#040989] dark:text-[#F5F7FA]">
                                   {option.title}
                                 </h5>
-                                <p className="text-[11px] sm:text-xs clash-desc font-[225] text-slate-600 dark:text-slate-300 leading-relaxed">
-                                  {option.description}
-                                </p>
+                                {option.description && (
+                                  <p className="text-[11px] sm:text-xs clash-desc font-[225] text-slate-600 dark:text-slate-300 leading-relaxed">
+                                    {option.description}
+                                  </p>
+                                )}
                               </div>
 
                               <div
@@ -926,100 +918,72 @@ export default function SamplePortfolioPage() {
                   </AnimatePresence>
                 </div>
 
-                {/* SAĞ KOLON: AKADEMİ CANLI STRATEJİ ETKİSİ (%36) */}
-                <div className="w-full lg:w-[36%] p-5 sm:p-7 bg-slate-50/60 dark:bg-white/[0.02] flex flex-col justify-between space-y-5">
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between pb-3 border-b border-slate-200/70 dark:border-white/10">
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-lg bg-[#004BFA]/10 flex items-center justify-center text-[#004BFA]">
-                          <Zap className="w-3.5 h-3.5 text-[#004BFA]" />
-                        </div>
-                        <h4 className="text-xs sm:text-sm clash-title font-[500] text-[#040989] dark:text-white">
-                          Canlı Kalibrasyon Etkisi
-                        </h4>
-                      </div>
-                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 font-semibold">
-                        Canlı AI
-                      </span>
-                    </div>
+                {/* SAĞ KOLON: DİNAMİK AĞIRLIK DAĞILIMI (FİNAİ İMZA GRADYAN & AMBIENT ANİMASYON) */}
+                <div className="w-full lg:w-[36%] p-6 sm:p-8 bg-gradient-to-br from-[#02041A] via-[#040989] to-[#02041A] border-t lg:border-t-0 lg:border-l border-white/10 flex flex-col justify-center relative overflow-hidden text-white">
+                  {/* Ambient Arka Plan Işık Küreleri */}
+                  <div className="absolute -top-12 -right-12 w-48 h-48 bg-[#004BFA]/25 rounded-full blur-2xl pointer-events-none" />
+                  <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-[#5B80FF]/20 rounded-full blur-2xl pointer-events-none" />
 
-                    {/* Strateji Adı ve Risk */}
-                    <div className="p-3.5 rounded-2xl bg-white dark:bg-[#02041A] border border-slate-200/80 dark:border-white/10 space-y-1.5 shadow-xs">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-slate-400 font-normal">Belirlenen Profil</span>
-                        <span className="font-semibold text-[#004BFA] dark:text-[#5B80FF]">
-                          {currentTelemetry.expectedRisk} Risk
-                        </span>
-                      </div>
-                      <h5 className="text-sm font-semibold clash-title text-[#0E1E38] dark:text-white">
-                        {currentTelemetry.title}
-                      </h5>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">
-                        {currentTelemetry.tagline}
-                      </p>
+                  <div className="relative z-10 space-y-6">
+                    <div className="flex items-center justify-between pb-3 border-b border-white/15">
+                      <span className="text-xs font-semibold tracking-wider uppercase text-blue-200">
+                        Dinamik Ağırlık Dağılımı
+                      </span>
+                      <span className="text-[11px] font-numbers text-blue-300/80">
+                        %100 Toplam
+                      </span>
                     </div>
 
                     {/* Canlı Dağılım Çubukları */}
-                    <div className="space-y-2 pt-1">
-                      <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
-                        Dinamik Ağırlık Dağılımı
-                      </span>
-
-                      {/* Hisse Senedi */}
-                      <div className="space-y-1">
+                    <div className="space-y-4">
+                      {/* BIST Hisse Senedi */}
+                      <div className="space-y-1.5">
                         <div className="flex justify-between text-xs font-medium">
-                          <span className="text-slate-600 dark:text-slate-300">BIST Hisse Senedi</span>
-                          <span className="font-numbers text-[#004BFA]">%{currentTelemetry.macroWeights.stock}</span>
+                          <span className="text-slate-200">BIST Hisse Senedi</span>
+                          <span className="font-numbers text-[#5B80FF] font-semibold text-sm">
+                            %{currentTelemetry.macroWeights.stock}
+                          </span>
                         </div>
-                        <div className="w-full h-1.5 rounded-full bg-slate-200/70 dark:bg-white/10 overflow-hidden">
+                        <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden p-0.5 border border-white/5">
                           <div
-                            className="h-full bg-[#004BFA] transition-all duration-300"
+                            className="h-full rounded-full bg-gradient-to-r from-[#004BFA] to-[#5B80FF] transition-all duration-500 ease-out shadow-[0_0_12px_rgba(0,75,250,0.6)]"
                             style={{ width: `${currentTelemetry.macroWeights.stock}%` }}
                           />
                         </div>
                       </div>
 
-                      {/* Yatırım Fonları */}
-                      <div className="space-y-1">
+                      {/* Sektör & Yatırım Fonları */}
+                      <div className="space-y-1.5">
                         <div className="flex justify-between text-xs font-medium">
-                          <span className="text-slate-600 dark:text-slate-300">Sektör & Yatırım Fonları</span>
-                          <span className="font-numbers text-emerald-600">%{currentTelemetry.macroWeights.fund}</span>
+                          <span className="text-slate-200">Sektör & Yatırım Fonları</span>
+                          <span className="font-numbers text-emerald-400 font-semibold text-sm">
+                            %{currentTelemetry.macroWeights.fund}
+                          </span>
                         </div>
-                        <div className="w-full h-1.5 rounded-full bg-slate-200/70 dark:bg-white/10 overflow-hidden">
+                        <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden p-0.5 border border-white/5">
                           <div
-                            className="h-full bg-emerald-500 transition-all duration-300"
+                            className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500 ease-out shadow-[0_0_12px_rgba(16,185,129,0.6)]"
                             style={{ width: `${currentTelemetry.macroWeights.fund}%` }}
                           />
                         </div>
                       </div>
 
-                      {/* Kıymetli Maden & Likit */}
-                      <div className="space-y-1">
+                      {/* Kıymetli Maden & Likit Kalkan */}
+                      <div className="space-y-1.5">
                         <div className="flex justify-between text-xs font-medium">
-                          <span className="text-slate-600 dark:text-slate-300">Kıymetli Maden & Likit Kalkan</span>
-                          <span className="font-numbers text-amber-600">%{currentTelemetry.macroWeights.goldAndCash}</span>
+                          <span className="text-slate-200">Kıymetli Maden & Likit Kalkan</span>
+                          <span className="font-numbers text-amber-400 font-semibold text-sm">
+                            %{currentTelemetry.macroWeights.goldAndCash}
+                          </span>
                         </div>
-                        <div className="w-full h-1.5 rounded-full bg-slate-200/70 dark:bg-white/10 overflow-hidden">
+                        <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden p-0.5 border border-white/5">
                           <div
-                            className="h-full bg-amber-500 transition-all duration-300"
+                            className="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-500 ease-out shadow-[0_0_12px_rgba(245,158,11,0.6)]"
                             style={{ width: `${currentTelemetry.macroWeights.goldAndCash}%` }}
                           />
                         </div>
                       </div>
                     </div>
-
-                    {/* Tahmini Getiri Bandı */}
-                    <div className="p-3 rounded-2xl bg-blue-50/50 dark:bg-white/5 border border-blue-100 dark:border-white/10 flex items-center justify-between text-xs">
-                      <span className="text-slate-500 dark:text-slate-400">Beklenen Yıllık Getiri</span>
-                      <span className="font-bold text-[#004BFA] dark:text-[#5B80FF]">
-                        {currentTelemetry.expectedReturnRange}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Alt Bilgi İpucu */}
-                  <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-white/5 text-[10px] text-slate-400 leading-relaxed border border-slate-200/50 dark:border-white/5">
-                    💡 Verdiğiniz her yanıt, BIST ve TEFAS medyan getiri katsayılarıyla portföyünüzün risk dengesini gerçek zamanlı olarak ayarlar.
                   </div>
                 </div>
               </div>
@@ -1040,10 +1004,6 @@ export default function SamplePortfolioPage() {
                 </button>
 
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-slate-400 hidden sm:inline-block">
-                    Adım {quizStep + 1} / {WIZARD_QUESTIONS.length}
-                  </span>
-
                   {quizStep < WIZARD_QUESTIONS.length - 1 ? (
                     <button
                       type="button"
