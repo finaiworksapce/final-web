@@ -129,10 +129,8 @@ export default function SamplePortfolioPage() {
     }));
   }, [currentTelemetry, recommendedStrategy, financialLiteracyLevel, DISTRIBUTION_COLORS]);
 
-  const RADIUS = 32;
-  const CIRCUMFERENCE = 2 * Math.PI * RADIUS; // ~201.06
-  const RADIUS_OUTER = 44;
-  const CIRCUMFERENCE_OUTER = 2 * Math.PI * RADIUS_OUTER; // ~276.46
+  const RADIUS = 38;
+  const CIRCUMFERENCE = 2 * Math.PI * RADIUS; // ~238.76
   let cumulativeOffset = 0;
 
   const displayName = userName || (email ? email.split("@")[0] : "Salih KAVAKCI");
@@ -195,17 +193,6 @@ export default function SamplePortfolioPage() {
             <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
             <span>Ana Sayfaya Dön</span>
           </Link>
-
-          <div className="h-4 w-px bg-[#D6E4FF] dark:bg-white/20 hidden sm:block" />
-
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-[#D6E4FF]/40 dark:bg-white/10 border border-[#D6E4FF] dark:border-white/20 flex items-center justify-center text-[#004BFA] dark:text-[#D6E4FF]">
-              <Sparkles className="w-4 h-4" />
-            </div>
-            <span className="text-xs sm:text-sm clash-title font-[500] tracking-tight">
-              Çok Katmanlı AI Portföy Modeli & Simülasyonu
-            </span>
-          </div>
         </div>
 
         {/* Sağ Butonlar: 10 Soruluk Testi Yeniden Yap + Varlık Ekle */}
@@ -268,29 +255,13 @@ export default function SamplePortfolioPage() {
           </motion.div>
         )}
 
-        {/* BAŞLIK & KİŞİSELLEŞTİRME VURGUSU */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <span className="text-[10px] clash-subtitle font-[325] px-2.5 py-0.5 rounded-full bg-[#D6E4FF]/60 text-[#004BFA] dark:text-[#F5F7FA] border border-[#004BFA]/20 uppercase tracking-wider flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#004BFA] animate-pulse" />
-                <span>10 Aşamalı Faktör Algoritması Devrede</span>
-              </span>
-              <span className="text-xs clash-desc font-[225] text-[#040989]/60 dark:text-[#F5F7FA]/60">
-                • {currentTelemetry.title}
-              </span>
-            </div>
+        {/* BAŞLIK & DÜZENLE BUTONU */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl clash-title font-[500] text-[#040989] dark:text-[#F5F7FA] tracking-tight">
+            {displayName} İçin Çok Katmanlı Portföy Modeli
+          </h1>
 
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl clash-title font-[500] text-[#040989] dark:text-[#F5F7FA] tracking-tight">
-              {displayName} İçin Çok Katmanlı Portföy Modeli
-            </h1>
-
-            <p className="text-xs sm:text-sm clash-desc font-[225] text-[#040989]/80 dark:text-[#F5F7FA]/75 mt-1 max-w-4xl leading-relaxed">
-              {currentTelemetry.tagline} BIST sektörlerinin ve TEFAS/BYF fonlarının reel <strong>Medyan Getiri</strong> verileriyle geçmişi incelenmiş ve geleceğe dönük bileşik getiri projeksiyonu çıkarılmıştır.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2 self-start lg:self-center shrink-0">
+          <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
             <button
               onClick={() => {
                 setQuizStep(0);
@@ -309,26 +280,26 @@ export default function SamplePortfolioPage() {
         {/* ----------------------------------------------------------------------------------- */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-stretch w-full">
           
-          {/* SOL: Çok Katmanlı Donut Dağılım Kartı */}
-          <div className="lg:col-span-6 bg-white dark:bg-[#040989]/40 rounded-2xl min-[360px]:rounded-3xl p-5 sm:p-6 shadow-sm border border-[#D6E4FF]/60 dark:border-white/10 flex flex-col justify-between">
-            <div className="flex items-center justify-between pb-3 border-b border-[#D6E4FF]/50 dark:border-white/10">
+          {/* SOL: Çok Katmanlı Donut Dağılımı (Kutusuz Açık Canvas) */}
+          <div className="lg:col-span-6 flex flex-col justify-between p-1 sm:p-2">
+            <div className="flex items-center justify-between pb-2">
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-lg bg-[#D6E4FF]/30 dark:bg-white/10 border border-[#D6E4FF]/60 dark:border-white/20 flex items-center justify-center text-[#040989] dark:text-[#F5F7FA] shrink-0">
-                  <PieChart className="w-3.5 h-3.5 text-[#004BFA]" />
+                <div className="w-6 h-6 rounded-lg bg-[#004BFA]/10 flex items-center justify-center text-[#004BFA] shrink-0">
+                  <PieChart className="w-3.5 h-3.5" />
                 </div>
-                <h3 className="text-xs sm:text-[13px] clash-subtitle font-[325] text-[#040989] dark:text-[#F5F7FA] tracking-tight">
+                <h3 className="text-sm clash-title font-[500] text-[#040989] dark:text-[#F5F7FA] tracking-tight">
                   Çok Katmanlı Hedef Varlık Dağılımı
                 </h3>
               </div>
             </div>
 
             {/* Donut Grafik ve Liste */}
-            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 my-auto py-4">
-              {/* Donut SVG ve Dış Sınıf Göstergeleri */}
+            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 my-auto py-2">
+              {/* Donut SVG */}
               <div className="flex flex-col items-center shrink-0">
-                <div className="relative w-36 h-36 sm:w-44 sm:h-44 shrink-0 flex items-center justify-center">
+                <div className="relative w-44 h-44 sm:w-52 sm:h-52 shrink-0 flex items-center justify-center">
                   <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90 filter drop-shadow-xs">
-                    {/* İÇ HALKA: Varlık Dilimleri */}
+                    {/* Varlık Dilimleri */}
                     {distributionItems.map((item) => {
                       const strokeLength = (item.percentage / 100) * CIRCUMFERENCE;
                       const strokeDasharray = `${strokeLength} ${CIRCUMFERENCE - strokeLength}`;
@@ -345,90 +316,37 @@ export default function SamplePortfolioPage() {
                           r={RADIUS}
                           fill="none"
                           stroke={item.color}
-                          strokeWidth={isHovered ? 11 : 8}
+                          strokeWidth={isHovered ? 13 : 10}
                           strokeDasharray={strokeDasharray}
                           strokeDashoffset={strokeDashoffset}
                           style={{ transition: "stroke-width 200ms ease-out" }}
                         />
                       );
                     })}
-
-                    {/* DIŞ ÇİZGİLER: Hisse, Fon ve Kıymetli Madenler Bölgesi */}
-                    {(() => {
-                      const stockW = currentTelemetry.macroWeights.stock;
-                      const fundW = currentTelemetry.macroWeights.fund;
-                      const goldW = currentTelemetry.macroWeights.goldAndCash;
-
-                      const stockLen = (stockW / 100) * CIRCUMFERENCE_OUTER;
-                      const fundLen = (fundW / 100) * CIRCUMFERENCE_OUTER;
-                      const goldLen = (goldW / 100) * CIRCUMFERENCE_OUTER;
-
-                      return (
-                        <>
-                          {stockW > 0 && (
-                            <circle
-                              cx="50"
-                              cy="50"
-                              r={RADIUS_OUTER}
-                              fill="none"
-                              stroke="#004BFA"
-                              strokeWidth={2.5}
-                              strokeDasharray={`${Math.max(0, stockLen - 2)} ${CIRCUMFERENCE_OUTER}`}
-                              strokeDashoffset={0}
-                            />
-                          )}
-                          {fundW > 0 && (
-                            <circle
-                              cx="50"
-                              cy="50"
-                              r={RADIUS_OUTER}
-                              fill="none"
-                              stroke="#10B981"
-                              strokeWidth={2.5}
-                              strokeDasharray={`${Math.max(0, fundLen - 2)} ${CIRCUMFERENCE_OUTER}`}
-                              strokeDashoffset={-stockLen}
-                            />
-                          )}
-                          {goldW > 0 && (
-                            <circle
-                              cx="50"
-                              cy="50"
-                              r={RADIUS_OUTER}
-                              fill="none"
-                              stroke="#F59E0B"
-                              strokeWidth={2.5}
-                              strokeDasharray={`${Math.max(0, goldLen - 2)} ${CIRCUMFERENCE_OUTER}`}
-                              strokeDashoffset={-(stockLen + fundLen)}
-                            />
-                          )}
-                        </>
-                      );
-                    })()}
                   </svg>
 
                   {/* Donut İçi Bilgi */}
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none px-1">
-                    <span className="text-[10px] clash-desc font-[225] text-[#040989]/70 dark:text-[#F5F7FA]/70 leading-tight">
+                    <span className="text-[11px] clash-desc font-[225] text-[#040989]/70 dark:text-[#F5F7FA]/70 leading-tight">
                       Tam Sepet
                     </span>
-                    <span className="text-sm sm:text-base font-numbers font-medium text-[#040989] dark:text-[#F5F7FA] tracking-tight mt-0.5">
+                    <span className="text-base sm:text-lg font-numbers font-medium text-[#040989] dark:text-[#F5F7FA] tracking-tight mt-0.5">
                       %100
                     </span>
                   </div>
                 </div>
 
-                {/* Dış Çizgi Açıklama Göstergeleri */}
-                <div className="flex flex-wrap items-center justify-center gap-2 mt-2 text-[10px] font-medium">
-                  <span className="flex items-center gap-1 text-[#004BFA] dark:text-[#5B80FF]">
-                    <span className="w-2 h-0.5 rounded-full bg-[#004BFA]" />
+                {/* Makro Ağırlık Göstergeleri (Çizgisiz & Sade) */}
+                <div className="flex flex-wrap items-center justify-center gap-2.5 mt-3 text-xs clash-subtitle font-[325]">
+                  <span className="text-[#004BFA] dark:text-[#5B80FF]">
                     Hisseler (%{currentTelemetry.macroWeights.stock})
                   </span>
-                  <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
-                    <span className="w-2 h-0.5 rounded-full bg-emerald-600" />
+                  <span className="text-slate-300 dark:text-white/20">•</span>
+                  <span className="text-emerald-600 dark:text-emerald-400">
                     Fonlar (%{currentTelemetry.macroWeights.fund})
                   </span>
-                  <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
-                    <span className="w-2 h-0.5 rounded-full bg-amber-600" />
+                  <span className="text-slate-300 dark:text-white/20">•</span>
+                  <span className="text-amber-600 dark:text-amber-400">
                     Kıymetli Madenler (%{currentTelemetry.macroWeights.goldAndCash})
                   </span>
                 </div>
@@ -579,65 +497,100 @@ export default function SamplePortfolioPage() {
         </div>
 
         {/* ----------------------------------------------------------------------------------- */}
-        {/* BÖLÜM 2: GELECEK KAZANÇ & BİLEŞİK GETİRİ SİMÜLATÖRÜ */}
+        {/* BÖLÜM 2: GELECEK KAZANÇ & BİLEŞİK GETİRİ SİMÜLATÖRÜ (KOMPAKT & EFEKTİF TASARIM) */}
         {/* ----------------------------------------------------------------------------------- */}
-        <div className="bg-white dark:bg-[#040989]/40 border border-[#D6E4FF]/60 dark:border-white/10 rounded-2xl min-[360px]:rounded-3xl p-5 sm:p-7 shadow-sm space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#D6E4FF]/50 dark:border-white/10">
-            <div>
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-[#004BFA] text-white flex items-center justify-center shadow-xs">
-                  <Calculator className="w-4 h-4" />
-                </div>
-                <h3 className="text-base sm:text-lg clash-title font-[500] text-[#040989] dark:text-[#F5F7FA]">
+        <div className="bg-white dark:bg-[#040989]/40 border border-[#D6E4FF]/60 dark:border-white/10 rounded-2xl min-[360px]:rounded-3xl p-4 sm:p-5 shadow-xs space-y-3.5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#D6E4FF]/50 dark:border-white/10">
+            <div className="flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-lg bg-[#004BFA] text-white flex items-center justify-center shadow-xs shrink-0">
+                <Calculator className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="text-sm sm:text-base clash-title font-[500] text-[#040989] dark:text-[#F5F7FA] leading-tight">
                   Gelecek Kazanç & Bileşik Getiri Simülatörü
                 </h3>
+                <span className="text-[11px] clash-desc font-[225] text-[#040989]/60 dark:text-[#F5F7FA]/60">
+                  Aylık {Number(answers["investment_budget_plan"]?.replace(/\D/g, '') || customAmountInput || '10000').toLocaleString('tr-TR')} ₺ Düzenli Tasarruf Planı (DCA)
+                </span>
               </div>
+            </div>
+
+            {/* Senaryo Seçici Butonlar */}
+            <div className="flex items-center gap-1 bg-[#F5F7FA] dark:bg-white/5 p-1 rounded-xl border border-[#D6E4FF]/50 dark:border-white/10 self-start sm:self-auto">
+              {(['median', 'average', 'conservative'] as const).map((scKey) => {
+                const sc = currentTelemetry.projection.scenarios[scKey];
+                const isActive = activeScenario === scKey;
+                return (
+                  <button
+                    key={scKey}
+                    onClick={() => setActiveScenario(scKey)}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] clash-subtitle font-[325] transition-all flex items-center gap-1 ${
+                      isActive
+                        ? 'bg-[#004BFA] text-white shadow-xs'
+                        : 'text-[#040989]/70 dark:text-[#F5F7FA]/70 hover:text-[#004BFA]'
+                    }`}
+                  >
+                    <span>{sc.label.split(' ')[0]}</span>
+                    <span className="opacity-80 font-numbers">(%{sc.annualRate})</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          {/* 6 Projeksiyon Kartı: 1 Ay, 3 Ay, 6 Ay, 1 Yıl, 3 Yıl, 5 Yıl */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* 6 Vade Kartı: Tek Satırda Efektif ve Kompakt Görünüm */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-2.5">
             {[
-              { title: "1 Ay Sonunda", data: activeProjectionScenario.month1, border: "border-blue-500/20", text: "text-blue-600 dark:text-blue-400", bg: "from-blue-50/70" },
-              { title: "3 Ay Sonunda", data: activeProjectionScenario.month3, border: "border-cyan-500/20", text: "text-cyan-600 dark:text-cyan-400", bg: "from-cyan-50/70" },
-              { title: "6 Ay Sonunda", data: activeProjectionScenario.month6, border: "border-teal-500/20", text: "text-teal-600 dark:text-teal-400", bg: "from-teal-50/70" },
-              { title: "1 Yıl Sonunda", data: activeProjectionScenario.year1, border: "border-indigo-500/20", text: "text-indigo-600 dark:text-indigo-400", bg: "from-indigo-50/70" },
-              { title: "3 Yıl Sonunda", data: activeProjectionScenario.year3, border: "border-violet-500/20", text: "text-violet-600 dark:text-violet-400", bg: "from-violet-50/70" },
-              { title: "5 Yıl Sonunda", data: activeProjectionScenario.year5, border: "border-emerald-500/25", text: "text-emerald-600 dark:text-emerald-400", bg: "from-emerald-50/70" },
-            ].map((card, idx) => (
-              <div 
-                key={idx}
-                className={`bg-gradient-to-br ${card.bg} via-white to-transparent dark:from-white/5 dark:via-transparent dark:to-transparent border ${card.border} rounded-2xl p-5 space-y-3 relative overflow-hidden`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className={`text-xs clash-subtitle font-[325] ${card.text} uppercase tracking-wider`}>
-                    {card.title}
-                  </span>
-                </div>
-
-                <div>
-                  <span className="text-xs clash-desc font-[225] text-slate-500">Tahmini Toplam Portföy:</span>
-                  <div className={`text-2xl font-numbers font-bold ${card.text} mt-0.5`}>
-                    {card.data.total.toLocaleString('tr-TR')} ₺
-                  </div>
-                </div>
-
-                <div className="pt-3 border-t border-slate-200/60 dark:border-white/10 space-y-1.5 text-xs">
-                  <div className="flex items-center justify-between">
-                    <span className="clash-desc font-[225] text-slate-500">Cebinizden Çıkan Anapara:</span>
-                    <span className="font-numbers font-medium text-slate-700 dark:text-slate-200">
-                      {card.data.principal.toLocaleString('tr-TR')} ₺
+              { title: "1 Ay", data: activeProjectionScenario.month1 },
+              { title: "3 Ay", data: activeProjectionScenario.month3 },
+              { title: "6 Ay", data: activeProjectionScenario.month6 },
+              { title: "1 Yıl", data: activeProjectionScenario.year1 },
+              { title: "3 Yıl", data: activeProjectionScenario.year3 },
+              { title: "5 Yıl", data: activeProjectionScenario.year5 },
+            ].map((card, idx) => {
+              const profitPct = card.data.principal > 0 ? ((card.data.profit / card.data.principal) * 100).toFixed(1) : "0.0";
+              const isLongTerm = idx >= 3;
+              return (
+                <div 
+                  key={idx}
+                  className={`rounded-xl p-3 border transition-all relative overflow-hidden flex flex-col justify-between ${
+                    isLongTerm 
+                      ? 'border-[#004BFA]/30 bg-gradient-to-b from-[#004BFA]/5 to-transparent' 
+                      : 'border-[#D6E4FF]/50 dark:border-white/10 bg-white/70 dark:bg-white/5'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="text-[11px] clash-subtitle font-[325] text-[#040989]/80 dark:text-[#F5F7FA]/80">
+                      {card.title}
+                    </span>
+                    <span className={`text-[10px] font-numbers font-medium px-1.5 py-0.5 rounded ${
+                      Number(profitPct) > 0 
+                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
+                        : 'bg-slate-100 dark:bg-white/10 text-slate-500'
+                    }`}>
+                      +{profitPct}%
                     </span>
                   </div>
-                  <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 font-medium">
-                    <span className="clash-desc font-[225]">Bileşik Kazanç (Kâr):</span>
-                    <span className="font-numbers">
-                      +{card.data.profit.toLocaleString('tr-TR')} ₺
-                    </span>
+
+                  <div className="my-1.5">
+                    <div className="text-sm sm:text-base font-numbers font-bold text-[#040989] dark:text-[#F5F7FA] tracking-tight">
+                      {card.data.total.toLocaleString('tr-TR')} ₺
+                    </div>
+                  </div>
+
+                  <div className="pt-1.5 border-t border-[#D6E4FF]/40 dark:border-white/5 space-y-0.5 text-[10px]">
+                    <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 font-numbers">
+                      <span>Anapara:</span>
+                      <span>{card.data.principal.toLocaleString('tr-TR')} ₺</span>
+                    </div>
+                    <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 font-numbers font-semibold">
+                      <span>Net Kâr:</span>
+                      <span>+{card.data.profit.toLocaleString('tr-TR')} ₺</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
