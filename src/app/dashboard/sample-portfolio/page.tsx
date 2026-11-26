@@ -755,7 +755,7 @@ export default function SamplePortfolioPage() {
               </div>
             </motion.div>
 
-            {/* 2. HAREKETLİ BEYAZ KALİBRASYON KARTI (YAYLANMALI MERKEZE UÇUŞ) */}
+            {/* 2. HAREKETLİ BEYAZ VE LACİVERT KALİBRASYON KARTI (YAYLANMALI MERKEZE UÇUŞ) */}
             <motion.div
               key="quiz-card-container"
               initial={{ opacity: 0, scale: 0.9, y: 24 }}
@@ -768,64 +768,65 @@ export default function SamplePortfolioPage() {
                 mass: 0.85
               }}
               onClick={(e) => e.stopPropagation()}
-              className="relative z-10 w-full max-w-5xl xl:max-w-6xl max-h-[92vh] bg-white dark:bg-[#02041A] rounded-3xl border border-white/20 dark:border-white/15 shadow-2xl overflow-hidden flex flex-col font-clash ring-1 ring-white/10 my-auto"
+              className="relative z-10 w-full max-w-5xl xl:max-w-6xl max-h-[92vh] bg-white dark:bg-[#02041A] rounded-3xl border border-white/20 dark:border-white/15 shadow-2xl overflow-hidden flex flex-col lg:flex-row font-clash ring-1 ring-white/10 my-auto"
             >
-              {/* Modal Üst Bar: Logo, Başlık, 10 Adımlı İlerleme Hapları & Kapat */}
-              <div className="px-5 sm:px-7 py-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between gap-4 flex-wrap bg-white dark:bg-[#02041A] shrink-0">
-                <div className="flex items-center gap-3">
-                  <img src="/icon.png" alt="FinAi" className="w-8 h-8 object-contain shrink-0" />
-                  <div>
+              {/* SOL TARAF (%64): ÜST BAR (LOGO+BAŞLIK+HAPLAR), SORULAR/SEÇENEKLER VE GERİ BUTONU */}
+              <div className="w-full lg:w-[64%] flex flex-col justify-between bg-white dark:bg-[#02041A] overflow-hidden min-h-0">
+                {/* Sol Üst Bar */}
+                <div className="px-5 sm:px-7 py-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between gap-3 shrink-0">
+                  <div className="flex items-center gap-3">
+                    <img src="/icon.png" alt="FinAi" className="w-7 h-7 sm:w-8 sm:h-8 object-contain shrink-0" />
                     <h3 className="text-sm sm:text-base clash-title font-[500] text-[#040989] dark:text-[#F5F7FA]">
                       FinAi Workspace Kişiye Özel Model Portföy
                     </h3>
                   </div>
+
+                  <div className="flex items-center gap-2">
+                    {/* 10 Step Pills */}
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {WIZARD_QUESTIONS.map((q, idx) => {
+                        const isDone = Boolean(answers[q.id]);
+                        const isCurrent = idx === quizStep;
+                        return (
+                          <button
+                            key={q.id}
+                            type="button"
+                            onClick={() => setQuizStep(idx)}
+                            className={`h-2 rounded-full transition-all cursor-pointer ${
+                              isCurrent
+                                ? "w-6 sm:w-8 bg-[#004BFA]"
+                                : isDone
+                                ? "w-3 sm:w-4 bg-emerald-500"
+                                : "w-2.5 sm:w-3 bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/20"
+                            }`}
+                            title={`Adım ${idx + 1}: ${q.category}`}
+                          />
+                        );
+                      })}
+                    </div>
+
+                    {/* Mobilde Kapat Butonu */}
+                    <button
+                      type="button"
+                      onClick={() => setIsQuizModalOpen(false)}
+                      className="lg:hidden p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-white/10 text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer ml-auto"
+                      title="Kapat"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
 
-                {/* Akademi Tarzı 10 Aşamalı İlerleme Bölmeleri (Step Pills) */}
-                <div className="flex items-center gap-1.5 shrink-0">
-                  {WIZARD_QUESTIONS.map((q, idx) => {
-                    const isDone = Boolean(answers[q.id]);
-                    const isCurrent = idx === quizStep;
-                    return (
-                      <button
-                        key={q.id}
-                        type="button"
-                        onClick={() => setQuizStep(idx)}
-                        className={`h-2 rounded-full transition-all cursor-pointer ${
-                          isCurrent
-                            ? "w-8 bg-[#004BFA]"
-                            : isDone
-                            ? "w-4 bg-emerald-500"
-                            : "w-3 bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/20"
-                        }`}
-                        title={`Adım ${idx + 1}: ${q.category}`}
-                      />
-                    );
-                  })}
+                {/* İlerleme Çizgisi */}
+                <div className="w-full h-1 bg-slate-100 dark:bg-white/5 shrink-0">
+                  <div
+                    className="h-full bg-gradient-to-r from-[#004BFA] to-blue-500 transition-all duration-300"
+                    style={{ width: `${((quizStep + 1) / WIZARD_QUESTIONS.length) * 100}%` }}
+                  />
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => setIsQuizModalOpen(false)}
-                  className="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-white/10 text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer ml-auto"
-                  title="Kapat"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* İlerleme Çizgisi */}
-              <div className="w-full h-1 bg-slate-100 dark:bg-white/5 shrink-0">
-                <div
-                  className="h-full bg-gradient-to-r from-[#004BFA] to-blue-500 transition-all duration-300"
-                  style={{ width: `${((quizStep + 1) / WIZARD_QUESTIONS.length) * 100}%` }}
-                />
-              </div>
-
-              {/* İKİLİ GÖVDE: SOLDA SORU VE SEÇENEKLER (%64), SAĞDA CANLI TELEMETRİ / ETKİ (%36) */}
-              <div className="flex-1 overflow-y-auto flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-slate-100 dark:divide-white/10">
-                {/* SOL KOLON: SORU & SEÇENEK KARTLARI */}
-                <div className="w-full lg:w-[64%] p-5 sm:p-7 space-y-5">
+                {/* Soru & Seçenek Kartları (Kaydırılabilir Alan) */}
+                <div className="flex-1 overflow-y-auto p-5 sm:p-7 space-y-4 min-h-0">
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={`question-content-${quizStep}`}
@@ -918,97 +919,134 @@ export default function SamplePortfolioPage() {
                   </AnimatePresence>
                 </div>
 
-                {/* SAĞ KOLON: DİNAMİK AĞIRLIK DAĞILIMI (FİNAİ İMZA GRADYAN & AMBIENT ANİMASYON) */}
-                <div className="w-full lg:w-[36%] p-6 sm:p-8 bg-gradient-to-br from-[#02041A] via-[#040989] to-[#02041A] border-t lg:border-t-0 lg:border-l border-white/10 flex flex-col justify-center relative overflow-hidden text-white">
-                  {/* Ambient Arka Plan Işık Küreleri */}
-                  <div className="absolute -top-12 -right-12 w-48 h-48 bg-[#004BFA]/25 rounded-full blur-2xl pointer-events-none" />
-                  <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-[#5B80FF]/20 rounded-full blur-2xl pointer-events-none" />
+                {/* Sol Alt Bar: Geri (ve mobilde İleri) */}
+                <div className="px-5 sm:px-7 py-4 border-t border-slate-100 dark:border-white/10 flex items-center justify-between bg-slate-50/80 dark:bg-white/5 shrink-0">
+                  <button
+                    type="button"
+                    disabled={quizStep === 0}
+                    onClick={() => setQuizStep((prev) => Math.max(0, prev - 1))}
+                    className={`px-4 py-2 rounded-xl text-xs clash-subtitle font-[325] transition-colors cursor-pointer ${
+                      quizStep === 0
+                        ? "text-slate-300 dark:text-slate-600 cursor-not-allowed"
+                        : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10"
+                    }`}
+                  >
+                    Geri
+                  </button>
 
-                  <div className="relative z-10 space-y-6">
-                    <div className="flex items-center justify-between pb-3 border-b border-white/15">
-                      <span className="text-xs font-semibold tracking-wider uppercase text-blue-200">
-                        Dinamik Ağırlık Dağılımı
-                      </span>
-                      <span className="text-[11px] font-numbers text-blue-300/80">
-                        %100 Toplam
-                      </span>
-                    </div>
-
-                    {/* Canlı Dağılım Çubukları */}
-                    <div className="space-y-4">
-                      {/* BIST Hisse Senedi */}
-                      <div className="space-y-1.5">
-                        <div className="flex justify-between text-xs font-medium">
-                          <span className="text-slate-200">BIST Hisse Senedi</span>
-                          <span className="font-numbers text-[#5B80FF] font-semibold text-sm">
-                            %{currentTelemetry.macroWeights.stock}
-                          </span>
-                        </div>
-                        <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden p-0.5 border border-white/5">
-                          <div
-                            className="h-full rounded-full bg-gradient-to-r from-[#004BFA] to-[#5B80FF] transition-all duration-500 ease-out shadow-[0_0_12px_rgba(0,75,250,0.6)]"
-                            style={{ width: `${currentTelemetry.macroWeights.stock}%` }}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Sektör & Yatırım Fonları */}
-                      <div className="space-y-1.5">
-                        <div className="flex justify-between text-xs font-medium">
-                          <span className="text-slate-200">Sektör & Yatırım Fonları</span>
-                          <span className="font-numbers text-emerald-400 font-semibold text-sm">
-                            %{currentTelemetry.macroWeights.fund}
-                          </span>
-                        </div>
-                        <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden p-0.5 border border-white/5">
-                          <div
-                            className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500 ease-out shadow-[0_0_12px_rgba(16,185,129,0.6)]"
-                            style={{ width: `${currentTelemetry.macroWeights.fund}%` }}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Kıymetli Maden & Likit Kalkan */}
-                      <div className="space-y-1.5">
-                        <div className="flex justify-between text-xs font-medium">
-                          <span className="text-slate-200">Kıymetli Maden & Likit Kalkan</span>
-                          <span className="font-numbers text-amber-400 font-semibold text-sm">
-                            %{currentTelemetry.macroWeights.goldAndCash}
-                          </span>
-                        </div>
-                        <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden p-0.5 border border-white/5">
-                          <div
-                            className="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-500 ease-out shadow-[0_0_12px_rgba(245,158,11,0.6)]"
-                            style={{ width: `${currentTelemetry.macroWeights.goldAndCash}%` }}
-                          />
-                        </div>
-                      </div>
-                    </div>
+                  {/* Mobilde İleri Butonu */}
+                  <div className="lg:hidden flex items-center">
+                    {quizStep < WIZARD_QUESTIONS.length - 1 ? (
+                      <button
+                        type="button"
+                        onClick={() => setQuizStep((prev) => prev + 1)}
+                        className="px-5 py-2.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white font-medium text-xs sm:text-sm clash-subtitle shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <span>İleri ({quizStep + 1}/10)</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={handleSaveAndApply}
+                        className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#004BFA] to-blue-600 hover:opacity-95 text-white font-medium text-xs sm:text-sm clash-subtitle shadow-lg shadow-[#004BFA]/30 transition-all flex items-center gap-2 cursor-pointer"
+                      >
+                        <Sparkles className="w-4 h-4" />
+                        <span>Kaydet ve Uygula</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
 
-              {/* Modal Alt Bar: Geri, İleri / Tamamla */}
-              <div className="px-5 sm:px-7 py-4 border-t border-slate-100 dark:border-white/10 flex items-center justify-between bg-slate-50/80 dark:bg-white/5 shrink-0">
-                <button
-                  type="button"
-                  disabled={quizStep === 0}
-                  onClick={() => setQuizStep((prev) => Math.max(0, prev - 1))}
-                  className={`px-4 py-2 rounded-xl text-xs clash-subtitle font-[325] transition-colors cursor-pointer ${
-                    quizStep === 0
-                      ? "text-slate-300 dark:text-slate-600 cursor-not-allowed"
-                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10"
-                  }`}
-                >
-                  Geri
-                </button>
+              {/* SAĞ TARAF (%36): KESİNTİSİZ TAM BOY LACİVERT GRADYAN (ÜST VE ALT DAHİL) */}
+              <div className="w-full lg:w-[36%] bg-gradient-to-br from-[#02041A] via-[#040989] to-[#02041A] border-t lg:border-t-0 lg:border-l border-white/10 flex flex-col justify-between p-6 sm:p-7 relative overflow-hidden text-white shrink-0">
+                {/* Ambient Arka Plan Işık Küreleri */}
+                <div className="absolute -top-16 -right-16 w-56 h-56 bg-[#004BFA]/30 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-16 -left-16 w-56 h-56 bg-[#5B80FF]/25 rounded-full blur-3xl pointer-events-none" />
 
-                <div className="flex items-center gap-3">
+                {/* Sağ Üst Bar: Kapat (X) Butonu (Tamamen Lacivert Gradyan İçinde) */}
+                <div className="hidden lg:flex items-center justify-end relative z-10 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setIsQuizModalOpen(false)}
+                    className="p-1.5 rounded-xl bg-white/5 hover:bg-white/15 text-white/70 hover:text-white transition-colors cursor-pointer border border-white/10"
+                    title="Kapat"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {/* Sağ Orta: Dinamik Ağırlık Dağılımı (Dikey Olarak Mükemmel Ortalı) */}
+                <div className="relative z-10 my-auto py-6 space-y-6">
+                  <div className="flex items-center justify-between pb-3 border-b border-white/15">
+                    <span className="text-xs font-semibold tracking-wider uppercase text-blue-200">
+                      Dinamik Ağırlık Dağılımı
+                    </span>
+                    <span className="text-[11px] font-numbers text-blue-300/80">
+                      %100 Toplam
+                    </span>
+                  </div>
+
+                  {/* Canlı Dağılım Çubukları */}
+                  <div className="space-y-4">
+                    {/* BIST Hisse Senedi */}
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between text-xs font-medium">
+                        <span className="text-slate-200">BIST Hisse Senedi</span>
+                        <span className="font-numbers text-[#5B80FF] font-semibold text-sm">
+                          %{currentTelemetry.macroWeights.stock}
+                        </span>
+                      </div>
+                      <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden p-0.5 border border-white/5">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-[#004BFA] to-[#5B80FF] transition-all duration-500 ease-out shadow-[0_0_12px_rgba(0,75,250,0.6)]"
+                          style={{ width: `${currentTelemetry.macroWeights.stock}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Sektör & Yatırım Fonları */}
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between text-xs font-medium">
+                        <span className="text-slate-200">Sektör & Yatırım Fonları</span>
+                        <span className="font-numbers text-emerald-400 font-semibold text-sm">
+                          %{currentTelemetry.macroWeights.fund}
+                        </span>
+                      </div>
+                      <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden p-0.5 border border-white/5">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500 ease-out shadow-[0_0_12px_rgba(16,185,129,0.6)]"
+                          style={{ width: `${currentTelemetry.macroWeights.fund}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Kıymetli Maden & Likit Kalkan */}
+                    <div className="space-y-1.5">
+                      <div className="flex justify-between text-xs font-medium">
+                        <span className="text-slate-200">Kıymetli Maden & Likit Kalkan</span>
+                        <span className="font-numbers text-amber-400 font-semibold text-sm">
+                          %{currentTelemetry.macroWeights.goldAndCash}
+                        </span>
+                      </div>
+                      <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden p-0.5 border border-white/5">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-amber-500 to-yellow-400 transition-all duration-500 ease-out shadow-[0_0_12px_rgba(245,158,11,0.6)]"
+                          style={{ width: `${currentTelemetry.macroWeights.goldAndCash}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sağ Alt Bar: İleri / Uygula Butonu (Tamamen Lacivert Gradyan İçinde) */}
+                <div className="hidden lg:flex items-center justify-end relative z-10 shrink-0">
                   {quizStep < WIZARD_QUESTIONS.length - 1 ? (
                     <button
                       type="button"
                       onClick={() => setQuizStep((prev) => prev + 1)}
-                      className="px-5 py-2.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white font-medium text-xs sm:text-sm clash-subtitle shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
+                      className="w-full py-2.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white font-medium text-xs sm:text-sm clash-subtitle shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <span>İleri ({quizStep + 1}/10)</span>
                       <ChevronRight className="w-4 h-4" />
@@ -1017,7 +1055,7 @@ export default function SamplePortfolioPage() {
                     <button
                       type="button"
                       onClick={handleSaveAndApply}
-                      className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#004BFA] to-blue-600 hover:opacity-95 text-white font-medium text-xs sm:text-sm clash-subtitle shadow-lg shadow-[#004BFA]/30 transition-all flex items-center gap-2 cursor-pointer"
+                      className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#004BFA] to-blue-600 hover:opacity-95 text-white font-medium text-xs sm:text-sm clash-subtitle shadow-lg shadow-[#004BFA]/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <Sparkles className="w-4 h-4" />
                       <span>Kaydet ve Modeli Uygula</span>
