@@ -129,8 +129,10 @@ export default function SamplePortfolioPage() {
     }));
   }, [currentTelemetry, recommendedStrategy, financialLiteracyLevel, DISTRIBUTION_COLORS]);
 
-  const RADIUS = 34;
-  const CIRCUMFERENCE = 2 * Math.PI * RADIUS; // ~213.628
+  const RADIUS = 32;
+  const CIRCUMFERENCE = 2 * Math.PI * RADIUS; // ~201.06
+  const RADIUS_OUTER = 44;
+  const CIRCUMFERENCE_OUTER = 2 * Math.PI * RADIUS_OUTER; // ~276.46
   let cumulativeOffset = 0;
 
   const displayName = userName || (email ? email.split("@")[0] : "Salih KAVAKCI");
@@ -318,58 +320,116 @@ export default function SamplePortfolioPage() {
                   Çok Katmanlı Hedef Varlık Dağılımı
                 </h3>
               </div>
-
-              {/* 3 Ana Varlık Sınıfı Özeti */}
-              <div className="flex items-center gap-2 text-[10px] clash-subtitle font-[325]">
-                <span className="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                  Hisse: %{currentTelemetry.macroWeights.stock}
-                </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                  Fon: %{currentTelemetry.macroWeights.fund}
-                </span>
-                <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
-                  Altın: %{currentTelemetry.macroWeights.goldAndCash}
-                </span>
-              </div>
             </div>
 
             {/* Donut Grafik ve Liste */}
             <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 my-auto py-4">
-              {/* Donut SVG */}
-              <div className="relative w-36 h-36 sm:w-44 sm:h-44 shrink-0 flex items-center justify-center">
-                <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90 filter drop-shadow-xs">
-                  {distributionItems.map((item) => {
-                    const strokeLength = (item.percentage / 100) * CIRCUMFERENCE;
-                    const strokeDasharray = `${strokeLength} ${CIRCUMFERENCE - strokeLength}`;
-                    const strokeDashoffset = -cumulativeOffset;
-                    cumulativeOffset += strokeLength;
+              {/* Donut SVG ve Dış Sınıf Göstergeleri */}
+              <div className="flex flex-col items-center shrink-0">
+                <div className="relative w-36 h-36 sm:w-44 sm:h-44 shrink-0 flex items-center justify-center">
+                  <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90 filter drop-shadow-xs">
+                    {/* İÇ HALKA: Varlık Dilimleri */}
+                    {distributionItems.map((item) => {
+                      const strokeLength = (item.percentage / 100) * CIRCUMFERENCE;
+                      const strokeDasharray = `${strokeLength} ${CIRCUMFERENCE - strokeLength}`;
+                      const strokeDashoffset = -cumulativeOffset;
+                      cumulativeOffset += strokeLength;
 
-                    const isHovered = hoveredSymbol === item.name;
+                      const isHovered = hoveredSymbol === item.name;
 
-                    return (
-                      <circle
-                        key={item.name}
-                        cx="50"
-                        cy="50"
-                        r={RADIUS}
-                        fill="none"
-                        stroke={item.color}
-                        strokeWidth={isHovered ? 12 : 9}
-                        strokeDasharray={strokeDasharray}
-                        strokeDashoffset={strokeDashoffset}
-                        style={{ transition: "stroke-width 200ms ease-out" }}
-                      />
-                    );
-                  })}
-                </svg>
+                      return (
+                        <circle
+                          key={item.name}
+                          cx="50"
+                          cy="50"
+                          r={RADIUS}
+                          fill="none"
+                          stroke={item.color}
+                          strokeWidth={isHovered ? 11 : 8}
+                          strokeDasharray={strokeDasharray}
+                          strokeDashoffset={strokeDashoffset}
+                          style={{ transition: "stroke-width 200ms ease-out" }}
+                        />
+                      );
+                    })}
 
-                {/* Donut İçi Bilgi */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none px-1">
-                  <span className="text-[10px] clash-desc font-[225] text-[#040989]/70 dark:text-[#F5F7FA]/70 leading-tight">
-                    Tam Sepet
+                    {/* DIŞ ÇİZGİLER: Hisse, Fon ve Kıymetli Madenler Bölgesi */}
+                    {(() => {
+                      const stockW = currentTelemetry.macroWeights.stock;
+                      const fundW = currentTelemetry.macroWeights.fund;
+                      const goldW = currentTelemetry.macroWeights.goldAndCash;
+
+                      const stockLen = (stockW / 100) * CIRCUMFERENCE_OUTER;
+                      const fundLen = (fundW / 100) * CIRCUMFERENCE_OUTER;
+                      const goldLen = (goldW / 100) * CIRCUMFERENCE_OUTER;
+
+                      return (
+                        <>
+                          {stockW > 0 && (
+                            <circle
+                              cx="50"
+                              cy="50"
+                              r={RADIUS_OUTER}
+                              fill="none"
+                              stroke="#004BFA"
+                              strokeWidth={2.5}
+                              strokeDasharray={`${Math.max(0, stockLen - 2)} ${CIRCUMFERENCE_OUTER}`}
+                              strokeDashoffset={0}
+                            />
+                          )}
+                          {fundW > 0 && (
+                            <circle
+                              cx="50"
+                              cy="50"
+                              r={RADIUS_OUTER}
+                              fill="none"
+                              stroke="#10B981"
+                              strokeWidth={2.5}
+                              strokeDasharray={`${Math.max(0, fundLen - 2)} ${CIRCUMFERENCE_OUTER}`}
+                              strokeDashoffset={-stockLen}
+                            />
+                          )}
+                          {goldW > 0 && (
+                            <circle
+                              cx="50"
+                              cy="50"
+                              r={RADIUS_OUTER}
+                              fill="none"
+                              stroke="#F59E0B"
+                              strokeWidth={2.5}
+                              strokeDasharray={`${Math.max(0, goldLen - 2)} ${CIRCUMFERENCE_OUTER}`}
+                              strokeDashoffset={-(stockLen + fundLen)}
+                            />
+                          )}
+                        </>
+                      );
+                    })()}
+                  </svg>
+
+                  {/* Donut İçi Bilgi */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none px-1">
+                    <span className="text-[10px] clash-desc font-[225] text-[#040989]/70 dark:text-[#F5F7FA]/70 leading-tight">
+                      Tam Sepet
+                    </span>
+                    <span className="text-sm sm:text-base font-numbers font-medium text-[#040989] dark:text-[#F5F7FA] tracking-tight mt-0.5">
+                      %100
+                    </span>
+                  </div>
+                </div>
+
+                {/* Dış Çizgi Açıklama Göstergeleri */}
+                <div className="flex flex-wrap items-center justify-center gap-2 mt-2 text-[10px] font-medium">
+                  <span className="flex items-center gap-1 text-[#004BFA] dark:text-[#5B80FF]">
+                    <span className="w-2 h-0.5 rounded-full bg-[#004BFA]" />
+                    Hisseler (%{currentTelemetry.macroWeights.stock})
                   </span>
-                  <span className="text-sm sm:text-base font-numbers font-medium text-[#040989] dark:text-[#F5F7FA] tracking-tight mt-0.5">
-                    %100
+                  <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
+                    <span className="w-2 h-0.5 rounded-full bg-emerald-600" />
+                    Fonlar (%{currentTelemetry.macroWeights.fund})
+                  </span>
+                  <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
+                    <span className="w-2 h-0.5 rounded-full bg-amber-600" />
+                    Kıymetli Madenler (%{currentTelemetry.macroWeights.goldAndCash})
                   </span>
                 </div>
               </div>
@@ -397,9 +457,6 @@ export default function SamplePortfolioPage() {
                       </div>
 
                       <div className="flex items-center gap-1.5 shrink-0 ml-1">
-                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-white/10 text-slate-500 dark:text-slate-400 font-mono">
-                          {item.group === 'BIST_HISSE' ? 'Hisse' : item.group === 'BYF_FON' ? 'Fon' : 'Emtia'}
-                        </span>
                         <span className="text-xs font-numbers font-medium text-[#040989] dark:text-[#F5F7FA] tabular-nums">
                           %{item.percentage}
                         </span>
@@ -408,20 +465,6 @@ export default function SamplePortfolioPage() {
                   );
                 })}
               </div>
-            </div>
-
-            <div className="pt-3 border-t border-[#D6E4FF]/50 dark:border-white/10 flex items-center justify-between text-[11px] clash-desc font-[225] text-[#040989]/70 dark:text-[#F5F7FA]/70">
-              <span>Hisse (%{currentTelemetry.macroWeights.stock}) + Fon (%{currentTelemetry.macroWeights.fund}) + Altın (%{currentTelemetry.macroWeights.goldAndCash})</span>
-              <button
-                onClick={() => {
-                  setQuizStep(0);
-                  setIsQuizModalOpen(true);
-                }}
-                className="text-[#004BFA] dark:text-[#5B80FF] clash-subtitle font-[325] hover:underline flex items-center gap-1"
-              >
-                <span>Yeniden Kalibre Et</span>
-                <ChevronRight className="w-3 h-3" />
-              </button>
             </div>
           </div>
 
@@ -536,7 +579,7 @@ export default function SamplePortfolioPage() {
         </div>
 
         {/* ----------------------------------------------------------------------------------- */}
-        {/* BÖLÜM 2: GELECEK KAZANÇ & BİLEŞİK GETİRİ SİMÜLATÖRÜ (10. Soru Entegrasyonu) */}
+        {/* BÖLÜM 2: GELECEK KAZANÇ & BİLEŞİK GETİRİ SİMÜLATÖRÜ */}
         {/* ----------------------------------------------------------------------------------- */}
         <div className="bg-white dark:bg-[#040989]/40 border border-[#D6E4FF]/60 dark:border-white/10 rounded-2xl min-[360px]:rounded-3xl p-5 sm:p-7 shadow-sm space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#D6E4FF]/50 dark:border-white/10">
@@ -549,163 +592,57 @@ export default function SamplePortfolioPage() {
                   Gelecek Kazanç & Bileşik Getiri Simülatörü
                 </h3>
               </div>
-              <p className="text-xs clash-desc font-[225] text-[#040989]/70 dark:text-[#F5F7FA]/70 mt-1">
-                10. soruda belirlediğiniz <strong>{currentTelemetry.projection.monthlyContribution.toLocaleString('tr-TR')} ₺ / Ay</strong> düzenli tasarruf planınıza göre bileşik getiri projeksiyonu
-              </p>
-            </div>
-
-            {/* 3 Senaryo Seçici */}
-            <div className="flex items-center bg-[#F5F7FA] dark:bg-white/5 p-1 rounded-xl border border-[#D6E4FF]/60 dark:border-white/10 self-start sm:self-auto">
-              <button
-                onClick={() => setActiveScenario('median')}
-                className={`px-3 py-1.5 rounded-lg text-xs clash-subtitle font-[325] transition-all ${
-                  activeScenario === 'median'
-                    ? 'bg-[#004BFA] text-white shadow-xs'
-                    : 'text-[#040989]/70 dark:text-[#F5F7FA]/70 hover:text-[#004BFA]'
-                }`}
-              >
-                Reel Medyan (%46.5)
-              </button>
-              <button
-                onClick={() => setActiveScenario('average')}
-                className={`px-3 py-1.5 rounded-lg text-xs clash-subtitle font-[325] transition-all ${
-                  activeScenario === 'average'
-                    ? 'bg-[#004BFA] text-white shadow-xs'
-                    : 'text-[#040989]/70 dark:text-[#F5F7FA]/70 hover:text-[#004BFA]'
-                }`}
-              >
-                İyimser Boğa (%65.0)
-              </button>
-              <button
-                onClick={() => setActiveScenario('conservative')}
-                className={`px-3 py-1.5 rounded-lg text-xs clash-subtitle font-[325] transition-all ${
-                  activeScenario === 'conservative'
-                    ? 'bg-[#004BFA] text-white shadow-xs'
-                    : 'text-[#040989]/70 dark:text-[#F5F7FA]/70 hover:text-[#004BFA]'
-                }`}
-              >
-                Korumacı Taban (%38.0)
-              </button>
             </div>
           </div>
 
-          {/* 3 Projeksiyon Kartı: 1 Yıl, 3 Yıl, 5 Yıl */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* 1 Yıl */}
-            <div className="bg-gradient-to-br from-blue-50/70 via-white to-transparent dark:from-white/5 dark:via-transparent dark:to-transparent border border-[#004BFA]/20 rounded-2xl p-5 space-y-3 relative overflow-hidden">
-              <div className="flex items-center justify-between">
-                <span className="text-xs clash-subtitle font-[325] text-[#004BFA] dark:text-[#5B80FF] uppercase tracking-wider">
-                  1 Yıl Sonunda (12 Ay)
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 dark:bg-white/10 text-blue-700 dark:text-blue-300 font-mono">
-                  12 Taksit
-                </span>
-              </div>
-
-              <div>
-                <span className="text-xs clash-desc font-[225] text-slate-500">Tahmini Toplam Portföy:</span>
-                <div className="text-2xl font-numbers font-bold text-[#040989] dark:text-[#F5F7FA] mt-0.5">
-                  {activeProjectionScenario.year1.total.toLocaleString('tr-TR')} ₺
-                </div>
-              </div>
-
-              <div className="pt-3 border-t border-slate-200/60 dark:border-white/10 space-y-1.5 text-xs">
+          {/* 6 Projeksiyon Kartı: 1 Ay, 3 Ay, 6 Ay, 1 Yıl, 3 Yıl, 5 Yıl */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { title: "1 Ay Sonunda", data: activeProjectionScenario.month1, border: "border-blue-500/20", text: "text-blue-600 dark:text-blue-400", bg: "from-blue-50/70" },
+              { title: "3 Ay Sonunda", data: activeProjectionScenario.month3, border: "border-cyan-500/20", text: "text-cyan-600 dark:text-cyan-400", bg: "from-cyan-50/70" },
+              { title: "6 Ay Sonunda", data: activeProjectionScenario.month6, border: "border-teal-500/20", text: "text-teal-600 dark:text-teal-400", bg: "from-teal-50/70" },
+              { title: "1 Yıl Sonunda", data: activeProjectionScenario.year1, border: "border-indigo-500/20", text: "text-indigo-600 dark:text-indigo-400", bg: "from-indigo-50/70" },
+              { title: "3 Yıl Sonunda", data: activeProjectionScenario.year3, border: "border-violet-500/20", text: "text-violet-600 dark:text-violet-400", bg: "from-violet-50/70" },
+              { title: "5 Yıl Sonunda", data: activeProjectionScenario.year5, border: "border-emerald-500/25", text: "text-emerald-600 dark:text-emerald-400", bg: "from-emerald-50/70" },
+            ].map((card, idx) => (
+              <div 
+                key={idx}
+                className={`bg-gradient-to-br ${card.bg} via-white to-transparent dark:from-white/5 dark:via-transparent dark:to-transparent border ${card.border} rounded-2xl p-5 space-y-3 relative overflow-hidden`}
+              >
                 <div className="flex items-center justify-between">
-                  <span className="clash-desc font-[225] text-slate-500">Cebinizden Çıkan Anapara:</span>
-                  <span className="font-numbers font-medium text-slate-700 dark:text-slate-200">
-                    {activeProjectionScenario.year1.principal.toLocaleString('tr-TR')} ₺
+                  <span className={`text-xs clash-subtitle font-[325] ${card.text} uppercase tracking-wider`}>
+                    {card.title}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 font-medium">
-                  <span className="clash-desc font-[225]">Bileşik Kazanç (Kâr):</span>
-                  <span className="font-numbers">
-                    +{activeProjectionScenario.year1.profit.toLocaleString('tr-TR')} ₺
-                  </span>
+
+                <div>
+                  <span className="text-xs clash-desc font-[225] text-slate-500">Tahmini Toplam Portföy:</span>
+                  <div className={`text-2xl font-numbers font-bold ${card.text} mt-0.5`}>
+                    {card.data.total.toLocaleString('tr-TR')} ₺
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-slate-200/60 dark:border-white/10 space-y-1.5 text-xs">
+                  <div className="flex items-center justify-between">
+                    <span className="clash-desc font-[225] text-slate-500">Cebinizden Çıkan Anapara:</span>
+                    <span className="font-numbers font-medium text-slate-700 dark:text-slate-200">
+                      {card.data.principal.toLocaleString('tr-TR')} ₺
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 font-medium">
+                    <span className="clash-desc font-[225]">Bileşik Kazanç (Kâr):</span>
+                    <span className="font-numbers">
+                      +{card.data.profit.toLocaleString('tr-TR')} ₺
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            {/* 3 Yıl */}
-            <div className="bg-gradient-to-br from-indigo-50/70 via-white to-transparent dark:from-white/5 dark:via-transparent dark:to-transparent border border-indigo-500/25 rounded-2xl p-5 space-y-3 relative overflow-hidden">
-              <div className="flex items-center justify-between">
-                <span className="text-xs clash-subtitle font-[325] text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">
-                  3 Yıl Sonunda (36 Ay)
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-100 dark:bg-white/10 text-indigo-700 dark:text-indigo-300 font-mono">
-                  36 Taksit
-                </span>
-              </div>
-
-              <div>
-                <span className="text-xs clash-desc font-[225] text-slate-500">Tahmini Toplam Portföy:</span>
-                <div className="text-2xl font-numbers font-bold text-indigo-600 dark:text-indigo-400 mt-0.5">
-                  {activeProjectionScenario.year3.total.toLocaleString('tr-TR')} ₺
-                </div>
-              </div>
-
-              <div className="pt-3 border-t border-slate-200/60 dark:border-white/10 space-y-1.5 text-xs">
-                <div className="flex items-center justify-between">
-                  <span className="clash-desc font-[225] text-slate-500">Cebinizden Çıkan Anapara:</span>
-                  <span className="font-numbers font-medium text-slate-700 dark:text-slate-200">
-                    {activeProjectionScenario.year3.principal.toLocaleString('tr-TR')} ₺
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 font-medium">
-                  <span className="clash-desc font-[225]">Bileşik Kazanç (Kâr):</span>
-                  <span className="font-numbers">
-                    +{activeProjectionScenario.year3.profit.toLocaleString('tr-TR')} ₺
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* 5 Yıl */}
-            <div className="bg-gradient-to-br from-emerald-50/70 via-white to-transparent dark:from-white/5 dark:via-transparent dark:to-transparent border border-emerald-500/25 rounded-2xl p-5 space-y-3 relative overflow-hidden">
-              <div className="flex items-center justify-between">
-                <span className="text-xs clash-subtitle font-[325] text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
-                  5 Yıl Sonunda (60 Ay)
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-white/10 text-emerald-700 dark:text-emerald-300 font-mono">
-                  Bileşik Güç
-                </span>
-              </div>
-
-              <div>
-                <span className="text-xs clash-desc font-[225] text-slate-500">Tahmini Toplam Portföy:</span>
-                <div className="text-2xl font-numbers font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
-                  {activeProjectionScenario.year5.total.toLocaleString('tr-TR')} ₺
-                </div>
-              </div>
-
-              <div className="pt-3 border-t border-slate-200/60 dark:border-white/10 space-y-1.5 text-xs">
-                <div className="flex items-center justify-between">
-                  <span className="clash-desc font-[225] text-slate-500">Cebinizden Çıkan Anapara:</span>
-                  <span className="font-numbers font-medium text-slate-700 dark:text-slate-200">
-                    {activeProjectionScenario.year5.principal.toLocaleString('tr-TR')} ₺
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 font-medium">
-                  <span className="clash-desc font-[225]">Bileşik Kazanç (Kâr):</span>
-                  <span className="font-numbers">
-                    +{activeProjectionScenario.year5.profit.toLocaleString('tr-TR')} ₺
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 flex items-center justify-between text-xs clash-desc font-[225] text-slate-600 dark:text-slate-300">
-            <div className="flex items-center gap-2">
-              <HelpCircle className="w-4 h-4 text-[#004BFA] shrink-0" />
-              <span>
-                Simülasyon, portföyünüzdeki BIST hisselerinin ve BYF fonlarının reel <strong>Medyan Getiri</strong> eğrileri ve bileşik getiri faiziyle (FV = PMT × [((1+r)^n - 1) / r]) hesaplanmıştır.
-              </span>
-            </div>
+            ))}
           </div>
         </div>
 
         {/* ----------------------------------------------------------------------------------- */}
-        {/* BÖLÜM 3: SEKTÖREL VE FON GETİRİ MATRİSİ (Reel Veriler: 1A, 3A, 6A, 1Y, 5Y) */}
+        {/* BÖLÜM 3: PİYASA GETİRİ PERFORMANSLARI */}
         {/* ----------------------------------------------------------------------------------- */}
         <div className="bg-white dark:bg-[#040989]/40 border border-[#D6E4FF]/60 dark:border-white/10 rounded-2xl min-[360px]:rounded-3xl p-5 sm:p-7 shadow-sm space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -715,15 +652,15 @@ export default function SamplePortfolioPage() {
                   <BarChart3 className="w-4 h-4" />
                 </div>
                 <h3 className="text-sm sm:text-base clash-title font-[500] text-[#040989] dark:text-[#F5F7FA]">
-                  Reel Sektör & Fon Getiri Matrisi (Medyan Analizleri)
+                  Piyasa Getiri Performansları
                 </h3>
               </div>
               <p className="text-xs clash-desc font-[225] text-[#040989]/70 dark:text-[#F5F7FA]/70 mt-0.5">
-                Varlık sayfasındaki 625 BIST hissesinin ve 38 Borsa Yatırım Fonunun dönemlik reel performansları
+                BIST sektörleri ve fon kategorilerinin dönemlik getiri oranları
               </p>
             </div>
 
-            {/* Tab Değiştirici: BIST Sektörleri vs BYF Fonları */}
+            {/* Tab Değiştirici: Hisseler vs Fonlar */}
             <div className="flex items-center bg-[#F5F7FA] dark:bg-white/5 p-1 rounded-xl border border-[#D6E4FF]/60 dark:border-white/10">
               <button
                 onClick={() => setActiveMatrixTab('sectors')}
@@ -733,7 +670,7 @@ export default function SamplePortfolioPage() {
                     : 'text-[#040989]/70 dark:text-[#F5F7FA]/70 hover:text-[#004BFA]'
                 }`}
               >
-                BIST Sektörleri (625 Hisse)
+                Hisseler
               </button>
               <button
                 onClick={() => setActiveMatrixTab('funds')}
@@ -743,7 +680,7 @@ export default function SamplePortfolioPage() {
                     : 'text-[#040989]/70 dark:text-[#F5F7FA]/70 hover:text-[#004BFA]'
                 }`}
               >
-                BYF Fon Türleri (38 Fon)
+                Fonlar
               </button>
             </div>
           </div>
@@ -752,7 +689,7 @@ export default function SamplePortfolioPage() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-[#D6E4FF]/60 dark:border-white/10 text-[11px] clash-subtitle font-[325] text-[#040989]/60 dark:text-[#F5F7FA]/60 uppercase tracking-wider">
-                  <th className="py-2.5 px-3">{activeMatrixTab === 'sectors' ? 'BIST Sektörü' : 'Fon Türü / Kodu'}</th>
+                  <th className="py-2.5 px-3">{activeMatrixTab === 'sectors' ? 'BIST Sektörü' : 'Fon Türü'}</th>
                   <th className="py-2.5 px-3">Kapsam</th>
                   <th className="py-2.5 px-3 text-right">1 Aylık</th>
                   <th className="py-2.5 px-3 text-right">3 Aylık</th>
@@ -791,15 +728,8 @@ export default function SamplePortfolioPage() {
                 ) : (
                   BYF_FUNDS_MEDIAN.map((f, idx) => (
                     <tr key={idx} className="hover:bg-[#D6E4FF]/20 dark:hover:bg-white/5 transition-colors">
-                      <td className="py-2.5 px-3">
-                        <div className="flex items-center gap-2">
-                          <span className="px-2 py-0.5 rounded bg-blue-100 dark:bg-white/10 text-[#004BFA] dark:text-[#93C5FD] font-mono font-bold text-[11px]">
-                            {f.code}
-                          </span>
-                          <span className="font-medium text-[#040989] dark:text-[#F5F7FA] truncate max-w-xs">
-                            {f.name}
-                          </span>
-                        </div>
+                      <td className="py-2.5 px-3 font-medium text-[#040989] dark:text-[#F5F7FA]">
+                        {f.name}
                       </td>
                       <td className="py-2.5 px-3 text-slate-500">
                         Risk: {f.riskValue}/7
@@ -827,238 +757,327 @@ export default function SamplePortfolioPage() {
           </div>
         </div>
 
-        {/* ----------------------------------------------------------------------------------- */}
-        {/* BÖLÜM 4: DETAYLI DAĞILIM VE TEMSİLİ ENSTRÜMAN TABLOSU */}
-        {/* ----------------------------------------------------------------------------------- */}
-        <div className="bg-white dark:bg-[#040989]/40 border border-[#D6E4FF]/60 dark:border-white/10 rounded-2xl min-[360px]:rounded-3xl p-5 sm:p-6 shadow-xs space-y-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-sm sm:text-base clash-title font-[500] text-[#040989] dark:text-[#F5F7FA]">
-                Hedef Varlık Grupları ve Temsili Örnekler
-              </h3>
-              <p className="text-xs clash-desc font-[225] text-[#040989]/70 dark:text-[#F5F7FA]/70">
-                Portföyünüzdeki her varlık grubunun stratejik ağırlığı ve hedef fonksiyonu
-              </p>
-            </div>
-            <span className="text-xs clash-subtitle font-[325] px-2.5 py-1 rounded-lg bg-[#D6E4FF]/40 text-[#004BFA] dark:text-[#F5F7FA]">
-              {distributionItems.length} Dilim
-            </span>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-[#D6E4FF]/60 dark:border-white/10 text-[11px] clash-subtitle font-[325] text-[#040989]/60 dark:text-[#F5F7FA]/60 uppercase tracking-wider">
-                  <th className="py-2.5 px-3">Varlık Sınıfı</th>
-                  <th className="py-2.5 px-3">Hedef Ağırlık</th>
-                  <th className="py-2.5 px-3">Temsili Örnekler</th>
-                  <th className="py-2.5 px-3">Stratejik Fonksiyonu</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#D6E4FF]/40 dark:divide-white/5 text-xs">
-                {distributionItems.map((item, idx) => {
-                  const matchingInstruments = currentTelemetry.instruments?.filter(
-                    inst => (inst.category as string) === (item.category as string) || inst.name.includes(item.shortName) || item.name.includes(inst.symbol)
-                  );
-
-                  return (
-                    <tr key={idx} className="hover:bg-[#D6E4FF]/20 dark:hover:bg-white/5 transition-colors">
-                      <td className="py-3.5 px-3">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
-                          <span className="clash-subtitle font-[325] text-[#040989] dark:text-[#F5F7FA]">
-                            {item.name}
-                          </span>
-                        </div>
-                      </td>
-
-                      <td className="py-3.5 px-3">
-                        <div className="flex items-center gap-2">
-                          <div className="w-16 h-1.5 bg-[#D6E4FF]/50 dark:bg-white/10 rounded-full overflow-hidden">
-                            <div 
-                              className="h-full rounded-full" 
-                              style={{ width: `${item.percentage}%`, backgroundColor: item.color }}
-                            />
-                          </div>
-                          <span className="font-numbers font-medium text-[#040989] dark:text-[#F5F7FA]">
-                            %{item.percentage}
-                          </span>
-                        </div>
-                      </td>
-
-                      <td className="py-3.5 px-3">
-                        <div className="flex flex-wrap gap-1">
-                          {matchingInstruments && matchingInstruments.length > 0 ? (
-                            matchingInstruments.map((m, mIdx) => (
-                              <span
-                                key={mIdx}
-                                className="px-2 py-0.5 rounded-md bg-[#F5F7FA] dark:bg-white/10 border border-[#D6E4FF]/60 dark:border-white/20 text-[10px] clash-subtitle font-[325] text-[#040989] dark:text-[#F5F7FA]"
-                              >
-                                {m.symbol}
-                              </span>
-                            ))
-                          ) : (
-                            <span className="text-[10px] text-slate-400">Piyasa Sektör Hisseleri / Fonları</span>
-                          )}
-                        </div>
-                      </td>
-
-                      <td className="py-3.5 px-3 text-[#040989]/80 dark:text-[#F5F7FA]/80 clash-desc font-[225]">
-                        {item.name.includes("Altın") 
-                          ? "Enflasyon ve kur şoklarına karşı güvenli liman koruması"
-                          : item.name.includes("Likit") || item.name.includes("TLREF")
-                          ? "Yıllık %45+ risksiz kupon getirisi ve fırsat alımı likidite tamponu"
-                          : item.name.includes("Teknoloji")
-                          ? "Yüksek çarpanlı büyüme ve teknolojik katma değer"
-                          : item.name.includes("Temettü")
-                          ? "Düzenli kâr payı nakit akışı ve köklü şirket ortaklığı"
-                          : "Piyasa liderliği ve sürdürülebilir sermaye kazancı"}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
       </div>
 
       {/* ----------------------------------------------------------------------------------- */}
-      {/* İNTERAKTİF 10 SORULUK KALİBRASYON TESTİ MODALI (WIZARD OVERLAY) */}
+      {/* İNTERAKTİF 10 SORULUK KALİBRASYON TESTİ: FİNAİ AKADEMİ MODELİ */}
+      {/* (FinAi İmza Gradyanı, Ambient Işıma, SVG Trend Dalgası & Yaylanmalı İkili Panel) */}
       {/* ----------------------------------------------------------------------------------- */}
       <AnimatePresence>
         {isQuizModalOpen && currentModalQuestion && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 lg:p-8 overflow-y-auto">
+            {/* 1. FinAi İmza Gradyanlı Arka Plan Katmanı (Akademi ile Birebir) */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              transition={{ duration: 0.2 }}
-              className="w-full max-w-2xl bg-white dark:bg-[#02041A] rounded-3xl border border-[#D6E4FF] dark:border-white/15 shadow-2xl overflow-hidden flex flex-col font-clash"
+              key="quiz-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.35 }}
+              onClick={() => setIsQuizModalOpen(false)}
+              className="fixed inset-0 bg-gradient-to-br from-[#02041A] via-[#040989] to-[#02041A] overflow-hidden cursor-pointer"
             >
-              {/* Modal Üst Bar */}
-              <div className="px-5 sm:px-7 py-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-[#004BFA]/10 flex items-center justify-center text-[#004BFA] dark:text-[#D6E4FF]">
-                    <Sliders className="w-4 h-4" />
-                  </div>
+              {/* Ambient Background Gradient Circles */}
+              <div className="absolute -top-24 -right-24 w-96 h-96 sm:w-[540px] sm:h-[540px] bg-[#004BFA]/20 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -bottom-24 -left-24 w-96 h-96 sm:w-[540px] sm:h-[540px] bg-[#004BFA]/20 rounded-full blur-3xl pointer-events-none" />
+
+              {/* Subtle SVG Wave Background (Toplam Varlık Trend Çizgisi) */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
+                <svg viewBox="0 0 500 160" className="w-full h-full" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="quizHeroWave" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stopColor="#004BFA" stopOpacity="0.2" />
+                      <stop offset="50%" stopColor="#5B80FF" stopOpacity="0.6" />
+                      <stop offset="100%" stopColor="#5B80FF" stopOpacity="0.95" />
+                    </linearGradient>
+                  </defs>
+                  <path
+                    d="M 0,118 C 60,130 90,125 140,112 C 190,99 220,118 270,103 C 320,88 360,95 400,72 C 430,55 465,38 500,24"
+                    fill="none"
+                    stroke="url(#quizHeroWave)"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  />
+                  <circle cx="499" cy="24" r="4" fill="#5B80FF" opacity="1" className="animate-pulse" />
+                </svg>
+              </div>
+            </motion.div>
+
+            {/* 2. HAREKETLİ BEYAZ KALİBRASYON KARTI (YAYLANMALI MERKEZE UÇUŞ) */}
+            <motion.div
+              key="quiz-card-container"
+              initial={{ opacity: 0, scale: 0.9, y: 24 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 24 }}
+              transition={{
+                type: "spring",
+                stiffness: 110,
+                damping: 18,
+                mass: 0.85
+              }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative z-10 w-full max-w-5xl xl:max-w-6xl max-h-[92vh] bg-white dark:bg-[#02041A] rounded-3xl border border-white/20 dark:border-white/15 shadow-2xl overflow-hidden flex flex-col font-clash ring-1 ring-white/10 my-auto"
+            >
+              {/* Modal Üst Bar: Logo, Başlık, 10 Adımlı İlerleme Hapları & Kapat */}
+              <div className="px-5 sm:px-7 py-4 border-b border-slate-100 dark:border-white/10 flex items-center justify-between gap-4 flex-wrap bg-white dark:bg-[#02041A] shrink-0">
+                <div className="flex items-center gap-3">
+                  <img src="/icon.png" alt="FinAi" className="w-8 h-8 object-contain shrink-0" />
                   <div>
-                    <h3 className="text-xs sm:text-sm clash-title font-[500] text-[#040989] dark:text-[#F5F7FA]">
+                    <h3 className="text-sm sm:text-base clash-title font-[500] text-[#040989] dark:text-[#F5F7FA]">
                       FinAi 10 Aşamalı Portföy Kalibrasyonu
                     </h3>
-                    <span className="text-[10px] clash-desc font-[225] text-slate-400">
-                      Adım {quizStep + 1} / {WIZARD_QUESTIONS.length}
+                    <span className="text-[11px] clash-desc font-[225] text-slate-400 block">
+                      Kişiselleştirilmiş BIST Model Portföy & Dağılım Motoru
                     </span>
                   </div>
                 </div>
 
+                {/* Akademi Tarzı 10 Aşamalı İlerleme Bölmeleri (Step Pills) */}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  {WIZARD_QUESTIONS.map((q, idx) => {
+                    const isDone = Boolean(answers[q.id]);
+                    const isCurrent = idx === quizStep;
+                    return (
+                      <button
+                        key={q.id}
+                        type="button"
+                        onClick={() => setQuizStep(idx)}
+                        className={`h-2 rounded-full transition-all cursor-pointer ${
+                          isCurrent
+                            ? "w-8 bg-[#004BFA]"
+                            : isDone
+                            ? "w-4 bg-emerald-500"
+                            : "w-3 bg-slate-200 dark:bg-white/10 hover:bg-slate-300 dark:hover:bg-white/20"
+                        }`}
+                        title={`Adım ${idx + 1}: ${q.category}`}
+                      />
+                    );
+                  })}
+                </div>
+
                 <button
+                  type="button"
                   onClick={() => setIsQuizModalOpen(false)}
-                  className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/10 text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors"
+                  className="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-white/10 text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer ml-auto"
+                  title="Kapat"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
               {/* İlerleme Çizgisi */}
-              <div className="w-full h-1 bg-slate-100 dark:bg-white/5">
+              <div className="w-full h-1 bg-slate-100 dark:bg-white/5 shrink-0">
                 <div
-                  className="h-full bg-[#004BFA] transition-all duration-300"
+                  className="h-full bg-gradient-to-r from-[#004BFA] to-blue-500 transition-all duration-300"
                   style={{ width: `${((quizStep + 1) / WIZARD_QUESTIONS.length) * 100}%` }}
                 />
               </div>
 
-              {/* Soru İçeriği */}
-              <div className="p-5 sm:p-7 space-y-5 overflow-y-auto max-h-[70vh]">
-                <div className="space-y-1">
-                  <span className="text-[10px] clash-subtitle font-[325] text-[#004BFA] dark:text-[#5B80FF] uppercase tracking-wider block">
-                    {currentModalQuestion.category}
-                  </span>
-                  <h4 className="text-base sm:text-lg clash-title font-[500] text-[#040989] dark:text-[#F5F7FA] leading-snug">
-                    {currentModalQuestion.title}
-                  </h4>
-                  <p className="text-xs clash-desc font-[225] text-slate-500 dark:text-slate-400">
-                    {currentModalQuestion.contextExplanation}
-                  </p>
+              {/* İKİLİ GÖVDE: SOLDA SORU VE SEÇENEKLER (%64), SAĞDA CANLI TELEMETRİ / ETKİ (%36) */}
+              <div className="flex-1 overflow-y-auto flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-slate-100 dark:divide-white/10">
+                {/* SOL KOLON: SORU & SEÇENEK KARTLARI */}
+                <div className="w-full lg:w-[64%] p-5 sm:p-7 space-y-5">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={`question-content-${quizStep}`}
+                      initial={{ opacity: 0, x: -16 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 16 }}
+                      transition={{ duration: 0.25, ease: "easeOut" }}
+                      className="space-y-4"
+                    >
+                      <div className="space-y-1">
+                        <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-[#004BFA]/10 dark:bg-[#004BFA]/20 text-[#004BFA] dark:text-[#5B80FF] text-[11px] font-semibold tracking-wide">
+                          <span>{currentModalQuestion.category}</span>
+                          <span className="text-slate-400 dark:text-slate-500">•</span>
+                          <span>Adım {quizStep + 1} / {WIZARD_QUESTIONS.length}</span>
+                        </div>
+                        <h4 className="text-base sm:text-xl clash-title font-[500] text-[#040989] dark:text-[#F5F7FA] leading-snug pt-1">
+                          {currentModalQuestion.title}
+                        </h4>
+                        <p className="text-xs sm:text-[13px] clash-desc font-[225] text-slate-500 dark:text-slate-400 leading-relaxed">
+                          {currentModalQuestion.contextExplanation}
+                        </p>
+                      </div>
+
+                      {/* Soru 10 İçin Özel Açık Uçlu Sayısal Giriş Alanı */}
+                      {currentModalQuestion.isCustomInputAllowed && (
+                        <div className="p-4 rounded-2xl bg-blue-50/70 dark:bg-white/5 border border-blue-200/80 dark:border-white/10 space-y-2">
+                          <label className="text-xs clash-subtitle font-[325] text-[#004BFA] dark:text-[#93C5FD] block">
+                            Aylık Yatırım Bütçenizi Serbest Olarak Girin (₺):
+                          </label>
+                          <div className="flex items-center gap-2">
+                            <div className="relative flex-1">
+                              <input
+                                type="number"
+                                min="500"
+                                step="500"
+                                placeholder="Örn: 10000"
+                                value={customAmountInput}
+                                onChange={(e) => {
+                                  setCustomAmountInput(e.target.value);
+                                  handleOptionSelect(currentModalQuestion.id, e.target.value);
+                                }}
+                                className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-white/20 bg-white dark:bg-[#02041A] text-sm font-numbers text-[#040989] dark:text-white focus:outline-hidden focus:border-[#004BFA]"
+                              />
+                              <span className="absolute right-3.5 top-2.5 text-xs font-semibold text-slate-400">₺ / Ay</span>
+                            </div>
+                          </div>
+                          <span className="text-[10px] text-slate-400 block">
+                            * Aşağıdaki hazır bütçe şablonlarından birini seçebilir veya buraya doğrudan kendi bütçenizi yazabilirsiniz.
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Seçenek Kartları */}
+                      <div className="space-y-2.5 pt-1">
+                        {currentModalQuestion.options.map((option) => {
+                          const isSelected = answers[currentModalQuestion.id] === option.id;
+                          return (
+                            <div
+                              key={option.id}
+                              onClick={() => {
+                                handleOptionSelect(currentModalQuestion.id, option.id);
+                                if (option.id === "budget_10k_monthly") setCustomAmountInput("10000");
+                                else if (option.id === "budget_25k_monthly") setCustomAmountInput("25000");
+                                else if (option.id === "budget_50k_monthly") setCustomAmountInput("50000");
+                              }}
+                              className={`cursor-pointer p-4 rounded-2xl border transition-all duration-200 flex items-start justify-between gap-3 ${
+                                isSelected
+                                  ? "bg-[#004BFA]/5 dark:bg-[#004BFA]/20 border-[#004BFA] ring-2 ring-[#004BFA]/30 shadow-xs"
+                                  : "bg-slate-50/70 dark:bg-white/5 border-slate-200/80 dark:border-white/10 hover:border-[#004BFA]/40 hover:bg-white dark:hover:bg-white/10"
+                              }`}
+                            >
+                              <div className="space-y-1">
+                                <h5 className="text-xs sm:text-sm clash-title font-[500] text-[#040989] dark:text-[#F5F7FA]">
+                                  {option.title}
+                                </h5>
+                                <p className="text-[11px] sm:text-xs clash-desc font-[225] text-slate-600 dark:text-slate-300 leading-relaxed">
+                                  {option.description}
+                                </p>
+                              </div>
+
+                              <div
+                                className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 mt-0.5 transition-all ${
+                                  isSelected
+                                    ? "border-[#004BFA] bg-[#004BFA] text-white"
+                                    : "border-slate-300 dark:border-white/20"
+                                }`}
+                              >
+                                {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
 
-                {/* Soru 10 İçin Özel Açık Uçlu Sayısal Giriş Alanı */}
-                {currentModalQuestion.isCustomInputAllowed && (
-                  <div className="p-4 rounded-2xl bg-blue-50/60 dark:bg-white/5 border border-blue-200/80 dark:border-white/10 space-y-2">
-                    <label className="text-xs clash-subtitle font-[325] text-[#004BFA] dark:text-[#93C5FD] block">
-                      Aylık Yatırım Bütçenizi Serbest Olarak Girin (₺):
-                    </label>
-                    <div className="flex items-center gap-2">
-                      <div className="relative flex-1">
-                        <input
-                          type="number"
-                          min="500"
-                          step="500"
-                          placeholder="Örn: 10000"
-                          value={customAmountInput}
-                          onChange={(e) => {
-                            setCustomAmountInput(e.target.value);
-                            handleOptionSelect(currentModalQuestion.id, e.target.value);
-                          }}
-                          className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-white/20 bg-white dark:bg-[#02041A] text-sm font-numbers text-[#040989] dark:text-white focus:outline-hidden focus:border-[#004BFA]"
-                        />
-                        <span className="absolute right-3.5 top-2.5 text-xs font-semibold text-slate-400">₺ / Ay</span>
+                {/* SAĞ KOLON: AKADEMİ CANLI STRATEJİ ETKİSİ (%36) */}
+                <div className="w-full lg:w-[36%] p-5 sm:p-7 bg-slate-50/60 dark:bg-white/[0.02] flex flex-col justify-between space-y-5">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between pb-3 border-b border-slate-200/70 dark:border-white/10">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-lg bg-[#004BFA]/10 flex items-center justify-center text-[#004BFA]">
+                          <Zap className="w-3.5 h-3.5 text-[#004BFA]" />
+                        </div>
+                        <h4 className="text-xs sm:text-sm clash-title font-[500] text-[#040989] dark:text-white">
+                          Canlı Kalibrasyon Etkisi
+                        </h4>
+                      </div>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 font-semibold">
+                        Canlı AI
+                      </span>
+                    </div>
+
+                    {/* Strateji Adı ve Risk */}
+                    <div className="p-3.5 rounded-2xl bg-white dark:bg-[#02041A] border border-slate-200/80 dark:border-white/10 space-y-1.5 shadow-xs">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-slate-400 font-normal">Belirlenen Profil</span>
+                        <span className="font-semibold text-[#004BFA] dark:text-[#5B80FF]">
+                          {currentTelemetry.expectedRisk} Risk
+                        </span>
+                      </div>
+                      <h5 className="text-sm font-semibold clash-title text-[#0E1E38] dark:text-white">
+                        {currentTelemetry.title}
+                      </h5>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">
+                        {currentTelemetry.tagline}
+                      </p>
+                    </div>
+
+                    {/* Canlı Dağılım Çubukları */}
+                    <div className="space-y-2 pt-1">
+                      <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+                        Dinamik Ağırlık Dağılımı
+                      </span>
+
+                      {/* Hisse Senedi */}
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs font-medium">
+                          <span className="text-slate-600 dark:text-slate-300">BIST Hisse Senedi</span>
+                          <span className="font-numbers text-[#004BFA]">%{currentTelemetry.macroWeights.stock}</span>
+                        </div>
+                        <div className="w-full h-1.5 rounded-full bg-slate-200/70 dark:bg-white/10 overflow-hidden">
+                          <div
+                            className="h-full bg-[#004BFA] transition-all duration-300"
+                            style={{ width: `${currentTelemetry.macroWeights.stock}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Yatırım Fonları */}
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs font-medium">
+                          <span className="text-slate-600 dark:text-slate-300">Sektör & Yatırım Fonları</span>
+                          <span className="font-numbers text-emerald-600">%{currentTelemetry.macroWeights.fund}</span>
+                        </div>
+                        <div className="w-full h-1.5 rounded-full bg-slate-200/70 dark:bg-white/10 overflow-hidden">
+                          <div
+                            className="h-full bg-emerald-500 transition-all duration-300"
+                            style={{ width: `${currentTelemetry.macroWeights.fund}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Kıymetli Maden & Likit */}
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs font-medium">
+                          <span className="text-slate-600 dark:text-slate-300">Kıymetli Maden & Likit Kalkan</span>
+                          <span className="font-numbers text-amber-600">%{currentTelemetry.macroWeights.goldAndCash}</span>
+                        </div>
+                        <div className="w-full h-1.5 rounded-full bg-slate-200/70 dark:bg-white/10 overflow-hidden">
+                          <div
+                            className="h-full bg-amber-500 transition-all duration-300"
+                            style={{ width: `${currentTelemetry.macroWeights.goldAndCash}%` }}
+                          />
+                        </div>
                       </div>
                     </div>
-                    <span className="text-[10px] text-slate-400 block">
-                      * Aşağıdaki hazır paketlerden birini seçebilir veya buraya doğrudan kendi bütçenizi yazabilirsiniz.
-                    </span>
+
+                    {/* Tahmini Getiri Bandı */}
+                    <div className="p-3 rounded-2xl bg-blue-50/50 dark:bg-white/5 border border-blue-100 dark:border-white/10 flex items-center justify-between text-xs">
+                      <span className="text-slate-500 dark:text-slate-400">Beklenen Yıllık Getiri</span>
+                      <span className="font-bold text-[#004BFA] dark:text-[#5B80FF]">
+                        {currentTelemetry.expectedReturnRange}
+                      </span>
+                    </div>
                   </div>
-                )}
 
-                {/* Seçenek Kartları */}
-                <div className="space-y-2.5">
-                  {currentModalQuestion.options.map((option) => {
-                    const isSelected = answers[currentModalQuestion.id] === option.id;
-                    return (
-                      <div
-                        key={option.id}
-                        onClick={() => {
-                          handleOptionSelect(currentModalQuestion.id, option.id);
-                          if (option.id === 'budget_10k_monthly') setCustomAmountInput("10000");
-                          else if (option.id === 'budget_25k_monthly') setCustomAmountInput("25000");
-                          else if (option.id === 'budget_50k_monthly') setCustomAmountInput("50000");
-                        }}
-                        className={`cursor-pointer p-4 rounded-2xl border transition-all duration-200 flex items-start justify-between gap-3 ${
-                          isSelected
-                            ? "bg-[#004BFA]/5 dark:bg-[#004BFA]/20 border-[#004BFA] ring-1 ring-[#004BFA]/40 shadow-xs"
-                            : "bg-slate-50/70 dark:bg-white/5 border-slate-200/80 dark:border-white/10 hover:border-[#004BFA]/40 hover:bg-white dark:hover:bg-white/10"
-                        }`}
-                      >
-                        <div className="space-y-1">
-                          <h5 className="text-xs sm:text-sm clash-title font-[500] text-[#040989] dark:text-[#F5F7FA]">
-                            {option.title}
-                          </h5>
-                          <p className="text-[11px] sm:text-xs clash-desc font-[225] text-slate-600 dark:text-slate-300 leading-relaxed">
-                            {option.description}
-                          </p>
-                        </div>
-
-                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 mt-0.5 ${
-                          isSelected
-                            ? "border-[#004BFA] bg-[#004BFA] text-white"
-                            : "border-slate-300 dark:border-white/20"
-                        }`}>
-                          {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
-                        </div>
-                      </div>
-                    );
-                  })}
+                  {/* Alt Bilgi İpucu */}
+                  <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-white/5 text-[10px] text-slate-400 leading-relaxed border border-slate-200/50 dark:border-white/5">
+                    💡 Verdiğiniz her yanıt, BIST ve TEFAS medyan getiri katsayılarıyla portföyünüzün risk dengesini gerçek zamanlı olarak ayarlar.
+                  </div>
                 </div>
               </div>
 
               {/* Modal Alt Bar: Geri, İleri / Tamamla */}
-              <div className="px-5 sm:px-7 py-4 border-t border-slate-100 dark:border-white/10 flex items-center justify-between bg-slate-50/50 dark:bg-white/5">
+              <div className="px-5 sm:px-7 py-4 border-t border-slate-100 dark:border-white/10 flex items-center justify-between bg-slate-50/80 dark:bg-white/5 shrink-0">
                 <button
+                  type="button"
                   disabled={quizStep === 0}
-                  onClick={() => setQuizStep(prev => Math.max(0, prev - 1))}
-                  className={`px-4 py-2 rounded-xl text-xs clash-subtitle font-[325] transition-colors ${
+                  onClick={() => setQuizStep((prev) => Math.max(0, prev - 1))}
+                  className={`px-4 py-2 rounded-xl text-xs clash-subtitle font-[325] transition-colors cursor-pointer ${
                     quizStep === 0
                       ? "text-slate-300 dark:text-slate-600 cursor-not-allowed"
                       : "text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-white/10"
@@ -1067,27 +1086,32 @@ export default function SamplePortfolioPage() {
                   Geri
                 </button>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-slate-400 hidden sm:inline-block">
+                    Adım {quizStep + 1} / {WIZARD_QUESTIONS.length}
+                  </span>
+
                   {quizStep < WIZARD_QUESTIONS.length - 1 ? (
                     <button
-                      onClick={() => setQuizStep(prev => prev + 1)}
-                      className="px-5 py-2 rounded-xl bg-[#004BFA] hover:bg-[#004BFA]/90 text-white font-normal text-xs clash-subtitle font-[325] shadow-xs transition-all flex items-center gap-1.5"
+                      type="button"
+                      onClick={() => setQuizStep((prev) => prev + 1)}
+                      className="px-5 py-2.5 rounded-xl bg-[#004BFA] hover:bg-[#003ad1] text-white font-medium text-xs sm:text-sm clash-subtitle shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
                     >
                       <span>İleri ({quizStep + 1}/10)</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
+                      <ChevronRight className="w-4 h-4" />
                     </button>
                   ) : (
                     <button
+                      type="button"
                       onClick={handleSaveAndApply}
-                      className="px-6 py-2 rounded-xl bg-gradient-to-r from-[#004BFA] to-blue-600 hover:opacity-90 text-white font-normal text-xs clash-subtitle font-[325] shadow-sm transition-all flex items-center gap-1.5"
+                      className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#004BFA] to-blue-600 hover:opacity-95 text-white font-medium text-xs sm:text-sm clash-subtitle shadow-lg shadow-[#004BFA]/30 transition-all flex items-center gap-2 cursor-pointer"
                     >
-                      <Sparkles className="w-3.5 h-3.5" />
+                      <Sparkles className="w-4 h-4" />
                       <span>Kaydet ve Modeli Uygula</span>
                     </button>
                   )}
                 </div>
               </div>
-
             </motion.div>
           </div>
         )}

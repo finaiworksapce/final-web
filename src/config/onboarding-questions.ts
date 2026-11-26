@@ -71,6 +71,9 @@ export interface FundReturnItem {
 export interface CompoundProjectionScenario {
   label: string;
   annualRate: number; // Yıllıklaştırılmış bileşik getiri (CAGR)
+  month1: { principal: number; profit: number; total: number };
+  month3: { principal: number; profit: number; total: number };
+  month6: { principal: number; profit: number; total: number };
   year1: { principal: number; profit: number; total: number };
   year3: { principal: number; profit: number; total: number };
   year5: { principal: number; profit: number; total: number };
@@ -160,18 +163,18 @@ export const BIST_SECTORS_MEDIAN: SectorReturnItem[] = [
 // 2. REEL VERİLER: BYF FONLARI GETİRİ VERİLERİ (Tablodaki 38 Fon)
 // -----------------------------------------------------------------------------------------
 export const BYF_FUNDS_MEDIAN: FundReturnItem[] = [
-  { code: 'ZTR', name: 'Ziraat Portföy BIST TLREF Endeksi Fonu', category: 'Para Piyasası / TLREF', riskValue: 2, ret1M: 2.91, ret3M: 9.39, ret6M: 19.96, ret1Y: 45.89, ret3Y: 160.0, ret5Y: 450.0 },
-  { code: 'ZTK', name: 'Ziraat Portföy BIST TLREFK Katılım Fonu', category: 'Katılım TLREF', riskValue: 2, ret1M: 2.92, ret3M: 9.38, ret6M: 19.82, ret1Y: 45.59, ret3Y: 160.0, ret5Y: 450.0 },
-  { code: 'ZTM', name: 'Ziraat Portföy BIST Temettü 25 Fonu', category: 'Temettü', riskValue: 6, ret1M: -1.29, ret3M: -13.89, ret6M: -10.23, ret1Y: 14.04, ret3Y: 83.59, ret5Y: 623.88 },
-  { code: 'ZPP', name: 'Ziraat Portföy BIST Banka Dışı Likit 10 Fonu', category: 'Sanayi / Banka Dışı', riskValue: 7, ret1M: -1.79, ret3M: -20.45, ret6M: -11.15, ret1Y: 28.13, ret3Y: 68.71, ret5Y: 765.28 },
-  { code: 'BOE', name: 'Ak Portföy BIST 30 Endeksi Fonu', category: 'BIST 30 Endeks', riskValue: 6, ret1M: -0.81, ret3M: -15.93, ret6M: -11.07, ret1Y: 16.75, ret3Y: 71.09, ret5Y: 636.00 },
-  { code: 'ZKP', name: 'Ziraat Portföy BIST Katılım 30 Fonu', category: 'Katılım Hisse', riskValue: 6, ret1M: -3.20, ret3M: -31.13, ret6M: -20.84, ret1Y: 16.84, ret3Y: 61.32, ret5Y: 726.65 },
-  { code: 'ZGD', name: 'Ziraat Portföy Altın Katılım Fonu', category: 'Altın Katılım', riskValue: 6, ret1M: -2.83, ret3M: -15.61, ret6M: -10.30, ret1Y: -2.56, ret3Y: 219.08, ret5Y: 790.88 },
-  { code: 'FGS', name: 'QNB Portföy Gümüş Katılım Fonu', category: 'Gümüş Katılım', riskValue: 7, ret1M: -18.47, ret3M: -33.70, ret6M: -38.07, ret1Y: 0.63, ret3Y: 206.13, ret5Y: 630.15 },
-  { code: 'BLH', name: 'Ak Portföy BIST Likit Banka Fonu', category: 'Banka', riskValue: 7, ret1M: 3.75, ret3M: -3.86, ret6M: 3.60, ret1Y: 5.44, ret3Y: 107.88, ret5Y: 1054.32 },
-  { code: 'ZPT', name: 'Ziraat Portföy Teknoloji ve İletişim 10 Fonu', category: 'Teknoloji', riskValue: 7, ret1M: -3.55, ret3M: -38.77, ret6M: -38.59, ret1Y: -7.88, ret3Y: 16.91, ret5Y: 308.12 },
-  { code: 'DJA', name: 'QNB Portföy Temiz Enerji Fonu', category: 'Temiz Enerji', riskValue: 7, ret1M: 1.12, ret3M: -58.31, ret6M: -59.18, ret1Y: -50.79, ret3Y: -47.17, ret5Y: 151.78 },
-  { code: 'FUS', name: 'QNB Portföy Amerikan Doları Fonu', category: 'Dolar / Yabancı', riskValue: 6, ret1M: 1.48, ret3M: 5.48, ret6M: 8.81, ret1Y: 19.35, ret3Y: 73.05, ret5Y: 305.41 }
+  { code: 'TLREF', name: 'Para Piyasası / TLREF Fonları', category: 'Para Piyasası', riskValue: 2, ret1M: 2.91, ret3M: 9.39, ret6M: 19.96, ret1Y: 45.89, ret3Y: 160.0, ret5Y: 450.0 },
+  { code: 'KTLREF', name: 'Katılım Para Piyasası Fonları', category: 'Katılım TLREF', riskValue: 2, ret1M: 2.92, ret3M: 9.38, ret6M: 19.82, ret1Y: 45.59, ret3Y: 160.0, ret5Y: 450.0 },
+  { code: 'TEMETTU', name: 'Temettü Fonları', category: 'Temettü', riskValue: 6, ret1M: -1.29, ret3M: -13.89, ret6M: -10.23, ret1Y: 14.04, ret3Y: 83.59, ret5Y: 623.88 },
+  { code: 'SANAYI', name: 'Sanayi ve İmalat Fonları', category: 'Sanayi', riskValue: 7, ret1M: -1.79, ret3M: -20.45, ret6M: -11.15, ret1Y: 28.13, ret3Y: 68.71, ret5Y: 765.28 },
+  { code: 'BIST30', name: 'BIST 30 Endeks Fonları', category: 'BIST 30', riskValue: 6, ret1M: -0.81, ret3M: -15.93, ret6M: -11.07, ret1Y: 16.75, ret3Y: 71.09, ret5Y: 636.00 },
+  { code: 'KATILIM', name: 'BIST Katılım Fonları', category: 'Katılım Hisse', riskValue: 6, ret1M: -3.20, ret3M: -31.13, ret6M: -20.84, ret1Y: 16.84, ret3Y: 61.32, ret5Y: 726.65 },
+  { code: 'ALTIN', name: 'Altın Katılım Fonları', category: 'Kıymetli Maden', riskValue: 6, ret1M: -2.83, ret3M: -15.61, ret6M: -10.30, ret1Y: -2.56, ret3Y: 219.08, ret5Y: 790.88 },
+  { code: 'GUMUS', name: 'Gümüş Katılım Fonları', category: 'Kıymetli Maden', riskValue: 7, ret1M: -18.47, ret3M: -33.70, ret6M: -38.07, ret1Y: 0.63, ret3Y: 206.13, ret5Y: 630.15 },
+  { code: 'BANKA', name: 'Banka Sektörü Fonları', category: 'Banka', riskValue: 7, ret1M: 3.75, ret3M: -3.86, ret6M: 3.60, ret1Y: 5.44, ret3Y: 107.88, ret5Y: 1054.32 },
+  { code: 'TEKNO', name: 'Teknoloji ve İletişim Fonları', category: 'Teknoloji', riskValue: 7, ret1M: -3.55, ret3M: -38.77, ret6M: -38.59, ret1Y: -7.88, ret3Y: 16.91, ret5Y: 308.12 },
+  { code: 'ENERJI', name: 'Temiz Enerji Fonları', category: 'Temiz Enerji', riskValue: 7, ret1M: 1.12, ret3M: -58.31, ret6M: -59.18, ret1Y: -50.79, ret3Y: -47.17, ret5Y: 151.78 },
+  { code: 'DOLAR', name: 'Dolar / Yabancı Varlık Fonları', category: 'Dolar / Yabancı', riskValue: 6, ret1M: 1.48, ret3M: 5.48, ret6M: 8.81, ret1Y: 19.35, ret3Y: 73.05, ret5Y: 305.41 }
 ];
 
 // -----------------------------------------------------------------------------------------
@@ -571,6 +574,9 @@ export function calculateFutureCompoundWealth(
   }
 
   return {
+    month1: calcForMonths(1),
+    month3: calcForMonths(3),
+    month6: calcForMonths(6),
     year1: calcForMonths(12),
     year3: calcForMonths(36),
     year5: calcForMonths(60)
@@ -640,31 +646,29 @@ export function calculateDynamicStrategy(answers: Record<string, string>): Dynam
   }
 
   // Fon içi tür dilimleri
-  let fundSlice1Name = "BIST TLREF Para Piyasası Fonu (ZTR)";
+  let fundSlice1Name = "Para Piyasası Fonları";
   let fundSlice1Weight = Math.round(fund * 0.35);
-  let fundSlice2Name = "BIST Temettü 25 Fonu (ZTM)";
+  let fundSlice2Name = "Temettü Fonları";
   let fundSlice2Weight = Math.round(fund * 0.35);
-  let fundSlice3Name = "BIST Sanayi & Büyüme Fonu (ZPP)";
+  let fundSlice3Name = "Sanayi & Büyüme Fonları";
   let fundSlice3Weight = fund - (fundSlice1Weight + fundSlice2Weight);
 
   if (isIslamic) {
-    fundSlice1Name = "BIST Katılım TLREFK Fonu (ZTK)";
-    fundSlice2Name = "BIST Katılım 30 Fonu (ZKP)";
-    fundSlice3Name = "Katılım 30 Eşit Ağırlık Fonu (ZKE)";
+    fundSlice1Name = "Katılım Para Piyasası Fonları";
+    fundSlice2Name = "Katılım 30 Fonları";
+    fundSlice3Name = "Katılım Eşit Ağırlık Fonları";
   } else if (sectorFocus === 'sec_tech_energy') {
-    fundSlice1Name = "Teknoloji ve İletişim 10 Fonu (ZPT)";
-    fundSlice2Name = "BIST TLREF Para Piyasası Fonu (ZTR)";
-    fundSlice3Name = "Temiz Enerji Fonu (DJA)";
+    fundSlice1Name = "Teknoloji ve İletişim Fonları";
+    fundSlice2Name = "Para Piyasası Fonları";
+    fundSlice3Name = "Temiz Enerji Fonları";
   } else if (sectorFocus === 'sec_banking_finance') {
-    fundSlice1Name = "BIST Likit Banka Fonu (BLH)";
-    fundSlice2Name = "BIST TLREF Para Piyasası Fonu (ZTR)";
-    fundSlice3Name = "BIST 30 Endeks Fonu (BOE)";
+    fundSlice1Name = "Banka Sektörü Fonları";
+    fundSlice2Name = "Para Piyasası Fonları";
+    fundSlice3Name = "BIST 30 Endeks Fonları";
   }
 
   // Altın / Döviz Kalkanı Dilimi
-  const goldSliceName = isIslamic 
-    ? "Darphane Altın Katılım Fonu (ZGD)" 
-    : (shieldFocus === 'shield_strong_35' ? "Altın Katılım (ZGD) & Dolar (FUS)" : "Kıymetli Madenler (ZGD Altın)");
+  const goldSliceName = "Kıymetli Madenler";
 
   // Çok Katmanlı Daire Grafiği Dilimleri
   const slices: StrategySlice[] = [
@@ -788,6 +792,9 @@ export function calculateDynamicStrategy(answers: Record<string, string>): Dynam
       median: {
         label: 'FinAi Reel Beklenti (Medyan)',
         annualRate: 46.5,
+        month1: medianSim.month1,
+        month3: medianSim.month3,
+        month6: medianSim.month6,
         year1: medianSim.year1,
         year3: medianSim.year3,
         year5: medianSim.year5
@@ -795,6 +802,9 @@ export function calculateDynamicStrategy(answers: Record<string, string>): Dynam
       average: {
         label: 'İyimser Boğa Senaryosu (Ortalama)',
         annualRate: 65.0,
+        month1: averageSim.month1,
+        month3: averageSim.month3,
+        month6: averageSim.month6,
         year1: averageSim.year1,
         year3: averageSim.year3,
         year5: averageSim.year5
@@ -802,6 +812,9 @@ export function calculateDynamicStrategy(answers: Record<string, string>): Dynam
       conservative: {
         label: 'Korumacı / Taban Senaryo (TLREF & Altın)',
         annualRate: 38.0,
+        month1: conservativeSim.month1,
+        month3: conservativeSim.month3,
+        month6: conservativeSim.month6,
         year1: conservativeSim.year1,
         year3: conservativeSim.year3,
         year5: conservativeSim.year5
