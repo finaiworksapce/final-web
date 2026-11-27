@@ -205,10 +205,12 @@ export default function SamplePortfolioPage() {
     (!userMetadata?.onboarding_answers || Object.keys(userMetadata.onboarding_answers).length === 0)
   );
 
-  // Dinamik Strateji Telemetrisi (Anlık 10 soruya göre hesaplanır)
+  const displayName = userName || (email ? email.split("@")[0] : "Salih KAVAKCI");
+
+  // Dinamik Strateji Telemetrisi (Anlık 10 soruya ve kullanıcı adına göre hesaplanır)
   const currentTelemetry = useMemo(() => {
-    return calculateDynamicStrategy(answers);
-  }, [answers]);
+    return calculateDynamicStrategy(answers, displayName);
+  }, [answers, displayName]);
 
   // Varlık Dağılım Grafiği dilimleri
   const distributionItems = useMemo(() => {
@@ -242,8 +244,6 @@ export default function SamplePortfolioPage() {
   const RADIUS = 38;
   const CIRCUMFERENCE = 2 * Math.PI * RADIUS; // ~238.76
   let cumulativeOffset = 0;
-
-  const displayName = userName || (email ? email.split("@")[0] : "Salih KAVAKCI");
 
   // Testteki seçenek seçimi
   const handleOptionSelect = (questionId: string, optionId: string) => {
@@ -602,7 +602,7 @@ export default function SamplePortfolioPage() {
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-2">
                   <div className="flex items-center gap-1.5 text-xs clash-subtitle font-[325] text-[#D6E4FF]">
                     <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-                    <span>FinAi Stratejik Yol Haritanız (3 Altın İlke)</span>
+                    <span>FinAi Stratejik Yol Haritanız (2 Altın Kural)</span>
                   </div>
                   <div className="space-y-1.5">
                     {currentTelemetry.strategicRoadmap.map((step, sIdx) => (

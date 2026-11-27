@@ -596,7 +596,10 @@ export function calculateFutureCompoundWealth(
 // -----------------------------------------------------------------------------------------
 // 5. DİNAMİK STRATEJİ VE TELEMETRİ HESAPLAYICI (10 Soru Entegrasyonu)
 // -----------------------------------------------------------------------------------------
-export function calculateDynamicStrategy(answers: Record<string, string>): DynamicStrategyTelemetry {
+export function calculateDynamicStrategy(
+  answers: Record<string, string>,
+  userName?: string
+): DynamicStrategyTelemetry {
   const isIslamic = answers['interest_sensitivity'] === 'islamic_sensitive';
 
   // 1. BAŞLANGIÇ BİAS MATRİSİ (NÖTR NOKTA: %40 Hisse, %40 Fon, %20 Altın/Likit)
@@ -858,32 +861,17 @@ export function calculateDynamicStrategy(answers: Record<string, string>): Dynam
   const isAggressive = stock >= 50;
   const isConservative = stock <= 30;
 
-  // 1. KULLANICIYA KENDİSİNİ ANLATAN YATIRIMCI KİMLİĞİ (PSİKOLOJİK AYNA)
-  const volKey = answers['volatility_reaction'];
-  const horizonKey = answers['investment_horizon'];
-  const goalKey = answers['strategic_goal'];
+  // 1. KULLANICIYA KENDİSİNİ ANLATAN YATIRIMCI KİMLİĞİ (PSİKOLOJİK AYNA & DERS 1)
+  const resolvedName = userName?.trim() || "Salih KAVAKCI";
+  const investorPersona = `Merhaba ${resolvedName}, FinAi Workspace ekibi olarak sormuş olduğumuz sorulara verdiğin yanıtlara baktığımızda aslında senin paranı bu enflasyonist ortamda ezdirmemek ve alın terini korumak için yatırım yapmak istediğini çok iyi anlıyoruz. Bunu yaparken de erkenden saçlarının beyazlamamasını, strese girmemeyi ve geceleri rahat uyumak istemeni de gayet iyi anlıyoruz çünkü bu çok insani ve kabul edilebilir bir istek. Fakat sana dürüst olarak söyleyebiliriz ki volatilite dediğimiz bir kavram var. Bu kavram piyasanın iniş ve çıkışlarını, yani fiyatların dalgalanmasını anlatır. Mesela Borsa İstanbul'da en güçlü sanayi şirketleri bile bazı dönemlerde endeksteki sert sarsıntılarla düşüşler yaşar ama zamanla işlerini büyüterek çok daha yüksek zirvelere ulaşır. Sen paranı enflasyonun üzerinde büyütmek istiyorsun ama bu dalgalanmalar yaşanmadan o büyük kazançların ortaya çıkması piyasanın doğasına aykırı. Hem güçlü bir getiri isteyip hem de fiyat dalgalanmasından rahatsız olmak senin yatırımcı tarafındaki en belirgin çelişkin. Bu durum gözümüze çarptığı için biz seni uyaralım dedik, sonuçta burada oyun oynamıyoruz paralar ile işlem yapıyoruz. Bu da senin finansal okuryazarlığındaki ilk dersin olsun ortak.`;
 
-  let investorPersona = "";
-  if (volKey === 'dip_buyer') {
-    investorPersona = `Piyasanın kısa vadeli gürültüsüne ve dönemsel düzeltmelerine aldırış etmeyen, düşüşleri alım fırsatı olarak gören yüksek vizyonlu bir büyüme yatırımcısısınız. ${
-      horizonKey === 'horizon_long' ? '3 yıldan uzun vadeniz' : 'Belirlediğiniz yatırım ufku'
-    }, Borsa İstanbul'un reel bileşik büyüme gücünden azami faydalanmanız için en büyük stratejik kozunuzdur.`;
-  } else if (volKey === 'panic_sell' || isConservative) {
-    investorPersona = `Anapara güvenliğini ve finansal huzuru her şeyin üzerinde tutan, sert sermaye erimelerine karşı temkinli bir yatırımcısınız. Sizin için en doğru yatırım modeli, getiri peşinde koşarken uykunuzu kaçırmayan; likit fonlar ve kıymetli maden kalkanıyla şoklara karşı tam zırhlanmış bir portföydür.`;
-  } else {
-    investorPersona = `Sermayenizin reel değerini enflasyon karşısında korurken istikrarlı büyüme hedefleyen rasyonel ve dengeli bir yatırımcısınız. %15'in üzerindeki dalgalanmalarda psikolojik konfor arayışınız, hisse ve fon dengesini optimize etmeyi zorunlu kılar.`;
-  }
+  // 2. NEDEN BU DAĞILIM? (SEPET MÜHENDİSLİĞİ VE DERS 2)
+  const allocationRationale = `Şimdi gelelim senin için hazırladığımız bu portföy dağılımının arkasındaki mantığa. Portföyün ana motorunu hisse senetleri yaptık çünkü bir hisse aldığında sadece ekrandaki bir koda değil fabrikası, çalışanları, üretimi ve müşterisi olan yaşayan bir şirkete ortak olursun. Enflasyon her şeyin fiyatını artırırken iyi şirketler de ürettikleri mal ve hizmetlerin fiyatını artırır, kârını büyütür. Paranın değerini enflasyon karşısında koruyup katlayacak asıl güç bu üreten şirketlerin büyümesine ortak olmaktır. Fakat tek bir şirkete güvenip bütün paranı tek bir yere bağlayamazsın. Hani erkenden saçlarının beyazlamasını ve strese girmeyi istemiyordun ya, işte tam bu yüzden çeşitlendirme yapmanı öneriyoruz. Çeşitlendirme demek olası bir krizde veya piyasa çalkantısında bir varlık düşerken diğerinin ayakta kalması ve sepeti dengede tutması demektir. Bu yüzden hisse tarafında sana önereceğimiz şirketler krizlerde bile satış yapabilen ihracatçı sanayi devleri, savunma sanayii liderleri ve nakit akışı güçlü defansif perakende şirketleri olacak. Peki fon nedir ve neden sepetine fon koyduk? Fon dediğimiz şey; onlarca farklı hisseyi, kıymetli madeni veya para piyasası aracını tek bir sepetin içine toplayan ve Sermaye Piyasası Kurulu lisanslı profesyonel yöneticiler tarafından idare edilen hazır bir yatırım havuzudur. Fon seçmemizin sebebi senin tek tek şirket bilançosu kovalamakla ya da haber takip etmekle uğraşmadan, uzmanların yönettiği bu hazır sepetlerle piyasanın büyümesine en az riskle ortak olmanı sağlamaktır. Altın tarafı ise piyasada sert bir kriz ya da jeopolitik fırtına koptuğunda hisseler dalgalanırken portföyünün değerini koruyan ve geceleri rahat uyumanı sağlayan bir kalkan görevi görür. Tabii ki unutmaman gereken ikinci ders ise şu: Bu piyasalarda para kazanmak istiyorsan kimsenin dediklerini tam anlamıyla körü körüne onaylamadan önce mutlaka senin de kendi araştırmanı yapman gerekir. Bizim burada söylediklerimiz bile sadece sorduğumuz sorulara verdiğin yanıtlara göre yapılan analizler olduğundan dolayı kesinlikle yatırım tavsiyesi içermemektedir. O yüzden direksiyon her zaman sende olmalı, kendi araştırmanı mutlaka kendin yapmalısın.`;
 
-  // 2. NEDEN BU DAĞILIM? (SEPET MÜHENDİSLİĞİ VE GEREKÇELERİ)
-  const allocationRationale = isIslamic
-    ? `Faizsiz finans ve katılım hassasiyetiniz gereği geleneksel faizli enstrümanlar tamamen elenmiştir. Portföyünüzün %${stock}'lik ana motoru BIST Katılım Endeksi'nin sağlam ve borçluluğu düşük şirketlerine tahsis edildi. Bireysel hisse riskini seyreltmek için %${fund}'lik dilim ZTK Katılım Likit ve ZKP Katılım 30 fonlarıyla çeşitlendirildi. Seçtiğiniz %${gold}'lik fiziki altın güvencesi ise piyasa türbülanslarında portföyünüzün psikolojik kalkanı olarak konumlandırıldı.`
-    : `Bileşik getiri hedefinize ulaşabilmeniz için portföyün %${stock}'lik ana omurgası BIST'in lider sanayi, teknoloji ve ihracatçı hisselerine ayrıldı. Hisse senedi piyasasının dönemsel dalgalanmalarını yumuşatmak ve piyasa medyan getirisini sabitlemek adına %${fund}'lik bölüm borsa yatırım fonlarına (BYF) dağıtıldı. Portföyünüzdeki %${gold}'lik altın ve likit rezerv ise olası jeopolitik risklerde ve piyasa şoklarında anaparanızın güvence sigortasıdır.`;
-
-  // 3. FİNAİ STRATEJİK YOL HARİTASI (NASIL BİR YOL İZLEMELİSİN?)
+  // 3. FİNAİ STRATEJİK YOL HARİTASI (2 ALTIN KURAL & KAPANIŞ)
   const strategicRoadmap: string[] = [
-    `Aylık ${monthlyBudget.toLocaleString('tr-TR')} ₺ Düzenli Tasarruf Disiplini (DCA): Piyasa yükselirken de düşerken de belirlediğiniz periyotta düzenli alım yaparak dalgalanmaları avantaja çevirin. Asla piyasa zamanlaması yapmaya çalışmayın.`,
-    `Düşüş Refleksi ve Psikolojik Soğukkanlılık: BIST düzeltmelerinde asla panikle satış yapmayın. Portföyünüzdeki %${gold}'lik kıymetli maden ve fon tamponu bu dalgalanmaları emmek için tasarlandı.`,
-    `${rebalanceCycleText}: Varlık sınıflarından biri aşırı değer kazandığında kâr realize edip geride kalan dilimi tamamlayarak sepetin %${stock}/%${fund}/%${gold} hedef oranlarını koruyun.`
+    `Peki bu sepeti kurdun diyelim, bundan sonra nasıl bir yol izleyeceksin ve paranı nasıl yöneteceksin? Birincisi, her ay kenara ayırdığın o birikim bütçesini piyasa ister ralli yapsın ister düşüşte olsun hiç aksatmadan sepete eklemeye devam edeceksin. Borsa düşerken ekleme yaparsan şirketleri indirimli fiyattan toplarsın, yükselirken eklersen zaten portföyün değer kazanıyordur. Asla "biraz daha düşsün öyle alırım" diyerek piyasa zamanlaması yapmaya kalkma çünkü piyasanın dibini de tepesini de kimse bilemez. Düzenli ekleme disiplini her zaman tahmin yapmaktan daha çok para kazandırır.`,
+    `İkincisi, ekranın kıpkırmızı olduğu ve herkesin paniklediği günlerde o sat butonundan uzak duracaksın. Borsa İstanbul'da dönemsel sarsıntılar her zaman olur ve olacaktır. İşte tam o günlerde sepetindeki altın ve fon kalkanının bu dalgaları göğüslemek için orada durduğunu hatırla. Derin bir nefes al, ekranı kapat ve hayatına devam et. Fırtına çıktığında gemiyi panikle terk eden değil, rotasına sadık kalan limana ulaşır. Yolun uzun ama rotan gayet net. FinAi Workspace ekibi olarak bu yolculukta her zaman senin arkandayız.`
   ];
 
   return {
