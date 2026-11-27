@@ -101,6 +101,9 @@ export interface DynamicStrategyTelemetry {
   rebalanceCycle: string;
   sharpeRatioEst: string;
   analystSummary: string;
+  investorPersona: string;
+  allocationRationale: string;
+  strategicRoadmap: string[];
   isIslamic?: boolean;
   distribution: {
     stock: number;
@@ -855,6 +858,34 @@ export function calculateDynamicStrategy(answers: Record<string, string>): Dynam
   const isAggressive = stock >= 50;
   const isConservative = stock <= 30;
 
+  // 1. KULLANICIYA KENDİSİNİ ANLATAN YATIRIMCI KİMLİĞİ (PSİKOLOJİK AYNA)
+  const volKey = answers['volatility_reaction'];
+  const horizonKey = answers['investment_horizon'];
+  const goalKey = answers['strategic_goal'];
+
+  let investorPersona = "";
+  if (volKey === 'dip_buyer') {
+    investorPersona = `Piyasanın kısa vadeli gürültüsüne ve dönemsel düzeltmelerine aldırış etmeyen, düşüşleri alım fırsatı olarak gören yüksek vizyonlu bir büyüme yatırımcısısınız. ${
+      horizonKey === 'horizon_long' ? '3 yıldan uzun vadeniz' : 'Belirlediğiniz yatırım ufku'
+    }, Borsa İstanbul'un reel bileşik büyüme gücünden azami faydalanmanız için en büyük stratejik kozunuzdur.`;
+  } else if (volKey === 'panic_sell' || isConservative) {
+    investorPersona = `Anapara güvenliğini ve finansal huzuru her şeyin üzerinde tutan, sert sermaye erimelerine karşı temkinli bir yatırımcısınız. Sizin için en doğru yatırım modeli, getiri peşinde koşarken uykunuzu kaçırmayan; likit fonlar ve kıymetli maden kalkanıyla şoklara karşı tam zırhlanmış bir portföydür.`;
+  } else {
+    investorPersona = `Sermayenizin reel değerini enflasyon karşısında korurken istikrarlı büyüme hedefleyen rasyonel ve dengeli bir yatırımcısınız. %15'in üzerindeki dalgalanmalarda psikolojik konfor arayışınız, hisse ve fon dengesini optimize etmeyi zorunlu kılar.`;
+  }
+
+  // 2. NEDEN BU DAĞILIM? (SEPET MÜHENDİSLİĞİ VE GEREKÇELERİ)
+  const allocationRationale = isIslamic
+    ? `Faizsiz finans ve katılım hassasiyetiniz gereği geleneksel faizli enstrümanlar tamamen elenmiştir. Portföyünüzün %${stock}'lik ana motoru BIST Katılım Endeksi'nin sağlam ve borçluluğu düşük şirketlerine tahsis edildi. Bireysel hisse riskini seyreltmek için %${fund}'lik dilim ZTK Katılım Likit ve ZKP Katılım 30 fonlarıyla çeşitlendirildi. Seçtiğiniz %${gold}'lik fiziki altın güvencesi ise piyasa türbülanslarında portföyünüzün psikolojik kalkanı olarak konumlandırıldı.`
+    : `Bileşik getiri hedefinize ulaşabilmeniz için portföyün %${stock}'lik ana omurgası BIST'in lider sanayi, teknoloji ve ihracatçı hisselerine ayrıldı. Hisse senedi piyasasının dönemsel dalgalanmalarını yumuşatmak ve piyasa medyan getirisini sabitlemek adına %${fund}'lik bölüm borsa yatırım fonlarına (BYF) dağıtıldı. Portföyünüzdeki %${gold}'lik altın ve likit rezerv ise olası jeopolitik risklerde ve piyasa şoklarında anaparanızın güvence sigortasıdır.`;
+
+  // 3. FİNAİ STRATEJİK YOL HARİTASI (NASIL BİR YOL İZLEMELİSİN?)
+  const strategicRoadmap: string[] = [
+    `Aylık ${monthlyBudget.toLocaleString('tr-TR')} ₺ Düzenli Tasarruf Disiplini (DCA): Piyasa yükselirken de düşerken de belirlediğiniz periyotta düzenli alım yaparak dalgalanmaları avantaja çevirin. Asla piyasa zamanlaması yapmaya çalışmayın.`,
+    `Düşüş Refleksi ve Psikolojik Soğukkanlılık: BIST düzeltmelerinde asla panikle satış yapmayın. Portföyünüzdeki %${gold}'lik kıymetli maden ve fon tamponu bu dalgalanmaları emmek için tasarlandı.`,
+    `${rebalanceCycleText}: Varlık sınıflarından biri aşırı değer kazandığında kâr realize edip geride kalan dilimi tamamlayarak sepetin %${stock}/%${fund}/%${gold} hedef oranlarını koruyun.`
+  ];
+
   return {
     id: isIslamic 
       ? (isAggressive ? 'advanced_islamic' : isConservative ? 'beginner_islamic' : 'intermediate_islamic')
@@ -870,9 +901,10 @@ export function calculateDynamicStrategy(answers: Record<string, string>): Dynam
     maxDrawdownTolerance: isAggressive ? '-%22' : isConservative ? '-%9' : '-%15',
     rebalanceCycle: rebalanceCycleText,
     sharpeRatioEst: isConservative ? '1.92' : isAggressive ? '1.45' : '1.74',
-    analystSummary: isIslamic
-      ? `Katılım finans ilkelerine tam uyumlu BIST Katılım hisseleri, faizsiz ZTK likit fonu ve ZGD altın fonu üzerine kurgulanmıştır. Aylık ${monthlyBudget.toLocaleString('tr-TR')} ₺ birikimle bileşik getiri hedeflenir.`
-      : `BIST sektör lideri hisseler, ZTR ve ZTM borsa yatırım fonları ile fiziki altın güvencesiyle dengelenmiştir. Aylık ${monthlyBudget.toLocaleString('tr-TR')} ₺ düzenli ekleme ile sermaye büyümesi hedeflenir.`,
+    analystSummary: `${investorPersona} ${allocationRationale}`,
+    investorPersona,
+    allocationRationale,
+    strategicRoadmap,
     isIslamic,
     distribution: { stock, fund, gold, cash: 0 },
     macroWeights: { stock, fund, goldAndCash: gold },

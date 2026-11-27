@@ -679,6 +679,18 @@ export default function AssetsPage() {
     useEffect(() => {
         fetchLivePrices();
         const interval = setInterval(fetchLivePrices, 60000);
+
+        if (typeof window !== "undefined") {
+            const params = new URLSearchParams(window.location.search);
+            const sec = params.get("sector");
+            if (sec) {
+                setSelectedSector(sec);
+                setTimeout(() => {
+                    stockSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+                }, 400);
+            }
+        }
+
         return () => clearInterval(interval);
     }, []);
 

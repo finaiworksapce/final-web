@@ -43,6 +43,115 @@ import { useTheme } from "next-themes";
 const DISTRIBUTION_COLORS_LIGHT = ["#004BFA", "#2563EB", "#3B82F6", "#10B981", "#059669", "#34D399", "#F59E0B", "#D97706"];
 const DISTRIBUTION_COLORS_DARK = ["#5B80FF", "#38BDF8", "#818CF8", "#34D399", "#10B981", "#6EE7B7", "#FBBF24", "#F59E0B"];
 
+const TOP_SECTOR_ASSETS: Record<string, { symbol: string; name: string; tag: string }[]> = {
+  "Sanayi & Savunma Hisseleri": [
+    { symbol: "ASELS", name: "Aselsan Elektronik", tag: "Savunma" },
+    { symbol: "FROTO", name: "Ford Otosan", tag: "Otomotiv" },
+    { symbol: "TUPRS", name: "Tüpraş Rafineri", tag: "Petrol" },
+    { symbol: "KCHOL", name: "Koç Holding", tag: "Holding" },
+    { symbol: "EREGL", name: "Ereğli Demir Çelik", tag: "Çelik" }
+  ],
+  "İhracatçı Sanayi Liderleri": [
+    { symbol: "FROTO", name: "Ford Otosan", tag: "Otomotiv" },
+    { symbol: "TOASO", name: "Tofaş Oto", tag: "Otomotiv" },
+    { symbol: "SISE", name: "Şişecam", tag: "Sanayi" },
+    { symbol: "ARCLK", name: "Arçelik", tag: "Tüketim" },
+    { symbol: "VESTL", name: "Vestel Elektronik", tag: "Elektronik" }
+  ],
+  "Teknoloji & Bilişim Hisseleri": [
+    { symbol: "MIATK", name: "Mia Teknoloji", tag: "Yazılım" },
+    { symbol: "LOGO", name: "Logo Yazılım", tag: "Kurumsal" },
+    { symbol: "VBTYZ", name: "VBT Yazılım", tag: "Sistem" },
+    { symbol: "REEDR", name: "Reeder Teknoloji", tag: "Donanım" },
+    { symbol: "ARDYZ", name: "Ard Bilişim", tag: "Bilişim" }
+  ],
+  "Ulaştırma & Havacılık Hisseleri": [
+    { symbol: "THYAO", name: "Türk Hava Yolları", tag: "Havacılık" },
+    { symbol: "PGSUS", name: "Pegasus", tag: "Havacılık" },
+    { symbol: "TAVHL", name: "TAV Havalimanları", tag: "Havalimanı" },
+    { symbol: "CLEBI", name: "Çelebi Hava Servisi", tag: "Yer Hizmetleri" },
+    { symbol: "RYSAS", name: "Reysaş Lojistik", tag: "Taşımacılık" }
+  ],
+  "Defansif Tüketim & Perakende Hisseleri": [
+    { symbol: "BIMAS", name: "BİM Mağazalar", tag: "Gıda" },
+    { symbol: "MGROS", name: "Migros Ticaret", tag: "Perakende" },
+    { symbol: "SOKM", name: "Şok Marketler", tag: "Perakende" },
+    { symbol: "CCOLA", name: "Coca-Cola İçecek", tag: "İçecek" },
+    { symbol: "ULKER", name: "Ülker Bisküvi", tag: "Gıda" }
+  ],
+  "Temettü & Nakit Akışı Hisseleri": [
+    { symbol: "TUPRS", name: "Tüpraş", tag: "Temettü" },
+    { symbol: "FROTO", name: "Ford Otosan", tag: "Kâr Payı" },
+    { symbol: "TTRAK", name: "Türk Traktör", tag: "Temettü" },
+    { symbol: "EREGL", name: "Ereğli Demir Çelik", tag: "Kâr Payı" },
+    { symbol: "BIMAS", name: "BİM Mağazalar", tag: "Defansif" }
+  ],
+  "Finans & Holding Hisseleri": [
+    { symbol: "AKBNK", name: "Akbank", tag: "Banka" },
+    { symbol: "ISCTR", name: "İş Bankası", tag: "Banka" },
+    { symbol: "GARAN", name: "Garanti BBVA", tag: "Banka" },
+    { symbol: "KCHOL", name: "Koç Holding", tag: "Holding" },
+    { symbol: "SAHOL", name: "Sabancı Holding", tag: "Holding" }
+  ],
+  "Teknoloji ve İletişim Fonları": [
+    { symbol: "TTE", name: "İş Portföy BIST Teknoloji", tag: "Teknoloji" },
+    { symbol: "YAY", name: "Yapı Kredi Teknoloji", tag: "Yazılım" },
+    { symbol: "TE3", name: "TEB Portföy BIST Teknoloji", tag: "Teknoloji" },
+    { symbol: "ZTM", name: "Ziraat BIST 30", tag: "Endeks" },
+    { symbol: "IKT", name: "İstanbul Portföy Bilişim", tag: "Bilişim" }
+  ],
+  "Para Piyasası Fonları": [
+    { symbol: "ZTK", name: "Ziraat Katılım TLREF", tag: "Katılım Likit" },
+    { symbol: "PPF", name: "Para Piyasası Fonu", tag: "Likit Faizsiz" },
+    { symbol: "KRS", name: "Kuveyt Türk Kısa Vadeli", tag: "Kira Sertifikası" },
+    { symbol: "TLY", name: "TLREF Para Piyasası Fonu", tag: "Gecelik" },
+    { symbol: "ZTM", name: "Ziraat Likit Fon", tag: "Para Piyasası" }
+  ],
+  "Temiz Enerji Fonları": [
+    { symbol: "AEY", name: "Ak Portföy Yenilenebilir Enerji", tag: "Temiz Enerji" },
+    { symbol: "IEY", name: "İş Portföy Yenilenebilir Enerji", tag: "Yeşil Enerji" },
+    { symbol: "ZRE", name: "Ziraat Sınai & Enerji", tag: "Enerji" },
+    { symbol: "BIO", name: "Biotrend Enerji Fonu", tag: "Biyoenerji" },
+    { symbol: "GNR", name: "Garanti Portföy Temiz Enerji", tag: "Güneş/Rüzgar" }
+  ],
+  "Kıymetli Madenler": [
+    { symbol: "GLDTR", name: "QNB Portföy Altın BYF", tag: "Fiziki Altın" },
+    { symbol: "ALTIN.S1", name: "Darphane Altın Sertifikası", tag: "Borsa Altın" },
+    { symbol: "GMSTR", name: "QNB Portföy Gümüş BYF", tag: "Fiziki Gümüş" },
+    { symbol: "USDTR", name: "QNB Portföy Dolar BYF", tag: "Döviz Kalkanı" },
+    { symbol: "ZGD", name: "Ziraat Katılım Altın", tag: "Katılım Altın" }
+  ],
+  "Kıymetli Maden ve Nakit Kalkanı": [
+    { symbol: "GLDTR", name: "QNB Portföy Altın BYF", tag: "Fiziki Altın" },
+    { symbol: "ALTIN.S1", name: "Darphane Altın Sertifikası", tag: "Borsa Altın" },
+    { symbol: "ZTK", name: "Ziraat Katılım TLREF", tag: "Para Piyasası" },
+    { symbol: "USDTR", name: "QNB Portföy Dolar BYF", tag: "Döviz Kalkanı" },
+    { symbol: "GMSTR", name: "QNB Portföy Gümüş BYF", tag: "Fiziki Gümüş" }
+  ]
+};
+
+function getTargetSectorParam(sliceName: string): string {
+  if (sliceName.includes("Savunma") || sliceName.includes("Sanayi")) return "Savunma Sanayii";
+  if (sliceName.includes("Teknoloji") || sliceName.includes("Bilişim")) return "Teknoloji & Yazılım";
+  if (sliceName.includes("Ulaştırma") || sliceName.includes("Havacılık")) return "Ulaştırma & Havacılık";
+  if (sliceName.includes("Perakende") || sliceName.includes("Gıda") || sliceName.includes("Tüketim")) return "Perakende & Tüketim";
+  if (sliceName.includes("Enerji")) return "Enerji & Elektrik";
+  if (sliceName.includes("Banka") || sliceName.includes("Finans")) return "Bankacılık";
+  return "BIST";
+}
+
+function getTopAssetsForSlice(sliceName: string) {
+  if (TOP_SECTOR_ASSETS[sliceName]) {
+    return TOP_SECTOR_ASSETS[sliceName];
+  }
+  for (const key of Object.keys(TOP_SECTOR_ASSETS)) {
+    if (sliceName.includes(key) || key.includes(sliceName)) {
+      return TOP_SECTOR_ASSETS[key];
+    }
+  }
+  return TOP_SECTOR_ASSETS["Sanayi & Savunma Hisseleri"];
+}
+
 export default function SamplePortfolioPage() {
   const { 
     user, 
@@ -60,6 +169,7 @@ export default function SamplePortfolioPage() {
   const DISTRIBUTION_COLORS = isDark ? DISTRIBUTION_COLORS_DARK : DISTRIBUTION_COLORS_LIGHT;
 
   const [hoveredSymbol, setHoveredSymbol] = useState<string | null>(null);
+  const [hoveredSliceForPopup, setHoveredSliceForPopup] = useState<{ name: string; percentage: number; color: string } | null>(null);
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
   const [quizStep, setQuizStep] = useState(0);
   const [activeScenario, setActiveScenario] = useState<'median' | 'average' | 'conservative'>('median');
@@ -353,20 +463,27 @@ export default function SamplePortfolioPage() {
               </div>
 
               {/* Sektör ve Fon Kırılım Listesi */}
-              <div className="flex-1 w-full min-w-0 space-y-2">
+              <div 
+                className="flex-1 w-full min-w-0 space-y-2 relative"
+                onMouseLeave={() => setHoveredSliceForPopup(null)}
+              >
                 {distributionItems.map((item) => {
-                  const isHovered = hoveredSymbol === item.name;
+                  const isHovered = hoveredSymbol === item.name || hoveredSliceForPopup?.name === item.name;
+                  const targetSector = getTargetSectorParam(item.name);
                   return (
-                    <div
+                    <Link
                       key={item.name}
-                      onMouseEnter={() => setHoveredSymbol(item.name)}
-                      onMouseLeave={() => setHoveredSymbol(null)}
-                      className={`flex items-center justify-between gap-2 p-1.5 rounded-lg transition-colors ${
-                        isHovered ? "bg-[#D6E4FF]/30 dark:bg-white/10" : ""
+                      href={`/dashboard/data?sector=${encodeURIComponent(targetSector)}`}
+                      onMouseEnter={() => {
+                        setHoveredSymbol(item.name);
+                        setHoveredSliceForPopup(item);
+                      }}
+                      className={`flex items-center justify-between gap-2 p-2 rounded-xl transition-all cursor-pointer group ${
+                        isHovered ? "bg-[#D6E4FF]/40 dark:bg-white/10 ring-1 ring-[#004BFA]/30" : "hover:bg-[#D6E4FF]/20 dark:hover:bg-white/5"
                       }`}
                     >
                       <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
+                        <div className="w-2.5 h-2.5 rounded-full shrink-0 group-hover:scale-125 transition-transform" style={{ backgroundColor: item.color }} />
                         <span className={`text-xs clash-desc font-[225] truncate ${
                           isHovered ? "text-[#004BFA] dark:text-[#5B80FF] font-normal" : "text-[#040989]/90 dark:text-[#F5F7FA]/90"
                         }`}>
@@ -378,131 +495,166 @@ export default function SamplePortfolioPage() {
                         <span className="text-xs font-numbers font-medium text-[#040989] dark:text-[#F5F7FA] tabular-nums">
                           %{item.percentage}
                         </span>
+                        <ChevronRight className="w-3 h-3 text-[#004BFA]/50 group-hover:translate-x-0.5 transition-transform opacity-0 group-hover:opacity-100" />
                       </div>
-                    </div>
+                    </Link>
                   );
                 })}
+
+                {/* MOUSE İLE ÜZERİNE GELİNDİĞİNDE EN POPÜLER 5 HİSSEYİ GÖSTEREN KUTUCUK */}
+                {hoveredSliceForPopup && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.96, y: 4 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.96 }}
+                    className="absolute left-0 right-0 sm:left-auto sm:right-0 top-0 sm:-top-2 z-40 w-full sm:w-72 bg-white/95 dark:bg-[#02041A]/95 backdrop-blur-md border border-[#004BFA]/30 rounded-2xl p-3.5 shadow-2xl space-y-2.5"
+                  >
+                    <div className="flex items-center justify-between pb-2 border-b border-[#D6E4FF]/60 dark:border-white/10">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: hoveredSliceForPopup.color }} />
+                        <span className="text-xs clash-title font-[500] text-[#040989] dark:text-[#F5F7FA] truncate">
+                          {hoveredSliceForPopup.name}
+                        </span>
+                      </div>
+                      <span className="text-[11px] font-numbers font-semibold text-[#004BFA] dark:text-[#5B80FF] shrink-0">
+                        %{hoveredSliceForPopup.percentage}
+                      </span>
+                    </div>
+
+                    <div className="text-[10px] clash-subtitle font-[325] text-slate-400 uppercase tracking-wider">
+                      En Popüler 5 Varlık & Örnekler
+                    </div>
+
+                    <div className="space-y-1.5">
+                      {getTopAssetsForSlice(hoveredSliceForPopup.name).map((stock, sIdx) => (
+                        <div 
+                          key={sIdx}
+                          className="flex items-center justify-between p-1.5 rounded-lg bg-slate-50 dark:bg-white/5 hover:bg-[#D6E4FF]/30 dark:hover:bg-white/10 transition-colors text-xs"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="font-numbers font-bold text-[#004BFA] dark:text-[#5B80FF]">
+                              {stock.symbol}
+                            </span>
+                            <span className="text-[11px] clash-desc font-[225] text-slate-600 dark:text-slate-300 truncate max-w-[120px]">
+                              {stock.name}
+                            </span>
+                          </div>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-200/60 dark:bg-white/10 text-slate-500 font-mono">
+                            {stock.tag}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <Link
+                      href={`/dashboard/data?sector=${encodeURIComponent(getTargetSectorParam(hoveredSliceForPopup.name))}`}
+                      className="w-full py-2 px-3 rounded-xl bg-[#004BFA] hover:bg-[#004BFA]/90 text-white text-xs clash-subtitle font-[325] flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-95 mt-1"
+                    >
+                      <span>Varlık Sayfasında Tümünü İncele</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </motion.div>
+                )}
               </div>
             </div>
           </div>
 
-          {/* SAĞ: 4 Bento Metrik Kartı & AI Strateji Rasyoneli */}
-          <div className="lg:col-span-6 flex flex-col justify-between gap-4">
-            
-            {/* 4 Bento Metrik Kartı */}
-            <div className="grid grid-cols-2 gap-3.5">
-              <div className="bg-white dark:bg-[#040989]/40 border border-[#D6E4FF]/60 dark:border-white/10 rounded-2xl p-4 shadow-xs">
-                <span className="text-xs clash-subtitle font-[325] text-[#040989]/70 dark:text-[#F5F7FA]/70 block">
-                  Yıllık Reel Medyan Getiri
-                </span>
-                <div className="text-lg sm:text-xl font-numbers font-medium text-emerald-600 dark:text-emerald-400 mt-1 flex items-center gap-1.5">
-                  <TrendingUp className="w-4 h-4" />
-                  <span>~%{activeProjectionScenario.annualRate}</span>
-                </div>
-                <span className="text-[10px] clash-desc font-[225] text-[#040989]/60 dark:text-[#F5F7FA]/60 mt-0.5 block">
-                  Enflasyon üstü bileşik medyan
-                </span>
-              </div>
-
-              <div className="bg-white dark:bg-[#040989]/40 border border-[#D6E4FF]/60 dark:border-white/10 rounded-2xl p-4 shadow-xs">
-                <span className="text-xs clash-subtitle font-[325] text-[#040989]/70 dark:text-[#F5F7FA]/70 block">
-                  Risk Toleransı Seviyesi
-                </span>
-                <div className="text-lg sm:text-xl font-numbers font-medium text-[#004BFA] dark:text-[#5B80FF] mt-1 flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4" />
-                  <span>{currentTelemetry.expectedRisk}</span>
-                </div>
-                <span className="text-[10px] clash-desc font-[225] text-[#040989]/60 dark:text-[#F5F7FA]/60 mt-0.5 block">
-                  Maks. Çekilme: {currentTelemetry.maxDrawdownTolerance}
-                </span>
-              </div>
-
-              <div className="bg-white dark:bg-[#040989]/40 border border-[#D6E4FF]/60 dark:border-white/10 rounded-2xl p-4 shadow-xs">
-                <span className="text-xs clash-subtitle font-[325] text-[#040989]/70 dark:text-[#F5F7FA]/70 block">
-                  Volatilite Bandı
-                </span>
-                <div className="text-lg sm:text-xl font-numbers font-medium text-amber-600 dark:text-amber-400 mt-1 flex items-center gap-1.5">
-                  <Zap className="w-4 h-4" />
-                  <span>{currentTelemetry.volatilityBand}</span>
-                </div>
-                <span className="text-[10px] clash-desc font-[225] text-[#040989]/60 dark:text-[#F5F7FA]/60 mt-0.5 block">
-                  Sharpe Oranı: {currentTelemetry.sharpeRatioEst}
-                </span>
-              </div>
-
-              <div className="bg-white dark:bg-[#040989]/40 border border-[#D6E4FF]/60 dark:border-white/10 rounded-2xl p-4 shadow-xs">
-                <span className="text-xs clash-subtitle font-[325] text-[#040989]/70 dark:text-[#F5F7FA]/70 block">
-                  Dengeleme Takvimi
-                </span>
-                <div className="text-sm sm:text-base clash-title font-[500] text-[#040989] dark:text-[#F5F7FA] mt-1 flex items-center gap-1.5">
-                  <RefreshCw className="w-4 h-4 text-[#004BFA]" />
-                  <span className="truncate">{currentTelemetry.rebalanceCycle}</span>
-                </div>
-                <span className="text-[10px] clash-desc font-[225] text-[#040989]/60 dark:text-[#F5F7FA]/60 mt-0.5 block">
-                  AI Dinamik Takip
-                </span>
-              </div>
-            </div>
-
-            {/* AI Strateji Rasyoneli (Koyu Kart) */}
-            <div className="bg-gradient-to-br from-[#02041A] via-[#040989] to-[#02041A] text-white rounded-2xl min-[360px]:rounded-3xl p-5 sm:p-6 shadow-xl relative overflow-hidden flex-1 flex flex-col justify-between">
-              <div className="relative z-10 space-y-3">
-                <div className="flex items-center justify-between pb-2 border-b border-white/10">
+          {/* SAĞ: FinAi 10-Aşamalı Strateji Rasyoneli (Bento Kartlar Kaldırıldı, Rasyonel Yukarı Taşındı) */}
+          <div className="lg:col-span-6 flex flex-col justify-between">
+            <div className="bg-gradient-to-br from-[#02041A] via-[#040989] to-[#02041A] text-white rounded-2xl min-[360px]:rounded-3xl p-5 sm:p-6 shadow-xl relative overflow-hidden h-full flex flex-col justify-between space-y-4">
+              <div className="relative z-10 space-y-3.5">
+                <div className="flex items-center justify-between pb-2.5 border-b border-white/10">
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-[#D6E4FF]" />
-                    <h3 className="text-sm clash-title font-[500] text-white">
+                    <h3 className="text-sm sm:text-base clash-title font-[500] text-white">
                       FinAi 10-Aşamalı Strateji Rasyoneli
                     </h3>
                   </div>
 
-                  <span className="text-[10px] clash-subtitle font-[325] px-2 py-0.5 rounded-full bg-white/10 text-[#D6E4FF]">
-                    Kişiye Özel
+                  <span className="text-[10px] clash-subtitle font-[325] px-2.5 py-0.5 rounded-full bg-white/10 text-[#D6E4FF] border border-white/10">
+                    Kişiye Özel Terzilik
                   </span>
                 </div>
 
-                <p className="text-xs sm:text-[13px] clash-desc font-[225] text-[#D6E4FF]/90 leading-relaxed">
-                  {currentTelemetry.analystSummary}
-                </p>
+                {/* 1. KULLANICIYA KENDİSİNİ ANLATAN YATIRIMCI KİMLİĞİ */}
+                <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
+                  <div className="flex items-center gap-1.5 text-xs clash-subtitle font-[325] text-[#D6E4FF]">
+                    <Compass className="w-3.5 h-3.5 text-[#5B80FF]" />
+                    <span>Yatırımcı Portreniz & Davranış Aynanız</span>
+                  </div>
+                  <p className="text-xs clash-desc font-[225] text-white/90 leading-relaxed">
+                    {currentTelemetry.investorPersona}
+                  </p>
+                </div>
 
-                <div className="flex flex-wrap gap-2 pt-1">
-                  <span className="px-2.5 py-1 rounded-lg bg-white/10 text-white/90 text-[10px] clash-subtitle font-[325]">
-                    ✦ BIST Sektör Hisseleri
-                  </span>
-                  <span className="px-2.5 py-1 rounded-lg bg-white/10 text-white/90 text-[10px] clash-subtitle font-[325]">
-                    ✦ BYF Fon Sepeti
-                  </span>
-                  <span className="px-2.5 py-1 rounded-lg bg-white/10 text-white/90 text-[10px] clash-subtitle font-[325]">
-                    ✦ Bileşik Medyan Projeksiyonu
-                  </span>
+                {/* 2. NEDEN BU DAĞILIM? (SEPET MÜHENDİSLİĞİ) */}
+                <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
+                  <div className="flex items-center gap-1.5 text-xs clash-subtitle font-[325] text-[#D6E4FF]">
+                    <PieChart className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Neden Bu Dağılım? (%{currentTelemetry.macroWeights.stock} Hisse / %{currentTelemetry.macroWeights.fund} Fon / %{currentTelemetry.macroWeights.goldAndCash} Kalkan)</span>
+                  </div>
+                  <p className="text-xs clash-desc font-[225] text-white/90 leading-relaxed">
+                    {currentTelemetry.allocationRationale}
+                  </p>
+                </div>
+
+                {/* 3. FİNAİ STRATEJİK YOL HARİTASI */}
+                <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                  <div className="flex items-center gap-1.5 text-xs clash-subtitle font-[325] text-[#D6E4FF]">
+                    <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+                    <span>FinAi Stratejik Yol Haritanız (3 Altın İlke)</span>
+                  </div>
+                  <div className="space-y-1.5">
+                    {currentTelemetry.strategicRoadmap.map((step, sIdx) => (
+                      <div key={sIdx} className="flex items-start gap-2 text-[11px] clash-desc font-[225] text-[#D6E4FF]/90 leading-snug">
+                        <span className="w-4 h-4 rounded-full bg-white/10 text-white font-numbers font-medium text-[10px] flex items-center justify-center shrink-0 mt-0.5">
+                          {sIdx + 1}
+                        </span>
+                        <span>{step}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-white/10 mt-4 flex items-center justify-between relative z-10">
+              <div className="pt-3 border-t border-white/10 mt-3 flex items-center justify-between relative z-10">
                 <span className="text-[11px] clash-desc font-[225] text-[#D6E4FF]/80">
                   Modeli doğrudan portföyünüze uygulayın
                 </span>
 
-                <Link
-                  href="/dashboard/portfolio?openAdd=true"
-                  className="px-4 py-2 rounded-xl bg-[#004BFA] hover:bg-[#004BFA]/90 text-white font-normal text-xs clash-subtitle font-[325] flex items-center gap-1.5 shadow-xs transition-all active:scale-95"
-                >
-                  <PlusCircle className="w-3.5 h-3.5" />
-                  <span>Varlık Ekle</span>
-                </Link>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      setQuizStep(0);
+                      setIsQuizModalOpen(true);
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-[#D6E4FF] font-normal text-xs clash-subtitle font-[325] flex items-center gap-1 transition-all"
+                  >
+                    <Sliders className="w-3.5 h-3.5" />
+                    <span>Testi Düzenle</span>
+                  </button>
+
+                  <Link
+                    href="/dashboard/portfolio?openAdd=true"
+                    className="px-4 py-2 rounded-xl bg-[#004BFA] hover:bg-[#004BFA]/90 text-white font-normal text-xs clash-subtitle font-[325] flex items-center gap-1.5 shadow-xs transition-all active:scale-95"
+                  >
+                    <PlusCircle className="w-3.5 h-3.5" />
+                    <span>Varlık Ekle</span>
+                  </Link>
+                </div>
               </div>
             </div>
-
           </div>
 
         </div>
 
         {/* ----------------------------------------------------------------------------------- */}
-        {/* BÖLÜM 2: GELECEK KAZANÇ & BİLEŞİK GETİRİ SİMÜLATÖRÜ (KOMPAKT & EFEKTİF TASARIM) */}
+        {/* BÖLÜM 2: GELECEK KAZANÇ & BİLEŞİK GETİRİ SİMÜLATÖRÜ (YUKARIDAN AŞAĞIYA - KUTUSUZ) */}
         {/* ----------------------------------------------------------------------------------- */}
-        <div className="bg-white dark:bg-[#040989]/40 border border-[#D6E4FF]/60 dark:border-white/10 rounded-2xl min-[360px]:rounded-3xl p-4 sm:p-5 shadow-xs space-y-3.5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#D6E4FF]/50 dark:border-white/10">
+        <div className="space-y-3 py-3">
+          <div className="flex items-center justify-between pb-3 border-b border-[#D6E4FF]/40 dark:border-white/10">
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-lg bg-[#004BFA] text-white flex items-center justify-center shadow-xs shrink-0">
+              <div className="w-7 h-7 rounded-lg bg-[#004BFA]/10 flex items-center justify-center text-[#004BFA] shrink-0">
                 <Calculator className="w-4 h-4" />
               </div>
               <div>
@@ -510,82 +662,62 @@ export default function SamplePortfolioPage() {
                   Gelecek Kazanç & Bileşik Getiri Simülatörü
                 </h3>
                 <span className="text-[11px] clash-desc font-[225] text-[#040989]/60 dark:text-[#F5F7FA]/60">
-                  {currentTelemetry.projection.frequency} • {Number(answers["custom_amount_input"] || customAmountInput || '10000').toLocaleString('tr-TR')} ₺ Tasarruf Planı
+                  {currentTelemetry.projection.frequency} • {Number(answers["custom_amount_input"] || customAmountInput || '10000').toLocaleString('tr-TR')} ₺ Tasarruf Planı (DCA)
                 </span>
               </div>
             </div>
-
-            {/* Senaryo Seçici Butonlar */}
-            <div className="flex items-center gap-1 bg-[#F5F7FA] dark:bg-white/5 p-1 rounded-xl border border-[#D6E4FF]/50 dark:border-white/10 self-start sm:self-auto">
-              {(['median', 'average', 'conservative'] as const).map((scKey) => {
-                const sc = currentTelemetry.projection.scenarios[scKey];
-                const isActive = activeScenario === scKey;
-                return (
-                  <button
-                    key={scKey}
-                    onClick={() => setActiveScenario(scKey)}
-                    className={`px-2.5 py-1 rounded-lg text-[11px] clash-subtitle font-[325] transition-all flex items-center gap-1 ${
-                      isActive
-                        ? 'bg-[#004BFA] text-white shadow-xs'
-                        : 'text-[#040989]/70 dark:text-[#F5F7FA]/70 hover:text-[#004BFA]'
-                    }`}
-                  >
-                    <span>{sc.label.split(' ')[0]}</span>
-                    <span className="opacity-80 font-numbers">(%{sc.annualRate})</span>
-                  </button>
-                );
-              })}
-            </div>
           </div>
 
-          {/* 6 Vade Kartı: Tek Satırda Efektif ve Kompakt Görünüm */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-2.5">
+          {/* Yukarıdan Aşağıya Vade Akışı (Kutusuz, Sade Sayılar ve Metinler) */}
+          <div className="divide-y divide-[#D6E4FF]/40 dark:divide-white/10">
             {[
-              { title: "1 Ay", data: activeProjectionScenario.month1 },
-              { title: "3 Ay", data: activeProjectionScenario.month3 },
-              { title: "6 Ay", data: activeProjectionScenario.month6 },
-              { title: "1 Yıl", data: activeProjectionScenario.year1 },
-              { title: "3 Yıl", data: activeProjectionScenario.year3 },
-              { title: "5 Yıl", data: activeProjectionScenario.year5 },
-            ].map((card, idx) => {
-              const profitPct = card.data.principal > 0 ? ((card.data.profit / card.data.principal) * 100).toFixed(1) : "0.0";
+              { title: "1 Ay Sonunda", data: activeProjectionScenario.month1, horizon: "Kısa Vade" },
+              { title: "3 Ay Sonunda", data: activeProjectionScenario.month3, horizon: "Çeyreklik Dönem" },
+              { title: "6 Ay Sonunda", data: activeProjectionScenario.month6, horizon: "Yarım Yıllık Vade" },
+              { title: "1 Yıl Sonunda", data: activeProjectionScenario.year1, horizon: "Yıllık Hedef Vadesi" },
+              { title: "3 Yıl Sonunda", data: activeProjectionScenario.year3, horizon: "Bileşik Büyüme Eşiği" },
+              { title: "5 Yıl Sonunda", data: activeProjectionScenario.year5, horizon: "Maksimum Bileşik Servet" },
+            ].map((row, idx) => {
+              const profitPct = row.data.principal > 0 ? ((row.data.profit / row.data.principal) * 100).toFixed(1) : "0.0";
               const isLongTerm = idx >= 3;
               return (
                 <div 
-                  key={idx}
-                  className={`rounded-xl p-3 border transition-all relative overflow-hidden flex flex-col justify-between ${
-                    isLongTerm 
-                      ? 'border-[#004BFA]/30 bg-gradient-to-b from-[#004BFA]/5 to-transparent' 
-                      : 'border-[#D6E4FF]/50 dark:border-white/10 bg-white/70 dark:bg-white/5'
-                  }`}
+                  key={idx} 
+                  className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-[#D6E4FF]/10 dark:hover:bg-white/5 px-2 rounded-xl transition-colors"
                 >
-                  <div className="flex items-center justify-between gap-1">
-                    <span className="text-[11px] clash-subtitle font-[325] text-[#040989]/80 dark:text-[#F5F7FA]/80">
-                      {card.title}
-                    </span>
-                    <span className={`text-[10px] font-numbers font-medium px-1.5 py-0.5 rounded ${
-                      Number(profitPct) > 0 
-                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' 
-                        : 'bg-slate-100 dark:bg-white/10 text-slate-500'
-                    }`}>
-                      +{profitPct}%
-                    </span>
-                  </div>
-
-                  <div className="my-1.5">
-                    <div className="text-sm sm:text-base font-numbers font-bold text-[#040989] dark:text-[#F5F7FA] tracking-tight">
-                      {card.data.total.toLocaleString('tr-TR')} ₺
+                  <div className="flex items-center gap-3 min-w-[160px]">
+                    <div className={`w-2 h-2 rounded-full ${isLongTerm ? 'bg-emerald-500' : 'bg-[#004BFA]'}`} />
+                    <div>
+                      <span className="text-xs sm:text-sm clash-title font-[500] text-[#040989] dark:text-[#F5F7FA]">
+                        {row.title}
+                      </span>
+                      <span className="text-[10px] clash-desc font-[225] text-[#040989]/60 dark:text-[#F5F7FA]/60 block">
+                        {row.horizon}
+                      </span>
                     </div>
                   </div>
 
-                  <div className="pt-1.5 border-t border-[#D6E4FF]/40 dark:border-white/5 space-y-0.5 text-[10px]">
-                    <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 font-numbers">
-                      <span>Anapara:</span>
-                      <span>{card.data.principal.toLocaleString('tr-TR')} ₺</span>
+                  <div className="flex items-center justify-between sm:justify-end gap-6 sm:gap-14 w-full sm:w-auto">
+                    <div>
+                      <span className="text-[10px] clash-desc text-slate-400 dark:text-slate-500 block">Tahmini Toplam:</span>
+                      <span className="text-sm sm:text-base font-numbers font-bold text-[#040989] dark:text-[#F5F7FA]">
+                        {row.data.total.toLocaleString('tr-TR')} ₺
+                      </span>
                     </div>
-                    <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 font-numbers font-semibold">
-                      <span>Net Kâr:</span>
-                      <span>+{card.data.profit.toLocaleString('tr-TR')} ₺</span>
+
+                    <div>
+                      <span className="text-[10px] clash-desc text-slate-400 dark:text-slate-500 block">Cebinizden Çıkan Anapara:</span>
+                      <span className="text-xs sm:text-sm font-numbers text-slate-600 dark:text-slate-300">
+                        {row.data.principal.toLocaleString('tr-TR')} ₺
+                      </span>
+                    </div>
+
+                    <div className="text-right min-w-[130px]">
+                      <span className="text-[10px] clash-desc text-slate-400 dark:text-slate-500 block">Bileşik Kazanç (Net Kâr):</span>
+                      <span className="text-xs sm:text-sm font-numbers font-semibold text-emerald-600 dark:text-emerald-400">
+                        +{row.data.profit.toLocaleString('tr-TR')} ₺
+                        <span className="text-[10px] font-normal ml-1">({Number(profitPct) > 0 ? `+${profitPct}%` : '%0'})</span>
+                      </span>
                     </div>
                   </div>
                 </div>
